@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>C on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/c/</link>
+        <description>Recent content in C on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Sat, 21 Jan 2023 00:08:25 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/c/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Process Management</title>
+        <link>https://roykesydon.github.io/Blog/p/process-management/</link>
+        <pubDate>Sat, 21 Jan 2023 00:08:25 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/process-management/</guid>
+        <description>&lt;h1 id=&#34;compile-c&#34;&gt;Compile C&lt;/h1&gt;
+&lt;h2 id=&#34;4-steps&#34;&gt;4-steps&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;pre-processing&lt;/li&gt;
+&lt;li&gt;compilation&lt;/li&gt;
+&lt;li&gt;assembly&lt;/li&gt;
+&lt;li&gt;linking&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;types-of-object-files&#34;&gt;Types of Object Files&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Executable object file&lt;/li&gt;
+&lt;li&gt;Relocatable object file&lt;/li&gt;
+&lt;li&gt;Shared object file&lt;/li&gt;
+&lt;li&gt;Core file&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;formats-of-object-files&#34;&gt;Formats of Object Files&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;a.out
+&lt;ul&gt;
+&lt;li&gt;initial version of UNIX&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;COFF
+&lt;ul&gt;
+&lt;li&gt;SVR3 UNIX&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;PE
+&lt;ul&gt;
+&lt;li&gt;Win. NT&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ELF
+&lt;ul&gt;
+&lt;li&gt;SVR4 Linux&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;elf-format-of-a-program&#34;&gt;ELF format of a program&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;ELF Header&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;Program Header Table&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.text&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.rodata&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.data&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.bss&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.symtab&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.rel.text&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.rel.data&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.debug&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.line&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.strtab&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;Section Header Table&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;可參考: &lt;a class=&#34;link&#34; href=&#34;http://ccckmit.wikidot.com/lk:elf&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;http://ccckmit.wikidot.com/lk:elf&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;process&#34;&gt;Process&lt;/h1&gt;
+&lt;p&gt;Instance of a program running on a computer&lt;/p&gt;
+&lt;h2 id=&#34;process-control-block&#34;&gt;Process Control Block&lt;/h2&gt;
+&lt;p&gt;task_struct&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Process Identification
+&lt;ul&gt;
+&lt;li&gt;PID, PPID, SID, UID, EUID..&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Process State Information&lt;/li&gt;
+&lt;li&gt;Process Control Information&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

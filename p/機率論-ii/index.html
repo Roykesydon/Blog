@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='機率密度函數 PDF probability density function PMF 在 連續R.V. 上，假如 $X\text{\textasciitilde}[0,1)$，$p_X(0.7)$ = 0，因為有無窮多個數字 公式 $f_X(x)=\lim\limits_{\Delta x \rightarrow 0} \frac{P(x \le X \le x &#43; \Delta x)}{\Delta x} \\ = \lim\limits_{\Delta x \rightarrow 0} \frac{F_X(x&#43;\Delta x) - F_X(x)}{\Delta x} \\ = F^{\prime}_X(x) $ 和 CDF 的關係 $CDF: F_X(x) = PDF: f_X(x)$ $\int^x_{-\infty}$ 可以從 PDF 轉到 CDF
+$\frac{d}{dx} 可以從 CDF 轉到 PDF$
+跟機率的關係 $P(a &amp;lt; X \le b) = F_X(b) - F_X(a) \\ = \int^b_{-\infty} f_X(x)dx - \int^a_{-\infty} f_X(x)dx \\ = \int^a_b f_X(x)dx$ $f_X(x)=\lim\limits_{\Delta x \rightarrow 0} \frac{P(x \le X \le x &#43; \Delta x)}{\Delta x}$ 當 $\Delta x$ 很小時 $P(x \le X \le x &#43; \Delta x) \approx f_X(x) \cdot \Delta x$ 性質 $f_X(x) = F^{\prime}_X(x)$ $F_X(x)=\int^x_{-\infty}f_X(u)du$ $P(a \le X \le b)=\int^b_a f_X(x) dx$ $\int^{\infty}_{-\infty}f_X(x)dx=1$ $f_X(x) \ge 0$ $f_X(x)$ 可以比 1 大 連續機率分佈 Uniform 機率分佈 $X \text{\textasciitilde}UNIF(a,b)$ PDF $f_X(x) = \begin{cases} \frac{1}{b-a} &amp;amp; ,a \le x \le b \\ 0 &amp;amp; ,otherwise \end{cases}$ CDF $F_X(x) = \begin{cases} 0 &amp;amp; ,x \le a \\ \frac{x-a}{b-a} &amp;amp; ,a &amp;lt; x \le b\\ 1 &amp;amp; ,x &amp;gt; b \end{cases}$ Exponential 機率分佈 有失憶性(memoryless)，常被用來 model 有這種性質的事情 $X \text{\textasciitilde}Exponential(\lambda)$ PDF $f_X(x) = \begin{cases} \lambda e^{-\lambda x} &amp;amp; ,x \ge 0 \\ 0 &amp;amp; ,otherwise \end{cases}$ CDF $F_X(x) = 1-e^{-\lambda x}$ Erlang 機率分佈 Gamma Distribution $X \text{\textasciitilde}Erlang(n,\lambda)$ PDF $f_X(x) = \begin{cases} \frac{1}{(n-1)!'>
+<title>機率論 - II</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/%E6%A9%9F%E7%8E%87%E8%AB%96-ii/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.c8da5069c06805334f6b22a49ff864b8c2cf9279882d00f7f4c0cf2f656d204c.css"><meta property='og:title' content='機率論 - II'>
+<meta property='og:description' content='機率密度函數 PDF probability density function PMF 在 連續R.V. 上，假如 $X\text{\textasciitilde}[0,1)$，$p_X(0.7)$ = 0，因為有無窮多個數字 公式 $f_X(x)=\lim\limits_{\Delta x \rightarrow 0} \frac{P(x \le X \le x &#43; \Delta x)}{\Delta x} \\ = \lim\limits_{\Delta x \rightarrow 0} \frac{F_X(x&#43;\Delta x) - F_X(x)}{\Delta x} \\ = F^{\prime}_X(x) $ 和 CDF 的關係 $CDF: F_X(x) = PDF: f_X(x)$ $\int^x_{-\infty}$ 可以從 PDF 轉到 CDF
+$\frac{d}{dx} 可以從 CDF 轉到 PDF$
+跟機率的關係 $P(a &amp;lt; X \le b) = F_X(b) - F_X(a) \\ = \int^b_{-\infty} f_X(x)dx - \int^a_{-\infty} f_X(x)dx \\ = \int^a_b f_X(x)dx$ $f_X(x)=\lim\limits_{\Delta x \rightarrow 0} \frac{P(x \le X \le x &#43; \Delta x)}{\Delta x}$ 當 $\Delta x$ 很小時 $P(x \le X \le x &#43; \Delta x) \approx f_X(x) \cdot \Delta x$ 性質 $f_X(x) = F^{\prime}_X(x)$ $F_X(x)=\int^x_{-\infty}f_X(u)du$ $P(a \le X \le b)=\int^b_a f_X(x) dx$ $\int^{\infty}_{-\infty}f_X(x)dx=1$ $f_X(x) \ge 0$ $f_X(x)$ 可以比 1 大 連續機率分佈 Uniform 機率分佈 $X \text{\textasciitilde}UNIF(a,b)$ PDF $f_X(x) = \begin{cases} \frac{1}{b-a} &amp;amp; ,a \le x \le b \\ 0 &amp;amp; ,otherwise \end{cases}$ CDF $F_X(x) = \begin{cases} 0 &amp;amp; ,x \le a \\ \frac{x-a}{b-a} &amp;amp; ,a &amp;lt; x \le b\\ 1 &amp;amp; ,x &amp;gt; b \end{cases}$ Exponential 機率分佈 有失憶性(memoryless)，常被用來 model 有這種性質的事情 $X \text{\textasciitilde}Exponential(\lambda)$ PDF $f_X(x) = \begin{cases} \lambda e^{-\lambda x} &amp;amp; ,x \ge 0 \\ 0 &amp;amp; ,otherwise \end{cases}$ CDF $F_X(x) = 1-e^{-\lambda x}$ Erlang 機率分佈 Gamma Distribution $X \text{\textasciitilde}Erlang(n,\lambda)$ PDF $f_X(x) = \begin{cases} \frac{1}{(n-1)!'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/%E6%A9%9F%E7%8E%87%E8%AB%96-ii/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='math' /><meta property='article:tag' content='probability' /><meta property='article:published_time' content='2023-02-01T15:18:41&#43;08:00'/><meta property='article:modified_time' content='2023-02-01T15:18:41&#43;08:00'/>
+<meta name="twitter:title" content="機率論 - II">
+<meta name="twitter:description" content="機率密度函數 PDF probability density function PMF 在 連續R.V. 上，假如 $X\text{\textasciitilde}[0,1)$，$p_X(0.7)$ = 0，因為有無窮多個數字 公式 $f_X(x)=\lim\limits_{\Delta x \rightarrow 0} \frac{P(x \le X \le x &#43; \Delta x)}{\Delta x} \\ = \lim\limits_{\Delta x \rightarrow 0} \frac{F_X(x&#43;\Delta x) - F_X(x)}{\Delta x} \\ = F^{\prime}_X(x) $ 和 CDF 的關係 $CDF: F_X(x) = PDF: f_X(x)$ $\int^x_{-\infty}$ 可以從 PDF 轉到 CDF
+$\frac{d}{dx} 可以從 CDF 轉到 PDF$
+跟機率的關係 $P(a &amp;lt; X \le b) = F_X(b) - F_X(a) \\ = \int^b_{-\infty} f_X(x)dx - \int^a_{-\infty} f_X(x)dx \\ = \int^a_b f_X(x)dx$ $f_X(x)=\lim\limits_{\Delta x \rightarrow 0} \frac{P(x \le X \le x &#43; \Delta x)}{\Delta x}$ 當 $\Delta x$ 很小時 $P(x \le X \le x &#43; \Delta x) \approx f_X(x) \cdot \Delta x$ 性質 $f_X(x) = F^{\prime}_X(x)$ $F_X(x)=\int^x_{-\infty}f_X(u)du$ $P(a \le X \le b)=\int^b_a f_X(x) dx$ $\int^{\infty}_{-\infty}f_X(x)dx=1$ $f_X(x) \ge 0$ $f_X(x)$ 可以比 1 大 連續機率分佈 Uniform 機率分佈 $X \text{\textasciitilde}UNIF(a,b)$ PDF $f_X(x) = \begin{cases} \frac{1}{b-a} &amp;amp; ,a \le x \le b \\ 0 &amp;amp; ,otherwise \end{cases}$ CDF $F_X(x) = \begin{cases} 0 &amp;amp; ,x \le a \\ \frac{x-a}{b-a} &amp;amp; ,a &amp;lt; x \le b\\ 1 &amp;amp; ,x &amp;gt; b \end{cases}$ Exponential 機率分佈 有失憶性(memoryless)，常被用來 model 有這種性質的事情 $X \text{\textasciitilde}Exponential(\lambda)$ PDF $f_X(x) = \begin{cases} \lambda e^{-\lambda x} &amp;amp; ,x \ge 0 \\ 0 &amp;amp; ,otherwise \end{cases}$ CDF $F_X(x) = 1-e^{-\lambda x}$ Erlang 機率分佈 Gamma Distribution $X \text{\textasciitilde}Erlang(n,\lambda)$ PDF $f_X(x) = \begin{cases} \frac{1}{(n-1)!">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/Blog">
+                
+                    
+                    
+                    
+                        
+                        <img src="/Blog/logo_hu4571d0fc95bcb4b13f2ac8e17a6aeed9_16849_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⭐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/Blog">Roykesydon</a></h1>
+            <h2 class="site-description">I write notes here during my free time.</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#公式">公式</a>
+      <ol>
+        <li><a href="#和-cdf-的關係">和 CDF 的關係</a></li>
+      </ol>
+    </li>
+    <li><a href="#跟機率的關係">跟機率的關係</a></li>
+    <li><a href="#性質">性質</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#uniform-機率分佈">Uniform 機率分佈</a></li>
+    <li><a href="#exponential-機率分佈">Exponential 機率分佈</a></li>
+    <li><a href="#erlang-機率分佈">Erlang 機率分佈</a>
+      <ol>
+        <li><a href="#常見用法">常見用法</a></li>
+      </ol>
+    </li>
+    <li><a href="#normal-機率分佈-常態分佈">Normal 機率分佈 (常態分佈)</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#離散隨機變數">離散隨機變數</a>
+      <ol>
+        <li><a href="#離散隨機變數的函數的期望值">離散隨機變數的函數的期望值</a></li>
+        <li><a href="#性質-1">性質</a></li>
+        <li><a href="#常見隨機變數函數的期望值">常見隨機變數函數的期望值</a></li>
+        <li><a href="#變異數-variance">變異數 Variance</a>
+          <ol>
+            <li><a href="#算法">算法</a></li>
+          </ol>
+        </li>
+        <li><a href="#常見離散分佈的期望值--變異數">常見離散分佈的期望值 / 變異數</a></li>
+      </ol>
+    </li>
+    <li><a href="#連續隨機變數">連續隨機變數</a>
+      <ol>
+        <li><a href="#連續隨機變數的函數的期望值">連續隨機變數的函數的期望值</a></li>
+        <li><a href="#性質-2">性質</a></li>
+        <li><a href="#常見隨機變數函數的期望值-1">常見隨機變數函數的期望值</a></li>
+        <li><a href="#變異數-variance-1">變異數 Variance</a></li>
+        <li><a href="#常見連續分佈之期望值變異數">常見連續分佈之期望值/變異數</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/math/" style="background-color: #457ee9; color: #fff;">
+                Math
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/Blog/p/%E6%A9%9F%E7%8E%87%E8%AB%96-ii/">機率論 - II</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Feb 01, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="機率密度函數-pdf">機率密度函數 PDF</h1>
+<ul>
+<li>probability density function</li>
+<li>PMF 在 連續R.V. 上，假如 $X\text{\textasciitilde}[0,1)$，$p_X(0.7)$ = 0，因為有無窮多個數字</li>
+</ul>
+<h2 id="公式">公式</h2>
+<ul>
+<li>$f_X(x)=\lim\limits_{\Delta x \rightarrow 0} \frac{P(x \le X \le x + \Delta x)}{\Delta x} \\
+= \lim\limits_{\Delta x \rightarrow 0} \frac{F_X(x+\Delta x) - F_X(x)}{\Delta x} \\
+= F^{\prime}_X(x)
+$</li>
+</ul>
+<h3 id="和-cdf-的關係">和 CDF 的關係</h3>
+<ul>
+<li>$CDF: F_X(x) = PDF: f_X(x)$
+<ul>
+<li>
+<p>$\int^x_{-\infty}$ 可以從 PDF 轉到 CDF</p>
+</li>
+<li>
+<p>$\frac{d}{dx} 可以從 CDF 轉到 PDF$</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="跟機率的關係">跟機率的關係</h2>
+<ul>
+<li>$P(a &lt; X \le b) = F_X(b) - F_X(a) \\
+= \int^b_{-\infty} f_X(x)dx - \int^a_{-\infty} f_X(x)dx \\
+= \int^a_b f_X(x)dx$</li>
+<li>$f_X(x)=\lim\limits_{\Delta x \rightarrow 0} \frac{P(x \le X \le x + \Delta x)}{\Delta x}$
+<ul>
+<li>當 $\Delta x$ 很小時
+<ul>
+<li>$P(x \le X \le x + \Delta x) \approx f_X(x) \cdot \Delta x$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="性質">性質</h2>
+<ul>
+<li>$f_X(x) = F^{\prime}_X(x)$</li>
+<li>$F_X(x)=\int^x_{-\infty}f_X(u)du$</li>
+<li>$P(a \le X \le b)=\int^b_a f_X(x) dx$</li>
+<li>$\int^{\infty}_{-\infty}f_X(x)dx=1$</li>
+<li>$f_X(x) \ge 0$</li>
+<li>$f_X(x)$ 可以比 1 大</li>
+</ul>
+<h1 id="連續機率分佈">連續機率分佈</h1>
+<h2 id="uniform-機率分佈">Uniform 機率分佈</h2>
+<ul>
+<li>$X \text{\textasciitilde}UNIF(a,b)$</li>
+<li>PDF
+<ul>
+<li>$f_X(x) = \begin{cases}
+\frac{1}{b-a} &amp; ,a \le x \le b \\
+0 &amp; ,otherwise
+\end{cases}$</li>
+</ul>
+</li>
+<li>CDF
+<ul>
+<li>$F_X(x) = \begin{cases}
+0 &amp; ,x \le a \\
+\frac{x-a}{b-a} &amp; ,a &lt; x \le b\\
+1 &amp; ,x &gt; b
+\end{cases}$</li>
+</ul>
+</li>
+</ul>
+<h2 id="exponential-機率分佈">Exponential 機率分佈</h2>
+<ul>
+<li>有失憶性(memoryless)，常被用來 model 有這種性質的事情</li>
+<li>$X \text{\textasciitilde}Exponential(\lambda)$</li>
+<li>PDF
+<ul>
+<li>$f_X(x) = \begin{cases}
+\lambda e^{-\lambda x} &amp; ,x \ge 0 \\
+0 &amp; ,otherwise
+\end{cases}$</li>
+</ul>
+</li>
+<li>CDF
+<ul>
+<li>$F_X(x) = 1-e^{-\lambda x}$</li>
+</ul>
+</li>
+</ul>
+<h2 id="erlang-機率分佈">Erlang 機率分佈</h2>
+<ul>
+<li>Gamma Distribution</li>
+<li>$X \text{\textasciitilde}Erlang(n,\lambda)$</li>
+<li>PDF
+<ul>
+<li>$f_X(x) = \begin{cases}
+\frac{1}{(n-1)!}\lambda^n x^{n-1} e^{-\lambda x} &amp; ,x \ge 0 \\
+0 &amp; ,otherwise
+\end{cases}$
+<ul>
+<li>$f_X(x)=(\lambda e^{-\lambda x}) * (\lambda e^{-\lambda x}) * &hellip; * (\lambda e^{-\lambda x})$
+<ul>
+<li>自己和自己做 n 次 convolution</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CDF
+<ul>
+<li>$F_X(x) = \begin{cases}
+1 - \Sigma^{n-1}_{k=0}\frac{(\lambda x)^k}{k!}e^{-\lambda x} &amp; ,x \ge 0 \\
+0 &amp; ,otherwise
+\end{cases}$</li>
+</ul>
+</li>
+</ul>
+<h3 id="常見用法">常見用法</h3>
+<ul>
+<li>用來 model 一件有多個關卡事情的總時間，而每個關卡所需時間是隨機的
+<ul>
+<li>關卡數: n</li>
+<li>每關卡所需時間之機率分佈 $Exponential(\lambda)$</li>
+<li>e.g. 打電動過三關所需時間
+<ul>
+<li>$Erlang(3, \lambda)$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="normal-機率分佈-常態分佈">Normal 機率分佈 (常態分佈)</h2>
+<ul>
+<li>
+<p>在自然界常出現</p>
+</li>
+<li>
+<p>常被用做「很多隨機量的總和」的機率模型</p>
+</li>
+<li>
+<p>又稱 Gaussian 機率分佈</p>
+</li>
+<li>
+<p>$X \text{\textasciitilde}Gaussian(\mu,\sigma)$</p>
+</li>
+<li>
+<p>PDF</p>
+<ul>
+<li>$f_X(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$</li>
+</ul>
+</li>
+<li>
+<p>也常用 $X \text{\textasciitilde}N(\mu,\sigma^2)$</p>
+<ul>
+<li>注意 $\sigma$ 不一樣</li>
+</ul>
+</li>
+<li>
+<p>CDF</p>
+<ul>
+<li>
+<p>太難算，積不出來</p>
+<ul>
+<li>針對某組特別的 $\mu, \sigma$ 的 CDF 建表，把其他常態分佈的 CDF 和這組產生關聯</li>
+</ul>
+</li>
+<li>
+<p>標準常態分佈</p>
+<ul>
+<li>$Z \text{\textasciitilde}N(0,1)$
+<ul>
+<li>$f_Z(z)=\frac{1}{\sqrt{2 \pi}}e^{-\frac{z^2}{2}}$</li>
+</ul>
+</li>
+<li>CDF 表示為 $\Phi(z)$
+<ul>
+<li>
+<p>$\Phi(z)=\int^z_{-\infty}\frac{1}{\sqrt{2\pi}}e^{-\frac{u^2}{2}}du$</p>
+<ul>
+<li>積不出來，以數值方法近似出來後建表給人家查
+<ul>
+<li>查 standard normal table</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>e.g. $F_Z(1.325)=?$</p>
+<ul>
+<li>查表 $F_Z(1.32)=0.9066$，$F_Z(1.33)=0.9082$
+<ul>
+<li>用內插約略得 0.9074</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>性質</p>
+<ul>
+<li>$\Phi(-z) = 1 - \Phi(z)$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>任意  $\mu, \sigma$ 的 CDF</p>
+<ul>
+<li>對任何 $X \text{\textasciitilde}N(\mu,\sigma^2)$
+<ul>
+<li>$\frac{X-\mu}{\sigma}\text{\textasciitilde}N(0,1)$</li>
+<li>$F_X(x)=\Phi(\frac{x-\mu}{\sigma})$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="期望值">期望值</h1>
+<ul>
+<li>Expectation</li>
+<li>大數法則
+<ul>
+<li>$P(A)=\lim\limits_{N \rightarrow \infty}\frac{N_A}{N}$</li>
+</ul>
+</li>
+<li>基本上期望值是利用大數法則算的 mean 值，雖然平均值是 R.V.，但當實驗無窮多次時，會收斂到常數，因此以這為估算值</li>
+<li>Mean 值又稱做期望值</li>
+</ul>
+<h2 id="離散隨機變數">離散隨機變數</h2>
+<ul>
+<li>$E\lbrack X \rbrack=\mu_X=\displaystyle\sum^{\infty}_{x=-\infty}x \cdot P_X(x)$</li>
+</ul>
+<h3 id="離散隨機變數的函數的期望值">離散隨機變數的函數的期望值</h3>
+<ul>
+<li>對離散隨機變數 X 而言，其任意函數 g(x) 也是一隨機變數，也有期望值
+<ul>
+<li>$g(X)$ 的期望值定義為
+<ul>
+<li>$E \lbrack g(X) \rbrack=\displaystyle\sum^{\infty}_{x=-\infty}g(x)\cdot P_X(x)$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="性質-1">性質</h3>
+<ul>
+<li>$E\lbrack \alpha g(X) \rbrack = \alpha \cdot E \lbrack g(X) \rbrack$</li>
+<li>$E\lbrack \alpha g(X) + \beta h(X) \rbrack \\
+=\alpha \cdot E \lbrack g(X) \rbrack + \beta \cdot E \lbrack h(X) \rbrack$</li>
+<li>$E\lbrack \alpha \rbrack = \alpha$</li>
+</ul>
+<h3 id="常見隨機變數函數的期望值">常見隨機變數函數的期望值</h3>
+<ul>
+<li>$X$ 的 $n^{th} moment$
+<ul>
+<li>$E \lbrack X^n \rbrack = \displaystyle\sum^{\infty}_{x=-\infty}x^n \cdot P_X(x)$</li>
+</ul>
+</li>
+<li>X 的變異數(variance)
+<ul>
+<li>$E \lbrack (X-\mu_X)^2 \rbrack = \displaystyle\sum^{\infty}_{x=-\infty} (x-\mu_X)^2 \cdot P_X(x)$</li>
+</ul>
+</li>
+</ul>
+<h3 id="變異數-variance">變異數 Variance</h3>
+<ul>
+<li>Variance 通常符號表示為 $\sigma^2_X=E \lbrack (X-\mu_X)^2 \rbrack$</li>
+<li>隱含隨機變數 X 多「亂」的資訊
+<ul>
+<li>variance 大的話，X 不見得接近 $\mu_X$</li>
+</ul>
+</li>
+<li>變異數開根號是標準差(standard deviation)
+<ul>
+<li>$\sigma_X = \sqrt{Variance} \ge 0$</li>
+</ul>
+</li>
+</ul>
+<h4 id="算法">算法</h4>
+<p>$\sigma^2_X=E \lbrack X^2 \rbrack - \mu^2_X\\
+\Rightarrow E \lbrack X^2 \rbrack = \sigma^2_X + \mu^2_X$</p>
+<h3 id="常見離散分佈的期望值--變異數">常見離散分佈的期望值 / 變異數</h3>
+<ul>
+<li>
+<p>$X\text{\textasciitilde}Bernouli(p)$</p>
+<ul>
+<li>
+<p>$\mu_X=1 \cdot p + 0 \cdot (1-p) \\
+= p$</p>
+</li>
+<li>
+<p>$\sigma^2_X = E \lbrack X^2 \rbrack - \mu^2_X \\
+= \displaystyle\sum^1_{x=0}x^2\cdot p_X(x)-\mu_X^2 \\
+=1^2 \cdot p + 0^2 \cdot (1-p) - p^2\\
+=p(1-p)$</p>
+</li>
+</ul>
+</li>
+<li>
+<p>$X$~$BIN(n,p)$</p>
+<ul>
+<li>
+<p>$\mu_X = np$</p>
+</li>
+<li>
+<p>$\sigma^2_X = np(1-p)$</p>
+</li>
+</ul>
+</li>
+<li>
+<p>$X$~$GEO(p)$</p>
+<ul>
+<li>
+<p>$\mu_X = \frac{1}{p}$</p>
+</li>
+<li>
+<p>$\sigma^2_X = \frac{(1-p)}{p^2}$</p>
+</li>
+</ul>
+</li>
+<li>
+<p>$X$~$PASKAL(k,p)$</p>
+<ul>
+<li>
+<p>$\mu_X = \frac{k}{p}$</p>
+</li>
+<li>
+<p>$\sigma^2_X = \frac{k(1-p)}{p^2}$</p>
+</li>
+</ul>
+</li>
+<li>
+<p>$X$~$POI(\alpha)$</p>
+<ul>
+<li>
+<p>$\mu_X = \alpha$</p>
+</li>
+<li>
+<p>$\sigma^2_X = \alpha$</p>
+</li>
+</ul>
+</li>
+<li>
+<p>$X$~$UNIF(a,b)$</p>
+<ul>
+<li>
+<p>$\mu_X = \frac{a+b}{2}$</p>
+</li>
+<li>
+<p>$\sigma^2_X = \frac{1}{12}(b-a)(b-a+2)$</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="連續隨機變數">連續隨機變數</h2>
+<p>對連續的隨機變數 X 而言，將 X 的值以 $\Delta$ 為單位無條件捨去來近似，以隨機變數 Y 表示(當 $\Delta \rightarrow$ 0 時，$X \approx Y$)，然後再當做 PMF 處理。</p>
+<ul>
+<li>$E \lbrack X \rbrack = \int^{\infty}_{-\infty}xf_X(x)dx$</li>
+</ul>
+<h3 id="連續隨機變數的函數的期望值">連續隨機變數的函數的期望值</h3>
+<ul>
+<li>對連續隨機變數 X 而言，其任意函數 g(x) 也是一隨機變數，也有期望值
+<ul>
+<li>$g(X)$ 的期望值定義為
+<ul>
+<li>$E \lbrack g(X) \rbrack=\int^{\infty}_{-\infty}g(x)\cdot f_X(x)dx$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="性質-2">性質</h3>
+<ul>
+<li>$E\lbrack \alpha g(X) \rbrack = \alpha \cdot E \lbrack g(X) \rbrack$</li>
+<li>$E\lbrack \alpha g(X) + \beta h(X) \rbrack \\
+=\alpha \cdot E \lbrack g(X) \rbrack + \beta \cdot E \lbrack h(X) \rbrack$</li>
+<li>$E\lbrack \alpha \rbrack = \alpha$</li>
+</ul>
+<h3 id="常見隨機變數函數的期望值-1">常見隨機變數函數的期望值</h3>
+<ul>
+<li>$X$ 的 $n^{th} moment$
+<ul>
+<li>$E \lbrack X^n \rbrack = \int^{\infty}_{-\infty}x^n \cdot f_X(x)dx$</li>
+</ul>
+</li>
+<li>X 的變異數(variance)
+<ul>
+<li>$E \lbrack (X-\mu_X)^2 \rbrack = \int^{\infty}_{-\infty} (x-\mu_X)^2 \cdot f_X(x)dx$</li>
+</ul>
+</li>
+</ul>
+<h3 id="變異數-variance-1">變異數 Variance</h3>
+<ul>
+<li>和離散隨機變數的資訊一樣</li>
+</ul>
+<h3 id="常見連續分佈之期望值變異數">常見連續分佈之期望值/變異數</h3>
+<ul>
+<li>
+<p>$X$~$Exponential(\lambda)$</p>
+<ul>
+<li>
+<p>$\mu_X = \frac{1}{\lambda}$</p>
+</li>
+<li>
+<p>$\sigma^2_X = \frac{1}{\lambda^2}$</p>
+</li>
+</ul>
+</li>
+<li>
+<p>$X$~$Erlang(n, \lambda)$</p>
+<ul>
+<li>
+<p>$\mu_X = \frac{n}{\lambda}$</p>
+</li>
+<li>
+<p>$\sigma^2_X = \frac{n}{\lambda^2}$</p>
+</li>
+</ul>
+</li>
+<li>
+<p>$X$~$Gaussian(\mu,\sigma)$</p>
+<ul>
+<li>
+<p>$\mu_X = \mu$</p>
+</li>
+<li>
+<p>$\sigma^2_X = \sigma^2$</p>
+</li>
+</ul>
+</li>
+<li>
+<p>$X$~$UNIF(a,b)$</p>
+<ul>
+<li>
+<p>$\mu_X = \frac{a+b}{2}$</p>
+</li>
+<li>
+<p>$\sigma^2_X = \frac{1}{12}(b-a)^2$</p>
+</li>
+</ul>
+</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/math/">math</a>
+        
+            <a href="/Blog/tags/probability/">probability</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/%E6%A9%9F%E7%8E%87%E8%AB%96-iv/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">機率論 - IV</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E6%A9%9F%E7%8E%87%E8%AB%96-iii/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">機率論 - III</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E6%A9%9F%E7%8E%87%E8%AB%96-i/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">機率論 - I</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E7%B7%9A%E6%80%A7%E4%BB%A3%E6%95%B8-ii/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">線性代數 - II</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E7%B7%9A%E6%80%A7%E4%BB%A3%E6%95%B8-i/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">線性代數 - I</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2022 - 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

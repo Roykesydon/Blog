@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: Masked Autoencoders Are Scalable Vision Learners
+Abstract 這篇論文顯示出 MAE 是 CV 中的 scalable self-supervised learners。
+MAE 的方法很簡單
+隨機蓋住輸入影像的一些 patch 重建 missing pixels 具備兩個核心設計
+非對稱的 encoder-decoder 架構，encoder 只作用於可見的 patch 子集合(沒有 mask tokens)，lightweight decoder 則根據 latent representation 和 make tokens 來重建圖片。 當遮住高比例(比如 75%)的影像時，會得到一個 nontrivial 和 meaningful 的 self-supervisory task 結合這兩點設計，可以有效地訓練大模型。 以 ViT-Huge 用 ImageNet-1K 訓練(訓練集一百多萬張照片)可達到 87.8% 的準確度。
+Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督預訓練處理了需要大量標註資料的問題。 masked autoencoders 是一種更 general 的 denoising autoencoders 的形式。 BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者思考是什麼讓 masked autoencoding 在 CV 和 NLP 產生不同。 有以下觀點'>
+<title>MAE 論文</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/mae-%E8%AB%96%E6%96%87/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.c8da5069c06805334f6b22a49ff864b8c2cf9279882d00f7f4c0cf2f656d204c.css"><meta property='og:title' content='MAE 論文'>
+<meta property='og:description' content='paper: Masked Autoencoders Are Scalable Vision Learners
+Abstract 這篇論文顯示出 MAE 是 CV 中的 scalable self-supervised learners。
+MAE 的方法很簡單
+隨機蓋住輸入影像的一些 patch 重建 missing pixels 具備兩個核心設計
+非對稱的 encoder-decoder 架構，encoder 只作用於可見的 patch 子集合(沒有 mask tokens)，lightweight decoder 則根據 latent representation 和 make tokens 來重建圖片。 當遮住高比例(比如 75%)的影像時，會得到一個 nontrivial 和 meaningful 的 self-supervisory task 結合這兩點設計，可以有效地訓練大模型。 以 ViT-Huge 用 ImageNet-1K 訓練(訓練集一百多萬張照片)可達到 87.8% 的準確度。
+Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督預訓練處理了需要大量標註資料的問題。 masked autoencoders 是一種更 general 的 denoising autoencoders 的形式。 BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者思考是什麼讓 masked autoencoding 在 CV 和 NLP 產生不同。 有以下觀點'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/mae-%E8%AB%96%E6%96%87/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='computer-vision' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:published_time' content='2023-02-15T16:08:46&#43;08:00'/><meta property='article:modified_time' content='2023-02-15T16:08:46&#43;08:00'/>
+<meta name="twitter:title" content="MAE 論文">
+<meta name="twitter:description" content="paper: Masked Autoencoders Are Scalable Vision Learners
+Abstract 這篇論文顯示出 MAE 是 CV 中的 scalable self-supervised learners。
+MAE 的方法很簡單
+隨機蓋住輸入影像的一些 patch 重建 missing pixels 具備兩個核心設計
+非對稱的 encoder-decoder 架構，encoder 只作用於可見的 patch 子集合(沒有 mask tokens)，lightweight decoder 則根據 latent representation 和 make tokens 來重建圖片。 當遮住高比例(比如 75%)的影像時，會得到一個 nontrivial 和 meaningful 的 self-supervisory task 結合這兩點設計，可以有效地訓練大模型。 以 ViT-Huge 用 ImageNet-1K 訓練(訓練集一百多萬張照片)可達到 87.8% 的準確度。
+Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督預訓練處理了需要大量標註資料的問題。 masked autoencoders 是一種更 general 的 denoising autoencoders 的形式。 BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者思考是什麼讓 masked autoencoding 在 CV 和 NLP 產生不同。 有以下觀點">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/Blog">
+                
+                    
+                    
+                    
+                        
+                        <img src="/Blog/logo_hu4571d0fc95bcb4b13f2ac8e17a6aeed9_16849_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⭐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/Blog">Roykesydon</a></h1>
+            <h2 class="site-description">I write notes here during my free time.</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/deep-learning/" style="background-color: #936ce1; color: #fff;">
+                Deep Learning
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">MAE 論文</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Feb 15, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    2 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>paper: <a class="link" href="https://arxiv.org/abs/2111.06377"  target="_blank" rel="noopener"
+    >Masked Autoencoders Are Scalable Vision Learners</a></p>
+<h1 id="abstract">Abstract</h1>
+<p>這篇論文顯示出 MAE 是 CV 中的 scalable self-supervised learners。</p>
+<p>MAE 的方法很簡單</p>
+<ul>
+<li>隨機蓋住輸入影像的一些 patch</li>
+<li>重建 missing pixels</li>
+</ul>
+<p>具備兩個核心設計</p>
+<ol>
+<li>非對稱的 encoder-decoder 架構，encoder 只作用於可見的 patch 子集合(沒有 mask tokens)，lightweight decoder 則根據 latent representation 和 make tokens 來重建圖片。</li>
+<li>當遮住高比例(比如 75%)的影像時，會得到一個 nontrivial 和 meaningful 的 self-supervisory task</li>
+</ol>
+<p>結合這兩點設計，可以有效地訓練大模型。
+以 ViT-Huge 用 ImageNet-1K 訓練(訓練集一百多萬張照片)可達到 87.8% 的準確度。</p>
+<h1 id="introduction">Introduction</h1>
+<p><img src="/images/deep-learning/MAE/intro.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="/images/deep-learning/MAE/valid-example.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="/images/deep-learning/MAE/valid-example-2.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>在 CV 中，常需要大量 labeled images。
+NLP 中，自監督預訓練處理了需要大量標註資料的問題。
+masked autoencoders 是一種更 general 的 denoising autoencoders 的形式。
+BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者思考是什麼讓 masked autoencoding 在 CV 和 NLP 產生不同。
+有以下觀點</p>
+<ol>
+<li>直到前陣子，CV 中的 CNN 是主流，但卷積層不好引入 mask tokens 或 positional embedding 這些 indicator。但這些可以透過 ViT 來解決，不應成為問題。</li>
+<li>語言和視覺的 Information density 不同，語言是 highly semantic 和 information-dense，使填字本身不是很簡單的事情，但影像含有大量冗餘的訊息，缺失的部分比較好從相鄰的 patch 重建，比如直接插值，所以作者用一種簡單的策略，隨機 mask 很大一部分的 patch，創造一個具有挑戰性的自監督任務，強迫模型關注 global 的資訊。</li>
+<li>關於 decoder，CV 還原 pixel，pixel 屬於 lower semantic level，NLP 還原 word，word 的 semantic information 較高。作者發現，雖然在 BERT 中，可以用簡單的 decoder 還原(一個 MLP)，但 CV 中 decoder 的設計就很重要。</li>
+</ol>
+<p>基於以上觀點，作者提出 MAE，隨機遮住大量的 patch，並在 pixel space 重建失去的 patch。而且是非對稱 encoder-decoder 架構，encoder 只會看到可見的 patch，但 docoder 除了 latent representation，還會看到 mask tokens。這種設計在非常高的掩蓋率(比如 75%)下不但可以提高準確度，還可以讓 encoder 只處理較少比例(比如 25%)的 patch，將訓練時間減少 3 倍或更多，使 MAE 可以輕鬆擴展成更大的模型。</p>
+<p>在這樣的架構下，用 MAE 的 pre-training，可以訓練非常吃 data 的模型，比如 ViT-Large/-Huge，而只使用 ImageNet-1K。</p>
+<p>用 ImageNet-1K 在 vanilla ViT-Huge 上 fine-tune 可達到 87.8% 準確度，比以往只使用 ImageNet-1K 的結果都高。</p>
+<p>在 obejct detection、instance segmentation、semantic segmentation 上做 transfer learning 都達到不錯的效果，可以打敗用監督式預訓練模型的對手。</p>
+<h1 id="相關工作">相關工作</h1>
+<ul>
+<li>Autoencoding
+<ul>
+<li>MAE 是一種 denoising autoencoding 的形式，但和 DAE 還是差別很大。</li>
+</ul>
+</li>
+<li>Masked image encoding
+<ul>
+<li>iGPT、ViT、BEiT</li>
+</ul>
+</li>
+</ul>
+<h1 id="approach">Approach</h1>
+<ul>
+<li>
+<p>Masking</p>
+<ul>
+<li>和 ViT 一樣，把圖片切成多個 patch，對於 patch 均勻隨機地採樣保留，剩下地遮住</li>
+</ul>
+</li>
+<li>
+<p>MAE encoder</p>
+<ul>
+<li>ViT</li>
+<li>也有 positional embedding</li>
+</ul>
+</li>
+<li>
+<p>MAE decoder</p>
+<ul>
+<li>Transformer block</li>
+<li>輸入
+<ul>
+<li>encoded visible patches</li>
+<li>mask tokens
+<ul>
+<li>shared, learned vector</li>
+</ul>
+</li>
+<li>都會加入 positional embedding</li>
+</ul>
+</li>
+<li>用相較 encoder 輕量的解碼器，所有的 patch 由這個輕量的 decoder 處理，減少預訓練時間</li>
+</ul>
+</li>
+<li>
+<p>Reconstruction target</p>
+<ul>
+<li>decoder 的最後一層是 linear projection，之後再 reshape 成你要的  patch</li>
+<li>loss function
+<ul>
+<li>mean squared error(MSE)</li>
+<li>只算 masked patched 的 MSE，像 BERT</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Simple implementation</p>
+<ol>
+<li>先取得一系列 token(patch 做 linear projection + positional embedding)</li>
+<li>randomly shuffle，根據比例移除尾端一部份</li>
+<li>encoding 後，尾端接上 mask tokens，並且 unshuffle</li>
+<li>加上 positional embedding 後，給 decoder</li>
+</ol>
+</li>
+</ul>
+<h1 id="imagenet-experiments">ImageNet Experiments</h1>
+<p>在 ImageNet-1K 上做自監督的預訓練，然後做</p>
+<ol>
+<li>end-to-end fine-tuning
+<ul>
+<li>所有參數都可改</li>
+</ul>
+</li>
+<li>linear probing
+<ul>
+<li>只改最後一層線性層</li>
+</ul>
+</li>
+</ol>
+<p><img src="/images/deep-learning/MAE/vit-mae.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="/images/deep-learning/MAE/result.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="/images/deep-learning/MAE/ratio-result.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>optimal masking ratio 意外地高，相比 BERT 只有 15%</p>
+<p><img src="/images/deep-learning/MAE/fine-tune-blocks.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h1 id="討論和結論">討論和結論</h1>
+<p>在 CV 實用的預訓練做法主流是監督式的，CV 中自監督的做法可能正跟著 NLP 的軌跡走。</p>
+<p>要仔細處理圖像和語言的區別，作者去除圖片中很可能不構成 semantic segment 的部分，而不是移除某個 object。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/computer-vision/">computer-vision</a>
+        
+            <a href="/Blog/tags/deep-learning/">deep-learning</a>
+        
+            <a href="/Blog/tags/machine-learning/">machine-learning</a>
+        
+            <a href="/Blog/tags/transformer/">transformer</a>
+        
+            <a href="/Blog/tags/attention/">attention</a>
+        
+            <a href="/Blog/tags/self-attention/">self-attention</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/vit-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">ViT 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/instructgpt/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">InstructGPT</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/gpt-%E4%B8%89%E9%83%A8%E6%9B%B2/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT 三部曲</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/q-learning/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Q-learning</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/proximal-policy-optimizationppo/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Proximal Policy Optimization(PPO)</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2022 - 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

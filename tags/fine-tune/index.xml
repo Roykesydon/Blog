@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>fine-tune on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/fine-tune/</link>
+        <description>Recent content in fine-tune on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Thu, 26 Jan 2023 01:36:53 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/fine-tune/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Bayesian Optimization</title>
+        <link>https://roykesydon.github.io/Blog/p/bayesian-optimization/</link>
+        <pubDate>Thu, 26 Jan 2023 01:36:53 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/bayesian-optimization/</guid>
+        <description>&lt;h1 id=&#34;介紹&#34;&gt;介紹&lt;/h1&gt;
+&lt;p&gt;一種用於自動化找超參數的方法，用在採樣昂貴而且是黑盒子的情況&lt;/p&gt;
+&lt;h1 id=&#34;流程&#34;&gt;流程&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;取樣一些資料點&lt;/li&gt;
+&lt;li&gt;生出一個 Surrogate Model(可採用 Gaussian Process)&lt;/li&gt;
+&lt;li&gt;反覆做以下事情
+&lt;ul&gt;
+&lt;li&gt;用 Acquisition Function 挑選下一個要採樣的點&lt;/li&gt;
+&lt;li&gt;重新評估 Surrogate Model&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;gaussian-process&#34;&gt;Gaussian Process&lt;/h2&gt;
+&lt;p&gt;最終的 prediction 是一個 distribution 而不是單一個數字
+生成方法需借助 kernel function，常用 RBF(Radial Basis Function)&lt;/p&gt;
+&lt;p&gt;$K(x, x^{&amp;rsquo;}|\tau)=\sigma^2exp(-\frac{1}{2}(\frac{x-x^{&amp;rsquo;}}{l})^2)$&lt;/p&gt;
+&lt;p&gt;$\sigma$ 和 $l$ 是兩個可以調整的超參數&lt;/p&gt;
+&lt;h2 id=&#34;acquisition-function&#34;&gt;Acquisition Function&lt;/h2&gt;
+&lt;p&gt;可用超參數來調節 exploitation 和 exploitation&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;UCB(Upper confidence bound)&lt;/li&gt;
+&lt;li&gt;PI(probability of improvement)&lt;/li&gt;
+&lt;li&gt;EI(Expected improvement)&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>linear-algebra on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/linear-algebra/</link>
+        <description>Recent content in linear-algebra on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Tue, 21 Feb 2023 15:42:47 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/linear-algebra/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>線性代數 - II</title>
+        <link>https://roykesydon.github.io/Blog/p/%E7%B7%9A%E6%80%A7%E4%BB%A3%E6%95%B8-ii/</link>
+        <pubDate>Tue, 21 Feb 2023 15:42:47 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/%E7%B7%9A%E6%80%A7%E4%BB%A3%E6%95%B8-ii/</guid>
+        <description>&lt;h1 id=&#34;linear-equation&#34;&gt;linear equation&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;$a_1x_1+a_2x_2+&amp;hellip;+a_nx_n = b$
+&lt;ul&gt;
+&lt;li&gt;$a$ 是 coefficient&lt;/li&gt;
+&lt;li&gt;$x$ 是 variables&lt;/li&gt;
+&lt;li&gt;$b$ 是 constant term&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;systems-of-linear-equations&#34;&gt;Systems of linear equations&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;m equations, n variables&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$a_{11}x_1+a_{12}x_2+&amp;hellip;+a_{1n}x_n = b_1\\
+a_{21}x_1+a_{22}x_2+&amp;hellip;+a_{2n}x_n = b_2\\
+&amp;hellip;\\
+a_{m1}x_1+a_{m2}x_2+&amp;hellip;+a_{mn}x_n = b_m$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;solution&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$[s_1~s_2~&amp;hellip;~s_n]^T$ 是一組解，代換到 $x_1$~$x_n$ 後滿足所有 equation 的向量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;所有 Systems of linear equations 都有&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;no solution&lt;/li&gt;
+&lt;li&gt;exactly one solution&lt;/li&gt;
+&lt;li&gt;infinitely many solutions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;consistent/inconsistent&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果有一組以上的解就是 consistent&lt;/li&gt;
+&lt;li&gt;無解就是 inconsistent&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;equivalent&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果兩組 Systems of linear equations 的 solution set 一樣，稱為 equivalent&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;elementary row operations&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不會影響 solution set&lt;/li&gt;
+&lt;li&gt;types
+&lt;ul&gt;
+&lt;li&gt;Interchange
+&lt;ul&gt;
+&lt;li&gt;兩 row 互換&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Scaling
+&lt;ul&gt;
+&lt;li&gt;某 row 乘某個 nonzero scalar&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Row addition
+&lt;ul&gt;
+&lt;li&gt;把某 row 乘某個 scalar 後加到某 row&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;property
+&lt;ul&gt;
+&lt;li&gt;所有 elementary row operations 都是 reversible&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;用來求解&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;coefficient matrix&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$a_{11}x_1+a_{12}x_2+&amp;hellip;+a_{1n}x_n = b_1\\
+a_{21}x_1+a_{22}x_2+&amp;hellip;+a_{2n}x_n = b_2\\
+&amp;hellip;\\
+a_{m1}x_1+a_{m2}x_2+&amp;hellip;+a_{mn}x_n = b_m$
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;可以拆為 $Ax=b$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$A=\begin{bmatrix}
+a_{11}&amp;amp; a_{12}&amp;amp;&amp;hellip;&amp;amp; a_{1n} \\
+a_{21}&amp;amp; a_{22}&amp;amp;&amp;hellip;&amp;amp; a_{2n} \\
+&amp;hellip;&amp;amp; &amp;hellip;&amp;amp;&amp;hellip;&amp;amp; &amp;hellip; \\
+a_{m1}&amp;amp; a_{m2}&amp;amp;&amp;hellip;&amp;amp; a_{mn}
+\end{bmatrix}$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A 就是 coefficient matrix&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$x=\begin{bmatrix}
+x_1\\
+x_2\\
+&amp;hellip;\\
+x_n
+\end{bmatrix}$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$x$ 是 variable vector&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$[A|b]=\begin{bmatrix}
+a_{11}&amp;amp; a_{12}&amp;amp;&amp;hellip;&amp;amp; a_{1n} &amp;amp; b_1 \\
+a_{21}&amp;amp; a_{22}&amp;amp;&amp;hellip;&amp;amp; a_{2n} &amp;amp; b_2\\
+&amp;hellip;&amp;amp; &amp;hellip;&amp;amp;&amp;hellip;&amp;amp; &amp;hellip; &amp;amp; &amp;hellip;\\
+a_{m1}&amp;amp; a_{m2}&amp;amp;&amp;hellip;&amp;amp; a_{mn} &amp;amp; b_m
+\end{bmatrix}$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;叫做 augmented matrix&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>線性代數 - I</title>
+        <link>https://roykesydon.github.io/Blog/p/%E7%B7%9A%E6%80%A7%E4%BB%A3%E6%95%B8-i/</link>
+        <pubDate>Tue, 21 Feb 2023 14:42:47 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/%E7%B7%9A%E6%80%A7%E4%BB%A3%E6%95%B8-i/</guid>
+        <description>&lt;h1 id=&#34;matrix&#34;&gt;matrix&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;a rectangular array of scalars&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;size&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;m by n&lt;/li&gt;
+&lt;li&gt;叫做 square if m = n&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;equal&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;兩個矩陣的 size 和每個 entry 都一樣&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;submatrix&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;從一個大矩陣刪掉 rows 或 columns&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;addition&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;兩個大小相同的矩陣，每個對應位置的 entry 兩兩相加&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;scalar multiplication&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一個矩陣的所有 entry 乘以某個 scalar&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;zero matrix&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;所有 entry 都是 0，該矩陣常以 $O_{n \times m}$ 來表示&lt;/li&gt;
+&lt;li&gt;性質
+&lt;ul&gt;
+&lt;li&gt;$A = O + A$&lt;/li&gt;
+&lt;li&gt;$0 \cdot A = O $&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;subtraction&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$A-B=A+(-B)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;transpose&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$A^T$ 的 $(i,j)$-entry 是 $A$ 的 $(j,i)$-entry&lt;/li&gt;
+&lt;li&gt;Properties
+&lt;ul&gt;
+&lt;li&gt;$(A+B)^T=A^T+B^T$&lt;/li&gt;
+&lt;li&gt;$(sA)^T=sA^T$&lt;/li&gt;
+&lt;li&gt;$(A^T)^T=A$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;vectors&#34;&gt;vectors&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;type&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;row vector
+&lt;ul&gt;
+&lt;li&gt;只有 1 row 的 matrix&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;column vector
+&lt;ul&gt;
+&lt;li&gt;只有 1 column 的 matrix&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;components&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;the entries of a vector&lt;/li&gt;
+&lt;li&gt;用 the $i$ th component 代表 $v_i$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;addition, scalar multiplication&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;和 matrix 一樣&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;矩陣表示&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一個矩陣常被表示為
+&lt;ul&gt;
+&lt;li&gt;a stack of row vectors&lt;/li&gt;
+&lt;li&gt;a cross list of column vectors&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;linear-combination&#34;&gt;linear combination&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$c_1u_1+c_2u_2+&amp;hellip;+c_ku_k$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;scalars&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$c_1,c_2,&amp;hellip;,c_k$&lt;/li&gt;
+&lt;li&gt;又被稱作 linear combination 的 coefficients&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;vectors&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$u_1,u_2,&amp;hellip;,u_k$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果 $u,v$ 非平行二維向量，則二維空間中所有向量皆是 $u,v$ 的 linear combination，且是 unique 的&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;standard-vectors&#34;&gt;standard vectors&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$e_1 = \begin{bmatrix}
+1 \\
+0 \\
+&amp;hellip; \\
+0
+\end{bmatrix}
+,e_2 = \begin{bmatrix}
+0 \\
+1 \\
+&amp;hellip; \\
+0
+\end{bmatrix},&amp;hellip;,
+e_n = \begin{bmatrix}
+0 \\
+0 \\
+&amp;hellip; \\
+1
+\end{bmatrix}$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$R^n$ 的任何一個向量都可以被 standard vectors 表示成 uniquely linearly combined&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;矩陣向量乘法&#34;&gt;矩陣向量乘法&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;$Av=v_1a_1+v_2a_2+&amp;hellip;+v_na_n$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;identity-matrix&#34;&gt;Identity Matrix&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;對整數 n，$n \times n$ identity matrix
+&lt;ul&gt;
+&lt;li&gt;$I_n$&lt;/li&gt;
+&lt;li&gt;每個 columns 是 standard vectors $e_1, e_2, &amp;hellip;, e_n$ in $R^n$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;stochastic-matrix&#34;&gt;Stochastic Matrix&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;對整數 n，$n \times n$ stochastic matrix&lt;/li&gt;
+&lt;li&gt;所有 entry 都必須非負&lt;/li&gt;
+&lt;li&gt;每個 column 的 entry 總和必須是 unity (相加為 1)&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

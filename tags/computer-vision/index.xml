@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>computer-vision on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/computer-vision/</link>
+        <description>Recent content in computer-vision on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Wed, 15 Feb 2023 16:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/computer-vision/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>MAE 論文</title>
+        <link>https://roykesydon.github.io/Blog/p/mae-%E8%AB%96%E6%96%87/</link>
+        <pubDate>Wed, 15 Feb 2023 16:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/mae-%E8%AB%96%E6%96%87/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2111.06377&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Masked Autoencoders Are Scalable Vision Learners&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;abstract&#34;&gt;Abstract&lt;/h1&gt;
+&lt;p&gt;這篇論文顯示出 MAE 是 CV 中的 scalable self-supervised learners。&lt;/p&gt;
+&lt;p&gt;MAE 的方法很簡單&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;隨機蓋住輸入影像的一些 patch&lt;/li&gt;
+&lt;li&gt;重建 missing pixels&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;具備兩個核心設計&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;非對稱的 encoder-decoder 架構，encoder 只作用於可見的 patch 子集合(沒有 mask tokens)，lightweight decoder 則根據 latent representation 和 make tokens 來重建圖片。&lt;/li&gt;
+&lt;li&gt;當遮住高比例(比如 75%)的影像時，會得到一個 nontrivial 和 meaningful 的 self-supervisory task&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;結合這兩點設計，可以有效地訓練大模型。
+以 ViT-Huge 用 ImageNet-1K 訓練(訓練集一百多萬張照片)可達到 87.8% 的準確度。&lt;/p&gt;
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/intro.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/valid-example.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/valid-example-2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在 CV 中，常需要大量 labeled images。
+NLP 中，自監督預訓練處理了需要大量標註資料的問題。
+masked autoencoders 是一種更 general 的 denoising autoencoders 的形式。
+BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者思考是什麼讓 masked autoencoding 在 CV 和 NLP 產生不同。
+有以下觀點&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;直到前陣子，CV 中的 CNN 是主流，但卷積層不好引入 mask tokens 或 positional embedding 這些 indicator。但這些可以透過 ViT 來解決，不應成為問題。&lt;/li&gt;
+&lt;li&gt;語言和視覺的 Information density 不同，語言是 highly semantic 和 information-dense，使填字本身不是很簡單的事情，但影像含有大量冗餘的訊息，缺失的部分比較好從相鄰的 patch 重建，比如直接插值，所以作者用一種簡單的策略，隨機 mask 很大一部分的 patch，創造一個具有挑戰性的自監督任務，強迫模型關注 global 的資訊。&lt;/li&gt;
+&lt;li&gt;關於 decoder，CV 還原 pixel，pixel 屬於 lower semantic level，NLP 還原 word，word 的 semantic information 較高。作者發現，雖然在 BERT 中，可以用簡單的 decoder 還原(一個 MLP)，但 CV 中 decoder 的設計就很重要。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;基於以上觀點，作者提出 MAE，隨機遮住大量的 patch，並在 pixel space 重建失去的 patch。而且是非對稱 encoder-decoder 架構，encoder 只會看到可見的 patch，但 docoder 除了 latent representation，還會看到 mask tokens。這種設計在非常高的掩蓋率(比如 75%)下不但可以提高準確度，還可以讓 encoder 只處理較少比例(比如 25%)的 patch，將訓練時間減少 3 倍或更多，使 MAE 可以輕鬆擴展成更大的模型。&lt;/p&gt;
+&lt;p&gt;在這樣的架構下，用 MAE 的 pre-training，可以訓練非常吃 data 的模型，比如 ViT-Large/-Huge，而只使用 ImageNet-1K。&lt;/p&gt;
+&lt;p&gt;用 ImageNet-1K 在 vanilla ViT-Huge 上 fine-tune 可達到 87.8% 準確度，比以往只使用 ImageNet-1K 的結果都高。&lt;/p&gt;
+&lt;p&gt;在 obejct detection、instance segmentation、semantic segmentation 上做 transfer learning 都達到不錯的效果，可以打敗用監督式預訓練模型的對手。&lt;/p&gt;
+&lt;h1 id=&#34;相關工作&#34;&gt;相關工作&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Autoencoding
+&lt;ul&gt;
+&lt;li&gt;MAE 是一種 denoising autoencoding 的形式，但和 DAE 還是差別很大。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Masked image encoding
+&lt;ul&gt;
+&lt;li&gt;iGPT、ViT、BEiT&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;approach&#34;&gt;Approach&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Masking&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;和 ViT 一樣，把圖片切成多個 patch，對於 patch 均勻隨機地採樣保留，剩下地遮住&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;MAE encoder&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ViT&lt;/li&gt;
+&lt;li&gt;也有 positional embedding&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;MAE decoder&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Transformer block&lt;/li&gt;
+&lt;li&gt;輸入
+&lt;ul&gt;
+&lt;li&gt;encoded visible patches&lt;/li&gt;
+&lt;li&gt;mask tokens
+&lt;ul&gt;
+&lt;li&gt;shared, learned vector&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;都會加入 positional embedding&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;用相較 encoder 輕量的解碼器，所有的 patch 由這個輕量的 decoder 處理，減少預訓練時間&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Reconstruction target&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;decoder 的最後一層是 linear projection，之後再 reshape 成你要的  patch&lt;/li&gt;
+&lt;li&gt;loss function
+&lt;ul&gt;
+&lt;li&gt;mean squared error(MSE)&lt;/li&gt;
+&lt;li&gt;只算 masked patched 的 MSE，像 BERT&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Simple implementation&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;先取得一系列 token(patch 做 linear projection + positional embedding)&lt;/li&gt;
+&lt;li&gt;randomly shuffle，根據比例移除尾端一部份&lt;/li&gt;
+&lt;li&gt;encoding 後，尾端接上 mask tokens，並且 unshuffle&lt;/li&gt;
+&lt;li&gt;加上 positional embedding 後，給 decoder&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;imagenet-experiments&#34;&gt;ImageNet Experiments&lt;/h1&gt;
+&lt;p&gt;在 ImageNet-1K 上做自監督的預訓練，然後做&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;end-to-end fine-tuning
+&lt;ul&gt;
+&lt;li&gt;所有參數都可改&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;linear probing
+&lt;ul&gt;
+&lt;li&gt;只改最後一層線性層&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/vit-mae.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/result.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/ratio-result.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;optimal masking ratio 意外地高，相比 BERT 只有 15%&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/fine-tune-blocks.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h1 id=&#34;討論和結論&#34;&gt;討論和結論&lt;/h1&gt;
+&lt;p&gt;在 CV 實用的預訓練做法主流是監督式的，CV 中自監督的做法可能正跟著 NLP 的軌跡走。&lt;/p&gt;
+&lt;p&gt;要仔細處理圖像和語言的區別，作者去除圖片中很可能不構成 semantic segment 的部分，而不是移除某個 object。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>ViT 論文</title>
+        <link>https://roykesydon.github.io/Blog/p/vit-%E8%AB%96%E6%96%87/</link>
+        <pubDate>Sun, 12 Feb 2023 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/vit-%E8%AB%96%E6%96%87/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2010.11929&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;abstract&#34;&gt;Abstract&lt;/h1&gt;
+&lt;p&gt;在 CV 領域 transformer 表現有限，目前 attention 常常是和卷積神經網路一起用，或是用來把一些卷積層換成 self-attention，但整體架構不變。這篇論文想展現一個純 Transformer 可以直接在影像分類上表現很好。如果用大量資料作預訓練，再遷移到中小型的資料集，可以和 SOTA 的 CNN 表現得一樣好，還需要較少的訓練資源作訓練。&lt;/p&gt;
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;self-attention-based 架構，特別是 Transformer，已經是 NLP 的重要選擇。主流的作法是在大型文字資料集上作訓練，再針對小型任務資料集作 fine-tune。由於 Transformer 的計算效率高，還有可擴展性，可以 train 一些很大的 model，隨著 model 和資料集增大，目前還沒看出飽和的現象。&lt;/p&gt;
+&lt;p&gt;然而在 CV，CNN 還是主流，一些工作嘗試用 self-attention 結合 CNN-like 的架構，比如把 feature map 當 transformer 的輸入，因為原始 pixel 太多，或甚至把卷積層全換成 self-attention，雖然後者理論上效率很高(原論文中有另外 cite 兩篇作法)，但因為他們做法特殊，在現代硬體上很難加速，所以無法很有效地擴展。在 large-scale 的影像識別上， ResNet-like 的架構還是 SOTA。&lt;/p&gt;
+&lt;p&gt;該實驗直接把一個標準的 Transformer 作用於圖片上，只作最少的修改。把影像分成多個 patch，並把它們變成一系列的 linear embedding，當作 NLP 中的 tokens(words) 來處理。&lt;/p&gt;
+&lt;p&gt;當在中型大小的資料集(e.g. ImageNet)上訓練，如果沒有 strong regularization，ViT 會略輸同等大小的 ResNets&lt;/p&gt;
+&lt;p&gt;這篇論文在更大的資料集(14M-300M 的影像)上訓練，就打敗了 inductive bias。在大量資料上作預訓練就很讚。&lt;/p&gt;
+&lt;h1 id=&#34;related-work&#34;&gt;Related Work&lt;/h1&gt;
+&lt;p&gt;大型的 Transformer-based 模型常常是先在大資料集上預訓練然後根據任務 fine-tune，比如 BERT 和 GPT。&lt;/p&gt;
+&lt;p&gt;要把 self-attention 用在 CV 上，最簡單的做法就是把每個 Pixel 當一個元素，但 self-attention 是平方複雜度，在現實的圖片很難應用。一個應用 Transformer 的做法是只把 self-attention 用在 local neighborhood，另外一個是用 Sparse Transformer，還有一堆特殊的方法，雖然表現不錯，但要用硬體加速起來不容易。&lt;/p&gt;
+&lt;p&gt;另一個有關的模型是 iGPT，在 reduce image resolution 和 color space 後把 transformer 應用在 image pixels 上。它用非監督式訓練後，再 fine-tune 或做 linear probing(只更新最後的 linear layer) 分類任務，表現很好。&lt;/p&gt;
+&lt;p&gt;已經有類似的工作了，抽取 patches of size 2 * 2，最後再接 full self-attention，基本上和 ViT 非常像，這篇論文進一步證明了作大規模的預訓練可以讓 Transformer 和 SOTA 的 CNN 相比，而且 ViT 因為 patch 比較大，可以處理 medium-resolution 的圖片。這問題是可預期的，因為 Transformer 缺少了一些 inductive biases。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;inductive biases
+&lt;ul&gt;
+&lt;li&gt;一些假設&lt;/li&gt;
+&lt;li&gt;比如 CNN 常有四個假設
+&lt;ul&gt;
+&lt;li&gt;locality&lt;/li&gt;
+&lt;li&gt;translation invariance with pooling layers
+&lt;ul&gt;
+&lt;li&gt;平移不變性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;translation equivariance
+&lt;ul&gt;
+&lt;li&gt;f(g(x)) = g(f(x))&lt;/li&gt;
+&lt;li&gt;卷積和平移的先後順序沒差&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;method&#34;&gt;Method&lt;/h1&gt;
+&lt;p&gt;模型盡可能類似原始 Transformer，這樣可以把一些 NLP 上成功的 Transformer 架構拿來用，還可以用一些很有效率的 implementation&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-process.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;embedding 維度是 768 = 16 * 16 * 3
+position embedding 的做法是 standard learnable 1D positional embeddings，就是 BERT 的做法，簡單來說就是生出一張可以訓練的表，(序列長度, embedding size)，作者也有嘗試其他方法，但發現成效差不多，比如 2D positional embedding，概念就是從生出(序列長度, embedding size)變成生出 2 個(sqrt(序列長度), embedding size)。&lt;/p&gt;
+&lt;p&gt;[class] 的概念是 NLP 出來的，ResNet-like 的架構常見的做法也有通過 globally average-pooling (GAP)來生出向量，再接上分類器做預測。實驗發現直接在 transformer 的輸出做 GAP 和 [class] 都可以達到不錯的效果。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-gap.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-dataset.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-acc.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;拿標準的 Transformer 來作 Image recognition，和以往用 self-attention 在 CV 的方法不一樣，除了一開始的 initial patch extraction，沒有引入其他影像特有的 inductive biases。直接把圖片當成是一系列的 patch，然後直接用 Transformer encoder 當一般 NLP 任務處理。在很多影像分類訓練集上表現得更好還在 pre-train 上相對便宜。&lt;/p&gt;
+&lt;p&gt;還有一些值得挑戰的地方，比如把 ViT 應用在其他 CV 任務，比如 detection 和 segmentation。另一個挑戰是探索自監督預訓練的方法。這篇論文其實有實驗自監督，表現 OK，但和監督式還是有很大的落差。擴大 ViT 可能有更好的結果。&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
