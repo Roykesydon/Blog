@@ -1,0 +1,769 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Linux on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/categories/linux/</link>
+        <description>Recent content in Linux on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Mon, 20 Feb 2023 21:12:52 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/linux/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Process Scheduling</title>
+        <link>https://roykesydon.github.io/Blog/p/process-scheduling/</link>
+        <pubDate>Mon, 20 Feb 2023 21:12:52 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/process-scheduling/</guid>
+        <description>&lt;h1 id=&#34;process-scheduling&#34;&gt;Process Scheduling&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;可能時機&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;running -&amp;gt; waiting&lt;/li&gt;
+&lt;li&gt;running -&amp;gt; ready&lt;/li&gt;
+&lt;li&gt;waiting -&amp;gt; ready&lt;/li&gt;
+&lt;li&gt;running -&amp;gt; terminate&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Process Scheduler&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Preemptive scheduler (Time slice)
+&lt;ul&gt;
+&lt;li&gt;可以被搶占&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Non-Preemptive scheduler
+&lt;ul&gt;
+&lt;li&gt;又稱 cooperative scheduling&lt;/li&gt;
+&lt;li&gt;只可能出現在時機 1 或 4&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Classification fo Processes(related to scheduling)&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Interactive Processes (50 - 150 ms)&lt;/li&gt;
+&lt;li&gt;Batch Processes&lt;/li&gt;
+&lt;li&gt;Real time Processes
+&lt;ul&gt;
+&lt;li&gt;Hard&lt;/li&gt;
+&lt;li&gt;Soft&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Classification of Processes(related to CPU usage)&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;CPU Bound&lt;/li&gt;
+&lt;li&gt;I/O Bound&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;standard-scheduling-algorithm&#34;&gt;Standard Scheduling Algorithm&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;FCFS&lt;/li&gt;
+&lt;li&gt;SJF&lt;/li&gt;
+&lt;li&gt;SRTF&lt;/li&gt;
+&lt;li&gt;Priority Based&lt;/li&gt;
+&lt;li&gt;Highest Response Ratio Next&lt;/li&gt;
+&lt;li&gt;Round Robin&lt;/li&gt;
+&lt;li&gt;Virtual RR&lt;/li&gt;
+&lt;li&gt;Multi-Level Queue Scheduler&lt;/li&gt;
+&lt;li&gt;Multi-Level Feed Back Queue Scheduler&lt;/li&gt;
+&lt;li&gt;Rotating Staircase Deadline Scheduler&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;unix-svr3-scheduler&#34;&gt;UNIX SVR3 Scheduler&lt;/h1&gt;
+&lt;p&gt;有 32 個 runqueue，每個 runqueue 負責 4 個 priority values&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;128 Priority values&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;0-49: Kernel&lt;/li&gt;
+&lt;li&gt;50-127: User&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$Priority_j=Base_j+CPU_j(i)+nice_j$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Base: 0-127&lt;/li&gt;
+&lt;li&gt;$CPU_j(i) = DR * CPU_j(i-1)$
+&lt;ul&gt;
+&lt;li&gt;DR = $\frac{1}{2}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;nice: -20 ~ +19
+&lt;ul&gt;
+&lt;li&gt;可以用 nice 和 renice 改 process nice value&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;schedtool&#34;&gt;Schedtool&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Query &amp;amp; set per process scheduling parameters&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Scheduling Policy
+&lt;ul&gt;
+&lt;li&gt;Real time
+&lt;ol&gt;
+&lt;li&gt;SCHED_RR&lt;/li&gt;
+&lt;li&gt;SCHED_FIFO&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;Conventional
+&lt;ol&gt;
+&lt;li&gt;SCHED_NORMAL (default)&lt;/li&gt;
+&lt;li&gt;SCHED_BATCH (CPU intensive)&lt;/li&gt;
+&lt;li&gt;SCHED_ISO (unused)&lt;/li&gt;
+&lt;li&gt;SCHED_IDLEPRIO (low pri jobs)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Nice Value (-20 to +19)&lt;/li&gt;
+&lt;li&gt;Static Priority (1-99)&lt;/li&gt;
+&lt;li&gt;CPU affinity
+&lt;ul&gt;
+&lt;li&gt;process 想運行在某個指定的 CPU 上，不被轉移到其他 CPU，才不會降低指定 CPU 的 cache 命中率
+&lt;ul&gt;
+&lt;li&gt;soft CPU affinity&lt;/li&gt;
+&lt;li&gt;hard CPU affinity&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;cpus_allowed
+&lt;ul&gt;
+&lt;li&gt;一個用來指定 CPU 的 mask&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  schedtool &amp;lt;PID&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>IPC -- Inter-Process Communication</title>
+        <link>https://roykesydon.github.io/Blog/p/ipc--inter-process-communication/</link>
+        <pubDate>Sat, 28 Jan 2023 15:31:50 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/ipc--inter-process-communication/</guid>
+        <description>&lt;h1 id=&#34;share-information-between-processes&#34;&gt;Share information between processes&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;透過硬碟上的文件溝通
+&lt;ul&gt;
+&lt;li&gt;超慢&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;透過 kernel buffer
+&lt;ul&gt;
+&lt;li&gt;滿快的，但這樣要一直在 user mode 和 kernel mode 來回切換，因為kernel buffer 在 kernel space&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;透過 shared memory region
+&lt;ul&gt;
+&lt;li&gt;shared memory region 在 user space&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;mechanisms&#34;&gt;Mechanisms&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Signals&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Communication&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Data transfer
+&lt;ul&gt;
+&lt;li&gt;Byte Stream
+&lt;ul&gt;
+&lt;li&gt;Pipes&lt;/li&gt;
+&lt;li&gt;FIFOs(Named Pipes)&lt;/li&gt;
+&lt;li&gt;stream sockets&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Message Passing
+&lt;ul&gt;
+&lt;li&gt;SystemV MsgQ&lt;/li&gt;
+&lt;li&gt;POSIX MsgQ&lt;/li&gt;
+&lt;li&gt;datagram sockets&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Shared Memory
+&lt;ul&gt;
+&lt;li&gt;SystemV S.M&lt;/li&gt;
+&lt;li&gt;POSIX S.M&lt;/li&gt;
+&lt;li&gt;Memory Mapping
+&lt;ul&gt;
+&lt;li&gt;anonymous memory mapping&lt;/li&gt;
+&lt;li&gt;memory mapped file&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Synchronization&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;pipes&#34;&gt;Pipes&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Related processes
+&lt;ul&gt;
+&lt;li&gt;parent-child&lt;/li&gt;
+&lt;li&gt;sibling&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Executing on same machine&lt;/li&gt;
+&lt;li&gt;用法
+&lt;ul&gt;
+&lt;li&gt;cmd1 | cmd2
+&lt;ul&gt;
+&lt;li&gt;cmd1 不是輸出到 stdout，而是由 kernel 維護的 buffer，也就是 pipe&lt;/li&gt;
+&lt;li&gt;cmd 不是從 stdin 獲取輸入，而是從 pipe 獲取&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;cmd1 | cmd2 | &amp;hellip; | cmdn&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;named-pipes--fifos&#34;&gt;Named Pipes / FIFOs&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Related / Unrelated processes&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Executing on same machine&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;creat a FIFO&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;commands
+&lt;ul&gt;
+&lt;li&gt;mkfifo&lt;/li&gt;
+&lt;li&gt;mknod&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;嘗試寫入或讀取 FIFO 時，會被 redirect 到 pipe&lt;/p&gt;
+&lt;h1 id=&#34;signal-handling&#34;&gt;Signal Handling&lt;/h1&gt;
+&lt;h2 id=&#34;signal&#34;&gt;Signal&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Used by OS to notify running process some event has occured without the process needing to pull for that event&lt;/li&gt;
+&lt;li&gt;process 收到 signal 後會先停止執行並執行 signal handler&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;A process did something
+&lt;ul&gt;
+&lt;li&gt;SIGSEGV(11), SIGFPE(8), SIGILL(4), SIGPIPE(13)&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;A process wants to tell another process something
+&lt;ul&gt;
+&lt;li&gt;SIGCHILD(17)
+&lt;ul&gt;
+&lt;li&gt;child process terminated&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;User sends sig to foreground processes
+&lt;ul&gt;
+&lt;li&gt;Ctrl + C SIGINT(2)&lt;/li&gt;
+&lt;li&gt;Ctrl + \ SIGQUIT(3)&lt;/li&gt;
+&lt;li&gt;Ctrl + Z SIGTSTP(20)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;disposition&#34;&gt;disposition&lt;/h3&gt;
+&lt;p&gt;決定 process 遇到 signal 時該怎麼處理&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Term
+&lt;ul&gt;
+&lt;li&gt;teminate process&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Ign
+&lt;ul&gt;
+&lt;li&gt;ignore&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Core
+&lt;ul&gt;
+&lt;li&gt;terminate the process and dump core&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Stop
+&lt;ul&gt;
+&lt;li&gt;stop the process&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Cont
+&lt;ul&gt;
+&lt;li&gt;continue the process if it is stopped&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;signal-cant-not-be-caught&#34;&gt;Signal can&amp;rsquo;t not be caught&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;SIGKILL(9)&lt;/li&gt;
+&lt;li&gt;SIGSTOP(19)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;commands&#34;&gt;Commands&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;trap&lt;/p&gt;
+&lt;p&gt;可以 handle signal&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;kill&#34;&gt;kill&lt;/h2&gt;
+&lt;p&gt;kill - L 可以看到 standard signal 和 real-time signal&lt;/p&gt;
+&lt;p&gt;standard signal 開頭是 SIG，realt-time signal 是 SIGRT&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>IO Redirection</title>
+        <link>https://roykesydon.github.io/Blog/p/io-redirection/</link>
+        <pubDate>Sat, 21 Jan 2023 02:20:43 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/io-redirection/</guid>
+        <description>&lt;h1 id=&#34;ppfdt&#34;&gt;PPFDT&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;per process file descriptor table&lt;/li&gt;
+&lt;li&gt;每個 process 都有&lt;/li&gt;
+&lt;li&gt;存放 file descriptors
+&lt;ul&gt;
+&lt;li&gt;file descriptors 是一個唯一的整數，用來識別作業系統上的 open file&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;0, 1, 2 是 Standard input / ouput / error&lt;/li&gt;
+&lt;li&gt;大小受限於 OPEN_MAX，亦即能同時間能開的最多檔案數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;redirection&#34;&gt;Redirection&lt;/h1&gt;
+&lt;h2 id=&#34;input-redirection&#34;&gt;Input redirection&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;$ wc &amp;lt; /etc/passwd
+&lt;ul&gt;
+&lt;li&gt;把 wc 的 PPFDT 的 stdin 改成 /etc/passwd&lt;/li&gt;
+&lt;li&gt;如果是 $ wc /etc/passwd，則是在 PPFDT 追加 /etc/passwd&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;ouput-redirection&#34;&gt;Ouput redirection&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;$ wc &amp;gt; f1
+&lt;ul&gt;
+&lt;li&gt;把 wc 的 PPFDT 的 stdout 改成 f1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;input--output-redirection&#34;&gt;Input &amp;amp; output redirection&lt;/h2&gt;
+&lt;p&gt;兩個可以同時用&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$ cat &amp;lt; f1 &amp;gt; f2&lt;/li&gt;
+&lt;li&gt;&amp;gt;&amp;gt; 可以 append&lt;/li&gt;
+&lt;li&gt;$ &amp;lt; f1 cat &amp;gt; f2
+&lt;ul&gt;
+&lt;li&gt;可以亂換位置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;error-redirection&#34;&gt;Error redirection&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;$ find / -name f1 2&amp;gt; error 1&amp;gt; outputs
+&lt;ul&gt;
+&lt;li&gt;這樣就會把那些 Permission denied 的給到 errors，成功的給到 outputs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;2&amp;gt;/dev/null
+&lt;ul&gt;
+&lt;li&gt;/dev/null 會把丟進來的東西都丟棄&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;copy-descripter&#34;&gt;Copy Descripter&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;這兩者等價
+&lt;ul&gt;
+&lt;li&gt;$ cat f1 1&amp;gt;op_err 2&amp;gt;op_err&lt;/li&gt;
+&lt;li&gt;$ cat f1 1&amp;gt;op_err 2&amp;gt;&amp;amp;1
+&lt;ul&gt;
+&lt;li&gt;make 2 a copy of 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Process Management</title>
+        <link>https://roykesydon.github.io/Blog/p/process-management/</link>
+        <pubDate>Sat, 21 Jan 2023 00:08:25 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/process-management/</guid>
+        <description>&lt;h1 id=&#34;compile-c&#34;&gt;Compile C&lt;/h1&gt;
+&lt;h2 id=&#34;4-steps&#34;&gt;4-steps&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;pre-processing&lt;/li&gt;
+&lt;li&gt;compilation&lt;/li&gt;
+&lt;li&gt;assembly&lt;/li&gt;
+&lt;li&gt;linking&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;types-of-object-files&#34;&gt;Types of Object Files&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Executable object file&lt;/li&gt;
+&lt;li&gt;Relocatable object file&lt;/li&gt;
+&lt;li&gt;Shared object file&lt;/li&gt;
+&lt;li&gt;Core file&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;formats-of-object-files&#34;&gt;Formats of Object Files&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;a.out
+&lt;ul&gt;
+&lt;li&gt;initial version of UNIX&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;COFF
+&lt;ul&gt;
+&lt;li&gt;SVR3 UNIX&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;PE
+&lt;ul&gt;
+&lt;li&gt;Win. NT&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ELF
+&lt;ul&gt;
+&lt;li&gt;SVR4 Linux&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;elf-format-of-a-program&#34;&gt;ELF format of a program&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;ELF Header&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;Program Header Table&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.text&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.rodata&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.data&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.bss&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.symtab&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.rel.text&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.rel.data&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.debug&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.line&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;.strtab&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;Section Header Table&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;可參考: &lt;a class=&#34;link&#34; href=&#34;http://ccckmit.wikidot.com/lk:elf&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;http://ccckmit.wikidot.com/lk:elf&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;process&#34;&gt;Process&lt;/h1&gt;
+&lt;p&gt;Instance of a program running on a computer&lt;/p&gt;
+&lt;h2 id=&#34;process-control-block&#34;&gt;Process Control Block&lt;/h2&gt;
+&lt;p&gt;task_struct&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Process Identification
+&lt;ul&gt;
+&lt;li&gt;PID, PPID, SID, UID, EUID..&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Process State Information&lt;/li&gt;
+&lt;li&gt;Process Control Information&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>Shell</title>
+        <link>https://roykesydon.github.io/Blog/p/shell/</link>
+        <pubDate>Thu, 19 Jan 2023 23:00:02 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/shell/</guid>
+        <description>&lt;h1 id=&#34;features&#34;&gt;Features&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Process control&lt;/li&gt;
+&lt;li&gt;Variables&lt;/li&gt;
+&lt;li&gt;Flow control&lt;/li&gt;
+&lt;li&gt;Functions&lt;/li&gt;
+&lt;li&gt;File &amp;amp; cmd name completions&lt;/li&gt;
+&lt;li&gt;Cmd line editng&lt;/li&gt;
+&lt;li&gt;Cmd history&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;command-mode&#34;&gt;Command Mode&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Interactive&lt;/li&gt;
+&lt;li&gt;Non- Interactive&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;command-type&#34;&gt;Command Type&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;internal / Builtin command&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;指令的程式碼是 shell 的一部分
+&lt;ul&gt;
+&lt;li&gt;e.g., cd, exit&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;不會產生 child process&lt;/li&gt;
+&lt;li&gt;有些 internal command，比如 echo, pwd，會 internal 和 external 都有實作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;external command&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;指令的程式碼在硬碟上的某個 binary file
+&lt;ul&gt;
+&lt;li&gt;e.g., clear, ls&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;會產生 child process&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;common-commands&#34;&gt;Common Commands&lt;/h1&gt;
+&lt;p&gt;比較實用或常用的&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;grep&lt;/p&gt;
+&lt;p&gt;找字詞&lt;/p&gt;
+&lt;p&gt;grep &amp;lt;string/pattern&amp;gt; &lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;-i 大小寫不敏感&lt;/li&gt;
+&lt;li&gt;-v 不包含關鍵字的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;cut
+找 column&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;-f 找哪些 column&lt;/li&gt;
+&lt;li&gt;-d 分隔符是什麼&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;比較兩個檔案&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;comm&lt;/p&gt;
+&lt;p&gt;顯示 file1 獨有的列、 file2 獨有的列、file1 和 file2 共有的列&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;cmp, diff&lt;/p&gt;
+&lt;p&gt;回傳不一樣的列資訊&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;unset&lt;/p&gt;
+&lt;p&gt;把指定的變數移除掉&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;tee&lt;/p&gt;
+&lt;p&gt;吃 stdin 輸出到 stdout 和其他檔案&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;less&lt;/p&gt;
+&lt;p&gt;讀檔案用&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;expansions&#34;&gt;Expansions&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;White space&lt;/li&gt;
+&lt;li&gt;Control Operators
+&lt;ul&gt;
+&lt;li&gt;;
+&lt;ul&gt;
+&lt;li&gt;讓指令接著執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&amp;amp;
+&lt;ul&gt;
+&lt;li&gt;放在結尾，讓指令在背景執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&amp;amp;&amp;amp;
+&lt;ul&gt;
+&lt;li&gt;logical AND&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;||
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;logical OR&lt;/p&gt;
+&lt;p&gt;前面失敗才會跑後面&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;#
+&lt;ul&gt;
+&lt;li&gt;註解用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;\
+&lt;ul&gt;
+&lt;li&gt;escape special characters&lt;/li&gt;
+&lt;li&gt;放結尾好換行繼續輸入&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$?
+&lt;ul&gt;
+&lt;li&gt;一個特別的變數，有上個指令的 exit code&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Shell variables
+&lt;ul&gt;
+&lt;li&gt;User defined&lt;/li&gt;
+&lt;li&gt;Env var&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Shell history&lt;/li&gt;
+&lt;li&gt;File Globing
+&lt;ul&gt;
+&lt;li&gt;*, ?, [], -, !&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>Linux 瑣事</title>
+        <link>https://roykesydon.github.io/Blog/p/linux-%E7%91%A3%E4%BA%8B/</link>
+        <pubDate>Thu, 19 Jan 2023 01:50:07 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/linux-%E7%91%A3%E4%BA%8B/</guid>
+        <description>&lt;h1 id=&#34;vm&#34;&gt;VM&lt;/h1&gt;
+&lt;p&gt;A software implementation of a machine&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;System VM
+&lt;ul&gt;
+&lt;li&gt;提供可以執行 GuestOS 的 complete system platform&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Process VM
+&lt;ul&gt;
+&lt;li&gt;像一個一般的 app 一樣在 hostOS 跑，支援單一個 process&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;hypervisor&#34;&gt;Hypervisor&lt;/h2&gt;
+&lt;p&gt;又稱虛擬機器監視器（英語：virtual machine monitor，縮寫為VMM）
+用來管理 VM&lt;/p&gt;
+&lt;p&gt;允許多個 GuestOS 跑在 host computer&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Type-1&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;bare-metal hypervisors&lt;/li&gt;
+&lt;li&gt;直接在硬體上執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Type-2&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;hosted hypervisors&lt;/li&gt;
+&lt;li&gt;在 hostOS 上執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;directories&#34;&gt;directories&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Binary&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;e.g., bin, sbin, lib, opt
+&lt;ul&gt;
+&lt;li&gt;bin: 有關 user 的指令&lt;/li&gt;
+&lt;li&gt;sbin: 管理員會用的指令&lt;/li&gt;
+&lt;li&gt;opt: optional software，多數機器中這是空的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Configuration&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;e.g., boot, etc,&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Data&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;e.g., home, root, srv, media, mnt, temp&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;In memory
+字面上的意思，不在 hard disk，在 memory&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;e.g., dev, proc, sys&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;System Resources&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;e.g., usr&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Variable Data&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;e.g., var&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

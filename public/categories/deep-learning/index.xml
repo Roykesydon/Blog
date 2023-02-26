@@ -1,0 +1,1156 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Deep Learning on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/categories/deep-learning/</link>
+        <description>Recent content in Deep Learning on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Mon, 20 Feb 2023 16:21:23 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/deep-learning/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Q-learning</title>
+        <link>https://roykesydon.github.io/Blog/p/q-learning/</link>
+        <pubDate>Mon, 20 Feb 2023 16:21:23 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/q-learning/</guid>
+        <description>&lt;h1 id=&#34;rl-方法&#34;&gt;RL 方法&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Policy-based
+&lt;ul&gt;
+&lt;li&gt;learn 做事的 actor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Value-based
+&lt;ul&gt;
+&lt;li&gt;不直接 learn policy，而是 Learn critic，負責批評&lt;/li&gt;
+&lt;li&gt;Q-learning 屬於這種&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;critic&#34;&gt;Critic&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;不直接決定 action&lt;/li&gt;
+&lt;li&gt;給予 actor $\pi$，評估 actor $\pi$ 有多好&lt;/li&gt;
+&lt;li&gt;critic 的 output 依賴於 actor 的表現&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;state-value-function&#34;&gt;State Value Function&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;State value function $V^{\pi}(s)$
+&lt;ul&gt;
+&lt;li&gt;用 actor $\pi$，看到 s 後玩到結束，cumulated reward expectation 是多少&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;評估方法&#34;&gt;評估方法&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Monte-Carlo(MC) based approach&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;critic 看 $\pi$ 玩遊戲&lt;/li&gt;
+&lt;li&gt;訓練一個 network，看到不同的 state ，輸出 cumulated reward(直到遊戲結束，以下稱為 $G_a$)，解 regression 問題&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Temporal-difference(TD) approach&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊戲超長
+&lt;ul&gt;
+&lt;li&gt;TD 只需要 {$s_t,a_t,r_t,s_{t+1}$}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$V^{\pi}(s_t)=V^{\pi}(s_{t+1})+r_t$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;MS v.s. TD&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;MC
+&lt;ul&gt;
+&lt;li&gt;Larger variance
+&lt;ul&gt;
+&lt;li&gt;每次的輸出差異很大&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;TD
+&lt;ul&gt;
+&lt;li&gt;smaller variance
+&lt;ul&gt;
+&lt;li&gt;相較 $G_a$ 較小，因為這邊的 random variable 是 r，但 $G_a$ 是由很多 r 組合而成&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;V 可能估得不準確
+&lt;ul&gt;
+&lt;li&gt;那 learn 出來的結果自然也不准&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;較常見&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;another-critic&#34;&gt;Another Critic&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;State-action value function $Q^\pi(s,a)$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;又叫 Q function&lt;/li&gt;
+&lt;li&gt;當用 actor $\pi$ 時，在 state s 採取 a 這個 action 後的 cumulated reward expectation
+&lt;ul&gt;
+&lt;li&gt;有一個要注意的地方是，actor 看到 s 不一定會採取 a&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/q-learning/q-function.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/q-learning/how-to-use-q.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;只要有 Q function，就可以找到&amp;quot;更好的&amp;quot; policy，再替換掉原本的 policy
+&lt;ul&gt;
+&lt;li&gt;&amp;ldquo;更好的&amp;quot;定義
+&lt;ul&gt;
+&lt;li&gt;$V^{\pi^{&amp;rsquo;}} \ge V^{\pi}(s), \text{for all state s}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$\pi^{&amp;rsquo;}(s)=arg \underset{a}{max}Q^{\pi}(s,a)$
+&lt;ul&gt;
+&lt;li&gt;$\pi^{&amp;rsquo;}$ 沒有多餘的參數，就單純靠 Q function 推出來&lt;/li&gt;
+&lt;li&gt;這邊如果 a 是 continuous 的會有問題，等等解決&lt;/li&gt;
+&lt;li&gt;這樣就可以達到&amp;quot;更好的&amp;quot;policy，不過就不列證明了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;basic-tip&#34;&gt;Basic Tip&lt;/h1&gt;
+&lt;h2 id=&#34;target-network&#34;&gt;Target network&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;在 training 的時候，把其中一個 Q 固定住，不然要學的 target 是不固定的，會不好 train&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/q-learning/target-network.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;exploration&#34;&gt;Exploration&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;policy 完全 depend on Q function&lt;/li&gt;
+&lt;li&gt;如果 action 總是固定，這不是好的 data collection 方法，要在 s 採取 a 過，才比較好估計 Q(s, a)，如果 Q function 是 table 就根本不可能估出來，network 也會有一樣的問題，只是沒那麼嚴重。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;解法&#34;&gt;解法&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Epsilon Greedy
+&lt;ul&gt;
+&lt;li&gt;$a=\begin{cases}
+arg \underset{a}{max}Q(s,a), &amp;amp; \text{with probability } 1-\varepsilon \\
+random, &amp;amp; otherwise
+\end{cases}$&lt;/li&gt;
+&lt;li&gt;通常 $\varepsilon$ 會隨時間遞減，因為你一開始 train 的時候不知道怎麼比較好&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Boltzmann Exploration
+&lt;ul&gt;
+&lt;li&gt;$P(a|s)=\frac{exp(Q(s,a))}{\sum_a exp(Q(s,a))}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;replay-buffer&#34;&gt;Replay Buffer&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;把一堆的 {$s_t,a_t,r_t,s_{t+1}$} 存放在一個 buffer&lt;/li&gt;
+&lt;li&gt;{$s_t,a_t,r_t,s_{t+1}$} 簡稱為 exp&lt;/li&gt;
+&lt;li&gt;裡面的 exp 可能來自於不同的 policy&lt;/li&gt;
+&lt;li&gt;在 buffer 裝滿的時候才把舊的資料丟掉&lt;/li&gt;
+&lt;li&gt;每次從 buffer 隨機挑一個 batch 出來，update Q function&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;好處&#34;&gt;好處&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;跟環境作互動很花時間，這樣可以減少跟環境作互動的次數&lt;/li&gt;
+&lt;li&gt;本來就希望 batch 裡的 data 越 diverse 越好，不會希望 batch 裡的 data 都是同性質的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;issue&#34;&gt;issue&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;我們要觀察 $\pi$ 的 value，混雜了一些不是 $\pi$ 的 exp 到底有沒有關係?
+&lt;ul&gt;
+&lt;li&gt;理論上沒問題，但李老師沒解釋&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;typical-q-learning-演算法&#34;&gt;Typical Q-learning 演算法&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;初始化 Q-fucntion Q，target Q-function $\hat{Q}=Q$&lt;/li&gt;
+&lt;li&gt;在每個 episode
+&lt;ul&gt;
+&lt;li&gt;對於每個 time step t
+&lt;ul&gt;
+&lt;li&gt;給 state $s_t$，根據 Q 執行 action $a_t$ (epsilon greedy)&lt;/li&gt;
+&lt;li&gt;獲得 reward $r_t$，到達 $s_{t+1}$&lt;/li&gt;
+&lt;li&gt;把 {$s_t,a_t,r_t,s_{t+1}$} 存到 buffer&lt;/li&gt;
+&lt;li&gt;從 buffer sample {$s_t,a_t,r_t,s_{t+1}$}(通常是一個 batch)&lt;/li&gt;
+&lt;li&gt;Target $y=r_i+\underset{a}{max}\hat{Q}(s_{i+1},a)$&lt;/li&gt;
+&lt;li&gt;Update Q 的參數，好讓 $Q(s_i,a_i)$ 更接近 y(regression)&lt;/li&gt;
+&lt;li&gt;每 C 步 reset $\hat{Q}=Q$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Proximal Policy Optimization(PPO)</title>
+        <link>https://roykesydon.github.io/Blog/p/proximal-policy-optimizationppo/</link>
+        <pubDate>Mon, 20 Feb 2023 12:35:56 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/proximal-policy-optimizationppo/</guid>
+        <description>&lt;h1 id=&#34;onoff-policy&#34;&gt;On/Off-policy&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;On-policy
+&lt;ul&gt;
+&lt;li&gt;學習的 agent 和與環境互動的 agent 是同一個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Off-policy
+&lt;ul&gt;
+&lt;li&gt;學習的 agent 和與環境互動的 agent 是不同個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;想從-on-policy-轉-off-policy&#34;&gt;想從 On-policy 轉 Off-policy&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;On-policy 每次都要重新蒐集資料，很花時間&lt;/li&gt;
+&lt;li&gt;由另一個 $\pi_{\theta^{&amp;rsquo;}}$ 去 train $\theta$，$\theta^{&amp;rsquo;}$是固定的，所以我們可以 re-use sample data&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;importance-sampling&#34;&gt;Importance Sampling&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;是一個 general 的想法，不限於 RL&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$E_{x \text{\textasciitilde} p}[f(x)]\approx \frac{1}{N}\displaystyle\sum_{i=1}^N f(x^i)$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$x^i$ is sampled from p(x)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;我們遇到的問題是沒辦法從 p 來 sample data，只能透過 q(x) 去 sample $x^i$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可以把上式改寫成 $E_{x \text{\textasciitilde} p}[f(x)]=E_{x \text{\textasciitilde} q}[f(x)\frac{p(x)}{q(x)}]$&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;issue&#34;&gt;Issue&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;雖然理論上 q 可以任意選，只要不要 q(x) 是 0 的時候 p(x) 不是 0，實作上 p 和 q 不能差太多，不然會有問題&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;這兩項的 Variance 不一樣，如果 p 除以 q 差距很大，右邊的 Variance 會很大，如果 sample 不夠多次就會有問題&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/ppo/importance-sample-issue.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;轉換&#34;&gt;轉換&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;原本&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\triangledown \overline{R_{\theta}}=E_{\tau \text{\textasciitilde}p_{\theta}(\tau)}[R(\tau)\triangledown log p_{\theta} (\tau)]$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;改為&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\triangledown \overline{R_{\theta}}=E_{\tau \text{\textasciitilde}p_{\theta^{&amp;rsquo;}}(\tau)}[\frac{p_{\theta}(\tau)}{p_{\theta^{&amp;rsquo;}}(\tau)}R(\tau)\triangledown log p_{\theta} (\tau)]$&lt;/li&gt;
+&lt;li&gt;從 $\theta^{&amp;rsquo;}$ sample 資料&lt;/li&gt;
+&lt;li&gt;更新 $\theta$ 多次&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;advantage-function&#34;&gt;Advantage function&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;原本&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$E_{(s_t,a_t)\text{\textasciitilde}\pi_{\theta}}[A^{\theta}(s_t,a_t)\triangledown log p_\theta(a_t^n|s_t^n)]$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;改為&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$E_{(s_t,a_t)\text{\textasciitilde}\pi_{\theta^{&amp;rsquo;}}}[\frac{P_\theta(s_t,a_t)}{P_{\theta^{&amp;rsquo;}}(s_t,a_t)}A^{\theta^{&amp;rsquo;}}(s_t,a_t)\triangledown log p_\theta(a_t^n|s_t^n)]$&lt;/li&gt;
+&lt;li&gt;要注意 Advantage 的結果要由 $\theta^{&amp;rsquo;}$ 得出，是 $\theta^{&amp;rsquo;}$在和環境互動&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;新的 objective function&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$J^{\theta^{&amp;rsquo;}}(\theta)=E_{(s_t,a_t)\text{\textasciitilde}\pi_{\theta^{&amp;rsquo;}}}[\frac{p_\theta(a_t|s_t)}{p_{\theta^{&amp;rsquo;}}(a_t|s_t)}A^{\theta^{&amp;rsquo;}}(s_t,a_t)]$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;ppo&#34;&gt;PPO&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;確保 $\theta$ 和 $\theta^{&amp;rsquo;}$ 不會差太多&lt;/li&gt;
+&lt;li&gt;$J_{PPO}^{\theta^{&amp;rsquo;}}(\theta)=J^{\theta^{&amp;rsquo;}}(\theta)-\beta KL(\theta, \theta^{&amp;rsquo;})$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;前身-trpo&#34;&gt;前身 TRPO&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Trust Region Policy Optimization&lt;/li&gt;
+&lt;li&gt;$J_{TRPO}^{\theta^{&amp;rsquo;}}(\theta)=E_{(s_t,a_t)\text{\textasciitilde}\pi_{\theta^{&amp;rsquo;}}}[\frac{p_\theta(a_t|s_t)}{p_{\theta^{&amp;rsquo;}}(a_t|s_t)}A^{\theta^{&amp;rsquo;}}(s_t,a_t)], KL(\theta, \theta^{&amp;rsquo;})&amp;lt;\delta$&lt;/li&gt;
+&lt;li&gt;constrain 很難處理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;kl-divergence&#34;&gt;KL divergence&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;這邊不是 $\theta$ 和 $\theta^{&amp;rsquo;}$ 參數上的距離，而是 behavior 的距離
+&lt;ul&gt;
+&lt;li&gt;參數上的距離是指這兩個參數有多像&lt;/li&gt;
+&lt;li&gt;是給同樣的 state 生出 action 的 distribution 要像&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;algorithm&#34;&gt;algorithm&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;初始參數 $\theta^0$&lt;/li&gt;
+&lt;li&gt;每個 iteration
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;用 $\theta^k$ 和環境互動，蒐集{$s_t,a_t$}，並計算 advantage $A^{\theta^k}(s_t,a_t)$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;找出 theta 最佳化 $J_{PPO}(\theta)$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$J_{PPO}^{\theta^{k}}(\theta)=J^{\theta^{k}}(\theta)-\beta KL(\theta, \theta^{k})$&lt;/li&gt;
+&lt;li&gt;可以更新很多次&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;動態調整 $\beta$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Adaptive KL Penalty&lt;/li&gt;
+&lt;li&gt;設可接受的 KL 數值範圍&lt;/li&gt;
+&lt;li&gt;if $KL(\theta,\theta^k)&amp;gt;KL_{max},\text{increase} \beta$&lt;/li&gt;
+&lt;li&gt;if $KL(\theta,\theta^k)&amp;lt;KL_{min},\text{decrease} \beta$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;ppo2&#34;&gt;PPO2&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;PPO&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$J_{PPO}^{\theta^{k}}(\theta)=J^{\theta^{k}}(\theta)-\beta KL(\theta, \theta^{k})$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;PPO2&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$J_{PPO2}^{\theta^{k}}(\theta)\approx \displaystyle\sum_{(s_t,a_t)}min(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}A^{\theta^k}(s_t,a_t), \\
+clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\varepsilon)A^{\theta^k}(s_t,a_t))$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/ppo/ppo2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Policy Gradient</title>
+        <link>https://roykesydon.github.io/Blog/p/policy-gradient/</link>
+        <pubDate>Sun, 19 Feb 2023 17:16:14 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/policy-gradient/</guid>
+        <description>&lt;h1 id=&#34;basic-components&#34;&gt;Basic Components&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Actor
+&lt;ul&gt;
+&lt;li&gt;Policy $\pi$ is a network with parameter $\theta$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Env&lt;/li&gt;
+&lt;li&gt;Reward Function&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;trajectory&#34;&gt;Trajectory&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/policy-gradient/aer.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在一場遊戲，把 env 輸出的 s 和 actor 輸出的 a 串起來，是一個 Trajectory&lt;/li&gt;
+&lt;li&gt;Trajectory $\tau$ = {$s_1,a_1,s_2,a_2,&amp;hellip;,s_T,a_T$}&lt;/li&gt;
+&lt;li&gt;$p_{\theta}(\tau)=p(s_1)\displaystyle\prod_{t=1}^Tp_{\theta}(a_t|s_t)p(s_{t+1}|s_t,a_t)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;update&#34;&gt;Update&lt;/h1&gt;
+&lt;p&gt;$\theta \leftarrow \theta + \eta \triangledown \overline{R}_{\theta}$&lt;/p&gt;
+&lt;p&gt;$\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangledown p_{\theta} (\tau) \\
+=\frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}R(\tau^n)\triangledown log p_{\theta} (a_t^n|s_t^n)$&lt;/p&gt;
+&lt;h1 id=&#34;實作&#34;&gt;實作&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;常見公式
+&lt;ul&gt;
+&lt;li&gt;$\triangledown f(x)=f(x)\triangledown logf(x)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;用當前模型蒐集一堆 Trajectory&lt;/li&gt;
+&lt;li&gt;更新模型&lt;/li&gt;
+&lt;li&gt;回到第一步&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;細節
+&lt;ul&gt;
+&lt;li&gt;做一個分類問題，把 state 當作分類器的 Input，把 action 當作分類器的 ground truth 作訓練&lt;/li&gt;
+&lt;li&gt;在實作分類問題的時候，objective function 都會寫成 minimize cross entropy，就是 maximize log likelihood&lt;/li&gt;
+&lt;li&gt;RL 和一般分類的區別是，要記得在 loss 前面乘上 $R(\tau^n)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;tip&#34;&gt;Tip&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;Add a Baseline
+&lt;ul&gt;
+&lt;li&gt;$R(\tau^n)$ 有可能永遠都為正
+&lt;ul&gt;
+&lt;li&gt;此時等於告訴 Model 說，今天不管是什麼 action，都要提高它的機率。不一定會有問題，因為雖然都是正的，但正的量有大有小，可能某些 action 上升的幅度會更大。因為我們是在做 sampling，不一定會 sample 到某些 action，本來想的情況是所有的 trajectory 都會出現才沒問題。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;解法: 希望 reward 不要總是正的
+&lt;ul&gt;
+&lt;li&gt;$\triangledown \overline{R_{\theta}}\approx \frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}(R(\tau^n)-b)\triangledown log p_{\theta}(a_t^n|s_t^n)$&lt;/li&gt;
+&lt;li&gt;$b \approx E[R(\tau)]$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Assign Suitable Credit
+&lt;ul&gt;
+&lt;li&gt;原本整場遊戲的所有 action 都會乘上 $R(\tau)$，但這不太公平，因為就算結果是好的，不代表所有 action 都是對的，反之亦然。在理想的情況下，如果 sample 夠多，就可以解決這問題。&lt;/li&gt;
+&lt;li&gt;解法
+&lt;ol&gt;
+&lt;li&gt;只計算從這個 action 後的 reward 總和
+&lt;ul&gt;
+&lt;li&gt;因為前面的 reward 和你做了什麼沒關係&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;接續解法 1，把比較未來的 reward 做 discount
+&lt;ul&gt;
+&lt;li&gt;乘某個小於 1 的 $\gamma^{t^{&amp;rsquo;}-t}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;advantage-function&#34;&gt;Advantage function&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;base 可以是 state-dependent，可以根據 network 得出，以後再說&lt;/li&gt;
+&lt;li&gt;$(Reward-b)$ 可以合起來看做 Advantage function $A^{\theta}(s_t,a_t)$
+&lt;ul&gt;
+&lt;li&gt;這邊 Reward 不管你是什麼形式，有沒有 discount。&lt;/li&gt;
+&lt;li&gt;它的意義是，這個 action 相較於其他的 action 有多好，而不是絕對好&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;這個 A 通常可以由某個類神經網路估計，那個類神經網路叫做 critic，以後講 Actor-Critic 的時候再說&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>MAE 論文</title>
+        <link>https://roykesydon.github.io/Blog/p/mae-%E8%AB%96%E6%96%87/</link>
+        <pubDate>Wed, 15 Feb 2023 16:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/mae-%E8%AB%96%E6%96%87/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2111.06377&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Masked Autoencoders Are Scalable Vision Learners&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;abstract&#34;&gt;Abstract&lt;/h1&gt;
+&lt;p&gt;這篇論文顯示出 MAE 是 CV 中的 scalable self-supervised learners。&lt;/p&gt;
+&lt;p&gt;MAE 的方法很簡單&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;隨機蓋住輸入影像的一些 patch&lt;/li&gt;
+&lt;li&gt;重建 missing pixels&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;具備兩個核心設計&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;非對稱的 encoder-decoder 架構，encoder 只作用於可見的 patch 子集合(沒有 mask tokens)，lightweight decoder 則根據 latent representation 和 make tokens 來重建圖片。&lt;/li&gt;
+&lt;li&gt;當遮住高比例(比如 75%)的影像時，會得到一個 nontrivial 和 meaningful 的 self-supervisory task&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;結合這兩點設計，可以有效地訓練大模型。
+以 ViT-Huge 用 ImageNet-1K 訓練(訓練集一百多萬張照片)可達到 87.8% 的準確度。&lt;/p&gt;
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/intro.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/valid-example.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/valid-example-2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在 CV 中，常需要大量 labeled images。
+NLP 中，自監督預訓練處理了需要大量標註資料的問題。
+masked autoencoders 是一種更 general 的 denoising autoencoders 的形式。
+BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者思考是什麼讓 masked autoencoding 在 CV 和 NLP 產生不同。
+有以下觀點&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;直到前陣子，CV 中的 CNN 是主流，但卷積層不好引入 mask tokens 或 positional embedding 這些 indicator。但這些可以透過 ViT 來解決，不應成為問題。&lt;/li&gt;
+&lt;li&gt;語言和視覺的 Information density 不同，語言是 highly semantic 和 information-dense，使填字本身不是很簡單的事情，但影像含有大量冗餘的訊息，缺失的部分比較好從相鄰的 patch 重建，比如直接插值，所以作者用一種簡單的策略，隨機 mask 很大一部分的 patch，創造一個具有挑戰性的自監督任務，強迫模型關注 global 的資訊。&lt;/li&gt;
+&lt;li&gt;關於 decoder，CV 還原 pixel，pixel 屬於 lower semantic level，NLP 還原 word，word 的 semantic information 較高。作者發現，雖然在 BERT 中，可以用簡單的 decoder 還原(一個 MLP)，但 CV 中 decoder 的設計就很重要。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;基於以上觀點，作者提出 MAE，隨機遮住大量的 patch，並在 pixel space 重建失去的 patch。而且是非對稱 encoder-decoder 架構，encoder 只會看到可見的 patch，但 docoder 除了 latent representation，還會看到 mask tokens。這種設計在非常高的掩蓋率(比如 75%)下不但可以提高準確度，還可以讓 encoder 只處理較少比例(比如 25%)的 patch，將訓練時間減少 3 倍或更多，使 MAE 可以輕鬆擴展成更大的模型。&lt;/p&gt;
+&lt;p&gt;在這樣的架構下，用 MAE 的 pre-training，可以訓練非常吃 data 的模型，比如 ViT-Large/-Huge，而只使用 ImageNet-1K。&lt;/p&gt;
+&lt;p&gt;用 ImageNet-1K 在 vanilla ViT-Huge 上 fine-tune 可達到 87.8% 準確度，比以往只使用 ImageNet-1K 的結果都高。&lt;/p&gt;
+&lt;p&gt;在 obejct detection、instance segmentation、semantic segmentation 上做 transfer learning 都達到不錯的效果，可以打敗用監督式預訓練模型的對手。&lt;/p&gt;
+&lt;h1 id=&#34;相關工作&#34;&gt;相關工作&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Autoencoding
+&lt;ul&gt;
+&lt;li&gt;MAE 是一種 denoising autoencoding 的形式，但和 DAE 還是差別很大。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Masked image encoding
+&lt;ul&gt;
+&lt;li&gt;iGPT、ViT、BEiT&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;approach&#34;&gt;Approach&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Masking&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;和 ViT 一樣，把圖片切成多個 patch，對於 patch 均勻隨機地採樣保留，剩下地遮住&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;MAE encoder&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ViT&lt;/li&gt;
+&lt;li&gt;也有 positional embedding&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;MAE decoder&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Transformer block&lt;/li&gt;
+&lt;li&gt;輸入
+&lt;ul&gt;
+&lt;li&gt;encoded visible patches&lt;/li&gt;
+&lt;li&gt;mask tokens
+&lt;ul&gt;
+&lt;li&gt;shared, learned vector&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;都會加入 positional embedding&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;用相較 encoder 輕量的解碼器，所有的 patch 由這個輕量的 decoder 處理，減少預訓練時間&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Reconstruction target&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;decoder 的最後一層是 linear projection，之後再 reshape 成你要的  patch&lt;/li&gt;
+&lt;li&gt;loss function
+&lt;ul&gt;
+&lt;li&gt;mean squared error(MSE)&lt;/li&gt;
+&lt;li&gt;只算 masked patched 的 MSE，像 BERT&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Simple implementation&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;先取得一系列 token(patch 做 linear projection + positional embedding)&lt;/li&gt;
+&lt;li&gt;randomly shuffle，根據比例移除尾端一部份&lt;/li&gt;
+&lt;li&gt;encoding 後，尾端接上 mask tokens，並且 unshuffle&lt;/li&gt;
+&lt;li&gt;加上 positional embedding 後，給 decoder&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;imagenet-experiments&#34;&gt;ImageNet Experiments&lt;/h1&gt;
+&lt;p&gt;在 ImageNet-1K 上做自監督的預訓練，然後做&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;end-to-end fine-tuning
+&lt;ul&gt;
+&lt;li&gt;所有參數都可改&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;linear probing
+&lt;ul&gt;
+&lt;li&gt;只改最後一層線性層&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/vit-mae.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/result.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/ratio-result.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;optimal masking ratio 意外地高，相比 BERT 只有 15%&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/fine-tune-blocks.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h1 id=&#34;討論和結論&#34;&gt;討論和結論&lt;/h1&gt;
+&lt;p&gt;在 CV 實用的預訓練做法主流是監督式的，CV 中自監督的做法可能正跟著 NLP 的軌跡走。&lt;/p&gt;
+&lt;p&gt;要仔細處理圖像和語言的區別，作者去除圖片中很可能不構成 semantic segment 的部分，而不是移除某個 object。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>ViT 論文</title>
+        <link>https://roykesydon.github.io/Blog/p/vit-%E8%AB%96%E6%96%87/</link>
+        <pubDate>Sun, 12 Feb 2023 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/vit-%E8%AB%96%E6%96%87/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2010.11929&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;abstract&#34;&gt;Abstract&lt;/h1&gt;
+&lt;p&gt;在 CV 領域 transformer 表現有限，目前 attention 常常是和卷積神經網路一起用，或是用來把一些卷積層換成 self-attention，但整體架構不變。這篇論文想展現一個純 Transformer 可以直接在影像分類上表現很好。如果用大量資料作預訓練，再遷移到中小型的資料集，可以和 SOTA 的 CNN 表現得一樣好，還需要較少的訓練資源作訓練。&lt;/p&gt;
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;self-attention-based 架構，特別是 Transformer，已經是 NLP 的重要選擇。主流的作法是在大型文字資料集上作訓練，再針對小型任務資料集作 fine-tune。由於 Transformer 的計算效率高，還有可擴展性，可以 train 一些很大的 model，隨著 model 和資料集增大，目前還沒看出飽和的現象。&lt;/p&gt;
+&lt;p&gt;然而在 CV，CNN 還是主流，一些工作嘗試用 self-attention 結合 CNN-like 的架構，比如把 feature map 當 transformer 的輸入，因為原始 pixel 太多，或甚至把卷積層全換成 self-attention，雖然後者理論上效率很高(原論文中有另外 cite 兩篇作法)，但因為他們做法特殊，在現代硬體上很難加速，所以無法很有效地擴展。在 large-scale 的影像識別上， ResNet-like 的架構還是 SOTA。&lt;/p&gt;
+&lt;p&gt;該實驗直接把一個標準的 Transformer 作用於圖片上，只作最少的修改。把影像分成多個 patch，並把它們變成一系列的 linear embedding，當作 NLP 中的 tokens(words) 來處理。&lt;/p&gt;
+&lt;p&gt;當在中型大小的資料集(e.g. ImageNet)上訓練，如果沒有 strong regularization，ViT 會略輸同等大小的 ResNets&lt;/p&gt;
+&lt;p&gt;這篇論文在更大的資料集(14M-300M 的影像)上訓練，就打敗了 inductive bias。在大量資料上作預訓練就很讚。&lt;/p&gt;
+&lt;h1 id=&#34;related-work&#34;&gt;Related Work&lt;/h1&gt;
+&lt;p&gt;大型的 Transformer-based 模型常常是先在大資料集上預訓練然後根據任務 fine-tune，比如 BERT 和 GPT。&lt;/p&gt;
+&lt;p&gt;要把 self-attention 用在 CV 上，最簡單的做法就是把每個 Pixel 當一個元素，但 self-attention 是平方複雜度，在現實的圖片很難應用。一個應用 Transformer 的做法是只把 self-attention 用在 local neighborhood，另外一個是用 Sparse Transformer，還有一堆特殊的方法，雖然表現不錯，但要用硬體加速起來不容易。&lt;/p&gt;
+&lt;p&gt;另一個有關的模型是 iGPT，在 reduce image resolution 和 color space 後把 transformer 應用在 image pixels 上。它用非監督式訓練後，再 fine-tune 或做 linear probing(只更新最後的 linear layer) 分類任務，表現很好。&lt;/p&gt;
+&lt;p&gt;已經有類似的工作了，抽取 patches of size 2 * 2，最後再接 full self-attention，基本上和 ViT 非常像，這篇論文進一步證明了作大規模的預訓練可以讓 Transformer 和 SOTA 的 CNN 相比，而且 ViT 因為 patch 比較大，可以處理 medium-resolution 的圖片。這問題是可預期的，因為 Transformer 缺少了一些 inductive biases。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;inductive biases
+&lt;ul&gt;
+&lt;li&gt;一些假設&lt;/li&gt;
+&lt;li&gt;比如 CNN 常有四個假設
+&lt;ul&gt;
+&lt;li&gt;locality&lt;/li&gt;
+&lt;li&gt;translation invariance with pooling layers
+&lt;ul&gt;
+&lt;li&gt;平移不變性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;translation equivariance
+&lt;ul&gt;
+&lt;li&gt;f(g(x)) = g(f(x))&lt;/li&gt;
+&lt;li&gt;卷積和平移的先後順序沒差&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;method&#34;&gt;Method&lt;/h1&gt;
+&lt;p&gt;模型盡可能類似原始 Transformer，這樣可以把一些 NLP 上成功的 Transformer 架構拿來用，還可以用一些很有效率的 implementation&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-process.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;embedding 維度是 768 = 16 * 16 * 3
+position embedding 的做法是 standard learnable 1D positional embeddings，就是 BERT 的做法，簡單來說就是生出一張可以訓練的表，(序列長度, embedding size)，作者也有嘗試其他方法，但發現成效差不多，比如 2D positional embedding，概念就是從生出(序列長度, embedding size)變成生出 2 個(sqrt(序列長度), embedding size)。&lt;/p&gt;
+&lt;p&gt;[class] 的概念是 NLP 出來的，ResNet-like 的架構常見的做法也有通過 globally average-pooling (GAP)來生出向量，再接上分類器做預測。實驗發現直接在 transformer 的輸出做 GAP 和 [class] 都可以達到不錯的效果。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-gap.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-dataset.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-acc.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;拿標準的 Transformer 來作 Image recognition，和以往用 self-attention 在 CV 的方法不一樣，除了一開始的 initial patch extraction，沒有引入其他影像特有的 inductive biases。直接把圖片當成是一系列的 patch，然後直接用 Transformer encoder 當一般 NLP 任務處理。在很多影像分類訓練集上表現得更好還在 pre-train 上相對便宜。&lt;/p&gt;
+&lt;p&gt;還有一些值得挑戰的地方，比如把 ViT 應用在其他 CV 任務，比如 detection 和 segmentation。另一個挑戰是探索自監督預訓練的方法。這篇論文其實有實驗自監督，表現 OK，但和監督式還是有很大的落差。擴大 ViT 可能有更好的結果。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>InstructGPT</title>
+        <link>https://roykesydon.github.io/Blog/p/instructgpt/</link>
+        <pubDate>Fri, 27 Jan 2023 17:39:12 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/instructgpt/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2203.02155&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Training language models to follow instructions with human feedback&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;abstract&#34;&gt;Abstract&lt;/h1&gt;
+&lt;p&gt;把語言模型變大不代表他們會更好地遵循用戶的意圖。&lt;/p&gt;
+&lt;p&gt;大的語言模型有可能會生成 untruthful, toxic, not helpful 的答案。&lt;/p&gt;
+&lt;p&gt;該論文透過 fine-tuning with human feedback 來解決這問題。&lt;/p&gt;
+&lt;p&gt;一開始準備一系列人工標註的 prompts，然後用這 dataset 對 GPT-3 做 fine-tune。&lt;/p&gt;
+&lt;p&gt;接下來再蒐集一個 dataset，存放 rankings of model outputs，由人工判斷輸出好壞，再用 RL 把剛剛 fine-tune 過的 model 繼續 fine-tune。&lt;/p&gt;
+&lt;p&gt;最後有 1.3B 參數的 InstructGPT 表現的結果比 175B 參數的 GPT-3 還好。&lt;/p&gt;
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;Large language models(LMs) 可以透過 &amp;ldquo;prompt&amp;rdquo; 來執行各種 NLP 任務。&lt;/p&gt;
+&lt;p&gt;但這些模型也常有一些非目的性的行為，諸如捏造事實等等。&lt;/p&gt;
+&lt;p&gt;原因是出在目標函數上，多數 LMs 的目標函數是根據網路上的文本生出下一個字詞。&lt;/p&gt;
+&lt;p&gt;這和「根據使用者指令生出安全且有幫助的答案不同」。&lt;/p&gt;
+&lt;p&gt;上述的差異使語言模型的目標是 misaligned。&lt;/p&gt;
+&lt;p&gt;作者的目標是生出 helpful、 honest(沒有誤導性資訊)、harmless 的 model。&lt;/p&gt;
+&lt;p&gt;具體作法，使用 reinforcement learning from human feedback(RLHF)。&lt;/p&gt;
+&lt;h2 id=&#34;訓練步驟&#34;&gt;訓練步驟&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/instruct-gpt-train-step.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;結果&#34;&gt;結果&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Labelers 明顯偏好 InstructGPT 的答案，勝過 GPT-3 的答案&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;InstructGPT 的答案在 truthfulness 勝過 GPT-3 的答案&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;InstructGPT 的答案在 toxicity 上小勝 GPT-3 的答案，但在 bias 上沒有&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;methods&#34;&gt;Methods&lt;/h1&gt;
+&lt;h2 id=&#34;dataset&#34;&gt;Dataset&lt;/h2&gt;
+&lt;p&gt;標註人員寫很多 prompts&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Plain:
+&lt;ul&gt;
+&lt;li&gt;隨便寫任意任務&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Few-shot:
+&lt;ul&gt;
+&lt;li&gt;想個 instruction，並寫 multiple query/response pairs for that instruction&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;User-based:
+&lt;ul&gt;
+&lt;li&gt;根據一些申請使用 OpenAI API 的用戶，提出有關的 prompts&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;然後根據這個訓練初步模型，並把這個初步模型放到他們的 Playground 給用戶使用。&lt;/p&gt;
+&lt;p&gt;再把用戶問的問題蒐集回來，並做篩選。&lt;/p&gt;
+&lt;p&gt;訓練 SFT 的模型用 13k training prompts&lt;/p&gt;
+&lt;p&gt;訓練 RM 的模型用 33k training prompts&lt;/p&gt;
+&lt;p&gt;訓練 PPO 的模型用 31k training prompts&lt;/p&gt;
+&lt;h2 id=&#34;model&#34;&gt;Model&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Supervised fine-tuning(SFT)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;拿 GPT-3 去訓練 16 個 epochs&lt;/li&gt;
+&lt;li&gt;跑一個 epoch 就發現 overfitting，但發現訓練更多 epoches 對後面的 RM 有用，而且這個 model 也只是過渡產品&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Reward modeling(RM)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;把 SFT 後面的 unembedding layer 去除掉，接上線性層，最後輸出一個 scalar reward&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;用 6B RMs&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;這模型會吃 prompt 和 response&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;人工標記的是排序，不是分數&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;對每個 prompt 生出 9 個答案&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;原本是 4 個，但排 9 個花的時間可能不會到 4 個的兩倍，因為主要心力會花在讀 prompt。但標註訊息會多很多，因為都是兩兩比較。&lt;/li&gt;
+&lt;li&gt;而且在 loss 中最多只要丟入 RM 9 次，因為可以重用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Pairwise Ranking Loss&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;對一個 prompt(假設是 x)，取出一對回覆(假設是 $y_w$ 和 $y_l$)，算出 RM(x, $y_w$) 和 RM(x, $y_l$)，假設 $y_w$ 比 $y_l$ 排序高，讓 RM(x, $y_w$) - RM(x, $y_l$) 的數值越大越好&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/instruct-gpt-reward-loss.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Reinforcement learning(RL)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;PPO&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/instruct-gpt-rl-loss.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\beta$ 那項是 KL divergence&lt;/li&gt;
+&lt;li&gt;$\gamma$ 那項是不想要讓這 model 太專注在微調的任務，而失去原本在其他 NLP 任務也表現很好的功能。
+&lt;ul&gt;
+&lt;li&gt;$D_{pretrain}$ 是 pretraining distribution&lt;/li&gt;
+&lt;li&gt;如果 $\gamma$ 為 0，在該實驗中叫做 PPO，否則，稱為 PPO-ptx&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;result&#34;&gt;Result&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/instruct-gpt-result.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Bayesian Optimization</title>
+        <link>https://roykesydon.github.io/Blog/p/bayesian-optimization/</link>
+        <pubDate>Thu, 26 Jan 2023 01:36:53 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/bayesian-optimization/</guid>
+        <description>&lt;h1 id=&#34;介紹&#34;&gt;介紹&lt;/h1&gt;
+&lt;p&gt;一種用於自動化找超參數的方法，用在採樣昂貴而且是黑盒子的情況&lt;/p&gt;
+&lt;h1 id=&#34;流程&#34;&gt;流程&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;取樣一些資料點&lt;/li&gt;
+&lt;li&gt;生出一個 Surrogate Model(可採用 Gaussian Process)&lt;/li&gt;
+&lt;li&gt;反覆做以下事情
+&lt;ul&gt;
+&lt;li&gt;用 Acquisition Function 挑選下一個要採樣的點&lt;/li&gt;
+&lt;li&gt;重新評估 Surrogate Model&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;gaussian-process&#34;&gt;Gaussian Process&lt;/h2&gt;
+&lt;p&gt;最終的 prediction 是一個 distribution 而不是單一個數字
+生成方法需借助 kernel function，常用 RBF(Radial Basis Function)&lt;/p&gt;
+&lt;p&gt;$K(x, x^{&amp;rsquo;}|\tau)=\sigma^2exp(-\frac{1}{2}(\frac{x-x^{&amp;rsquo;}}{l})^2)$&lt;/p&gt;
+&lt;p&gt;$\sigma$ 和 $l$ 是兩個可以調整的超參數&lt;/p&gt;
+&lt;h2 id=&#34;acquisition-function&#34;&gt;Acquisition Function&lt;/h2&gt;
+&lt;p&gt;可用超參數來調節 exploitation 和 exploitation&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;UCB(Upper confidence bound)&lt;/li&gt;
+&lt;li&gt;PI(probability of improvement)&lt;/li&gt;
+&lt;li&gt;EI(Expected improvement)&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>GPT 三部曲</title>
+        <link>https://roykesydon.github.io/Blog/p/gpt-%E4%B8%89%E9%83%A8%E6%9B%B2/</link>
+        <pubDate>Thu, 19 Jan 2023 01:50:07 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/gpt-%E4%B8%89%E9%83%A8%E6%9B%B2/</guid>
+        <description>&lt;p&gt;GPT 本質上就是 Transformer 的 decoder&lt;/p&gt;
+&lt;h1 id=&#34;gpt-1&#34;&gt;GPT-1&lt;/h1&gt;
+&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://www.semanticscholar.org/paper/Improving-Language-Understanding-by-Generative-Radford-Narasimhan/cd18800a0fe0b668a1cc19f2ec95b5003d0a5035&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Improving Language Understanding by Generative Pre-Training&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;用 semi-supervised，後來被歸為 self-supervised&lt;/p&gt;
+&lt;h2 id=&#34;unsupervised-pre-training&#34;&gt;Unsupervised pre-training&lt;/h2&gt;
+&lt;p&gt;$L_1(U)=\sum_i logP(u_i|u_{i-k},&amp;hellip;,u_{i-1};\theta)$&lt;/p&gt;
+&lt;p&gt;$U= \{ u_1,&amp;hellip;,u_n \}$&lt;/p&gt;
+&lt;p&gt;$U$ 是一系列未標記的文本 token&lt;/p&gt;
+&lt;p&gt;$k$ 是窗口大小&lt;/p&gt;
+&lt;h3 id=&#34;模型大致架構&#34;&gt;模型大致架構&lt;/h3&gt;
+&lt;p&gt;$h_0=UW_e+W_p$&lt;/p&gt;
+&lt;p&gt;$h_1=transformer \_ block(h_{i-1})\forall i \in[1,n]$&lt;/p&gt;
+&lt;p&gt;$P(u)=softmax(h_nW^T_e)$&lt;/p&gt;
+&lt;p&gt;$U=\{u_{-k},&amp;hellip;,u_{-1}\}$&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;supervised-fine-tuning&#34;&gt;Supervised fine-tuning&lt;/h2&gt;
+&lt;p&gt;$P(y|x^1,&amp;hellip;,x^m)=softmax(h^m_lW_y)$&lt;/p&gt;
+&lt;p&gt;$L2(C)=\sum_{(x,y)}log P(y|x^1,&amp;hellip;,x^m)$&lt;/p&gt;
+&lt;p&gt;$L_3(C)=L_2(C)+\lambda*L_1(C)$&lt;/p&gt;
+&lt;p&gt;$C$ 是 labeled 的資料集，微調基本上就是在後面加上線性層&lt;/p&gt;
+&lt;p&gt;作者最大化 likelihood 的時候是用 $L_3$ 而非單純的 $L_2$&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;微調應用範例&#34;&gt;微調應用範例&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-1-tasks.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;資料集&#34;&gt;資料集&lt;/h2&gt;
+&lt;p&gt;用 BooksCorpus 訓練出來的&lt;/p&gt;
+&lt;p&gt;有超過 7000 本未出版的書&lt;/p&gt;
+&lt;h2 id=&#34;模型結構&#34;&gt;模型結構&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;12 層 transformer 的 decoder&lt;/li&gt;
+&lt;li&gt;768 維 word embedding&lt;/li&gt;
+&lt;li&gt;12 個 attention heads&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;和-bert-base-比較&#34;&gt;和 BERT BASE 比較&lt;/h2&gt;
+&lt;p&gt;BERT 論文比較晚出，但 BASE 的模型架構和 GPT 有相似之處，&lt;/p&gt;
+&lt;p&gt;BASE 是 12 層的 decoder，word embedding 和 attention head 的維度或數量和 GPT-1 相同&lt;/p&gt;
+&lt;h1 id=&#34;gpt-2&#34;&gt;GPT-2&lt;/h1&gt;
+&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://paperswithcode.com/paper/language-models-are-unsupervised-multitask&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Language Models are Unsupervised Multitask Learner&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;GPT-2 除了用更大的的模型和更大的資料集，把重點放在 zero-shot 上，雖然在 GPT-1 的論文就有提過 zero-shot&lt;/p&gt;
+&lt;h2 id=&#34;資料集-1&#34;&gt;資料集&lt;/h2&gt;
+&lt;p&gt;這次做了一個叫做 WebText 的資料集，有百萬級別的網頁&lt;/p&gt;
+&lt;h3 id=&#34;common-crawl&#34;&gt;Common Crawl&lt;/h3&gt;
+&lt;p&gt;大型爬蟲專案，有大量網頁資料，但充斥了垃圾訊息&lt;/p&gt;
+&lt;h3 id=&#34;webtext&#34;&gt;WebText&lt;/h3&gt;
+&lt;p&gt;WebText 的資料來源是 reddit 上的外部連結，只要有至少三個 karma，就會被採納，由此取得品質較好的網頁資料。透過這種方法，取得了 4500 萬個連結。並用Dragnet (Peters &amp;amp; Lecocq, 2013) and Newspaper content extractors 把文字訊息從 HTML 中抓出來&lt;/p&gt;
+&lt;h2 id=&#34;架構&#34;&gt;架構&lt;/h2&gt;
+&lt;p&gt;和原本差不多，變成有 1.5B 參數的 Transformer decoder&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-2-models.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;zero-shot&#34;&gt;zero-shot&lt;/h2&gt;
+&lt;p&gt;不需要下游任務的標記資料&lt;/p&gt;
+&lt;p&gt;改把任務輸入進模型&lt;/p&gt;
+&lt;h3 id=&#34;目前問題&#34;&gt;目前問題&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;現在的模型泛化能力不太好&lt;/li&gt;
+&lt;li&gt;Multitask learning
+在 NLP 上不太常用，NLP 現在主流還是在預訓練模型上做微調以應對下游任務
+&lt;ul&gt;
+&lt;li&gt;對每個下游任務都得重新訓練模型&lt;/li&gt;
+&lt;li&gt;得蒐集 labeled 資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;結果&#34;&gt;結果&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-2-result-1.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-2-result-2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h1 id=&#34;gpt-3&#34;&gt;GPT-3&lt;/h1&gt;
+&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2005.14165&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Language Models are Few-Shot Learners&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;摘要&#34;&gt;摘要&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;有 175B 的參數，由於模型極大，要在子任務微調會成本很大，所以不做任何梯度更新&lt;/li&gt;
+&lt;li&gt;在很多 NLP 任務有傑出的成果&lt;/li&gt;
+&lt;li&gt;可以生出人類難以區分的新聞文章&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;目前有的問題&#34;&gt;目前有的問題&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;要在子任務微調，需要資料集&lt;/li&gt;
+&lt;li&gt;微調後在有些子任務上表現好不代表你預訓練模型一定泛化能力高&lt;/li&gt;
+&lt;li&gt;人類不需要大量 labeled 資料去完成小任務&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;評估方式&#34;&gt;評估方式&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;分為三種，few / one / zero-shot learning&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;架構-1&#34;&gt;架構&lt;/h2&gt;
+&lt;p&gt;基本上 GPT-3 和 GPT-2 架構一樣&lt;/p&gt;
+&lt;h3 id=&#34;相同&#34;&gt;相同&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;modified initialization&lt;/li&gt;
+&lt;li&gt;pre-normalization&lt;/li&gt;
+&lt;li&gt;reversible tokenization described therein&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;不同&#34;&gt;不同&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;把 Sparse Transformer 的一些修改拿過來用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-3-models.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;GPT-3 Small 是 GPT-1 的大小
+GPT-3 Medium 是 BERT Large 的大小
+GPT-3 XL 和 GPT-2 相近，比較淺也比較寬&lt;/p&gt;
+&lt;h4 id=&#34;batch-size-大小&#34;&gt;Batch Size 大小&lt;/h4&gt;
+&lt;p&gt;模型小的時候需要小一點，透過這種額外的 noise 來避免 overfitting(不確定是不是猜想)&lt;/p&gt;
+&lt;h2 id=&#34;資料集-2&#34;&gt;資料集&lt;/h2&gt;
+&lt;h3 id=&#34;common-crawl-1&#34;&gt;Common Crawl&lt;/h3&gt;
+&lt;p&gt;架構比 GPT-2 大很多，所以回頭考慮這個資料集&lt;/p&gt;
+&lt;h4 id=&#34;三步驟&#34;&gt;三步驟&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;先過濾，透過 reddit 那個高品質的資料集，來訓練一個模型分類高品質和低品質的網頁。&lt;/li&gt;
+&lt;li&gt;透過 LSH 演算法把相似的文本過濾掉&lt;/li&gt;
+&lt;li&gt;把一些已知高品質的資料集也加進來&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-3-dataset.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;這是一個 Batch 裡有 60% 來自 Common Crawl(filtered) 的意思
+Wikipedia 雖然總量比較少，但也有 3% 的採樣率&lt;/p&gt;
+&lt;h2 id=&#34;結果-1&#34;&gt;結果&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-3-result-1.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;計算量指數增長，loss 卻是線性的往下降&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-3-result-2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;paper 裡有很多任務的實驗結果，這邊就不附上了&lt;/p&gt;
+&lt;h2 id=&#34;limitations&#34;&gt;Limitations&lt;/h2&gt;
+&lt;p&gt;在文本生成上還是比較弱，生很長的東西，可能會重複自己說過的話、失去連貫性、自相矛盾等等&lt;/p&gt;
+&lt;p&gt;在有些雙向性的任務上可能表現更差&lt;/p&gt;
+&lt;h2 id=&#34;影響&#34;&gt;影響&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;可能被用來散布不實消息、垃圾郵件等等&lt;/li&gt;
+&lt;li&gt;偏見&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;結論&#34;&gt;結論&lt;/h2&gt;
+&lt;p&gt;在很多 NLP 任務可以做到接近 SOTA 微調模型的成果&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
