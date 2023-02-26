@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='GPT-1 到 GPT-3 簡單筆記'>
+<title>GPT 三部曲</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/gpt-%E4%B8%89%E9%83%A8%E6%9B%B2/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.c8da5069c06805334f6b22a49ff864b8c2cf9279882d00f7f4c0cf2f656d204c.css"><meta property='og:title' content='GPT 三部曲'>
+<meta property='og:description' content='GPT-1 到 GPT-3 簡單筆記'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/gpt-%E4%B8%89%E9%83%A8%E6%9B%B2/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='nlp' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:published_time' content='2023-01-19T01:50:07&#43;08:00'/><meta property='article:modified_time' content='2023-01-19T01:50:07&#43;08:00'/>
+<meta name="twitter:title" content="GPT 三部曲">
+<meta name="twitter:description" content="GPT-1 到 GPT-3 簡單筆記">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/Blog">
+                
+                    
+                    
+                    
+                        
+                        <img src="/Blog/logo_hu4571d0fc95bcb4b13f2ac8e17a6aeed9_16849_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⭐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/Blog">Roykesydon</a></h1>
+            <h2 class="site-description">I write notes here during my free time.</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#unsupervised-pre-training">Unsupervised pre-training</a>
+      <ol>
+        <li><a href="#模型大致架構">模型大致架構</a></li>
+      </ol>
+    </li>
+    <li><a href="#supervised-fine-tuning">Supervised fine-tuning</a></li>
+    <li><a href="#微調應用範例">微調應用範例</a></li>
+    <li><a href="#資料集">資料集</a></li>
+    <li><a href="#模型結構">模型結構</a></li>
+    <li><a href="#和-bert-base-比較">和 BERT BASE 比較</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#資料集-1">資料集</a>
+      <ol>
+        <li><a href="#common-crawl">Common Crawl</a></li>
+        <li><a href="#webtext">WebText</a></li>
+      </ol>
+    </li>
+    <li><a href="#架構">架構</a></li>
+    <li><a href="#zero-shot">zero-shot</a>
+      <ol>
+        <li><a href="#目前問題">目前問題</a></li>
+      </ol>
+    </li>
+    <li><a href="#結果">結果</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#摘要">摘要</a></li>
+    <li><a href="#目前有的問題">目前有的問題</a></li>
+    <li><a href="#評估方式">評估方式</a></li>
+    <li><a href="#架構-1">架構</a>
+      <ol>
+        <li><a href="#相同">相同</a></li>
+        <li><a href="#不同">不同</a>
+          <ol>
+            <li><a href="#batch-size-大小">Batch Size 大小</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#資料集-2">資料集</a>
+      <ol>
+        <li><a href="#common-crawl-1">Common Crawl</a>
+          <ol>
+            <li><a href="#三步驟">三步驟</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#結果-1">結果</a></li>
+    <li><a href="#limitations">Limitations</a></li>
+    <li><a href="#影響">影響</a></li>
+    <li><a href="#結論">結論</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/deep-learning/" style="background-color: #936ce1; color: #fff;">
+                Deep Learning
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/Blog/p/gpt-%E4%B8%89%E9%83%A8%E6%9B%B2/">GPT 三部曲</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            GPT-1 到 GPT-3 簡單筆記
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jan 19, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    2 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>GPT 本質上就是 Transformer 的 decoder</p>
+<h1 id="gpt-1">GPT-1</h1>
+<p>paper: <a class="link" href="https://www.semanticscholar.org/paper/Improving-Language-Understanding-by-Generative-Radford-Narasimhan/cd18800a0fe0b668a1cc19f2ec95b5003d0a5035"  target="_blank" rel="noopener"
+    >Improving Language Understanding by Generative Pre-Training</a></p>
+<p>用 semi-supervised，後來被歸為 self-supervised</p>
+<h2 id="unsupervised-pre-training">Unsupervised pre-training</h2>
+<p>$L_1(U)=\sum_i logP(u_i|u_{i-k},&hellip;,u_{i-1};\theta)$</p>
+<p>$U= \{ u_1,&hellip;,u_n \}$</p>
+<p>$U$ 是一系列未標記的文本 token</p>
+<p>$k$ 是窗口大小</p>
+<h3 id="模型大致架構">模型大致架構</h3>
+<p>$h_0=UW_e+W_p$</p>
+<p>$h_1=transformer \_ block(h_{i-1})\forall i \in[1,n]$</p>
+<p>$P(u)=softmax(h_nW^T_e)$</p>
+<p>$U=\{u_{-k},&hellip;,u_{-1}\}$</p>
+<hr>
+<h2 id="supervised-fine-tuning">Supervised fine-tuning</h2>
+<p>$P(y|x^1,&hellip;,x^m)=softmax(h^m_lW_y)$</p>
+<p>$L2(C)=\sum_{(x,y)}log P(y|x^1,&hellip;,x^m)$</p>
+<p>$L_3(C)=L_2(C)+\lambda*L_1(C)$</p>
+<p>$C$ 是 labeled 的資料集，微調基本上就是在後面加上線性層</p>
+<p>作者最大化 likelihood 的時候是用 $L_3$ 而非單純的 $L_2$</p>
+<hr>
+<h2 id="微調應用範例">微調應用範例</h2>
+<p><img src="/images/gpt/gpt-1-tasks.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<hr>
+<h2 id="資料集">資料集</h2>
+<p>用 BooksCorpus 訓練出來的</p>
+<p>有超過 7000 本未出版的書</p>
+<h2 id="模型結構">模型結構</h2>
+<ul>
+<li>12 層 transformer 的 decoder</li>
+<li>768 維 word embedding</li>
+<li>12 個 attention heads</li>
+</ul>
+<h2 id="和-bert-base-比較">和 BERT BASE 比較</h2>
+<p>BERT 論文比較晚出，但 BASE 的模型架構和 GPT 有相似之處，</p>
+<p>BASE 是 12 層的 decoder，word embedding 和 attention head 的維度或數量和 GPT-1 相同</p>
+<h1 id="gpt-2">GPT-2</h1>
+<p>paper: <a class="link" href="https://paperswithcode.com/paper/language-models-are-unsupervised-multitask"  target="_blank" rel="noopener"
+    >Language Models are Unsupervised Multitask Learner</a></p>
+<p>GPT-2 除了用更大的的模型和更大的資料集，把重點放在 zero-shot 上，雖然在 GPT-1 的論文就有提過 zero-shot</p>
+<h2 id="資料集-1">資料集</h2>
+<p>這次做了一個叫做 WebText 的資料集，有百萬級別的網頁</p>
+<h3 id="common-crawl">Common Crawl</h3>
+<p>大型爬蟲專案，有大量網頁資料，但充斥了垃圾訊息</p>
+<h3 id="webtext">WebText</h3>
+<p>WebText 的資料來源是 reddit 上的外部連結，只要有至少三個 karma，就會被採納，由此取得品質較好的網頁資料。透過這種方法，取得了 4500 萬個連結。並用Dragnet (Peters &amp; Lecocq, 2013) and Newspaper content extractors 把文字訊息從 HTML 中抓出來</p>
+<h2 id="架構">架構</h2>
+<p>和原本差不多，變成有 1.5B 參數的 Transformer decoder</p>
+<p><img src="/images/gpt/gpt-2-models.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h2 id="zero-shot">zero-shot</h2>
+<p>不需要下游任務的標記資料</p>
+<p>改把任務輸入進模型</p>
+<h3 id="目前問題">目前問題</h3>
+<ul>
+<li>現在的模型泛化能力不太好</li>
+<li>Multitask learning
+在 NLP 上不太常用，NLP 現在主流還是在預訓練模型上做微調以應對下游任務
+<ul>
+<li>對每個下游任務都得重新訓練模型</li>
+<li>得蒐集 labeled 資料</li>
+</ul>
+</li>
+</ul>
+<h2 id="結果">結果</h2>
+<p><img src="/images/gpt/gpt-2-result-1.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="/images/gpt/gpt-2-result-2.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h1 id="gpt-3">GPT-3</h1>
+<p>paper: <a class="link" href="https://arxiv.org/abs/2005.14165"  target="_blank" rel="noopener"
+    >Language Models are Few-Shot Learners</a></p>
+<h2 id="摘要">摘要</h2>
+<ul>
+<li>有 175B 的參數，由於模型極大，要在子任務微調會成本很大，所以不做任何梯度更新</li>
+<li>在很多 NLP 任務有傑出的成果</li>
+<li>可以生出人類難以區分的新聞文章</li>
+</ul>
+<h2 id="目前有的問題">目前有的問題</h2>
+<ul>
+<li>要在子任務微調，需要資料集</li>
+<li>微調後在有些子任務上表現好不代表你預訓練模型一定泛化能力高</li>
+<li>人類不需要大量 labeled 資料去完成小任務</li>
+</ul>
+<h2 id="評估方式">評估方式</h2>
+<ul>
+<li>分為三種，few / one / zero-shot learning</li>
+</ul>
+<h2 id="架構-1">架構</h2>
+<p>基本上 GPT-3 和 GPT-2 架構一樣</p>
+<h3 id="相同">相同</h3>
+<ul>
+<li>modified initialization</li>
+<li>pre-normalization</li>
+<li>reversible tokenization described therein</li>
+</ul>
+<h3 id="不同">不同</h3>
+<ul>
+<li>把 Sparse Transformer 的一些修改拿過來用</li>
+</ul>
+<p><img src="/images/gpt/gpt-3-models.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>GPT-3 Small 是 GPT-1 的大小
+GPT-3 Medium 是 BERT Large 的大小
+GPT-3 XL 和 GPT-2 相近，比較淺也比較寬</p>
+<h4 id="batch-size-大小">Batch Size 大小</h4>
+<p>模型小的時候需要小一點，透過這種額外的 noise 來避免 overfitting(不確定是不是猜想)</p>
+<h2 id="資料集-2">資料集</h2>
+<h3 id="common-crawl-1">Common Crawl</h3>
+<p>架構比 GPT-2 大很多，所以回頭考慮這個資料集</p>
+<h4 id="三步驟">三步驟</h4>
+<ol>
+<li>先過濾，透過 reddit 那個高品質的資料集，來訓練一個模型分類高品質和低品質的網頁。</li>
+<li>透過 LSH 演算法把相似的文本過濾掉</li>
+<li>把一些已知高品質的資料集也加進來</li>
+</ol>
+<p><img src="/images/gpt/gpt-3-dataset.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>這是一個 Batch 裡有 60% 來自 Common Crawl(filtered) 的意思
+Wikipedia 雖然總量比較少，但也有 3% 的採樣率</p>
+<h2 id="結果-1">結果</h2>
+<p><img src="/images/gpt/gpt-3-result-1.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>計算量指數增長，loss 卻是線性的往下降</p>
+<p><img src="/images/gpt/gpt-3-result-2.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>paper 裡有很多任務的實驗結果，這邊就不附上了</p>
+<h2 id="limitations">Limitations</h2>
+<p>在文本生成上還是比較弱，生很長的東西，可能會重複自己說過的話、失去連貫性、自相矛盾等等</p>
+<p>在有些雙向性的任務上可能表現更差</p>
+<h2 id="影響">影響</h2>
+<ul>
+<li>可能被用來散布不實消息、垃圾郵件等等</li>
+<li>偏見</li>
+</ul>
+<h2 id="結論">結論</h2>
+<p>在很多 NLP 任務可以做到接近 SOTA 微調模型的成果</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/nlp/">nlp</a>
+        
+            <a href="/Blog/tags/deep-learning/">deep-learning</a>
+        
+            <a href="/Blog/tags/machine-learning/">machine-learning</a>
+        
+            <a href="/Blog/tags/transformer/">transformer</a>
+        
+            <a href="/Blog/tags/attention/">attention</a>
+        
+            <a href="/Blog/tags/self-attention/">self-attention</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/instructgpt/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">InstructGPT</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">MAE 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/vit-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">ViT 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/q-learning/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Q-learning</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/proximal-policy-optimizationppo/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Proximal Policy Optimization(PPO)</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2022 - 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

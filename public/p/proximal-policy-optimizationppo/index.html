@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='On/Off-policy On-policy 學習的 agent 和與環境互動的 agent 是同一個 Off-policy 學習的 agent 和與環境互動的 agent 是不同個 想從 On-policy 轉 Off-policy On-policy 每次都要重新蒐集資料，很花時間 由另一個 $\pi_{\theta^{&amp;rsquo;}}$ 去 train $\theta$，$\theta^{&amp;rsquo;}$是固定的，所以我們可以 re-use sample data Importance Sampling 是一個 general 的想法，不限於 RL
+$E_{x \text{\textasciitilde} p}[f(x)]\approx \frac{1}{N}\displaystyle\sum_{i=1}^N f(x^i)$
+$x^i$ is sampled from p(x) 我們遇到的問題是沒辦法從 p 來 sample data，只能透過 q(x) 去 sample $x^i$
+可以把上式改寫成 $E_{x \text{\textasciitilde} p}[f(x)]=E_{x \text{\textasciitilde} q}[f(x)\frac{p(x)}{q(x)}]$
+Issue 雖然理論上 q 可以任意選，只要不要 q(x) 是 0 的時候 p(x) 不是 0，實作上 p 和 q 不能差太多，不然會有問題'>
+<title>Proximal Policy Optimization(PPO)</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/proximal-policy-optimizationppo/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.c8da5069c06805334f6b22a49ff864b8c2cf9279882d00f7f4c0cf2f656d204c.css"><meta property='og:title' content='Proximal Policy Optimization(PPO)'>
+<meta property='og:description' content='On/Off-policy On-policy 學習的 agent 和與環境互動的 agent 是同一個 Off-policy 學習的 agent 和與環境互動的 agent 是不同個 想從 On-policy 轉 Off-policy On-policy 每次都要重新蒐集資料，很花時間 由另一個 $\pi_{\theta^{&amp;rsquo;}}$ 去 train $\theta$，$\theta^{&amp;rsquo;}$是固定的，所以我們可以 re-use sample data Importance Sampling 是一個 general 的想法，不限於 RL
+$E_{x \text{\textasciitilde} p}[f(x)]\approx \frac{1}{N}\displaystyle\sum_{i=1}^N f(x^i)$
+$x^i$ is sampled from p(x) 我們遇到的問題是沒辦法從 p 來 sample data，只能透過 q(x) 去 sample $x^i$
+可以把上式改寫成 $E_{x \text{\textasciitilde} p}[f(x)]=E_{x \text{\textasciitilde} q}[f(x)\frac{p(x)}{q(x)}]$
+Issue 雖然理論上 q 可以任意選，只要不要 q(x) 是 0 的時候 p(x) 不是 0，實作上 p 和 q 不能差太多，不然會有問題'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/proximal-policy-optimizationppo/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='reinforcement-learning' /><meta property='article:published_time' content='2023-02-20T12:35:56&#43;08:00'/><meta property='article:modified_time' content='2023-02-20T12:35:56&#43;08:00'/>
+<meta name="twitter:title" content="Proximal Policy Optimization(PPO)">
+<meta name="twitter:description" content="On/Off-policy On-policy 學習的 agent 和與環境互動的 agent 是同一個 Off-policy 學習的 agent 和與環境互動的 agent 是不同個 想從 On-policy 轉 Off-policy On-policy 每次都要重新蒐集資料，很花時間 由另一個 $\pi_{\theta^{&amp;rsquo;}}$ 去 train $\theta$，$\theta^{&amp;rsquo;}$是固定的，所以我們可以 re-use sample data Importance Sampling 是一個 general 的想法，不限於 RL
+$E_{x \text{\textasciitilde} p}[f(x)]\approx \frac{1}{N}\displaystyle\sum_{i=1}^N f(x^i)$
+$x^i$ is sampled from p(x) 我們遇到的問題是沒辦法從 p 來 sample data，只能透過 q(x) 去 sample $x^i$
+可以把上式改寫成 $E_{x \text{\textasciitilde} p}[f(x)]=E_{x \text{\textasciitilde} q}[f(x)\frac{p(x)}{q(x)}]$
+Issue 雖然理論上 q 可以任意選，只要不要 q(x) 是 0 的時候 p(x) 不是 0，實作上 p 和 q 不能差太多，不然會有問題">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/Blog">
+                
+                    
+                    
+                    
+                        
+                        <img src="/Blog/logo_hu4571d0fc95bcb4b13f2ac8e17a6aeed9_16849_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⭐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/Blog">Roykesydon</a></h1>
+            <h2 class="site-description">I write notes here during my free time.</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#importance-sampling">Importance Sampling</a>
+      <ol>
+        <li><a href="#issue">Issue</a></li>
+      </ol>
+    </li>
+    <li><a href="#轉換">轉換</a>
+      <ol>
+        <li><a href="#advantage-function">Advantage function</a></li>
+      </ol>
+    </li>
+  </ol>
+
+  <ol>
+    <li><a href="#前身-trpo">前身 TRPO</a></li>
+    <li><a href="#kl-divergence">KL divergence</a></li>
+    <li><a href="#algorithm">algorithm</a></li>
+    <li><a href="#ppo2">PPO2</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/deep-learning/" style="background-color: #936ce1; color: #fff;">
+                Deep Learning
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/Blog/p/proximal-policy-optimizationppo/">Proximal Policy Optimization(PPO)</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Feb 20, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    1 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="onoff-policy">On/Off-policy</h1>
+<ul>
+<li>On-policy
+<ul>
+<li>學習的 agent 和與環境互動的 agent 是同一個</li>
+</ul>
+</li>
+<li>Off-policy
+<ul>
+<li>學習的 agent 和與環境互動的 agent 是不同個</li>
+</ul>
+</li>
+</ul>
+<h1 id="想從-on-policy-轉-off-policy">想從 On-policy 轉 Off-policy</h1>
+<ul>
+<li>On-policy 每次都要重新蒐集資料，很花時間</li>
+<li>由另一個 $\pi_{\theta^{&rsquo;}}$ 去 train $\theta$，$\theta^{&rsquo;}$是固定的，所以我們可以 re-use sample data</li>
+</ul>
+<h2 id="importance-sampling">Importance Sampling</h2>
+<ul>
+<li>
+<p>是一個 general 的想法，不限於 RL</p>
+</li>
+<li>
+<p>$E_{x \text{\textasciitilde} p}[f(x)]\approx \frac{1}{N}\displaystyle\sum_{i=1}^N f(x^i)$</p>
+<ul>
+<li>$x^i$ is sampled from p(x)</li>
+</ul>
+</li>
+<li>
+<p>我們遇到的問題是沒辦法從 p 來 sample data，只能透過 q(x) 去 sample $x^i$</p>
+</li>
+<li>
+<p>可以把上式改寫成 $E_{x \text{\textasciitilde} p}[f(x)]=E_{x \text{\textasciitilde} q}[f(x)\frac{p(x)}{q(x)}]$</p>
+</li>
+</ul>
+<h3 id="issue">Issue</h3>
+<ul>
+<li>
+<p>雖然理論上 q 可以任意選，只要不要 q(x) 是 0 的時候 p(x) 不是 0，實作上 p 和 q 不能差太多，不然會有問題</p>
+<ul>
+<li>這兩項的 Variance 不一樣，如果 p 除以 q 差距很大，右邊的 Variance 會很大，如果 sample 不夠多次就會有問題</li>
+</ul>
+<p><img src="/images/drl/ppo/importance-sample-issue.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+</li>
+</ul>
+<h2 id="轉換">轉換</h2>
+<ul>
+<li>
+<p>原本</p>
+<ul>
+<li>$\triangledown \overline{R_{\theta}}=E_{\tau \text{\textasciitilde}p_{\theta}(\tau)}[R(\tau)\triangledown log p_{\theta} (\tau)]$</li>
+</ul>
+</li>
+<li>
+<p>改為</p>
+<ul>
+<li>$\triangledown \overline{R_{\theta}}=E_{\tau \text{\textasciitilde}p_{\theta^{&rsquo;}}(\tau)}[\frac{p_{\theta}(\tau)}{p_{\theta^{&rsquo;}}(\tau)}R(\tau)\triangledown log p_{\theta} (\tau)]$</li>
+<li>從 $\theta^{&rsquo;}$ sample 資料</li>
+<li>更新 $\theta$ 多次</li>
+</ul>
+</li>
+</ul>
+<h3 id="advantage-function">Advantage function</h3>
+<ul>
+<li>
+<p>原本</p>
+<ul>
+<li>$E_{(s_t,a_t)\text{\textasciitilde}\pi_{\theta}}[A^{\theta}(s_t,a_t)\triangledown log p_\theta(a_t^n|s_t^n)]$</li>
+</ul>
+</li>
+<li>
+<p>改為</p>
+<ul>
+<li>$E_{(s_t,a_t)\text{\textasciitilde}\pi_{\theta^{&rsquo;}}}[\frac{P_\theta(s_t,a_t)}{P_{\theta^{&rsquo;}}(s_t,a_t)}A^{\theta^{&rsquo;}}(s_t,a_t)\triangledown log p_\theta(a_t^n|s_t^n)]$</li>
+<li>要注意 Advantage 的結果要由 $\theta^{&rsquo;}$ 得出，是 $\theta^{&rsquo;}$在和環境互動</li>
+</ul>
+</li>
+<li>
+<p>新的 objective function</p>
+<ul>
+<li>$J^{\theta^{&rsquo;}}(\theta)=E_{(s_t,a_t)\text{\textasciitilde}\pi_{\theta^{&rsquo;}}}[\frac{p_\theta(a_t|s_t)}{p_{\theta^{&rsquo;}}(a_t|s_t)}A^{\theta^{&rsquo;}}(s_t,a_t)]$</li>
+</ul>
+</li>
+</ul>
+<h1 id="ppo">PPO</h1>
+<ul>
+<li>確保 $\theta$ 和 $\theta^{&rsquo;}$ 不會差太多</li>
+<li>$J_{PPO}^{\theta^{&rsquo;}}(\theta)=J^{\theta^{&rsquo;}}(\theta)-\beta KL(\theta, \theta^{&rsquo;})$</li>
+</ul>
+<h2 id="前身-trpo">前身 TRPO</h2>
+<ul>
+<li>Trust Region Policy Optimization</li>
+<li>$J_{TRPO}^{\theta^{&rsquo;}}(\theta)=E_{(s_t,a_t)\text{\textasciitilde}\pi_{\theta^{&rsquo;}}}[\frac{p_\theta(a_t|s_t)}{p_{\theta^{&rsquo;}}(a_t|s_t)}A^{\theta^{&rsquo;}}(s_t,a_t)], KL(\theta, \theta^{&rsquo;})&lt;\delta$</li>
+<li>constrain 很難處理</li>
+</ul>
+<h2 id="kl-divergence">KL divergence</h2>
+<ul>
+<li>這邊不是 $\theta$ 和 $\theta^{&rsquo;}$ 參數上的距離，而是 behavior 的距離
+<ul>
+<li>參數上的距離是指這兩個參數有多像</li>
+<li>是給同樣的 state 生出 action 的 distribution 要像</li>
+</ul>
+</li>
+</ul>
+<h2 id="algorithm">algorithm</h2>
+<ul>
+<li>初始參數 $\theta^0$</li>
+<li>每個 iteration
+<ul>
+<li>
+<p>用 $\theta^k$ 和環境互動，蒐集{$s_t,a_t$}，並計算 advantage $A^{\theta^k}(s_t,a_t)$</p>
+</li>
+<li>
+<p>找出 theta 最佳化 $J_{PPO}(\theta)$</p>
+<ul>
+<li>$J_{PPO}^{\theta^{k}}(\theta)=J^{\theta^{k}}(\theta)-\beta KL(\theta, \theta^{k})$</li>
+<li>可以更新很多次</li>
+</ul>
+</li>
+<li>
+<p>動態調整 $\beta$</p>
+<ul>
+<li>Adaptive KL Penalty</li>
+<li>設可接受的 KL 數值範圍</li>
+<li>if $KL(\theta,\theta^k)&gt;KL_{max},\text{increase} \beta$</li>
+<li>if $KL(\theta,\theta^k)&lt;KL_{min},\text{decrease} \beta$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="ppo2">PPO2</h2>
+<ul>
+<li>
+<p>PPO</p>
+<ul>
+<li>$J_{PPO}^{\theta^{k}}(\theta)=J^{\theta^{k}}(\theta)-\beta KL(\theta, \theta^{k})$</li>
+</ul>
+</li>
+<li>
+<p>PPO2</p>
+<ul>
+<li>$J_{PPO2}^{\theta^{k}}(\theta)\approx \displaystyle\sum_{(s_t,a_t)}min(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}A^{\theta^k}(s_t,a_t), \\
+clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\varepsilon)A^{\theta^k}(s_t,a_t))$</li>
+</ul>
+<p><img src="/images/drl/ppo/ppo2.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/deep-learning/">deep-learning</a>
+        
+            <a href="/Blog/tags/machine-learning/">machine-learning</a>
+        
+            <a href="/Blog/tags/reinforcement-learning/">reinforcement-learning</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/q-learning/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Q-learning</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/policy-gradient/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Policy Gradient</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">MAE 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/vit-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">ViT 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/instructgpt/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">InstructGPT</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2022 - 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

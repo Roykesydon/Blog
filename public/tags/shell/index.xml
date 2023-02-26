@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>shell on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/shell/</link>
+        <description>Recent content in shell on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Thu, 19 Jan 2023 23:00:02 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/shell/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Shell</title>
+        <link>https://roykesydon.github.io/Blog/p/shell/</link>
+        <pubDate>Thu, 19 Jan 2023 23:00:02 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/shell/</guid>
+        <description>&lt;h1 id=&#34;features&#34;&gt;Features&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Process control&lt;/li&gt;
+&lt;li&gt;Variables&lt;/li&gt;
+&lt;li&gt;Flow control&lt;/li&gt;
+&lt;li&gt;Functions&lt;/li&gt;
+&lt;li&gt;File &amp;amp; cmd name completions&lt;/li&gt;
+&lt;li&gt;Cmd line editng&lt;/li&gt;
+&lt;li&gt;Cmd history&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;command-mode&#34;&gt;Command Mode&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Interactive&lt;/li&gt;
+&lt;li&gt;Non- Interactive&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;command-type&#34;&gt;Command Type&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;internal / Builtin command&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;指令的程式碼是 shell 的一部分
+&lt;ul&gt;
+&lt;li&gt;e.g., cd, exit&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;不會產生 child process&lt;/li&gt;
+&lt;li&gt;有些 internal command，比如 echo, pwd，會 internal 和 external 都有實作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;external command&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;指令的程式碼在硬碟上的某個 binary file
+&lt;ul&gt;
+&lt;li&gt;e.g., clear, ls&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;會產生 child process&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;common-commands&#34;&gt;Common Commands&lt;/h1&gt;
+&lt;p&gt;比較實用或常用的&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;grep&lt;/p&gt;
+&lt;p&gt;找字詞&lt;/p&gt;
+&lt;p&gt;grep &amp;lt;string/pattern&amp;gt; &lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;-i 大小寫不敏感&lt;/li&gt;
+&lt;li&gt;-v 不包含關鍵字的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;cut
+找 column&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;-f 找哪些 column&lt;/li&gt;
+&lt;li&gt;-d 分隔符是什麼&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;比較兩個檔案&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;comm&lt;/p&gt;
+&lt;p&gt;顯示 file1 獨有的列、 file2 獨有的列、file1 和 file2 共有的列&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;cmp, diff&lt;/p&gt;
+&lt;p&gt;回傳不一樣的列資訊&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;unset&lt;/p&gt;
+&lt;p&gt;把指定的變數移除掉&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;tee&lt;/p&gt;
+&lt;p&gt;吃 stdin 輸出到 stdout 和其他檔案&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;less&lt;/p&gt;
+&lt;p&gt;讀檔案用&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;expansions&#34;&gt;Expansions&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;White space&lt;/li&gt;
+&lt;li&gt;Control Operators
+&lt;ul&gt;
+&lt;li&gt;;
+&lt;ul&gt;
+&lt;li&gt;讓指令接著執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&amp;amp;
+&lt;ul&gt;
+&lt;li&gt;放在結尾，讓指令在背景執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&amp;amp;&amp;amp;
+&lt;ul&gt;
+&lt;li&gt;logical AND&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;||
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;logical OR&lt;/p&gt;
+&lt;p&gt;前面失敗才會跑後面&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;#
+&lt;ul&gt;
+&lt;li&gt;註解用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;\
+&lt;ul&gt;
+&lt;li&gt;escape special characters&lt;/li&gt;
+&lt;li&gt;放結尾好換行繼續輸入&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$?
+&lt;ul&gt;
+&lt;li&gt;一個特別的變數，有上個指令的 exit code&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Shell variables
+&lt;ul&gt;
+&lt;li&gt;User defined&lt;/li&gt;
+&lt;li&gt;Env var&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Shell history&lt;/li&gt;
+&lt;li&gt;File Globing
+&lt;ul&gt;
+&lt;li&gt;*, ?, [], -, !&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

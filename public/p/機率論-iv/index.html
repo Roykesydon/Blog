@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='隨機變數之和 Z=X&#43;Y
+$p_Z(z)=\displaystyle\sum_{x=-\infty}^{\infty}p_{X,Y}(x,z-x)\\ =\displaystyle\sum_{y=-\infty}^{\infty}p_{X,Y}(z-y,y)$
+$f_Z(z)=\int_{-\infty}^{\infty}f_{X,Y}(x,z-x)dx\\ =\int_{-\infty}^{\infty}f_{X,Y}(z-y,y)dy$
+如果 X, Y 獨立
+離散
+$p_Z(z)=\displaystyle\sum_{x=-\infty}^{\infty}p_{X}(x)\cdot p_Y(z-x)\\ =\displaystyle\sum_{y=-\infty}^{\infty}p_{X}(z-y)\cdot p_Y(y)$ 這兩個等式是 discrete convolution $=p_X(z) * p_Y(z)$ 連續
+$f_Z(z)=\int_{-\infty}^{\infty}f_{X}(x) f_Y(z-x) dx\\ =\int_{-\infty}^{\infty}f_{X}(z-y) f_Y(y) dy$ 這兩個等式是 continuous convolution $=f_X(z) * f_Y(z)$ 如果有 n 個獨立隨機變數
+$X=X_1&#43;X_2&#43;&amp;hellip;&#43;X_n$ 如果 $X_1,&amp;hellip;,X_n$ 獨立 $p_X(x)=p_{X_1}(x) * p_{X_2}(x) * p_{X_3}(x) * &amp;hellip; * p_{X_n}(x)$ 連續做 convolution $f_X(x)=f_{X_1}(x) * f_{X_2}(x) * f_{X_3}(x) * &amp;hellip; * f_{X_n}(x)$ 連續做 convolution MGF moment generating function
+convolution 很難算
+流程'>
+<title>機率論 - IV</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/%E6%A9%9F%E7%8E%87%E8%AB%96-iv/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.c8da5069c06805334f6b22a49ff864b8c2cf9279882d00f7f4c0cf2f656d204c.css"><meta property='og:title' content='機率論 - IV'>
+<meta property='og:description' content='隨機變數之和 Z=X&#43;Y
+$p_Z(z)=\displaystyle\sum_{x=-\infty}^{\infty}p_{X,Y}(x,z-x)\\ =\displaystyle\sum_{y=-\infty}^{\infty}p_{X,Y}(z-y,y)$
+$f_Z(z)=\int_{-\infty}^{\infty}f_{X,Y}(x,z-x)dx\\ =\int_{-\infty}^{\infty}f_{X,Y}(z-y,y)dy$
+如果 X, Y 獨立
+離散
+$p_Z(z)=\displaystyle\sum_{x=-\infty}^{\infty}p_{X}(x)\cdot p_Y(z-x)\\ =\displaystyle\sum_{y=-\infty}^{\infty}p_{X}(z-y)\cdot p_Y(y)$ 這兩個等式是 discrete convolution $=p_X(z) * p_Y(z)$ 連續
+$f_Z(z)=\int_{-\infty}^{\infty}f_{X}(x) f_Y(z-x) dx\\ =\int_{-\infty}^{\infty}f_{X}(z-y) f_Y(y) dy$ 這兩個等式是 continuous convolution $=f_X(z) * f_Y(z)$ 如果有 n 個獨立隨機變數
+$X=X_1&#43;X_2&#43;&amp;hellip;&#43;X_n$ 如果 $X_1,&amp;hellip;,X_n$ 獨立 $p_X(x)=p_{X_1}(x) * p_{X_2}(x) * p_{X_3}(x) * &amp;hellip; * p_{X_n}(x)$ 連續做 convolution $f_X(x)=f_{X_1}(x) * f_{X_2}(x) * f_{X_3}(x) * &amp;hellip; * f_{X_n}(x)$ 連續做 convolution MGF moment generating function
+convolution 很難算
+流程'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/%E6%A9%9F%E7%8E%87%E8%AB%96-iv/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='math' /><meta property='article:tag' content='probability' /><meta property='article:published_time' content='2023-02-05T15:18:41&#43;08:00'/><meta property='article:modified_time' content='2023-02-05T15:18:41&#43;08:00'/>
+<meta name="twitter:title" content="機率論 - IV">
+<meta name="twitter:description" content="隨機變數之和 Z=X&#43;Y
+$p_Z(z)=\displaystyle\sum_{x=-\infty}^{\infty}p_{X,Y}(x,z-x)\\ =\displaystyle\sum_{y=-\infty}^{\infty}p_{X,Y}(z-y,y)$
+$f_Z(z)=\int_{-\infty}^{\infty}f_{X,Y}(x,z-x)dx\\ =\int_{-\infty}^{\infty}f_{X,Y}(z-y,y)dy$
+如果 X, Y 獨立
+離散
+$p_Z(z)=\displaystyle\sum_{x=-\infty}^{\infty}p_{X}(x)\cdot p_Y(z-x)\\ =\displaystyle\sum_{y=-\infty}^{\infty}p_{X}(z-y)\cdot p_Y(y)$ 這兩個等式是 discrete convolution $=p_X(z) * p_Y(z)$ 連續
+$f_Z(z)=\int_{-\infty}^{\infty}f_{X}(x) f_Y(z-x) dx\\ =\int_{-\infty}^{\infty}f_{X}(z-y) f_Y(y) dy$ 這兩個等式是 continuous convolution $=f_X(z) * f_Y(z)$ 如果有 n 個獨立隨機變數
+$X=X_1&#43;X_2&#43;&amp;hellip;&#43;X_n$ 如果 $X_1,&amp;hellip;,X_n$ 獨立 $p_X(x)=p_{X_1}(x) * p_{X_2}(x) * p_{X_3}(x) * &amp;hellip; * p_{X_n}(x)$ 連續做 convolution $f_X(x)=f_{X_1}(x) * f_{X_2}(x) * f_{X_3}(x) * &amp;hellip; * f_{X_n}(x)$ 連續做 convolution MGF moment generating function
+convolution 很難算
+流程">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/Blog">
+                
+                    
+                    
+                    
+                        
+                        <img src="/Blog/logo_hu4571d0fc95bcb4b13f2ac8e17a6aeed9_16849_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⭐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/Blog">Roykesydon</a></h1>
+            <h2 class="site-description">I write notes here during my free time.</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#獨立隨機變數之和">獨立隨機變數之和</a></li>
+    <li><a href="#隨機變數之獨立隨機變數和">隨機變數之獨立隨機變數和</a></li>
+  </ol>
+
+  <ol>
+    <li><a href="#de-moivre---laplace-formula">De Moivre - Laplace Formula</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/math/" style="background-color: #457ee9; color: #fff;">
+                Math
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/Blog/p/%E6%A9%9F%E7%8E%87%E8%AB%96-iv/">機率論 - IV</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Feb 05, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    2 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="隨機變數之和">隨機變數之和</h1>
+<ul>
+<li>
+<p>Z=X+Y</p>
+</li>
+<li>
+<p>$p_Z(z)=\displaystyle\sum_{x=-\infty}^{\infty}p_{X,Y}(x,z-x)\\
+=\displaystyle\sum_{y=-\infty}^{\infty}p_{X,Y}(z-y,y)$</p>
+</li>
+<li>
+<p>$f_Z(z)=\int_{-\infty}^{\infty}f_{X,Y}(x,z-x)dx\\
+=\int_{-\infty}^{\infty}f_{X,Y}(z-y,y)dy$</p>
+</li>
+<li>
+<p>如果 X, Y 獨立</p>
+<ul>
+<li>
+<p>離散</p>
+<ul>
+<li>$p_Z(z)=\displaystyle\sum_{x=-\infty}^{\infty}p_{X}(x)\cdot p_Y(z-x)\\
+=\displaystyle\sum_{y=-\infty}^{\infty}p_{X}(z-y)\cdot p_Y(y)$
+<ul>
+<li>這兩個等式是 discrete convolution</li>
+<li>$=p_X(z) * p_Y(z)$</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>連續</p>
+<ul>
+<li>$f_Z(z)=\int_{-\infty}^{\infty}f_{X}(x) f_Y(z-x) dx\\
+=\int_{-\infty}^{\infty}f_{X}(z-y) f_Y(y) dy$
+<ul>
+<li>這兩個等式是 continuous convolution</li>
+<li>$=f_X(z) * f_Y(z)$</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>如果有 n 個獨立隨機變數</p>
+<ul>
+<li>$X=X_1+X_2+&hellip;+X_n$
+<ul>
+<li>如果 $X_1,&hellip;,X_n$ 獨立
+<ul>
+<li>$p_X(x)=p_{X_1}(x) * p_{X_2}(x) * p_{X_3}(x) * &hellip; * p_{X_n}(x)$
+<ul>
+<li>連續做 convolution</li>
+</ul>
+</li>
+<li>$f_X(x)=f_{X_1}(x) * f_{X_2}(x) * f_{X_3}(x) * &hellip; * f_{X_n}(x)$
+<ul>
+<li>連續做 convolution</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="mgf">MGF</h1>
+<ul>
+<li>
+<p>moment generating function</p>
+</li>
+<li>
+<p>convolution 很難算</p>
+</li>
+<li>
+<p>流程</p>
+<ul>
+<li>如果有多個連續 convolution 也適用下面流程，全部一次一起相乘</li>
+</ul>
+<ol>
+<li>
+<p>給定 $p_{X_1}(x), p_{X_2}(x)$，目標是求 $p_{X_1}(x) * p{X_2}(x)$</p>
+</li>
+<li>
+<p>轉換到 MGF</p>
+<ul>
+<li>
+<p>$\phi_{X_1}(s)=E \lbrack e^{sX_1} \rbrack\\
+= \displaystyle\sum_{x=-\infty}^{\infty}e^{sx}\cdot p_{X_1}(x)$</p>
+</li>
+<li>
+<p>$\phi_{X_2}(s)=E \lbrack e^{sX_2} \rbrack$</p>
+</li>
+</ul>
+</li>
+<li>
+<p>相乘
+$\phi_{X_1}(s) \cdot \phi_{X_2}(s)$</p>
+</li>
+<li>
+<p>逆轉換</p>
+<ul>
+<li>查表</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>$\phi_X(s)$ 定義</p>
+<ul>
+<li>$\phi_X(s)=E \lbrack e^{sX} \rbrack = \begin{cases}
+\displaystyle\sum_{x=-\infty}^{\infty} e^{sx} \cdot p_{X}(x) &amp; 離散, \\
+\int_{-\infty}^{\infty} e^{sx} \cdot f_{X}(x)dx &amp; 連續
+\end{cases}$</li>
+</ul>
+</li>
+<li>
+<p>性質</p>
+<ul>
+<li>Y = aX + b
+<ul>
+<li>$\phi_Y(s) = e^{sb} \cdot \phi_X(as) $</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>常見離散機率分佈的 MGF</p>
+<ul>
+<li>$X$~$Bernoulli(p)$
+<ul>
+<li>$\phi_X(s)=1-p+pe^s$</li>
+</ul>
+</li>
+<li>$X$~$BIN(n, p)$
+<ul>
+<li>作 n 次實驗成功次數等於個實驗室成功次數的總和</li>
+<li>$X = X_1 + X_2 + &hellip; + X_n, X_i 獨立, Xi$~$Bernoulli(p)$</li>
+<li>$\phi_{X_i}(s)=1-p+pe^s$</li>
+<li>$\phi_{X}(s)=\lbrack 1-p+pe^s \rbrack ^n$</li>
+</ul>
+</li>
+<li>$X$~$Geometric(p)$
+<ul>
+<li>自行推導</li>
+</ul>
+</li>
+<li>$X$~$Pascal(k,p)$
+<ul>
+<li>看到第 k 次成功，花的總實驗室次數等於第 1 號成功花多少次 + 第 2 號 +&hellip;+ 第 k 號</li>
+<li>$X = X_1 + X_2 + &hellip; + X_n, X_i 獨立, Xi$~$Gemetric(p)$</li>
+</ul>
+</li>
+<li>$X$~$Exponential(\lambda)$
+<ul>
+<li>自行推導</li>
+</ul>
+</li>
+<li>$X$~$Erlang(n,\lambda)$
+<ul>
+<li>$X = X_1 + X_2 + &hellip; + X_n, X_i 獨立, Xi$~$Exponential(\lambda)$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="多個隨機變數之和">多個隨機變數之和</h1>
+<h2 id="獨立隨機變數之和">獨立隨機變數之和</h2>
+<ul>
+<li>$X_1, X_2, &hellip;$獨立，且各自有一模一樣的機率分佈
+<ul>
+<li>
+<p>{ $X_i$ } $I.I.D.$</p>
+<ul>
+<li>Independently and Identically Distributed</li>
+</ul>
+</li>
+<li>
+<p>$X = X_1+X_2+&hellip;+X_n$，n 為常數，請問 X 的機率分佈</p>
+<ul>
+<li>$p_X(x)=p_{X_1}(x) * p_{X_1}(x) * p_{X_1}(x) * &hellip; * p_{X_1}(x)$</li>
+<li>$f_X(x)=f_{X_1}(x) * f_{X_1}(x) * f_{X_1}(x) * &hellip; * f_{X_1}(x)$
+<ul>
+<li>因為他們機率分佈一模一樣，所以底下都是 $X_1$</li>
+</ul>
+</li>
+<li>$\phi_X(s)=\lbrack \phi_{X_1}(s) \rbrack ^n$</li>
+</ul>
+</li>
+<li>
+<p>e.g. 假設壽司理想重量是 13g，抓飯量是常態分佈，期望值是 14，標準差是 3，每天要作 100 個，每天飯量的機率分佈是?</p>
+<ul>
+<li>$X_i$ : 第 i 個壽司的飯量，{ $X_i$ } I.I.D.</li>
+<li>$X_i$~$N(14,9)\\
+\Rightarrow \phi_{X_i}(s)=\phi_{X_1}(s)\\
+=e^{\mu S + \frac{\sigma^2}{2}s^2} = e^{14 s + \frac{9}{2}s^2}$</li>
+<li>$X=X_1+X_2+&hellip;+X_{100}$</li>
+<li>$\phi_X(s)=\lbrack \phi_{X_1}(s) \rbrack^{100}\\
+=e^{1400 s + \frac{900}{2}s^2}$
+<ul>
+<li>這個東西是 $X$~$N(1400,900)$ 的 MGF，所以可以逆推回來機率分佈</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="隨機變數之獨立隨機變數和">隨機變數之獨立隨機變數和</h2>
+<ul>
+<li>
+<p>$X_1,X_2,&hellip;I.I.D.$</p>
+</li>
+<li>
+<p>$X = X_1 + X_2 + &hellip; + X_N$</p>
+</li>
+<li>
+<p>N 本身也是隨機變數，其機率分佈已知</p>
+</li>
+<li>
+<p>$\phi_X(s)=\phi_N(ln(\phi_{X_1}(s)))$</p>
+</li>
+</ul>
+<h1 id="中央極限定理">中央極限定理</h1>
+<ul>
+<li>
+<p>central limit theorem(CLT)</p>
+</li>
+<li>
+<p>若 $X_1,X_2,&hellip;,X_n$ 為 $I.I.D.$，當 n 趨近於無窮大時</p>
+<ul>
+<li>$X=X_1+X_2+&hellip;+X_n$~$N(\mu_{X_1+X_2&hellip;+X_n}, \sigma^2_{X_1+X_2+&hellip;+X_n})$</li>
+<li>$\mu_{X_1+X_2+&hellip;+X_n}=\mu_{X_1}+\mu_{X_2}+&hellip;+\mu_{X_n}=n\mu_{X_1}$</li>
+<li>$\sigma^2_{X_1+X_2+&hellip;+X_n}=\sigma^2_{X_1}+\sigma^2_{X_2}+&hellip;+\sigma^2_{X_n}=n\sigma^2_{X_1}$</li>
+</ul>
+</li>
+<li>
+<p>應用</p>
+<ol>
+<li>要處理多個獨立的隨機變數的和時，可以用 CLT 將其機率分佈近似為常態分佈後計算機率
+<ul>
+<li>比如雜訊常當作常態分佈</li>
+</ul>
+</li>
+<li>如果某機率分佈等於多個獨立隨機變數的和，此機率分佈可以用常態分佈近似，再算機率
+<ul>
+<li>e.g. $X$~$BIN(100,0.3)$
+<ul>
+<li>$X=X_1+X_2+&hellip;+X_100$</li>
+<li>{$X_i$} $I.I.D., X_i$~$Bernoulli(0.3)$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>範例</p>
+<ol>
+<li>天團粉絲有 0.2 的機率買 CD，共有100萬個粉絲，發售 CD 超過 200800 張的機率為何
+<ul>
+<li>$X$~$BIN(1000000,0.2)$</li>
+<li>$P(X&gt;200800)=\displaystyle\sum_{x=200801}^{10^6}(\overset{1000000}{x})0.2^x0.8^{10^6-x}$
+<ul>
+<li>$(\overset{1000000}{x})=\frac{1000000!}{200801!799199!}$</li>
+<li>算不出來</li>
+</ul>
+</li>
+<li>$X=X_1+X_2+&hellip;+X_{1000000}, X_i$~$Bernoulli(0.2)\\
+\Rightarrow \mu_{X_1}=0.2, \sigma_{X_1}^2=0.16$</li>
+<li>By CLT $\Rightarrow X$~$N(200000,160000)$
+<ul>
+<li>$P(X&gt;200800)\\
+=P(\frac{X-200000}{400} &gt; \frac{200800-200000}{400})\\
+=P(Z&gt;2)
+=Q(2)
+\approx0.023$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="de-moivre---laplace-formula">De Moivre - Laplace Formula</h2>
+<ul>
+<li>如果是離散的隨機變數和，可以算的更精確</li>
+<li>$P(k_1 \le X \le k_2) \approx \Phi(\frac{k_2+0.5-n\mu_{X_1}}{\sqrt{n}\sigma_{X_1}}) - \Phi(\frac{k_1-0.5-n\mu_{X_1}}{\sqrt{n}\sigma_{X_1}})$</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/math/">math</a>
+        
+            <a href="/Blog/tags/probability/">probability</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/%E6%A9%9F%E7%8E%87%E8%AB%96-iii/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">機率論 - III</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E6%A9%9F%E7%8E%87%E8%AB%96-ii/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">機率論 - II</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E6%A9%9F%E7%8E%87%E8%AB%96-i/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">機率論 - I</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E7%B7%9A%E6%80%A7%E4%BB%A3%E6%95%B8-ii/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">線性代數 - II</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E7%B7%9A%E6%80%A7%E4%BB%A3%E6%95%B8-i/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">線性代數 - I</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2022 - 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

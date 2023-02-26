@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale
+Abstract 在 CV 領域 transformer 表現有限，目前 attention 常常是和卷積神經網路一起用，或是用來把一些卷積層換成 self-attention，但整體架構不變。這篇論文想展現一個純 Transformer 可以直接在影像分類上表現很好。如果用大量資料作預訓練，再遷移到中小型的資料集，可以和 SOTA 的 CNN 表現得一樣好，還需要較少的訓練資源作訓練。
+Introduction self-attention-based 架構，特別是 Transformer，已經是 NLP 的重要選擇。主流的作法是在大型文字資料集上作訓練，再針對小型任務資料集作 fine-tune。由於 Transformer 的計算效率高，還有可擴展性，可以 train 一些很大的 model，隨著 model 和資料集增大，目前還沒看出飽和的現象。
+然而在 CV，CNN 還是主流，一些工作嘗試用 self-attention 結合 CNN-like 的架構，比如把 feature map 當 transformer 的輸入，因為原始 pixel 太多，或甚至把卷積層全換成 self-attention，雖然後者理論上效率很高(原論文中有另外 cite 兩篇作法)，但因為他們做法特殊，在現代硬體上很難加速，所以無法很有效地擴展。在 large-scale 的影像識別上， ResNet-like 的架構還是 SOTA。
+該實驗直接把一個標準的 Transformer 作用於圖片上，只作最少的修改。把影像分成多個 patch，並把它們變成一系列的 linear embedding，當作 NLP 中的 tokens(words) 來處理。'>
+<title>ViT 論文</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/vit-%E8%AB%96%E6%96%87/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.c8da5069c06805334f6b22a49ff864b8c2cf9279882d00f7f4c0cf2f656d204c.css"><meta property='og:title' content='ViT 論文'>
+<meta property='og:description' content='paper: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale
+Abstract 在 CV 領域 transformer 表現有限，目前 attention 常常是和卷積神經網路一起用，或是用來把一些卷積層換成 self-attention，但整體架構不變。這篇論文想展現一個純 Transformer 可以直接在影像分類上表現很好。如果用大量資料作預訓練，再遷移到中小型的資料集，可以和 SOTA 的 CNN 表現得一樣好，還需要較少的訓練資源作訓練。
+Introduction self-attention-based 架構，特別是 Transformer，已經是 NLP 的重要選擇。主流的作法是在大型文字資料集上作訓練，再針對小型任務資料集作 fine-tune。由於 Transformer 的計算效率高，還有可擴展性，可以 train 一些很大的 model，隨著 model 和資料集增大，目前還沒看出飽和的現象。
+然而在 CV，CNN 還是主流，一些工作嘗試用 self-attention 結合 CNN-like 的架構，比如把 feature map 當 transformer 的輸入，因為原始 pixel 太多，或甚至把卷積層全換成 self-attention，雖然後者理論上效率很高(原論文中有另外 cite 兩篇作法)，但因為他們做法特殊，在現代硬體上很難加速，所以無法很有效地擴展。在 large-scale 的影像識別上， ResNet-like 的架構還是 SOTA。
+該實驗直接把一個標準的 Transformer 作用於圖片上，只作最少的修改。把影像分成多個 patch，並把它們變成一系列的 linear embedding，當作 NLP 中的 tokens(words) 來處理。'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/vit-%E8%AB%96%E6%96%87/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='computer-vision' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:published_time' content='2023-02-12T00:27:55&#43;08:00'/><meta property='article:modified_time' content='2023-02-12T00:27:55&#43;08:00'/>
+<meta name="twitter:title" content="ViT 論文">
+<meta name="twitter:description" content="paper: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale
+Abstract 在 CV 領域 transformer 表現有限，目前 attention 常常是和卷積神經網路一起用，或是用來把一些卷積層換成 self-attention，但整體架構不變。這篇論文想展現一個純 Transformer 可以直接在影像分類上表現很好。如果用大量資料作預訓練，再遷移到中小型的資料集，可以和 SOTA 的 CNN 表現得一樣好，還需要較少的訓練資源作訓練。
+Introduction self-attention-based 架構，特別是 Transformer，已經是 NLP 的重要選擇。主流的作法是在大型文字資料集上作訓練，再針對小型任務資料集作 fine-tune。由於 Transformer 的計算效率高，還有可擴展性，可以 train 一些很大的 model，隨著 model 和資料集增大，目前還沒看出飽和的現象。
+然而在 CV，CNN 還是主流，一些工作嘗試用 self-attention 結合 CNN-like 的架構，比如把 feature map 當 transformer 的輸入，因為原始 pixel 太多，或甚至把卷積層全換成 self-attention，雖然後者理論上效率很高(原論文中有另外 cite 兩篇作法)，但因為他們做法特殊，在現代硬體上很難加速，所以無法很有效地擴展。在 large-scale 的影像識別上， ResNet-like 的架構還是 SOTA。
+該實驗直接把一個標準的 Transformer 作用於圖片上，只作最少的修改。把影像分成多個 patch，並把它們變成一系列的 linear embedding，當作 NLP 中的 tokens(words) 來處理。">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/Blog">
+                
+                    
+                    
+                    
+                        
+                        <img src="/Blog/logo_hu4571d0fc95bcb4b13f2ac8e17a6aeed9_16849_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⭐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/Blog">Roykesydon</a></h1>
+            <h2 class="site-description">I write notes here during my free time.</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/deep-learning/" style="background-color: #936ce1; color: #fff;">
+                Deep Learning
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/Blog/p/vit-%E8%AB%96%E6%96%87/">ViT 論文</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Feb 12, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    2 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>paper: <a class="link" href="https://arxiv.org/abs/2010.11929"  target="_blank" rel="noopener"
+    >An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale</a></p>
+<h1 id="abstract">Abstract</h1>
+<p>在 CV 領域 transformer 表現有限，目前 attention 常常是和卷積神經網路一起用，或是用來把一些卷積層換成 self-attention，但整體架構不變。這篇論文想展現一個純 Transformer 可以直接在影像分類上表現很好。如果用大量資料作預訓練，再遷移到中小型的資料集，可以和 SOTA 的 CNN 表現得一樣好，還需要較少的訓練資源作訓練。</p>
+<h1 id="introduction">Introduction</h1>
+<p>self-attention-based 架構，特別是 Transformer，已經是 NLP 的重要選擇。主流的作法是在大型文字資料集上作訓練，再針對小型任務資料集作 fine-tune。由於 Transformer 的計算效率高，還有可擴展性，可以 train 一些很大的 model，隨著 model 和資料集增大，目前還沒看出飽和的現象。</p>
+<p>然而在 CV，CNN 還是主流，一些工作嘗試用 self-attention 結合 CNN-like 的架構，比如把 feature map 當 transformer 的輸入，因為原始 pixel 太多，或甚至把卷積層全換成 self-attention，雖然後者理論上效率很高(原論文中有另外 cite 兩篇作法)，但因為他們做法特殊，在現代硬體上很難加速，所以無法很有效地擴展。在 large-scale 的影像識別上， ResNet-like 的架構還是 SOTA。</p>
+<p>該實驗直接把一個標準的 Transformer 作用於圖片上，只作最少的修改。把影像分成多個 patch，並把它們變成一系列的 linear embedding，當作 NLP 中的 tokens(words) 來處理。</p>
+<p>當在中型大小的資料集(e.g. ImageNet)上訓練，如果沒有 strong regularization，ViT 會略輸同等大小的 ResNets</p>
+<p>這篇論文在更大的資料集(14M-300M 的影像)上訓練，就打敗了 inductive bias。在大量資料上作預訓練就很讚。</p>
+<h1 id="related-work">Related Work</h1>
+<p>大型的 Transformer-based 模型常常是先在大資料集上預訓練然後根據任務 fine-tune，比如 BERT 和 GPT。</p>
+<p>要把 self-attention 用在 CV 上，最簡單的做法就是把每個 Pixel 當一個元素，但 self-attention 是平方複雜度，在現實的圖片很難應用。一個應用 Transformer 的做法是只把 self-attention 用在 local neighborhood，另外一個是用 Sparse Transformer，還有一堆特殊的方法，雖然表現不錯，但要用硬體加速起來不容易。</p>
+<p>另一個有關的模型是 iGPT，在 reduce image resolution 和 color space 後把 transformer 應用在 image pixels 上。它用非監督式訓練後，再 fine-tune 或做 linear probing(只更新最後的 linear layer) 分類任務，表現很好。</p>
+<p>已經有類似的工作了，抽取 patches of size 2 * 2，最後再接 full self-attention，基本上和 ViT 非常像，這篇論文進一步證明了作大規模的預訓練可以讓 Transformer 和 SOTA 的 CNN 相比，而且 ViT 因為 patch 比較大，可以處理 medium-resolution 的圖片。這問題是可預期的，因為 Transformer 缺少了一些 inductive biases。</p>
+<ul>
+<li>inductive biases
+<ul>
+<li>一些假設</li>
+<li>比如 CNN 常有四個假設
+<ul>
+<li>locality</li>
+<li>translation invariance with pooling layers
+<ul>
+<li>平移不變性</li>
+</ul>
+</li>
+<li>translation equivariance
+<ul>
+<li>f(g(x)) = g(f(x))</li>
+<li>卷積和平移的先後順序沒差</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="method">Method</h1>
+<p>模型盡可能類似原始 Transformer，這樣可以把一些 NLP 上成功的 Transformer 架構拿來用，還可以用一些很有效率的 implementation</p>
+<p><img src="/images/deep-learning/ViT/ViT.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="/images/deep-learning/ViT/ViT-process.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>embedding 維度是 768 = 16 * 16 * 3
+position embedding 的做法是 standard learnable 1D positional embeddings，就是 BERT 的做法，簡單來說就是生出一張可以訓練的表，(序列長度, embedding size)，作者也有嘗試其他方法，但發現成效差不多，比如 2D positional embedding，概念就是從生出(序列長度, embedding size)變成生出 2 個(sqrt(序列長度), embedding size)。</p>
+<p>[class] 的概念是 NLP 出來的，ResNet-like 的架構常見的做法也有通過 globally average-pooling (GAP)來生出向量，再接上分類器做預測。實驗發現直接在 transformer 的輸出做 GAP 和 [class] 都可以達到不錯的效果。</p>
+<p><img src="/images/deep-learning/ViT/ViT-gap.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="/images/deep-learning/ViT/ViT-dataset.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="/images/deep-learning/ViT/ViT-acc.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h1 id="conclusion">Conclusion</h1>
+<p>拿標準的 Transformer 來作 Image recognition，和以往用 self-attention 在 CV 的方法不一樣，除了一開始的 initial patch extraction，沒有引入其他影像特有的 inductive biases。直接把圖片當成是一系列的 patch，然後直接用 Transformer encoder 當一般 NLP 任務處理。在很多影像分類訓練集上表現得更好還在 pre-train 上相對便宜。</p>
+<p>還有一些值得挑戰的地方，比如把 ViT 應用在其他 CV 任務，比如 detection 和 segmentation。另一個挑戰是探索自監督預訓練的方法。這篇論文其實有實驗自監督，表現 OK，但和監督式還是有很大的落差。擴大 ViT 可能有更好的結果。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/computer-vision/">computer-vision</a>
+        
+            <a href="/Blog/tags/deep-learning/">deep-learning</a>
+        
+            <a href="/Blog/tags/machine-learning/">machine-learning</a>
+        
+            <a href="/Blog/tags/transformer/">transformer</a>
+        
+            <a href="/Blog/tags/attention/">attention</a>
+        
+            <a href="/Blog/tags/self-attention/">self-attention</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">MAE 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/instructgpt/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">InstructGPT</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/gpt-%E4%B8%89%E9%83%A8%E6%9B%B2/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT 三部曲</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/q-learning/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Q-learning</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/proximal-policy-optimizationppo/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Proximal Policy Optimization(PPO)</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2022 - 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
