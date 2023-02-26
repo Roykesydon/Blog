@@ -45,20 +45,20 @@ self-attention-based 架構，特別是 Transformer，已經是 NLP 的重要選
 # Method
 模型盡可能類似原始 Transformer，這樣可以把一些 NLP 上成功的 Transformer 架構拿來用，還可以用一些很有效率的 implementation
 
-![](/images/deep-learning/ViT/ViT.png)
+![](/Blog/images/deep-learning/ViT/ViT.png)
 
-![](/images/deep-learning/ViT/ViT-process.png)
+![](/Blog/images/deep-learning/ViT/ViT-process.png)
 
 embedding 維度是 768 = 16 * 16 * 3
 position embedding 的做法是 standard learnable 1D positional embeddings，就是 BERT 的做法，簡單來說就是生出一張可以訓練的表，(序列長度, embedding size)，作者也有嘗試其他方法，但發現成效差不多，比如 2D positional embedding，概念就是從生出(序列長度, embedding size)變成生出 2 個(sqrt(序列長度), embedding size)。
 
 \[class\] 的概念是 NLP 出來的，ResNet-like 的架構常見的做法也有通過 globally average-pooling (GAP)來生出向量，再接上分類器做預測。實驗發現直接在 transformer 的輸出做 GAP 和 \[class\] 都可以達到不錯的效果。
 
-![](/images/deep-learning/ViT/ViT-gap.png)
+![](/Blog/images/deep-learning/ViT/ViT-gap.png)
 
-![](/images/deep-learning/ViT/ViT-dataset.png)
+![](/Blog/images/deep-learning/ViT/ViT-dataset.png)
 
-![](/images/deep-learning/ViT/ViT-acc.png)
+![](/Blog/images/deep-learning/ViT/ViT-acc.png)
 
 # Conclusion
 拿標準的 Transformer 來作 Image recognition，和以往用 self-attention 在 CV 的方法不一樣，除了一開始的 initial patch extraction，沒有引入其他影像特有的 inductive biases。直接把圖片當成是一系列的 patch，然後直接用 Transformer encoder 當一般 NLP 任務處理。在很多影像分類訓練集上表現得更好還在 pre-train 上相對便宜。

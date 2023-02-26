@@ -50,9 +50,9 @@ categories : ["deep-learning"]
     - 當用 actor $\pi$ 時，在 state s 採取 a 這個 action 後的 cumulated reward expectation
         - 有一個要注意的地方是，actor 看到 s 不一定會採取 a
 
-    ![](/images/drl/q-learning/q-function.png)
+    ![](/Blog/images/drl/q-learning/q-function.png)
 
-    ![](/images/drl/q-learning/how-to-use-q.png)
+    ![](/Blog/images/drl/q-learning/how-to-use-q.png)
 
     - 只要有 Q function，就可以找到"更好的" policy，再替換掉原本的 policy
         - "更好的"定義
@@ -66,7 +66,7 @@ categories : ["deep-learning"]
 ## Target network
 - 在 training 的時候，把其中一個 Q 固定住，不然要學的 target 是不固定的，會不好 train
 
-![](/images/drl/q-learning/target-network.png)
+![](/Blog/images/drl/q-learning/target-network.png)
 
 ## Exploration
 - policy 完全 depend on Q function

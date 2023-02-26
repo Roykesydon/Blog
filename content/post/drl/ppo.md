@@ -30,7 +30,7 @@ categories : ["deep-learning"]
 - 雖然理論上 q 可以任意選，只要不要 q(x) 是 0 的時候 p(x) 不是 0，實作上 p 和 q 不能差太多，不然會有問題
     - 這兩項的 Variance 不一樣，如果 p 除以 q 差距很大，右邊的 Variance 會很大，如果 sample 不夠多次就會有問題
 
-    ![](/images/drl/ppo/importance-sample-issue.png)
+    ![](/Blog/images/drl/ppo/importance-sample-issue.png)
 
 
 ## 轉換
@@ -90,4 +90,4 @@ categories : ["deep-learning"]
     - $J_{PPO2}^{\theta^{k}}(\theta)\approx \displaystyle\sum_{(s_t,a_t)}min(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}A^{\theta^k}(s_t,a_t), \\\\ 
     clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\varepsilon)A^{\theta^k}(s_t,a_t))$
     
-    ![](/images/drl/ppo/ppo2.png)
+    ![](/Blog/images/drl/ppo/ppo2.png)

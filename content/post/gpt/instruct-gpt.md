@@ -43,7 +43,7 @@ Large language models(LMs) 可以透過 "prompt" 來執行各種 NLP 任務。
 
 ## 訓練步驟
 
-![](/images/gpt/instruct-gpt-train-step.png)
+![](/Blog/images/gpt/instruct-gpt-train-step.png)
 
 ## 結果
 
@@ -94,16 +94,16 @@ Large language models(LMs) 可以透過 "prompt" 來執行各種 NLP 任務。
     - Pairwise Ranking Loss
         - 對一個 prompt(假設是 x)，取出一對回覆(假設是 $y_w$ 和 $y_l$)，算出 RM(x, $y_w$) 和 RM(x, $y_l$)，假設 $y_w$ 比 $y_l$ 排序高，讓 RM(x, $y_w$) - RM(x, $y_l$) 的數值越大越好
 
-        ![](/images/gpt/instruct-gpt-reward-loss.png)
+        ![](/Blog/images/gpt/instruct-gpt-reward-loss.png)
     
 - Reinforcement learning(RL)
     - PPO
 
-    - ![](/images/gpt/instruct-gpt-rl-loss.png)
+    - ![](/Blog/images/gpt/instruct-gpt-rl-loss.png)
         - $\beta$ 那項是 KL divergence
         - $\gamma$ 那項是不想要讓這 model 太專注在微調的任務，而失去原本在其他 NLP 任務也表現很好的功能。
             - $D_{pretrain}$ 是 pretraining distribution
             - 如果 $\gamma$ 為 0，在該實驗中叫做 PPO，否則，稱為 PPO-ptx
 # Result
 
-![](/images/gpt/instruct-gpt-result.png)
+![](/Blog/images/gpt/instruct-gpt-result.png)

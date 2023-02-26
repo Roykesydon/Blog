@@ -30,7 +30,7 @@
 &lt;p&gt;作者的目標是生出 helpful、 honest(沒有誤導性資訊)、harmless 的 model。&lt;/p&gt;
 &lt;p&gt;具體作法，使用 reinforcement learning from human feedback(RLHF)。&lt;/p&gt;
 &lt;h2 id=&#34;訓練步驟&#34;&gt;訓練步驟&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/instruct-gpt-train-step.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/instruct-gpt-train-step.png&#34;
 	
 	
 	
@@ -111,7 +111,7 @@
 &lt;ul&gt;
 &lt;li&gt;對一個 prompt(假設是 x)，取出一對回覆(假設是 $y_w$ 和 $y_l$)，算出 RM(x, $y_w$) 和 RM(x, $y_l$)，假設 $y_w$ 比 $y_l$ 排序高，讓 RM(x, $y_w$) - RM(x, $y_l$) 的數值越大越好&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/instruct-gpt-reward-loss.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/instruct-gpt-reward-loss.png&#34;
 	
 	
 	
@@ -129,7 +129,7 @@
 &lt;p&gt;PPO&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/instruct-gpt-rl-loss.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/instruct-gpt-rl-loss.png&#34;
 	
 	
 	
@@ -151,7 +151,7 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;result&#34;&gt;Result&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/instruct-gpt-result.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/instruct-gpt-result.png&#34;
 	
 	
 	
@@ -191,7 +191,7 @@
 &lt;p&gt;作者最大化 likelihood 的時候是用 $L_3$ 而非單純的 $L_2$&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;微調應用範例&#34;&gt;微調應用範例&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-1-tasks.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-1-tasks.png&#34;
 	
 	
 	
@@ -224,7 +224,7 @@
 &lt;p&gt;WebText 的資料來源是 reddit 上的外部連結，只要有至少三個 karma，就會被採納，由此取得品質較好的網頁資料。透過這種方法，取得了 4500 萬個連結。並用Dragnet (Peters &amp;amp; Lecocq, 2013) and Newspaper content extractors 把文字訊息從 HTML 中抓出來&lt;/p&gt;
 &lt;h2 id=&#34;架構&#34;&gt;架構&lt;/h2&gt;
 &lt;p&gt;和原本差不多，變成有 1.5B 參數的 Transformer decoder&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-2-models.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-2-models.png&#34;
 	
 	
 	
@@ -247,7 +247,7 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;結果&#34;&gt;結果&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-2-result-1.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-2-result-1.png&#34;
 	
 	
 	
@@ -255,7 +255,7 @@
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-2-result-2.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-2-result-2.png&#34;
 	
 	
 	
@@ -294,7 +294,7 @@
 &lt;ul&gt;
 &lt;li&gt;把 Sparse Transformer 的一些修改拿過來用&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-3-models.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-3-models.png&#34;
 	
 	
 	
@@ -316,7 +316,7 @@ GPT-3 XL 和 GPT-2 相近，比較淺也比較寬&lt;/p&gt;
 &lt;li&gt;透過 LSH 演算法把相似的文本過濾掉&lt;/li&gt;
 &lt;li&gt;把一些已知高品質的資料集也加進來&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-3-dataset.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-3-dataset.png&#34;
 	
 	
 	
@@ -327,7 +327,7 @@ GPT-3 XL 和 GPT-2 相近，比較淺也比較寬&lt;/p&gt;
 &lt;p&gt;這是一個 Batch 裡有 60% 來自 Common Crawl(filtered) 的意思
 Wikipedia 雖然總量比較少，但也有 3% 的採樣率&lt;/p&gt;
 &lt;h2 id=&#34;結果-1&#34;&gt;結果&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-3-result-1.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-3-result-1.png&#34;
 	
 	
 	
@@ -336,7 +336,7 @@ Wikipedia 雖然總量比較少，但也有 3% 的採樣率&lt;/p&gt;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;計算量指數增長，loss 卻是線性的往下降&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-3-result-2.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-3-result-2.png&#34;
 	
 	
 	

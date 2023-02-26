@@ -54,7 +54,7 @@ $C$ 是 labeled 的資料集，微調基本上就是在後面加上線性層
 
 ## 微調應用範例
 
-![](/images/gpt/gpt-1-tasks.png)
+![](/Blog/images/gpt/gpt-1-tasks.png)
 
 ---
 
@@ -96,7 +96,7 @@ WebText 的資料來源是 reddit 上的外部連結，只要有至少三個 kar
 
 和原本差不多，變成有 1.5B 參數的 Transformer decoder
 
-![](/images/gpt/gpt-2-models.png)
+![](/Blog/images/gpt/gpt-2-models.png)
 
 ## zero-shot
 
@@ -113,9 +113,9 @@ WebText 的資料來源是 reddit 上的外部連結，只要有至少三個 kar
 
 ## 結果
 
-![](/images/gpt/gpt-2-result-1.png)
+![](/Blog/images/gpt/gpt-2-result-1.png)
 
-![](/images/gpt/gpt-2-result-2.png)
+![](/Blog/images/gpt/gpt-2-result-2.png)
 
 # GPT-3
 
@@ -149,7 +149,7 @@ paper: [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165)
 ### 不同
 - 把 Sparse Transformer 的一些修改拿過來用
 
-![](/images/gpt/gpt-3-models.png)
+![](/Blog/images/gpt/gpt-3-models.png)
 
 GPT-3 Small 是 GPT-1 的大小
 GPT-3 Medium 是 BERT Large 的大小
@@ -171,18 +171,18 @@ GPT-3 XL 和 GPT-2 相近，比較淺也比較寬
 2. 透過 LSH 演算法把相似的文本過濾掉
 3. 把一些已知高品質的資料集也加進來
 
-![](/images/gpt/gpt-3-dataset.png)
+![](/Blog/images/gpt/gpt-3-dataset.png)
 
 這是一個 Batch 裡有 60% 來自 Common Crawl(filtered) 的意思
 Wikipedia 雖然總量比較少，但也有 3% 的採樣率
 
 ## 結果
 
-![](/images/gpt/gpt-3-result-1.png)
+![](/Blog/images/gpt/gpt-3-result-1.png)
 
 計算量指數增長，loss 卻是線性的往下降
 
-![](/images/gpt/gpt-3-result-2.png)
+![](/Blog/images/gpt/gpt-3-result-2.png)
 
 paper 裡有很多任務的實驗結果，這邊就不附上了
 

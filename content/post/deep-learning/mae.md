@@ -25,11 +25,11 @@ MAE 的方法很簡單
 
 # Introduction
 
-![](/images/deep-learning/MAE/intro.png)
+![](/Blog/images/deep-learning/MAE/intro.png)
 
-![](/images/deep-learning/MAE/valid-example.png)
+![](/Blog/images/deep-learning/MAE/valid-example.png)
 
-![](/images/deep-learning/MAE/valid-example-2.png)
+![](/Blog/images/deep-learning/MAE/valid-example-2.png)
 
 在 CV 中，常需要大量 labeled images。
 NLP 中，自監督預訓練處理了需要大量標註資料的問題。
@@ -88,15 +88,15 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 2. linear probing
     - 只改最後一層線性層
 
-![](/images/deep-learning/MAE/vit-mae.png)
+![](/Blog/images/deep-learning/MAE/vit-mae.png)
 
-![](/images/deep-learning/MAE/result.png)
+![](/Blog/images/deep-learning/MAE/result.png)
 
-![](/images/deep-learning/MAE/ratio-result.png)
+![](/Blog/images/deep-learning/MAE/ratio-result.png)
 
 optimal masking ratio 意外地高，相比 BERT 只有 15% 
 
-![](/images/deep-learning/MAE/fine-tune-blocks.png)
+![](/Blog/images/deep-learning/MAE/fine-tune-blocks.png)
 
 
 # 討論和結論

@@ -15,7 +15,7 @@ categories : ["deep-learning"]
 
 
 # Trajectory
-![](/images/drl/policy-gradient/aer.png)
+![](/Blog/images/drl/policy-gradient/aer.png)
 - 在一場遊戲，把 env 輸出的 s 和 actor 輸出的 a 串起來，是一個 Trajectory
 - Trajectory $\tau$ = {$s_1,a_1,s_2,a_2,...,s_T,a_T$}
 - $p_{\theta}(\tau)=p(s_1)\displaystyle\prod_{t=1}^Tp_{\theta}(a_t|s_t)p(s_{t+1}|s_t,a_t)$

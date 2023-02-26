@@ -10,7 +10,7 @@ Introduction self-attention-based 架構，特別是 Transformer，已經是 NLP
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/vit-%E8%AB%96%E6%96%87/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.05dfba192882c28a755d88e3541e3c015a45597151e594e6159d6113c4284978.css"><meta property='og:title' content='ViT 論文'>
+<link rel="stylesheet" href="/Blog/scss/style.min.8ba0009e8cca52c2ec8ac52dce3ac8d883cab10ebd0e2447c7fc3d51de630b5f.css"><meta property='og:title' content='ViT 論文'>
 <meta property='og:description' content='paper: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale
 Abstract 在 CV 領域 transformer 表現有限，目前 attention 常常是和卷積神經網路一起用，或是用來把一些卷積層換成 self-attention，但整體架構不變。這篇論文想展現一個純 Transformer 可以直接在影像分類上表現很好。如果用大量資料作預訓練，再遷移到中小型的資料集，可以和 SOTA 的 CNN 表現得一樣好，還需要較少的訓練資源作訓練。
 Introduction self-attention-based 架構，特別是 Transformer，已經是 NLP 的重要選擇。主流的作法是在大型文字資料集上作訓練，再針對小型任務資料集作 fine-tune。由於 Transformer 的計算效率高，還有可擴展性，可以 train 一些很大的 model，隨著 model 和資料集增大，目前還沒看出飽和的現象。
@@ -324,7 +324,7 @@ Introduction self-attention-based 架構，特別是 Transformer，已經是 NLP
 </ul>
 <h1 id="method">Method</h1>
 <p>模型盡可能類似原始 Transformer，這樣可以把一些 NLP 上成功的 Transformer 架構拿來用，還可以用一些很有效率的 implementation</p>
-<p><img src="/images/deep-learning/ViT/ViT.png"
+<p><img src="/Blog/images/deep-learning/ViT/ViT.png"
 	
 	
 	
@@ -332,7 +332,7 @@ Introduction self-attention-based 架構，特別是 Transformer，已經是 NLP
 	
 	
 ></p>
-<p><img src="/images/deep-learning/ViT/ViT-process.png"
+<p><img src="/Blog/images/deep-learning/ViT/ViT-process.png"
 	
 	
 	
@@ -343,7 +343,7 @@ Introduction self-attention-based 架構，特別是 Transformer，已經是 NLP
 <p>embedding 維度是 768 = 16 * 16 * 3
 position embedding 的做法是 standard learnable 1D positional embeddings，就是 BERT 的做法，簡單來說就是生出一張可以訓練的表，(序列長度, embedding size)，作者也有嘗試其他方法，但發現成效差不多，比如 2D positional embedding，概念就是從生出(序列長度, embedding size)變成生出 2 個(sqrt(序列長度), embedding size)。</p>
 <p>[class] 的概念是 NLP 出來的，ResNet-like 的架構常見的做法也有通過 globally average-pooling (GAP)來生出向量，再接上分類器做預測。實驗發現直接在 transformer 的輸出做 GAP 和 [class] 都可以達到不錯的效果。</p>
-<p><img src="/images/deep-learning/ViT/ViT-gap.png"
+<p><img src="/Blog/images/deep-learning/ViT/ViT-gap.png"
 	
 	
 	
@@ -351,7 +351,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 	
 	
 ></p>
-<p><img src="/images/deep-learning/ViT/ViT-dataset.png"
+<p><img src="/Blog/images/deep-learning/ViT/ViT-dataset.png"
 	
 	
 	
@@ -359,7 +359,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 	
 	
 ></p>
-<p><img src="/images/deep-learning/ViT/ViT-acc.png"
+<p><img src="/Blog/images/deep-learning/ViT/ViT-acc.png"
 	
 	
 	
