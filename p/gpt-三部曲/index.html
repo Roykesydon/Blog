@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/gpt-%E4%B8%89%E9%83%A8%E6%9B%B2/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.05dfba192882c28a755d88e3541e3c015a45597151e594e6159d6113c4284978.css"><meta property='og:title' content='GPT 三部曲'>
+<link rel="stylesheet" href="/Blog/scss/style.min.8ba0009e8cca52c2ec8ac52dce3ac8d883cab10ebd0e2447c7fc3d51de630b5f.css"><meta property='og:title' content='GPT 三部曲'>
 <meta property='og:description' content='GPT-1 到 GPT-3 簡單筆記'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/gpt-%E4%B8%89%E9%83%A8%E6%9B%B2/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -385,7 +385,7 @@
 <p>作者最大化 likelihood 的時候是用 $L_3$ 而非單純的 $L_2$</p>
 <hr>
 <h2 id="微調應用範例">微調應用範例</h2>
-<p><img src="/images/gpt/gpt-1-tasks.png"
+<p><img src="/Blog/images/gpt/gpt-1-tasks.png"
 	
 	
 	
@@ -418,7 +418,7 @@
 <p>WebText 的資料來源是 reddit 上的外部連結，只要有至少三個 karma，就會被採納，由此取得品質較好的網頁資料。透過這種方法，取得了 4500 萬個連結。並用Dragnet (Peters &amp; Lecocq, 2013) and Newspaper content extractors 把文字訊息從 HTML 中抓出來</p>
 <h2 id="架構">架構</h2>
 <p>和原本差不多，變成有 1.5B 參數的 Transformer decoder</p>
-<p><img src="/images/gpt/gpt-2-models.png"
+<p><img src="/Blog/images/gpt/gpt-2-models.png"
 	
 	
 	
@@ -441,7 +441,7 @@
 </li>
 </ul>
 <h2 id="結果">結果</h2>
-<p><img src="/images/gpt/gpt-2-result-1.png"
+<p><img src="/Blog/images/gpt/gpt-2-result-1.png"
 	
 	
 	
@@ -449,7 +449,7 @@
 	
 	
 ></p>
-<p><img src="/images/gpt/gpt-2-result-2.png"
+<p><img src="/Blog/images/gpt/gpt-2-result-2.png"
 	
 	
 	
@@ -488,7 +488,7 @@
 <ul>
 <li>把 Sparse Transformer 的一些修改拿過來用</li>
 </ul>
-<p><img src="/images/gpt/gpt-3-models.png"
+<p><img src="/Blog/images/gpt/gpt-3-models.png"
 	
 	
 	
@@ -510,7 +510,7 @@ GPT-3 XL 和 GPT-2 相近，比較淺也比較寬</p>
 <li>透過 LSH 演算法把相似的文本過濾掉</li>
 <li>把一些已知高品質的資料集也加進來</li>
 </ol>
-<p><img src="/images/gpt/gpt-3-dataset.png"
+<p><img src="/Blog/images/gpt/gpt-3-dataset.png"
 	
 	
 	
@@ -521,7 +521,7 @@ GPT-3 XL 和 GPT-2 相近，比較淺也比較寬</p>
 <p>這是一個 Batch 裡有 60% 來自 Common Crawl(filtered) 的意思
 Wikipedia 雖然總量比較少，但也有 3% 的採樣率</p>
 <h2 id="結果-1">結果</h2>
-<p><img src="/images/gpt/gpt-3-result-1.png"
+<p><img src="/Blog/images/gpt/gpt-3-result-1.png"
 	
 	
 	
@@ -530,7 +530,7 @@ Wikipedia 雖然總量比較少，但也有 3% 的採樣率</p>
 	
 ></p>
 <p>計算量指數增長，loss 卻是線性的往下降</p>
-<p><img src="/images/gpt/gpt-3-result-2.png"
+<p><img src="/Blog/images/gpt/gpt-3-result-2.png"
 	
 	
 	

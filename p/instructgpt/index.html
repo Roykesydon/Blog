@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/instructgpt/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.05dfba192882c28a755d88e3541e3c015a45597151e594e6159d6113c4284978.css"><meta property='og:title' content='InstructGPT'>
+<link rel="stylesheet" href="/Blog/scss/style.min.8ba0009e8cca52c2ec8ac52dce3ac8d883cab10ebd0e2447c7fc3d51de630b5f.css"><meta property='og:title' content='InstructGPT'>
 <meta property='og:description' content='ChatGPT 的作法，僅在數據蒐集的方面有些微不同'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/instructgpt/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -331,7 +331,7 @@
 <p>作者的目標是生出 helpful、 honest(沒有誤導性資訊)、harmless 的 model。</p>
 <p>具體作法，使用 reinforcement learning from human feedback(RLHF)。</p>
 <h2 id="訓練步驟">訓練步驟</h2>
-<p><img src="/images/gpt/instruct-gpt-train-step.png"
+<p><img src="/Blog/images/gpt/instruct-gpt-train-step.png"
 	
 	
 	
@@ -412,7 +412,7 @@
 <ul>
 <li>對一個 prompt(假設是 x)，取出一對回覆(假設是 $y_w$ 和 $y_l$)，算出 RM(x, $y_w$) 和 RM(x, $y_l$)，假設 $y_w$ 比 $y_l$ 排序高，讓 RM(x, $y_w$) - RM(x, $y_l$) 的數值越大越好</li>
 </ul>
-<p><img src="/images/gpt/instruct-gpt-reward-loss.png"
+<p><img src="/Blog/images/gpt/instruct-gpt-reward-loss.png"
 	
 	
 	
@@ -430,7 +430,7 @@
 <p>PPO</p>
 </li>
 <li>
-<p><img src="/images/gpt/instruct-gpt-rl-loss.png"
+<p><img src="/Blog/images/gpt/instruct-gpt-rl-loss.png"
 	
 	
 	
@@ -452,7 +452,7 @@
 </li>
 </ul>
 <h1 id="result">Result</h1>
-<p><img src="/images/gpt/instruct-gpt-result.png"
+<p><img src="/Blog/images/gpt/instruct-gpt-result.png"
 	
 	
 	

@@ -29,7 +29,7 @@
 &lt;p&gt;結合這兩點設計，可以有效地訓練大模型。
 以 ViT-Huge 用 ImageNet-1K 訓練(訓練集一百多萬張照片)可達到 87.8% 的準確度。&lt;/p&gt;
 &lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/intro.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MAE/intro.png&#34;
 	
 	
 	
@@ -37,7 +37,7 @@
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/valid-example.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MAE/valid-example.png&#34;
 	
 	
 	
@@ -45,7 +45,7 @@
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/valid-example-2.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MAE/valid-example-2.png&#34;
 	
 	
 	
@@ -149,7 +149,7 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/vit-mae.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MAE/vit-mae.png&#34;
 	
 	
 	
@@ -157,7 +157,7 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/result.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MAE/result.png&#34;
 	
 	
 	
@@ -165,7 +165,7 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/ratio-result.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MAE/ratio-result.png&#34;
 	
 	
 	
@@ -174,7 +174,7 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;optimal masking ratio 意外地高，相比 BERT 只有 15%&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/fine-tune-blocks.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MAE/fine-tune-blocks.png&#34;
 	
 	
 	
@@ -233,7 +233,7 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 &lt;/ul&gt;
 &lt;h1 id=&#34;method&#34;&gt;Method&lt;/h1&gt;
 &lt;p&gt;模型盡可能類似原始 Transformer，這樣可以把一些 NLP 上成功的 Transformer 架構拿來用，還可以用一些很有效率的 implementation&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/ViT/ViT.png&#34;
 	
 	
 	
@@ -241,7 +241,7 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-process.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/ViT/ViT-process.png&#34;
 	
 	
 	
@@ -252,7 +252,7 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 &lt;p&gt;embedding 維度是 768 = 16 * 16 * 3
 position embedding 的做法是 standard learnable 1D positional embeddings，就是 BERT 的做法，簡單來說就是生出一張可以訓練的表，(序列長度, embedding size)，作者也有嘗試其他方法，但發現成效差不多，比如 2D positional embedding，概念就是從生出(序列長度, embedding size)變成生出 2 個(sqrt(序列長度), embedding size)。&lt;/p&gt;
 &lt;p&gt;[class] 的概念是 NLP 出來的，ResNet-like 的架構常見的做法也有通過 globally average-pooling (GAP)來生出向量，再接上分類器做預測。實驗發現直接在 transformer 的輸出做 GAP 和 [class] 都可以達到不錯的效果。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-gap.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/ViT/ViT-gap.png&#34;
 	
 	
 	
@@ -260,7 +260,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-dataset.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/ViT/ViT-dataset.png&#34;
 	
 	
 	
@@ -268,7 +268,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-acc.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/ViT/ViT-acc.png&#34;
 	
 	
 	

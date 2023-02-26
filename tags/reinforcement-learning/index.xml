@@ -102,7 +102,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/q-learning/q-function.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/q-learning/q-function.png&#34;
 	
 	
 	
@@ -110,7 +110,7 @@
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/q-learning/how-to-use-q.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/q-learning/how-to-use-q.png&#34;
 	
 	
 	
@@ -143,7 +143,7 @@
 &lt;ul&gt;
 &lt;li&gt;在 training 的時候，把其中一個 Q 固定住，不然要學的 target 是不固定的，會不好 train&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/q-learning/target-network.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/q-learning/target-network.png&#34;
 	
 	
 	
@@ -264,7 +264,7 @@ random, &amp;amp; otherwise
 &lt;ul&gt;
 &lt;li&gt;這兩項的 Variance 不一樣，如果 p 除以 q 差距很大，右邊的 Variance 會很大，如果 sample 不夠多次就會有問題&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/ppo/importance-sample-issue.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/ppo/importance-sample-issue.png&#34;
 	
 	
 	
@@ -374,7 +374,7 @@ random, &amp;amp; otherwise
 &lt;li&gt;$J_{PPO2}^{\theta^{k}}(\theta)\approx \displaystyle\sum_{(s_t,a_t)}min(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}A^{\theta^k}(s_t,a_t), \\
 clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\varepsilon)A^{\theta^k}(s_t,a_t))$&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/ppo/ppo2.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/ppo/ppo2.png&#34;
 	
 	
 	
@@ -403,7 +403,7 @@ clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\vareps
 &lt;li&gt;Reward Function&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;trajectory&#34;&gt;Trajectory&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/policy-gradient/aer.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/policy-gradient/aer.png&#34;
 	
 	
 	

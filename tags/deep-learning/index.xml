@@ -102,7 +102,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/q-learning/q-function.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/q-learning/q-function.png&#34;
 	
 	
 	
@@ -110,7 +110,7 @@
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/q-learning/how-to-use-q.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/q-learning/how-to-use-q.png&#34;
 	
 	
 	
@@ -143,7 +143,7 @@
 &lt;ul&gt;
 &lt;li&gt;在 training 的時候，把其中一個 Q 固定住，不然要學的 target 是不固定的，會不好 train&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/q-learning/target-network.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/q-learning/target-network.png&#34;
 	
 	
 	
@@ -264,7 +264,7 @@ random, &amp;amp; otherwise
 &lt;ul&gt;
 &lt;li&gt;這兩項的 Variance 不一樣，如果 p 除以 q 差距很大，右邊的 Variance 會很大，如果 sample 不夠多次就會有問題&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/ppo/importance-sample-issue.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/ppo/importance-sample-issue.png&#34;
 	
 	
 	
@@ -374,7 +374,7 @@ random, &amp;amp; otherwise
 &lt;li&gt;$J_{PPO2}^{\theta^{k}}(\theta)\approx \displaystyle\sum_{(s_t,a_t)}min(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}A^{\theta^k}(s_t,a_t), \\
 clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\varepsilon)A^{\theta^k}(s_t,a_t))$&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/ppo/ppo2.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/ppo/ppo2.png&#34;
 	
 	
 	
@@ -403,7 +403,7 @@ clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\vareps
 &lt;li&gt;Reward Function&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;trajectory&#34;&gt;Trajectory&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/drl/policy-gradient/aer.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/policy-gradient/aer.png&#34;
 	
 	
 	
@@ -515,7 +515,7 @@ clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\vareps
 &lt;p&gt;結合這兩點設計，可以有效地訓練大模型。
 以 ViT-Huge 用 ImageNet-1K 訓練(訓練集一百多萬張照片)可達到 87.8% 的準確度。&lt;/p&gt;
 &lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/intro.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MAE/intro.png&#34;
 	
 	
 	
@@ -523,7 +523,7 @@ clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\vareps
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/valid-example.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MAE/valid-example.png&#34;
 	
 	
 	
@@ -531,7 +531,7 @@ clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\vareps
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/valid-example-2.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MAE/valid-example-2.png&#34;
 	
 	
 	
@@ -635,7 +635,7 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/vit-mae.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MAE/vit-mae.png&#34;
 	
 	
 	
@@ -643,7 +643,7 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/result.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MAE/result.png&#34;
 	
 	
 	
@@ -651,7 +651,7 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/ratio-result.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MAE/ratio-result.png&#34;
 	
 	
 	
@@ -660,7 +660,7 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;optimal masking ratio 意外地高，相比 BERT 只有 15%&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/MAE/fine-tune-blocks.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MAE/fine-tune-blocks.png&#34;
 	
 	
 	
@@ -719,7 +719,7 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 &lt;/ul&gt;
 &lt;h1 id=&#34;method&#34;&gt;Method&lt;/h1&gt;
 &lt;p&gt;模型盡可能類似原始 Transformer，這樣可以把一些 NLP 上成功的 Transformer 架構拿來用，還可以用一些很有效率的 implementation&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/ViT/ViT.png&#34;
 	
 	
 	
@@ -727,7 +727,7 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-process.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/ViT/ViT-process.png&#34;
 	
 	
 	
@@ -738,7 +738,7 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 &lt;p&gt;embedding 維度是 768 = 16 * 16 * 3
 position embedding 的做法是 standard learnable 1D positional embeddings，就是 BERT 的做法，簡單來說就是生出一張可以訓練的表，(序列長度, embedding size)，作者也有嘗試其他方法，但發現成效差不多，比如 2D positional embedding，概念就是從生出(序列長度, embedding size)變成生出 2 個(sqrt(序列長度), embedding size)。&lt;/p&gt;
 &lt;p&gt;[class] 的概念是 NLP 出來的，ResNet-like 的架構常見的做法也有通過 globally average-pooling (GAP)來生出向量，再接上分類器做預測。實驗發現直接在 transformer 的輸出做 GAP 和 [class] 都可以達到不錯的效果。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-gap.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/ViT/ViT-gap.png&#34;
 	
 	
 	
@@ -746,7 +746,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-dataset.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/ViT/ViT-dataset.png&#34;
 	
 	
 	
@@ -754,7 +754,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/deep-learning/ViT/ViT-acc.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/ViT/ViT-acc.png&#34;
 	
 	
 	
@@ -791,7 +791,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 &lt;p&gt;作者的目標是生出 helpful、 honest(沒有誤導性資訊)、harmless 的 model。&lt;/p&gt;
 &lt;p&gt;具體作法，使用 reinforcement learning from human feedback(RLHF)。&lt;/p&gt;
 &lt;h2 id=&#34;訓練步驟&#34;&gt;訓練步驟&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/instruct-gpt-train-step.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/instruct-gpt-train-step.png&#34;
 	
 	
 	
@@ -872,7 +872,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 &lt;ul&gt;
 &lt;li&gt;對一個 prompt(假設是 x)，取出一對回覆(假設是 $y_w$ 和 $y_l$)，算出 RM(x, $y_w$) 和 RM(x, $y_l$)，假設 $y_w$ 比 $y_l$ 排序高，讓 RM(x, $y_w$) - RM(x, $y_l$) 的數值越大越好&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/instruct-gpt-reward-loss.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/instruct-gpt-reward-loss.png&#34;
 	
 	
 	
@@ -890,7 +890,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 &lt;p&gt;PPO&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/instruct-gpt-rl-loss.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/instruct-gpt-rl-loss.png&#34;
 	
 	
 	
@@ -912,7 +912,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;result&#34;&gt;Result&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/instruct-gpt-result.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/instruct-gpt-result.png&#34;
 	
 	
 	
@@ -985,7 +985,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 &lt;p&gt;作者最大化 likelihood 的時候是用 $L_3$ 而非單純的 $L_2$&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id=&#34;微調應用範例&#34;&gt;微調應用範例&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-1-tasks.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-1-tasks.png&#34;
 	
 	
 	
@@ -1018,7 +1018,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 &lt;p&gt;WebText 的資料來源是 reddit 上的外部連結，只要有至少三個 karma，就會被採納，由此取得品質較好的網頁資料。透過這種方法，取得了 4500 萬個連結。並用Dragnet (Peters &amp;amp; Lecocq, 2013) and Newspaper content extractors 把文字訊息從 HTML 中抓出來&lt;/p&gt;
 &lt;h2 id=&#34;架構&#34;&gt;架構&lt;/h2&gt;
 &lt;p&gt;和原本差不多，變成有 1.5B 參數的 Transformer decoder&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-2-models.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-2-models.png&#34;
 	
 	
 	
@@ -1041,7 +1041,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;結果&#34;&gt;結果&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-2-result-1.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-2-result-1.png&#34;
 	
 	
 	
@@ -1049,7 +1049,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-2-result-2.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-2-result-2.png&#34;
 	
 	
 	
@@ -1088,7 +1088,7 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
 &lt;ul&gt;
 &lt;li&gt;把 Sparse Transformer 的一些修改拿過來用&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-3-models.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-3-models.png&#34;
 	
 	
 	
@@ -1110,7 +1110,7 @@ GPT-3 XL 和 GPT-2 相近，比較淺也比較寬&lt;/p&gt;
 &lt;li&gt;透過 LSH 演算法把相似的文本過濾掉&lt;/li&gt;
 &lt;li&gt;把一些已知高品質的資料集也加進來&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-3-dataset.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-3-dataset.png&#34;
 	
 	
 	
@@ -1121,7 +1121,7 @@ GPT-3 XL 和 GPT-2 相近，比較淺也比較寬&lt;/p&gt;
 &lt;p&gt;這是一個 Batch 裡有 60% 來自 Common Crawl(filtered) 的意思
 Wikipedia 雖然總量比較少，但也有 3% 的採樣率&lt;/p&gt;
 &lt;h2 id=&#34;結果-1&#34;&gt;結果&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-3-result-1.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-3-result-1.png&#34;
 	
 	
 	
@@ -1130,7 +1130,7 @@ Wikipedia 雖然總量比較少，但也有 3% 的採樣率&lt;/p&gt;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;計算量指數增長，loss 卻是線性的往下降&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/images/gpt/gpt-3-result-2.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/gpt/gpt-3-result-2.png&#34;
 	
 	
 	
