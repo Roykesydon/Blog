@@ -1,18 +1,33 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='一種自動調參的方法'>
-<title>Bayesian Optimization</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: PatentBERT: Patent Classification with Fine-Tuning a pre-trained BERT Model
+Abstract 把 fine-tune BERT 應用在專利分類上，當應用於超過 200 萬件專利的資料集時，該方法超越了結合 word-embedding 的 CNN 的 SOTA 作法。
+貢獻: 一個用預訓練的 BERT 去 fine-tune 的 SOTA 方法 一個叫做 USPTO-3M 的大型資料集，屬於 CPC subclass level，並提供 SQL 語句讓後續的研究者使用 與傳統觀念相反，只需要 claim 就足以完成分類任務 Introduction 專利分類是一個 multi-label 的分類任務。
+由於標籤的數量可能很大，所以是個具有挑戰性的任務。
+作者準備了一個基於 CPC 的新資料集，有超過三百萬項美國專利。
+CPC Cooperative Patent Classification 是 IPC 更具體和詳細的版本 可預見將取代 IPC 成為新的標準 只是由於 CLEP-IP 競賽，大部分論文都基於 IPC 資料集包含 1978 到 2009 提交的專利 IPC International Patent Classification 此外，作者的 dataset 基於 patent claims'>
+<title>PatentBERT 論文閱讀</title>
 
-<link rel='canonical' href='https://roykesydon.github.io/Blog/p/bayesian-optimization/'>
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/patentbert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.8ba0009e8cca52c2ec8ac52dce3ac8d883cab10ebd0e2447c7fc3d51de630b5f.css"><meta property='og:title' content='Bayesian Optimization'>
-<meta property='og:description' content='一種自動調參的方法'>
-<meta property='og:url' content='https://roykesydon.github.io/Blog/p/bayesian-optimization/'>
+<link rel="stylesheet" href="/Blog/scss/style.min.8ba0009e8cca52c2ec8ac52dce3ac8d883cab10ebd0e2447c7fc3d51de630b5f.css"><meta property='og:title' content='PatentBERT 論文閱讀'>
+<meta property='og:description' content='paper: PatentBERT: Patent Classification with Fine-Tuning a pre-trained BERT Model
+Abstract 把 fine-tune BERT 應用在專利分類上，當應用於超過 200 萬件專利的資料集時，該方法超越了結合 word-embedding 的 CNN 的 SOTA 作法。
+貢獻: 一個用預訓練的 BERT 去 fine-tune 的 SOTA 方法 一個叫做 USPTO-3M 的大型資料集，屬於 CPC subclass level，並提供 SQL 語句讓後續的研究者使用 與傳統觀念相反，只需要 claim 就足以完成分類任務 Introduction 專利分類是一個 multi-label 的分類任務。
+由於標籤的數量可能很大，所以是個具有挑戰性的任務。
+作者準備了一個基於 CPC 的新資料集，有超過三百萬項美國專利。
+CPC Cooperative Patent Classification 是 IPC 更具體和詳細的版本 可預見將取代 IPC 成為新的標準 只是由於 CLEP-IP 競賽，大部分論文都基於 IPC 資料集包含 1978 到 2009 提交的專利 IPC International Patent Classification 此外，作者的 dataset 基於 patent claims'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/patentbert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 <meta property='og:site_name' content='Roykesydon'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='fine-tune' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:published_time' content='2023-01-26T01:36:53&#43;08:00'/><meta property='article:modified_time' content='2023-01-26T01:36:53&#43;08:00'/>
-<meta name="twitter:title" content="Bayesian Optimization">
-<meta name="twitter:description" content="一種自動調參的方法">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:published_time' content='2023-03-02T16:08:46&#43;08:00'/><meta property='article:modified_time' content='2023-03-02T16:08:46&#43;08:00'/>
+<meta name="twitter:title" content="PatentBERT 論文閱讀">
+<meta name="twitter:description" content="paper: PatentBERT: Patent Classification with Fine-Tuning a pre-trained BERT Model
+Abstract 把 fine-tune BERT 應用在專利分類上，當應用於超過 200 萬件專利的資料集時，該方法超越了結合 word-embedding 的 CNN 的 SOTA 作法。
+貢獻: 一個用預訓練的 BERT 去 fine-tune 的 SOTA 方法 一個叫做 USPTO-3M 的大型資料集，屬於 CPC subclass level，並提供 SQL 語句讓後續的研究者使用 與傳統觀念相反，只需要 claim 就足以完成分類任務 Introduction 專利分類是一個 multi-label 的分類任務。
+由於標籤的數量可能很大，所以是個具有挑戰性的任務。
+作者準備了一個基於 CPC 的新資料集，有超過三百萬項美國專利。
+CPC Cooperative Patent Classification 是 IPC 更具體和詳細的版本 可預見將取代 IPC 成為新的標準 只是由於 CLEP-IP 競賽，大部分論文都基於 IPC 資料集包含 1978 到 2009 提交的專利 IPC International Patent Classification 此外，作者的 dataset 基於 patent claims">
     </head>
     <body class="
     article-page
@@ -201,39 +216,7 @@
     </ol>
 </aside>
 
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">Table of contents</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ol>
-    <li><a href="#gaussian-process">Gaussian Process</a></li>
-    <li><a href="#acquisition-function">Acquisition Function</a></li>
-  </ol>
-</nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
+    
 
             <main class="main full-width">
     <article class="main-article">
@@ -252,13 +235,9 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/Blog/p/bayesian-optimization/">Bayesian Optimization</a>
+            <a href="/Blog/p/patentbert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">PatentBERT 論文閱讀</a>
         </h2>
     
-        
-        <h3 class="article-subtitle">
-            一種自動調參的方法
-        </h3>
         
     </div>
 
@@ -278,7 +257,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Jan 26, 2023</time>
+                <time class="article-time--published">Mar 02, 2023</time>
             </div>
         
 
@@ -308,31 +287,94 @@
     <section class="article-content">
     
     
-    <h1 id="介紹">介紹</h1>
-<p>一種用於自動化找超參數的方法，用在採樣昂貴而且是黑盒子的情況</p>
-<h1 id="流程">流程</h1>
-<ol>
-<li>取樣一些資料點</li>
-<li>生出一個 Surrogate Model(可採用 Gaussian Process)</li>
-<li>反覆做以下事情
+    <p>paper: <a class="link" href="https://arxiv.org/abs/1906.02124"  target="_blank" rel="noopener"
+    >PatentBERT: Patent Classification with Fine-Tuning a pre-trained BERT Model</a></p>
+<h1 id="abstract">Abstract</h1>
+<p>把 fine-tune BERT 應用在專利分類上，當應用於超過 200 萬件專利的資料集時，該方法超越了結合 word-embedding 的 CNN 的 SOTA 作法。</p>
 <ul>
-<li>用 Acquisition Function 挑選下一個要採樣的點</li>
-<li>重新評估 Surrogate Model</li>
+<li>貢獻:
+<ol>
+<li>一個用預訓練的 BERT 去 fine-tune 的 SOTA 方法</li>
+<li>一個叫做 USPTO-3M 的大型資料集，屬於 CPC subclass level，並提供 SQL 語句讓後續的研究者使用</li>
+<li>與傳統觀念相反，只需要 claim 就足以完成分類任務</li>
+</ol>
+</li>
+</ul>
+<h1 id="introduction">Introduction</h1>
+<p>專利分類是一個 multi-label 的分類任務。</p>
+<p>由於標籤的數量可能很大，所以是個具有挑戰性的任務。</p>
+<p>作者準備了一個基於 CPC 的新資料集，有超過三百萬項美國專利。</p>
+<ul>
+<li>CPC
+<ul>
+<li>Cooperative Patent Classification</li>
+<li>是 IPC 更具體和詳細的版本</li>
+<li>可預見將取代 IPC 成為新的標準
+<ul>
+<li>只是由於 CLEP-IP 競賽，大部分論文都基於 IPC
+<ul>
+<li>資料集包含 1978 到 2009 提交的專利</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>IPC
+<ul>
+<li>International Patent Classification</li>
+</ul>
+</li>
+</ul>
+<p>此外，作者的 dataset 基於 patent claims</p>
+<ul>
+<li>patent claims
+<ul>
+<li>重要性在過往被低估</li>
+<li>在起草專利申請時，專利業者會先起草 patent claims</li>
+<li>專利文件的其餘部分由 claim 做延伸</li>
+<li>在專利法中，claims 定義了專利發明的界線，確定了專利權範圍</li>
+</ul>
+</li>
+</ul>
+<p>為使模型更簡單，只關注 patent claims，並且僅用第一項 claim。</p>
+<h1 id="相關工作">相關工作</h1>
+<p>過往有些研究只顯示了 precision，但沒有 F1 value 或 recall，難以公平比較。</p>
+<p>以 DeepPatent</p>
+<h1 id="data">Data</h1>
+<p>過往資料基於 CLEF-IP 或 patent offices。</p>
+<p>作者發現在 BigQuery 用 Google Patents Public Datasets 更容易。</p>
+<p>而且可用 SQL statements，作者認為比共享傳統資料集更好，原因如下:</p>
+<ol>
+<li>Seperation of concerns
+<ul>
+<li>如果資料包含前處理或後處理，其他研究人員需要不同操作時會很頭痛。</li>
+</ul>
+</li>
+<li>Clarity and flexibility
+<ul>
+<li>SQL statement 精確且容易根據不同條件進行修改。</li>
 </ul>
 </li>
 </ol>
-<h2 id="gaussian-process">Gaussian Process</h2>
-<p>最終的 prediction 是一個 distribution 而不是單一個數字
-生成方法需借助 kernel function，常用 RBF(Radial Basis Function)</p>
-<p>$K(x, x^{&rsquo;}|\tau)=\sigma^2exp(-\frac{1}{2}(\frac{x-x^{&rsquo;}}{l})^2)$</p>
-<p>$\sigma$ 和 $l$ 是兩個可以調整的超參數</p>
-<h2 id="acquisition-function">Acquisition Function</h2>
-<p>可用超參數來調節 exploitation 和 exploitation</p>
-<ul>
-<li>UCB(Upper confidence bound)</li>
-<li>PI(probability of improvement)</li>
-<li>EI(Expected improvement)</li>
-</ul>
+<p>在和 DeepPatent 比較的時候，可以的話，會用 USPTO2M 進行測試，如果不行，才會合併來自 USPTO-3M 的資料，比如 USPTO-2M 沒有 claims 的情況。</p>
+<p>為了比較 claim 如何影響性能，將合併兩個資料集。</p>
+<h1 id="method--experimental-setup">Method &amp; Experimental Setup</h1>
+<p>用 BERT-Base 就可以打敗 DeepPatent。</p>
+<p>遵循 BERT Project 中給的 fine-tune 範例。</p>
+<p>為了 multilabel，用 sigmoid cross entropy with logits function 而不是用 softmax。</p>
+<p><img src="/Blog/images/deep-learning/PatentBERT/result.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h1 id="conclusion">Conclusion</h1>
+<p>專利分類作為具有挑戰性的任務，幾十年來一直沒有令人滿意的表現。</p>
+<p>本文提出一個基於 fine-tune BERT 的方法，性能優於 DeepPatent。</p>
+<p>並且結果表明只用 patent claim 就可以完成分類任務。</p>
 
 </section>
 
@@ -341,11 +383,15 @@
     
     <section class="article-tags">
         
-            <a href="/Blog/tags/fine-tune/">fine-tune</a>
-        
             <a href="/Blog/tags/deep-learning/">deep-learning</a>
         
             <a href="/Blog/tags/machine-learning/">machine-learning</a>
+        
+            <a href="/Blog/tags/transformer/">transformer</a>
+        
+            <a href="/Blog/tags/attention/">attention</a>
+        
+            <a href="/Blog/tags/self-attention/">self-attention</a>
         
     </section>
 
@@ -391,12 +437,51 @@
             
                 
 <article class="">
-    <a href="/Blog/p/patentbert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">PatentBERT 論文閱讀</h2>
+            <h2 class="article-title">MAE 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/vit-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">ViT 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/instructgpt/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">InstructGPT</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/gpt-%E4%B8%89%E9%83%A8%E6%9B%B2/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT 三部曲</h2>
         </div>
     </a>
 </article>
@@ -410,45 +495,6 @@
 
         <div class="article-details">
             <h2 class="article-title">Q-learning</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/proximal-policy-optimizationppo/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Proximal Policy Optimization(PPO)</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/policy-gradient/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Policy Gradient</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">MAE 論文</h2>
         </div>
     </a>
 </article>

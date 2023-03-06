@@ -108,3 +108,49 @@ random, & otherwise
         - Target $y=r_i+\underset{a}{max}\hat{Q}(s_{i+1},a)$
         - Update Q 的參數，好讓 $Q(s_i,a_i)$ 更接近 y(regression)
         - 每 C 步 reset $\hat{Q}=Q$
+
+# Adveanced Tip
+
+## Double DQN
+- Q Value 往往被高估
+    - 我們的目的是要讓 $Q(s_t, a_t)$ 和 $r_t+\underset{a}{max}Q(s_{t+1},a)$ 越接近越好(後者就是 target)
+    - target 常常不小心設太高，因為如果有 action 被高估了，就會選那個當 target
+- Double DQN: 兩個函式 $Q$ 和 $Q^{'}$
+    - 把 target 換成  $r_t+Q^{'}(s_{t+1},arg \underset{a}{max}Q(s_{t+1},a))$
+    - 選 action 交給 $Q$，實際算交給 $Q^{'}$
+        - 如果 $Q$ 選了高估的 action，$Q^{'}$ 有可能修正回來
+        - 如果 $Q^{'}$ 高估，$Q$ 不一定會選到
+    - $Q^{'}$ 是 target network(固定不動)
+
+## Dueling DQN
+- 改變 network 架構
+- 分成兩條 path
+    - 第一條算 scalar
+    - 第二條算 vector，每個 action 都有個 value
+    - 把 scalar 加到每一個維度
+    - 只更改到 V(s) 的時候，會全部的 action 都改到，可能會是一個比較有效率的方式，不用 sample 所有的 action
+        - 但有可能模型不管 V(s)，直接設 0，只改 A
+        - 所以會對 A 下 constrain，讓 network 傾向於改 V
+            - 比如同個 state 下的所有 action 要生出 A(s,a) 總和為 0
+                - 在 A 的輸出加個 normalization 即可辦到，這個 normalization 就是把每個維度都減掉平均
+
+![](/Blog/images/drl/q-learning/dueling-dqn.png)
+
+## Prioritized Replay
+- 原本是 uniform 的從 buffer sample data
+- 改讓 「有更大的 TD error」的 data 有更高的機率被 sample
+    - TD error 就是 $Q(s_t, a_t)$ 和 target 的差距
+- 實際在做的時候有額外的細節，不會只改 sampling 的 process，還要改 update 參數的方法
+
+## Multi-step
+- Balance between MC 和 TD
+- TD 只需要存 {$s_t,a_t,r_t,s_{t+1}$}
+- 改存 {$s_t,a_t,r_t,...,s_{t+N},a_{t+N},r_{t+N}, s_{t+N+1}$}
+- 我們的目的是要讓 $Q(s_t, a_t)$ 和 $\displaystyle\sum_{t^{'}=t}^{t+N} r_{t^{'}}+\hat{Q}(s_{t+N+1},a_{t+N+1})$ 越接近越好(後者就是 target)
+    - $a_{t+N+1}=arg\underset{a}{max}\hat{Q}(s_{t+N+1},a)$
+- 同時有 MC 和 TD 的好處和壞處
+    - 估測的影響比較輕微
+    - r 比較多項，variance 比較大
+
+## Noisy Net
+- improve exploration

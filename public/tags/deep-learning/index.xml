@@ -6,7 +6,103 @@
         <description>Recent content in deep-learning on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 20 Feb 2023 16:21:23 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/deep-learning/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 02 Mar 2023 16:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/deep-learning/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>PatentBERT 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/patentbert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Thu, 02 Mar 2023 16:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/patentbert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1906.02124&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;PatentBERT: Patent Classification with Fine-Tuning a pre-trained BERT Model&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;abstract&#34;&gt;Abstract&lt;/h1&gt;
+&lt;p&gt;把 fine-tune BERT 應用在專利分類上，當應用於超過 200 萬件專利的資料集時，該方法超越了結合 word-embedding 的 CNN 的 SOTA 作法。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;貢獻:
+&lt;ol&gt;
+&lt;li&gt;一個用預訓練的 BERT 去 fine-tune 的 SOTA 方法&lt;/li&gt;
+&lt;li&gt;一個叫做 USPTO-3M 的大型資料集，屬於 CPC subclass level，並提供 SQL 語句讓後續的研究者使用&lt;/li&gt;
+&lt;li&gt;與傳統觀念相反，只需要 claim 就足以完成分類任務&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;專利分類是一個 multi-label 的分類任務。&lt;/p&gt;
+&lt;p&gt;由於標籤的數量可能很大，所以是個具有挑戰性的任務。&lt;/p&gt;
+&lt;p&gt;作者準備了一個基於 CPC 的新資料集，有超過三百萬項美國專利。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CPC
+&lt;ul&gt;
+&lt;li&gt;Cooperative Patent Classification&lt;/li&gt;
+&lt;li&gt;是 IPC 更具體和詳細的版本&lt;/li&gt;
+&lt;li&gt;可預見將取代 IPC 成為新的標準
+&lt;ul&gt;
+&lt;li&gt;只是由於 CLEP-IP 競賽，大部分論文都基於 IPC
+&lt;ul&gt;
+&lt;li&gt;資料集包含 1978 到 2009 提交的專利&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;IPC
+&lt;ul&gt;
+&lt;li&gt;International Patent Classification&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;此外，作者的 dataset 基於 patent claims&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;patent claims
+&lt;ul&gt;
+&lt;li&gt;重要性在過往被低估&lt;/li&gt;
+&lt;li&gt;在起草專利申請時，專利業者會先起草 patent claims&lt;/li&gt;
+&lt;li&gt;專利文件的其餘部分由 claim 做延伸&lt;/li&gt;
+&lt;li&gt;在專利法中，claims 定義了專利發明的界線，確定了專利權範圍&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;為使模型更簡單，只關注 patent claims，並且僅用第一項 claim。&lt;/p&gt;
+&lt;h1 id=&#34;相關工作&#34;&gt;相關工作&lt;/h1&gt;
+&lt;p&gt;過往有些研究只顯示了 precision，但沒有 F1 value 或 recall，難以公平比較。&lt;/p&gt;
+&lt;p&gt;以 DeepPatent&lt;/p&gt;
+&lt;h1 id=&#34;data&#34;&gt;Data&lt;/h1&gt;
+&lt;p&gt;過往資料基於 CLEF-IP 或 patent offices。&lt;/p&gt;
+&lt;p&gt;作者發現在 BigQuery 用 Google Patents Public Datasets 更容易。&lt;/p&gt;
+&lt;p&gt;而且可用 SQL statements，作者認為比共享傳統資料集更好，原因如下:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Seperation of concerns
+&lt;ul&gt;
+&lt;li&gt;如果資料包含前處理或後處理，其他研究人員需要不同操作時會很頭痛。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Clarity and flexibility
+&lt;ul&gt;
+&lt;li&gt;SQL statement 精確且容易根據不同條件進行修改。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在和 DeepPatent 比較的時候，可以的話，會用 USPTO2M 進行測試，如果不行，才會合併來自 USPTO-3M 的資料，比如 USPTO-2M 沒有 claims 的情況。&lt;/p&gt;
+&lt;p&gt;為了比較 claim 如何影響性能，將合併兩個資料集。&lt;/p&gt;
+&lt;h1 id=&#34;method--experimental-setup&#34;&gt;Method &amp;amp; Experimental Setup&lt;/h1&gt;
+&lt;p&gt;用 BERT-Base 就可以打敗 DeepPatent。&lt;/p&gt;
+&lt;p&gt;遵循 BERT Project 中給的 fine-tune 範例。&lt;/p&gt;
+&lt;p&gt;為了 multilabel，用 sigmoid cross entropy with logits function 而不是用 softmax。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/PatentBERT/result.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;專利分類作為具有挑戰性的任務，幾十年來一直沒有令人滿意的表現。&lt;/p&gt;
+&lt;p&gt;本文提出一個基於 fine-tune BERT 的方法，性能優於 DeepPatent。&lt;/p&gt;
+&lt;p&gt;並且結果表明只用 patent claim 就可以完成分類任務。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Q-learning</title>
         <link>https://roykesydon.github.io/Blog/p/q-learning/</link>
         <pubDate>Mon, 20 Feb 2023 16:21:23 +0800</pubDate>
@@ -212,6 +308,92 @@ random, &amp;amp; otherwise
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;adveanced-tip&#34;&gt;Adveanced Tip&lt;/h1&gt;
+&lt;h2 id=&#34;double-dqn&#34;&gt;Double DQN&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Q Value 往往被高估
+&lt;ul&gt;
+&lt;li&gt;我們的目的是要讓 $Q(s_t, a_t)$ 和 $r_t+\underset{a}{max}Q(s_{t+1},a)$ 越接近越好(後者就是 target)&lt;/li&gt;
+&lt;li&gt;target 常常不小心設太高，因為如果有 action 被高估了，就會選那個當 target&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Double DQN: 兩個函式 $Q$ 和 $Q^{&amp;rsquo;}$
+&lt;ul&gt;
+&lt;li&gt;把 target 換成  $r_t+Q^{&amp;rsquo;}(s_{t+1},arg \underset{a}{max}Q(s_{t+1},a))$&lt;/li&gt;
+&lt;li&gt;選 action 交給 $Q$，實際算交給 $Q^{&amp;rsquo;}$
+&lt;ul&gt;
+&lt;li&gt;如果 $Q$ 選了高估的 action，$Q^{&amp;rsquo;}$ 有可能修正回來&lt;/li&gt;
+&lt;li&gt;如果 $Q^{&amp;rsquo;}$ 高估，$Q$ 不一定會選到&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$Q^{&amp;rsquo;}$ 是 target network(固定不動)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;dueling-dqn&#34;&gt;Dueling DQN&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;改變 network 架構&lt;/li&gt;
+&lt;li&gt;分成兩條 path
+&lt;ul&gt;
+&lt;li&gt;第一條算 scalar&lt;/li&gt;
+&lt;li&gt;第二條算 vector，每個 action 都有個 value&lt;/li&gt;
+&lt;li&gt;把 scalar 加到每一個維度&lt;/li&gt;
+&lt;li&gt;只更改到 V(s) 的時候，會全部的 action 都改到，可能會是一個比較有效率的方式，不用 sample 所有的 action
+&lt;ul&gt;
+&lt;li&gt;但有可能模型不管 V(s)，直接設 0，只改 A&lt;/li&gt;
+&lt;li&gt;所以會對 A 下 constrain，讓 network 傾向於改 V
+&lt;ul&gt;
+&lt;li&gt;比如同個 state 下的所有 action 要生出 A(s,a) 總和為 0
+&lt;ul&gt;
+&lt;li&gt;在 A 的輸出加個 normalization 即可辦到，這個 normalization 就是把每個維度都減掉平均&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/q-learning/dueling-dqn.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;prioritized-replay&#34;&gt;Prioritized Replay&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;原本是 uniform 的從 buffer sample data&lt;/li&gt;
+&lt;li&gt;改讓 「有更大的 TD error」的 data 有更高的機率被 sample
+&lt;ul&gt;
+&lt;li&gt;TD error 就是 $Q(s_t, a_t)$ 和 target 的差距&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;實際在做的時候有額外的細節，不會只改 sampling 的 process，還要改 update 參數的方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;multi-step&#34;&gt;Multi-step&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Balance between MC 和 TD&lt;/li&gt;
+&lt;li&gt;TD 只需要存 {$s_t,a_t,r_t,s_{t+1}$}&lt;/li&gt;
+&lt;li&gt;改存 {$s_t,a_t,r_t,&amp;hellip;,s_{t+N},a_{t+N},r_{t+N}, s_{t+N+1}$}&lt;/li&gt;
+&lt;li&gt;我們的目的是要讓 $Q(s_t, a_t)$ 和 $\displaystyle\sum_{t^{&amp;rsquo;}=t}^{t+N} r_{t^{&amp;rsquo;}}+\hat{Q}(s_{t+N+1},a_{t+N+1})$ 越接近越好(後者就是 target)
+&lt;ul&gt;
+&lt;li&gt;$a_{t+N+1}=arg\underset{a}{max}\hat{Q}(s_{t+N+1},a)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;同時有 MC 和 TD 的好處和壞處
+&lt;ul&gt;
+&lt;li&gt;估測的影響比較輕微&lt;/li&gt;
+&lt;li&gt;r 比較多項，variance 比較大&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;noisy-net&#34;&gt;Noisy Net&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;improve exploration&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         </item>
