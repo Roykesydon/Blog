@@ -252,6 +252,14 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
     </li>
     <li><a href="#typical-q-learning-演算法">Typical Q-learning 演算法</a></li>
   </ol>
+
+  <ol>
+    <li><a href="#double-dqn">Double DQN</a></li>
+    <li><a href="#dueling-dqn">Dueling DQN</a></li>
+    <li><a href="#prioritized-replay">Prioritized Replay</a></li>
+    <li><a href="#multi-step">Multi-step</a></li>
+    <li><a href="#noisy-net">Noisy Net</a></li>
+  </ol>
 </nav>
         </div>
     </section>
@@ -315,7 +323,7 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
 
 
                 <time class="article-time--reading">
-                    2 minute read
+                    3 minute read
                 </time>
             </div>
         
@@ -531,6 +539,92 @@ random, &amp; otherwise
 </ul>
 </li>
 </ul>
+<h1 id="adveanced-tip">Adveanced Tip</h1>
+<h2 id="double-dqn">Double DQN</h2>
+<ul>
+<li>Q Value 往往被高估
+<ul>
+<li>我們的目的是要讓 $Q(s_t, a_t)$ 和 $r_t+\underset{a}{max}Q(s_{t+1},a)$ 越接近越好(後者就是 target)</li>
+<li>target 常常不小心設太高，因為如果有 action 被高估了，就會選那個當 target</li>
+</ul>
+</li>
+<li>Double DQN: 兩個函式 $Q$ 和 $Q^{&rsquo;}$
+<ul>
+<li>把 target 換成  $r_t+Q^{&rsquo;}(s_{t+1},arg \underset{a}{max}Q(s_{t+1},a))$</li>
+<li>選 action 交給 $Q$，實際算交給 $Q^{&rsquo;}$
+<ul>
+<li>如果 $Q$ 選了高估的 action，$Q^{&rsquo;}$ 有可能修正回來</li>
+<li>如果 $Q^{&rsquo;}$ 高估，$Q$ 不一定會選到</li>
+</ul>
+</li>
+<li>$Q^{&rsquo;}$ 是 target network(固定不動)</li>
+</ul>
+</li>
+</ul>
+<h2 id="dueling-dqn">Dueling DQN</h2>
+<ul>
+<li>改變 network 架構</li>
+<li>分成兩條 path
+<ul>
+<li>第一條算 scalar</li>
+<li>第二條算 vector，每個 action 都有個 value</li>
+<li>把 scalar 加到每一個維度</li>
+<li>只更改到 V(s) 的時候，會全部的 action 都改到，可能會是一個比較有效率的方式，不用 sample 所有的 action
+<ul>
+<li>但有可能模型不管 V(s)，直接設 0，只改 A</li>
+<li>所以會對 A 下 constrain，讓 network 傾向於改 V
+<ul>
+<li>比如同個 state 下的所有 action 要生出 A(s,a) 總和為 0
+<ul>
+<li>在 A 的輸出加個 normalization 即可辦到，這個 normalization 就是把每個維度都減掉平均</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/Blog/images/drl/q-learning/dueling-dqn.png"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h2 id="prioritized-replay">Prioritized Replay</h2>
+<ul>
+<li>原本是 uniform 的從 buffer sample data</li>
+<li>改讓 「有更大的 TD error」的 data 有更高的機率被 sample
+<ul>
+<li>TD error 就是 $Q(s_t, a_t)$ 和 target 的差距</li>
+</ul>
+</li>
+<li>實際在做的時候有額外的細節，不會只改 sampling 的 process，還要改 update 參數的方法</li>
+</ul>
+<h2 id="multi-step">Multi-step</h2>
+<ul>
+<li>Balance between MC 和 TD</li>
+<li>TD 只需要存 {$s_t,a_t,r_t,s_{t+1}$}</li>
+<li>改存 {$s_t,a_t,r_t,&hellip;,s_{t+N},a_{t+N},r_{t+N}, s_{t+N+1}$}</li>
+<li>我們的目的是要讓 $Q(s_t, a_t)$ 和 $\displaystyle\sum_{t^{&rsquo;}=t}^{t+N} r_{t^{&rsquo;}}+\hat{Q}(s_{t+N+1},a_{t+N+1})$ 越接近越好(後者就是 target)
+<ul>
+<li>$a_{t+N+1}=arg\underset{a}{max}\hat{Q}(s_{t+N+1},a)$</li>
+</ul>
+</li>
+<li>同時有 MC 和 TD 的好處和壞處
+<ul>
+<li>估測的影響比較輕微</li>
+<li>r 比較多項，variance 比較大</li>
+</ul>
+</li>
+</ul>
+<h2 id="noisy-net">Noisy Net</h2>
+<ul>
+<li>improve exploration</li>
+</ul>
 
 </section>
 
@@ -615,6 +709,19 @@ random, &amp; otherwise
             
                 
 <article class="">
+    <a href="/Blog/p/patentbert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">PatentBERT 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
     <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">
         
         
@@ -634,19 +741,6 @@ random, &amp; otherwise
 
         <div class="article-details">
             <h2 class="article-title">ViT 論文</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/instructgpt/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">InstructGPT</h2>
         </div>
     </a>
 </article>
