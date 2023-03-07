@@ -6,7 +6,15 @@
         <description>Recent content in Categories on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Thu, 02 Mar 2023 16:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 07 Mar 2023 14:26:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>CTF</title>
+        <link>https://roykesydon.github.io/Blog/categories/ctf/</link>
+        <pubDate>Tue, 07 Mar 2023 14:26:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/categories/ctf/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/ctf.jpg" alt="Featured image of post CTF" /&gt;</description>
+        </item>
+        <item>
         <title>Deep Learning</title>
         <link>https://roykesydon.github.io/Blog/categories/deep-learning/</link>
         <pubDate>Thu, 02 Mar 2023 16:08:46 +0800</pubDate>
