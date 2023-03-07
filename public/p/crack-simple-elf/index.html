@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Assembly language Control flow
+jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status flag 而 jump je 0x33 代表「如果 zero flag 是 1 就跳到 0x33」 call 是 unconditional GOTO，但會把下一個 address 放到 stack 那 RET instruction 可以晚點把它取出，並回到那邊 status flag
+在 register 上的多數 operation，比如加減法，會對 status flags 產生影響 只有很少的 status flags，而且他們通常存在在一個 special register 上 範例 zero flag 上個運算的結果是不是 0，在一些條件判斷很常用該 flag Register 從組合語言的角度來看，是一些有固定 size 的全域變數 special register Program Counter 記錄下個要執行的 instruction 別名 PC Intel x86 叫 Instruction Pointer 根據 16/32/64 bits，稱為 IP/EIP/RIP Stack pointer SP, ESP, RSP 繞過字串比對 該程式吃一個參數，比對是不是密碼'>
+<title>Crack simple ELF</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/crack-simple-elf/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.8ba0009e8cca52c2ec8ac52dce3ac8d883cab10ebd0e2447c7fc3d51de630b5f.css"><meta property='og:title' content='Crack simple ELF'>
+<meta property='og:description' content='Assembly language Control flow
+jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status flag 而 jump je 0x33 代表「如果 zero flag 是 1 就跳到 0x33」 call 是 unconditional GOTO，但會把下一個 address 放到 stack 那 RET instruction 可以晚點把它取出，並回到那邊 status flag
+在 register 上的多數 operation，比如加減法，會對 status flags 產生影響 只有很少的 status flags，而且他們通常存在在一個 special register 上 範例 zero flag 上個運算的結果是不是 0，在一些條件判斷很常用該 flag Register 從組合語言的角度來看，是一些有固定 size 的全域變數 special register Program Counter 記錄下個要執行的 instruction 別名 PC Intel x86 叫 Instruction Pointer 根據 16/32/64 bits，稱為 IP/EIP/RIP Stack pointer SP, ESP, RSP 繞過字串比對 該程式吃一個參數，比對是不是密碼'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/crack-simple-elf/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='ctf' /><meta property='article:tag' content='binary-exploitation' /><meta property='article:published_time' content='2023-03-07T14:26:17&#43;08:00'/><meta property='article:modified_time' content='2023-03-07T14:26:17&#43;08:00'/>
+<meta name="twitter:title" content="Crack simple ELF">
+<meta name="twitter:description" content="Assembly language Control flow
+jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status flag 而 jump je 0x33 代表「如果 zero flag 是 1 就跳到 0x33」 call 是 unconditional GOTO，但會把下一個 address 放到 stack 那 RET instruction 可以晚點把它取出，並回到那邊 status flag
+在 register 上的多數 operation，比如加減法，會對 status flags 產生影響 只有很少的 status flags，而且他們通常存在在一個 special register 上 範例 zero flag 上個運算的結果是不是 0，在一些條件判斷很常用該 flag Register 從組合語言的角度來看，是一些有固定 size 的全域變數 special register Program Counter 記錄下個要執行的 instruction 別名 PC Intel x86 叫 Instruction Pointer 根據 16/32/64 bits，稱為 IP/EIP/RIP Stack pointer SP, ESP, RSP 繞過字串比對 該程式吃一個參數，比對是不是密碼">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/Blog">
+                
+                    
+                    
+                    
+                        
+                        <img src="/Blog/logo_hu4571d0fc95bcb4b13f2ac8e17a6aeed9_16849_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⭐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/Blog">Roykesydon</a></h1>
+            <h2 class="site-description">I write notes here during my free time.</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/ctf/" style="background-color: #131313; color: #43c559;">
+                CTF
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/Blog/p/crack-simple-elf/">Crack simple ELF</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 07, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    3 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="assembly-language">Assembly language</h1>
+<ul>
+<li>
+<p>Control flow</p>
+<ul>
+<li>jumps, branches, calls
+<ul>
+<li>jmp, jne, je, bne, be, call</li>
+<li>branch 就是根據 status flag 而 jump
+<ul>
+<li>je 0x33 代表「如果 zero flag 是 1 就跳到 0x33」</li>
+</ul>
+</li>
+<li>call 是 unconditional GOTO，但會把下一個 address 放到 stack
+<ul>
+<li>那 RET instruction 可以晚點把它取出，並回到那邊</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>status flag</p>
+<ul>
+<li>在 register 上的多數 operation，比如加減法，會對 status flags 產生影響</li>
+<li>只有很少的 status flags，而且他們通常存在在一個 special register 上</li>
+<li>範例
+<ul>
+<li>zero flag
+<ul>
+<li>上個運算的結果是不是 0，在一些條件判斷很常用該 flag</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="register">Register</h2>
+<ul>
+<li>從組合語言的角度來看，是一些有固定 size 的全域變數</li>
+<li>special register
+<ul>
+<li>Program Counter
+<ul>
+<li>記錄下個要執行的 instruction</li>
+<li>別名
+<ul>
+<li>PC</li>
+<li>Intel x86 叫 Instruction Pointer
+<ul>
+<li>根據 16/32/64 bits，稱為 IP/EIP/RIP</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Stack pointer
+<ul>
+<li>SP, ESP, RSP</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="繞過字串比對">繞過字串比對</h1>
+<p>該程式吃一個參數，比對是不是密碼</p>
+<p>我們要透過 gdb 從執行檔觸發 printf(&ldquo;Access Granted!\n&rdquo;);</p>
+<ul>
+<li>程式碼:
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">argc</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Checking License: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="nf">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#34;AAAA-Z10N-42-OK&#34;</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Access Granted!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;WRONG!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Usage: &lt;key&gt;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>來源: <a class="link" href="https://github.com/LiveOverflow/liveoverflow_youtube/blob/master/0x05_simple_crackme_intro_assembler/license_1.c"  target="_blank" rel="noopener"
+    >https://github.com/LiveOverflow/liveoverflow_youtube/blob/master/0x05_simple_crackme_intro_assembler/license_1.c</a></li>
+<li><code>gcc ./test.c -o ./test -Wall</code>
+<ul>
+<li>-Wall 可以顯示所有警告</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>輸入 <code>gdb ./test</code></p>
+<p>可以透過 <code>disassemble main</code> 來顯示 main function 的 assembler instruction</p>
+<p>可以用 <code>set disassembly-flavor intel</code> 來換個風格</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Dump of assembler code for function main:
+</span></span><span class="line"><span class="cl">   0x0000000000001189 &lt;+0&gt;:     endbr64
+</span></span><span class="line"><span class="cl">   0x000000000000118d &lt;+4&gt;:     push   rbp
+</span></span><span class="line"><span class="cl">   0x000000000000118e &lt;+5&gt;:     mov    rbp,rsp
+</span></span><span class="line"><span class="cl">   0x0000000000001191 &lt;+8&gt;:     sub    rsp,0x10
+</span></span><span class="line"><span class="cl">   0x0000000000001195 &lt;+12&gt;:    mov    DWORD PTR [rbp-0x4],edi
+</span></span><span class="line"><span class="cl">   0x0000000000001198 &lt;+15&gt;:    mov    QWORD PTR [rbp-0x10],rsi
+</span></span><span class="line"><span class="cl">   0x000000000000119c &lt;+19&gt;:    cmp    DWORD PTR [rbp-0x4],0x2
+</span></span><span class="line"><span class="cl">   0x00000000000011a0 &lt;+23&gt;:    jne    0x11fb &lt;main+114&gt;
+</span></span><span class="line"><span class="cl">   0x00000000000011a2 &lt;+25&gt;:    mov    rax,QWORD PTR [rbp-0x10]
+</span></span><span class="line"><span class="cl">   0x00000000000011a6 &lt;+29&gt;:    add    rax,0x8
+</span></span><span class="line"><span class="cl">   0x00000000000011aa &lt;+33&gt;:    mov    rax,QWORD PTR [rax]
+</span></span><span class="line"><span class="cl">   0x00000000000011ad &lt;+36&gt;:    mov    rsi,rax
+</span></span><span class="line"><span class="cl">   0x00000000000011b0 &lt;+39&gt;:    lea    rdi,[rip+0xe4d]        # 0x2004
+</span></span><span class="line"><span class="cl">   0x00000000000011b7 &lt;+46&gt;:    mov    eax,0x0
+</span></span><span class="line"><span class="cl">   0x00000000000011bc &lt;+51&gt;:    call   0x1080 &lt;printf@plt&gt;
+</span></span><span class="line"><span class="cl">   0x00000000000011c1 &lt;+56&gt;:    mov    rax,QWORD PTR [rbp-0x10]
+</span></span><span class="line"><span class="cl">   0x00000000000011c5 &lt;+60&gt;:    add    rax,0x8
+</span></span><span class="line"><span class="cl">   0x00000000000011c9 &lt;+64&gt;:    mov    rax,QWORD PTR [rax]
+</span></span><span class="line"><span class="cl">   0x00000000000011cc &lt;+67&gt;:    lea    rsi,[rip+0xe47]        # 0x201a
+</span></span><span class="line"><span class="cl">   0x00000000000011d3 &lt;+74&gt;:    mov    rdi,rax
+</span></span><span class="line"><span class="cl">   0x00000000000011d6 &lt;+77&gt;:    call   0x1090 &lt;strcmp@plt&gt;
+</span></span><span class="line"><span class="cl">   0x00000000000011db &lt;+82&gt;:    test   eax,eax
+</span></span><span class="line"><span class="cl">   0x00000000000011dd &lt;+84&gt;:    jne    0x11ed &lt;main+100&gt;
+</span></span><span class="line"><span class="cl">   0x00000000000011df &lt;+86&gt;:    lea    rdi,[rip+0xe44]        # 0x202a
+</span></span><span class="line"><span class="cl">   0x00000000000011e6 &lt;+93&gt;:    call   0x1070 &lt;puts@plt&gt;
+</span></span><span class="line"><span class="cl">   0x00000000000011eb &lt;+98&gt;:    jmp    0x1207 &lt;main+126&gt;
+</span></span><span class="line"><span class="cl">   0x00000000000011ed &lt;+100&gt;:   lea    rdi,[rip+0xe46]        # 0x203a
+</span></span><span class="line"><span class="cl">   0x00000000000011f4 &lt;+107&gt;:   call   0x1070 &lt;puts@plt&gt;
+</span></span><span class="line"><span class="cl">   0x00000000000011f9 &lt;+112&gt;:   jmp    0x1207 &lt;main+126&gt;
+</span></span><span class="line"><span class="cl">   0x00000000000011fb &lt;+114&gt;:   lea    rdi,[rip+0xe3f]        # 0x2041
+</span></span><span class="line"><span class="cl">   0x0000000000001202 &lt;+121&gt;:   call   0x1070 &lt;puts@plt&gt;
+</span></span><span class="line"><span class="cl">   0x0000000000001207 &lt;+126&gt;:   mov    eax,0x0
+</span></span><span class="line"><span class="cl">   0x000000000000120c &lt;+131&gt;:   leave
+</span></span><span class="line"><span class="cl">   0x000000000000120d &lt;+132&gt;:   ret
+</span></span><span class="line"><span class="cl">End of assembler dump.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以先畫 control flow graph，分析每塊的運作情形，或找軟體生，比如在 MacOS 可以用 Hopper</p>
+<ul>
+<li>指令
+<ul>
+<li>
+<p><code>break *main</code></p>
+<ul>
+<li>在 main 的第一行設置 breakpoint</li>
+<li>也可以直接把 main 換成某個 address，比如<code>break *0x00000000000011fb</code></li>
+</ul>
+</li>
+<li>
+<p><code>run  &lt;參數，比如這邊就是 key&gt;</code></p>
+<ul>
+<li>跑程式</li>
+</ul>
+</li>
+<li>
+<p><code>info registers</code></p>
+<ul>
+<li>執行的過程中，可以隨時查看 register 情形，</li>
+<li>e registers are the low 32 bits of the r registers</li>
+</ul>
+</li>
+<li>
+<p>程式執行到下一步</p>
+<ul>
+<li>可用 <code>si</code>、<code>ni</code>、<code>continue</code>
+<ul>
+<li>si 和 ni 會跑到下一行程式，差別是 si 會進去 function calls
+<ul>
+<li>接著可以一直按 enter，不用一直重打</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><code>x/s &lt;address&gt;</code></p>
+<ul>
+<li>印出 ASCII 字串，可以用在 .rodata section</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>最後會發現關鍵在</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">   0x00000000000011d6 &lt;+77&gt;:    call   0x1090 &lt;strcmp@plt&gt;
+</span></span><span class="line"><span class="cl">   0x00000000000011db &lt;+82&gt;:    test   eax,eax
+</span></span><span class="line"><span class="cl">   0x00000000000011dd &lt;+84&gt;:    jne    0x11ed &lt;main+100&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我們執行 &lt;+82&gt; 前，把 eax 改為 0 即可，test 用來確認一個值是否為 0，目的是為了後面的 jne，我們的目標是讓 zero flag 設成 1，而 eax 是 rax 的 first 32 bits。</p>
+<p>本來是 <code>rax 0x23 35</code>，下完<code>set $eax=0</code>，變成<code>rax 0x0 0</code></p>
+<p>此時我們接著 <code>ni</code> 下去，得到 &ldquo;Access Granted!&rdquo;</p>
+<h1 id="tools">Tools</h1>
+<ul>
+<li>
+<p>hexdump</p>
+<ul>
+<li>可以把二進制文件印出來
+<ul>
+<li>-C 可以額外顯示 ASCII</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>strings</p>
+<ul>
+<li>把高於某種長度的 printable character sequence 印出來</li>
+</ul>
+</li>
+<li>
+<p>objdump</p>
+<ul>
+<li>-d 可以用來 disassemble</li>
+<li>-x 可以查看 header
+<ul>
+<li>section
+<ul>
+<li>.text
+<ul>
+<li>存放程式碼的地方</li>
+<li><code>15 .text 000001e5 00000000000010a0 00000000000010a0 000010a0 2**4</code>
+<ul>
+<li>長度 0x1e5 bytes</li>
+<li>address 在 0x10a0</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>.rodata
+<ul>
+<li>read only data</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>strace</p>
+<ul>
+<li>trace system calls and signal</li>
+</ul>
+</li>
+<li>
+<p>radare2</p>
+<ul>
+<li>
+<p>UNIX-like reverse engineering framework and command-line toolset</p>
+</li>
+<li>
+<p><code>r2 ./test</code></p>
+</li>
+<li>
+<p><code>aaa</code></p>
+<ul>
+<li>深度分析</li>
+</ul>
+</li>
+<li>
+<p><code>afl</code></p>
+<ul>
+<li>列出所有 function</li>
+</ul>
+</li>
+<li>
+<p><code>?</code></p>
+<ul>
+<li>&ndash;help</li>
+<li>a?
+<ul>
+<li>a 的詳細說明</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><code>s main</code></p>
+<ul>
+<li>seek address</li>
+</ul>
+</li>
+<li>
+<p><code>pdf</code></p>
+<ul>
+<li>印出當前函式的 disassembly</li>
+</ul>
+</li>
+<li>
+<p><code>VV</code></p>
+<ul>
+<li>Visual mode(graph)</li>
+<li><code>p</code>
+<ul>
+<li>切換顯示方法</li>
+</ul>
+</li>
+<li><code>?</code>
+<ul>
+<li>&ndash;help</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><code>r2 -d ./test</code></p>
+<ul>
+<li>像 gdb 一樣 debug</li>
+<li><code>db &lt;address&gt;</code>
+<ul>
+<li>設置 breakpoint</li>
+</ul>
+</li>
+<li><code>:dc</code>
+<ul>
+<li>按 &ldquo;:&rdquo; 跑 command mode，這樣就可以在 VV 看</li>
+<li>dc 會 run 程式碼</li>
+</ul>
+</li>
+<li><code>s</code>
+<ul>
+<li>和 si 一樣，可以用 <code>S</code>，那就是 ni</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/ctf/">ctf</a>
+        
+            <a href="/Blog/tags/binary-exploitation/">binary-exploitation</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2022 - 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
