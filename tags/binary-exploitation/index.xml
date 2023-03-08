@@ -76,6 +76,11 @@
 &lt;li&gt;SP, ESP, RSP&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;Base Pointer
+&lt;ul&gt;
+&lt;li&gt;BP, EBP, RBP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -381,7 +386,7 @@
 &lt;li&gt;Visual mode(graph)&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;p&lt;/code&gt;
 &lt;ul&gt;
-&lt;li&gt;切換顯示方法&lt;/li&gt;
+&lt;li&gt;切換顯示方法(包含顯示 address)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;code&gt;?&lt;/code&gt;
@@ -389,6 +394,12 @@
 &lt;li&gt;&amp;ndash;help&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;V!&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可以看到大量資訊的方法&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
@@ -411,11 +422,74 @@
 &lt;li&gt;和 si 一樣，可以用 &lt;code&gt;S&lt;/code&gt;，那就是 ni&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dr&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;register info&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dr rip=0x00123123123&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;可以這樣設置位址&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;ood [args]&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;reopen in debug mode (with args)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;afvn &amp;lt;var1&amp;gt; &amp;lt;var2&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;rename variable&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;uncrackable&#34;&gt;Uncrackable?&lt;/h1&gt;
+&lt;p&gt;密碼直接放在 binary，連 vim 都可以輕鬆看到，接下來會挑戰更難一點的情形，先從不把 key 放在裡面開始，雖然上次直接改 register 的做法根本不用管 key 是什麼&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;不顯示 string 密碼&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;這次的做法改成，不再是 check string 一不一樣，而是先算 license key 的所有 char 轉成 int 後的總合，並且刪除掉 license key，之後對輸入的密碼算總和看一不一樣&lt;/li&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;0x00001212      72c2           jb 0x11d6
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;0x00001214      817de8940300.  cmp dword [var_18h], 0x394
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;0x0000121b      750e           jne 0x122b
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;程式碼的這塊是看總合的，這時我們在 jne 設 breakpoint 後，可以直接把 rip 改到改成下一行的 address，直接繞過
+&lt;ul&gt;
+&lt;li&gt;關鍵在於只要可以找到是哪一行 cmp，就可以繞過它&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;parser differential&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;讓 linux 可執行，但讓 debugger 不能跑&lt;/li&gt;
+&lt;li&gt;每個 Parser 的演算法略有不同&lt;/li&gt;
+&lt;li&gt;fuzzing
+&lt;ul&gt;
+&lt;li&gt;隨機改一個 bytes，有可能執行結果和原本一樣，但是 parser 有問題&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
 </description>
         </item>
         

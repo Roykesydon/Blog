@@ -3,7 +3,7 @@
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Assembly language Control flow
 jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status flag 而 jump je 0x33 代表「如果 zero flag 是 1 就跳到 0x33」 call 是 unconditional GOTO，但會把下一個 address 放到 stack 那 RET instruction 可以晚點把它取出，並回到那邊 status flag
-在 register 上的多數 operation，比如加減法，會對 status flags 產生影響 只有很少的 status flags，而且他們通常存在在一個 special register 上 範例 zero flag 上個運算的結果是不是 0，在一些條件判斷很常用該 flag Register 從組合語言的角度來看，是一些有固定 size 的全域變數 special register Program Counter 記錄下個要執行的 instruction 別名 PC Intel x86 叫 Instruction Pointer 根據 16/32/64 bits，稱為 IP/EIP/RIP Stack pointer SP, ESP, RSP 繞過字串比對 該程式吃一個參數，比對是不是密碼'>
+在 register 上的多數 operation，比如加減法，會對 status flags 產生影響 只有很少的 status flags，而且他們通常存在在一個 special register 上 範例 zero flag 上個運算的結果是不是 0，在一些條件判斷很常用該 flag Register 從組合語言的角度來看，是一些有固定 size 的全域變數 special register Program Counter 記錄下個要執行的 instruction 別名 PC Intel x86 叫 Instruction Pointer 根據 16/32/64 bits，稱為 IP/EIP/RIP Stack pointer SP, ESP, RSP Base Pointer BP, EBP, RBP 繞過字串比對 該程式吃一個參數，比對是不是密碼'>
 <title>Crack simple ELF</title>
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/crack-simple-elf/'>
@@ -11,14 +11,14 @@ jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status fl
 <link rel="stylesheet" href="/Blog/scss/style.min.8ba0009e8cca52c2ec8ac52dce3ac8d883cab10ebd0e2447c7fc3d51de630b5f.css"><meta property='og:title' content='Crack simple ELF'>
 <meta property='og:description' content='Assembly language Control flow
 jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status flag 而 jump je 0x33 代表「如果 zero flag 是 1 就跳到 0x33」 call 是 unconditional GOTO，但會把下一個 address 放到 stack 那 RET instruction 可以晚點把它取出，並回到那邊 status flag
-在 register 上的多數 operation，比如加減法，會對 status flags 產生影響 只有很少的 status flags，而且他們通常存在在一個 special register 上 範例 zero flag 上個運算的結果是不是 0，在一些條件判斷很常用該 flag Register 從組合語言的角度來看，是一些有固定 size 的全域變數 special register Program Counter 記錄下個要執行的 instruction 別名 PC Intel x86 叫 Instruction Pointer 根據 16/32/64 bits，稱為 IP/EIP/RIP Stack pointer SP, ESP, RSP 繞過字串比對 該程式吃一個參數，比對是不是密碼'>
+在 register 上的多數 operation，比如加減法，會對 status flags 產生影響 只有很少的 status flags，而且他們通常存在在一個 special register 上 範例 zero flag 上個運算的結果是不是 0，在一些條件判斷很常用該 flag Register 從組合語言的角度來看，是一些有固定 size 的全域變數 special register Program Counter 記錄下個要執行的 instruction 別名 PC Intel x86 叫 Instruction Pointer 根據 16/32/64 bits，稱為 IP/EIP/RIP Stack pointer SP, ESP, RSP Base Pointer BP, EBP, RBP 繞過字串比對 該程式吃一個參數，比對是不是密碼'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/crack-simple-elf/'>
 <meta property='og:site_name' content='Roykesydon'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='ctf' /><meta property='article:tag' content='binary-exploitation' /><meta property='article:published_time' content='2023-03-07T14:26:17&#43;08:00'/><meta property='article:modified_time' content='2023-03-07T14:26:17&#43;08:00'/>
 <meta name="twitter:title" content="Crack simple ELF">
 <meta name="twitter:description" content="Assembly language Control flow
 jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status flag 而 jump je 0x33 代表「如果 zero flag 是 1 就跳到 0x33」 call 是 unconditional GOTO，但會把下一個 address 放到 stack 那 RET instruction 可以晚點把它取出，並回到那邊 status flag
-在 register 上的多數 operation，比如加減法，會對 status flags 產生影響 只有很少的 status flags，而且他們通常存在在一個 special register 上 範例 zero flag 上個運算的結果是不是 0，在一些條件判斷很常用該 flag Register 從組合語言的角度來看，是一些有固定 size 的全域變數 special register Program Counter 記錄下個要執行的 instruction 別名 PC Intel x86 叫 Instruction Pointer 根據 16/32/64 bits，稱為 IP/EIP/RIP Stack pointer SP, ESP, RSP 繞過字串比對 該程式吃一個參數，比對是不是密碼">
+在 register 上的多數 operation，比如加減法，會對 status flags 產生影響 只有很少的 status flags，而且他們通常存在在一個 special register 上 範例 zero flag 上個運算的結果是不是 0，在一些條件判斷很常用該 flag Register 從組合語言的角度來看，是一些有固定 size 的全域變數 special register Program Counter 記錄下個要執行的 instruction 別名 PC Intel x86 叫 Instruction Pointer 根據 16/32/64 bits，稱為 IP/EIP/RIP Stack pointer SP, ESP, RSP Base Pointer BP, EBP, RBP 繞過字串比對 該程式吃一個參數，比對是不是密碼">
     </head>
     <body class="
     article-page
@@ -263,7 +263,7 @@ jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status fl
 
 
                 <time class="article-time--reading">
-                    3 minute read
+                    4 minute read
                 </time>
             </div>
         
@@ -340,6 +340,11 @@ jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status fl
 <li>Stack pointer
 <ul>
 <li>SP, ESP, RSP</li>
+</ul>
+</li>
+<li>Base Pointer
+<ul>
+<li>BP, EBP, RBP</li>
 </ul>
 </li>
 </ul>
@@ -647,7 +652,7 @@ jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status fl
 <li>Visual mode(graph)</li>
 <li><code>p</code>
 <ul>
-<li>切換顯示方法</li>
+<li>切換顯示方法(包含顯示 address)</li>
 </ul>
 </li>
 <li><code>?</code>
@@ -655,6 +660,12 @@ jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status fl
 <li>&ndash;help</li>
 </ul>
 </li>
+</ul>
+</li>
+<li>
+<p><code>V!</code></p>
+<ul>
+<li>可以看到大量資訊的方法</li>
 </ul>
 </li>
 <li>
@@ -677,11 +688,74 @@ jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status fl
 <li>和 si 一樣，可以用 <code>S</code>，那就是 ni</li>
 </ul>
 </li>
+<li><code>dr</code>
+<ul>
+<li>register info</li>
+<li><code>dr rip=0x00123123123</code>
+<ul>
+<li>可以這樣設置位址</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
+</li>
+<li>
+<p><code>ood [args]</code></p>
+<ul>
+<li>reopen in debug mode (with args)</li>
+</ul>
+</li>
+<li>
+<p><code>afvn &lt;var1&gt; &lt;var2&gt;</code></p>
+<ul>
+<li>rename variable</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="uncrackable">Uncrackable?</h1>
+<p>密碼直接放在 binary，連 vim 都可以輕鬆看到，接下來會挑戰更難一點的情形，先從不把 key 放在裡面開始，雖然上次直接改 register 的做法根本不用管 key 是什麼</p>
+<ol>
+<li>
+<p>不顯示 string 密碼</p>
+<ul>
+<li>這次的做法改成，不再是 check string 一不一樣，而是先算 license key 的所有 char 轉成 int 後的總合，並且刪除掉 license key，之後對輸入的密碼算總和看一不一樣</li>
+<li>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">0x00001212      72c2           jb 0x11d6
+</span></span><span class="line"><span class="cl">0x00001214      817de8940300.  cmp dword [var_18h], 0x394
+</span></span><span class="line"><span class="cl">0x0000121b      750e           jne 0x122b
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>程式碼的這塊是看總合的，這時我們在 jne 設 breakpoint 後，可以直接把 rip 改到改成下一行的 address，直接繞過
+<ul>
+<li>關鍵在於只要可以找到是哪一行 cmp，就可以繞過它</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>parser differential</p>
+<ul>
+<li>讓 linux 可執行，但讓 debugger 不能跑</li>
+<li>每個 Parser 的演算法略有不同</li>
+<li>fuzzing
+<ul>
+<li>隨機改一個 bytes，有可能執行結果和原本一樣，但是 parser 有問題</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
 
 </section>
 

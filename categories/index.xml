@@ -6,13 +6,21 @@
         <description>Recent content in Categories on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 07 Mar 2023 14:26:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 08 Mar 2023 14:26:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Software Engineering</title>
+        <link>https://roykesydon.github.io/Blog/categories/software-engineering/</link>
+        <pubDate>Wed, 08 Mar 2023 14:26:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/categories/software-engineering/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/software-engineering.png" alt="Featured image of post Software Engineering" /&gt;</description>
+        </item>
+        <item>
         <title>CTF</title>
         <link>https://roykesydon.github.io/Blog/categories/ctf/</link>
         <pubDate>Tue, 07 Mar 2023 14:26:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/categories/ctf/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/ctf.jpg" alt="Featured image of post CTF" /&gt;</description>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/ctf.png" alt="Featured image of post CTF" /&gt;</description>
         </item>
         <item>
         <title>Deep Learning</title>
@@ -28,7 +36,7 @@
         <pubDate>Tue, 21 Feb 2023 15:42:47 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/categories/math/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/math.jpg" alt="Featured image of post Math" /&gt;</description>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/math.png" alt="Featured image of post Math" /&gt;</description>
         </item>
         <item>
         <title>Linux</title>
