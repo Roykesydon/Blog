@@ -6,7 +6,116 @@
         <description>Recent content on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 07 Mar 2023 14:26:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 08 Mar 2023 14:26:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>軟體設計原則</title>
+        <link>https://roykesydon.github.io/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88%E5%8E%9F%E5%89%87/</link>
+        <pubDate>Wed, 08 Mar 2023 14:26:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88%E5%8E%9F%E5%89%87/</guid>
+        <description>&lt;h1 id=&#34;uml-類別圖&#34;&gt;UML 類別圖&lt;/h1&gt;
+&lt;h2 id=&#34;relationship&#34;&gt;Relationship&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Dependency
+&lt;ul&gt;
+&lt;li&gt;&amp;ldquo;uses-a&amp;rdquo;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Association
+&lt;ul&gt;
+&lt;li&gt;&amp;ldquo;knows-a&amp;rdquo;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Composition
+&lt;ul&gt;
+&lt;li&gt;&amp;ldquo;has-a&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;child 的存在依賴於 parent，若刪除 parent，child 也會隨之刪除&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Aggregation
+&lt;ul&gt;
+&lt;li&gt;&amp;ldquo;has-a&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;child 的存在獨立於 parent，若刪除 parent，child 不會隨之刪除&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Inheritance
+&lt;ul&gt;
+&lt;li&gt;&amp;ldquo;is-a&amp;rdquo;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Implementation
+&lt;ul&gt;
+&lt;li&gt;&amp;ldquo;can-do&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;實現 interface&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;other-features&#34;&gt;other features&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Navigation
+&lt;ul&gt;
+&lt;li&gt;當兩個 class 都可以看到對方，就用沒箭頭的關聯線，否則有箭頭&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Role Name
+&lt;ul&gt;
+&lt;li&gt;類別中的 Attribute&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Multiplicity
+&lt;ul&gt;
+&lt;li&gt;關聯端點上可以寫數量，代表物件個數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Self-Association
+&lt;ul&gt;
+&lt;li&gt;同個類別的物件彼此有關係&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;軟體設計原則&#34;&gt;軟體設計原則&lt;/h1&gt;
+&lt;h2 id=&#34;encapsulate-what-varies&#34;&gt;Encapsulate What Varies&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;把經常改變的程式碼封裝起來，使日後修改時不會影響其他區塊的程式碼&lt;/li&gt;
+&lt;li&gt;實際使用的情境，可以把常改變的東西放在 interface 後，使日後改變實作時不影響呼叫該 interface 的程式碼&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;favor-composition-over-inheritance&#34;&gt;Favor Composition over Inheritance&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Composition(組合)在很多情境可以取代掉 Inheritance(繼承)，可藉由 Polymorphism(多型)來達成&lt;/li&gt;
+&lt;li&gt;只有當 is-a 的情境出現，才用繼承比較好&lt;/li&gt;
+&lt;li&gt;Composition 使用起來更有彈性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;solid-設計原則&#34;&gt;SOLID 設計原則&lt;/h1&gt;
+&lt;h2 id=&#34;single-responsibility-principle-srp&#34;&gt;Single Responsibility Principle, SRP&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;單一職責原則&lt;/li&gt;
+&lt;li&gt;A class should have only one reason to change.&lt;/li&gt;
+&lt;li&gt;可以把一個複雜的 module 拆成多個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;open-close-principle-ocp&#34;&gt;Open-Close Principle, OCP&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;開放封閉原則&lt;/li&gt;
+&lt;li&gt;You should be able to extend the behavior of a system without having to modify that system.&lt;/li&gt;
+&lt;li&gt;要可以擴充，同時不修改到原系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;liskovsubstitution-principle-lsp&#34;&gt;LiskovSubstitution Principle, LSP&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;里氏替換原則&lt;/li&gt;
+&lt;li&gt;父類別有的功能，子類別必須遵從，父類別的部分要可以直接替換成子類別&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;interface-segregation-principle-isp&#34;&gt;Interface Segregation Principle, ISP&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;介面隔離原則&lt;/li&gt;
+&lt;li&gt;No client should be forced to depend on methods it does not use&lt;/li&gt;
+&lt;li&gt;以 interface 來說，不該讓 module 實現它不需要的功能，可以把 interface 拆小&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;dependency-inversion-principle-dip&#34;&gt;Dependency Inversion Principle, DIP&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;反向依賴原則&lt;/li&gt;
+&lt;li&gt;高階模組不應該依賴低階模組，兩者都應依賴抽象層&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>Crack simple ELF</title>
         <link>https://roykesydon.github.io/Blog/p/crack-simple-elf/</link>
         <pubDate>Tue, 07 Mar 2023 14:26:17 +0800</pubDate>
@@ -74,6 +183,11 @@
 &lt;li&gt;Stack pointer
 &lt;ul&gt;
 &lt;li&gt;SP, ESP, RSP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Base Pointer
+&lt;ul&gt;
+&lt;li&gt;BP, EBP, RBP&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -381,7 +495,7 @@
 &lt;li&gt;Visual mode(graph)&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;p&lt;/code&gt;
 &lt;ul&gt;
-&lt;li&gt;切換顯示方法&lt;/li&gt;
+&lt;li&gt;切換顯示方法(包含顯示 address)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;code&gt;?&lt;/code&gt;
@@ -389,6 +503,12 @@
 &lt;li&gt;&amp;ndash;help&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;V!&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可以看到大量資訊的方法&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
@@ -411,11 +531,74 @@
 &lt;li&gt;和 si 一樣，可以用 &lt;code&gt;S&lt;/code&gt;，那就是 ni&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dr&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;register info&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dr rip=0x00123123123&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;可以這樣設置位址&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;ood [args]&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;reopen in debug mode (with args)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;afvn &amp;lt;var1&amp;gt; &amp;lt;var2&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;rename variable&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;uncrackable&#34;&gt;Uncrackable?&lt;/h1&gt;
+&lt;p&gt;密碼直接放在 binary，連 vim 都可以輕鬆看到，接下來會挑戰更難一點的情形，先從不把 key 放在裡面開始，雖然上次直接改 register 的做法根本不用管 key 是什麼&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;不顯示 string 密碼&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;這次的做法改成，不再是 check string 一不一樣，而是先算 license key 的所有 char 轉成 int 後的總合，並且刪除掉 license key，之後對輸入的密碼算總和看一不一樣&lt;/li&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;0x00001212      72c2           jb 0x11d6
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;0x00001214      817de8940300.  cmp dword [var_18h], 0x394
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;0x0000121b      750e           jne 0x122b
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;程式碼的這塊是看總合的，這時我們在 jne 設 breakpoint 後，可以直接把 rip 改到改成下一行的 address，直接繞過
+&lt;ul&gt;
+&lt;li&gt;關鍵在於只要可以找到是哪一行 cmp，就可以繞過它&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;parser differential&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;讓 linux 可執行，但讓 debugger 不能跑&lt;/li&gt;
+&lt;li&gt;每個 Parser 的演算法略有不同&lt;/li&gt;
+&lt;li&gt;fuzzing
+&lt;ul&gt;
+&lt;li&gt;隨機改一個 bytes，有可能執行結果和原本一樣，但是 parser 有問題&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
 </description>
         </item>
         <item>
