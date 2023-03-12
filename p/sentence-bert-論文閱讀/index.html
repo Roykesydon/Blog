@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: Masked Autoencoders Are Scalable Vision Learners
-Abstract 這篇論文顯示出 MAE 是 CV 中的 scalable self-supervised learners。
-MAE 的方法很簡單
-隨機蓋住輸入影像的一些 patch 重建 missing pixels 具備兩個核心設計
-非對稱的 encoder-decoder 架構，encoder 只作用於可見的 patch 子集合(沒有 mask tokens)，lightweight decoder 則根據 latent representation 和 make tokens 來重建圖片。 當遮住高比例(比如 75%)的影像時，會得到一個 nontrivial 和 meaningful 的 self-supervisory task 結合這兩點設計，可以有效地訓練大模型。 以 ViT-Huge 用 ImageNet-1K 訓練(訓練集一百多萬張照片)可達到 87.8% 的準確度。
-Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督預訓練處理了需要大量標註資料的問題。 masked autoencoders 是一種更 general 的 denoising autoencoders 的形式。 BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者思考是什麼讓 masked autoencoding 在 CV 和 NLP 產生不同。 有以下觀點'>
-<title>MAE 論文</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks
+Abstract BERT 和 RoBERTa 在 semantic textual similarity (STS) 上太花時間，因為他需要將兩個句子都輸入網路，並且兩兩比對。
+Sentence-BERT(SBERT) 對預訓練的 BERT 作了一些修改，透過 siamese 和 triplet network 的結構來生出有意義的 embeddings，使其最後可以透過 cosine-similarity 比較相似度。
+Introduction SBERT 使 BERT 可以用於某些迄今為止不適用於 BERT 的任務，比如 large-scale semantic similarity comparison、clustering 還有 information retrieval via semantic search。
+以往的相關研究是把單個句子輸入 BERT，最後 average BERT output layer，或是使用第一個 output，但這樣會產生糟糕的 sentence embeddings。
+SentEval 是一個 evaluation toolkit for sentence embeddings
+Related Work BERT 透過輸入兩個句子，以 [SEP] 隔開，可以在 STS 取得 SOTA。'>
+<title>Sentence-BERT 論文閱讀</title>
 
-<link rel='canonical' href='https://roykesydon.github.io/Blog/p/mae-%E8%AB%96%E6%96%87/'>
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/sentence-bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.8ba0009e8cca52c2ec8ac52dce3ac8d883cab10ebd0e2447c7fc3d51de630b5f.css"><meta property='og:title' content='MAE 論文'>
-<meta property='og:description' content='paper: Masked Autoencoders Are Scalable Vision Learners
-Abstract 這篇論文顯示出 MAE 是 CV 中的 scalable self-supervised learners。
-MAE 的方法很簡單
-隨機蓋住輸入影像的一些 patch 重建 missing pixels 具備兩個核心設計
-非對稱的 encoder-decoder 架構，encoder 只作用於可見的 patch 子集合(沒有 mask tokens)，lightweight decoder 則根據 latent representation 和 make tokens 來重建圖片。 當遮住高比例(比如 75%)的影像時，會得到一個 nontrivial 和 meaningful 的 self-supervisory task 結合這兩點設計，可以有效地訓練大模型。 以 ViT-Huge 用 ImageNet-1K 訓練(訓練集一百多萬張照片)可達到 87.8% 的準確度。
-Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督預訓練處理了需要大量標註資料的問題。 masked autoencoders 是一種更 general 的 denoising autoencoders 的形式。 BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者思考是什麼讓 masked autoencoding 在 CV 和 NLP 產生不同。 有以下觀點'>
-<meta property='og:url' content='https://roykesydon.github.io/Blog/p/mae-%E8%AB%96%E6%96%87/'>
+<link rel="stylesheet" href="/Blog/scss/style.min.8ba0009e8cca52c2ec8ac52dce3ac8d883cab10ebd0e2447c7fc3d51de630b5f.css"><meta property='og:title' content='Sentence-BERT 論文閱讀'>
+<meta property='og:description' content='paper: Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks
+Abstract BERT 和 RoBERTa 在 semantic textual similarity (STS) 上太花時間，因為他需要將兩個句子都輸入網路，並且兩兩比對。
+Sentence-BERT(SBERT) 對預訓練的 BERT 作了一些修改，透過 siamese 和 triplet network 的結構來生出有意義的 embeddings，使其最後可以透過 cosine-similarity 比較相似度。
+Introduction SBERT 使 BERT 可以用於某些迄今為止不適用於 BERT 的任務，比如 large-scale semantic similarity comparison、clustering 還有 information retrieval via semantic search。
+以往的相關研究是把單個句子輸入 BERT，最後 average BERT output layer，或是使用第一個 output，但這樣會產生糟糕的 sentence embeddings。
+SentEval 是一個 evaluation toolkit for sentence embeddings
+Related Work BERT 透過輸入兩個句子，以 [SEP] 隔開，可以在 STS 取得 SOTA。'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/sentence-bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 <meta property='og:site_name' content='Roykesydon'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='computer-vision' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:published_time' content='2023-02-15T16:08:46&#43;08:00'/><meta property='article:modified_time' content='2023-02-15T16:08:46&#43;08:00'/>
-<meta name="twitter:title" content="MAE 論文">
-<meta name="twitter:description" content="paper: Masked Autoencoders Are Scalable Vision Learners
-Abstract 這篇論文顯示出 MAE 是 CV 中的 scalable self-supervised learners。
-MAE 的方法很簡單
-隨機蓋住輸入影像的一些 patch 重建 missing pixels 具備兩個核心設計
-非對稱的 encoder-decoder 架構，encoder 只作用於可見的 patch 子集合(沒有 mask tokens)，lightweight decoder 則根據 latent representation 和 make tokens 來重建圖片。 當遮住高比例(比如 75%)的影像時，會得到一個 nontrivial 和 meaningful 的 self-supervisory task 結合這兩點設計，可以有效地訓練大模型。 以 ViT-Huge 用 ImageNet-1K 訓練(訓練集一百多萬張照片)可達到 87.8% 的準確度。
-Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督預訓練處理了需要大量標註資料的問題。 masked autoencoders 是一種更 general 的 denoising autoencoders 的形式。 BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者思考是什麼讓 masked autoencoding 在 CV 和 NLP 產生不同。 有以下觀點">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:published_time' content='2023-03-12T10:08:46&#43;08:00'/><meta property='article:modified_time' content='2023-03-12T10:08:46&#43;08:00'/>
+<meta name="twitter:title" content="Sentence-BERT 論文閱讀">
+<meta name="twitter:description" content="paper: Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks
+Abstract BERT 和 RoBERTa 在 semantic textual similarity (STS) 上太花時間，因為他需要將兩個句子都輸入網路，並且兩兩比對。
+Sentence-BERT(SBERT) 對預訓練的 BERT 作了一些修改，透過 siamese 和 triplet network 的結構來生出有意義的 embeddings，使其最後可以透過 cosine-similarity 比較相似度。
+Introduction SBERT 使 BERT 可以用於某些迄今為止不適用於 BERT 的任務，比如 large-scale semantic similarity comparison、clustering 還有 information retrieval via semantic search。
+以往的相關研究是把單個句子輸入 BERT，最後 average BERT output layer，或是使用第一個 output，但這樣會產生糟糕的 sentence embeddings。
+SentEval 是一個 evaluation toolkit for sentence embeddings
+Related Work BERT 透過輸入兩個句子，以 [SEP] 隔開，可以在 STS 取得 SOTA。">
     </head>
     <body class="
     article-page
@@ -216,7 +219,47 @@ Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督�
     </ol>
 </aside>
 
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#related-work">Related Work</a></li>
+    <li><a href="#model">Model</a>
+      <ol>
+        <li><a href="#training-details">Training Details</a></li>
+      </ol>
+    </li>
+    <li><a href="#evaluation">Evaluation</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
             <main class="main full-width">
     <article class="main-article">
@@ -235,7 +278,7 @@ Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督�
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">MAE 論文</a>
+            <a href="/Blog/p/sentence-bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">Sentence-BERT 論文閱讀</a>
         </h2>
     
         
@@ -257,7 +300,7 @@ Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督�
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Feb 15, 2023</time>
+                <time class="article-time--published">Mar 12, 2023</time>
             </div>
         
 
@@ -272,7 +315,7 @@ Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督�
 
 
                 <time class="article-time--reading">
-                    2 minute read
+                    1 minute read
                 </time>
             </div>
         
@@ -287,24 +330,25 @@ Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督�
     <section class="article-content">
     
     
-    <p>paper: <a class="link" href="https://arxiv.org/abs/2111.06377"  target="_blank" rel="noopener"
-    >Masked Autoencoders Are Scalable Vision Learners</a></p>
-<h1 id="abstract">Abstract</h1>
-<p>這篇論文顯示出 MAE 是 CV 中的 scalable self-supervised learners。</p>
-<p>MAE 的方法很簡單</p>
-<ul>
-<li>隨機蓋住輸入影像的一些 patch</li>
-<li>重建 missing pixels</li>
-</ul>
-<p>具備兩個核心設計</p>
+    <p>paper: <a class="link" href="https://arxiv.org/abs/1908.10084"  target="_blank" rel="noopener"
+    >Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks</a></p>
+<h2 id="abstract">Abstract</h2>
+<p>BERT 和 RoBERTa 在 semantic textual similarity (STS) 上太花時間，因為他需要將兩個句子都輸入網路，並且兩兩比對。</p>
+<p>Sentence-BERT(SBERT) 對預訓練的 BERT 作了一些修改，透過 siamese 和 triplet network 的結構來生出有意義的 embeddings，使其最後可以透過 cosine-similarity 比較相似度。</p>
+<h2 id="introduction">Introduction</h2>
+<p>SBERT 使 BERT 可以用於某些迄今為止不適用於 BERT 的任務，比如 large-scale semantic similarity comparison、clustering 還有 information retrieval via semantic search。</p>
+<p>以往的相關研究是把單個句子輸入 BERT，最後 average BERT output layer，或是使用第一個 output，但這樣會產生糟糕的 sentence embeddings。</p>
+<p>SentEval 是一個 evaluation toolkit for sentence embeddings</p>
+<h2 id="related-work">Related Work</h2>
+<p>BERT 透過輸入兩個句子，以 [SEP] 隔開，可以在 STS 取得 SOTA。</p>
+<p>但這樣無法計算獨立的 sentence embedding，所以過往的研究人員把單個句子輸入 BERT，最後 average BERT output layer，或是使用第一個 output。</p>
+<h2 id="model">Model</h2>
+<p>SBERT 在 BERT / RoBERTa 的輸出中添加了 pooling，作者嘗試了三種策略，CLS-token 的輸出、所以輸出向量的平均、max-over-time of the output vectors，默認是 MEAN。</p>
+<p>實驗以下結構和目標函數:</p>
 <ol>
-<li>非對稱的 encoder-decoder 架構，encoder 只作用於可見的 patch 子集合(沒有 mask tokens)，lightweight decoder 則根據 latent representation 和 make tokens 來重建圖片。</li>
-<li>當遮住高比例(比如 75%)的影像時，會得到一個 nontrivial 和 meaningful 的 self-supervisory task</li>
-</ol>
-<p>結合這兩點設計，可以有效地訓練大模型。
-以 ViT-Huge 用 ImageNet-1K 訓練(訓練集一百多萬張照片)可達到 87.8% 的準確度。</p>
-<h1 id="introduction">Introduction</h1>
-<p><img src="/Blog/images/deep-learning/MAE/intro.png"
+<li>
+<p>Classification Objective Function</p>
+<p><img src="/Blog/images/deep-learning/SBERT/COF-1.png"
 	
 	
 	
@@ -312,7 +356,7 @@ Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督�
 	
 	
 ></p>
-<p><img src="/Blog/images/deep-learning/MAE/valid-example.png"
+<p><img src="/Blog/images/deep-learning/SBERT/COF-2.png"
 	
 	
 	
@@ -320,111 +364,15 @@ Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督�
 	
 	
 ></p>
-<p><img src="/Blog/images/deep-learning/MAE/valid-example-2.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p>在 CV 中，常需要大量 labeled images。
-NLP 中，自監督預訓練處理了需要大量標註資料的問題。
-masked autoencoders 是一種更 general 的 denoising autoencoders 的形式。
-BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者思考是什麼讓 masked autoencoding 在 CV 和 NLP 產生不同。
-有以下觀點</p>
-<ol>
-<li>直到前陣子，CV 中的 CNN 是主流，但卷積層不好引入 mask tokens 或 positional embedding 這些 indicator。但這些可以透過 ViT 來解決，不應成為問題。</li>
-<li>語言和視覺的 Information density 不同，語言是 highly semantic 和 information-dense，使填字本身不是很簡單的事情，但影像含有大量冗餘的訊息，缺失的部分比較好從相鄰的 patch 重建，比如直接插值，所以作者用一種簡單的策略，隨機 mask 很大一部分的 patch，創造一個具有挑戰性的自監督任務，強迫模型關注 global 的資訊。</li>
-<li>關於 decoder，CV 還原 pixel，pixel 屬於 lower semantic level，NLP 還原 word，word 的 semantic information 較高。作者發現，雖然在 BERT 中，可以用簡單的 decoder 還原(一個 MLP)，但 CV 中 decoder 的設計就很重要。</li>
-</ol>
-<p>基於以上觀點，作者提出 MAE，隨機遮住大量的 patch，並在 pixel space 重建失去的 patch。而且是非對稱 encoder-decoder 架構，encoder 只會看到可見的 patch，但 docoder 除了 latent representation，還會看到 mask tokens。這種設計在非常高的掩蓋率(比如 75%)下不但可以提高準確度，還可以讓 encoder 只處理較少比例(比如 25%)的 patch，將訓練時間減少 3 倍或更多，使 MAE 可以輕鬆擴展成更大的模型。</p>
-<p>在這樣的架構下，用 MAE 的 pre-training，可以訓練非常吃 data 的模型，比如 ViT-Large/-Huge，而只使用 ImageNet-1K。</p>
-<p>用 ImageNet-1K 在 vanilla ViT-Huge 上 fine-tune 可達到 87.8% 準確度，比以往只使用 ImageNet-1K 的結果都高。</p>
-<p>在 obejct detection、instance segmentation、semantic segmentation 上做 transfer learning 都達到不錯的效果，可以打敗用監督式預訓練模型的對手。</p>
-<h1 id="相關工作">相關工作</h1>
-<ul>
-<li>Autoencoding
-<ul>
-<li>MAE 是一種 denoising autoencoding 的形式，但和 DAE 還是差別很大。</li>
-</ul>
-</li>
-<li>Masked image encoding
-<ul>
-<li>iGPT、ViT、BEiT</li>
-</ul>
-</li>
-</ul>
-<h1 id="approach">Approach</h1>
-<ul>
-<li>
-<p>Masking</p>
-<ul>
-<li>和 ViT 一樣，把圖片切成多個 patch，對於 patch 均勻隨機地採樣保留，剩下地遮住</li>
-</ul>
 </li>
 <li>
-<p>MAE encoder</p>
-<ul>
-<li>ViT</li>
-<li>也有 positional embedding</li>
-</ul>
-</li>
-<li>
-<p>MAE decoder</p>
-<ul>
-<li>Transformer block</li>
-<li>輸入
-<ul>
-<li>encoded visible patches</li>
-<li>mask tokens
-<ul>
-<li>shared, learned vector</li>
-</ul>
-</li>
-<li>都會加入 positional embedding</li>
-</ul>
-</li>
-<li>用相較 encoder 輕量的解碼器，所有的 patch 由這個輕量的 decoder 處理，減少預訓練時間</li>
-</ul>
-</li>
-<li>
-<p>Reconstruction target</p>
-<ul>
-<li>decoder 的最後一層是 linear projection，之後再 reshape 成你要的  patch</li>
-<li>loss function
-<ul>
-<li>mean squared error(MSE)</li>
-<li>只算 masked patched 的 MSE，像 BERT</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>Simple implementation</p>
-<ol>
-<li>先取得一系列 token(patch 做 linear projection + positional embedding)</li>
-<li>randomly shuffle，根據比例移除尾端一部份</li>
-<li>encoding 後，尾端接上 mask tokens，並且 unshuffle</li>
-<li>加上 positional embedding 後，給 decoder</li>
-</ol>
-</li>
-</ul>
-<h1 id="imagenet-experiments">ImageNet Experiments</h1>
-<p>在 ImageNet-1K 上做自監督的預訓練，然後做</p>
-<ol>
-<li>end-to-end fine-tuning
-<ul>
-<li>所有參數都可改</li>
-</ul>
-</li>
-<li>linear probing
-<ul>
-<li>只改最後一層線性層</li>
-</ul>
+<p>Regression Objective Function</p>
 </li>
 </ol>
-<p><img src="/Blog/images/deep-learning/MAE/vit-mae.png"
+<ul>
+<li>
+<p>用 mean squared-error loss</p>
+<p><img src="/Blog/images/deep-learning/SBERT/ROF.png"
 	
 	
 	
@@ -432,7 +380,12 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 	
 	
 ></p>
-<p><img src="/Blog/images/deep-learning/MAE/result.png"
+</li>
+</ul>
+<ol start="3">
+<li>
+<p>Triplet Objective Function</p>
+<p><img src="/Blog/images/deep-learning/SBERT/TOF.png"
 	
 	
 	
@@ -440,26 +393,35 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
 	
 	
 ></p>
-<p><img src="/Blog/images/deep-learning/MAE/ratio-result.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p>optimal masking ratio 意外地高，相比 BERT 只有 15%</p>
-<p><img src="/Blog/images/deep-learning/MAE/fine-tune-blocks.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<h1 id="討論和結論">討論和結論</h1>
-<p>在 CV 實用的預訓練做法主流是監督式的，CV 中自監督的做法可能正跟著 NLP 的軌跡走。</p>
-<p>要仔細處理圖像和語言的區別，作者去除圖片中很可能不構成 semantic segment 的部分，而不是移除某個 object。</p>
+</li>
+</ol>
+<h3 id="training-details">Training Details</h3>
+<ul>
+<li>Dataset
+<ul>
+<li>SNLI 結合 Multi-Genre NLI
+<ul>
+<li>SNLI: 570,000 個 句子 pair，有三類，contradiction, eintailment, and neutral</li>
+<li>MultiNLI: 430,000 個句子 pair</li>
+</ul>
+</li>
+<li>3-way softmax Classification Objective Function</li>
+<li>1-epoch</li>
+<li>batch-size: 16</li>
+<li>Adam</li>
+<li>lr: 2e-5</li>
+<li>warm-up: 超過 10% of the training data</li>
+<li>默認 pooling 策略: MEAN</li>
+</ul>
+</li>
+</ul>
+<h2 id="evaluation">Evaluation</h2>
+<p>學習一個複雜的回歸函數分析 STS 常是 SOTA，但是由於他是 pair-wise，遇到 combinatorial explosion，不好拓展。</p>
+<p>本文用 cosine-similarity 比較兩個 embeddings 的相似度，也用 negative Manhatten 和 negative Euclidean distances，但得到差不多的結果。</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>用 BERT 生出的 embeddings 不適合常見的相似度測量方法，比如 cosine-similarity。</p>
+<p>本文提出 SBERT 改進，在 siamese / triplet 網路架構中微調 BERT。</p>
+<p>用 RoBERTa 替換掉 BERT 並沒有什麼顯著改進。</p>
 
 </section>
 
@@ -467,8 +429,6 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
     <footer class="article-footer">
     
     <section class="article-tags">
-        
-            <a href="/Blog/tags/computer-vision/">computer-vision</a>
         
             <a href="/Blog/tags/deep-learning/">deep-learning</a>
         
@@ -524,38 +484,38 @@ BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者�
             
                 
 <article class="">
-    <a href="/Blog/p/vit-%E8%AB%96%E6%96%87/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">ViT 論文</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/sentence-bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Sentence-BERT 論文閱讀</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
     <a href="/Blog/p/patentbert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
 
         <div class="article-details">
             <h2 class="article-title">PatentBERT 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">MAE 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/vit-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">ViT 論文</h2>
         </div>
     </a>
 </article>

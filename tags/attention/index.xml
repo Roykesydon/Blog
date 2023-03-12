@@ -6,7 +6,107 @@
         <description>Recent content in attention on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Thu, 02 Mar 2023 16:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/attention/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 12 Mar 2023 10:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/attention/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Sentence-BERT 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/sentence-bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Sun, 12 Mar 2023 10:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/sentence-bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1908.10084&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;BERT 和 RoBERTa 在 semantic textual similarity (STS) 上太花時間，因為他需要將兩個句子都輸入網路，並且兩兩比對。&lt;/p&gt;
+&lt;p&gt;Sentence-BERT(SBERT) 對預訓練的 BERT 作了一些修改，透過 siamese 和 triplet network 的結構來生出有意義的 embeddings，使其最後可以透過 cosine-similarity 比較相似度。&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;SBERT 使 BERT 可以用於某些迄今為止不適用於 BERT 的任務，比如 large-scale semantic similarity comparison、clustering 還有 information retrieval via semantic search。&lt;/p&gt;
+&lt;p&gt;以往的相關研究是把單個句子輸入 BERT，最後 average BERT output layer，或是使用第一個 output，但這樣會產生糟糕的 sentence embeddings。&lt;/p&gt;
+&lt;p&gt;SentEval 是一個 evaluation toolkit for sentence embeddings&lt;/p&gt;
+&lt;h2 id=&#34;related-work&#34;&gt;Related Work&lt;/h2&gt;
+&lt;p&gt;BERT 透過輸入兩個句子，以 [SEP] 隔開，可以在 STS 取得 SOTA。&lt;/p&gt;
+&lt;p&gt;但這樣無法計算獨立的 sentence embedding，所以過往的研究人員把單個句子輸入 BERT，最後 average BERT output layer，或是使用第一個 output。&lt;/p&gt;
+&lt;h2 id=&#34;model&#34;&gt;Model&lt;/h2&gt;
+&lt;p&gt;SBERT 在 BERT / RoBERTa 的輸出中添加了 pooling，作者嘗試了三種策略，CLS-token 的輸出、所以輸出向量的平均、max-over-time of the output vectors，默認是 MEAN。&lt;/p&gt;
+&lt;p&gt;實驗以下結構和目標函數:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Classification Objective Function&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/SBERT/COF-1.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/SBERT/COF-2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Regression Objective Function&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;用 mean squared-error loss&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/SBERT/ROF.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;
+&lt;p&gt;Triplet Objective Function&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/SBERT/TOF.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;training-details&#34;&gt;Training Details&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Dataset
+&lt;ul&gt;
+&lt;li&gt;SNLI 結合 Multi-Genre NLI
+&lt;ul&gt;
+&lt;li&gt;SNLI: 570,000 個 句子 pair，有三類，contradiction, eintailment, and neutral&lt;/li&gt;
+&lt;li&gt;MultiNLI: 430,000 個句子 pair&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;3-way softmax Classification Objective Function&lt;/li&gt;
+&lt;li&gt;1-epoch&lt;/li&gt;
+&lt;li&gt;batch-size: 16&lt;/li&gt;
+&lt;li&gt;Adam&lt;/li&gt;
+&lt;li&gt;lr: 2e-5&lt;/li&gt;
+&lt;li&gt;warm-up: 超過 10% of the training data&lt;/li&gt;
+&lt;li&gt;默認 pooling 策略: MEAN&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;evaluation&#34;&gt;Evaluation&lt;/h2&gt;
+&lt;p&gt;學習一個複雜的回歸函數分析 STS 常是 SOTA，但是由於他是 pair-wise，遇到 combinatorial explosion，不好拓展。&lt;/p&gt;
+&lt;p&gt;本文用 cosine-similarity 比較兩個 embeddings 的相似度，也用 negative Manhatten 和 negative Euclidean distances，但得到差不多的結果。&lt;/p&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;用 BERT 生出的 embeddings 不適合常見的相似度測量方法，比如 cosine-similarity。&lt;/p&gt;
+&lt;p&gt;本文提出 SBERT 改進，在 siamese / triplet 網路架構中微調 BERT。&lt;/p&gt;
+&lt;p&gt;用 RoBERTa 替換掉 BERT 並沒有什麼顯著改進。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>PatentBERT 論文閱讀</title>
         <link>https://roykesydon.github.io/Blog/p/patentbert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
         <pubDate>Thu, 02 Mar 2023 16:08:46 +0800</pubDate>

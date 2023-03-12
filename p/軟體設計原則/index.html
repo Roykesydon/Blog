@@ -223,24 +223,30 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#relationship">Relationship</a>
+    <li><a href="#uml-類別圖">UML 類別圖</a>
       <ol>
-        <li><a href="#other-features">other features</a></li>
+        <li><a href="#relationship">Relationship</a>
+          <ol>
+            <li><a href="#other-features">other features</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
-  </ol>
-
-  <ol>
-    <li><a href="#encapsulate-what-varies">Encapsulate What Varies</a></li>
-    <li><a href="#favor-composition-over-inheritance">Favor Composition over Inheritance</a></li>
-  </ol>
-
-  <ol>
-    <li><a href="#single-responsibility-principle-srp">Single Responsibility Principle, SRP</a></li>
-    <li><a href="#open-close-principle-ocp">Open-Close Principle, OCP</a></li>
-    <li><a href="#liskovsubstitution-principle-lsp">LiskovSubstitution Principle, LSP</a></li>
-    <li><a href="#interface-segregation-principle-isp">Interface Segregation Principle, ISP</a></li>
-    <li><a href="#dependency-inversion-principle-dip">Dependency Inversion Principle, DIP</a></li>
+    <li><a href="#軟體設計原則">軟體設計原則</a>
+      <ol>
+        <li><a href="#encapsulate-what-varies">Encapsulate What Varies</a></li>
+        <li><a href="#favor-composition-over-inheritance">Favor Composition over Inheritance</a></li>
+      </ol>
+    </li>
+    <li><a href="#solid-設計原則">SOLID 設計原則</a>
+      <ol>
+        <li><a href="#single-responsibility-principle-srp">Single Responsibility Principle, SRP</a></li>
+        <li><a href="#open-close-principle-ocp">Open-Close Principle, OCP</a></li>
+        <li><a href="#liskovsubstitution-principle-lsp">LiskovSubstitution Principle, LSP</a></li>
+        <li><a href="#interface-segregation-principle-isp">Interface Segregation Principle, ISP</a></li>
+        <li><a href="#dependency-inversion-principle-dip">Dependency Inversion Principle, DIP</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -320,8 +326,8 @@
     <section class="article-content">
     
     
-    <h1 id="uml-類別圖">UML 類別圖</h1>
-<h2 id="relationship">Relationship</h2>
+    <h2 id="uml-類別圖">UML 類別圖</h2>
+<h3 id="relationship">Relationship</h3>
 <ul>
 <li>Dependency
 <ul>
@@ -357,7 +363,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="other-features">other features</h3>
+<h4 id="other-features">other features</h4>
 <ul>
 <li>Navigation
 <ul>
@@ -380,43 +386,43 @@
 </ul>
 </li>
 </ul>
-<h1 id="軟體設計原則">軟體設計原則</h1>
-<h2 id="encapsulate-what-varies">Encapsulate What Varies</h2>
+<h2 id="軟體設計原則">軟體設計原則</h2>
+<h3 id="encapsulate-what-varies">Encapsulate What Varies</h3>
 <ul>
 <li>把經常改變的程式碼封裝起來，使日後修改時不會影響其他區塊的程式碼</li>
 <li>實際使用的情境，可以把常改變的東西放在 interface 後，使日後改變實作時不影響呼叫該 interface 的程式碼</li>
 </ul>
-<h2 id="favor-composition-over-inheritance">Favor Composition over Inheritance</h2>
+<h3 id="favor-composition-over-inheritance">Favor Composition over Inheritance</h3>
 <ul>
 <li>Composition(組合)在很多情境可以取代掉 Inheritance(繼承)，可藉由 Polymorphism(多型)來達成</li>
 <li>只有當 is-a 的情境出現，才用繼承比較好</li>
 <li>Composition 使用起來更有彈性</li>
 </ul>
-<h1 id="solid-設計原則">SOLID 設計原則</h1>
-<h2 id="single-responsibility-principle-srp">Single Responsibility Principle, SRP</h2>
+<h2 id="solid-設計原則">SOLID 設計原則</h2>
+<h3 id="single-responsibility-principle-srp">Single Responsibility Principle, SRP</h3>
 <ul>
 <li>單一職責原則</li>
 <li>A class should have only one reason to change.</li>
 <li>可以把一個複雜的 module 拆成多個</li>
 </ul>
-<h2 id="open-close-principle-ocp">Open-Close Principle, OCP</h2>
+<h3 id="open-close-principle-ocp">Open-Close Principle, OCP</h3>
 <ul>
 <li>開放封閉原則</li>
 <li>You should be able to extend the behavior of a system without having to modify that system.</li>
 <li>要可以擴充，同時不修改到原系統</li>
 </ul>
-<h2 id="liskovsubstitution-principle-lsp">LiskovSubstitution Principle, LSP</h2>
+<h3 id="liskovsubstitution-principle-lsp">LiskovSubstitution Principle, LSP</h3>
 <ul>
 <li>里氏替換原則</li>
 <li>父類別有的功能，子類別必須遵從，父類別的部分要可以直接替換成子類別</li>
 </ul>
-<h2 id="interface-segregation-principle-isp">Interface Segregation Principle, ISP</h2>
+<h3 id="interface-segregation-principle-isp">Interface Segregation Principle, ISP</h3>
 <ul>
 <li>介面隔離原則</li>
 <li>No client should be forced to depend on methods it does not use</li>
 <li>以 interface 來說，不該讓 module 實現它不需要的功能，可以把 interface 拆小</li>
 </ul>
-<h2 id="dependency-inversion-principle-dip">Dependency Inversion Principle, DIP</h2>
+<h3 id="dependency-inversion-principle-dip">Dependency Inversion Principle, DIP</h3>
 <ul>
 <li>反向依賴原則</li>
 <li>高階模組不應該依賴低階模組，兩者都應依賴抽象層</li>
