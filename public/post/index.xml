@@ -6,14 +6,114 @@
         <description>Recent content in Posts on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Wed, 08 Mar 2023 14:26:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 12 Mar 2023 10:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Sentence-BERT 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/sentence-bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Sun, 12 Mar 2023 10:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/sentence-bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1908.10084&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;BERT 和 RoBERTa 在 semantic textual similarity (STS) 上太花時間，因為他需要將兩個句子都輸入網路，並且兩兩比對。&lt;/p&gt;
+&lt;p&gt;Sentence-BERT(SBERT) 對預訓練的 BERT 作了一些修改，透過 siamese 和 triplet network 的結構來生出有意義的 embeddings，使其最後可以透過 cosine-similarity 比較相似度。&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;SBERT 使 BERT 可以用於某些迄今為止不適用於 BERT 的任務，比如 large-scale semantic similarity comparison、clustering 還有 information retrieval via semantic search。&lt;/p&gt;
+&lt;p&gt;以往的相關研究是把單個句子輸入 BERT，最後 average BERT output layer，或是使用第一個 output，但這樣會產生糟糕的 sentence embeddings。&lt;/p&gt;
+&lt;p&gt;SentEval 是一個 evaluation toolkit for sentence embeddings&lt;/p&gt;
+&lt;h2 id=&#34;related-work&#34;&gt;Related Work&lt;/h2&gt;
+&lt;p&gt;BERT 透過輸入兩個句子，以 [SEP] 隔開，可以在 STS 取得 SOTA。&lt;/p&gt;
+&lt;p&gt;但這樣無法計算獨立的 sentence embedding，所以過往的研究人員把單個句子輸入 BERT，最後 average BERT output layer，或是使用第一個 output。&lt;/p&gt;
+&lt;h2 id=&#34;model&#34;&gt;Model&lt;/h2&gt;
+&lt;p&gt;SBERT 在 BERT / RoBERTa 的輸出中添加了 pooling，作者嘗試了三種策略，CLS-token 的輸出、所以輸出向量的平均、max-over-time of the output vectors，默認是 MEAN。&lt;/p&gt;
+&lt;p&gt;實驗以下結構和目標函數:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Classification Objective Function&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/SBERT/COF-1.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/SBERT/COF-2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Regression Objective Function&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;用 mean squared-error loss&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/SBERT/ROF.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;
+&lt;p&gt;Triplet Objective Function&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/SBERT/TOF.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;training-details&#34;&gt;Training Details&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Dataset
+&lt;ul&gt;
+&lt;li&gt;SNLI 結合 Multi-Genre NLI
+&lt;ul&gt;
+&lt;li&gt;SNLI: 570,000 個 句子 pair，有三類，contradiction, eintailment, and neutral&lt;/li&gt;
+&lt;li&gt;MultiNLI: 430,000 個句子 pair&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;3-way softmax Classification Objective Function&lt;/li&gt;
+&lt;li&gt;1-epoch&lt;/li&gt;
+&lt;li&gt;batch-size: 16&lt;/li&gt;
+&lt;li&gt;Adam&lt;/li&gt;
+&lt;li&gt;lr: 2e-5&lt;/li&gt;
+&lt;li&gt;warm-up: 超過 10% of the training data&lt;/li&gt;
+&lt;li&gt;默認 pooling 策略: MEAN&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;evaluation&#34;&gt;Evaluation&lt;/h2&gt;
+&lt;p&gt;學習一個複雜的回歸函數分析 STS 常是 SOTA，但是由於他是 pair-wise，遇到 combinatorial explosion，不好拓展。&lt;/p&gt;
+&lt;p&gt;本文用 cosine-similarity 比較兩個 embeddings 的相似度，也用 negative Manhatten 和 negative Euclidean distances，但得到差不多的結果。&lt;/p&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;用 BERT 生出的 embeddings 不適合常見的相似度測量方法，比如 cosine-similarity。&lt;/p&gt;
+&lt;p&gt;本文提出 SBERT 改進，在 siamese / triplet 網路架構中微調 BERT。&lt;/p&gt;
+&lt;p&gt;用 RoBERTa 替換掉 BERT 並沒有什麼顯著改進。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>軟體設計原則</title>
         <link>https://roykesydon.github.io/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88%E5%8E%9F%E5%89%87/</link>
         <pubDate>Wed, 08 Mar 2023 14:26:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88%E5%8E%9F%E5%89%87/</guid>
-        <description>&lt;h1 id=&#34;uml-類別圖&#34;&gt;UML 類別圖&lt;/h1&gt;
-&lt;h2 id=&#34;relationship&#34;&gt;Relationship&lt;/h2&gt;
+        <description>&lt;h2 id=&#34;uml-類別圖&#34;&gt;UML 類別圖&lt;/h2&gt;
+&lt;h3 id=&#34;relationship&#34;&gt;Relationship&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Dependency
 &lt;ul&gt;
@@ -49,7 +149,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;other-features&#34;&gt;other features&lt;/h3&gt;
+&lt;h4 id=&#34;other-features&#34;&gt;other features&lt;/h4&gt;
 &lt;ul&gt;
 &lt;li&gt;Navigation
 &lt;ul&gt;
@@ -72,43 +172,43 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id=&#34;軟體設計原則&#34;&gt;軟體設計原則&lt;/h1&gt;
-&lt;h2 id=&#34;encapsulate-what-varies&#34;&gt;Encapsulate What Varies&lt;/h2&gt;
+&lt;h2 id=&#34;軟體設計原則&#34;&gt;軟體設計原則&lt;/h2&gt;
+&lt;h3 id=&#34;encapsulate-what-varies&#34;&gt;Encapsulate What Varies&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;把經常改變的程式碼封裝起來，使日後修改時不會影響其他區塊的程式碼&lt;/li&gt;
 &lt;li&gt;實際使用的情境，可以把常改變的東西放在 interface 後，使日後改變實作時不影響呼叫該 interface 的程式碼&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;favor-composition-over-inheritance&#34;&gt;Favor Composition over Inheritance&lt;/h2&gt;
+&lt;h3 id=&#34;favor-composition-over-inheritance&#34;&gt;Favor Composition over Inheritance&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Composition(組合)在很多情境可以取代掉 Inheritance(繼承)，可藉由 Polymorphism(多型)來達成&lt;/li&gt;
 &lt;li&gt;只有當 is-a 的情境出現，才用繼承比較好&lt;/li&gt;
 &lt;li&gt;Composition 使用起來更有彈性&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id=&#34;solid-設計原則&#34;&gt;SOLID 設計原則&lt;/h1&gt;
-&lt;h2 id=&#34;single-responsibility-principle-srp&#34;&gt;Single Responsibility Principle, SRP&lt;/h2&gt;
+&lt;h2 id=&#34;solid-設計原則&#34;&gt;SOLID 設計原則&lt;/h2&gt;
+&lt;h3 id=&#34;single-responsibility-principle-srp&#34;&gt;Single Responsibility Principle, SRP&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;單一職責原則&lt;/li&gt;
 &lt;li&gt;A class should have only one reason to change.&lt;/li&gt;
 &lt;li&gt;可以把一個複雜的 module 拆成多個&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;open-close-principle-ocp&#34;&gt;Open-Close Principle, OCP&lt;/h2&gt;
+&lt;h3 id=&#34;open-close-principle-ocp&#34;&gt;Open-Close Principle, OCP&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;開放封閉原則&lt;/li&gt;
 &lt;li&gt;You should be able to extend the behavior of a system without having to modify that system.&lt;/li&gt;
 &lt;li&gt;要可以擴充，同時不修改到原系統&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;liskovsubstitution-principle-lsp&#34;&gt;LiskovSubstitution Principle, LSP&lt;/h2&gt;
+&lt;h3 id=&#34;liskovsubstitution-principle-lsp&#34;&gt;LiskovSubstitution Principle, LSP&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;里氏替換原則&lt;/li&gt;
 &lt;li&gt;父類別有的功能，子類別必須遵從，父類別的部分要可以直接替換成子類別&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;interface-segregation-principle-isp&#34;&gt;Interface Segregation Principle, ISP&lt;/h2&gt;
+&lt;h3 id=&#34;interface-segregation-principle-isp&#34;&gt;Interface Segregation Principle, ISP&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;介面隔離原則&lt;/li&gt;
 &lt;li&gt;No client should be forced to depend on methods it does not use&lt;/li&gt;
 &lt;li&gt;以 interface 來說，不該讓 module 實現它不需要的功能，可以把 interface 拆小&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;dependency-inversion-principle-dip&#34;&gt;Dependency Inversion Principle, DIP&lt;/h2&gt;
+&lt;h3 id=&#34;dependency-inversion-principle-dip&#34;&gt;Dependency Inversion Principle, DIP&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;反向依賴原則&lt;/li&gt;
 &lt;li&gt;高階模組不應該依賴低階模組，兩者都應依賴抽象層&lt;/li&gt;
