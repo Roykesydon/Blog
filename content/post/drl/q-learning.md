@@ -7,24 +7,24 @@ tags: ["deep-learning","machine-learning","reinforcement-learning"]
 categories : ["deep-learning"]
 ---
 
-# RL 方法
+## RL 方法
 - Policy-based
     - learn 做事的 actor
 - Value-based
     - 不直接 learn policy，而是 Learn critic，負責批評
     - Q-learning 屬於這種
 
-# Critic
+## Critic
 - 不直接決定 action
 - 給予 actor $\pi$，評估 actor $\pi$ 有多好
 - critic 的 output 依賴於 actor 的表現
 
-## State Value Function
+### State Value Function
 
 - State value function $V^{\pi}(s)$
     - 用 actor $\pi$，看到 s 後玩到結束，cumulated reward expectation 是多少
 
-### 評估方法
+#### 評估方法
 - Monte-Carlo(MC) based approach
     - critic 看 $\pi$ 玩遊戲
     - 訓練一個 network，看到不同的 state ，輸出 cumulated reward(直到遊戲結束，以下稱為 $G_a$)，解 regression 問題
@@ -44,7 +44,7 @@ categories : ["deep-learning"]
             - 那 learn 出來的結果自然也不准
         - 較常見
 
-## Another Critic
+### Another Critic
 - State-action value function $Q^\pi(s,a)$
     - 又叫 Q function
     - 當用 actor $\pi$ 時，在 state s 採取 a 這個 action 後的 cumulated reward expectation
@@ -62,17 +62,17 @@ categories : ["deep-learning"]
             - 這邊如果 a 是 continuous 的會有問題，等等解決
             - 這樣就可以達到"更好的"policy，不過就不列證明了
 
-# Basic Tip
-## Target network
+## Basic Tip
+### Target network
 - 在 training 的時候，把其中一個 Q 固定住，不然要學的 target 是不固定的，會不好 train
 
 ![](/Blog/images/drl/q-learning/target-network.png)
 
-## Exploration
+### Exploration
 - policy 完全 depend on Q function
 - 如果 action 總是固定，這不是好的 data collection 方法，要在 s 採取 a 過，才比較好估計 Q(s, a)，如果 Q function 是 table 就根本不可能估出來，network 也會有一樣的問題，只是沒那麼嚴重。
 
-### 解法
+#### 解法
 - Epsilon Greedy
     - $a=\begin{cases}
 arg \underset{a}{max}Q(s,a), & \text{with probability } 1-\varepsilon \\\\ 
@@ -82,22 +82,22 @@ random, & otherwise
 - Boltzmann Exploration
     - $P(a|s)=\frac{exp(Q(s,a))}{\sum_a exp(Q(s,a))}$
 
-## Replay Buffer
+### Replay Buffer
 - 把一堆的 {$s_t,a_t,r_t,s_{t+1}$} 存放在一個 buffer
 - {$s_t,a_t,r_t,s_{t+1}$} 簡稱為 exp
 - 裡面的 exp 可能來自於不同的 policy
 - 在 buffer 裝滿的時候才把舊的資料丟掉
 - 每次從 buffer 隨機挑一個 batch 出來，update Q function
 
-### 好處
+#### 好處
 - 跟環境作互動很花時間，這樣可以減少跟環境作互動的次數
 - 本來就希望 batch 裡的 data 越 diverse 越好，不會希望 batch 裡的 data 都是同性質的
 
-### issue
+#### issue
 - 我們要觀察 $\pi$ 的 value，混雜了一些不是 $\pi$ 的 exp 到底有沒有關係?
     - 理論上沒問題，但李老師沒解釋
 
-## Typical Q-learning 演算法
+### Typical Q-learning 演算法
 - 初始化 Q-fucntion Q，target Q-function $\hat{Q}=Q$
 - 在每個 episode
     - 對於每個 time step t
@@ -109,9 +109,9 @@ random, & otherwise
         - Update Q 的參數，好讓 $Q(s_i,a_i)$ 更接近 y(regression)
         - 每 C 步 reset $\hat{Q}=Q$
 
-# Adveanced Tip
+## Adveanced Tip
 
-## Double DQN
+### Double DQN
 - Q Value 往往被高估
     - 我們的目的是要讓 $Q(s_t, a_t)$ 和 $r_t+\underset{a}{max}Q(s_{t+1},a)$ 越接近越好(後者就是 target)
     - target 常常不小心設太高，因為如果有 action 被高估了，就會選那個當 target
@@ -122,7 +122,7 @@ random, & otherwise
         - 如果 $Q^{'}$ 高估，$Q$ 不一定會選到
     - $Q^{'}$ 是 target network(固定不動)
 
-## Dueling DQN
+### Dueling DQN
 - 改變 network 架構
 - 分成兩條 path
     - 第一條算 scalar
@@ -136,13 +136,13 @@ random, & otherwise
 
 ![](/Blog/images/drl/q-learning/dueling-dqn.png)
 
-## Prioritized Replay
+### Prioritized Replay
 - 原本是 uniform 的從 buffer sample data
 - 改讓 「有更大的 TD error」的 data 有更高的機率被 sample
     - TD error 就是 $Q(s_t, a_t)$ 和 target 的差距
 - 實際在做的時候有額外的細節，不會只改 sampling 的 process，還要改 update 參數的方法
 
-## Multi-step
+### Multi-step
 - Balance between MC 和 TD
 - TD 只需要存 {$s_t,a_t,r_t,s_{t+1}$}
 - 改存 {$s_t,a_t,r_t,...,s_{t+N},a_{t+N},r_{t+N}, s_{t+N+1}$}
@@ -152,5 +152,51 @@ random, & otherwise
     - 估測的影響比較輕微
     - r 比較多項，variance 比較大
 
-## Noisy Net
+### Noisy Net
 - improve exploration
+- Noise on Action
+    - Epsilon Greedy(之前的回顧)
+        - $f_X(x) = \begin{cases}
+        arg \underset{a}{max}Q(s,a), & \text{with probability }1-\varepsilon \\\\ 
+        random, & ,otherwise
+        \end{cases}$
+    - 給同樣的 state，採取的 action 不一定一樣
+    - 沒有真實的 policy 會這樣運作
+- Noise on Parameters
+    -  $a = arg \underset{a}{max}\tilde{Q}(s,a)$
+        - 在每個 episode 剛開始的時候，在 Q-function 的參數上面加上 gaussian noise
+    
+    - 給同樣的 state，採取同樣的 action
+        - 叫做 state-dependent exploration
+
+    - explore in a consistent way
+
+### Distributional Q-function
+- Q-function 生出的東西是 cumulated reward 的期望值
+    - 所以我們是在對 distribution 取 mean，但不同的 distribution 也可能有同樣的 mean
+- 想做的事情是 model distribution
+- 如果有做這個，就比較不會有 over estimate reward 的結果，反而容易 under estimate，使 double 比較沒用
+    - output 的 range 不可能無限寬，超過邊界的 reward 會被丟掉
+### Rainbow
+- 綜合一堆方法
+
+## Continuous actions
+- Q learning 不容易處理 continuous action
+
+### Solution
+
+1. sample n 個可能的 a，都丟 Q function 看誰最大
+
+2. gradient descent
+    - 把 a 當作 parameter，要找一組 a 去 maximize Q function
+        - 運算量大，要 iterative 的 update a
+        - 不一定可以找到 global 的最佳解
+
+3. 特別設計 Q network，讓解 optimization 的問題變容易
+    - 範例
+        - Q network 輸出 $\mu(s)$、$\Sigma(s)$、$V(s)$，個別是 vector、matrix、scalar
+        - a 是 continuous 的 Action，是一個 vector，每個維度都是實數
+        - $\Sigma(s)$ 是 positive definite 的，實作的時候會把 $\Sigma$ 和它的 transpose 相乘
+        - $Q(s,a)=-(a-\mu(s))^T\Sigma(s)(a-\mu(s))+V(s)$
+        - $(a-\mu(s))^T\Sigma(s)(a-\mu(s))$ 這項必為正，所以 $a=\mu(s)$ 的時候就是最佳解
+4. 不要用 Q-learning

@@ -229,36 +229,50 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#state-value-function">State Value Function</a>
+    <li><a href="#rl-方法">RL 方法</a></li>
+    <li><a href="#critic">Critic</a>
       <ol>
-        <li><a href="#評估方法">評估方法</a></li>
+        <li><a href="#state-value-function">State Value Function</a>
+          <ol>
+            <li><a href="#評估方法">評估方法</a></li>
+          </ol>
+        </li>
+        <li><a href="#another-critic">Another Critic</a></li>
       </ol>
     </li>
-    <li><a href="#another-critic">Another Critic</a></li>
-  </ol>
-
-  <ol>
-    <li><a href="#target-network">Target network</a></li>
-    <li><a href="#exploration">Exploration</a>
+    <li><a href="#basic-tip">Basic Tip</a>
       <ol>
-        <li><a href="#解法">解法</a></li>
+        <li><a href="#target-network">Target network</a></li>
+        <li><a href="#exploration">Exploration</a>
+          <ol>
+            <li><a href="#解法">解法</a></li>
+          </ol>
+        </li>
+        <li><a href="#replay-buffer">Replay Buffer</a>
+          <ol>
+            <li><a href="#好處">好處</a></li>
+            <li><a href="#issue">issue</a></li>
+          </ol>
+        </li>
+        <li><a href="#typical-q-learning-演算法">Typical Q-learning 演算法</a></li>
       </ol>
     </li>
-    <li><a href="#replay-buffer">Replay Buffer</a>
+    <li><a href="#adveanced-tip">Adveanced Tip</a>
       <ol>
-        <li><a href="#好處">好處</a></li>
-        <li><a href="#issue">issue</a></li>
+        <li><a href="#double-dqn">Double DQN</a></li>
+        <li><a href="#dueling-dqn">Dueling DQN</a></li>
+        <li><a href="#prioritized-replay">Prioritized Replay</a></li>
+        <li><a href="#multi-step">Multi-step</a></li>
+        <li><a href="#noisy-net">Noisy Net</a></li>
+        <li><a href="#distributional-q-function">Distributional Q-function</a></li>
+        <li><a href="#rainbow">Rainbow</a></li>
       </ol>
     </li>
-    <li><a href="#typical-q-learning-演算法">Typical Q-learning 演算法</a></li>
-  </ol>
-
-  <ol>
-    <li><a href="#double-dqn">Double DQN</a></li>
-    <li><a href="#dueling-dqn">Dueling DQN</a></li>
-    <li><a href="#prioritized-replay">Prioritized Replay</a></li>
-    <li><a href="#multi-step">Multi-step</a></li>
-    <li><a href="#noisy-net">Noisy Net</a></li>
+    <li><a href="#continuous-actions">Continuous actions</a>
+      <ol>
+        <li><a href="#solution">Solution</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -338,7 +352,7 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
     <section class="article-content">
     
     
-    <h1 id="rl-方法">RL 方法</h1>
+    <h2 id="rl-方法">RL 方法</h2>
 <ul>
 <li>Policy-based
 <ul>
@@ -352,13 +366,13 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
 </ul>
 </li>
 </ul>
-<h1 id="critic">Critic</h1>
+<h2 id="critic">Critic</h2>
 <ul>
 <li>不直接決定 action</li>
 <li>給予 actor $\pi$，評估 actor $\pi$ 有多好</li>
 <li>critic 的 output 依賴於 actor 的表現</li>
 </ul>
-<h2 id="state-value-function">State Value Function</h2>
+<h3 id="state-value-function">State Value Function</h3>
 <ul>
 <li>State value function $V^{\pi}(s)$
 <ul>
@@ -366,7 +380,7 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
 </ul>
 </li>
 </ul>
-<h3 id="評估方法">評估方法</h3>
+<h4 id="評估方法">評估方法</h4>
 <ul>
 <li>
 <p>Monte-Carlo(MC) based approach</p>
@@ -416,7 +430,7 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
 </ul>
 </li>
 </ul>
-<h2 id="another-critic">Another Critic</h2>
+<h3 id="another-critic">Another Critic</h3>
 <ul>
 <li>
 <p>State-action value function $Q^\pi(s,a)$</p>
@@ -464,8 +478,8 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
 </ul>
 </li>
 </ul>
-<h1 id="basic-tip">Basic Tip</h1>
-<h2 id="target-network">Target network</h2>
+<h2 id="basic-tip">Basic Tip</h2>
+<h3 id="target-network">Target network</h3>
 <ul>
 <li>在 training 的時候，把其中一個 Q 固定住，不然要學的 target 是不固定的，會不好 train</li>
 </ul>
@@ -477,12 +491,12 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
 	
 	
 ></p>
-<h2 id="exploration">Exploration</h2>
+<h3 id="exploration">Exploration</h3>
 <ul>
 <li>policy 完全 depend on Q function</li>
 <li>如果 action 總是固定，這不是好的 data collection 方法，要在 s 採取 a 過，才比較好估計 Q(s, a)，如果 Q function 是 table 就根本不可能估出來，network 也會有一樣的問題，只是沒那麼嚴重。</li>
 </ul>
-<h3 id="解法">解法</h3>
+<h4 id="解法">解法</h4>
 <ul>
 <li>Epsilon Greedy
 <ul>
@@ -499,7 +513,7 @@ random, &amp; otherwise
 </ul>
 </li>
 </ul>
-<h2 id="replay-buffer">Replay Buffer</h2>
+<h3 id="replay-buffer">Replay Buffer</h3>
 <ul>
 <li>把一堆的 {$s_t,a_t,r_t,s_{t+1}$} 存放在一個 buffer</li>
 <li>{$s_t,a_t,r_t,s_{t+1}$} 簡稱為 exp</li>
@@ -507,12 +521,12 @@ random, &amp; otherwise
 <li>在 buffer 裝滿的時候才把舊的資料丟掉</li>
 <li>每次從 buffer 隨機挑一個 batch 出來，update Q function</li>
 </ul>
-<h3 id="好處">好處</h3>
+<h4 id="好處">好處</h4>
 <ul>
 <li>跟環境作互動很花時間，這樣可以減少跟環境作互動的次數</li>
 <li>本來就希望 batch 裡的 data 越 diverse 越好，不會希望 batch 裡的 data 都是同性質的</li>
 </ul>
-<h3 id="issue">issue</h3>
+<h4 id="issue">issue</h4>
 <ul>
 <li>我們要觀察 $\pi$ 的 value，混雜了一些不是 $\pi$ 的 exp 到底有沒有關係?
 <ul>
@@ -520,7 +534,7 @@ random, &amp; otherwise
 </ul>
 </li>
 </ul>
-<h2 id="typical-q-learning-演算法">Typical Q-learning 演算法</h2>
+<h3 id="typical-q-learning-演算法">Typical Q-learning 演算法</h3>
 <ul>
 <li>初始化 Q-fucntion Q，target Q-function $\hat{Q}=Q$</li>
 <li>在每個 episode
@@ -539,8 +553,8 @@ random, &amp; otherwise
 </ul>
 </li>
 </ul>
-<h1 id="adveanced-tip">Adveanced Tip</h1>
-<h2 id="double-dqn">Double DQN</h2>
+<h2 id="adveanced-tip">Adveanced Tip</h2>
+<h3 id="double-dqn">Double DQN</h3>
 <ul>
 <li>Q Value 往往被高估
 <ul>
@@ -561,7 +575,7 @@ random, &amp; otherwise
 </ul>
 </li>
 </ul>
-<h2 id="dueling-dqn">Dueling DQN</h2>
+<h3 id="dueling-dqn">Dueling DQN</h3>
 <ul>
 <li>改變 network 架構</li>
 <li>分成兩條 path
@@ -594,7 +608,7 @@ random, &amp; otherwise
 	
 	
 ></p>
-<h2 id="prioritized-replay">Prioritized Replay</h2>
+<h3 id="prioritized-replay">Prioritized Replay</h3>
 <ul>
 <li>原本是 uniform 的從 buffer sample data</li>
 <li>改讓 「有更大的 TD error」的 data 有更高的機率被 sample
@@ -604,7 +618,7 @@ random, &amp; otherwise
 </li>
 <li>實際在做的時候有額外的細節，不會只改 sampling 的 process，還要改 update 參數的方法</li>
 </ul>
-<h2 id="multi-step">Multi-step</h2>
+<h3 id="multi-step">Multi-step</h3>
 <ul>
 <li>Balance between MC 和 TD</li>
 <li>TD 只需要存 {$s_t,a_t,r_t,s_{t+1}$}</li>
@@ -621,10 +635,99 @@ random, &amp; otherwise
 </ul>
 </li>
 </ul>
-<h2 id="noisy-net">Noisy Net</h2>
+<h3 id="noisy-net">Noisy Net</h3>
 <ul>
 <li>improve exploration</li>
+<li>Noise on Action
+<ul>
+<li>Epsilon Greedy(之前的回顧)
+<ul>
+<li>$f_X(x) = \begin{cases}
+arg \underset{a}{max}Q(s,a), &amp; \text{with probability }1-\varepsilon \\
+random, &amp; ,otherwise
+\end{cases}$</li>
 </ul>
+</li>
+<li>給同樣的 state，採取的 action 不一定一樣</li>
+<li>沒有真實的 policy 會這樣運作</li>
+</ul>
+</li>
+<li>Noise on Parameters
+<ul>
+<li>
+<p>$a = arg \underset{a}{max}\tilde{Q}(s,a)$</p>
+<ul>
+<li>在每個 episode 剛開始的時候，在 Q-function 的參數上面加上 gaussian noise</li>
+</ul>
+</li>
+<li>
+<p>給同樣的 state，採取同樣的 action</p>
+<ul>
+<li>叫做 state-dependent exploration</li>
+</ul>
+</li>
+<li>
+<p>explore in a consistent way</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="distributional-q-function">Distributional Q-function</h3>
+<ul>
+<li>Q-function 生出的東西是 cumulated reward 的期望值
+<ul>
+<li>所以我們是在對 distribution 取 mean，但不同的 distribution 也可能有同樣的 mean</li>
+</ul>
+</li>
+<li>想做的事情是 model distribution</li>
+<li>如果有做這個，就比較不會有 over estimate reward 的結果，反而容易 under estimate，使 double 比較沒用
+<ul>
+<li>output 的 range 不可能無限寬，超過邊界的 reward 會被丟掉</li>
+</ul>
+</li>
+</ul>
+<h3 id="rainbow">Rainbow</h3>
+<ul>
+<li>綜合一堆方法</li>
+</ul>
+<h2 id="continuous-actions">Continuous actions</h2>
+<ul>
+<li>Q learning 不容易處理 continuous action</li>
+</ul>
+<h3 id="solution">Solution</h3>
+<ol>
+<li>
+<p>sample n 個可能的 a，都丟 Q function 看誰最大</p>
+</li>
+<li>
+<p>gradient descent</p>
+<ul>
+<li>把 a 當作 parameter，要找一組 a 去 maximize Q function
+<ul>
+<li>運算量大，要 iterative 的 update a</li>
+<li>不一定可以找到 global 的最佳解</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>特別設計 Q network，讓解 optimization 的問題變容易</p>
+<ul>
+<li>範例
+<ul>
+<li>Q network 輸出 $\mu(s)$、$\Sigma(s)$、$V(s)$，個別是 vector、matrix、scalar</li>
+<li>a 是 continuous 的 Action，是一個 vector，每個維度都是實數</li>
+<li>$\Sigma(s)$ 是 positive definite 的，實作的時候會把 $\Sigma$ 和它的 transpose 相乘</li>
+<li>$Q(s,a)=-(a-\mu(s))^T\Sigma(s)(a-\mu(s))+V(s)$</li>
+<li>$(a-\mu(s))^T\Sigma(s)(a-\mu(s))$ 這項必為正，所以 $a=\mu(s)$ 的時候就是最佳解</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>不要用 Q-learning</p>
+</li>
+</ol>
 
 </section>
 
@@ -683,6 +786,19 @@ random, &amp; otherwise
             
                 
 <article class="">
+    <a href="/Blog/p/actor-critic/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Actor-Critic</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
     <a href="/Blog/p/proximal-policy-optimizationppo/">
         
         
@@ -733,19 +849,6 @@ random, &amp; otherwise
 </article>
 
             
-                
-<article class="">
-    <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">MAE 論文</h2>
-        </div>
-    </a>
-</article>
-
-            
         </div>
     </div>
 </aside>
@@ -758,8 +861,6 @@ random, &amp; otherwise
     <footer class="site-footer">
     <section class="copyright">
         &copy; 
-        
-            2022 - 
         
         2023 Roykesydon
     </section>
