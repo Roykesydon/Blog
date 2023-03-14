@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>database on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/database/</link>
+        <description>Recent content in database on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Tue, 14 Mar 2023 10:26:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/database/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Database Normalization</title>
+        <link>https://roykesydon.github.io/Blog/p/database-normalization/</link>
+        <pubDate>Tue, 14 Mar 2023 10:26:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/database-normalization/</guid>
+        <description>&lt;h2 id=&#34;normalization-目的&#34;&gt;Normalization 目的&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;避免 redundent information&lt;/li&gt;
+&lt;li&gt;更容易 understand、enhance、extend&lt;/li&gt;
+&lt;li&gt;避免 anomalies&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;隨著 1NF ~ 5NF，有更多的 safety guarantee&lt;/p&gt;
+&lt;h2 id=&#34;1nf&#34;&gt;1NF&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;違反條件
+&lt;ul&gt;
+&lt;li&gt;用 row order 傳達資訊&lt;/li&gt;
+&lt;li&gt;mixing data types in single column
+&lt;ul&gt;
+&lt;li&gt;但 relational database 不會讓你這樣做&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;存在沒有 primary key 的 table&lt;/li&gt;
+&lt;li&gt;repeating groups
+&lt;ul&gt;
+&lt;li&gt;同一個 column 有多個數值，或是在同一個 row 存多個同類型的數值。&lt;/li&gt;
+&lt;li&gt;ex :
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;player&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;item&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;roy&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1 item_1, 4 item_2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;star&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;4 item_4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;player&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;item_type1&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;quantity1&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;item_type2&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;quantity2&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;roy&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;item1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;item2&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;star&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;item_4&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;4&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;2nf&#34;&gt;2NF&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;所有的 non-key attribute 都要 depend on 整個 PK
+&lt;ul&gt;
+&lt;li&gt;非正式定義，有點細微差異&lt;/li&gt;
+&lt;li&gt;functional dependency
+&lt;ul&gt;
+&lt;li&gt;ex: {player_id, item_type} -&amp;gt; {item_Quantity}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;3nf&#34;&gt;3NF&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;transitive dependency
+&lt;ul&gt;
+&lt;li&gt;{A} -&amp;gt; {B} -&amp;gt; {C}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;所有 non-key attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;boyce-codd-normal-form&#34;&gt;Boyce-Codd Normal Form&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;所有 attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;4nf&#34;&gt;4NF&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;multivalued dependency
+&lt;ul&gt;
+&lt;li&gt;不像 functional dependency，箭頭後方的那項可以有多個 value&lt;/li&gt;
+&lt;li&gt;{Model} $\twoheadrightarrow$ {Color}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;一個 table 中的所有 multivalued dependency 必須依賴於 key&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;5nf&#34;&gt;5NF&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;沒有 Join Dependency
+&lt;ul&gt;
+&lt;li&gt;table 不能表示成其他 table join 起來的結果&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

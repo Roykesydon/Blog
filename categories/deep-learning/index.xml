@@ -6,7 +6,133 @@
         <description>Recent content in Deep Learning on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 12 Mar 2023 10:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/deep-learning/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 14 Mar 2023 16:21:23 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/deep-learning/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Actor-Critic</title>
+        <link>https://roykesydon.github.io/Blog/p/actor-critic/</link>
+        <pubDate>Tue, 14 Mar 2023 16:21:23 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/actor-critic/</guid>
+        <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;結合 policy-based 和 value-based&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A3C
+&lt;ul&gt;
+&lt;li&gt;Actor-Critic 最知名的方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Advantage Actor-Critic 是 A2C&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;advantage-actor-critic&#34;&gt;Advantage Actor-Critic&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Review: Policy gradient&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\triangledown \overline{R_{\theta}}\approx \frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}(\displaystyle\sum_{t^{&amp;rsquo;}=t}^{T_n}\gamma^{t^{&amp;rsquo;}-t}r_{t^{&amp;rsquo;}}^n-b)\triangledown log p_{\theta}(a_t^n|s_t^n)$
+&lt;ul&gt;
+&lt;li&gt;$G_t^n=\displaystyle\sum_{t^{&amp;rsquo;}=t}^{T_n}\gamma^{t^{&amp;rsquo;}-t}r_{t^{&amp;rsquo;}}^n-b$
+&lt;ul&gt;
+&lt;li&gt;G very unstable，因為給同樣的 state 作同樣的 action 不一定會得到同樣的結果，G 是個 random variable&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;想要改獲得期望值，取代掉 sample 的值(G 的部分)，可以用 Q-Learning&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$E[G_t^n]=Q^{\pi_\theta}(s_t^n,a_t^n)$
+&lt;ul&gt;
+&lt;li&gt;Q function 這樣定義&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;所以我們可以把 G 的部分改用 Q 替換掉，就可以把 Actor 和 Critic 結合起來&lt;/li&gt;
+&lt;li&gt;baseline 的部分也可以用 value function 替換掉&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;但用 $Q^{\pi}(s_t^n,a_t^n)-V^{\pi}(s_t^n)$ 要一次 estimate 兩個 network&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可以把 Q 以 V 來表示，那只需要估測 V
+&lt;ul&gt;
+&lt;li&gt;$Q^{\pi}(s_t^n,a_t^n)=E[r_t^n+V^{\pi}(s_{t+1}^n)]$&lt;/li&gt;
+&lt;li&gt;雖然有隨機性(獲得的 reward 和跳到什麼 state 不一定)，但先不管期望值 $Q^{\pi}(s_t^n,a_t^n)=r_t^n+V^{\pi}(s_{t+1}^n)$&lt;/li&gt;
+&lt;li&gt;現在雖然多個一個 r，有一些 variance，但也比 G 好&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$\triangledown \overline{R_{\theta}}\approx \frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}(r_t^n+V^{\pi}(s_{t+1}^n)-V^{\pi}(s_t^n))\triangledown log p_{\theta}(a_t^n|s_t^n)$&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/actor-critic/A2C.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;tips&#34;&gt;Tips&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;actor $\pi(s)$ 和 critic $V^{\pi}(s)$ 的權重可以共享&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;前面幾個 layer 可以 share&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;對 $\pi$ 的 output 下 constrain，讓他的 entropy 不要太小，達到 exploration 的效果&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;asynchronous-advantage-actor-critic&#34;&gt;Asynchronous Advantage Actor-Critic&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;一開始有個 global network，開一堆 worker，每次工作前，把 global network 的參數 copy 過去&lt;/li&gt;
+&lt;li&gt;個別去和環境作互動，更新的梯度施加在 global network 上&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;pathwise-derivative-policy-gradient&#34;&gt;Pathwise Derivative Policy Gradient&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;可以當作是 Q-Learning 解 continuous action 的一種方法&lt;/li&gt;
+&lt;li&gt;訓練一個 actor，目標是生出的 a 餵給 Q 後，可以讓 Q function 的輸出越大越好
+&lt;ul&gt;
+&lt;li&gt;只會調 actor 的參數，會 fix Q 的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;就是個 GAN&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/actor-critic/pathwise.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;在每個 episode&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;對於每個 time step t
+&lt;ul&gt;
+&lt;li&gt;⚠️給 state $s_t$，根據 $\pi$ 執行 action $a_t$ (epsilon greedy)⚠️&lt;/li&gt;
+&lt;li&gt;獲得 reward $r_t$，到達 $s_{t+1}$&lt;/li&gt;
+&lt;li&gt;把 {$s_t,a_t,r_t,s_{t+1}$} 存到 buffer&lt;/li&gt;
+&lt;li&gt;從 buffer sample {$s_t,a_t,r_t,s_{t+1}$}(通常是一個 batch)&lt;/li&gt;
+&lt;li&gt;⚠️Target $y=r_i+\hat{Q}(s_{i+1},\hat{\pi}(s_{i+1}))$⚠️&lt;/li&gt;
+&lt;li&gt;Update Q 的參數，好讓 $Q(s_i,a_i)$ 更接近 y(regression)&lt;/li&gt;
+&lt;li&gt;⚠️Update $\pi$ 的參數，讓 $Q(s_i,\pi(s_i))$ 最大化⚠️&lt;/li&gt;
+&lt;li&gt;每 C 步 reset $\hat{Q}=Q$&lt;/li&gt;
+&lt;li&gt;⚠️每 C 步 reset $\hat{\pi}=\pi$⚠️&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;⚠️ 是和 Q-Learning 不一樣的地方&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>Sentence-BERT 論文閱讀</title>
         <link>https://roykesydon.github.io/Blog/p/sentence-bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
         <pubDate>Sun, 12 Mar 2023 10:08:46 +0800</pubDate>
@@ -208,7 +334,7 @@
         <pubDate>Mon, 20 Feb 2023 16:21:23 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/p/q-learning/</guid>
-        <description>&lt;h1 id=&#34;rl-方法&#34;&gt;RL 方法&lt;/h1&gt;
+        <description>&lt;h2 id=&#34;rl-方法&#34;&gt;RL 方法&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Policy-based
 &lt;ul&gt;
@@ -222,13 +348,13 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id=&#34;critic&#34;&gt;Critic&lt;/h1&gt;
+&lt;h2 id=&#34;critic&#34;&gt;Critic&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;不直接決定 action&lt;/li&gt;
 &lt;li&gt;給予 actor $\pi$，評估 actor $\pi$ 有多好&lt;/li&gt;
 &lt;li&gt;critic 的 output 依賴於 actor 的表現&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;state-value-function&#34;&gt;State Value Function&lt;/h2&gt;
+&lt;h3 id=&#34;state-value-function&#34;&gt;State Value Function&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;State value function $V^{\pi}(s)$
 &lt;ul&gt;
@@ -236,7 +362,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;評估方法&#34;&gt;評估方法&lt;/h3&gt;
+&lt;h4 id=&#34;評估方法&#34;&gt;評估方法&lt;/h4&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Monte-Carlo(MC) based approach&lt;/p&gt;
@@ -286,7 +412,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;another-critic&#34;&gt;Another Critic&lt;/h2&gt;
+&lt;h3 id=&#34;another-critic&#34;&gt;Another Critic&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;State-action value function $Q^\pi(s,a)$&lt;/p&gt;
@@ -334,8 +460,8 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id=&#34;basic-tip&#34;&gt;Basic Tip&lt;/h1&gt;
-&lt;h2 id=&#34;target-network&#34;&gt;Target network&lt;/h2&gt;
+&lt;h2 id=&#34;basic-tip&#34;&gt;Basic Tip&lt;/h2&gt;
+&lt;h3 id=&#34;target-network&#34;&gt;Target network&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;在 training 的時候，把其中一個 Q 固定住，不然要學的 target 是不固定的，會不好 train&lt;/li&gt;
 &lt;/ul&gt;
@@ -347,12 +473,12 @@
 	
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;exploration&#34;&gt;Exploration&lt;/h2&gt;
+&lt;h3 id=&#34;exploration&#34;&gt;Exploration&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;policy 完全 depend on Q function&lt;/li&gt;
 &lt;li&gt;如果 action 總是固定，這不是好的 data collection 方法，要在 s 採取 a 過，才比較好估計 Q(s, a)，如果 Q function 是 table 就根本不可能估出來，network 也會有一樣的問題，只是沒那麼嚴重。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;解法&#34;&gt;解法&lt;/h3&gt;
+&lt;h4 id=&#34;解法&#34;&gt;解法&lt;/h4&gt;
 &lt;ul&gt;
 &lt;li&gt;Epsilon Greedy
 &lt;ul&gt;
@@ -369,7 +495,7 @@ random, &amp;amp; otherwise
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;replay-buffer&#34;&gt;Replay Buffer&lt;/h2&gt;
+&lt;h3 id=&#34;replay-buffer&#34;&gt;Replay Buffer&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;把一堆的 {$s_t,a_t,r_t,s_{t+1}$} 存放在一個 buffer&lt;/li&gt;
 &lt;li&gt;{$s_t,a_t,r_t,s_{t+1}$} 簡稱為 exp&lt;/li&gt;
@@ -377,12 +503,12 @@ random, &amp;amp; otherwise
 &lt;li&gt;在 buffer 裝滿的時候才把舊的資料丟掉&lt;/li&gt;
 &lt;li&gt;每次從 buffer 隨機挑一個 batch 出來，update Q function&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;好處&#34;&gt;好處&lt;/h3&gt;
+&lt;h4 id=&#34;好處&#34;&gt;好處&lt;/h4&gt;
 &lt;ul&gt;
 &lt;li&gt;跟環境作互動很花時間，這樣可以減少跟環境作互動的次數&lt;/li&gt;
 &lt;li&gt;本來就希望 batch 裡的 data 越 diverse 越好，不會希望 batch 裡的 data 都是同性質的&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;issue&#34;&gt;issue&lt;/h3&gt;
+&lt;h4 id=&#34;issue&#34;&gt;issue&lt;/h4&gt;
 &lt;ul&gt;
 &lt;li&gt;我們要觀察 $\pi$ 的 value，混雜了一些不是 $\pi$ 的 exp 到底有沒有關係?
 &lt;ul&gt;
@@ -390,7 +516,7 @@ random, &amp;amp; otherwise
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;typical-q-learning-演算法&#34;&gt;Typical Q-learning 演算法&lt;/h2&gt;
+&lt;h3 id=&#34;typical-q-learning-演算法&#34;&gt;Typical Q-learning 演算法&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;初始化 Q-fucntion Q，target Q-function $\hat{Q}=Q$&lt;/li&gt;
 &lt;li&gt;在每個 episode
@@ -409,8 +535,8 @@ random, &amp;amp; otherwise
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id=&#34;adveanced-tip&#34;&gt;Adveanced Tip&lt;/h1&gt;
-&lt;h2 id=&#34;double-dqn&#34;&gt;Double DQN&lt;/h2&gt;
+&lt;h2 id=&#34;adveanced-tip&#34;&gt;Adveanced Tip&lt;/h2&gt;
+&lt;h3 id=&#34;double-dqn&#34;&gt;Double DQN&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Q Value 往往被高估
 &lt;ul&gt;
@@ -431,7 +557,7 @@ random, &amp;amp; otherwise
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;dueling-dqn&#34;&gt;Dueling DQN&lt;/h2&gt;
+&lt;h3 id=&#34;dueling-dqn&#34;&gt;Dueling DQN&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;改變 network 架構&lt;/li&gt;
 &lt;li&gt;分成兩條 path
@@ -464,7 +590,7 @@ random, &amp;amp; otherwise
 	
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;prioritized-replay&#34;&gt;Prioritized Replay&lt;/h2&gt;
+&lt;h3 id=&#34;prioritized-replay&#34;&gt;Prioritized Replay&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;原本是 uniform 的從 buffer sample data&lt;/li&gt;
 &lt;li&gt;改讓 「有更大的 TD error」的 data 有更高的機率被 sample
@@ -474,7 +600,7 @@ random, &amp;amp; otherwise
 &lt;/li&gt;
 &lt;li&gt;實際在做的時候有額外的細節，不會只改 sampling 的 process，還要改 update 參數的方法&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;multi-step&#34;&gt;Multi-step&lt;/h2&gt;
+&lt;h3 id=&#34;multi-step&#34;&gt;Multi-step&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Balance between MC 和 TD&lt;/li&gt;
 &lt;li&gt;TD 只需要存 {$s_t,a_t,r_t,s_{t+1}$}&lt;/li&gt;
@@ -491,10 +617,99 @@ random, &amp;amp; otherwise
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;noisy-net&#34;&gt;Noisy Net&lt;/h2&gt;
+&lt;h3 id=&#34;noisy-net&#34;&gt;Noisy Net&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;improve exploration&lt;/li&gt;
+&lt;li&gt;Noise on Action
+&lt;ul&gt;
+&lt;li&gt;Epsilon Greedy(之前的回顧)
+&lt;ul&gt;
+&lt;li&gt;$f_X(x) = \begin{cases}
+arg \underset{a}{max}Q(s,a), &amp;amp; \text{with probability }1-\varepsilon \\
+random, &amp;amp; ,otherwise
+\end{cases}$&lt;/li&gt;
 &lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;給同樣的 state，採取的 action 不一定一樣&lt;/li&gt;
+&lt;li&gt;沒有真實的 policy 會這樣運作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Noise on Parameters
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$a = arg \underset{a}{max}\tilde{Q}(s,a)$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在每個 episode 剛開始的時候，在 Q-function 的參數上面加上 gaussian noise&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;給同樣的 state，採取同樣的 action&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;叫做 state-dependent exploration&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;explore in a consistent way&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;distributional-q-function&#34;&gt;Distributional Q-function&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Q-function 生出的東西是 cumulated reward 的期望值
+&lt;ul&gt;
+&lt;li&gt;所以我們是在對 distribution 取 mean，但不同的 distribution 也可能有同樣的 mean&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;想做的事情是 model distribution&lt;/li&gt;
+&lt;li&gt;如果有做這個，就比較不會有 over estimate reward 的結果，反而容易 under estimate，使 double 比較沒用
+&lt;ul&gt;
+&lt;li&gt;output 的 range 不可能無限寬，超過邊界的 reward 會被丟掉&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;rainbow&#34;&gt;Rainbow&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;綜合一堆方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;continuous-actions&#34;&gt;Continuous actions&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Q learning 不容易處理 continuous action&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;solution&#34;&gt;Solution&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;sample n 個可能的 a，都丟 Q function 看誰最大&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;gradient descent&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;把 a 當作 parameter，要找一組 a 去 maximize Q function
+&lt;ul&gt;
+&lt;li&gt;運算量大，要 iterative 的 update a&lt;/li&gt;
+&lt;li&gt;不一定可以找到 global 的最佳解&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;特別設計 Q network，讓解 optimization 的問題變容易&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;範例
+&lt;ul&gt;
+&lt;li&gt;Q network 輸出 $\mu(s)$、$\Sigma(s)$、$V(s)$，個別是 vector、matrix、scalar&lt;/li&gt;
+&lt;li&gt;a 是 continuous 的 Action，是一個 vector，每個維度都是實數&lt;/li&gt;
+&lt;li&gt;$\Sigma(s)$ 是 positive definite 的，實作的時候會把 $\Sigma$ 和它的 transpose 相乘&lt;/li&gt;
+&lt;li&gt;$Q(s,a)=-(a-\mu(s))^T\Sigma(s)(a-\mu(s))+V(s)$&lt;/li&gt;
+&lt;li&gt;$(a-\mu(s))^T\Sigma(s)(a-\mu(s))$ 這項必為正，所以 $a=\mu(s)$ 的時候就是最佳解&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;不要用 Q-learning&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
 </description>
         </item>
         <item>
