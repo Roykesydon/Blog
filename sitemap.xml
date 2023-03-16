@@ -3,30 +3,42 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://roykesydon.github.io/Blog/</loc>
-    <lastmod>2023-03-14T16:21:23+08:00</lastmod>
+    <lastmod>2023-03-15T15:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/attention/</loc>
+    <lastmod>2023-03-15T15:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/categories/</loc>
+    <lastmod>2023-03-15T15:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/categories/deep-learning/</loc>
+    <lastmod>2023-03-15T15:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/deep-learning/</loc>
+    <lastmod>2023-03-15T15:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/machine-learning/</loc>
+    <lastmod>2023-03-15T15:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/p/patentsberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</loc>
+    <lastmod>2023-03-15T15:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/post/</loc>
+    <lastmod>2023-03-15T15:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/self-attention/</loc>
+    <lastmod>2023-03-15T15:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/</loc>
+    <lastmod>2023-03-15T15:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/transformer/</loc>
+    <lastmod>2023-03-15T15:08:46+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/p/actor-critic/</loc>
     <lastmod>2023-03-14T16:21:23+08:00</lastmod>
   </url><url>
-    <loc>https://roykesydon.github.io/Blog/categories/</loc>
-    <lastmod>2023-03-14T16:21:23+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/categories/deep-learning/</loc>
-    <lastmod>2023-03-14T16:21:23+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/deep-learning/</loc>
-    <lastmod>2023-03-14T16:21:23+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/machine-learning/</loc>
-    <lastmod>2023-03-14T16:21:23+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/post/</loc>
-    <lastmod>2023-03-14T16:21:23+08:00</lastmod>
-  </url><url>
     <loc>https://roykesydon.github.io/Blog/tags/reinforcement-learning/</loc>
-    <lastmod>2023-03-14T16:21:23+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/</loc>
     <lastmod>2023-03-14T16:21:23+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/tags/database/</loc>
@@ -38,16 +50,7 @@
     <loc>https://roykesydon.github.io/Blog/categories/software-engineering/</loc>
     <lastmod>2023-03-14T10:26:17+08:00</lastmod>
   </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/attention/</loc>
-    <lastmod>2023-03-12T10:08:46+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/self-attention/</loc>
-    <lastmod>2023-03-12T10:08:46+08:00</lastmod>
-  </url><url>
     <loc>https://roykesydon.github.io/Blog/p/sentence-bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</loc>
-    <lastmod>2023-03-12T10:08:46+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/transformer/</loc>
     <lastmod>2023-03-12T10:08:46+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/tags/software-design/</loc>
@@ -175,6 +178,8 @@
   </url><url>
     <loc>https://roykesydon.github.io/Blog/archives/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/categories/embedded-system/</loc>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/search/</loc>
   </url>
