@@ -6,7 +6,110 @@
         <description>Recent content in self-attention on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 12 Mar 2023 10:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/self-attention/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 15 Mar 2023 15:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/self-attention/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>PatentSBERTa 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/patentsberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Wed, 15 Mar 2023 15:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/patentsberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2103.11933&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;PatentSBERTa: A Deep NLP based Hybrid Model for Patent Distance and Classification using Augmented SBERT&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;本研究提供了一個計算  patent-to-patent (p2p) technological similarity 的有效方法。&lt;/p&gt;
+&lt;p&gt;並提出一個 hybrid framework，用於把 p2p 相似性的結果應用於 semantic search 和 automated patent classification。&lt;/p&gt;
+&lt;p&gt;把 Sentence-BERT (SBERT) 用在 claims 上來作 embeddings。&lt;/p&gt;
+&lt;p&gt;為了進一步提升 embedding 的品質，使用基於 SBERT 和 RoBERT 的 transformer model，然後再用 augmented approach 在  in-domain supervised patent claims data(相對於 out-domain) 來 fine-tune SBERT。&lt;/p&gt;
+&lt;p&gt;用 KNN(Nearest Neighbors) 來根據 p2p similarity 分類模型。&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;傳統上的 p2p 相似度是基於關鍵字、技術類別等 metadata 決定的，但近期 semantic-based 的方法也越來越受歡迎。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;目前遇到的問題
+&lt;ol&gt;
+&lt;li&gt;BERT 用來計算 p2p 相似性的成本很高&lt;/li&gt;
+&lt;li&gt;基於 generic text 的 pre-trained model 在遇到特定領域的專業術語時可能會遇到侷限。&lt;/li&gt;
+&lt;li&gt;在專利做 multi-label classification (MLC) 是個挑戰&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;貢獻
+&lt;ol&gt;
+&lt;li&gt;提供一個快速高效的框架，利用 Transformer 架構計算 p2p 相似度&lt;/li&gt;
+&lt;li&gt;透過 augmented SBERT，將 transformer model fine-tune 到 domain-specific language&lt;/li&gt;
+&lt;li&gt;提出一個基於 Transformer 和 傳統 ML 模型的混和架構，可以打敗 multi-label 和 multi-class 的專利分類 SOTA 模型&lt;/li&gt;
+&lt;li&gt;用簡單的 KNN 進行專利分類，提供了一種簡單的方法來檢查、理解和解釋模型的預測結果&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;data&#34;&gt;Data&lt;/h2&gt;
+&lt;h3 id=&#34;dataset-description&#34;&gt;Dataset Description&lt;/h3&gt;
+&lt;p&gt;本研究使用 PatentsView dataset，PatentsView 平台建立在一個定期更新的 database 上。&lt;/p&gt;
+&lt;p&gt;dataset 已用於之前類似的研究，比如 DeepPatent、PatentBERT。&lt;/p&gt;
+&lt;p&gt;本研究使用了 2013-2017 的所有專利，這些專利至少要在 BigQuery 上有一條 claim。&lt;/p&gt;
+&lt;p&gt;本研究的 record 有 1,492,294 項專利，並用 8% 作為測試集。&lt;/p&gt;
+&lt;p&gt;此外，本研究刪除了有重複專利 ID 和 claim text 的 record。&lt;/p&gt;
+&lt;h3 id=&#34;textual-data-patent-claims&#34;&gt;Textual Data: Patent Claims&lt;/h3&gt;
+&lt;p&gt;本研究使用 claim 作為輸入。&lt;/p&gt;
+&lt;p&gt;claim 被認為是準備專利文件的初始框架，其他文件都是根據 claim 準備的，
+因此，claim 比其他文件包含更全面和準確的訊息。&lt;/p&gt;
+&lt;p&gt;claim 具有層次結構，first claim 被視為該架構的主幹。&lt;/p&gt;
+&lt;p&gt;本研究僅使用 first claim，但在以後的研究中，希望根據 tree structure 組合所有 claim，並計算 semantic similarity，並做多標籤分類。&lt;/p&gt;
+&lt;p&gt;在研究樣本中， claim 平均有 17 個。&lt;/p&gt;
+&lt;p&gt;claim 的平均長度是 162，本研究中，BERT 的 max_seq_length 是 510。&lt;/p&gt;
+&lt;h3 id=&#34;patent-classification-cpc-classes&#34;&gt;Patent Classification: CPC Classes&lt;/h3&gt;
+&lt;p&gt;CPC系統和IPC（國際專利分類）系統是最常用的兩種分類系統，CPC 是 IPC 系統的更具體和詳細的版本。&lt;/p&gt;
+&lt;p&gt;CPC 具有用於分類的層次結構，包括 Section、Class、Subclass 和 Group，
+在子類級別，CPC 有 667 個標籤。&lt;/p&gt;
+&lt;p&gt;在數據集中我們有 663 個標籤，其中 159 個在數據集中的樣本少於 350 個，這種標籤分佈導致了 KNN 不好處理，一般來說，隨著 instance 數量的增加，我們可以提高模型的準確性。&lt;/p&gt;
+&lt;h2 id=&#34;method-and-experimental-setup&#34;&gt;Method and experimental setup&lt;/h2&gt;
+&lt;p&gt;Pretrained Language Models (LMs) 在 NLP 中變得十分流行。&lt;/p&gt;
+&lt;p&gt;在 pairwise sentence semantic similarity，SBERT 和 BERT 是兩種具有顯著不同效果的方法。&lt;/p&gt;
+&lt;p&gt;BERT 通常可以取得更好的性能，但在實際應用上來說太慢了。&lt;/p&gt;
+&lt;p&gt;SBERT 在實際應用上表現還行，但需要 in-domain training data 並且 finetune。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/PatentSBERTa/Bi_vs_Cross-Encoder.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/PatentSBERTa/approach.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;上圖是 Augmented SBERT In-domain approach。&lt;/p&gt;
+&lt;p&gt;in-domain sentence pairs 透過 cross-encoder 來標記，假設有 n 個 in-domain sentences，會有 $C_2^n$ 組可能的組合。&lt;/p&gt;
+&lt;p&gt;使用所有可能的組合並不會提高性能，所以要有正確的採樣策略，才可提升性能的同時也減少計算開銷。&lt;/p&gt;
+&lt;p&gt;上圖那種結合 cross-encoder 和 bi-encoder 的作法被稱為 Augmented SBERT (AugSBERT)，
+涉及以下三個步驟:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;用資料集 Fine-tune RoBERTa 以生出 cross-encoder&lt;/li&gt;
+&lt;li&gt;用 cross-encoder 來把未標記的資料標記，同時基於某種特定的採樣策略，從 652,653 種可能的組合中挑選 3432 組&lt;/li&gt;
+&lt;li&gt;把資料集 + 額外的 3432 組資料一起拿來訓練 SBERT&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;results&#34;&gt;Results&lt;/h2&gt;
+&lt;h3 id=&#34;p2p-similarity-and-semantic-search&#34;&gt;P2P similarity and semantic search&lt;/h3&gt;
+&lt;p&gt;Patent Semantic Search (PSS) 是專利分析的基礎部分。&lt;/p&gt;
+&lt;p&gt;Transformer 模型等語義相似性的解法是一種新解法，可以用來解決基於關鍵字的搜尋方法中， query terms 和專利內容不匹配的問題。&lt;/p&gt;
+&lt;p&gt;為了評估模型的準確性，未來的研究中，作者希望通過 Mean Reciprocal Rank (MRR) 來評估分類結果。&lt;/p&gt;
+&lt;h3 id=&#34;cpc-prediction&#34;&gt;CPC Prediction&lt;/h3&gt;
+&lt;p&gt;Top-N 準確度等於 GT 與預測有最高概率的任何 N 個預測匹配的頻率，
+所以 Top-5 就是最高的五個分類中一個就有中。&lt;/p&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;本文使用  augmented SBERT  獲得 SOTA 的專利文本 embedding。&lt;/p&gt;
+&lt;p&gt;介紹了一種 augmented 的方法，把 SBERT 微調到適合 patent claims 的 domain。&lt;/p&gt;
+&lt;p&gt;SBERT 的一個主要優點是可以有效率地獲得 embedding distance，使我們能夠為大的專利資料集建構 p2p similarity。&lt;/p&gt;
+&lt;p&gt;雖然基於文本的 p2p similarity 的有用性已經在各種應用方面得到證明，但本文進一步證明作者的 transformer-based p2p similarity 可以被用在 SOTA 的專利分類。&lt;/p&gt;
+&lt;p&gt;而且使用簡單的 KNN 方法，檢查他們可以使模型決策具備 understandable 和 explainable。&lt;/p&gt;
+&lt;h2 id=&#34;limitations--future-research&#34;&gt;Limitations &amp;amp; Future Research&lt;/h2&gt;
+&lt;p&gt;未來希望用 Annoy(Approximate Nearest Neighbor Oh Yeah!) 來測試更大樣本的模型並比較結果。&lt;/p&gt;
+&lt;p&gt;Annoy(Approximate Nearest Neighbor Oh Yeah!) 是想尋找近似相似而不是精確相似的句子。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Sentence-BERT 論文閱讀</title>
         <link>https://roykesydon.github.io/Blog/p/sentence-bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
         <pubDate>Sun, 12 Mar 2023 10:08:46 +0800</pubDate>

@@ -5,7 +5,7 @@ draft: true
 description: ""
 type: "post"
 tags: ["linux","embedded-system"]
-categories : ["linux"]
+categories : ["embedded-system"]
 ---
 
 # Introduce
