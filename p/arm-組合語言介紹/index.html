@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='開發環境 IDE SW4STM32 支援 STM32 GCC C/C&#43;&#43; compiler GDB-based debugger 板子 STM32 Bucleo Board Cortex-M4 ST-LINK debugger Memories 1MB Flash 128KB SRAM Debug Interface JTAG Joint Test Action Group standard ASICs hardware debug interface SWD Serial Wire Debug 只從 JTAG 用 5 wires Bootup Code Reset
+Boot Loader
+0x00000000 的程式 把 CPU 重置 Reset handler
+Ststem initialization C startup code
+Application(main)
+Memory map 見官網 memory map
+只用到 SRAM 的 128KB(SRAM)，還有 Code 的 1MB(Flash)'>
+<title>ARM 組合語言介紹</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/arm-%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80%E4%BB%8B%E7%B4%B9/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.8ba0009e8cca52c2ec8ac52dce3ac8d883cab10ebd0e2447c7fc3d51de630b5f.css"><meta property='og:title' content='ARM 組合語言介紹'>
+<meta property='og:description' content='開發環境 IDE SW4STM32 支援 STM32 GCC C/C&#43;&#43; compiler GDB-based debugger 板子 STM32 Bucleo Board Cortex-M4 ST-LINK debugger Memories 1MB Flash 128KB SRAM Debug Interface JTAG Joint Test Action Group standard ASICs hardware debug interface SWD Serial Wire Debug 只從 JTAG 用 5 wires Bootup Code Reset
+Boot Loader
+0x00000000 的程式 把 CPU 重置 Reset handler
+Ststem initialization C startup code
+Application(main)
+Memory map 見官網 memory map
+只用到 SRAM 的 128KB(SRAM)，還有 Code 的 1MB(Flash)'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/arm-%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80%E4%BB%8B%E7%B4%B9/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='embedded-system' /><meta property='article:tag' content='stm32' /><meta property='article:tag' content='mcu' /><meta property='article:tag' content='assembly' /><meta property='article:published_time' content='2023-03-21T01:32:54&#43;08:00'/><meta property='article:modified_time' content='2023-03-21T01:32:54&#43;08:00'/>
+<meta name="twitter:title" content="ARM 組合語言介紹">
+<meta name="twitter:description" content="開發環境 IDE SW4STM32 支援 STM32 GCC C/C&#43;&#43; compiler GDB-based debugger 板子 STM32 Bucleo Board Cortex-M4 ST-LINK debugger Memories 1MB Flash 128KB SRAM Debug Interface JTAG Joint Test Action Group standard ASICs hardware debug interface SWD Serial Wire Debug 只從 JTAG 用 5 wires Bootup Code Reset
+Boot Loader
+0x00000000 的程式 把 CPU 重置 Reset handler
+Ststem initialization C startup code
+Application(main)
+Memory map 見官網 memory map
+只用到 SRAM 的 128KB(SRAM)，還有 Code 的 1MB(Flash)">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/Blog">
+                
+                    
+                    
+                    
+                        
+                        <img src="/Blog/logo_hu4571d0fc95bcb4b13f2ac8e17a6aeed9_16849_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">⭐</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/Blog">Roykesydon</a></h1>
+            <h2 class="site-description">I write notes here during my free time.</h2>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#開發環境">開發環境</a>
+      <ol>
+        <li><a href="#ide">IDE</a></li>
+        <li><a href="#板子">板子</a></li>
+        <li><a href="#debug-interface">Debug Interface</a></li>
+      </ol>
+    </li>
+    <li><a href="#bootup-code">Bootup Code</a></li>
+    <li><a href="#memory-map">Memory map</a></li>
+    <li><a href="#sections">Sections</a></li>
+    <li><a href="#重要的額外文件">重要的額外文件</a></li>
+    <li><a href="#arm-register">ARM Register</a></li>
+    <li><a href="#assembly-syntax">Assembly syntax</a>
+      <ol>
+        <li><a href="#instructions-class">Instructions class</a></li>
+        <li><a href="#examples">examples</a></li>
+        <li><a href="#operand2">Operand2</a></li>
+        <li><a href="#arm-instrcution-formats">ARM instrcution formats</a></li>
+        <li><a href="#reverse-ordering-operations">Reverse Ordering Operations</a></li>
+        <li><a href="#load-and-store-instructions">Load and Store Instructions</a></li>
+        <li><a href="#status-register-access-instructions">Status Register Access Instructions</a></li>
+        <li><a href="#if-then-else">If-Then-Else</a></li>
+        <li><a href="#branch-instructinos">Branch Instructinos</a></li>
+        <li><a href="#stack-memory-access">Stack memory access</a></li>
+        <li><a href="#memory-barrier-instructions">Memory Barrier Instructions</a></li>
+      </ol>
+    </li>
+    <li><a href="#function-call-and-parameter-passing">Function Call and Parameter Passing</a>
+      <ol>
+        <li><a href="#arm-procedure-call-standard">ARM Procedure Call Standard</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/embedded-system/" style="background-color: #e17100; color: #fff;">
+                Embedded System
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/Blog/p/arm-%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80%E4%BB%8B%E7%B4%B9/">ARM 組合語言介紹</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 21, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    5 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="開發環境">開發環境</h2>
+<h3 id="ide">IDE</h3>
+<ul>
+<li>SW4STM32
+<ul>
+<li>支援 STM32</li>
+<li>GCC C/C++ compiler</li>
+<li>GDB-based debugger</li>
+</ul>
+</li>
+</ul>
+<h3 id="板子">板子</h3>
+<ul>
+<li>STM32 Bucleo Board
+<ul>
+<li>Cortex-M4</li>
+<li>ST-LINK
+<ul>
+<li>debugger</li>
+</ul>
+</li>
+<li>Memories
+<ul>
+<li>1MB Flash</li>
+<li>128KB SRAM</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="debug-interface">Debug Interface</h3>
+<ul>
+<li>JTAG
+<ul>
+<li>Joint Test Action Group</li>
+<li>standard ASICs hardware debug interface</li>
+</ul>
+</li>
+<li>SWD
+<ul>
+<li>Serial Wire Debug</li>
+<li>只從 JTAG 用 5 wires</li>
+</ul>
+</li>
+</ul>
+<h2 id="bootup-code">Bootup Code</h2>
+<ol>
+<li>
+<p>Reset</p>
+</li>
+<li>
+<p>Boot Loader</p>
+<ul>
+<li>0x00000000 的程式</li>
+<li>把 CPU 重置</li>
+</ul>
+</li>
+<li>
+<p>Reset handler</p>
+<ul>
+<li>Ststem initialization</li>
+</ul>
+</li>
+<li>
+<p>C startup code</p>
+</li>
+<li>
+<p>Application(main)</p>
+</li>
+</ol>
+<h2 id="memory-map">Memory map</h2>
+<p>見官網 memory map</p>
+<p>只用到 SRAM 的 128KB(SRAM)，還有 Code 的 1MB(Flash)</p>
+<h2 id="sections">Sections</h2>
+<ul>
+<li>.data
+<ul>
+<li>儲存資料</li>
+</ul>
+</li>
+<li>.text
+<ul>
+<li>儲存程式碼</li>
+</ul>
+</li>
+</ul>
+<p>同 section 會放在一塊是為了設定 read-only 方便，比如 .text 的要靠硬體實現 read-only</p>
+<h2 id="重要的額外文件">重要的額外文件</h2>
+<ul>
+<li>Linker Script
+<ul>
+<li>定義了不同 section 該存放的地方，以及 memory 相關定義</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">MEMORY
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    RAM (xrw)		: ORIGIN = 0x20000000, LENGTH = 96K
+</span></span><span class="line"><span class="cl">    ROM (rx)		: ORIGIN = 0x8000000, LENGTH = 1024K
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SECTIONS
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">/* The program code and other data into ROM memory */
+</span></span><span class="line"><span class="cl">.text :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    . = ALIGN(8);
+</span></span><span class="line"><span class="cl">    *(.text)           /* .text sections (code) */
+</span></span><span class="line"><span class="cl">    *(.text*)          /* .text* sections (code) */
+</span></span><span class="line"><span class="cl">    *(.glue_7)         /* glue arm to thumb code */
+</span></span><span class="line"><span class="cl">    *(.glue_7t)        /* glue thumb to arm code */
+</span></span><span class="line"><span class="cl">    *(.eh_frame)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    KEEP (*(.init))
+</span></span><span class="line"><span class="cl">    KEEP (*(.fini))
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    . = ALIGN(8);
+</span></span><span class="line"><span class="cl">    _etext = .;        /* define a global symbols at end of code */
+</span></span><span class="line"><span class="cl">} &gt;ROM
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">.data : 
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    . = ALIGN(8);
+</span></span><span class="line"><span class="cl">    _sdata = .;        /* create a global symbol at data start */
+</span></span><span class="line"><span class="cl">    *(.data)           /* .data sections */
+</span></span><span class="line"><span class="cl">    *(.data*)          /* .data* sections */
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    . = ALIGN(8);
+</span></span><span class="line"><span class="cl">    _edata = .;        /* define a global symbol at data end */
+</span></span><span class="line"><span class="cl">} &gt;RAM AT&gt; ROM
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>Make File
+<ul>
+<li>描述如何編譯和連接的規則</li>
+<li>把 startup 的 .s檔加進去</li>
+</ul>
+</li>
+<li>startup_stm32.s
+<ul>
+<li>
+<p>編譯好後擺在 binary 頭的地方</p>
+</li>
+<li>
+<p>vector table</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/******************************************************************************
+</span></span><span class="line"><span class="cl">*
+</span></span><span class="line"><span class="cl">* The STM32L476RGTx vector table.  Note that the proper constructs
+</span></span><span class="line"><span class="cl">* must be placed on this to ensure that it ends up at physical address
+</span></span><span class="line"><span class="cl">* 0x0000.0000.
+</span></span><span class="line"><span class="cl">*
+</span></span><span class="line"><span class="cl">******************************************************************************/
+</span></span><span class="line"><span class="cl">.section .isr_vector,&#34;a&#34;,%progbits
+</span></span><span class="line"><span class="cl">.type g_pfnVectors, %object
+</span></span><span class="line"><span class="cl">.size g_pfnVectors, .-g_pfnVectors
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">g_pfnVectors:
+</span></span><span class="line"><span class="cl">.word _estack
+</span></span><span class="line"><span class="cl">.word Reset_Handler
+</span></span><span class="line"><span class="cl">.word NMI_Handler
+</span></span><span class="line"><span class="cl">.word HardFault_Handler
+</span></span><span class="line"><span class="cl">.word	MemManage_Handler
+</span></span><span class="line"><span class="cl">.word	BusFault_Handler
+</span></span><span class="line"><span class="cl">.word	UsageFault_Handler
+</span></span><span class="line"><span class="cl">.word	0
+</span></span><span class="line"><span class="cl">.word	0
+</span></span><span class="line"><span class="cl">.word	0
+</span></span><span class="line"><span class="cl">.word	0
+</span></span><span class="line"><span class="cl">.word	SVC_Handler
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>Reset_Handler
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Reset_Handler:
+</span></span><span class="line"><span class="cl">    ldr   r0, =_estack
+</span></span><span class="line"><span class="cl">    mov   sp, r0          /* set stack pointer */
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    /* Copy the data segment initializers from flash to SRAM */
+</span></span><span class="line"><span class="cl">    ldr r0, =_sdata
+</span></span><span class="line"><span class="cl">    ldr r1, =_edata
+</span></span><span class="line"><span class="cl">    ldr r2, =_sidata
+</span></span><span class="line"><span class="cl">    movs r3, #0
+</span></span><span class="line"><span class="cl">    b LoopCopyDataInit
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">LoopCopyDataInit:
+</span></span><span class="line"><span class="cl">    adds r4, r0, r3
+</span></span><span class="line"><span class="cl">    cmp r4, r1
+</span></span><span class="line"><span class="cl">    bcc CopyDataInit
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    /* Zero fill the bss segment. */
+</span></span><span class="line"><span class="cl">    ldr r2, =_sbss
+</span></span><span class="line"><span class="cl">    ldr r4, =_ebss
+</span></span><span class="line"><span class="cl">    movs r3, #0
+</span></span><span class="line"><span class="cl">    b LoopFillZerobss
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">LoopFillZerobss:
+</span></span><span class="line"><span class="cl">    cmp r2, r4
+</span></span><span class="line"><span class="cl">    bcc FillZerobss
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    /* Call the clock system intitialization function.*/
+</span></span><span class="line"><span class="cl">    bl  SystemInit
+</span></span><span class="line"><span class="cl">    /* Call static constructors */
+</span></span><span class="line"><span class="cl">    bl __libc_init_array
+</span></span><span class="line"><span class="cl">    /* Call the application&#39;s entry point.*/
+</span></span><span class="line"><span class="cl">    bl main
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="arm-register">ARM Register</h2>
+<ul>
+<li>
+<p>ARM 的可存取暫存器為 R0-R15</p>
+<ul>
+<li>r13: Stack Pointer</li>
+<li>r14: Link Register</li>
+<li>r15: Program Counter</li>
+<li>r0~r7 是 low register r8~r15 是 high register</li>
+</ul>
+</li>
+<li>
+<p>狀態暫存器</p>
+<ul>
+<li>CPSR (Current Processor Status Register)
+<ul>
+<li>用來儲存各種狀態，包含 condition flag，比如 negative, zero, carry, overflow
+<ul>
+<li>carry: 無符號加法操作是否溢出</li>
+<li>overflow: 有符號加法操作是否溢出</li>
+<li>當兩個都為 1 或都為 0 代表運算沒問題</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>有多種模式，有些模式有自己獨立的 r 暫存器，並有 SPSR，用來在中斷發生時，把 CPSR 的資訊 copy 過去</p>
+</li>
+<li>
+<p>Special-purpose registers</p>
+<ul>
+<li>APSR, IPSR, EPSR</li>
+</ul>
+</li>
+</ul>
+<h2 id="assembly-syntax">Assembly syntax</h2>
+<ul>
+<li>UAL: Unified Assembler Language</li>
+<li>自己去翻 instruction set</li>
+</ul>
+<h3 id="instructions-class">Instructions class</h3>
+<ul>
+<li>Branch instructions
+<ul>
+<li>B, BL, BX,&hellip;</li>
+</ul>
+</li>
+<li>Data-processing instructions
+<ul>
+<li>MOV, ADD, SUB, MUL,&hellip;</li>
+</ul>
+</li>
+<li>Load and store instructions
+<ul>
+<li>LDR, STR,&hellip;</li>
+</ul>
+</li>
+<li>Status register access instructions
+<ul>
+<li>MSR, MRS,&hellip;</li>
+</ul>
+</li>
+<li>Miscellaneous instructions
+<ul>
+<li>Memory Barrier instructions</li>
+<li>Exception-Related instructions</li>
+<li>Pseudo instructions</li>
+</ul>
+</li>
+</ul>
+<h3 id="examples">examples</h3>
+<ul>
+<li>
+<p><code>MOVS R0, #0x12</code></p>
+<ul>
+<li>R0=0x12</li>
+</ul>
+</li>
+<li>
+<p><code>MOVS R1, #`A` </code></p>
+<ul>
+<li>R1=A(ASCII)</li>
+</ul>
+</li>
+<li>
+<p><code>NVIC_IRQ_SETEN  EQU  0xE000E100</code></p>
+<ul>
+<li>宣告常數 NVIC_IRQ_SETEN，賦值 0xE000E100</li>
+</ul>
+</li>
+<li>
+<p><code>LDR R0,=NVIC_IRQ_SETEN</code></p>
+<ul>
+<li>放 0xE000E100 進 R0</li>
+<li>這不能改成 <code>MOVS R0, #0xE000E100 </code>，因為每個 instruction 只有 32 個 bits，這勢必塞不下，必須從記憶體 load 進來</li>
+</ul>
+</li>
+<li>
+<p><code>NVIC_IRQ0_ENABLE  EQU  0x1</code></p>
+<ul>
+<li>宣告常數 NVIC_IRQ0_ENABLE，賦值 0x1</li>
+</ul>
+</li>
+<li>
+<p><code>MOVS R1, #NVIC_IRQ0_ENABLE</code></p>
+<ul>
+<li>R1=0x1</li>
+</ul>
+</li>
+<li>
+<p><code>STR R1, [R0]</code></p>
+<ul>
+<li>把 0x1 存到 0xE000E100，這裡可以 enable external interrupt IRQ#0</li>
+</ul>
+</li>
+<li>
+<p><code>LDR rn [pc, #offset to literal pool]</code></p>
+<ul>
+<li>load register n with one word from the address [pc + offset]</li>
+<li>最後的形式</li>
+</ul>
+</li>
+</ul>
+<h3 id="operand2">Operand2</h3>
+<ul>
+<li>共有 12 bits
+<ul>
+<li>設計成 4 bits for rotate, 8 bits for Immediate</li>
+</ul>
+</li>
+</ul>
+<h3 id="arm-instrcution-formats">ARM instrcution formats</h3>
+<ul>
+<li>ADD vs ADDS
+<ul>
+<li>有 S 代表會去更新 status</li>
+</ul>
+</li>
+<li>cond
+<ul>
+<li>根據之前的執行情況，判斷指令要不要執行</li>
+<li>suffix</li>
+</ul>
+</li>
+</ul>
+<h3 id="reverse-ordering-operations">Reverse Ordering Operations</h3>
+<ul>
+<li>REV (Byte-Reverse Word)
+<ul>
+<li>把 4 個 Byte 全數反轉，用在一個是 Little-Endian 一個是 Big-Endian 的情況</li>
+</ul>
+</li>
+</ul>
+<h3 id="load-and-store-instructions">Load and Store Instructions</h3>
+<ul>
+<li>examples
+<ul>
+<li><code>LDR r0, [r1]</code>
+<ul>
+<li>r0 = [r1]</li>
+</ul>
+</li>
+<li><code>LDM r0, {r1, r2}</code>
+<ul>
+<li>r1 = [r0]</li>
+<li>r2 = [r0+4]</li>
+</ul>
+</li>
+<li><code>STM r0, {r1, r2}</code>
+<ul>
+<li>[r0] = r1</li>
+<li>[r0+4] = r2</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="status-register-access-instructions">Status Register Access Instructions</h3>
+<ul>
+<li>一般來說不太會用到，因為用 suffix 就可以看條件</li>
+<li>MRS: Register = Status Register
+<ul>
+<li><code>MRS r0, IPSR</code></li>
+</ul>
+</li>
+<li>MSR: Status Register = Register
+<ul>
+<li><code>MSR APSR, r0</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="if-then-else">If-Then-Else</h3>
+<ul>
+<li>用 CMP 和 conditional branches</li>
+<li>Example
+<ul>
+<li>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">  CMP R0, #10   ;compare r0 to 10
+</span></span><span class="line"><span class="cl">  BLE incr_counter ; if less or equal, then branch to incr_counter
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+</ul>
+<h3 id="branch-instructinos">Branch Instructinos</h3>
+<p>能跳的距離受限於 operand 長度</p>
+<ul>
+<li>B-Branch
+<ul>
+<li>能跳 PC 的 +/- 2046 bytes</li>
+</ul>
+</li>
+<li>BL-Branch and Link
+<ul>
+<li>能跳 PC 的 +/- 254 bytes</li>
+<li>Branch to subroutine 的時候，會把下一行指令放到 Link register</li>
+<li>沒有 push 到 stack，所以要特別小心，register 是共用的，
+可能要視情況自己放到 stack
+<ul>
+<li>比如要進兩層 function，可以用 <code>push {r4-r6, LR}</code> 和 <code>POP {R4-R6, PC}</code> 這種做法來保留參數</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>BX-Branch and exchange
+<ul>
+<li>return</li>
+</ul>
+</li>
+</ul>
+<h3 id="stack-memory-access">Stack memory access</h3>
+<ul>
+<li>
+<p>PUSH</p>
+<ul>
+<li>SP = SP - N*4</li>
+</ul>
+</li>
+<li>
+<p>POP</p>
+<ul>
+<li>SP = SP + N*4</li>
+</ul>
+</li>
+<li>
+<p>Ascending/Descending</p>
+<ul>
+<li>stack 往哪個方向長</li>
+</ul>
+</li>
+<li>
+<p>Empty/Full</p>
+<ul>
+<li>stack 指向下一個空的位置，還是最後一個 item</li>
+</ul>
+</li>
+<li>
+<p>預設且常見的是 fully descending</p>
+</li>
+<li>
+<p>STM 和 LDM 可以透過 suffix 來存到 stack</p>
+<ul>
+<li>example
+<ul>
+<li><code>STMFD r13!, {r4-r7}</code></li>
+<li>把 r4 到 r7 push 到 stack</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="memory-barrier-instructions">Memory Barrier Instructions</h3>
+<ul>
+<li>DMB, SDB, ISB</li>
+<li>在下個指令前 sync memory data</li>
+</ul>
+<h2 id="function-call-and-parameter-passing">Function Call and Parameter Passing</h2>
+<ul>
+<li>caller 和 callee 誰負責 backup 和 restore
+<ul>
+<li>caller 負責
+<ul>
+<li>不管 callee 怎樣亂搞都行</li>
+<li>但不知道 callee 要用哪些參數，全 backup 可能多此一舉</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>怎麼傳遞參數給 callee
+<ul>
+<li>常放在 stack，但這樣要透過 memory，相較 register 慢</li>
+</ul>
+</li>
+<li>怎麼 return value 給 caller
+<ul>
+<li>和上個問題差不多</li>
+</ul>
+</li>
+</ul>
+<h3 id="arm-procedure-call-standard">ARM Procedure Call Standard</h3>
+<p>又稱 APCS，講不同的 register 的一種使用規範</p>
+<ul>
+<li>r0-r3 用來當參數和回傳</li>
+<li>r4-r11 用來 local variable，callee 使用前可以先 backup</li>
+<li>r12-r15 特殊用途，沒事別亂動</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/embedded-system/">embedded-system</a>
+        
+            <a href="/Blog/tags/stm32/">stm32</a>
+        
+            <a href="/Blog/tags/mcu/">mcu</a>
+        
+            <a href="/Blog/tags/assembly/">assembly</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

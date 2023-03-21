@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>embedded-system on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/embedded-system/</link>
+        <description>Recent content in embedded-system on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Tue, 21 Mar 2023 01:32:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/embedded-system/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>ARM 組合語言介紹</title>
+        <link>https://roykesydon.github.io/Blog/p/arm-%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80%E4%BB%8B%E7%B4%B9/</link>
+        <pubDate>Tue, 21 Mar 2023 01:32:54 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/arm-%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80%E4%BB%8B%E7%B4%B9/</guid>
+        <description>&lt;h2 id=&#34;開發環境&#34;&gt;開發環境&lt;/h2&gt;
+&lt;h3 id=&#34;ide&#34;&gt;IDE&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;SW4STM32
+&lt;ul&gt;
+&lt;li&gt;支援 STM32&lt;/li&gt;
+&lt;li&gt;GCC C/C++ compiler&lt;/li&gt;
+&lt;li&gt;GDB-based debugger&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;板子&#34;&gt;板子&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;STM32 Bucleo Board
+&lt;ul&gt;
+&lt;li&gt;Cortex-M4&lt;/li&gt;
+&lt;li&gt;ST-LINK
+&lt;ul&gt;
+&lt;li&gt;debugger&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Memories
+&lt;ul&gt;
+&lt;li&gt;1MB Flash&lt;/li&gt;
+&lt;li&gt;128KB SRAM&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;debug-interface&#34;&gt;Debug Interface&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;JTAG
+&lt;ul&gt;
+&lt;li&gt;Joint Test Action Group&lt;/li&gt;
+&lt;li&gt;standard ASICs hardware debug interface&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;SWD
+&lt;ul&gt;
+&lt;li&gt;Serial Wire Debug&lt;/li&gt;
+&lt;li&gt;只從 JTAG 用 5 wires&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;bootup-code&#34;&gt;Bootup Code&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Reset&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Boot Loader&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;0x00000000 的程式&lt;/li&gt;
+&lt;li&gt;把 CPU 重置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Reset handler&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Ststem initialization&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;C startup code&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Application(main)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;memory-map&#34;&gt;Memory map&lt;/h2&gt;
+&lt;p&gt;見官網 memory map&lt;/p&gt;
+&lt;p&gt;只用到 SRAM 的 128KB(SRAM)，還有 Code 的 1MB(Flash)&lt;/p&gt;
+&lt;h2 id=&#34;sections&#34;&gt;Sections&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;.data
+&lt;ul&gt;
+&lt;li&gt;儲存資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;.text
+&lt;ul&gt;
+&lt;li&gt;儲存程式碼&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;同 section 會放在一塊是為了設定 read-only 方便，比如 .text 的要靠硬體實現 read-only&lt;/p&gt;
+&lt;h2 id=&#34;重要的額外文件&#34;&gt;重要的額外文件&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Linker Script
+&lt;ul&gt;
+&lt;li&gt;定義了不同 section 該存放的地方，以及 memory 相關定義&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;MEMORY
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    RAM (xrw)		: ORIGIN = 0x20000000, LENGTH = 96K
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    ROM (rx)		: ORIGIN = 0x8000000, LENGTH = 1024K
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;SECTIONS
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/* The program code and other data into ROM memory */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.text :
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    . = ALIGN(8);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    *(.text)           /* .text sections (code) */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    *(.text*)          /* .text* sections (code) */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    *(.glue_7)         /* glue arm to thumb code */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    *(.glue_7t)        /* glue thumb to arm code */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    *(.eh_frame)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    KEEP (*(.init))
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    KEEP (*(.fini))
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    . = ALIGN(8);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    _etext = .;        /* define a global symbols at end of code */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;} &amp;gt;ROM
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.data : 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    . = ALIGN(8);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    _sdata = .;        /* create a global symbol at data start */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    *(.data)           /* .data sections */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    *(.data*)          /* .data* sections */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    . = ALIGN(8);
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    _edata = .;        /* define a global symbol at data end */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;} &amp;gt;RAM AT&amp;gt; ROM
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;Make File
+&lt;ul&gt;
+&lt;li&gt;描述如何編譯和連接的規則&lt;/li&gt;
+&lt;li&gt;把 startup 的 .s檔加進去&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;startup_stm32.s
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;編譯好後擺在 binary 頭的地方&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;vector table&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;/******************************************************************************
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;*
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;* The STM32L476RGTx vector table.  Note that the proper constructs
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;* must be placed on this to ensure that it ends up at physical address
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;* 0x0000.0000.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;*
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;******************************************************************************/
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.section .isr_vector,&amp;#34;a&amp;#34;,%progbits
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.type g_pfnVectors, %object
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.size g_pfnVectors, .-g_pfnVectors
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;g_pfnVectors:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.word _estack
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.word Reset_Handler
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.word NMI_Handler
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.word HardFault_Handler
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.word	MemManage_Handler
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.word	BusFault_Handler
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.word	UsageFault_Handler
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.word	0
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.word	0
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.word	0
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.word	0
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;.word	SVC_Handler
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;Reset_Handler
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Reset_Handler:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    ldr   r0, =_estack
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    mov   sp, r0          /* set stack pointer */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    /* Copy the data segment initializers from flash to SRAM */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    ldr r0, =_sdata
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    ldr r1, =_edata
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    ldr r2, =_sidata
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    movs r3, #0
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    b LoopCopyDataInit
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;LoopCopyDataInit:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    adds r4, r0, r3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    cmp r4, r1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    bcc CopyDataInit
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    /* Zero fill the bss segment. */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    ldr r2, =_sbss
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    ldr r4, =_ebss
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    movs r3, #0
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    b LoopFillZerobss
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;LoopFillZerobss:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    cmp r2, r4
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    bcc FillZerobss
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    /* Call the clock system intitialization function.*/
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    bl  SystemInit
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    /* Call static constructors */
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    bl __libc_init_array
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    /* Call the application&amp;#39;s entry point.*/
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    bl main
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;arm-register&#34;&gt;ARM Register&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;ARM 的可存取暫存器為 R0-R15&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;r13: Stack Pointer&lt;/li&gt;
+&lt;li&gt;r14: Link Register&lt;/li&gt;
+&lt;li&gt;r15: Program Counter&lt;/li&gt;
+&lt;li&gt;r0~r7 是 low register r8~r15 是 high register&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;狀態暫存器&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CPSR (Current Processor Status Register)
+&lt;ul&gt;
+&lt;li&gt;用來儲存各種狀態，包含 condition flag，比如 negative, zero, carry, overflow
+&lt;ul&gt;
+&lt;li&gt;carry: 無符號加法操作是否溢出&lt;/li&gt;
+&lt;li&gt;overflow: 有符號加法操作是否溢出&lt;/li&gt;
+&lt;li&gt;當兩個都為 1 或都為 0 代表運算沒問題&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;有多種模式，有些模式有自己獨立的 r 暫存器，並有 SPSR，用來在中斷發生時，把 CPSR 的資訊 copy 過去&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Special-purpose registers&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;APSR, IPSR, EPSR&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;assembly-syntax&#34;&gt;Assembly syntax&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;UAL: Unified Assembler Language&lt;/li&gt;
+&lt;li&gt;自己去翻 instruction set&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;instructions-class&#34;&gt;Instructions class&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Branch instructions
+&lt;ul&gt;
+&lt;li&gt;B, BL, BX,&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Data-processing instructions
+&lt;ul&gt;
+&lt;li&gt;MOV, ADD, SUB, MUL,&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Load and store instructions
+&lt;ul&gt;
+&lt;li&gt;LDR, STR,&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Status register access instructions
+&lt;ul&gt;
+&lt;li&gt;MSR, MRS,&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Miscellaneous instructions
+&lt;ul&gt;
+&lt;li&gt;Memory Barrier instructions&lt;/li&gt;
+&lt;li&gt;Exception-Related instructions&lt;/li&gt;
+&lt;li&gt;Pseudo instructions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;examples&#34;&gt;examples&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;MOVS R0, #0x12&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;R0=0x12&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;MOVS R1, #`A` &lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;R1=A(ASCII)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;NVIC_IRQ_SETEN  EQU  0xE000E100&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;宣告常數 NVIC_IRQ_SETEN，賦值 0xE000E100&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;LDR R0,=NVIC_IRQ_SETEN&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;放 0xE000E100 進 R0&lt;/li&gt;
+&lt;li&gt;這不能改成 &lt;code&gt;MOVS R0, #0xE000E100 &lt;/code&gt;，因為每個 instruction 只有 32 個 bits，這勢必塞不下，必須從記憶體 load 進來&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;NVIC_IRQ0_ENABLE  EQU  0x1&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;宣告常數 NVIC_IRQ0_ENABLE，賦值 0x1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;MOVS R1, #NVIC_IRQ0_ENABLE&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;R1=0x1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;STR R1, [R0]&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;把 0x1 存到 0xE000E100，這裡可以 enable external interrupt IRQ#0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;LDR rn [pc, #offset to literal pool]&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;load register n with one word from the address [pc + offset]&lt;/li&gt;
+&lt;li&gt;最後的形式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;operand2&#34;&gt;Operand2&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;共有 12 bits
+&lt;ul&gt;
+&lt;li&gt;設計成 4 bits for rotate, 8 bits for Immediate&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;arm-instrcution-formats&#34;&gt;ARM instrcution formats&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;ADD vs ADDS
+&lt;ul&gt;
+&lt;li&gt;有 S 代表會去更新 status&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;cond
+&lt;ul&gt;
+&lt;li&gt;根據之前的執行情況，判斷指令要不要執行&lt;/li&gt;
+&lt;li&gt;suffix&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;reverse-ordering-operations&#34;&gt;Reverse Ordering Operations&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;REV (Byte-Reverse Word)
+&lt;ul&gt;
+&lt;li&gt;把 4 個 Byte 全數反轉，用在一個是 Little-Endian 一個是 Big-Endian 的情況&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;load-and-store-instructions&#34;&gt;Load and Store Instructions&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;examples
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;LDR r0, [r1]&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;r0 = [r1]&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;LDM r0, {r1, r2}&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;r1 = [r0]&lt;/li&gt;
+&lt;li&gt;r2 = [r0+4]&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;STM r0, {r1, r2}&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;[r0] = r1&lt;/li&gt;
+&lt;li&gt;[r0+4] = r2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;status-register-access-instructions&#34;&gt;Status Register Access Instructions&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一般來說不太會用到，因為用 suffix 就可以看條件&lt;/li&gt;
+&lt;li&gt;MRS: Register = Status Register
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;MRS r0, IPSR&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;MSR: Status Register = Register
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;MSR APSR, r0&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;if-then-else&#34;&gt;If-Then-Else&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用 CMP 和 conditional branches&lt;/li&gt;
+&lt;li&gt;Example
+&lt;ul&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  CMP R0, #10   ;compare r0 to 10
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  BLE incr_counter ; if less or equal, then branch to incr_counter
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;branch-instructinos&#34;&gt;Branch Instructinos&lt;/h3&gt;
+&lt;p&gt;能跳的距離受限於 operand 長度&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;B-Branch
+&lt;ul&gt;
+&lt;li&gt;能跳 PC 的 +/- 2046 bytes&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;BL-Branch and Link
+&lt;ul&gt;
+&lt;li&gt;能跳 PC 的 +/- 254 bytes&lt;/li&gt;
+&lt;li&gt;Branch to subroutine 的時候，會把下一行指令放到 Link register&lt;/li&gt;
+&lt;li&gt;沒有 push 到 stack，所以要特別小心，register 是共用的，
+可能要視情況自己放到 stack
+&lt;ul&gt;
+&lt;li&gt;比如要進兩層 function，可以用 &lt;code&gt;push {r4-r6, LR}&lt;/code&gt; 和 &lt;code&gt;POP {R4-R6, PC}&lt;/code&gt; 這種做法來保留參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;BX-Branch and exchange
+&lt;ul&gt;
+&lt;li&gt;return&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;stack-memory-access&#34;&gt;Stack memory access&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;PUSH&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;SP = SP - N*4&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;POP&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;SP = SP + N*4&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Ascending/Descending&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;stack 往哪個方向長&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Empty/Full&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;stack 指向下一個空的位置，還是最後一個 item&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;預設且常見的是 fully descending&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;STM 和 LDM 可以透過 suffix 來存到 stack&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;example
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;STMFD r13!, {r4-r7}&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;把 r4 到 r7 push 到 stack&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;memory-barrier-instructions&#34;&gt;Memory Barrier Instructions&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;DMB, SDB, ISB&lt;/li&gt;
+&lt;li&gt;在下個指令前 sync memory data&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;function-call-and-parameter-passing&#34;&gt;Function Call and Parameter Passing&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;caller 和 callee 誰負責 backup 和 restore
+&lt;ul&gt;
+&lt;li&gt;caller 負責
+&lt;ul&gt;
+&lt;li&gt;不管 callee 怎樣亂搞都行&lt;/li&gt;
+&lt;li&gt;但不知道 callee 要用哪些參數，全 backup 可能多此一舉&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;怎麼傳遞參數給 callee
+&lt;ul&gt;
+&lt;li&gt;常放在 stack，但這樣要透過 memory，相較 register 慢&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;怎麼 return value 給 caller
+&lt;ul&gt;
+&lt;li&gt;和上個問題差不多&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;arm-procedure-call-standard&#34;&gt;ARM Procedure Call Standard&lt;/h3&gt;
+&lt;p&gt;又稱 APCS，講不同的 register 的一種使用規範&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;r0-r3 用來當參數和回傳&lt;/li&gt;
+&lt;li&gt;r4-r11 用來 local variable，callee 使用前可以先 backup&lt;/li&gt;
+&lt;li&gt;r12-r15 特殊用途，沒事別亂動&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

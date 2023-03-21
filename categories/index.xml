@@ -6,7 +6,15 @@
         <description>Recent content in Categories on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Wed, 15 Mar 2023 15:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 21 Mar 2023 01:32:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Embedded System</title>
+        <link>https://roykesydon.github.io/Blog/categories/embedded-system/</link>
+        <pubDate>Tue, 21 Mar 2023 01:32:54 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/categories/embedded-system/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/embedded-system.jpg" alt="Featured image of post Embedded System" /&gt;</description>
+        </item>
+        <item>
         <title>Deep Learning</title>
         <link>https://roykesydon.github.io/Blog/categories/deep-learning/</link>
         <pubDate>Wed, 15 Mar 2023 15:08:46 +0800</pubDate>
@@ -45,14 +53,6 @@
         
         <guid>https://roykesydon.github.io/Blog/categories/linux/</guid>
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/linux.jpg" alt="Featured image of post Linux" /&gt;</description>
-        </item>
-        <item>
-        <title>Embedded System</title>
-        <link>https://roykesydon.github.io/Blog/categories/embedded-system/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/categories/embedded-system/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/embedded-system.jpg" alt="Featured image of post Embedded System" /&gt;</description>
         </item>
         
     </channel>
