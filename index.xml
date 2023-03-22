@@ -6,7 +6,160 @@
         <description>Recent content on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 21 Mar 2023 01:32:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 22 Mar 2023 01:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>RoBERTa 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/roberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Wed, 22 Mar 2023 01:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/roberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1907.11692&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;RoBERTa: A Robustly Optimized BERT Pretraining Approach&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;發現 BERT 訓練不足，並且作者的模型在 4/9 的 GLUE 任務, RACE 和 SQuAD 取得 SOTA。&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;自監督的訓練方法帶來了顯著的性能提升，但要確定這一堆方法中的哪些方面貢獻最大，具備挑戰性。&lt;/p&gt;
+&lt;p&gt;訓練的計算量是昂貴的，使 fine-tune 受限，而且通常都是用不同大小的 private training data，使評估模型更加困難。&lt;/p&gt;
+&lt;p&gt;作者提出了對 BERT 預訓練的 replication study，包括對超參數的調整，以及對訓練集大小的仔細評估。&lt;/p&gt;
+&lt;p&gt;作者發現 BERT 訓練不足，並提出了一種改進方法，稱為 RoBERTa，可以達到或超過所有 post-BERT 的方法。&lt;/p&gt;
+&lt;p&gt;修改如下:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;訓練模型的時間更長，batch 更大，用更多 data&lt;/li&gt;
+&lt;li&gt;移除 next sentence prediction objective&lt;/li&gt;
+&lt;li&gt;訓練更長的序列&lt;/li&gt;
+&lt;li&gt;動態地改變用於訓練資料的 masking pattern&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;貢獻:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;提出一組重要的 BERT 設計選擇和訓練策略&lt;/li&gt;
+&lt;li&gt;使用了新的 dataset，叫做 CCNEWS，並證明用更多的資料來預訓練，可以提高下游任務的表現&lt;/li&gt;
+&lt;li&gt;訓練表明，在正確的設計選擇下，pretrained masked language model 和其他最近的方法比，具有競爭力&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
+&lt;p&gt;對 BERT 做回顧&lt;/p&gt;
+&lt;h3 id=&#34;architecture&#34;&gt;Architecture&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;L layers&lt;/li&gt;
+&lt;li&gt;A self-attention heads&lt;/li&gt;
+&lt;li&gt;H hidden dimension&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;training-objectives&#34;&gt;Training Objectives&lt;/h3&gt;
+&lt;p&gt;預訓練的時候，BERT 有兩個目標: masked language modeling 和 next sentence prediction&lt;/p&gt;
+&lt;h4 id=&#34;masked-language-model-mlm&#34;&gt;Masked Language Model (MLM)&lt;/h4&gt;
+&lt;p&gt;BERT 隨機選擇 15% 的 token 進行可能的替換&lt;/p&gt;
+&lt;p&gt;80% 換成 [MASK]，10% 保持不變，10% 被選為一個隨便的 vocabulary token&lt;/p&gt;
+&lt;h4 id=&#34;next-sentence-prediction-nsp&#34;&gt;Next Sentence Prediction (NSP)&lt;/h4&gt;
+&lt;p&gt;分類第二句是不是下一句，是二元分類。&lt;/p&gt;
+&lt;p&gt;正例由提取連續的句子產生，負例由不同的片段配對產生。&lt;/p&gt;
+&lt;p&gt;正例和負例以相等機率產生。&lt;/p&gt;
+&lt;h4 id=&#34;optimization&#34;&gt;Optimization&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Adam&lt;/li&gt;
+&lt;li&gt;$\beta_1$ = 0.9, $\beta_2$ = 0.999, $\epsilon$ = 1e-6&lt;/li&gt;
+&lt;li&gt;$L_2$ weight decay of 0.01&lt;/li&gt;
+&lt;li&gt;Learning rate 前 10,000 step warm up 到 1e-4，然後 linear decay&lt;/li&gt;
+&lt;li&gt;全部的 layer 和 attention weight 都 dropout 0.1&lt;/li&gt;
+&lt;li&gt;GELU 激活函數&lt;/li&gt;
+&lt;li&gt;1,000,000 次 update，batch size 256，序列長度 512&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;data&#34;&gt;Data&lt;/h4&gt;
+&lt;p&gt;BERT 在 BookCorpus 和 English Wikipedia 混和的資料集上訓練，共有 16GB 的未壓縮文本&lt;/p&gt;
+&lt;h2 id=&#34;experimental-setup&#34;&gt;Experimental Setup&lt;/h2&gt;
+&lt;p&gt;描述對於 BERT 的 replication study 的實驗設置&lt;/p&gt;
+&lt;h3 id=&#34;implementation&#34;&gt;Implementation&lt;/h3&gt;
+&lt;p&gt;作者用 FAIRSEQ 重新實現了 BERT。&lt;/p&gt;
+&lt;p&gt;主要遵循 [Background-Optimization] 中的 BERT 原始超參數，但 peak learning rate 和 warmup step 除外，他們針對每個設置單獨調整。&lt;/p&gt;
+&lt;p&gt;作者發現訓練對 Adam epsilon 非常敏感。&lt;/p&gt;
+&lt;p&gt;作者發現設置 $\beta_2$ = 0.98，在大 batch size 的情況下，可以提高訓練時的穩定性。&lt;/p&gt;
+&lt;p&gt;用最多 512 個 token 預訓練。&lt;/p&gt;
+&lt;p&gt;作者不會隨機注入短序列，也不會為前 90% 的更新縮短輸入的長度。&lt;/p&gt;
+&lt;p&gt;作者只訓練 full-length 的 sequences。&lt;/p&gt;
+&lt;h3 id=&#34;data-1&#34;&gt;Data&lt;/h3&gt;
+&lt;p&gt;BERT-style 的預訓練仰賴大量文本。&lt;/p&gt;
+&lt;p&gt;已有研究證明增加數據量可以提高 end-task 的性能。&lt;/p&gt;
+&lt;p&gt;已有一些研究，用比原始 BERT 更多樣更大的數據集，但不是所有的數據集都有公開。&lt;/p&gt;
+&lt;p&gt;本研究用了五個不同大小和領域的英文文本，共有超過 160 GB 的未壓縮文本。&lt;/p&gt;
+&lt;p&gt;使用以下數據集:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;BookCorpus + English Wikipedia
+&lt;ul&gt;
+&lt;li&gt;BERT 原本使用的。&lt;/li&gt;
+&lt;li&gt;16 GB&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;CC-News
+&lt;ul&gt;
+&lt;li&gt;作者從 CommonCrawl News dataset 的英文部分中蒐集，包含了 2016 年 9 月到 2019 年 2 月的 6300 萬篇英文新聞。&lt;/li&gt;
+&lt;li&gt;過濾後有 76 GB&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;OpenWebText
+&lt;ul&gt;
+&lt;li&gt;WebText 的開源重建版，從 Reddit 上至少有 3 個 upvotes 的 shared URLs 提取出的 Web 內容。&lt;/li&gt;
+&lt;li&gt;38 GB&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Stories
+&lt;ul&gt;
+&lt;li&gt;包含 CommonCrawl data 的一個子集合，經過過濾，以匹配 story-like style of Winograd schemas&lt;/li&gt;
+&lt;li&gt;31 GB&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;evaluation&#34;&gt;Evaluation&lt;/h3&gt;
+&lt;p&gt;使用以下三個 benchmarks 評估預訓練模型&lt;/p&gt;
+&lt;h4 id=&#34;glue&#34;&gt;GLUE&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;The General Language Understanding Evaluation&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;用於評估自然語言理解的 9 個數據集的集合，任務被定義為 single-sentence 分類或 sentence-pair 分類任務。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;finetune 的流程遵循原始 BERT paper&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;squad&#34;&gt;SQuAD&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;The Stanford Question Answering Dataset&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;提供一段 context 以及一個問題&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;具有兩個版本 V1.1 和 V2.0&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;V1.1
+&lt;ul&gt;
+&lt;li&gt;context 總是包含一個答案&lt;/li&gt;
+&lt;li&gt;評估 V1.1 的時候，作者採用和 BERT 相同的 span prediction method&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;V2.0
+&lt;ul&gt;
+&lt;li&gt;一些問題在提供的 context 中沒有回答，使任務更有挑戰性&lt;/li&gt;
+&lt;li&gt;評估 V2.0 的時候，作者會用一個額外的二元分類器預測問題是否可以回答，在評估的時候，只預測被分類為可回答的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;race&#34;&gt;RACE&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;The ReAding Comprehension from Examinations&lt;/li&gt;
+&lt;li&gt;大型閱讀理解數據集，有超過 28,000 篇文章 以及將近 100,000 個問題&lt;/li&gt;
+&lt;li&gt;從中國的英文考試蒐集的，這些考試是為國中生和高中生設計的&lt;/li&gt;
+&lt;li&gt;每篇文章都與多個問題相關聯&lt;/li&gt;
+&lt;li&gt;對每個問題，要從四個選項中選出一個對的&lt;/li&gt;
+&lt;li&gt;context 比起其他閱讀理解的數據集要長，而且要推理的問題比例很大&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;training-procedure-analysis&#34;&gt;Training Procedure Analysis&lt;/h2&gt;
+&lt;p&gt;探討哪些選擇對成功預訓練 BERT 很重要。&lt;/p&gt;
+&lt;p&gt;作者把架構固定，也就是訓練和$BERT_{BASE}$ (L=12, H=768, A=12, 110M params)一樣架構的 BERT models&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>ARM 組合語言介紹</title>
         <link>https://roykesydon.github.io/Blog/p/arm-%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80%E4%BB%8B%E7%B4%B9/</link>
         <pubDate>Tue, 21 Mar 2023 01:32:54 +0800</pubDate>
