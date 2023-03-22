@@ -1,18 +1,45 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Inter-Process Communication'>
-<title>IPC -- Inter-Process Communication</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: RoBERTa: A Robustly Optimized BERT Pretraining Approach
+Abstract 發現 BERT 訓練不足，並且作者的模型在 4/9 的 GLUE 任務, RACE 和 SQuAD 取得 SOTA。
+Introduction 自監督的訓練方法帶來了顯著的性能提升，但要確定這一堆方法中的哪些方面貢獻最大，具備挑戰性。
+訓練的計算量是昂貴的，使 fine-tune 受限，而且通常都是用不同大小的 private training data，使評估模型更加困難。
+作者提出了對 BERT 預訓練的 replication study，包括對超參數的調整，以及對訓練集大小的仔細評估。
+作者發現 BERT 訓練不足，並提出了一種改進方法，稱為 RoBERTa，可以達到或超過所有 post-BERT 的方法。
+修改如下:
+訓練模型的時間更長，batch 更大，用更多 data 移除 next sentence prediction objective 訓練更長的序列 動態地改變用於訓練資料的 masking pattern 貢獻:
+提出一組重要的 BERT 設計選擇和訓練策略 使用了新的 dataset，叫做 CCNEWS，並證明用更多的資料來預訓練，可以提高下游任務的表現 訓練表明，在正確的設計選擇下，pretrained masked language model 和其他最近的方法比，具有競爭力 Background 對 BERT 做回顧
+Architecture L layers A self-attention heads H hidden dimension Training Objectives 預訓練的時候，BERT 有兩個目標: masked language modeling 和 next sentence prediction'>
+<title>RoBERTa 論文閱讀</title>
 
-<link rel='canonical' href='https://roykesydon.github.io/Blog/p/ipc--inter-process-communication/'>
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/roberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.8ba0009e8cca52c2ec8ac52dce3ac8d883cab10ebd0e2447c7fc3d51de630b5f.css"><meta property='og:title' content='IPC -- Inter-Process Communication'>
-<meta property='og:description' content='Inter-Process Communication'>
-<meta property='og:url' content='https://roykesydon.github.io/Blog/p/ipc--inter-process-communication/'>
+<link rel="stylesheet" href="/Blog/scss/style.min.8ba0009e8cca52c2ec8ac52dce3ac8d883cab10ebd0e2447c7fc3d51de630b5f.css"><meta property='og:title' content='RoBERTa 論文閱讀'>
+<meta property='og:description' content='paper: RoBERTa: A Robustly Optimized BERT Pretraining Approach
+Abstract 發現 BERT 訓練不足，並且作者的模型在 4/9 的 GLUE 任務, RACE 和 SQuAD 取得 SOTA。
+Introduction 自監督的訓練方法帶來了顯著的性能提升，但要確定這一堆方法中的哪些方面貢獻最大，具備挑戰性。
+訓練的計算量是昂貴的，使 fine-tune 受限，而且通常都是用不同大小的 private training data，使評估模型更加困難。
+作者提出了對 BERT 預訓練的 replication study，包括對超參數的調整，以及對訓練集大小的仔細評估。
+作者發現 BERT 訓練不足，並提出了一種改進方法，稱為 RoBERTa，可以達到或超過所有 post-BERT 的方法。
+修改如下:
+訓練模型的時間更長，batch 更大，用更多 data 移除 next sentence prediction objective 訓練更長的序列 動態地改變用於訓練資料的 masking pattern 貢獻:
+提出一組重要的 BERT 設計選擇和訓練策略 使用了新的 dataset，叫做 CCNEWS，並證明用更多的資料來預訓練，可以提高下游任務的表現 訓練表明，在正確的設計選擇下，pretrained masked language model 和其他最近的方法比，具有競爭力 Background 對 BERT 做回顧
+Architecture L layers A self-attention heads H hidden dimension Training Objectives 預訓練的時候，BERT 有兩個目標: masked language modeling 和 next sentence prediction'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/roberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 <meta property='og:site_name' content='Roykesydon'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='linux' /><meta property='article:published_time' content='2023-01-28T15:31:50&#43;08:00'/><meta property='article:modified_time' content='2023-01-28T15:31:50&#43;08:00'/>
-<meta name="twitter:title" content="IPC -- Inter-Process Communication">
-<meta name="twitter:description" content="Inter-Process Communication">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:published_time' content='2023-03-22T01:08:46&#43;08:00'/><meta property='article:modified_time' content='2023-03-22T01:08:46&#43;08:00'/>
+<meta name="twitter:title" content="RoBERTa 論文閱讀">
+<meta name="twitter:description" content="paper: RoBERTa: A Robustly Optimized BERT Pretraining Approach
+Abstract 發現 BERT 訓練不足，並且作者的模型在 4/9 的 GLUE 任務, RACE 和 SQuAD 取得 SOTA。
+Introduction 自監督的訓練方法帶來了顯著的性能提升，但要確定這一堆方法中的哪些方面貢獻最大，具備挑戰性。
+訓練的計算量是昂貴的，使 fine-tune 受限，而且通常都是用不同大小的 private training data，使評估模型更加困難。
+作者提出了對 BERT 預訓練的 replication study，包括對超參數的調整，以及對訓練集大小的仔細評估。
+作者發現 BERT 訓練不足，並提出了一種改進方法，稱為 RoBERTa，可以達到或超過所有 post-BERT 的方法。
+修改如下:
+訓練模型的時間更長，batch 更大，用更多 data 移除 next sentence prediction objective 訓練更長的序列 動態地改變用於訓練資料的 masking pattern 貢獻:
+提出一組重要的 BERT 設計選擇和訓練策略 使用了新的 dataset，叫做 CCNEWS，並證明用更多的資料來預訓練，可以提高下游任務的表現 訓練表明，在正確的設計選擇下，pretrained masked language model 和其他最近的方法比，具有競爭力 Background 對 BERT 做回顧
+Architecture L layers A self-attention heads H hidden dimension Training Objectives 預訓練的時候，BERT 有兩個目標: masked language modeling 和 next sentence prediction">
     </head>
     <body class="
     article-page
@@ -223,14 +250,35 @@
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#signal">Signal</a>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#background">Background</a>
       <ol>
-        <li><a href="#disposition">disposition</a></li>
-        <li><a href="#signal-cant-not-be-caught">Signal can&rsquo;t not be caught</a></li>
-        <li><a href="#commands">Commands</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#training-objectives">Training Objectives</a>
+          <ol>
+            <li><a href="#masked-language-model-mlm">Masked Language Model (MLM)</a></li>
+            <li><a href="#next-sentence-prediction-nsp">Next Sentence Prediction (NSP)</a></li>
+            <li><a href="#optimization">Optimization</a></li>
+            <li><a href="#data">Data</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
-    <li><a href="#kill">kill</a></li>
+    <li><a href="#experimental-setup">Experimental Setup</a>
+      <ol>
+        <li><a href="#implementation">Implementation</a></li>
+        <li><a href="#data-1">Data</a></li>
+        <li><a href="#evaluation">Evaluation</a>
+          <ol>
+            <li><a href="#glue">GLUE</a></li>
+            <li><a href="#squad">SQuAD</a></li>
+            <li><a href="#race">RACE</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#training-procedure-analysis">Training Procedure Analysis</a></li>
   </ol>
 </nav>
         </div>
@@ -249,8 +297,8 @@
     
     <header class="article-category">
         
-            <a href="/Blog/categories/linux/" style="background-color: #a6a32f; color: #fff;">
-                Linux
+            <a href="/Blog/categories/deep-learning/" style="background-color: #936ce1; color: #fff;">
+                Deep Learning
             </a>
         
     </header>
@@ -258,13 +306,9 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/Blog/p/ipc--inter-process-communication/">IPC -- Inter-Process Communication</a>
+            <a href="/Blog/p/roberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">RoBERTa 論文閱讀</a>
         </h2>
     
-        
-        <h3 class="article-subtitle">
-            Inter-Process Communication
-        </h3>
         
     </div>
 
@@ -284,7 +328,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Jan 28, 2023</time>
+                <time class="article-time--published">Mar 22, 2023</time>
             </div>
         
 
@@ -314,183 +358,151 @@
     <section class="article-content">
     
     
-    <h1 id="share-information-between-processes">Share information between processes</h1>
+    <p>paper: <a class="link" href="https://arxiv.org/abs/1907.11692"  target="_blank" rel="noopener"
+    >RoBERTa: A Robustly Optimized BERT Pretraining Approach</a></p>
+<h2 id="abstract">Abstract</h2>
+<p>發現 BERT 訓練不足，並且作者的模型在 4/9 的 GLUE 任務, RACE 和 SQuAD 取得 SOTA。</p>
+<h2 id="introduction">Introduction</h2>
+<p>自監督的訓練方法帶來了顯著的性能提升，但要確定這一堆方法中的哪些方面貢獻最大，具備挑戰性。</p>
+<p>訓練的計算量是昂貴的，使 fine-tune 受限，而且通常都是用不同大小的 private training data，使評估模型更加困難。</p>
+<p>作者提出了對 BERT 預訓練的 replication study，包括對超參數的調整，以及對訓練集大小的仔細評估。</p>
+<p>作者發現 BERT 訓練不足，並提出了一種改進方法，稱為 RoBERTa，可以達到或超過所有 post-BERT 的方法。</p>
+<p>修改如下:</p>
 <ol>
-<li>透過硬碟上的文件溝通
-<ul>
-<li>超慢</li>
-</ul>
-</li>
-<li>透過 kernel buffer
-<ul>
-<li>滿快的，但這樣要一直在 user mode 和 kernel mode 來回切換，因為kernel buffer 在 kernel space</li>
-</ul>
-</li>
-<li>透過 shared memory region
-<ul>
-<li>shared memory region 在 user space</li>
-</ul>
-</li>
+<li>訓練模型的時間更長，batch 更大，用更多 data</li>
+<li>移除 next sentence prediction objective</li>
+<li>訓練更長的序列</li>
+<li>動態地改變用於訓練資料的 masking pattern</li>
 </ol>
-<h1 id="mechanisms">Mechanisms</h1>
+<p>貢獻:</p>
 <ol>
-<li>
-<p>Signals</p>
-</li>
-<li>
-<p>Communication</p>
-<ol>
-<li>Data transfer
-<ul>
-<li>Byte Stream
-<ul>
-<li>Pipes</li>
-<li>FIFOs(Named Pipes)</li>
-<li>stream sockets</li>
-</ul>
-</li>
-<li>Message Passing
-<ul>
-<li>SystemV MsgQ</li>
-<li>POSIX MsgQ</li>
-<li>datagram sockets</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Shared Memory
-<ul>
-<li>SystemV S.M</li>
-<li>POSIX S.M</li>
-<li>Memory Mapping
-<ul>
-<li>anonymous memory mapping</li>
-<li>memory mapped file</li>
-</ul>
-</li>
-</ul>
-</li>
+<li>提出一組重要的 BERT 設計選擇和訓練策略</li>
+<li>使用了新的 dataset，叫做 CCNEWS，並證明用更多的資料來預訓練，可以提高下游任務的表現</li>
+<li>訓練表明，在正確的設計選擇下，pretrained masked language model 和其他最近的方法比，具有競爭力</li>
 </ol>
-</li>
-<li>
-<p>Synchronization</p>
-</li>
-</ol>
-<h1 id="pipes">Pipes</h1>
+<h2 id="background">Background</h2>
+<p>對 BERT 做回顧</p>
+<h3 id="architecture">Architecture</h3>
 <ul>
-<li>Related processes
+<li>L layers</li>
+<li>A self-attention heads</li>
+<li>H hidden dimension</li>
+</ul>
+<h3 id="training-objectives">Training Objectives</h3>
+<p>預訓練的時候，BERT 有兩個目標: masked language modeling 和 next sentence prediction</p>
+<h4 id="masked-language-model-mlm">Masked Language Model (MLM)</h4>
+<p>BERT 隨機選擇 15% 的 token 進行可能的替換</p>
+<p>80% 換成 [MASK]，10% 保持不變，10% 被選為一個隨便的 vocabulary token</p>
+<h4 id="next-sentence-prediction-nsp">Next Sentence Prediction (NSP)</h4>
+<p>分類第二句是不是下一句，是二元分類。</p>
+<p>正例由提取連續的句子產生，負例由不同的片段配對產生。</p>
+<p>正例和負例以相等機率產生。</p>
+<h4 id="optimization">Optimization</h4>
 <ul>
-<li>parent-child</li>
-<li>sibling</li>
+<li>Adam</li>
+<li>$\beta_1$ = 0.9, $\beta_2$ = 0.999, $\epsilon$ = 1e-6</li>
+<li>$L_2$ weight decay of 0.01</li>
+<li>Learning rate 前 10,000 step warm up 到 1e-4，然後 linear decay</li>
+<li>全部的 layer 和 attention weight 都 dropout 0.1</li>
+<li>GELU 激活函數</li>
+<li>1,000,000 次 update，batch size 256，序列長度 512</li>
+</ul>
+<h4 id="data">Data</h4>
+<p>BERT 在 BookCorpus 和 English Wikipedia 混和的資料集上訓練，共有 16GB 的未壓縮文本</p>
+<h2 id="experimental-setup">Experimental Setup</h2>
+<p>描述對於 BERT 的 replication study 的實驗設置</p>
+<h3 id="implementation">Implementation</h3>
+<p>作者用 FAIRSEQ 重新實現了 BERT。</p>
+<p>主要遵循 [Background-Optimization] 中的 BERT 原始超參數，但 peak learning rate 和 warmup step 除外，他們針對每個設置單獨調整。</p>
+<p>作者發現訓練對 Adam epsilon 非常敏感。</p>
+<p>作者發現設置 $\beta_2$ = 0.98，在大 batch size 的情況下，可以提高訓練時的穩定性。</p>
+<p>用最多 512 個 token 預訓練。</p>
+<p>作者不會隨機注入短序列，也不會為前 90% 的更新縮短輸入的長度。</p>
+<p>作者只訓練 full-length 的 sequences。</p>
+<h3 id="data-1">Data</h3>
+<p>BERT-style 的預訓練仰賴大量文本。</p>
+<p>已有研究證明增加數據量可以提高 end-task 的性能。</p>
+<p>已有一些研究，用比原始 BERT 更多樣更大的數據集，但不是所有的數據集都有公開。</p>
+<p>本研究用了五個不同大小和領域的英文文本，共有超過 160 GB 的未壓縮文本。</p>
+<p>使用以下數據集:</p>
+<ul>
+<li>BookCorpus + English Wikipedia
+<ul>
+<li>BERT 原本使用的。</li>
+<li>16 GB</li>
 </ul>
 </li>
-<li>Executing on same machine</li>
-<li>用法
+<li>CC-News
 <ul>
-<li>cmd1 | cmd2
-<ul>
-<li>cmd1 不是輸出到 stdout，而是由 kernel 維護的 buffer，也就是 pipe</li>
-<li>cmd 不是從 stdin 獲取輸入，而是從 pipe 獲取</li>
+<li>作者從 CommonCrawl News dataset 的英文部分中蒐集，包含了 2016 年 9 月到 2019 年 2 月的 6300 萬篇英文新聞。</li>
+<li>過濾後有 76 GB</li>
 </ul>
 </li>
-<li>cmd1 | cmd2 | &hellip; | cmdn</li>
+<li>OpenWebText
+<ul>
+<li>WebText 的開源重建版，從 Reddit 上至少有 3 個 upvotes 的 shared URLs 提取出的 Web 內容。</li>
+<li>38 GB</li>
 </ul>
 </li>
-</ul>
-<h1 id="named-pipes--fifos">Named Pipes / FIFOs</h1>
+<li>Stories
 <ul>
-<li>
-<p>Related / Unrelated processes</p>
-</li>
-<li>
-<p>Executing on same machine</p>
-</li>
-<li>
-<p>creat a FIFO</p>
-<ul>
-<li>commands
-<ul>
-<li>mkfifo</li>
-<li>mknod</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>嘗試寫入或讀取 FIFO 時，會被 redirect 到 pipe</p>
-<h1 id="signal-handling">Signal Handling</h1>
-<h2 id="signal">Signal</h2>
-<ul>
-<li>Used by OS to notify running process some event has occured without the process needing to pull for that event</li>
-<li>process 收到 signal 後會先停止執行並執行 signal handler</li>
-</ul>
-<ol>
-<li>A process did something
-<ul>
-<li>SIGSEGV(11), SIGFPE(8), SIGILL(4), SIGPIPE(13)&hellip;</li>
-</ul>
-</li>
-<li>A process wants to tell another process something
-<ul>
-<li>SIGCHILD(17)
-<ul>
-<li>child process terminated</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>User sends sig to foreground processes
-<ul>
-<li>Ctrl + C SIGINT(2)</li>
-<li>Ctrl + \ SIGQUIT(3)</li>
-<li>Ctrl + Z SIGTSTP(20)</li>
-</ul>
-</li>
-</ol>
-<h3 id="disposition">disposition</h3>
-<p>決定 process 遇到 signal 時該怎麼處理</p>
-<ul>
-<li>Term
-<ul>
-<li>teminate process</li>
-</ul>
-</li>
-<li>Ign
-<ul>
-<li>ignore</li>
-</ul>
-</li>
-<li>Core
-<ul>
-<li>terminate the process and dump core</li>
-</ul>
-</li>
-<li>Stop
-<ul>
-<li>stop the process</li>
-</ul>
-</li>
-<li>Cont
-<ul>
-<li>continue the process if it is stopped</li>
+<li>包含 CommonCrawl data 的一個子集合，經過過濾，以匹配 story-like style of Winograd schemas</li>
+<li>31 GB</li>
 </ul>
 </li>
 </ul>
-<h3 id="signal-cant-not-be-caught">Signal can&rsquo;t not be caught</h3>
-<ul>
-<li>SIGKILL(9)</li>
-<li>SIGSTOP(19)</li>
-</ul>
-<h3 id="commands">Commands</h3>
+<h3 id="evaluation">Evaluation</h3>
+<p>使用以下三個 benchmarks 評估預訓練模型</p>
+<h4 id="glue">GLUE</h4>
 <ul>
 <li>
-<p>trap</p>
-<p>可以 handle signal</p>
+<p>The General Language Understanding Evaluation</p>
+</li>
+<li>
+<p>用於評估自然語言理解的 9 個數據集的集合，任務被定義為 single-sentence 分類或 sentence-pair 分類任務。</p>
+</li>
+<li>
+<p>finetune 的流程遵循原始 BERT paper</p>
 </li>
 </ul>
-<h2 id="kill">kill</h2>
-<p>kill - L 可以看到 standard signal 和 real-time signal</p>
-<p>standard signal 開頭是 SIG，realt-time signal 是 SIGRT</p>
+<h4 id="squad">SQuAD</h4>
+<ul>
+<li>
+<p>The Stanford Question Answering Dataset</p>
+</li>
+<li>
+<p>提供一段 context 以及一個問題</p>
+</li>
+<li>
+<p>具有兩個版本 V1.1 和 V2.0</p>
+<ul>
+<li>V1.1
+<ul>
+<li>context 總是包含一個答案</li>
+<li>評估 V1.1 的時候，作者採用和 BERT 相同的 span prediction method</li>
+</ul>
+</li>
+<li>V2.0
+<ul>
+<li>一些問題在提供的 context 中沒有回答，使任務更有挑戰性</li>
+<li>評估 V2.0 的時候，作者會用一個額外的二元分類器預測問題是否可以回答，在評估的時候，只預測被分類為可回答的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="race">RACE</h4>
+<ul>
+<li>The ReAding Comprehension from Examinations</li>
+<li>大型閱讀理解數據集，有超過 28,000 篇文章 以及將近 100,000 個問題</li>
+<li>從中國的英文考試蒐集的，這些考試是為國中生和高中生設計的</li>
+<li>每篇文章都與多個問題相關聯</li>
+<li>對每個問題，要從四個選項中選出一個對的</li>
+<li>context 比起其他閱讀理解的數據集要長，而且要推理的問題比例很大</li>
+</ul>
+<h2 id="training-procedure-analysis">Training Procedure Analysis</h2>
+<p>探討哪些選擇對成功預訓練 BERT 很重要。</p>
+<p>作者把架構固定，也就是訓練和$BERT_{BASE}$ (L=12, H=768, A=12, 110M params)一樣架構的 BERT models</p>
 
 </section>
 
@@ -499,7 +511,15 @@
     
     <section class="article-tags">
         
-            <a href="/Blog/tags/linux/">linux</a>
+            <a href="/Blog/tags/deep-learning/">deep-learning</a>
+        
+            <a href="/Blog/tags/machine-learning/">machine-learning</a>
+        
+            <a href="/Blog/tags/transformer/">transformer</a>
+        
+            <a href="/Blog/tags/attention/">attention</a>
+        
+            <a href="/Blog/tags/self-attention/">self-attention</a>
         
     </section>
 
@@ -545,12 +565,12 @@
             
                 
 <article class="">
-    <a href="/Blog/p/process-scheduling/">
+    <a href="/Blog/p/patentsberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Process Scheduling</h2>
+            <h2 class="article-title">PatentSBERTa 論文閱讀</h2>
         </div>
     </a>
 </article>
@@ -558,12 +578,12 @@
             
                 
 <article class="">
-    <a href="/Blog/p/io-redirection/">
+    <a href="/Blog/p/sentence-bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">IO Redirection</h2>
+            <h2 class="article-title">Sentence-BERT 論文閱讀</h2>
         </div>
     </a>
 </article>
@@ -571,12 +591,12 @@
             
                 
 <article class="">
-    <a href="/Blog/p/process-management/">
+    <a href="/Blog/p/patentbert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Process Management</h2>
+            <h2 class="article-title">PatentBERT 論文閱讀</h2>
         </div>
     </a>
 </article>
@@ -584,12 +604,12 @@
             
                 
 <article class="">
-    <a href="/Blog/p/shell/">
+    <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Shell</h2>
+            <h2 class="article-title">MAE 論文</h2>
         </div>
     </a>
 </article>
@@ -597,12 +617,12 @@
             
                 
 <article class="">
-    <a href="/Blog/p/linux-%E7%91%A3%E4%BA%8B/">
+    <a href="/Blog/p/vit-%E8%AB%96%E6%96%87/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Linux 瑣事</h2>
+            <h2 class="article-title">ViT 論文</h2>
         </div>
     </a>
 </article>
