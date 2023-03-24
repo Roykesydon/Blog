@@ -145,3 +145,106 @@ BERT-style 的預訓練仰賴大量文本。
 探討哪些選擇對成功預訓練 BERT 很重要。
 
 作者把架構固定，也就是訓練和$BERT_{BASE}$ (L=12, H=768, A=12, 110M params)一樣架構的 BERT models
+
+### Static vs. Dynamic Masking
+BERT 在 preprocessing 的時候處理 masking，產生單個 static mask。
+作者為了避免在每個 epoch 都對每個 instance 用相同的 mask，將數據複製了 10 次，在 40 個 epochs 裡，以 10 種不同的方式 mask。所以一次訓練過程中，相同的 mask 會出現四次。
+
+作者會以上述策略和 Dynamic masking 進行比較，Dynamic masking 是在每次餵 model 前，才生成 mask。
+
+作者發現 Dynamic Masking 相比 static，要不是差不多，就是略好，基於結果和效率的優勢考量，其他實驗中都用 dynamic masking。
+
+### Model Input Format and Next Sentence Prediction
+原始的 BERT 預訓練中，兩個句子要不是同一個文件的連續句子(p = 0.5)，不然就是不同的 document 做採樣
+
+以往有研究指出移除 NSP 會損害性能，但也有研究質疑必要性，所以本文比較了幾種替代訓練格式：
+- SEGMENT-PAIR+NSP
+    - 最原始的方法，每個 segment 可以有多個自然句子
+- SENTENCE-PAIR+NSP
+    - 只包含一對句子，由於輸入明顯少於 512 token，所以會增加 batch size 讓 token 總數和前者差不多
+- FULL-SENTENCES
+    - 包含從一個或多個文件中連續採樣的完整句子，可能會跨越文件邊界，在文件邊界間會加個額外的分隔符
+    - 移除了 NSP
+- DOC-SENTENCES
+    - 和 FULL-SENTENCES 差不多，但不能跨越 document，在 document 尾巴的部分會容易少於 512，所以會動態增加 batch size，讓 token 總數和 FULL-SENTENCES 差不多
+    - 移除了 NSP
+
+![](/Blog/images/deep-learning/RoBERTa/table2.png)
+
+發現 DOC-SENTENCES 是最棒的，但由於 DOC-SENTENCES 會讓 batch sizes 大小可變，所以其他實驗會用 FULL-SENTENCES，比較好和其他相關工作比較。
+
+### Training with large batches
+根據過去神經網路機器翻譯的工作，當 learning rate 適當增加的時候，用非常大的的 mini-bathces 可以提高 optimization 的速度和 end-task 性能。
+
+最近的研究也顯示 BERT 適用於 large batch training。
+
+![](/Blog/images/deep-learning/RoBERTa/table3.png)
+
+### Text Encoding
+
+Byte-Pair Encoding (BPE) 是一種介於字符級別和詞級別表示之間的混合表示方法，它允許處理自然語言語料庫中常見的大詞彙量。
+
+BPE 不依賴於完整的單詞，而是依靠 subwords units，通過對訓練語料進行統計分析來提取這些 subwords units。
+
+BPE 詞彙表的大小通常在 10K-100K 的 subword units。
+
+在 "Language Models are Unsupervised Multitask Learners" 文中，提到了一種巧妙的 BPE 實現，不是用 unicode characters，而是用 bytes 作為 base subword units。可以生出 50K 大小的詞彙表，而且不用引入任何的 "unknown"。
+
+原始的 BERT 用 character-level BPE vocabulary，大小為 30K。
+
+本文考慮用 50K byte-level BPE vocabulary，而不對輸入做額外的 preprocessing 或 tokenization，"Language Models are Unsupervised Multitask Learners" 的研究顯示這些 Encoding 的方法在最終效能上並無太大差別，只在某些任務上 end-task performance 表現稍差。
+
+但作者相信 universal encoding scheme 的優勢超過了輕微的性能下降，其他實驗也會用這種邊碼方式。
+
+## RoBERTa
+
+整理上面說的改進。
+
+RoBERTa 用以下配置:
+1. dynamic masking
+2. FULL-SENTENCES without NSP loss
+3. large mini-batches
+4. larger byte-level BPE
+
+此外，還調查了兩個之前的工作沒強調的重要因素:
+1. 用於預訓練的 data
+2. 訓練過 data 的次數
+
+為了把這些因素的重要性和其他模型選擇分隔開，先按照 $BERT_{LARGE}$ (L = 24, H = 1024, A = 16, 355M parameters) 訓練 RoBERTa。
+
+作者在 BOOKCORPUS plus WIKIPEDIA dataset 進行了 100K step 的預訓練。
+
+在控制 training data 的情況下， RoBERTa 比 $BERT_{LARGE}$ 的結果有大幅度的改進，重申了前面設計選擇的重要性。
+
+接下來，結合之前說的額外 dataset，並用相同的步數(100K) 訓練 RoBERTa，觀察到下游任務的性能進一步提高，驗證了數據大小和多樣性的重要性。
+
+最後，對 RoBERTa 做更長時間的預訓練，將步數提高到 300K 和 500K，再次觀察到下游任務性能顯著提升。
+
+作者也注意到，即使是他們訓練時間最長的模型，也不會 overfit 他們的數據。
+
+本文的其他部分在三個 benchmark 評估好壞: GLUE、SQuaD 和 RACE
+
+![](/Blog/images/deep-learning/RoBERTa/table4.png)
+
+### GLUE Results
+雖然很多 GLUE 排行榜的提交都是 depend on multi-task finetuning，但作者的 submission 是 depends only on single-task finetuning。
+
+此外，對於 RTE、STS 和 MRPC，從 MNLI 的模型微調會比 baseline 的 RoBERTa 有幫助許多。
+
+在第一個設置 (single-task, dev) 中，RoBERTa 在所有 9 個 GLUE 任務 dev set 上都取得了最先進的結果。
+
+在第二個設置 (ensembles, test) 中，作者將 RoBERTa 提交到 GLUE 排行榜，並在 9 個任務中的 4 個上取得了 SOTA 和迄今為止的最高平均分。
+
+這令人興奮的地方在於，與多數 top submissions 不同，RoBERTa 不是 depend on multi-tasking finetuning
+
+![](/Blog/images/deep-learning/RoBERTa/table5.png)
+
+## Conclusion
+
+在預訓練 BERT 模型時，作者仔細評估了許多設計決策。
+
+作者發現，通過對模型進行更長時間的訓練、使用更大的批次處理更多的數據、去除 NSP、訓練更長的序列、dynamic masking，可以顯著提高性能。
+
+作者改進的預訓練程序，我們稱之為 RoBERTa，在 GLUE、RACE 和 SQuAD 上實現了 SOTA，而無需為 GLUE 進行多任務微調或為 SQuAD 提供額外的數據。
+
+這些結果說明了這些以前被忽視的設計決策的重要性，並表明 BERT 的預訓練目標與最近提出的替代方案相比仍然具有競爭力。
