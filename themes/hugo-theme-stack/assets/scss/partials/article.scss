@@ -74,7 +74,7 @@
 
 .article-title-custom {
     position: relative;
-    text-transform: uppercase;
+    // text-transform: uppercase;
     // filter: drop-shadow(0px 0px 0.3em rgba(62, 75, 255, 0.8));
     // filter: drop-shadow(0px 0px 0.3em rgba(255, 62, 255, 0.897));
     filter: drop-shadow(0px 0px 0.3em rgba(255, 62, 255, 0.616));
@@ -86,7 +86,7 @@
 .article-title-custom::before {
     content: attr(data-text);
     position: absolute;
-    text-transform: uppercase;
+    // text-transform: uppercase;
     top: 0.69em;
     transform: scale(1, -1);
     background-image: linear-gradient(rgba(0, 0, 0, 0) 50%,
