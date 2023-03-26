@@ -62,6 +62,7 @@
         {{ $currentPage := . }}
         {{ range .Site.Menus.main }}
         {{ $active := or (eq $currentPage.Title .Name) (or ($currentPage.HasMenuCurrent "main" .) ($currentPage.IsMenuCurrent "main" .)) }}
+        <!-- <li {{ if $active }} class='current' {{ end }}> -->
         <li {{ if $active }} class='current' {{ end }}>
             <a href='{{ .URL }}' {{ if eq .Params.newTab true }}target="_blank"{{ end }}>
                 {{ $icon := default .Pre .Params.Icon }}
@@ -71,7 +72,12 @@
                 {{ with $icon }}
                     {{ partial "helper/icon" . }}
                 {{ end }}
-                <span>{{- .Name -}}</span>
+                <!-- <span>{{- .Name -}}</span> -->
+                <span 
+                {{ if $active }} class='current-menu-custom' {{ end }}
+                class="menu-custom"
+                data-text='{{- .Name -}}'
+                style="--color: rgba(204, 245, 255, 0.932)">{{- .Name -}}</span>
             </a>
         </li>
         {{ end }}

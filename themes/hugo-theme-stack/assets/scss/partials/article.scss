@@ -72,12 +72,47 @@
     }
 }
 
+.article-title-custom {
+    position: relative;
+    text-transform: uppercase;
+    filter: drop-shadow(0px 0px 0.3em rgba(62, 75, 255, 0.8));
+    font-size: 2.2rem;
+    color: rgb(255, 255, 255);
+    opacity: 1;
+}
+
+.article-title-custom::before {
+    content: attr(data-text);
+    position: absolute;
+    text-transform: uppercase;
+    top: 0.69em;
+    transform: scale(1, -1);
+    background-image: linear-gradient(rgba(0, 0, 0, 0) 50%,
+            rgba(255, 255, 255, 0.5) 100%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+// .article-title-custom::after {
+//     content: "";
+//     position: absolute;
+//     top: 0.7em;
+//     left: 0;
+//     width: 100%;
+//     height: 100%;
+//     z-index: 2;
+//     transform: perspective(500px) rotateX(49deg) scale(1.2, 0.7);
+//     background-image: linear-gradient(rgba(86, 80, 253, 0.4), transparent 70%);
+//     filter: blur(0.7em);
+// }
+
 .article-subtitle {
     font-weight: normal;
     color: var(--card-text-color-secondary);
     line-height: 1.5;
     margin: 0;
     font-size: 1.75rem;
+
     @include respond(xl) {
         font-size: 2rem;
     }
@@ -110,7 +145,7 @@
         color: var(--card-text-color-tertiary);
     }
 
-    & > div {
+    &>div {
         display: inline-flex;
         align-items: center;
         gap: 15px;
@@ -151,7 +186,7 @@
     }
 
     article {
-        & > a {
+        &>a {
             display: flex;
             align-items: center;
             padding: var(--small-card-padding);

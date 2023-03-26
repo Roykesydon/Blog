@@ -57,3 +57,71 @@ body::before {
 /**/
 
 
+/* custome menu item */
+.menu-custom {
+    position: relative;
+    height: 100%;
+    // width: 5em;
+    // left: 5px;
+    font-size: 1.7em;
+    color: transparent;
+    opacity: 1;
+    -webkit-text-stroke: 0.02em var(--color); 
+    // color: rgba(79, 220, 255, 0.849)
+    // color: rgba(204, 245, 255, 0.932);
+}
+
+.menu-custom:before {
+    content: attr(data-text);
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    color: rgba(204, 245, 255, 0.932);
+    // border-right: 1px solid var(--color);
+    padding-left: 10px;
+    // padding-left: 50px;
+    padding-left: 10px; /* 新增 */
+    left: -10px; /* 修改 */
+    // left: -10px;
+    text-shadow: 0 0 0.1em var(--color);
+    color: var(--color);
+    overflow: hidden;
+    -webkit-text-stroke: 0.005em var(--color);
+    transition: width 0.5s cubic-bezier(0.375, -0.04, 0.135, 1.13);
+}
+
+.menu-custom:hover::before {
+    width: 100%;
+}
+
+.current-menu-custom{
+    position: relative;
+    height: 100%;
+    // width: 5em;
+    // left: 5px;
+    font-size: 2.0em;
+    color: transparent;
+    opacity: 1;
+    -webkit-text-stroke: 0.02em var(--color);
+    width: 100%;
+}
+
+.current-menu-custom:before {
+    content: attr(data-text);
+    position: absolute;
+    height: 100%;
+    color: rgba(204, 245, 255, 0.932);
+    // border-right: 1px solid var(--color);
+    padding-left: 10px;
+    // padding-left: 50px;
+    padding-left: 10px; /* 新增 */
+    left: -10px; /* 修改 */
+    width: 100%;
+    // left: -10px;
+    text-shadow: 0 0 0.1em var(--color);
+    color: var(--color);
+    overflow: hidden;
+    -webkit-text-stroke: 0.005em var(--color);
+    transition: width 0.3s cubic-bezier(0.375, -0.04, 0.135, 1.13);
+}
+/**/
