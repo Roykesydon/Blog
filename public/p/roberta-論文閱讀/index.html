@@ -2,44 +2,29 @@
 <html lang="en-us" dir="ltr">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: RoBERTa: A Robustly Optimized BERT Pretraining Approach
-Abstract 發現 BERT 訓練不足，並且作者的模型在 4/9 的 GLUE 任務, RACE 和 SQuAD 取得 SOTA。
+1 2 3 4 5 6 ██████╗ ██████╗ ██████╗ ███████╗██████╗ ████████╗ █████╗ ██╔══██╗██╔═══██╗██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔══██╗ ██████╔╝██║ ██║██████╔╝█████╗ ██████╔╝ ██║ ███████║ ██╔══██╗██║ ██║██╔══██╗██╔══╝ ██╔══██╗ ██║ ██╔══██║ ██║ ██║╚██████╔╝██████╔╝███████╗██║ ██║ ██║ ██║ ██║ ╚═╝ ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═╝ ╚═╝ ╚═╝ ╚═╝ Abstract 發現 BERT 訓練不足，並且作者的模型在 4/9 的 GLUE 任務, RACE 和 SQuAD 取得 SOTA。
 Introduction 自監督的訓練方法帶來了顯著的性能提升，但要確定這一堆方法中的哪些方面貢獻最大，具備挑戰性。
 訓練的計算量是昂貴的，使 fine-tune 受限，而且通常都是用不同大小的 private training data，使評估模型更加困難。
-作者提出了對 BERT 預訓練的 replication study，包括對超參數的調整，以及對訓練集大小的仔細評估。
-作者發現 BERT 訓練不足，並提出了一種改進方法，稱為 RoBERTa，可以達到或超過所有 post-BERT 的方法。
-修改如下:
-訓練模型的時間更長，batch 更大，用更多 data 移除 next sentence prediction objective 訓練更長的序列 動態地改變用於訓練資料的 masking pattern 貢獻:
-提出一組重要的 BERT 設計選擇和訓練策略 使用了新的 dataset，叫做 CCNEWS，並證明用更多的資料來預訓練，可以提高下游任務的表現 訓練表明，在正確的設計選擇下，pretrained masked language model 和其他最近的方法比，具有競爭力 Background 對 BERT 做回顧
-Architecture L layers A self-attention heads H hidden dimension Training Objectives 預訓練的時候，BERT 有兩個目標: masked language modeling 和 next sentence prediction'>
+作者提出了對 BERT 預訓練的 replication study，包括對超參數的調整，以及對訓練集大小的仔細評估。'>
 <title>RoBERTa 論文閱讀</title>
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/roberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.8ba0009e8cca52c2ec8ac52dce3ac8d883cab10ebd0e2447c7fc3d51de630b5f.css"><meta property='og:title' content='RoBERTa 論文閱讀'>
+<link rel="stylesheet" href="/Blog/scss/style.min.4eafaa26a09159eb649c364192bc7ec96b45da36095f71e8d1821942c79d867d.css"><meta property='og:title' content='RoBERTa 論文閱讀'>
 <meta property='og:description' content='paper: RoBERTa: A Robustly Optimized BERT Pretraining Approach
-Abstract 發現 BERT 訓練不足，並且作者的模型在 4/9 的 GLUE 任務, RACE 和 SQuAD 取得 SOTA。
+1 2 3 4 5 6 ██████╗ ██████╗ ██████╗ ███████╗██████╗ ████████╗ █████╗ ██╔══██╗██╔═══██╗██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔══██╗ ██████╔╝██║ ██║██████╔╝█████╗ ██████╔╝ ██║ ███████║ ██╔══██╗██║ ██║██╔══██╗██╔══╝ ██╔══██╗ ██║ ██╔══██║ ██║ ██║╚██████╔╝██████╔╝███████╗██║ ██║ ██║ ██║ ██║ ╚═╝ ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═╝ ╚═╝ ╚═╝ ╚═╝ Abstract 發現 BERT 訓練不足，並且作者的模型在 4/9 的 GLUE 任務, RACE 和 SQuAD 取得 SOTA。
 Introduction 自監督的訓練方法帶來了顯著的性能提升，但要確定這一堆方法中的哪些方面貢獻最大，具備挑戰性。
 訓練的計算量是昂貴的，使 fine-tune 受限，而且通常都是用不同大小的 private training data，使評估模型更加困難。
-作者提出了對 BERT 預訓練的 replication study，包括對超參數的調整，以及對訓練集大小的仔細評估。
-作者發現 BERT 訓練不足，並提出了一種改進方法，稱為 RoBERTa，可以達到或超過所有 post-BERT 的方法。
-修改如下:
-訓練模型的時間更長，batch 更大，用更多 data 移除 next sentence prediction objective 訓練更長的序列 動態地改變用於訓練資料的 masking pattern 貢獻:
-提出一組重要的 BERT 設計選擇和訓練策略 使用了新的 dataset，叫做 CCNEWS，並證明用更多的資料來預訓練，可以提高下游任務的表現 訓練表明，在正確的設計選擇下，pretrained masked language model 和其他最近的方法比，具有競爭力 Background 對 BERT 做回顧
-Architecture L layers A self-attention heads H hidden dimension Training Objectives 預訓練的時候，BERT 有兩個目標: masked language modeling 和 next sentence prediction'>
+作者提出了對 BERT 預訓練的 replication study，包括對超參數的調整，以及對訓練集大小的仔細評估。'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/roberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 <meta property='og:site_name' content='Roykesydon'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:published_time' content='2023-03-22T01:08:46&#43;08:00'/><meta property='article:modified_time' content='2023-03-22T01:08:46&#43;08:00'/>
 <meta name="twitter:title" content="RoBERTa 論文閱讀">
 <meta name="twitter:description" content="paper: RoBERTa: A Robustly Optimized BERT Pretraining Approach
-Abstract 發現 BERT 訓練不足，並且作者的模型在 4/9 的 GLUE 任務, RACE 和 SQuAD 取得 SOTA。
+1 2 3 4 5 6 ██████╗ ██████╗ ██████╗ ███████╗██████╗ ████████╗ █████╗ ██╔══██╗██╔═══██╗██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔══██╗ ██████╔╝██║ ██║██████╔╝█████╗ ██████╔╝ ██║ ███████║ ██╔══██╗██║ ██║██╔══██╗██╔══╝ ██╔══██╗ ██║ ██╔══██║ ██║ ██║╚██████╔╝██████╔╝███████╗██║ ██║ ██║ ██║ ██║ ╚═╝ ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═╝ ╚═╝ ╚═╝ ╚═╝ Abstract 發現 BERT 訓練不足，並且作者的模型在 4/9 的 GLUE 任務, RACE 和 SQuAD 取得 SOTA。
 Introduction 自監督的訓練方法帶來了顯著的性能提升，但要確定這一堆方法中的哪些方面貢獻最大，具備挑戰性。
 訓練的計算量是昂貴的，使 fine-tune 受限，而且通常都是用不同大小的 private training data，使評估模型更加困難。
-作者提出了對 BERT 預訓練的 replication study，包括對超參數的調整，以及對訓練集大小的仔細評估。
-作者發現 BERT 訓練不足，並提出了一種改進方法，稱為 RoBERTa，可以達到或超過所有 post-BERT 的方法。
-修改如下:
-訓練模型的時間更長，batch 更大，用更多 data 移除 next sentence prediction objective 訓練更長的序列 動態地改變用於訓練資料的 masking pattern 貢獻:
-提出一組重要的 BERT 設計選擇和訓練策略 使用了新的 dataset，叫做 CCNEWS，並證明用更多的資料來預訓練，可以提高下游任務的表現 訓練表明，在正確的設計選擇下，pretrained masked language model 和其他最近的方法比，具有競爭力 Background 對 BERT 做回顧
-Architecture L layers A self-attention heads H hidden dimension Training Objectives 預訓練的時候，BERT 有兩個目標: masked language modeling 和 next sentence prediction">
+作者提出了對 BERT 預訓練的 replication study，包括對超參數的調整，以及對訓練集大小的仔細評估。">
     </head>
     <body class="
     article-page
@@ -94,7 +79,8 @@ Architecture L layers A self-attention heads H hidden dimension Training Objecti
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/Blog">Roykesydon</a></h1>
+            
+            <h1 class="glitch" data-text="Roykesydon" ><a href="/Blog">Roykesydon</a></h1>
             <h2 class="site-description">I write notes here during my free time.</h2>
         </div>
     </header><ol class="social-menu">
@@ -373,7 +359,25 @@ Architecture L layers A self-attention heads H hidden dimension Training Objecti
     
     <p>paper: <a class="link" href="https://arxiv.org/abs/1907.11692"  target="_blank" rel="noopener"
     >RoBERTa: A Robustly Optimized BERT Pretraining Approach</a></p>
-<h2 id="abstract">Abstract</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">██████╗  ██████╗ ██████╗ ███████╗██████╗ ████████╗ █████╗ 
+</span></span><span class="line"><span class="cl">██╔══██╗██╔═══██╗██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔══██╗
+</span></span><span class="line"><span class="cl">██████╔╝██║   ██║██████╔╝█████╗  ██████╔╝   ██║   ███████║
+</span></span><span class="line"><span class="cl">██╔══██╗██║   ██║██╔══██╗██╔══╝  ██╔══██╗   ██║   ██╔══██║
+</span></span><span class="line"><span class="cl">██║  ██║╚██████╔╝██████╔╝███████╗██║  ██║   ██║   ██║  ██║
+</span></span><span class="line"><span class="cl">╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="abstract">Abstract</h2>
 <p>發現 BERT 訓練不足，並且作者的模型在 4/9 的 GLUE 任務, RACE 和 SQuAD 取得 SOTA。</p>
 <h2 id="introduction">Introduction</h2>
 <p>自監督的訓練方法帶來了顯著的性能提升，但要確定這一堆方法中的哪些方面貢獻最大，具備挑戰性。</p>

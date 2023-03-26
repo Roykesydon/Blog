@@ -31,13 +31,14 @@ body::before {
     bottom: 0;
     background: rgba(0, 0, 0, 0.4);
     z-index: -1;
-  }
+}
 
 /* scrollbar styles for Firefox */
 * {
     scrollbar-width: auto;
     scrollbar-color: var(--scrollbar-thumb) transparent;
 }
+
 /**/
 
 /* scrollbar styles for Chromium */
@@ -52,4 +53,7 @@ body::before {
 ::-webkit-scrollbar-track {
     background-color: transparent;
 }
+
 /**/
+
+
