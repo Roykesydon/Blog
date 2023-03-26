@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
-    <head><meta charset='utf-8'>
+
+<head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: PatentBERT: Patent Classification with Fine-Tuning a pre-trained BERT Model
 Abstract 把 fine-tune BERT 應用在專利分類上，當應用於超過 200 萬件專利的資料集時，該方法超越了結合 word-embedding 的 CNN 的 SOTA 作法。
 貢獻: 一個用預訓練的 BERT 去 fine-tune 的 SOTA 方法 一個叫做 USPTO-3M 的大型資料集，屬於 CPC subclass level，並提供 SQL 語句讓後續的研究者使用 與傳統觀念相反，只需要 claim 就足以完成分類任務 Introduction 專利分類是一個 multi-label 的分類任務。
@@ -11,7 +12,7 @@ CPC Cooperative Patent Classification 是 IPC 更具體和詳細的版本 可預
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/patentbert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.e166f6b37b5a31b839d16e0daeaf52b43720273e290a890dd033090be24036b3.css"><meta property='og:title' content='PatentBERT 論文閱讀'>
+<link rel="stylesheet" href="/Blog/scss/style.min.35280941cf68b4ba0056f6f54a35d9ee9487749b6e916b6d76d1eb8b5b89cb53.css"><meta property='og:title' content='PatentBERT 論文閱讀'>
 <meta property='og:description' content='paper: PatentBERT: Patent Classification with Fine-Tuning a pre-trained BERT Model
 Abstract 把 fine-tune BERT 應用在專利分類上，當應用於超過 200 萬件專利的資料集時，該方法超越了結合 word-embedding 的 CNN 的 SOTA 作法。
 貢獻: 一個用預訓練的 BERT 去 fine-tune 的 SOTA 方法 一個叫做 USPTO-3M 的大型資料集，屬於 CPC subclass level，並提供 SQL 語句讓後續的研究者使用 與傳統觀念相反，只需要 claim 就足以完成分類任務 Introduction 專利分類是一個 multi-label 的分類任務。
@@ -28,8 +29,9 @@ Abstract 把 fine-tune BERT 應用在專利分類上，當應用於超過 200 �
 由於標籤的數量可能很大，所以是個具有挑戰性的任務。
 作者準備了一個基於 CPC 的新資料集，有超過三百萬項美國專利。
 CPC Cooperative Patent Classification 是 IPC 更具體和詳細的版本 可預見將取代 IPC 成為新的標準 只是由於 CLEP-IP 競賽，大部分論文都基於 IPC 資料集包含 1978 到 2009 提交的專利 IPC International Patent Classification 此外，作者的 dataset 基於 patent claims">
-    </head>
-    <body class="
+</head>
+
+<body class="
     article-page
     ">
     <script>
@@ -63,17 +65,32 @@ CPC Cooperative Patent Classification 是 IPC 更具體和詳細的版本 可預
         
             
             <figure class="site-avatar">
-                <a href="/Blog">
-                
-                    
-                    
-                    
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
                         
-                        <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-                </a>
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
                 
                     <span class="emoji">⭐</span>
                 
@@ -243,7 +260,7 @@ CPC Cooperative Patent Classification 是 IPC 更具體和詳細的版本 可預
 
     
 
-            <main class="main full-width">
+        <main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -626,8 +643,11 @@ CPC Cooperative Patent Classification 是 IPC 更具體和詳細的版本 可預
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
             >
 
-            </main>
-        </div>
+
+            
+            
+            
+        </main>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
@@ -645,5 +665,8 @@ CPC Cooperative Patent Classification 是 IPC 更具體和詳細的版本 可預
     }());
 </script>
 
-    </body>
+    </div>
+
+</body>
+
 </html>
