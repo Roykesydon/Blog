@@ -9,21 +9,38 @@
         {{ with .Site.Params.sidebar.avatar }}
             {{ if (default true .enabled) }}
             <figure class="site-avatar">
-                <a href="{{ .Site.BaseURL | relLangURL }}">
-                {{ if not .local }}
-                    <img src="{{ .src }}" width="300" height="300" class="site-logo" loading="lazy" alt="Avatar">
-                {{ else }}
-                    {{ $avatar := resources.Get (.src) }}
-                    
-                    {{ if $avatar }}
-                        {{ $avatarResized := $avatar.Resize "300x" }}
-                        <img src="{{ $avatarResized.RelPermalink }}" width="{{ $avatarResized.Width }}"
-                            height="{{ $avatarResized.Height }}" class="site-logo" loading="lazy" alt="Avatar">
-                    {{ else }}
-                        {{ errorf "Failed loading avatar from %q" . }}
-                    {{ end }}
-                {{ end }}
-                </a>
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="{{ .Site.BaseURL | relLangURL }}">
+                        {{ if not .local }}
+                            <img src="{{ .src }}" width="300" height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        {{ else }}
+                            {{ $avatar := resources.Get (.src) }}
+                            
+                            {{ if $avatar }}
+                                {{ $avatarResized := $avatar.Resize "300x" }}
+                                <img src="{{ $avatarResized.RelPermalink }}" width="{{ $avatarResized.Width }}"
+                                    height="{{ $avatarResized.Height }}" class="site-logo" loading="lazy" alt="Avatar">
+                            {{ else }}
+                                {{ errorf "Failed loading avatar from %q" . }}
+                            {{ end }}
+                        {{ end }}
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="{{ .Site.BaseURL | relLangURL }}">
+                        {{ $avatar := resources.Get (.src2) }}
+                            
+                        {{ if $avatar }}
+                            {{ $avatarResized := $avatar.Resize "300x" }}
+                            <img src="{{ $avatarResized.RelPermalink }}" width="{{ $avatarResized.Width }}"
+                                height="{{ $avatarResized.Height }}" class="site-logo" loading="lazy" alt="Avatar">
+                        {{ else }}
+                            {{ errorf "Failed loading avatar from %q" . }}
+                        {{ end }}
+                        </a>
+                    </div>
+                </div>
                 {{ with $.Site.Params.sidebar.emoji }}
                     <span class="emoji">{{ . }}</span>
                 {{ end }}

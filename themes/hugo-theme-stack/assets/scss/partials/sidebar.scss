@@ -276,3 +276,53 @@ $update-steps: 20;
         }
     }
 }
+
+.avatar-container-custom{
+    width: 300px;
+    height: 300px;
+}
+
+.avatar-container-custom:hover>.front-card {
+    transform: rotateY(180deg);
+}
+
+.avatar-container-custom:hover>.back-card {
+    transform: rotateY(360deg);
+}
+
+.front-card,
+.back-card {
+    position: absolute;
+    text-align: center;
+    // height: 50vh;
+    // width: 30vw;
+    // box-shadow: 0 0 0.2em black;
+    font-size: 1em;
+    color: white;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transition: transform 0.6s;
+}
+
+.front-card {
+    // background-color: rgb(49, 133, 222);
+}
+
+.back-card {
+    // background-color: rgb(136, 73, 199);
+    transform: rotateY(180deg);
+}
+
+.front-card div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.back-card div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

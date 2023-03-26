@@ -62,6 +62,7 @@ params:
             enabled: true
             local: true
             src: avatar.jpg  # themes/hugo-theme-stack/assets
+            src2: avatar2.png
 
     article:
         math: true

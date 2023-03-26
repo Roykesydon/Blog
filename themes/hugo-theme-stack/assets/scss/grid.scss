@@ -2,6 +2,10 @@
     margin-left: auto;
     margin-right: auto;
 
+    /* custom */
+    // overflow-x: hidden;
+    /**/
+
     .left-sidebar {
         order: -3;
         max-width: var(--left-sidebar-max-width);
@@ -58,12 +62,14 @@
     display: flex;
     flex-direction: row;
 
+
     &.column {
         flex-direction: column;
     }
 
     &.on-phone--column {
         flex-direction: column;
+
         @include respond(md) {
             flex-direction: unset;
         }
@@ -94,7 +100,7 @@ main.main {
     padding: 0 15px;
     gap: var(--section-separation);
     padding-top: var(--main-top-padding);
-    
+
     @include respond(md) {
         padding: 0 20px;
     }
