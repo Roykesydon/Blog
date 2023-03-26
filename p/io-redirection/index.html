@@ -6,7 +6,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/io-redirection/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.4eafaa26a09159eb649c364192bc7ec96b45da36095f71e8d1821942c79d867d.css"><meta property='og:title' content='IO Redirection'>
+<link rel="stylesheet" href="/Blog/scss/style.min.e166f6b37b5a31b839d16e0daeaf52b43720273e290a890dd033090be24036b3.css"><meta property='og:title' content='IO Redirection'>
 <meta property='og:description' content='PPFDT per process file descriptor table 每個 process 都有 存放 file descriptors file descriptors 是一個唯一的整數，用來識別作業系統上的 open file 0, 1, 2 是 Standard input / ouput / error 大小受限於 OPEN_MAX，亦即能同時間能開的最多檔案數 Redirection Input redirection $ wc &amp;lt; /etc/passwd 把 wc 的 PPFDT 的 stdin 改成 /etc/passwd 如果是 $ wc /etc/passwd，則是在 PPFDT 追加 /etc/passwd Ouput redirection $ wc &amp;gt; f1 把 wc 的 PPFDT 的 stdout 改成 f1 Input &amp;amp; output redirection 兩個可以同時用'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/io-redirection/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -117,6 +117,7 @@
         
         
         
+        
         <li >
             <a href='/Blog/' >
                 
@@ -132,9 +133,15 @@
 
 
                 
-                <span>Home</span>
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
             </a>
         </li>
+        
         
         
         <li >
@@ -151,9 +158,15 @@
 
 
                 
-                <span>About</span>
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
             </a>
         </li>
+        
         
         
         <li >
@@ -171,9 +184,15 @@
 
 
                 
-                <span>Archives</span>
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
             </a>
         </li>
+        
         
         
         <li >
@@ -190,7 +209,12 @@
 
 
                 
-                <span>Search</span>
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
             </a>
         </li>
         
@@ -255,7 +279,7 @@
     
 
     <div class="article-title-wrapper">
-        <h2 class="article-title">
+        <h2 class="article-title-custom">
             <a href="/Blog/p/io-redirection/">IO Redirection</a>
         </h2>
     
