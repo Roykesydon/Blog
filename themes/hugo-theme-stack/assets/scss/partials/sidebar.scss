@@ -277,9 +277,12 @@ $update-steps: 20;
     }
 }
 
+
+/* custom avatar */
+
 .avatar-container-custom{
-    width: 300px;
-    height: 300px;
+    width: 100%;
+    height: 100%;
 }
 
 .avatar-container-custom:hover>.front-card {
@@ -326,3 +329,4 @@ $update-steps: 20;
     left: 50%;
     transform: translate(-50%, -50%);
 }
+/**/
