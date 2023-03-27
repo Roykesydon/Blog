@@ -16,11 +16,20 @@
     </header>
 
     {{ $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
+
+    <!-- 只顯示最近 5 篇 -->
+    <!-- {{/* $pages := $pages.ByDate.Reverse | first 5 */}} -->
+    <!-- {{/* */}} 註解範例-->
+
     {{ $notHidden := where .Site.RegularPages "Params.hidden" "!=" true }}
     {{ $filtered := ($pages | intersect $notHidden) }}
 
+    
+
     {{ range $filtered.GroupByDate "2006" }}
     {{ $id := lower (replace .Key " " "-") }}
+
+    
     <div class="archives-group" id="{{ $id }}">
         <h2 class="archives-date section-title"><a href="{{ $.RelPermalink }}#{{ $id }}">{{ .Key }}</a></h2>
         <div class="article-list--compact">
