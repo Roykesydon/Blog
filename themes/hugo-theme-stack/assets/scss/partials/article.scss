@@ -95,36 +95,36 @@
 }
 
 /*custom float image right*/
-.article-title-wrapper {
-    position: relative;
-}
+// .article-float-image {
+//     position: relative;
+// }
 
-.article-test {
-    content: "hi";
-}
+// .article-test {
+//     content: "hi";
+// }
 
-.article-title-wrapper::before {
-    content: "";
-    // content: attr(data-text);
-    display: block;
-    position: absolute;
-    top: -250%;
-    right: -50%;
-    /* 設定初始位置，根據實際需要調整 */
-    width: 50%;
-    height: 500%;
-    background-image: var(--bg-image);
-    // background-image: url(attr(data-text));
-    background-size: cover;
-    opacity: 0;
-    transition: all 0.2s ease-out;
-}
+// .article-float-image::before {
+//     content: "";
+//     // content: attr(data-text);
+//     display: block;
+//     position: absolute;
+//     top: -250%;
+//     right: -50%;
+//     /* 設定初始位置，根據實際需要調整 */
+//     width: 50%;
+//     height: 500%;
+//     background-image: var(--bg-image);
+//     // background-image: url(attr(data-text));
+//     background-size: cover;
+//     opacity: 0;
+//     transition: all 0.2s ease-out;
+// }
 
-.article-title-wrapper:hover::before {
-    // background-color: red;
-    right: 0;
-    opacity: 1;
-}
+// .article-float-image:hover::before {
+//     // background-color: red;
+//     right: 0;
+//     opacity: 1;
+// }
 
 
 /**/

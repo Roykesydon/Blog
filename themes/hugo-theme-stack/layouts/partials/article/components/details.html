@@ -13,10 +13,25 @@
     {{ range $key, $value := $params }}
         <p>{{ $key }}: {{ $value }}</p>
     {{ end }} -->
+    <!-- {{.RelPermalink}}
 
+    {{ .Site }}
+    -----
+    {{ .Site.Title }}
+    ----
+    {{ .IsHome }}
+    -----
+    {{trim .Page.RelPermalink "/"}}
+
+    ----
+    {{ .Ancestors  }}
+    ----
+    {{ .Parent }} -->
+    <!-- {{ .RelPermalink }} -->
+    <!-- {{ printf "%#v" . }} -->
     <!-- {{index .Params.categories 0}} -->
-
-    <div class="article-title-wrapper" style="--bg-image: url('/Blog/images/categories/{{index .Params.categories 0}}.jpg');">
+    {{ if in .Site.Title .RelPermalink }}
+    <div class="article-title-wrapper article-float-image" >
         <h2 class="article-title-custom">
             <a href="{{ .RelPermalink }}">
                 {{- .Title -}}
@@ -28,6 +43,20 @@
         </h3>
         {{ end }}
     </div>
+    {{ else }}
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/{{index .Params.categories 0}}.jpg');">
+        <h2 class="article-title-custom">
+            <a href="{{ .RelPermalink }}">
+                {{- .Title -}}
+            </a>
+        </h2>
+        {{ with .Params.description }}
+        <h3 class="article-subtitle">
+            {{ . }}
+        </h3>
+        {{ end }}
+    </div>
+    {{end}}
 
     {{ $showReadingTime := .Params.readingTime | default (.Site.Params.article.readingTime) }}
     {{ $showDate := not .Date.IsZero }}
