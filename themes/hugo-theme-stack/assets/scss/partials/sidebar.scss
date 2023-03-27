@@ -84,6 +84,18 @@ $update-steps: 20;
     animation: shadow 5s linear 0.1s infinite forwards;
 }
 
+.glitch-description {
+    // transform: scale(0.5);
+    position: relative;
+    // width: 100%;
+    height: 1.2em;
+    // text-align: center;
+    font-size: 1.0em;
+    color: white;
+    opacity: 1;
+    animation: shadow 5s linear 0.1s infinite forwards;
+}
+
 @keyframes noise-2 {
     @for $i from 0 through $update-steps {
         #{percentage($i*(1/$update-steps))} {
@@ -108,6 +120,17 @@ $update-steps: 20;
     animation: noise-2 3s infinite linear forwards;
 }
 
+.glitch-description:after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0.02em;
+    text-shadow: -1px 0 red;
+    top: 0;
+    color: white;
+    background: rgb(20, 20, 20);
+    animation: noise-2 3s infinite linear forwards;
+}
+
 @keyframes noise {
     @for $i from 0 through $update-steps {
         #{percentage($i*(1/$update-steps))} {
@@ -121,10 +144,21 @@ $update-steps: 20;
 .glitch:before {
     content: attr(data-text);
     position: absolute;
+    left: -0.05em;
+    text-align: center;
+    top: 0;
+    color: white;
+    background: rgb(20, 20, 20);
+    animation: noise 5s infinite linear alternate-reverse;
+}
+
+.glitch-description:before {
+    content: attr(data-text);
+    position: absolute;
     // width: 100%;
     // height: 100%;
     // height: 0.5em;
-    left: -0.05em;
+    left: -0.02em;
     text-align: center;
     top: 0;
     color: white;

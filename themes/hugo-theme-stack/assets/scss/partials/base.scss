@@ -115,8 +115,8 @@ body::before {
     height: 100%;
     // color: rgba(204, 245, 255, 0.932);
 
-    background: linear-gradient(-90deg, #ff78ed, #ffffff, #ff85ef, #ffffff);
-    animation: menu-text-gradient 15s ease infinite;
+    background: linear-gradient(to right, #3508ff 20%, #f700ff 40%, #1c0cff 60%, #eb13ff 80%);
+    animation: menu-text-gradient 5s linear infinite;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;

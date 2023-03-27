@@ -9,7 +9,7 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/q-learning/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.a40751248f2c7629f7d8bf33e44ddc0a7430361b2ba150887cb4718e32faba89.css"><meta property='og:title' content='Q-learning'>
+<link rel="stylesheet" href="/Blog/scss/style.min.57f5f163753bac2b0a8a76112c576ee718103deee772d92466ffa2c7cc31cd94.css"><meta property='og:title' content='Q-learning'>
 <meta property='og:description' content='RL 方法 Policy-based learn 做事的 actor Value-based 不直接 learn policy，而是 Learn critic，負責批評 Q-learning 屬於這種 Critic 不直接決定 action 給予 actor $\pi$，評估 actor $\pi$ 有多好 critic 的 output 依賴於 actor 的表現 State Value Function State value function $V^{\pi}(s)$ 用 actor $\pi$，看到 s 後玩到結束，cumulated reward expectation 是多少 評估方法 Monte-Carlo(MC) based approach
 critic 看 $\pi$ 玩遊戲 訓練一個 network，看到不同的 state ，輸出 cumulated reward(直到遊戲結束，以下稱為 $G_a$)，解 regression 問題 Temporal-difference(TD) approach
 MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊戲超長 TD 只需要 {$s_t,a_t,r_t,s_{t&#43;1}$} $V^{\pi}(s_t)=V^{\pi}(s_{t&#43;1})&#43;r_t$ MS v.'>
@@ -93,6 +93,7 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
             
             <h1 class="glitch" data-text="Roykesydon" ><a href="/Blog">Roykesydon</a></h1>
             <h2 class="site-description">I write notes here during my free time.</h2>
+            
         </div>
     </header><ol class="social-menu">
             
