@@ -21,14 +21,15 @@
         {{ partial "sidebar/left.html" . }}
         {{- end -}}
         {{- block "right-sidebar" . -}}{{ end }}
+        <!-- spark -->
+        <!-- {{ range $i, $sequence := (seq 100) }}
+        <div class="spark"></div>
+        {{ end }} -->
+        <!--  -->
         <main class="main full-width">
             {{- block "main" . }}{{- end }}
 
-            <!-- spark -->
-            <!-- {{ range $i, $sequence := (seq 100) }}
-            <div class="spark"></div>
-            {{ end }} -->
-            <!--  -->
+            
         </main>
         {{ partial "footer/include.html" . }}
     </div>

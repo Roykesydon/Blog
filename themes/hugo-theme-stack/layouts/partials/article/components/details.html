@@ -9,13 +9,19 @@
     </header>
     {{ end }}
 
-    <div class="article-title-wrapper">
+    <!-- {{ $params := .Params }}
+    {{ range $key, $value := $params }}
+        <p>{{ $key }}: {{ $value }}</p>
+    {{ end }} -->
+
+    <!-- {{index .Params.categories 0}} -->
+
+    <div class="article-title-wrapper" style="--bg-image: url('/Blog/images/categories/{{index .Params.categories 0}}.jpg');">
         <h2 class="article-title-custom">
             <a href="{{ .RelPermalink }}">
                 {{- .Title -}}
             </a>
         </h2>
-    
         {{ with .Params.description }}
         <h3 class="article-subtitle">
             {{ . }}

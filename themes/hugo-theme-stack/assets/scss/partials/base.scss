@@ -113,7 +113,15 @@ body::before {
     content: attr(data-text);
     position: absolute;
     height: 100%;
-    color: rgba(204, 245, 255, 0.932);
+    // color: rgba(204, 245, 255, 0.932);
+
+    background: linear-gradient(-90deg, #ff78ed, #ffffff, #ff85ef, #ffffff);
+    animation: menu-text-gradient 15s ease infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 1600% 1600%;
+
     // border-right: 1px solid var(--color);
     padding-left: 10px;
     // padding-left: 50px;
@@ -124,10 +132,22 @@ body::before {
     width: 100%;
     // left: -10px;
     text-shadow: 0 0 0.1em var(--color);
-    color: var(--color);
+    // color: var(--color);
     overflow: hidden;
     -webkit-text-stroke: 0.005em var(--color);
     transition: width 0.3s cubic-bezier(0.375, -0.04, 0.135, 1.13);
+}
+
+@keyframes menu-text-gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 /**/

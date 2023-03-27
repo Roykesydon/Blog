@@ -11,7 +11,7 @@ Introduction self-attention-based 架構，特別是 Transformer，已經是 NLP
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/vit-%E8%AB%96%E6%96%87/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.77b3adfc55740e6a724c5a3c6efb31c840c3543dea1a1cb79ac4881ebd10c6de.css"><meta property='og:title' content='ViT 論文'>
+<link rel="stylesheet" href="/Blog/scss/style.min.9d29aac593d846dc2580afeb0bc6de2f1836f1b9970337b8ef16fa5f4610dfb8.css"><meta property='og:title' content='ViT 論文'>
 <meta property='og:description' content='paper: An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale
 Abstract 在 CV 領域 transformer 表現有限，目前 attention 常常是和卷積神經網路一起用，或是用來把一些卷積層換成 self-attention，但整體架構不變。這篇論文想展現一個純 Transformer 可以直接在影像分類上表現很好。如果用大量資料作預訓練，再遷移到中小型的資料集，可以和 SOTA 的 CNN 表現得一樣好，還需要較少的訓練資源作訓練。
 Introduction self-attention-based 架構，特別是 Transformer，已經是 NLP 的重要選擇。主流的作法是在大型文字資料集上作訓練，再針對小型任務資料集作 fine-tune。由於 Transformer 的計算效率高，還有可擴展性，可以 train 一些很大的 model，隨著 model 和資料集增大，目前還沒看出飽和的現象。
@@ -257,6 +257,9 @@ Introduction self-attention-based 架構，特別是 Transformer，已經是 NLP
 
     
 
+        
+        
+        
         <main class="main full-width">
     <article class="main-article">
     <header class="article-header">
@@ -272,11 +275,14 @@ Introduction self-attention-based 架構，特別是 Transformer，已經是 NLP
     </header>
     
 
-    <div class="article-title-wrapper">
+    
+
+    
+
+    <div class="article-title-wrapper" style="--bg-image: url('/Blog/images/categories/deep-learning.jpg');">
         <h2 class="article-title-custom">
             <a href="/Blog/p/vit-%E8%AB%96%E6%96%87/">ViT 論文</a>
         </h2>
-    
         
     </div>
 
@@ -641,8 +647,6 @@ position embedding 的做法是 standard learnable 1D positional embeddings，�
             >
 
 
-            
-            
             
         </main>
         <script 
