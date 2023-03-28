@@ -394,7 +394,7 @@ body .cybr-text+.cybr-text {
     --clip-seven: polygon(0 63%, 100% 63%, 100% 80%, 95% 80%, 95% 80%, 85% 80%, 85% 80%, 8% 80%, 0 70%);
     font-family: 'Cyber', sans-serif;
     color: var(--color);
-    cursor: pointer;
+    cursor: default;
     background: transparent;
     max-width: 40vw;
     outline: transparent;
