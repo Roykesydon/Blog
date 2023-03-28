@@ -11,7 +11,7 @@ $E[G_t^n]=Q^{\pi_\theta}(s_t^n,a_t^n)$ Q function 這樣定義 所以我們可�
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/actor-critic/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.57f5f163753bac2b0a8a76112c576ee718103deee772d92466ffa2c7cc31cd94.css"><meta property='og:title' content='Actor-Critic'>
+<link rel="stylesheet" href="/Blog/scss/style.min.ccfd3cf1c68ec5b9a2a233bae384277538b31cc16d3d14b7a550188eb3c13330.css"><meta property='og:title' content='Actor-Critic'>
 <meta property='og:description' content='Introduction 結合 policy-based 和 value-based
 A3C Actor-Critic 最知名的方法 Advantage Actor-Critic 是 A2C Advantage Actor-Critic Review: Policy gradient
 $\triangledown \overline{R_{\theta}}\approx \frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}(\displaystyle\sum_{t^{&amp;rsquo;}=t}^{T_n}\gamma^{t^{&amp;rsquo;}-t}r_{t^{&amp;rsquo;}}^n-b)\triangledown log p_{\theta}(a_t^n|s_t^n)$ $G_t^n=\displaystyle\sum_{t^{&amp;rsquo;}=t}^{T_n}\gamma^{t^{&amp;rsquo;}-t}r_{t^{&amp;rsquo;}}^n-b$ G very unstable，因為給同樣的 state 作同樣的 action 不一定會得到同樣的結果，G 是個 random variable 想要改獲得期望值，取代掉 sample 的值(G 的部分)，可以用 Q-Learning
@@ -95,10 +95,12 @@ $E[G_t^n]=Q^{\pi_\theta}(s_t^n,a_t^n)$ Q function 這樣定義 所以我們可�
             
         
         
-        <div class="site-meta">
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="site-meta cybr-text">
             
-            <h1 class="glitch" data-text="Roykesydon" ><a href="/Blog">Roykesydon</a></h1>
-            <h2 class="site-description">I write notes here during my free time.</h2>
+            
+            I write notes here during my free time.
+            <h2 class="site-description cybr-text__glitch">I write notes here during my free time.</h2>
             
         </div>
     </header><ol class="social-menu">
