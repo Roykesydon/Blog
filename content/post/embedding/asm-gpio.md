@@ -1,7 +1,7 @@
 ---
 title: "ARM GPIO 介紹"
 date: 2023-03-30T00:00:54+08:00
-draft: false
+draft: true
 description: ""
 type: "post"
 tags: ["embedded-system", "stm32", "mcu", "assembly"]
