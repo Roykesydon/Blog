@@ -4,7 +4,7 @@
 <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: GIT: A Generative Image-to-text Transformer for Vision and Language
 1 2 3 4 5 6 ██████╗ ██╗████████╗ ██╔════╝ ██║╚══██╔══╝ ██║ ███╗██║ ██║ ██║ ██║██║ ██║ ╚██████╔╝██║ ██║ ╚═════╝ ╚═╝ ╚═╝ Abstract 設計了一個 Generative Image-to-text Transformer，統一 vision-language tasks，像是 image/video captioning 或是問答。
-雖然 generative models 再預訓練和微調的時候是同樣的網路架構，現有的工作通常都包含複雜的架構 (uni/multi-modal encoder/decoder)， 而且依賴於外部模組，比如物件偵測或 optical character recognition (OCR)。
+雖然 generative models 在預訓練和微調的時候是同樣的網路架構，現有的工作通常都包含複雜的架構 (uni/multi-modal encoder/decoder)， 而且依賴於外部模組，比如物件偵測或 optical character recognition (OCR)。
 在 GIT，我們簡化為 single language modeling task 下的一個 image encoder 和一個 text decoder。
 擴大了預訓練資料和模型大小以提高模型性能。
 在許多具有挑戰性的 benchmarks 上取得 SOTA。
@@ -13,10 +13,10 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/git-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.5dffa81d02eee99d50b3fe6ce55c1814bbdf23eacfc7df0336da36b47b234b11.css"><meta property='og:title' content='GIT 論文閱讀'>
+<link rel="stylesheet" href="/Blog/scss/style.min.a9d194cf2fa9877d60536f43c640d1065e5c1af11fe9e65b8bb8762ffb2522da.css"><meta property='og:title' content='GIT 論文閱讀'>
 <meta property='og:description' content='paper: GIT: A Generative Image-to-text Transformer for Vision and Language
 1 2 3 4 5 6 ██████╗ ██╗████████╗ ██╔════╝ ██║╚══██╔══╝ ██║ ███╗██║ ██║ ██║ ██║██║ ██║ ╚██████╔╝██║ ██║ ╚═════╝ ╚═╝ ╚═╝ Abstract 設計了一個 Generative Image-to-text Transformer，統一 vision-language tasks，像是 image/video captioning 或是問答。
-雖然 generative models 再預訓練和微調的時候是同樣的網路架構，現有的工作通常都包含複雜的架構 (uni/multi-modal encoder/decoder)， 而且依賴於外部模組，比如物件偵測或 optical character recognition (OCR)。
+雖然 generative models 在預訓練和微調的時候是同樣的網路架構，現有的工作通常都包含複雜的架構 (uni/multi-modal encoder/decoder)， 而且依賴於外部模組，比如物件偵測或 optical character recognition (OCR)。
 在 GIT，我們簡化為 single language modeling task 下的一個 image encoder 和一個 text decoder。
 擴大了預訓練資料和模型大小以提高模型性能。
 在許多具有挑戰性的 benchmarks 上取得 SOTA。
@@ -27,7 +27,7 @@
 <meta name="twitter:title" content="GIT 論文閱讀">
 <meta name="twitter:description" content="paper: GIT: A Generative Image-to-text Transformer for Vision and Language
 1 2 3 4 5 6 ██████╗ ██╗████████╗ ██╔════╝ ██║╚══██╔══╝ ██║ ███╗██║ ██║ ██║ ██║██║ ██║ ╚██████╔╝██║ ██║ ╚═════╝ ╚═╝ ╚═╝ Abstract 設計了一個 Generative Image-to-text Transformer，統一 vision-language tasks，像是 image/video captioning 或是問答。
-雖然 generative models 再預訓練和微調的時候是同樣的網路架構，現有的工作通常都包含複雜的架構 (uni/multi-modal encoder/decoder)， 而且依賴於外部模組，比如物件偵測或 optical character recognition (OCR)。
+雖然 generative models 在預訓練和微調的時候是同樣的網路架構，現有的工作通常都包含複雜的架構 (uni/multi-modal encoder/decoder)， 而且依賴於外部模組，比如物件偵測或 optical character recognition (OCR)。
 在 GIT，我們簡化為 single language modeling task 下的一個 image encoder 和一個 text decoder。
 擴大了預訓練資料和模型大小以提高模型性能。
 在許多具有挑戰性的 benchmarks 上取得 SOTA。
@@ -429,7 +429,7 @@
 </div>
 </div><h2 id="abstract">Abstract</h2>
 <p>設計了一個 Generative Image-to-text Transformer，統一 vision-language tasks，像是 image/video captioning 或是問答。</p>
-<p>雖然 generative models 再預訓練和微調的時候是同樣的網路架構，現有的工作通常都包含複雜的架構 (uni/multi-modal encoder/decoder)，
+<p>雖然 generative models 在預訓練和微調的時候是同樣的網路架構，現有的工作通常都包含複雜的架構 (uni/multi-modal encoder/decoder)，
 而且依賴於外部模組，比如物件偵測或 optical character recognition (OCR)。</p>
 <p>在 GIT，我們簡化為 single language modeling task 下的一個 image encoder 和一個 text decoder。</p>
 <p>擴大了預訓練資料和模型大小以提高模型性能。</p>

@@ -6,7 +6,38 @@
         <description>Recent content in Posts on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Wed, 29 Mar 2023 01:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 30 Mar 2023 00:00:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>ARM GPIO 介紹</title>
+        <link>https://roykesydon.github.io/Blog/p/arm-gpio-%E4%BB%8B%E7%B4%B9/</link>
+        <pubDate>Thu, 30 Mar 2023 00:00:54 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/arm-gpio-%E4%BB%8B%E7%B4%B9/</guid>
+        <description>&lt;h2 id=&#34;amba&#34;&gt;AMBA&lt;/h2&gt;
+&lt;p&gt;Advanced Microcontroller Bus Architecture&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Advanced High-performance Bus(AHB)
+&lt;ul&gt;
+&lt;li&gt;ARM 的北橋&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Advanced Peripheral Bus(APB)
+&lt;ul&gt;
+&lt;li&gt;ARM 的南橋&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;general-purpose-inputsoutputs&#34;&gt;General-purpose inputs/outputs&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;GPIO&lt;/li&gt;
+&lt;li&gt;STM32L476 的 AHB2 上有 A~H GPIO port
+&lt;ul&gt;
+&lt;li&gt;除了 H，每個 port 有 16 pins&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>GIT 論文閱讀</title>
         <link>https://roykesydon.github.io/Blog/p/git-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
         <pubDate>Wed, 29 Mar 2023 01:08:46 +0800</pubDate>
@@ -34,7 +65,7 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
 &lt;p&gt;設計了一個 Generative Image-to-text Transformer，統一 vision-language tasks，像是 image/video captioning 或是問答。&lt;/p&gt;
-&lt;p&gt;雖然 generative models 再預訓練和微調的時候是同樣的網路架構，現有的工作通常都包含複雜的架構 (uni/multi-modal encoder/decoder)，
+&lt;p&gt;雖然 generative models 在預訓練和微調的時候是同樣的網路架構，現有的工作通常都包含複雜的架構 (uni/multi-modal encoder/decoder)，
 而且依賴於外部模組，比如物件偵測或 optical character recognition (OCR)。&lt;/p&gt;
 &lt;p&gt;在 GIT，我們簡化為 single language modeling task 下的一個 image encoder 和一個 text decoder。&lt;/p&gt;
 &lt;p&gt;擴大了預訓練資料和模型大小以提高模型性能。&lt;/p&gt;
