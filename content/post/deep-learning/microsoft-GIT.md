@@ -22,7 +22,7 @@ paper: [GIT: A Generative Image-to-text Transformer for Vision and Language](htt
 
 設計了一個 Generative Image-to-text Transformer，統一 vision-language tasks，像是 image/video captioning 或是問答。
 
-雖然 generative models 再預訓練和微調的時候是同樣的網路架構，現有的工作通常都包含複雜的架構 (uni/multi-modal encoder/decoder)，
+雖然 generative models 在預訓練和微調的時候是同樣的網路架構，現有的工作通常都包含複雜的架構 (uni/multi-modal encoder/decoder)，
 而且依賴於外部模組，比如物件偵測或 optical character recognition (OCR)。
 
 在 GIT，我們簡化為 single language modeling task 下的一個 image encoder 和一個 text decoder。
