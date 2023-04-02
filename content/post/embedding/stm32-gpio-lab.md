@@ -54,7 +54,7 @@ HAL_Delay(1000); //等一秒
 HAL_GPIO_TogglePin(RED_LED_GPIO_Port, RED_LED_Pin)
 ```
 
-根據架構圖左側，你可以透過修改 BSRR 來修改 ODR，達到修改書出的效果，請見 Reference Manuals，實際上 ```HAL_GPIO_WritePin``` 也是這樣實現的
+根據架構圖左側，你可以透過修改 BSRR 來修改 ODR，達到修改輸出的效果，請見 Reference Manuals，實際上 ```HAL_GPIO_WritePin``` 也是這樣實現的
 ```c
 void HAL_GPIO_WritePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, GPIO_PinState PinState)
 {
