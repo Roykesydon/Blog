@@ -17,7 +17,7 @@ User Label
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/stm32-gpio-%E5%AF%A6%E9%A9%97/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.815f01cd1fa51aedaa4081c0937b87345e3d60d7ab90658c14979c58262322dd.css"><meta property='og:title' content='STM32 GPIO 實驗'>
+<link rel="stylesheet" href="/Blog/scss/style.min.da8f06a853180e12f181731e81e2b29304d1d734f4ff3ae487f71c2f077bb4b8.css"><meta property='og:title' content='STM32 GPIO 實驗'>
 <meta property='og:description' content='目的 本文會試用 GPIO output / input / interrupt
 GPIO 架構 Output 介紹 在 ioc 那邊選個 pin，選 GPIO_Output
 在左邊欄位 System Core 選擇 GPIO
@@ -473,7 +473,7 @@ User Label
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">HAL_GPIO_TogglePin</span><span class="p">(</span><span class="n">RED_LED_GPIO_Port</span><span class="p">,</span> <span class="n">RED_LED_Pin</span><span class="p">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>根據架構圖左側，你可以透過修改 BSRR 來修改 ODR，達到修改書出的效果，請見 Reference Manuals，實際上 <code>HAL_GPIO_WritePin</code> 也是這樣實現的</p>
+</div><p>根據架構圖左側，你可以透過修改 BSRR 來修改 ODR，達到修改輸出的效果，請見 Reference Manuals，實際上 <code>HAL_GPIO_WritePin</code> 也是這樣實現的</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1

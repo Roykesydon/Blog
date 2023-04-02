@@ -93,7 +93,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;HAL_GPIO_TogglePin&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;RED_LED_GPIO_Port&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RED_LED_Pin&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;根據架構圖左側，你可以透過修改 BSRR 來修改 ODR，達到修改書出的效果，請見 Reference Manuals，實際上 &lt;code&gt;HAL_GPIO_WritePin&lt;/code&gt; 也是這樣實現的&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;根據架構圖左側，你可以透過修改 BSRR 來修改 ODR，達到修改輸出的效果，請見 Reference Manuals，實際上 &lt;code&gt;HAL_GPIO_WritePin&lt;/code&gt; 也是這樣實現的&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
