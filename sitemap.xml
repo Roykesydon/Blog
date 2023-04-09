@@ -5,25 +5,16 @@
     <loc>https://roykesydon.github.io/Blog/</loc>
     <lastmod>2023-04-09T00:00:54+08:00</lastmod>
   </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/assembly/</loc>
+    <loc>https://roykesydon.github.io/Blog/categories/</loc>
     <lastmod>2023-04-09T00:00:54+08:00</lastmod>
   </url><url>
-    <loc>https://roykesydon.github.io/Blog/categories/</loc>
+    <loc>https://roykesydon.github.io/Blog/tags/electric-circuits/</loc>
     <lastmod>2023-04-09T00:00:54+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/categories/embedded-system/</loc>
     <lastmod>2023-04-09T00:00:54+08:00</lastmod>
   </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/embedded-system/</loc>
-    <lastmod>2023-04-09T00:00:54+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/mcu/</loc>
-    <lastmod>2023-04-09T00:00:54+08:00</lastmod>
-  </url><url>
     <loc>https://roykesydon.github.io/Blog/post/</loc>
-    <lastmod>2023-04-09T00:00:54+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/stm32/</loc>
     <lastmod>2023-04-09T00:00:54+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/tags/</loc>
@@ -31,6 +22,15 @@
   </url><url>
     <loc>https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-i/</loc>
     <lastmod>2023-04-09T00:00:54+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/embedded-system/</loc>
+    <lastmod>2023-04-02T01:32:54+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/mcu/</loc>
+    <lastmod>2023-04-02T01:32:54+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/stm32/</loc>
+    <lastmod>2023-04-02T01:32:54+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/p/stm32-gpio-%E5%AF%A6%E9%A9%97/</loc>
     <lastmod>2023-04-02T01:32:54+08:00</lastmod>
@@ -66,6 +66,9 @@
     <lastmod>2023-03-22T01:08:46+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/p/arm-%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80%E4%BB%8B%E7%B4%B9/</loc>
+    <lastmod>2023-03-21T01:32:54+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/assembly/</loc>
     <lastmod>2023-03-21T01:32:54+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/p/patentsberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</loc>
