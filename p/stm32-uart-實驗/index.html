@@ -2,24 +2,30 @@
 <html lang="en-us" dir="ltr">
 
 <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Basic Components Actor Policy $\pi$ is a network with parameter $\theta$ Env Reward Function Trajectory 在一場遊戲，把 env 輸出的 s 和 actor 輸出的 a 串起來，是一個 Trajectory Trajectory $\tau$ = {$s_1,a_1,s_2,a_2,&amp;hellip;,s_T,a_T$} $p_{\theta}(\tau)=p(s_1)\displaystyle\prod_{t=1}^Tp_{\theta}(a_t|s_t)p(s_{t&#43;1}|s_t,a_t)$ Update $\theta \leftarrow \theta &#43; \eta \triangledown \overline{R}_{\theta}$
-$\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangledown p_{\theta} (\tau) \\ =\frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}R(\tau^n)\triangledown log p_{\theta} (a_t^n|s_t^n)$
-實作 常見公式 $\triangledown f(x)=f(x)\triangledown logf(x)$ 用當前模型蒐集一堆 Trajectory 更新模型 回到第一步 細節 做一個分類問題，把 state 當作分類器的 Input，把 action 當作分類器的 ground truth 作訓練 在實作分類問題的時候，objective function 都會寫成 minimize cross entropy，就是 maximize log likelihood RL 和一般分類的區別是，要記得在 loss 前面乘上 $R(\tau^n)$ Tip Add a Baseline $R(\tau^n)$ 有可能永遠都為正 此時等於告訴 Model 說，今天不管是什麼 action，都要提高它的機率。不一定會有問題，因為雖然都是正的，但正的量有大有小，可能某些 action 上升的幅度會更大。因為我們是在做 sampling，不一定會 sample 到某些 action，本來想的情況是所有的 trajectory 都會出現才沒問題。 解法: 希望 reward 不要總是正的 $\triangledown \overline{R_{\theta}}\approx \frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}(R(\tau^n)-b)\triangledown log p_{\theta}(a_t^n|s_t^n)$ $b \approx E[R(\tau)]$ Assign Suitable Credit 原本整場遊戲的所有 action 都會乘上 $R(\tau)$，但這不太公平，因為就算結果是好的，不代表所有 action 都是對的，反之亦然。在理想的情況下，如果 sample 夠多，就可以解決這問題。 解法 只計算從這個 action 後的 reward 總和 因為前面的 reward 和你做了什麼沒關係 接續解法 1，把比較未來的 reward 做 discount 乘某個小於 1 的 $\gamma^{t^{&amp;rsquo;}-t}$ Advantage function base 可以是 state-dependent，可以根據 network 得出，以後再說 $(Reward-b)$ 可以合起來看做 Advantage function $A^{\theta}(s_t,a_t)$ 這邊 Reward 不管你是什麼形式，有沒有 discount。 它的意義是，這個 action 相較於其他的 action 有多好，而不是絕對好 這個 A 通常可以由某個類神經網路估計，那個類神經網路叫做 critic，以後講 Actor-Critic 的時候再說 '>
-<title>Policy Gradient</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='介紹 試用 STM32 UART 功能
+會透過 RealTerm 和 STM32L476RG 溝通，並用 DMA 接收訊息
+根據 User manual，USART2 預設會連接 ST-LINK，要連接外部設備的話要修改 solder bridge
+ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous Parameters Settings 可以設置各種資訊 Baud Rate Word Length Parity Stop Bits DMA Setting Add 一個 RX Mode 改成 circular，並打開 memory 的 increment address increment address 是因為資料是用 array 存 circular 是當資料滿了後，會回到 zero position NVIC Setting 設置 DMA 應該就會自動設置一個 interrupt，檢查一下 程式碼 發送
+1 2 uint8_t myTxData[13] = &amp;#34;Hello World\r\n&amp;#34;; HAL_UART_Transmit(&amp;amp;huart2, myTxData, 13, 10); 接收'>
+<title>STM32 UART 實驗</title>
 
-<link rel='canonical' href='https://roykesydon.github.io/Blog/p/policy-gradient/'>
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/stm32-uart-%E5%AF%A6%E9%A9%97/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.8f3076e3dd3f450c167134d83dc24ec7048406209707a9014e56562b280dda39.css"><meta property='og:title' content='Policy Gradient'>
-<meta property='og:description' content='Basic Components Actor Policy $\pi$ is a network with parameter $\theta$ Env Reward Function Trajectory 在一場遊戲，把 env 輸出的 s 和 actor 輸出的 a 串起來，是一個 Trajectory Trajectory $\tau$ = {$s_1,a_1,s_2,a_2,&amp;hellip;,s_T,a_T$} $p_{\theta}(\tau)=p(s_1)\displaystyle\prod_{t=1}^Tp_{\theta}(a_t|s_t)p(s_{t&#43;1}|s_t,a_t)$ Update $\theta \leftarrow \theta &#43; \eta \triangledown \overline{R}_{\theta}$
-$\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangledown p_{\theta} (\tau) \\ =\frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}R(\tau^n)\triangledown log p_{\theta} (a_t^n|s_t^n)$
-實作 常見公式 $\triangledown f(x)=f(x)\triangledown logf(x)$ 用當前模型蒐集一堆 Trajectory 更新模型 回到第一步 細節 做一個分類問題，把 state 當作分類器的 Input，把 action 當作分類器的 ground truth 作訓練 在實作分類問題的時候，objective function 都會寫成 minimize cross entropy，就是 maximize log likelihood RL 和一般分類的區別是，要記得在 loss 前面乘上 $R(\tau^n)$ Tip Add a Baseline $R(\tau^n)$ 有可能永遠都為正 此時等於告訴 Model 說，今天不管是什麼 action，都要提高它的機率。不一定會有問題，因為雖然都是正的，但正的量有大有小，可能某些 action 上升的幅度會更大。因為我們是在做 sampling，不一定會 sample 到某些 action，本來想的情況是所有的 trajectory 都會出現才沒問題。 解法: 希望 reward 不要總是正的 $\triangledown \overline{R_{\theta}}\approx \frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}(R(\tau^n)-b)\triangledown log p_{\theta}(a_t^n|s_t^n)$ $b \approx E[R(\tau)]$ Assign Suitable Credit 原本整場遊戲的所有 action 都會乘上 $R(\tau)$，但這不太公平，因為就算結果是好的，不代表所有 action 都是對的，反之亦然。在理想的情況下，如果 sample 夠多，就可以解決這問題。 解法 只計算從這個 action 後的 reward 總和 因為前面的 reward 和你做了什麼沒關係 接續解法 1，把比較未來的 reward 做 discount 乘某個小於 1 的 $\gamma^{t^{&amp;rsquo;}-t}$ Advantage function base 可以是 state-dependent，可以根據 network 得出，以後再說 $(Reward-b)$ 可以合起來看做 Advantage function $A^{\theta}(s_t,a_t)$ 這邊 Reward 不管你是什麼形式，有沒有 discount。 它的意義是，這個 action 相較於其他的 action 有多好，而不是絕對好 這個 A 通常可以由某個類神經網路估計，那個類神經網路叫做 critic，以後講 Actor-Critic 的時候再說 '>
-<meta property='og:url' content='https://roykesydon.github.io/Blog/p/policy-gradient/'>
+<link rel="stylesheet" href="/Blog/scss/style.min.8f3076e3dd3f450c167134d83dc24ec7048406209707a9014e56562b280dda39.css"><meta property='og:title' content='STM32 UART 實驗'>
+<meta property='og:description' content='介紹 試用 STM32 UART 功能
+會透過 RealTerm 和 STM32L476RG 溝通，並用 DMA 接收訊息
+根據 User manual，USART2 預設會連接 ST-LINK，要連接外部設備的話要修改 solder bridge
+ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous Parameters Settings 可以設置各種資訊 Baud Rate Word Length Parity Stop Bits DMA Setting Add 一個 RX Mode 改成 circular，並打開 memory 的 increment address increment address 是因為資料是用 array 存 circular 是當資料滿了後，會回到 zero position NVIC Setting 設置 DMA 應該就會自動設置一個 interrupt，檢查一下 程式碼 發送
+1 2 uint8_t myTxData[13] = &amp;#34;Hello World\r\n&amp;#34;; HAL_UART_Transmit(&amp;amp;huart2, myTxData, 13, 10); 接收'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/stm32-uart-%E5%AF%A6%E9%A9%97/'>
 <meta property='og:site_name' content='Roykesydon'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='reinforcement-learning' /><meta property='article:published_time' content='2023-02-19T17:16:14&#43;08:00'/><meta property='article:modified_time' content='2023-02-19T17:16:14&#43;08:00'/>
-<meta name="twitter:title" content="Policy Gradient">
-<meta name="twitter:description" content="Basic Components Actor Policy $\pi$ is a network with parameter $\theta$ Env Reward Function Trajectory 在一場遊戲，把 env 輸出的 s 和 actor 輸出的 a 串起來，是一個 Trajectory Trajectory $\tau$ = {$s_1,a_1,s_2,a_2,&amp;hellip;,s_T,a_T$} $p_{\theta}(\tau)=p(s_1)\displaystyle\prod_{t=1}^Tp_{\theta}(a_t|s_t)p(s_{t&#43;1}|s_t,a_t)$ Update $\theta \leftarrow \theta &#43; \eta \triangledown \overline{R}_{\theta}$
-$\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangledown p_{\theta} (\tau) \\ =\frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}R(\tau^n)\triangledown log p_{\theta} (a_t^n|s_t^n)$
-實作 常見公式 $\triangledown f(x)=f(x)\triangledown logf(x)$ 用當前模型蒐集一堆 Trajectory 更新模型 回到第一步 細節 做一個分類問題，把 state 當作分類器的 Input，把 action 當作分類器的 ground truth 作訓練 在實作分類問題的時候，objective function 都會寫成 minimize cross entropy，就是 maximize log likelihood RL 和一般分類的區別是，要記得在 loss 前面乘上 $R(\tau^n)$ Tip Add a Baseline $R(\tau^n)$ 有可能永遠都為正 此時等於告訴 Model 說，今天不管是什麼 action，都要提高它的機率。不一定會有問題，因為雖然都是正的，但正的量有大有小，可能某些 action 上升的幅度會更大。因為我們是在做 sampling，不一定會 sample 到某些 action，本來想的情況是所有的 trajectory 都會出現才沒問題。 解法: 希望 reward 不要總是正的 $\triangledown \overline{R_{\theta}}\approx \frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}(R(\tau^n)-b)\triangledown log p_{\theta}(a_t^n|s_t^n)$ $b \approx E[R(\tau)]$ Assign Suitable Credit 原本整場遊戲的所有 action 都會乘上 $R(\tau)$，但這不太公平，因為就算結果是好的，不代表所有 action 都是對的，反之亦然。在理想的情況下，如果 sample 夠多，就可以解決這問題。 解法 只計算從這個 action 後的 reward 總和 因為前面的 reward 和你做了什麼沒關係 接續解法 1，把比較未來的 reward 做 discount 乘某個小於 1 的 $\gamma^{t^{&amp;rsquo;}-t}$ Advantage function base 可以是 state-dependent，可以根據 network 得出，以後再說 $(Reward-b)$ 可以合起來看做 Advantage function $A^{\theta}(s_t,a_t)$ 這邊 Reward 不管你是什麼形式，有沒有 discount。 它的意義是，這個 action 相較於其他的 action 有多好，而不是絕對好 這個 A 通常可以由某個類神經網路估計，那個類神經網路叫做 critic，以後講 Actor-Critic 的時候再說 ">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='embedded-system' /><meta property='article:tag' content='stm32' /><meta property='article:tag' content='mcu' /><meta property='article:published_time' content='2023-04-09T01:32:54&#43;08:00'/><meta property='article:modified_time' content='2023-04-09T01:32:54&#43;08:00'/>
+<meta name="twitter:title" content="STM32 UART 實驗">
+<meta name="twitter:description" content="介紹 試用 STM32 UART 功能
+會透過 RealTerm 和 STM32L476RG 溝通，並用 DMA 接收訊息
+根據 User manual，USART2 預設會連接 ST-LINK，要連接外部設備的話要修改 solder bridge
+ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous Parameters Settings 可以設置各種資訊 Baud Rate Word Length Parity Stop Bits DMA Setting Add 一個 RX Mode 改成 circular，並打開 memory 的 increment address increment address 是因為資料是用 array 存 circular 是當資料滿了後，會回到 zero position NVIC Setting 設置 DMA 應該就會自動設置一個 interrupt，檢查一下 程式碼 發送
+1 2 uint8_t myTxData[13] = &amp;#34;Hello World\r\n&amp;#34;; HAL_UART_Transmit(&amp;amp;huart2, myTxData, 13, 10); 接收">
 </head>
 
 <body class="
@@ -252,7 +258,52 @@ $\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangl
     </ol>
 </aside>
 
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#介紹">介紹</a></li>
+    <li><a href="#ioc-設置">ioc 設置</a></li>
+    <li><a href="#程式碼">程式碼</a></li>
+    <li><a href="#實驗">實驗</a>
+      <ol>
+        <li><a href="#realterm">RealTerm</a>
+          <ol>
+            <li><a href="#display">Display</a></li>
+            <li><a href="#port">Port</a></li>
+            <li><a href="#send">Send</a></li>
+          </ol>
+        </li>
+        <li><a href="#結果">結果</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
         
         
@@ -265,8 +316,8 @@ $\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangl
     
     <header class="article-category">
         
-            <a href="/Blog/categories/deep-learning/" style="background-color: #936ce1; color: #fff;">
-                Deep Learning
+            <a href="/Blog/categories/embedded-system/" style="background-color: #e17100; color: #fff;">
+                Embedded System
             </a>
         
     </header>
@@ -278,9 +329,9 @@ $\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangl
     
     
     
-    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/deep-learning.jpg');">
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/embedded-system.jpg');">
         <h2 class="article-title-custom">
-            <a href="/Blog/p/policy-gradient/">Policy Gradient</a>
+            <a href="/Blog/p/stm32-uart-%E5%AF%A6%E9%A9%97/">STM32 UART 實驗</a>
         </h2>
         
     </div>
@@ -302,7 +353,7 @@ $\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangl
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Feb 19, 2023</time>
+                <time class="article-time--published">Apr 09, 2023</time>
             </div>
         
 
@@ -317,7 +368,7 @@ $\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangl
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    2 minute read
                 </time>
             </div>
         
@@ -332,18 +383,145 @@ $\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangl
     <section class="article-content">
     
     
-    <h1 id="basic-components">Basic Components</h1>
+    <h2 id="介紹">介紹</h2>
+<p>試用 STM32 UART 功能</p>
+<p>會透過 RealTerm 和 STM32L476RG 溝通，並用 DMA 接收訊息</p>
+<p>根據 User manual，USART2 預設會連接 ST-LINK，要連接外部設備的話要修改 solder bridge</p>
+<h2 id="ioc-設置">ioc 設置</h2>
 <ul>
-<li>Actor
+<li>Connectivity 可以設置 USART2</li>
+<li>mode 從 disable 改選 Asynchronous</li>
+<li>Parameters Settings 可以設置各種資訊
 <ul>
-<li>Policy $\pi$ is a network with parameter $\theta$</li>
+<li>Baud Rate</li>
+<li>Word Length</li>
+<li>Parity</li>
+<li>Stop Bits</li>
 </ul>
 </li>
-<li>Env</li>
-<li>Reward Function</li>
+<li>DMA Setting
+<ul>
+<li>Add 一個 RX
+<ul>
+<li>Mode 改成 circular，並打開 memory 的 increment address
+<ul>
+<li>increment address 是因為資料是用 array 存</li>
+<li>circular 是當資料滿了後，會回到 zero position</li>
 </ul>
-<h1 id="trajectory">Trajectory</h1>
-<p><img src="/Blog/images/drl/policy-gradient/aer.png"
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>NVIC Setting
+<ul>
+<li>設置 DMA 應該就會自動設置一個 interrupt，檢查一下</li>
+</ul>
+</li>
+</ul>
+<h2 id="程式碼">程式碼</h2>
+<p>發送</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">uint8_t</span> <span class="n">myTxData</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#34;Hello World</span><span class="se">\r\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">HAL_UART_Transmit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart2</span><span class="p">,</span> <span class="n">myTxData</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接收</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">UART_HandleTypeDef</span> <span class="n">huart2</span><span class="p">;</span> <span class="c1">// generated code
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">uint8_t</span> <span class="n">myRxData</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="nf">HAL_UART_Receive_DMA</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart2</span><span class="p">,</span> <span class="n">myRxData</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span> <span class="c1">// 在 Init 後，在 main 中執行一次就好
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>interrupt</p>
+<p>在 hal_uart.c 有</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">__weak</span> <span class="kt">void</span> <span class="nf">HAL_UART_RxCpltCallback</span><span class="p">(</span><span class="n">UART_HandleTypeDef</span> <span class="o">*</span><span class="n">huart</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="cm">/* Prevent unused argument(s) compilation warning */</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">UNUSED</span><span class="p">(</span><span class="n">huart</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="cm">/* NOTE : This function should not be modified, when the callback is needed,
+</span></span></span><span class="line"><span class="cl"><span class="cm">            the HAL_UART_RxCpltCallback can be implemented in the user file.
+</span></span></span><span class="line"><span class="cl"><span class="cm">   */</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>當 DMA 滿了就會呼叫這個 function</p>
+<h2 id="實驗">實驗</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">HAL_UART_RxCpltCallback</span><span class="p">(</span><span class="n">UART_HandleTypeDef</span> <span class="o">*</span><span class="n">huart</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="cm">/* Prevent unused argument(s) compilation warning */</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">UNUSED</span><span class="p">(</span><span class="n">huart</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="cm">/* NOTE : This function should not be modified, when the callback is needed,
+</span></span></span><span class="line"><span class="cl"><span class="cm">            the HAL_UART_RxCpltCallback can be implemented in the user file.
+</span></span></span><span class="line"><span class="cl"><span class="cm">   */</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">HAL_UART_Transmit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart2</span><span class="p">,</span> <span class="n">myRxData</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>當 20 個 Bytes 儲存滿了就回傳資訊給電腦</p>
+<h3 id="realterm">RealTerm</h3>
+<h4 id="display">Display</h4>
+<ul>
+<li>勾選 Half Duplex
+<ul>
+<li>發送的訊息會顯示綠色，接收的是黃色</li>
+</ul>
+</li>
+</ul>
+<h4 id="port">Port</h4>
+<ul>
+<li>設置 Baud 和其他有的沒的</li>
+<li>選 open</li>
+</ul>
+<h4 id="send">Send</h4>
+<ul>
+<li>EOL 可以勾選 CRLF</li>
+<li>打一些文字後按 Send ASCII</li>
+</ul>
+<h3 id="結果">結果</h3>
+<p><img src="/Blog/images/embedding/stm32-uart/result.jpg"
 	
 	
 	
@@ -351,85 +529,8 @@ $\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangl
 	
 	
 ></p>
-<ul>
-<li>在一場遊戲，把 env 輸出的 s 和 actor 輸出的 a 串起來，是一個 Trajectory</li>
-<li>Trajectory $\tau$ = {$s_1,a_1,s_2,a_2,&hellip;,s_T,a_T$}</li>
-<li>$p_{\theta}(\tau)=p(s_1)\displaystyle\prod_{t=1}^Tp_{\theta}(a_t|s_t)p(s_{t+1}|s_t,a_t)$</li>
-</ul>
-<h1 id="update">Update</h1>
-<p>$\theta \leftarrow \theta + \eta \triangledown \overline{R}_{\theta}$</p>
-<p>$\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangledown p_{\theta} (\tau) \\
-=\frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}R(\tau^n)\triangledown log p_{\theta} (a_t^n|s_t^n)$</p>
-<h1 id="實作">實作</h1>
-<ul>
-<li>常見公式
-<ul>
-<li>$\triangledown f(x)=f(x)\triangledown logf(x)$</li>
-</ul>
-</li>
-</ul>
-<ol>
-<li>用當前模型蒐集一堆 Trajectory</li>
-<li>更新模型</li>
-<li>回到第一步</li>
-</ol>
-<ul>
-<li>細節
-<ul>
-<li>做一個分類問題，把 state 當作分類器的 Input，把 action 當作分類器的 ground truth 作訓練</li>
-<li>在實作分類問題的時候，objective function 都會寫成 minimize cross entropy，就是 maximize log likelihood</li>
-<li>RL 和一般分類的區別是，要記得在 loss 前面乘上 $R(\tau^n)$</li>
-</ul>
-</li>
-</ul>
-<h1 id="tip">Tip</h1>
-<ol>
-<li>Add a Baseline
-<ul>
-<li>$R(\tau^n)$ 有可能永遠都為正
-<ul>
-<li>此時等於告訴 Model 說，今天不管是什麼 action，都要提高它的機率。不一定會有問題，因為雖然都是正的，但正的量有大有小，可能某些 action 上升的幅度會更大。因為我們是在做 sampling，不一定會 sample 到某些 action，本來想的情況是所有的 trajectory 都會出現才沒問題。</li>
-</ul>
-</li>
-<li>解法: 希望 reward 不要總是正的
-<ul>
-<li>$\triangledown \overline{R_{\theta}}\approx \frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}(R(\tau^n)-b)\triangledown log p_{\theta}(a_t^n|s_t^n)$</li>
-<li>$b \approx E[R(\tau)]$</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Assign Suitable Credit
-<ul>
-<li>原本整場遊戲的所有 action 都會乘上 $R(\tau)$，但這不太公平，因為就算結果是好的，不代表所有 action 都是對的，反之亦然。在理想的情況下，如果 sample 夠多，就可以解決這問題。</li>
-<li>解法
-<ol>
-<li>只計算從這個 action 後的 reward 總和
-<ul>
-<li>因為前面的 reward 和你做了什麼沒關係</li>
-</ul>
-</li>
-<li>接續解法 1，把比較未來的 reward 做 discount
-<ul>
-<li>乘某個小於 1 的 $\gamma^{t^{&rsquo;}-t}$</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
-<h1 id="advantage-function">Advantage function</h1>
-<ul>
-<li>base 可以是 state-dependent，可以根據 network 得出，以後再說</li>
-<li>$(Reward-b)$ 可以合起來看做 Advantage function $A^{\theta}(s_t,a_t)$
-<ul>
-<li>這邊 Reward 不管你是什麼形式，有沒有 discount。</li>
-<li>它的意義是，這個 action 相較於其他的 action 有多好，而不是絕對好</li>
-</ul>
-</li>
-<li>這個 A 通常可以由某個類神經網路估計，那個類神經網路叫做 critic，以後講 Actor-Critic 的時候再說</li>
-</ul>
+<p><a class="link" href="https://github.com/Roykesydon/STM32-Playground/tree/main/STM32-UART/uart_test"  target="_blank" rel="noopener"
+    >程式碼</a></p>
 
 </section>
 
@@ -438,11 +539,11 @@ $\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangl
     
     <section class="article-tags">
         
-            <a href="/Blog/tags/deep-learning/">deep-learning</a>
+            <a href="/Blog/tags/embedded-system/">embedded-system</a>
         
-            <a href="/Blog/tags/machine-learning/">machine-learning</a>
+            <a href="/Blog/tags/stm32/">stm32</a>
         
-            <a href="/Blog/tags/reinforcement-learning/">reinforcement-learning</a>
+            <a href="/Blog/tags/mcu/">mcu</a>
         
     </section>
 
@@ -488,12 +589,12 @@ $\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangl
             
                 
 <article class="">
-    <a href="/Blog/p/actor-critic/">
+    <a href="/Blog/p/stm32-gpio-%E5%AF%A6%E9%A9%97/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Actor-Critic</h2>
+            <h2 class="article-title">STM32 GPIO 實驗</h2>
         </div>
     </a>
 </article>
@@ -501,12 +602,12 @@ $\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangl
             
                 
 <article class="">
-    <a href="/Blog/p/q-learning/">
+    <a href="/Blog/p/stm32cubeide-%E5%9F%BA%E6%9C%AC%E9%96%8B%E7%99%BC%E4%BD%BF%E7%94%A8/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Q-learning</h2>
+            <h2 class="article-title">STM32CubeIDE 基本開發使用</h2>
         </div>
     </a>
 </article>
@@ -514,12 +615,12 @@ $\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangl
             
                 
 <article class="">
-    <a href="/Blog/p/proximal-policy-optimizationppo/">
+    <a href="/Blog/p/arm-%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80%E4%BB%8B%E7%B4%B9/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Proximal Policy Optimization(PPO)</h2>
+            <h2 class="article-title">ARM 組合語言介紹</h2>
         </div>
     </a>
 </article>
@@ -527,25 +628,12 @@ $\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangl
             
                 
 <article class="">
-    <a href="/Blog/p/git-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-i/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">GIT 論文閱讀</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/roberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">RoBERTa 論文閱讀</h2>
+            <h2 class="article-title">電路學 - I</h2>
         </div>
     </a>
 </article>
