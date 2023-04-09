@@ -2,36 +2,24 @@
 <html lang="en-us" dir="ltr">
 
 <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: PatentSBERTa: A Deep NLP based Hybrid Model for Patent Distance and Classification using Augmented SBERT
-Abstract 本研究提供了一個計算 patent-to-patent (p2p) technological similarity 的有效方法。
-並提出一個 hybrid framework，用於把 p2p 相似性的結果應用於 semantic search 和 automated patent classification。
-把 Sentence-BERT (SBERT) 用在 claims 上來作 embeddings。
-為了進一步提升 embedding 的品質，使用基於 SBERT 和 RoBERT 的 transformer model，然後再用 augmented approach 在 in-domain supervised patent claims data(相對於 out-domain) 來 fine-tune SBERT。
-用 KNN(Nearest Neighbors) 來根據 p2p similarity 分類模型。
-Introduction 傳統上的 p2p 相似度是基於關鍵字、技術類別等 metadata 決定的，但近期 semantic-based 的方法也越來越受歡迎。'>
-<title>PatentSBERTa 論文閱讀</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='基本概念 常見名詞 電路 (electric circuit) 元件 (element) 電路組成的部分 單位系統 國際單位制 (International System of Units ,SI) 電荷與電流 電荷 (electric charge)
+組成原子的基本物質 庫倫 (C) 電荷守恆定律 (law of conservation of charge) 電荷不能被創造、破壞，只能轉移，系統中的電荷總數不變。 電流 (electric current)
+電荷的時間變化率 電流是電荷的移動，而且有方向性 安培 (A) 公式 $i \triangleq \frac{dq}{dt}$ $Q \triangleq \int_{t_0}^{t}i\text{ }dt$ 直流電 (direct current, dc) 恆定常數的電流 交流電 (alternating current, ac) 隨著時間以正弦波變化的電流 電壓 電動勢 (electromotive force, emf) 驅動導體內的電子往某方向移動 電壓 (voltage)、電位差 (potential difference) 伏特 (V) $v_{ab}\triangleq\frac{dw}{dq}$ 單位電荷從 b 移動到 a 需要做的功 $w$ 是能量，單位是焦耳(J) $q$ 是電荷，單位是庫倫(C) 壓降 (voltage drop)、壓升 (voltage rise) 直流電壓 (dc voltage)、交流電壓 (ac voltage) 功率與能量 消耗或吸收能量的時間變化率，單位是瓦特(walt, W)'>
+<title>電路學 - I</title>
 
-<link rel='canonical' href='https://roykesydon.github.io/Blog/p/patentsberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-i/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.116adfd5ea820644d2c0cd7398d39b34113963d61decb3bc645034e7b4dff6a2.css"><meta property='og:title' content='PatentSBERTa 論文閱讀'>
-<meta property='og:description' content='paper: PatentSBERTa: A Deep NLP based Hybrid Model for Patent Distance and Classification using Augmented SBERT
-Abstract 本研究提供了一個計算 patent-to-patent (p2p) technological similarity 的有效方法。
-並提出一個 hybrid framework，用於把 p2p 相似性的結果應用於 semantic search 和 automated patent classification。
-把 Sentence-BERT (SBERT) 用在 claims 上來作 embeddings。
-為了進一步提升 embedding 的品質，使用基於 SBERT 和 RoBERT 的 transformer model，然後再用 augmented approach 在 in-domain supervised patent claims data(相對於 out-domain) 來 fine-tune SBERT。
-用 KNN(Nearest Neighbors) 來根據 p2p similarity 分類模型。
-Introduction 傳統上的 p2p 相似度是基於關鍵字、技術類別等 metadata 決定的，但近期 semantic-based 的方法也越來越受歡迎。'>
-<meta property='og:url' content='https://roykesydon.github.io/Blog/p/patentsberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
+<link rel="stylesheet" href="/Blog/scss/style.min.116adfd5ea820644d2c0cd7398d39b34113963d61decb3bc645034e7b4dff6a2.css"><meta property='og:title' content='電路學 - I'>
+<meta property='og:description' content='基本概念 常見名詞 電路 (electric circuit) 元件 (element) 電路組成的部分 單位系統 國際單位制 (International System of Units ,SI) 電荷與電流 電荷 (electric charge)
+組成原子的基本物質 庫倫 (C) 電荷守恆定律 (law of conservation of charge) 電荷不能被創造、破壞，只能轉移，系統中的電荷總數不變。 電流 (electric current)
+電荷的時間變化率 電流是電荷的移動，而且有方向性 安培 (A) 公式 $i \triangleq \frac{dq}{dt}$ $Q \triangleq \int_{t_0}^{t}i\text{ }dt$ 直流電 (direct current, dc) 恆定常數的電流 交流電 (alternating current, ac) 隨著時間以正弦波變化的電流 電壓 電動勢 (electromotive force, emf) 驅動導體內的電子往某方向移動 電壓 (voltage)、電位差 (potential difference) 伏特 (V) $v_{ab}\triangleq\frac{dw}{dq}$ 單位電荷從 b 移動到 a 需要做的功 $w$ 是能量，單位是焦耳(J) $q$ 是電荷，單位是庫倫(C) 壓降 (voltage drop)、壓升 (voltage rise) 直流電壓 (dc voltage)、交流電壓 (ac voltage) 功率與能量 消耗或吸收能量的時間變化率，單位是瓦特(walt, W)'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-i/'>
 <meta property='og:site_name' content='Roykesydon'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:published_time' content='2023-03-15T15:08:46&#43;08:00'/><meta property='article:modified_time' content='2023-03-15T15:08:46&#43;08:00'/>
-<meta name="twitter:title" content="PatentSBERTa 論文閱讀">
-<meta name="twitter:description" content="paper: PatentSBERTa: A Deep NLP based Hybrid Model for Patent Distance and Classification using Augmented SBERT
-Abstract 本研究提供了一個計算 patent-to-patent (p2p) technological similarity 的有效方法。
-並提出一個 hybrid framework，用於把 p2p 相似性的結果應用於 semantic search 和 automated patent classification。
-把 Sentence-BERT (SBERT) 用在 claims 上來作 embeddings。
-為了進一步提升 embedding 的品質，使用基於 SBERT 和 RoBERT 的 transformer model，然後再用 augmented approach 在 in-domain supervised patent claims data(相對於 out-domain) 來 fine-tune SBERT。
-用 KNN(Nearest Neighbors) 來根據 p2p similarity 分類模型。
-Introduction 傳統上的 p2p 相似度是基於關鍵字、技術類別等 metadata 決定的，但近期 semantic-based 的方法也越來越受歡迎。">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='embedded-system' /><meta property='article:tag' content='stm32' /><meta property='article:tag' content='mcu' /><meta property='article:tag' content='assembly' /><meta property='article:published_time' content='2023-04-09T00:00:54&#43;08:00'/><meta property='article:modified_time' content='2023-04-09T00:00:54&#43;08:00'/>
+<meta name="twitter:title" content="電路學 - I">
+<meta name="twitter:description" content="基本概念 常見名詞 電路 (electric circuit) 元件 (element) 電路組成的部分 單位系統 國際單位制 (International System of Units ,SI) 電荷與電流 電荷 (electric charge)
+組成原子的基本物質 庫倫 (C) 電荷守恆定律 (law of conservation of charge) 電荷不能被創造、破壞，只能轉移，系統中的電荷總數不變。 電流 (electric current)
+電荷的時間變化率 電流是電荷的移動，而且有方向性 安培 (A) 公式 $i \triangleq \frac{dq}{dt}$ $Q \triangleq \int_{t_0}^{t}i\text{ }dt$ 直流電 (direct current, dc) 恆定常數的電流 交流電 (alternating current, ac) 隨著時間以正弦波變化的電流 電壓 電動勢 (electromotive force, emf) 驅動導體內的電子往某方向移動 電壓 (voltage)、電位差 (potential difference) 伏特 (V) $v_{ab}\triangleq\frac{dw}{dq}$ 單位電荷從 b 移動到 a 需要做的功 $w$ 是能量，單位是焦耳(J) $q$ 是電荷，單位是庫倫(C) 壓降 (voltage drop)、壓升 (voltage rise) 直流電壓 (dc voltage)、交流電壓 (ac voltage) 功率與能量 消耗或吸收能量的時間變化率，單位是瓦特(walt, W)">
 </head>
 
 <body class="
@@ -286,24 +274,34 @@ Introduction 傳統上的 p2p 相似度是基於關鍵字、技術類別等 meta
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#abstract">Abstract</a></li>
-    <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#data">Data</a>
+    <li><a href="#基本概念">基本概念</a>
       <ol>
-        <li><a href="#dataset-description">Dataset Description</a></li>
-        <li><a href="#textual-data-patent-claims">Textual Data: Patent Claims</a></li>
-        <li><a href="#patent-classification-cpc-classes">Patent Classification: CPC Classes</a></li>
+        <li><a href="#常見名詞">常見名詞</a></li>
+        <li><a href="#單位系統">單位系統</a></li>
+        <li><a href="#電荷與電流">電荷與電流</a></li>
+        <li><a href="#電壓">電壓</a></li>
+        <li><a href="#功率與能量">功率與能量</a></li>
+        <li><a href="#電路元件">電路元件</a>
+          <ol>
+            <li><a href="#電源">電源</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
-    <li><a href="#method-and-experimental-setup">Method and experimental setup</a></li>
-    <li><a href="#results">Results</a>
+    <li><a href="#基本定律">基本定律</a>
       <ol>
-        <li><a href="#p2p-similarity-and-semantic-search">P2P similarity and semantic search</a></li>
-        <li><a href="#cpc-prediction">CPC Prediction</a></li>
+        <li><a href="#歐姆定律-ohms-law">歐姆定律 (Ohm&rsquo;s Law)</a></li>
+        <li><a href="#node-branches-and-loops">Node, Branches, and Loops</a></li>
+        <li><a href="#克希荷夫定律-kirchhoffs-laws">克希荷夫定律 (Kirchhoff&rsquo;s Laws)</a></li>
+        <li><a href="#串並聯電阻">串並聯電阻</a></li>
+        <li><a href="#y---delta-轉換-wye-delta-transformations">Y - $\Delta$ 轉換 (Wye-Delta Transformations)</a>
+          <ol>
+            <li><a href="#delta---y-轉換-delta-to-wye-conversion">$\Delta$ - Y 轉換 (Delta to Wye conversion)</a></li>
+            <li><a href="#y---delta-轉換-wye-to-delta-conversion">Y - $\Delta$ 轉換 (Wye to Delta conversion)</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
-    <li><a href="#conclusion">Conclusion</a></li>
-    <li><a href="#limitations--future-research">Limitations &amp; Future Research</a></li>
   </ol>
 </nav>
         </div>
@@ -325,8 +323,8 @@ Introduction 傳統上的 p2p 相似度是基於關鍵字、技術類別等 meta
     
     <header class="article-category">
         
-            <a href="/Blog/categories/deep-learning/" style="background-color: #936ce1; color: #fff;">
-                Deep Learning
+            <a href="/Blog/categories/embedded-system/" style="background-color: #e17100; color: #fff;">
+                Embedded System
             </a>
         
     </header>
@@ -338,9 +336,9 @@ Introduction 傳統上的 p2p 相似度是基於關鍵字、技術類別等 meta
     
     
     
-    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/deep-learning.jpg');">
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/embedded-system.jpg');">
         <h2 class="article-title-custom">
-            <a href="/Blog/p/patentsberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">PatentSBERTa 論文閱讀</a>
+            <a href="/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-i/">電路學 - I</a>
         </h2>
         
     </div>
@@ -362,7 +360,7 @@ Introduction 傳統上的 p2p 相似度是基於關鍵字、技術類別等 meta
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Mar 15, 2023</time>
+                <time class="article-time--published">Apr 09, 2023</time>
             </div>
         
 
@@ -392,101 +390,345 @@ Introduction 傳統上的 p2p 相似度是基於關鍵字、技術類別等 meta
     <section class="article-content">
     
     
-    <p>paper: <a class="link" href="https://arxiv.org/abs/2103.11933"  target="_blank" rel="noopener"
-    >PatentSBERTa: A Deep NLP based Hybrid Model for Patent Distance and Classification using Augmented SBERT</a></p>
-<h2 id="abstract">Abstract</h2>
-<p>本研究提供了一個計算  patent-to-patent (p2p) technological similarity 的有效方法。</p>
-<p>並提出一個 hybrid framework，用於把 p2p 相似性的結果應用於 semantic search 和 automated patent classification。</p>
-<p>把 Sentence-BERT (SBERT) 用在 claims 上來作 embeddings。</p>
-<p>為了進一步提升 embedding 的品質，使用基於 SBERT 和 RoBERT 的 transformer model，然後再用 augmented approach 在  in-domain supervised patent claims data(相對於 out-domain) 來 fine-tune SBERT。</p>
-<p>用 KNN(Nearest Neighbors) 來根據 p2p similarity 分類模型。</p>
-<h2 id="introduction">Introduction</h2>
-<p>傳統上的 p2p 相似度是基於關鍵字、技術類別等 metadata 決定的，但近期 semantic-based 的方法也越來越受歡迎。</p>
+    <h2 id="基本概念">基本概念</h2>
+<h3 id="常見名詞">常見名詞</h3>
 <ul>
-<li>目前遇到的問題
-<ol>
-<li>BERT 用來計算 p2p 相似性的成本很高</li>
-<li>基於 generic text 的 pre-trained model 在遇到特定領域的專業術語時可能會遇到侷限。</li>
-<li>在專利做 multi-label classification (MLC) 是個挑戰</li>
-</ol>
-</li>
-<li>貢獻
-<ol>
-<li>提供一個快速高效的框架，利用 Transformer 架構計算 p2p 相似度</li>
-<li>透過 augmented SBERT，將 transformer model fine-tune 到 domain-specific language</li>
-<li>提出一個基於 Transformer 和 傳統 ML 模型的混和架構，可以打敗 multi-label 和 multi-class 的專利分類 SOTA 模型</li>
-<li>用簡單的 KNN 進行專利分類，提供了一種簡單的方法來檢查、理解和解釋模型的預測結果</li>
-</ol>
+<li>電路 (electric circuit)</li>
+<li>元件 (element)
+<ul>
+<li>電路組成的部分</li>
+</ul>
 </li>
 </ul>
-<h2 id="data">Data</h2>
-<h3 id="dataset-description">Dataset Description</h3>
-<p>本研究使用 PatentsView dataset，PatentsView 平台建立在一個定期更新的 database 上。</p>
-<p>dataset 已用於之前類似的研究，比如 DeepPatent、PatentBERT。</p>
-<p>本研究使用了 2013-2017 的所有專利，這些專利至少要在 BigQuery 上有一條 claim。</p>
-<p>本研究的 record 有 1,492,294 項專利，並用 8% 作為測試集。</p>
-<p>此外，本研究刪除了有重複專利 ID 和 claim text 的 record。</p>
-<h3 id="textual-data-patent-claims">Textual Data: Patent Claims</h3>
-<p>本研究使用 claim 作為輸入。</p>
-<p>claim 被認為是準備專利文件的初始框架，其他文件都是根據 claim 準備的，
-因此，claim 比其他文件包含更全面和準確的訊息。</p>
-<p>claim 具有層次結構，first claim 被視為該架構的主幹。</p>
-<p>本研究僅使用 first claim，但在以後的研究中，希望根據 tree structure 組合所有 claim，並計算 semantic similarity，並做多標籤分類。</p>
-<p>在研究樣本中， claim 平均有 17 個。</p>
-<p>claim 的平均長度是 162，本研究中，BERT 的 max_seq_length 是 510。</p>
-<h3 id="patent-classification-cpc-classes">Patent Classification: CPC Classes</h3>
-<p>CPC系統和IPC（國際專利分類）系統是最常用的兩種分類系統，CPC 是 IPC 系統的更具體和詳細的版本。</p>
-<p>CPC 具有用於分類的層次結構，包括 Section、Class、Subclass 和 Group，
-在子類級別，CPC 有 667 個標籤。</p>
-<p>在數據集中我們有 663 個標籤，其中 159 個在數據集中的樣本少於 350 個，這種標籤分佈導致了 KNN 不好處理，一般來說，隨著 instance 數量的增加，我們可以提高模型的準確性。</p>
-<h2 id="method-and-experimental-setup">Method and experimental setup</h2>
-<p>Pretrained Language Models (LMs) 在 NLP 中變得十分流行。</p>
-<p>在 pairwise sentence semantic similarity，SBERT 和 BERT 是兩種具有顯著不同效果的方法。</p>
-<p>BERT 通常可以取得更好的性能，但在實際應用上來說太慢了。</p>
-<p>SBERT 在實際應用上表現還行，但需要 in-domain training data 並且 finetune。</p>
-<p><img src="/Blog/images/deep-learning/PatentSBERTa/Bi_vs_Cross-Encoder.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p><img src="/Blog/images/deep-learning/PatentSBERTa/approach.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p>上圖是 Augmented SBERT In-domain approach。</p>
-<p>in-domain sentence pairs 透過 cross-encoder 來標記，假設有 n 個 in-domain sentences，會有 $C_2^n$ 組可能的組合。</p>
-<p>使用所有可能的組合並不會提高性能，所以要有正確的採樣策略，才可提升性能的同時也減少計算開銷。</p>
-<p>上圖那種結合 cross-encoder 和 bi-encoder 的作法被稱為 Augmented SBERT (AugSBERT)，
-涉及以下三個步驟:</p>
-<ol>
-<li>用資料集 Fine-tune RoBERTa 以生出 cross-encoder</li>
-<li>用 cross-encoder 來把未標記的資料標記，同時基於某種特定的採樣策略，從 652,653 種可能的組合中挑選 3432 組</li>
-<li>把資料集 + 額外的 3432 組資料一起拿來訓練 SBERT</li>
-</ol>
-<h2 id="results">Results</h2>
-<h3 id="p2p-similarity-and-semantic-search">P2P similarity and semantic search</h3>
-<p>Patent Semantic Search (PSS) 是專利分析的基礎部分。</p>
-<p>Transformer 模型等語義相似性的解法是一種新解法，可以用來解決基於關鍵字的搜尋方法中， query terms 和專利內容不匹配的問題。</p>
-<p>為了評估模型的準確性，未來的研究中，作者希望通過 Mean Reciprocal Rank (MRR) 來評估分類結果。</p>
-<h3 id="cpc-prediction">CPC Prediction</h3>
-<p>Top-N 準確度等於 GT 與預測有最高概率的任何 N 個預測匹配的頻率，
-所以 Top-5 就是最高的五個分類中一個就有中。</p>
-<h2 id="conclusion">Conclusion</h2>
-<p>本文使用  augmented SBERT  獲得 SOTA 的專利文本 embedding。</p>
-<p>介紹了一種 augmented 的方法，把 SBERT 微調到適合 patent claims 的 domain。</p>
-<p>SBERT 的一個主要優點是可以有效率地獲得 embedding distance，使我們能夠為大的專利資料集建構 p2p similarity。</p>
-<p>雖然基於文本的 p2p similarity 的有用性已經在各種應用方面得到證明，但本文進一步證明作者的 transformer-based p2p similarity 可以被用在 SOTA 的專利分類。</p>
-<p>而且使用簡單的 KNN 方法，檢查他們可以使模型決策具備 understandable 和 explainable。</p>
-<h2 id="limitations--future-research">Limitations &amp; Future Research</h2>
-<p>未來希望用 Annoy(Approximate Nearest Neighbor Oh Yeah!) 來測試更大樣本的模型並比較結果。</p>
-<p>Annoy(Approximate Nearest Neighbor Oh Yeah!) 是想尋找近似相似而不是精確相似的句子。</p>
+<h3 id="單位系統">單位系統</h3>
+<ul>
+<li>國際單位制 (International System of Units ,SI)</li>
+</ul>
+<h3 id="電荷與電流">電荷與電流</h3>
+<ul>
+<li>
+<p>電荷 (electric charge)</p>
+<ul>
+<li>組成原子的基本物質</li>
+<li>庫倫 (C)</li>
+<li>電荷守恆定律 (law of conservation of charge)
+<ul>
+<li>電荷不能被創造、破壞，只能轉移，系統中的電荷總數不變。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>電流 (electric current)</p>
+<ul>
+<li>電荷的時間變化率</li>
+<li>電流是電荷的移動，而且有方向性</li>
+<li>安培 (A)</li>
+<li>公式
+<ul>
+<li>$i \triangleq \frac{dq}{dt}$</li>
+<li>$Q \triangleq \int_{t_0}^{t}i\text{ }dt$</li>
+</ul>
+</li>
+<li>直流電 (direct current, dc)
+<ul>
+<li>恆定常數的電流</li>
+</ul>
+</li>
+<li>交流電 (alternating current, ac)
+<ul>
+<li>隨著時間以正弦波變化的電流</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="電壓">電壓</h3>
+<ul>
+<li>電動勢 (electromotive force, emf)
+<ul>
+<li>驅動導體內的電子往某方向移動</li>
+<li>電壓 (voltage)、電位差 (potential difference)</li>
+<li>伏特 (V)</li>
+<li>$v_{ab}\triangleq\frac{dw}{dq}$
+<ul>
+<li>單位電荷從 b 移動到 a 需要做的功</li>
+<li>$w$ 是能量，單位是焦耳(J)</li>
+<li>$q$ 是電荷，單位是庫倫(C)</li>
+</ul>
+</li>
+<li>壓降 (voltage drop)、壓升 (voltage rise)</li>
+<li>直流電壓 (dc voltage)、交流電壓 (ac voltage)</li>
+</ul>
+</li>
+</ul>
+<h3 id="功率與能量">功率與能量</h3>
+<ul>
+<li>
+<p>消耗或吸收能量的時間變化率，單位是瓦特(walt, W)</p>
+</li>
+<li>
+<p>公式</p>
+<ul>
+<li>$p \triangleq\frac{dw}{dt}$</li>
+<li>$p=iv$</li>
+</ul>
+</li>
+<li>
+<p>被動符號規則 (passive sign convention)</p>
+<ul>
+<li>電流從電壓的正極流入元件 ($p=+vi$)，表示該元件吸收功率</li>
+<li>電流從電壓的正極流出元件 ($p=-vi$)，表示該元件供應功率</li>
+</ul>
+</li>
+<li>
+<p>能量守恆定律 (law of conservation of energy)</p>
+<ul>
+<li>電路中任何時刻的功率總和為 0</li>
+<li>$\sum p=0$</li>
+</ul>
+</li>
+</ul>
+<h3 id="電路元件">電路元件</h3>
+<ul>
+<li>被動元件 (passive element)
+<ul>
+<li>不具備產生能量的能力</li>
+<li>電阻器 (resistor)、電容器 (capacitor)、電感器 (inductor)</li>
+</ul>
+</li>
+<li>主動元件 (active element)
+<ul>
+<li>具備產生能量的能力</li>
+<li>發電機 (generator)、電池 (battery)、運算放大器 (operational amplifier)</li>
+</ul>
+</li>
+</ul>
+<h4 id="電源">電源</h4>
+<ul>
+<li>電壓源、電流源
+<ul>
+<li>提供穩定電壓產生電流、提供穩定電流產生電壓</li>
+</ul>
+</li>
+<li>獨立電源
+<ul>
+<li>獨立電源提供指定電壓或電流的主動元件，與電路中其他元件無關。</li>
+<li>電池和發電機可被當作近似理想的電壓源</li>
+</ul>
+</li>
+<li>相依電源
+<ul>
+<li>提供的電壓或電流受另一個電流或電壓控制的主動元件</li>
+<li>類型
+<ul>
+<li>電壓控制電壓源 (voltage-controlled voltage source, VCVS)</li>
+<li>電流控制電壓源 (current-controlled voltage source, CCVS)</li>
+<li>電壓控制電流源 (voltage-controlled current source, VCCS)</li>
+<li>電流控制電流源 (current-controlled current source, CCCS)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="基本定律">基本定律</h2>
+<h3 id="歐姆定律-ohms-law">歐姆定律 (Ohm&rsquo;s Law)</h3>
+<ul>
+<li>
+<p>一般材料具備阻止電荷流通的特性，稱為電阻 (resistance)</p>
+</li>
+<li>
+<p>均勻截面積下，$R=\rho \frac{l}{A}$</p>
+<ul>
+<li>$\rho$ 是材料的電阻率 (resistivity)</li>
+</ul>
+</li>
+<li>
+<p>電路中抑制電流的材料稱為電阻器 (resistor)</p>
+</li>
+<li>
+<p>$v=iR$</p>
+</li>
+<li>
+<p>短路 (short circuit)、開路 (open circuit)</p>
+<ul>
+<li>短路: 電壓是 0，電流可能是任意值，電阻值接近 0</li>
+<li>開路: 電壓可能是任意值，電流是 0，電阻值接近無限大</li>
+</ul>
+</li>
+<li>
+<p>固定電阻、可變電阻</p>
+<ul>
+<li>阻值可調與否</li>
+<li>常用的可變電阻是電位器 (potentiometer)</li>
+</ul>
+</li>
+<li>
+<p>不是所有電阻都遵守歐姆定律</p>
+<ul>
+<li>遵守歐姆定律的稱為線性電阻 (linear resistor)，反之則為非線性電阻 (nonlinear resistor)，阻值隨電流變化</li>
+</ul>
+</li>
+<li>
+<p>電導 (conductance)</p>
+<ul>
+<li>電阻 R 的倒數</li>
+<li>元件導通電流的能力</li>
+<li>$G=\frac{1}{R}=\frac{i}{v}$</li>
+<li>單位姆歐 (mho, $\mho$) 或西門子 (siemens, S)</li>
+<li>$1 S = 1 \mho = 1 A/V$</li>
+</ul>
+</li>
+</ul>
+<h3 id="node-branches-and-loops">Node, Branches, and Loops</h3>
+<ul>
+<li>
+<p>分枝 (Branch)</p>
+<ul>
+<li>任意的兩端元件，比如電壓源、電阻</li>
+</ul>
+</li>
+<li>
+<p>節點 (Node)</p>
+<ul>
+<li>指連接二個或多個分支的接點</li>
+</ul>
+</li>
+<li>
+<p>迴路 (Loop)</p>
+<ul>
+<li>是電路中的任一封閉路徑</li>
+<li>從一個節點開始，經過一組節點，最後回到一開始的節點，途中每個節點只經過一次</li>
+</ul>
+</li>
+<li>
+<p>串聯</p>
+<ul>
+<li>多個元件共享單一節點</li>
+</ul>
+</li>
+<li>
+<p>並連</p>
+<ul>
+<li>多個元件連接到相同的兩個節點</li>
+</ul>
+</li>
+<li>
+<p>獨立迴路 (independent loop)</p>
+<ul>
+<li>至少包含一個不屬於其他獨立迴路的 branch</li>
+<li>$b=l+n-1$
+<ul>
+<li>b 是 branch，l 是獨立迴路，n 是 node</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="克希荷夫定律-kirchhoffs-laws">克希荷夫定律 (Kirchhoff&rsquo;s Laws)</h3>
+<ul>
+<li>
+<p>Kirchhoff&rsquo;s current law (KCL)</p>
+<ul>
+<li>流入任一 node 或封閉邊界的電流總和為 0
+<ul>
+<li>或是說流入某一節點的電流和等於流出的電流和</li>
+</ul>
+</li>
+<li>$\sum_{n=1}^{N}i_n=0$
+<ul>
+<li>$N$ 是連到 node 的 branch 數</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Kirchhoff&rsquo;s voltage law (KVL)</p>
+<ul>
+<li>一條封閉路徑(或迴路)中的電壓總和為零
+<ul>
+<li>或是說 voltage drop 的總和 = voltage rise 的總和</li>
+</ul>
+</li>
+<li>$\sum_{m=1}^{M}n_m=0$
+<ul>
+<li>$M$ 是迴路中的 branch 數</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="串並聯電阻">串並聯電阻</h3>
+<ul>
+<li>
+<p>串聯</p>
+<ul>
+<li>$R_{eq}=\sum_{n=1}^N R_n$
+<ul>
+<li>$R_{eq}$ 是等效電阻 (equivalent resistance)</li>
+</ul>
+</li>
+<li>分壓定理 (principle of voltage division)
+<ul>
+<li>電壓和各電阻的阻值成正比，阻值越大，壓降越大</li>
+</ul>
+</li>
+<li>分壓器 (voltage divider)</li>
+<li>$v_1=\frac{R_1}{R_1+R_2}v$</li>
+</ul>
+</li>
+<li>
+<p>並聯</p>
+<ul>
+<li>$\frac{1}{R_{eq}}=\frac{1}{R_1}+\frac{1}{R_2}+&hellip;+\frac{1}{R_N}$
+<ul>
+<li>$R_{eq}$ 永遠小於並聯電阻中最小的電阻值</li>
+<li>$G_{eq} = G_{1}+G_2+&hellip;+G_N$</li>
+</ul>
+</li>
+<li>分流定理 (principle of current division)
+<ul>
+<li>各分支電流與電阻值成反比</li>
+</ul>
+</li>
+<li>分流器 (current divider)</li>
+<li>$i_1=\frac{R_2}{R_1+R_2}i$</li>
+</ul>
+</li>
+</ul>
+<h3 id="y---delta-轉換-wye-delta-transformations">Y - $\Delta$ 轉換 (Wye-Delta Transformations)</h3>
+<ul>
+<li>遇到電阻不是串聯也不是並聯的情況，要如何轉換</li>
+<li>有時候把 Y 型網路和 $\Delta$ 型網路相互轉換會比較好算</li>
+<li>Y 型網路 = T 型網路</li>
+<li>$\Delta$ 網路 = $\Pi$ 網路</li>
+</ul>
+<h4 id="delta---y-轉換-delta-to-wye-conversion">$\Delta$ - Y 轉換 (Delta to Wye conversion)</h4>
+<ul>
+<li>Y 網路的每個電阻是 $\Delta$ 中的兩個相鄰電阻的相乘除以 $\Delta$ 中的三個電阻總和</li>
+</ul>
+<h4 id="y---delta-轉換-wye-to-delta-conversion">Y - $\Delta$ 轉換 (Wye to Delta conversion)</h4>
+<ul>
+<li>
+<p>$\Delta$ 網路的每個電阻是 Y 中的兩兩電阻的相乘總和除以 Y 中的對角電阻</p>
+</li>
+<li>
+<p>平衡</p>
+<ul>
+<li>條件
+<ul>
+<li>$R_1=R_2=R_3=R_Y$</li>
+<li>$R_a=R_b=R_c=R_{\Delta}$</li>
+</ul>
+</li>
+<li>結果
+<ul>
+<li>$R_Y=\frac{R_\Delta}{3}$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
 </section>
 
@@ -495,15 +737,13 @@ Introduction 傳統上的 p2p 相似度是基於關鍵字、技術類別等 meta
     
     <section class="article-tags">
         
-            <a href="/Blog/tags/deep-learning/">deep-learning</a>
+            <a href="/Blog/tags/embedded-system/">embedded-system</a>
         
-            <a href="/Blog/tags/machine-learning/">machine-learning</a>
+            <a href="/Blog/tags/stm32/">stm32</a>
         
-            <a href="/Blog/tags/transformer/">transformer</a>
+            <a href="/Blog/tags/mcu/">mcu</a>
         
-            <a href="/Blog/tags/attention/">attention</a>
-        
-            <a href="/Blog/tags/self-attention/">self-attention</a>
+            <a href="/Blog/tags/assembly/">assembly</a>
         
     </section>
 
@@ -549,12 +789,12 @@ Introduction 傳統上的 p2p 相似度是基於關鍵字、技術類別等 meta
             
                 
 <article class="">
-    <a href="/Blog/p/git-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/arm-%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80%E4%BB%8B%E7%B4%B9/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">GIT 論文閱讀</h2>
+            <h2 class="article-title">ARM 組合語言介紹</h2>
         </div>
     </a>
 </article>
@@ -562,12 +802,12 @@ Introduction 傳統上的 p2p 相似度是基於關鍵字、技術類別等 meta
             
                 
 <article class="">
-    <a href="/Blog/p/roberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/stm32-gpio-%E5%AF%A6%E9%A9%97/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">RoBERTa 論文閱讀</h2>
+            <h2 class="article-title">STM32 GPIO 實驗</h2>
         </div>
     </a>
 </article>
@@ -575,38 +815,12 @@ Introduction 傳統上的 p2p 相似度是基於關鍵字、技術類別等 meta
             
                 
 <article class="">
-    <a href="/Blog/p/sentence-bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/stm32cubeide-%E5%9F%BA%E6%9C%AC%E9%96%8B%E7%99%BC%E4%BD%BF%E7%94%A8/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Sentence-BERT 論文閱讀</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/patentbert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">PatentBERT 論文閱讀</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">MAE 論文</h2>
+            <h2 class="article-title">STM32CubeIDE 基本開發使用</h2>
         </div>
     </a>
 </article>

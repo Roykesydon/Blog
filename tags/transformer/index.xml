@@ -46,7 +46,7 @@
 &lt;p&gt;學習到的 representation 很好的提高了下游任務的性能，比如 image captioning、visual question answering 和 image-text retrieval。&lt;/p&gt;
 &lt;p&gt;在預訓練過程中，Masked Language Modeling (MLM) 和 Image-Text Matching (ITM) 被廣泛使用。&lt;/p&gt;
 &lt;p&gt;然而這些 loss 和下游任務不同，必須做 task-specific adaptation。&lt;/p&gt;
-&lt;p&gt;比如， image captioning 要移除 ITM，而且需要額外隨機初始的 MLP。&lt;/p&gt;
+&lt;p&gt;比如， image captioning 要移除 ITM，VQA 需要額外隨機初始的 MLP。&lt;/p&gt;
 &lt;p&gt;為了減少這種差異，最近的研究試圖為預訓練模型設計 unified generative models 來預訓練，因為大多數 VL 的問題可以轉化為生成問題。&lt;/p&gt;
 &lt;p&gt;這些方法通常利用 multi-modal encoder 和 text decoder，並精心設計 text input 和 text target。&lt;/p&gt;
 &lt;p&gt;為了進一步推動這方向的研究，作者設計了一個簡單的 Generative Image-to-text Transformer，稱作 GIT，只包含一個 image encoder 和 text decoder。&lt;/p&gt;
@@ -143,7 +143,7 @@
 &lt;p&gt;這種設計動機是基於[MiniVLM: A Smaller and Faster Vision-Language Model]，該研究隨機初始化顯示出與 BERT 初始化相似地性能。&lt;/p&gt;
 &lt;p&gt;原因可能在於 BERT 地初始化無法理解圖像信號，這對於 VL 任務至關重要。&lt;/p&gt;
 &lt;p&gt;[Flamingo: a Visual Language Model for Few-Shot Learning] 採用了類似的 image encoder + text decoder，但是他們的 decoder 經過 pretrain，並且有 freeze，好保留大型語言模型的泛化能力。&lt;/p&gt;
-&lt;p&gt;GIT 的所以參數都會更新，以更好地適應 VL 的任務。&lt;/p&gt;
+&lt;p&gt;GIT 的所有參數都會更新，以更好地適應 VL 的任務。&lt;/p&gt;
 &lt;p&gt;另一種架構是 cross-attention-based 的 decoder，用於 incorporate image signals，而不是 concatenation 再用 self-attention。&lt;/p&gt;
 &lt;p&gt;根據實驗，large-scale 的 pre-training，self-attention-based 會有更好的性能，小規模的則是 cross-attention-based。&lt;/p&gt;
 &lt;p&gt;一個合理的解釋是，經過充分訓練，decoder 可以很好地處理圖像和文本，而且 image token 可以為了 text generation 更好地更新。&lt;/p&gt;
@@ -248,7 +248,8 @@
 &lt;h2 id=&#34;其他&#34;&gt;其他&lt;/h2&gt;
 &lt;h3 id=&#34;a3-network&#34;&gt;A.3 Network&lt;/h3&gt;
 &lt;p&gt;講超參數&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/microsoft-GIT/table11.png&#34;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/microsoft-GIT/model.jpg&#34;
 	
 	
 	

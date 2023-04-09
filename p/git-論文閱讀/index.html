@@ -13,7 +13,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/git-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.da8f06a853180e12f181731e81e2b29304d1d734f4ff3ae487f71c2f077bb4b8.css"><meta property='og:title' content='GIT 論文閱讀'>
+<link rel="stylesheet" href="/Blog/scss/style.min.116adfd5ea820644d2c0cd7398d39b34113963d61decb3bc645034e7b4dff6a2.css"><meta property='og:title' content='GIT 論文閱讀'>
 <meta property='og:description' content='paper: GIT: A Generative Image-to-text Transformer for Vision and Language
 1 2 3 4 5 6 ██████╗ ██╗████████╗ ██╔════╝ ██║╚══██╔══╝ ██║ ███╗██║ ██║ ██║ ██║██║ ██║ ╚██████╔╝██║ ██║ ╚═════╝ ╚═╝ ╚═╝ Abstract 設計了一個 Generative Image-to-text Transformer，統一 vision-language tasks，像是 image/video captioning 或是問答。
 雖然 generative models 在預訓練和微調的時候是同樣的網路架構，現有的工作通常都包含複雜的架構 (uni/multi-modal encoder/decoder)， 而且依賴於外部模組，比如物件偵測或 optical character recognition (OCR)。
@@ -23,7 +23,7 @@
 比如首次在 TextCpas 上超越人類的表現。'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/git-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 <meta property='og:site_name' content='Roykesydon'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:published_time' content='2023-03-29T01:08:46&#43;08:00'/><meta property='article:modified_time' content='2023-03-29T01:08:46&#43;08:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:tag' content='computer-vision' /><meta property='article:published_time' content='2023-03-29T01:08:46&#43;08:00'/><meta property='article:modified_time' content='2023-03-29T01:08:46&#43;08:00'/>
 <meta name="twitter:title" content="GIT 論文閱讀">
 <meta name="twitter:description" content="paper: GIT: A Generative Image-to-text Transformer for Vision and Language
 1 2 3 4 5 6 ██████╗ ██╗████████╗ ██╔════╝ ██║╚══██╔══╝ ██║ ███╗██║ ██║ ██║ ██║██║ ██║ ╚██████╔╝██║ ██║ ╚═════╝ ╚═╝ ╚═╝ Abstract 設計了一個 Generative Image-to-text Transformer，統一 vision-language tasks，像是 image/video captioning 或是問答。
@@ -441,7 +441,7 @@
 <p>學習到的 representation 很好的提高了下游任務的性能，比如 image captioning、visual question answering 和 image-text retrieval。</p>
 <p>在預訓練過程中，Masked Language Modeling (MLM) 和 Image-Text Matching (ITM) 被廣泛使用。</p>
 <p>然而這些 loss 和下游任務不同，必須做 task-specific adaptation。</p>
-<p>比如， image captioning 要移除 ITM，而且需要額外隨機初始的 MLP。</p>
+<p>比如， image captioning 要移除 ITM，VQA 需要額外隨機初始的 MLP。</p>
 <p>為了減少這種差異，最近的研究試圖為預訓練模型設計 unified generative models 來預訓練，因為大多數 VL 的問題可以轉化為生成問題。</p>
 <p>這些方法通常利用 multi-modal encoder 和 text decoder，並精心設計 text input 和 text target。</p>
 <p>為了進一步推動這方向的研究，作者設計了一個簡單的 Generative Image-to-text Transformer，稱作 GIT，只包含一個 image encoder 和 text decoder。</p>
@@ -538,7 +538,7 @@
 <p>這種設計動機是基於[MiniVLM: A Smaller and Faster Vision-Language Model]，該研究隨機初始化顯示出與 BERT 初始化相似地性能。</p>
 <p>原因可能在於 BERT 地初始化無法理解圖像信號，這對於 VL 任務至關重要。</p>
 <p>[Flamingo: a Visual Language Model for Few-Shot Learning] 採用了類似的 image encoder + text decoder，但是他們的 decoder 經過 pretrain，並且有 freeze，好保留大型語言模型的泛化能力。</p>
-<p>GIT 的所以參數都會更新，以更好地適應 VL 的任務。</p>
+<p>GIT 的所有參數都會更新，以更好地適應 VL 的任務。</p>
 <p>另一種架構是 cross-attention-based 的 decoder，用於 incorporate image signals，而不是 concatenation 再用 self-attention。</p>
 <p>根據實驗，large-scale 的 pre-training，self-attention-based 會有更好的性能，小規模的則是 cross-attention-based。</p>
 <p>一個合理的解釋是，經過充分訓練，decoder 可以很好地處理圖像和文本，而且 image token 可以為了 text generation 更好地更新。</p>
@@ -643,7 +643,8 @@
 <h2 id="其他">其他</h2>
 <h3 id="a3-network">A.3 Network</h3>
 <p>講超參數</p>
-<p><img src="/Blog/images/deep-learning/microsoft-GIT/table11.png"
+<!-- raw HTML omitted -->
+<p><img src="/Blog/images/deep-learning/microsoft-GIT/model.jpg"
 	
 	
 	
@@ -668,6 +669,8 @@
             <a href="/Blog/tags/attention/">attention</a>
         
             <a href="/Blog/tags/self-attention/">self-attention</a>
+        
+            <a href="/Blog/tags/computer-vision/">computer-vision</a>
         
     </section>
 
@@ -713,6 +716,32 @@
             
                 
 <article class="">
+    <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">MAE 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/vit-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">ViT 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
     <a href="/Blog/p/roberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
@@ -745,32 +774,6 @@
 
         <div class="article-details">
             <h2 class="article-title">Sentence-BERT 論文閱讀</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/patentbert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">PatentBERT 論文閱讀</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">MAE 論文</h2>
         </div>
     </a>
 </article>
