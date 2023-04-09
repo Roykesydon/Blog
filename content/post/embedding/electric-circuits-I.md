@@ -4,7 +4,7 @@ date: 2023-04-09T00:00:54+08:00
 draft: false
 description: ""
 type: "post"
-tags: ["embedded-system", "stm32", "mcu", "assembly"]
+tags: ["electric-circuits"]
 categories : ["embedded-system"]
 ---
 
