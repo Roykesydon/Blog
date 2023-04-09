@@ -3,7 +3,7 @@ title: "GIT 論文閱讀"
 date: 2023-03-29T01:08:46+08:00
 draft: false
 type: "post"
-tags: ["deep-learning","machine-learning", "transformer", "attention", "self-attention"]
+tags: ["deep-learning","machine-learning", "transformer", "attention", "self-attention", "computer-vision"]
 categories : ["deep-learning"]
 ---
 
@@ -45,7 +45,7 @@ paper: [GIT: A Generative Image-to-text Transformer for Vision and Language](htt
 
 然而這些 loss 和下游任務不同，必須做 task-specific adaptation。
 
-比如， image captioning 要移除 ITM，而且需要額外隨機初始的 MLP。
+比如， image captioning 要移除 ITM，VQA 需要額外隨機初始的 MLP。
 
 為了減少這種差異，最近的研究試圖為預訓練模型設計 unified generative models 來預訓練，因為大多數 VL 的問題可以轉化為生成問題。
 
@@ -155,7 +155,7 @@ attention mask 根據上圖設計，使的 text token 只能依賴於前面的 t
 
 [Flamingo: a Visual Language Model for Few-Shot Learning] 採用了類似的 image encoder + text decoder，但是他們的 decoder 經過 pretrain，並且有 freeze，好保留大型語言模型的泛化能力。
 
-GIT 的所以參數都會更新，以更好地適應 VL 的任務。
+GIT 的所有參數都會更新，以更好地適應 VL 的任務。
 
 另一種架構是 cross-attention-based 的 decoder，用於 incorporate image signals，而不是 concatenation 再用 self-attention。
 
@@ -281,4 +281,5 @@ LEMON 的 transformer 可以擴展到 32 層，可能是因為他們使用 MLM �
 
 講超參數
 
-![](/Blog/images/deep-learning/microsoft-GIT/table11.png)
+<!-- ![](/Blog/images/deep-learning/microsoft-GIT/table11.png) -->
+![](/Blog/images/deep-learning/microsoft-GIT/model.jpg)
