@@ -2,24 +2,18 @@
 <html lang="en-us" dir="ltr">
 
 <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='RL 方法 Policy-based learn 做事的 actor Value-based 不直接 learn policy，而是 Learn critic，負責批評 Q-learning 屬於這種 Critic 不直接決定 action 給予 actor $\pi$，評估 actor $\pi$ 有多好 critic 的 output 依賴於 actor 的表現 State Value Function State value function $V^{\pi}(s)$ 用 actor $\pi$，看到 s 後玩到結束，cumulated reward expectation 是多少 評估方法 Monte-Carlo(MC) based approach
-critic 看 $\pi$ 玩遊戲 訓練一個 network，看到不同的 state ，輸出 cumulated reward(直到遊戲結束，以下稱為 $G_a$)，解 regression 問題 Temporal-difference(TD) approach
-MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊戲超長 TD 只需要 {$s_t,a_t,r_t,s_{t&#43;1}$} $V^{\pi}(s_t)=V^{\pi}(s_{t&#43;1})&#43;r_t$ MS v.'>
-<title>Q-learning</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='分析方法 節點分析 (Nodal Analysis) 解節點電壓 選取一個節點做為參考節點 (reference node) 或已知節點 (datum node)，其他節點的電壓相對於它 假設它電位為 0，稱為 ground 把 KCL 用在剩下的 n-1 個參考節點 (假設電流方向，可以隨便假設，只要一致，不要兩端電流都流入同個電阻) 求解聯立方程式，得到各節點電壓 包含電壓源的節點分析 (Nodal Analysis with Voltage Sources) 如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題 '>
+<title>電路學 - II</title>
 
-<link rel='canonical' href='https://roykesydon.github.io/Blog/p/q-learning/'>
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-ii/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.7f53e08c4b9f69091713d6ea9cbfa6f07161c9f25c4442680f7d64aa0209c134.css"><meta property='og:title' content='Q-learning'>
-<meta property='og:description' content='RL 方法 Policy-based learn 做事的 actor Value-based 不直接 learn policy，而是 Learn critic，負責批評 Q-learning 屬於這種 Critic 不直接決定 action 給予 actor $\pi$，評估 actor $\pi$ 有多好 critic 的 output 依賴於 actor 的表現 State Value Function State value function $V^{\pi}(s)$ 用 actor $\pi$，看到 s 後玩到結束，cumulated reward expectation 是多少 評估方法 Monte-Carlo(MC) based approach
-critic 看 $\pi$ 玩遊戲 訓練一個 network，看到不同的 state ，輸出 cumulated reward(直到遊戲結束，以下稱為 $G_a$)，解 regression 問題 Temporal-difference(TD) approach
-MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊戲超長 TD 只需要 {$s_t,a_t,r_t,s_{t&#43;1}$} $V^{\pi}(s_t)=V^{\pi}(s_{t&#43;1})&#43;r_t$ MS v.'>
-<meta property='og:url' content='https://roykesydon.github.io/Blog/p/q-learning/'>
+<link rel="stylesheet" href="/Blog/scss/style.min.7f53e08c4b9f69091713d6ea9cbfa6f07161c9f25c4442680f7d64aa0209c134.css"><meta property='og:title' content='電路學 - II'>
+<meta property='og:description' content='分析方法 節點分析 (Nodal Analysis) 解節點電壓 選取一個節點做為參考節點 (reference node) 或已知節點 (datum node)，其他節點的電壓相對於它 假設它電位為 0，稱為 ground 把 KCL 用在剩下的 n-1 個參考節點 (假設電流方向，可以隨便假設，只要一致，不要兩端電流都流入同個電阻) 求解聯立方程式，得到各節點電壓 包含電壓源的節點分析 (Nodal Analysis with Voltage Sources) 如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題 '>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-ii/'>
 <meta property='og:site_name' content='Roykesydon'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='reinforcement-learning' /><meta property='article:published_time' content='2023-02-20T16:21:23&#43;08:00'/><meta property='article:modified_time' content='2023-02-20T16:21:23&#43;08:00'/>
-<meta name="twitter:title" content="Q-learning">
-<meta name="twitter:description" content="RL 方法 Policy-based learn 做事的 actor Value-based 不直接 learn policy，而是 Learn critic，負責批評 Q-learning 屬於這種 Critic 不直接決定 action 給予 actor $\pi$，評估 actor $\pi$ 有多好 critic 的 output 依賴於 actor 的表現 State Value Function State value function $V^{\pi}(s)$ 用 actor $\pi$，看到 s 後玩到結束，cumulated reward expectation 是多少 評估方法 Monte-Carlo(MC) based approach
-critic 看 $\pi$ 玩遊戲 訓練一個 network，看到不同的 state ，輸出 cumulated reward(直到遊戲結束，以下稱為 $G_a$)，解 regression 問題 Temporal-difference(TD) approach
-MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊戲超長 TD 只需要 {$s_t,a_t,r_t,s_{t&#43;1}$} $V^{\pi}(s_t)=V^{\pi}(s_{t&#43;1})&#43;r_t$ MS v.">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='electric-circuits' /><meta property='article:published_time' content='2023-04-10T00:00:54&#43;08:00'/><meta property='article:modified_time' content='2023-04-10T00:00:54&#43;08:00'/>
+<meta name="twitter:title" content="電路學 - II">
+<meta name="twitter:description" content="分析方法 節點分析 (Nodal Analysis) 解節點電壓 選取一個節點做為參考節點 (reference node) 或已知節點 (datum node)，其他節點的電壓相對於它 假設它電位為 0，稱為 ground 把 KCL 用在剩下的 n-1 個參考節點 (假設電流方向，可以隨便假設，只要一致，不要兩端電流都流入同個電阻) 求解聯立方程式，得到各節點電壓 包含電壓源的節點分析 (Nodal Analysis with Voltage Sources) 如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題 ">
 </head>
 
 <body class="
@@ -274,48 +268,10 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#rl-方法">RL 方法</a></li>
-    <li><a href="#critic">Critic</a>
+    <li><a href="#分析方法">分析方法</a>
       <ol>
-        <li><a href="#state-value-function">State Value Function</a>
-          <ol>
-            <li><a href="#評估方法">評估方法</a></li>
-          </ol>
-        </li>
-        <li><a href="#another-critic">Another Critic</a></li>
-      </ol>
-    </li>
-    <li><a href="#basic-tip">Basic Tip</a>
-      <ol>
-        <li><a href="#target-network">Target network</a></li>
-        <li><a href="#exploration">Exploration</a>
-          <ol>
-            <li><a href="#解法">解法</a></li>
-          </ol>
-        </li>
-        <li><a href="#replay-buffer">Replay Buffer</a>
-          <ol>
-            <li><a href="#好處">好處</a></li>
-            <li><a href="#issue">issue</a></li>
-          </ol>
-        </li>
-        <li><a href="#typical-q-learning-演算法">Typical Q-learning 演算法</a></li>
-      </ol>
-    </li>
-    <li><a href="#adveanced-tip">Adveanced Tip</a>
-      <ol>
-        <li><a href="#double-dqn">Double DQN</a></li>
-        <li><a href="#dueling-dqn">Dueling DQN</a></li>
-        <li><a href="#prioritized-replay">Prioritized Replay</a></li>
-        <li><a href="#multi-step">Multi-step</a></li>
-        <li><a href="#noisy-net">Noisy Net</a></li>
-        <li><a href="#distributional-q-function">Distributional Q-function</a></li>
-        <li><a href="#rainbow">Rainbow</a></li>
-      </ol>
-    </li>
-    <li><a href="#continuous-actions">Continuous actions</a>
-      <ol>
-        <li><a href="#solution">Solution</a></li>
+        <li><a href="#節點分析-nodal-analysis">節點分析 (Nodal Analysis)</a></li>
+        <li><a href="#包含電壓源的節點分析-nodal-analysis-with-voltage-sources">包含電壓源的節點分析 (Nodal Analysis with Voltage Sources)</a></li>
       </ol>
     </li>
   </ol>
@@ -339,8 +295,8 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
     
     <header class="article-category">
         
-            <a href="/Blog/categories/deep-learning/" style="background-color: #936ce1; color: #fff;">
-                Deep Learning
+            <a href="/Blog/categories/embedded-system/" style="background-color: #e17100; color: #fff;">
+                Embedded System
             </a>
         
     </header>
@@ -352,9 +308,9 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
     
     
     
-    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/deep-learning.jpg');">
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/embedded-system.jpg');">
         <h2 class="article-title-custom">
-            <a href="/Blog/p/q-learning/">Q-learning</a>
+            <a href="/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-ii/">電路學 - II</a>
         </h2>
         
     </div>
@@ -376,7 +332,7 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Feb 20, 2023</time>
+                <time class="article-time--published">Apr 10, 2023</time>
             </div>
         
 
@@ -391,7 +347,7 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
 
 
                 <time class="article-time--reading">
-                    3 minute read
+                    1 minute read
                 </time>
             </div>
         
@@ -406,382 +362,25 @@ MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊�
     <section class="article-content">
     
     
-    <h2 id="rl-方法">RL 方法</h2>
+    <h2 id="分析方法">分析方法</h2>
+<h3 id="節點分析-nodal-analysis">節點分析 (Nodal Analysis)</h3>
 <ul>
-<li>Policy-based
-<ul>
-<li>learn 做事的 actor</li>
-</ul>
-</li>
-<li>Value-based
-<ul>
-<li>不直接 learn policy，而是 Learn critic，負責批評</li>
-<li>Q-learning 屬於這種</li>
-</ul>
-</li>
-</ul>
-<h2 id="critic">Critic</h2>
-<ul>
-<li>不直接決定 action</li>
-<li>給予 actor $\pi$，評估 actor $\pi$ 有多好</li>
-<li>critic 的 output 依賴於 actor 的表現</li>
-</ul>
-<h3 id="state-value-function">State Value Function</h3>
-<ul>
-<li>State value function $V^{\pi}(s)$
-<ul>
-<li>用 actor $\pi$，看到 s 後玩到結束，cumulated reward expectation 是多少</li>
-</ul>
-</li>
-</ul>
-<h4 id="評估方法">評估方法</h4>
-<ul>
-<li>
-<p>Monte-Carlo(MC) based approach</p>
-<ul>
-<li>critic 看 $\pi$ 玩遊戲</li>
-<li>訓練一個 network，看到不同的 state ，輸出 cumulated reward(直到遊戲結束，以下稱為 $G_a$)，解 regression 問題</li>
-</ul>
-</li>
-<li>
-<p>Temporal-difference(TD) approach</p>
-<ul>
-<li>MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊戲超長
-<ul>
-<li>TD 只需要 {$s_t,a_t,r_t,s_{t+1}$}</li>
-</ul>
-</li>
-<li>$V^{\pi}(s_t)=V^{\pi}(s_{t+1})+r_t$</li>
-</ul>
-</li>
-<li>
-<p>MS v.s. TD</p>
-<ul>
-<li>MC
-<ul>
-<li>Larger variance
-<ul>
-<li>每次的輸出差異很大</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>TD
-<ul>
-<li>smaller variance
-<ul>
-<li>相較 $G_a$ 較小，因為這邊的 random variable 是 r，但 $G_a$ 是由很多 r 組合而成</li>
-</ul>
-</li>
-<li>V 可能估得不準確
-<ul>
-<li>那 learn 出來的結果自然也不准</li>
-</ul>
-</li>
-<li>較常見</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="another-critic">Another Critic</h3>
-<ul>
-<li>
-<p>State-action value function $Q^\pi(s,a)$</p>
-<ul>
-<li>又叫 Q function</li>
-<li>當用 actor $\pi$ 時，在 state s 採取 a 這個 action 後的 cumulated reward expectation
-<ul>
-<li>有一個要注意的地方是，actor 看到 s 不一定會採取 a</li>
-</ul>
-</li>
-</ul>
-<p><img src="/Blog/images/drl/q-learning/q-function.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p><img src="/Blog/images/drl/q-learning/how-to-use-q.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<ul>
-<li>只要有 Q function，就可以找到&quot;更好的&quot; policy，再替換掉原本的 policy
-<ul>
-<li>&ldquo;更好的&quot;定義
-<ul>
-<li>$V^{\pi^{&rsquo;}} \ge V^{\pi}(s), \text{for all state s}$</li>
-</ul>
-</li>
-<li>$\pi^{&rsquo;}(s)=arg \underset{a}{max}Q^{\pi}(s,a)$
-<ul>
-<li>$\pi^{&rsquo;}$ 沒有多餘的參數，就單純靠 Q function 推出來</li>
-<li>這邊如果 a 是 continuous 的會有問題，等等解決</li>
-<li>這樣就可以達到&quot;更好的&quot;policy，不過就不列證明了</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="basic-tip">Basic Tip</h2>
-<h3 id="target-network">Target network</h3>
-<ul>
-<li>在 training 的時候，把其中一個 Q 固定住，不然要學的 target 是不固定的，會不好 train</li>
-</ul>
-<p><img src="/Blog/images/drl/q-learning/target-network.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<h3 id="exploration">Exploration</h3>
-<ul>
-<li>policy 完全 depend on Q function</li>
-<li>如果 action 總是固定，這不是好的 data collection 方法，要在 s 採取 a 過，才比較好估計 Q(s, a)，如果 Q function 是 table 就根本不可能估出來，network 也會有一樣的問題，只是沒那麼嚴重。</li>
-</ul>
-<h4 id="解法">解法</h4>
-<ul>
-<li>Epsilon Greedy
-<ul>
-<li>$a=\begin{cases}
-arg \underset{a}{max}Q(s,a), &amp; \text{with probability } 1-\varepsilon \\
-random, &amp; otherwise
-\end{cases}$</li>
-<li>通常 $\varepsilon$ 會隨時間遞減，因為你一開始 train 的時候不知道怎麼比較好</li>
-</ul>
-</li>
-<li>Boltzmann Exploration
-<ul>
-<li>$P(a|s)=\frac{exp(Q(s,a))}{\sum_a exp(Q(s,a))}$</li>
-</ul>
-</li>
-</ul>
-<h3 id="replay-buffer">Replay Buffer</h3>
-<ul>
-<li>把一堆的 {$s_t,a_t,r_t,s_{t+1}$} 存放在一個 buffer</li>
-<li>{$s_t,a_t,r_t,s_{t+1}$} 簡稱為 exp</li>
-<li>裡面的 exp 可能來自於不同的 policy</li>
-<li>在 buffer 裝滿的時候才把舊的資料丟掉</li>
-<li>每次從 buffer 隨機挑一個 batch 出來，update Q function</li>
-</ul>
-<h4 id="好處">好處</h4>
-<ul>
-<li>跟環境作互動很花時間，這樣可以減少跟環境作互動的次數</li>
-<li>本來就希望 batch 裡的 data 越 diverse 越好，不會希望 batch 裡的 data 都是同性質的</li>
-</ul>
-<h4 id="issue">issue</h4>
-<ul>
-<li>我們要觀察 $\pi$ 的 value，混雜了一些不是 $\pi$ 的 exp 到底有沒有關係?
-<ul>
-<li>理論上沒問題，但李老師沒解釋</li>
-</ul>
-</li>
-</ul>
-<h3 id="typical-q-learning-演算法">Typical Q-learning 演算法</h3>
-<ul>
-<li>初始化 Q-fucntion Q，target Q-function $\hat{Q}=Q$</li>
-<li>在每個 episode
-<ul>
-<li>對於每個 time step t
-<ul>
-<li>給 state $s_t$，根據 Q 執行 action $a_t$ (epsilon greedy)</li>
-<li>獲得 reward $r_t$，到達 $s_{t+1}$</li>
-<li>把 {$s_t,a_t,r_t,s_{t+1}$} 存到 buffer</li>
-<li>從 buffer sample {$s_t,a_t,r_t,s_{t+1}$}(通常是一個 batch)</li>
-<li>Target $y=r_i+\underset{a}{max}\hat{Q}(s_{i+1},a)$</li>
-<li>Update Q 的參數，好讓 $Q(s_i,a_i)$ 更接近 y(regression)</li>
-<li>每 C 步 reset $\hat{Q}=Q$</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="adveanced-tip">Adveanced Tip</h2>
-<h3 id="double-dqn">Double DQN</h3>
-<ul>
-<li>Q Value 往往被高估
-<ul>
-<li>我們的目的是要讓 $Q(s_t, a_t)$ 和 $r_t+\underset{a}{max}Q(s_{t+1},a)$ 越接近越好(後者就是 target)</li>
-<li>target 常常不小心設太高，因為如果有 action 被高估了，就會選那個當 target</li>
-</ul>
-</li>
-<li>Double DQN: 兩個函式 $Q$ 和 $Q^{&rsquo;}$
-<ul>
-<li>把 target 換成  $r_t+Q^{&rsquo;}(s_{t+1},arg \underset{a}{max}Q(s_{t+1},a))$</li>
-<li>選 action 交給 $Q$，實際算交給 $Q^{&rsquo;}$
-<ul>
-<li>如果 $Q$ 選了高估的 action，$Q^{&rsquo;}$ 有可能修正回來</li>
-<li>如果 $Q^{&rsquo;}$ 高估，$Q$ 不一定會選到</li>
-</ul>
-</li>
-<li>$Q^{&rsquo;}$ 是 target network(固定不動)</li>
-</ul>
-</li>
-</ul>
-<h3 id="dueling-dqn">Dueling DQN</h3>
-<ul>
-<li>改變 network 架構</li>
-<li>分成兩條 path
-<ul>
-<li>第一條算 scalar</li>
-<li>第二條算 vector，每個 action 都有個 value</li>
-<li>把 scalar 加到每一個維度</li>
-<li>只更改到 V(s) 的時候，會全部的 action 都改到，可能會是一個比較有效率的方式，不用 sample 所有的 action
-<ul>
-<li>但有可能模型不管 V(s)，直接設 0，只改 A</li>
-<li>所以會對 A 下 constrain，讓 network 傾向於改 V
-<ul>
-<li>比如同個 state 下的所有 action 要生出 A(s,a) 總和為 0
-<ul>
-<li>在 A 的輸出加個 normalization 即可辦到，這個 normalization 就是把每個維度都減掉平均</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><img src="/Blog/images/drl/q-learning/dueling-dqn.png"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<h3 id="prioritized-replay">Prioritized Replay</h3>
-<ul>
-<li>原本是 uniform 的從 buffer sample data</li>
-<li>改讓 「有更大的 TD error」的 data 有更高的機率被 sample
-<ul>
-<li>TD error 就是 $Q(s_t, a_t)$ 和 target 的差距</li>
-</ul>
-</li>
-<li>實際在做的時候有額外的細節，不會只改 sampling 的 process，還要改 update 參數的方法</li>
-</ul>
-<h3 id="multi-step">Multi-step</h3>
-<ul>
-<li>Balance between MC 和 TD</li>
-<li>TD 只需要存 {$s_t,a_t,r_t,s_{t+1}$}</li>
-<li>改存 {$s_t,a_t,r_t,&hellip;,s_{t+N},a_{t+N},r_{t+N}, s_{t+N+1}$}</li>
-<li>我們的目的是要讓 $Q(s_t, a_t)$ 和 $\displaystyle\sum_{t^{&rsquo;}=t}^{t+N} r_{t^{&rsquo;}}+\hat{Q}(s_{t+N+1},a_{t+N+1})$ 越接近越好(後者就是 target)
-<ul>
-<li>$a_{t+N+1}=arg\underset{a}{max}\hat{Q}(s_{t+N+1},a)$</li>
-</ul>
-</li>
-<li>同時有 MC 和 TD 的好處和壞處
-<ul>
-<li>估測的影響比較輕微</li>
-<li>r 比較多項，variance 比較大</li>
-</ul>
-</li>
-</ul>
-<h3 id="noisy-net">Noisy Net</h3>
-<ul>
-<li>improve exploration</li>
-<li>Noise on Action
-<ul>
-<li>Epsilon Greedy(之前的回顧)
-<ul>
-<li>$f_X(x) = \begin{cases}
-arg \underset{a}{max}Q(s,a), &amp; \text{with probability }1-\varepsilon \\
-random, &amp; ,otherwise
-\end{cases}$</li>
-</ul>
-</li>
-<li>給同樣的 state，採取的 action 不一定一樣</li>
-<li>沒有真實的 policy 會這樣運作</li>
-</ul>
-</li>
-<li>Noise on Parameters
-<ul>
-<li>
-<p>$a = arg \underset{a}{max}\tilde{Q}(s,a)$</p>
-<ul>
-<li>在每個 episode 剛開始的時候，在 Q-function 的參數上面加上 gaussian noise</li>
-</ul>
-</li>
-<li>
-<p>給同樣的 state，採取同樣的 action</p>
-<ul>
-<li>叫做 state-dependent exploration</li>
-</ul>
-</li>
-<li>
-<p>explore in a consistent way</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="distributional-q-function">Distributional Q-function</h3>
-<ul>
-<li>Q-function 生出的東西是 cumulated reward 的期望值
-<ul>
-<li>所以我們是在對 distribution 取 mean，但不同的 distribution 也可能有同樣的 mean</li>
-</ul>
-</li>
-<li>想做的事情是 model distribution</li>
-<li>如果有做這個，就比較不會有 over estimate reward 的結果，反而容易 under estimate，使 double 比較沒用
-<ul>
-<li>output 的 range 不可能無限寬，超過邊界的 reward 會被丟掉</li>
-</ul>
-</li>
-</ul>
-<h3 id="rainbow">Rainbow</h3>
-<ul>
-<li>綜合一堆方法</li>
-</ul>
-<h2 id="continuous-actions">Continuous actions</h2>
-<ul>
-<li>Q learning 不容易處理 continuous action</li>
-</ul>
-<h3 id="solution">Solution</h3>
+<li>解節點電壓
 <ol>
-<li>
-<p>sample n 個可能的 a，都丟 Q function 看誰最大</p>
-</li>
-<li>
-<p>gradient descent</p>
+<li>選取一個節點做為參考節點 (reference node) 或已知節點 (datum node)，其他節點的電壓相對於它
 <ul>
-<li>把 a 當作 parameter，要找一組 a 去 maximize Q function
-<ul>
-<li>運算量大，要 iterative 的 update a</li>
-<li>不一定可以找到 global 的最佳解</li>
+<li>假設它電位為 0，稱為 ground</li>
 </ul>
 </li>
-</ul>
-</li>
-<li>
-<p>特別設計 Q network，讓解 optimization 的問題變容易</p>
-<ul>
-<li>範例
-<ul>
-<li>Q network 輸出 $\mu(s)$、$\Sigma(s)$、$V(s)$，個別是 vector、matrix、scalar</li>
-<li>a 是 continuous 的 Action，是一個 vector，每個維度都是實數</li>
-<li>$\Sigma(s)$ 是 positive definite 的，實作的時候會把 $\Sigma$ 和它的 transpose 相乘</li>
-<li>$Q(s,a)=-(a-\mu(s))^T\Sigma(s)(a-\mu(s))+V(s)$</li>
-<li>$(a-\mu(s))^T\Sigma(s)(a-\mu(s))$ 這項必為正，所以 $a=\mu(s)$ 的時候就是最佳解</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>不要用 Q-learning</p>
-</li>
+<li>把 KCL 用在剩下的 n-1 個參考節點 (假設電流方向，可以隨便假設，只要一致，不要兩端電流都流入同個電阻)</li>
+<li>求解聯立方程式，得到各節點電壓</li>
 </ol>
+</li>
+</ul>
+<h3 id="包含電壓源的節點分析-nodal-analysis-with-voltage-sources">包含電壓源的節點分析 (Nodal Analysis with Voltage Sources)</h3>
+<ul>
+<li>如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題</li>
+</ul>
 
 </section>
 
@@ -790,11 +389,7 @@ random, &amp; ,otherwise
     
     <section class="article-tags">
         
-            <a href="/Blog/tags/deep-learning/">deep-learning</a>
-        
-            <a href="/Blog/tags/machine-learning/">machine-learning</a>
-        
-            <a href="/Blog/tags/reinforcement-learning/">reinforcement-learning</a>
+            <a href="/Blog/tags/electric-circuits/">electric-circuits</a>
         
     </section>
 
@@ -840,12 +435,12 @@ random, &amp; ,otherwise
             
                 
 <article class="">
-    <a href="/Blog/p/actor-critic/">
+    <a href="/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-i/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Actor-Critic</h2>
+            <h2 class="article-title">電路學 - I</h2>
         </div>
     </a>
 </article>
@@ -853,12 +448,12 @@ random, &amp; ,otherwise
             
                 
 <article class="">
-    <a href="/Blog/p/proximal-policy-optimizationppo/">
+    <a href="/Blog/p/stm32-uart-%E5%AF%A6%E9%A9%97/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Proximal Policy Optimization(PPO)</h2>
+            <h2 class="article-title">STM32 UART 實驗</h2>
         </div>
     </a>
 </article>
@@ -866,12 +461,12 @@ random, &amp; ,otherwise
             
                 
 <article class="">
-    <a href="/Blog/p/policy-gradient/">
+    <a href="/Blog/p/stm32-gpio-%E5%AF%A6%E9%A9%97/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Policy Gradient</h2>
+            <h2 class="article-title">STM32 GPIO 實驗</h2>
         </div>
     </a>
 </article>
@@ -879,12 +474,12 @@ random, &amp; ,otherwise
             
                 
 <article class="">
-    <a href="/Blog/p/git-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/stm32cubeide-%E5%9F%BA%E6%9C%AC%E9%96%8B%E7%99%BC%E4%BD%BF%E7%94%A8/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">GIT 論文閱讀</h2>
+            <h2 class="article-title">STM32CubeIDE 基本開發使用</h2>
         </div>
     </a>
 </article>
@@ -892,12 +487,12 @@ random, &amp; ,otherwise
             
                 
 <article class="">
-    <a href="/Blog/p/roberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/arm-%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80%E4%BB%8B%E7%B4%B9/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">RoBERTa 論文閱讀</h2>
+            <h2 class="article-title">ARM 組合語言介紹</h2>
         </div>
     </a>
 </article>

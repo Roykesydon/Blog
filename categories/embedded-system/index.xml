@@ -6,7 +6,34 @@
         <description>Recent content in Embedded System on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 09 Apr 2023 01:32:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/embedded-system/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 10 Apr 2023 00:00:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/embedded-system/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>電路學 - II</title>
+        <link>https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-ii/</link>
+        <pubDate>Mon, 10 Apr 2023 00:00:54 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-ii/</guid>
+        <description>&lt;h2 id=&#34;分析方法&#34;&gt;分析方法&lt;/h2&gt;
+&lt;h3 id=&#34;節點分析-nodal-analysis&#34;&gt;節點分析 (Nodal Analysis)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;解節點電壓
+&lt;ol&gt;
+&lt;li&gt;選取一個節點做為參考節點 (reference node) 或已知節點 (datum node)，其他節點的電壓相對於它
+&lt;ul&gt;
+&lt;li&gt;假設它電位為 0，稱為 ground&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;把 KCL 用在剩下的 n-1 個參考節點 (假設電流方向，可以隨便假設，只要一致，不要兩端電流都流入同個電阻)&lt;/li&gt;
+&lt;li&gt;求解聯立方程式，得到各節點電壓&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;包含電壓源的節點分析-nodal-analysis-with-voltage-sources&#34;&gt;包含電壓源的節點分析 (Nodal Analysis with Voltage Sources)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>STM32 UART 實驗</title>
         <link>https://roykesydon.github.io/Blog/p/stm32-uart-%E5%AF%A6%E9%A9%97/</link>
         <pubDate>Sun, 09 Apr 2023 01:32:54 +0800</pubDate>
