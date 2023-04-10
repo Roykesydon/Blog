@@ -147,7 +147,7 @@ attention mask 根據上圖設計，使的 text token 只能依賴於前面的 t
 
 這和 unidirectional attention mask 不同，unidirectional attention mask 並非每個 image token 都可以依賴於其他的 Image token。
 
-作者沒有很好地初始化 image encoder，而是隨機初始化 text decoder。
+作者很好地初始化 image encoder，卻隨機初始化 text decoder。
 
 這種設計動機是基於[MiniVLM: A Smaller and Faster Vision-Language Model]，該研究隨機初始化顯示出與 BERT 初始化相似地性能。
 

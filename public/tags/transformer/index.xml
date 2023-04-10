@@ -139,7 +139,7 @@
 &gt;&lt;/p&gt;
 &lt;p&gt;attention mask 根據上圖設計，使的 text token 只能依賴於前面的 text token 和 image token，而 image token 可以互相做 attention。&lt;/p&gt;
 &lt;p&gt;這和 unidirectional attention mask 不同，unidirectional attention mask 並非每個 image token 都可以依賴於其他的 Image token。&lt;/p&gt;
-&lt;p&gt;作者沒有很好地初始化 image encoder，而是隨機初始化 text decoder。&lt;/p&gt;
+&lt;p&gt;作者很好地初始化 image encoder，卻隨機初始化 text decoder。&lt;/p&gt;
 &lt;p&gt;這種設計動機是基於[MiniVLM: A Smaller and Faster Vision-Language Model]，該研究隨機初始化顯示出與 BERT 初始化相似地性能。&lt;/p&gt;
 &lt;p&gt;原因可能在於 BERT 地初始化無法理解圖像信號，這對於 VL 任務至關重要。&lt;/p&gt;
 &lt;p&gt;[Flamingo: a Visual Language Model for Few-Shot Learning] 採用了類似的 image encoder + text decoder，但是他們的 decoder 經過 pretrain，並且有 freeze，好保留大型語言模型的泛化能力。&lt;/p&gt;
