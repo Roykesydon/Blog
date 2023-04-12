@@ -2,18 +2,30 @@
 <html lang="en-us" dir="ltr">
 
 <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='分析方法 節點分析 (Nodal Analysis) 解節點電壓 選取一個節點做為參考節點 (reference node) 或已知節點 (datum node)，其他節點的電壓相對於它 假設它電位為 0，稱為 ground 把 KCL 用在剩下的 n-1 個參考節點 (假設電流方向，可以隨便假設，只要一致，不要兩端電流都流入同個電阻) 求解聯立方程式，得到各節點電壓 包含電壓源的節點分析 (Nodal Analysis with Voltage Sources) 如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題 '>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='分析方法 節點分析 (Nodal Analysis) 解節點電壓 選取一個節點做為參考節點 (reference node) 或已知節點 (datum node)，其他節點的電壓相對於它 假設它電位為 0，稱為 ground 把 KCL 用在剩下的 n-1 個參考節點 (假設電流方向，可以隨便假設，只要一致，不要兩端電流都流入同個電阻) 求解聯立方程式，得到各節點電壓 包含電壓源的節點分析 (Nodal Analysis with Voltage Sources) 如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題 超節點的屬性 超節點內部的電壓源提供限制方程式 超節點本身沒電壓 超節點要同時用 KCL 和 KVL 網目分析 (Mesh Analysis) 只能適用平面電路 (planer circuit)，不能用在非平面電路 (nonplaner circuit)
+在一個平面上沒有交互連接的分支 網目 (Mesh)
+不包含子迴路的單一迴路 網目電流 (mesh current)
+流經網目的電流 決定網目電流步驟
+在 n 個網目中，指定 n 個網目電流 對 n 個網目個別應用 KVL，把歐姆定律應用在網目電流上，以表示電壓 求解 n 個聯立方程式，計算網目電流 包含電流源的網目分析 (Mesh Analysis with Current Sources) 如果有兩個 Mesh 共用同一個電流源，會形成超網目 (supermesh)，把公用的電流源還有串聯的元件給移除掉 視察法 待補 節點分析 vs 網目分析 節點比網目少選節點分析，反之也是 要求電壓節點，求電流網目 可以用一種驗證另一種的結果 有些特殊問題只能用其中一種方法 直流電晶體電路 電子產品中的基本元件有三端主動元件&amp;ndash;電晶體 (transistor)'>
 <title>電路學 - II</title>
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-ii/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.7f53e08c4b9f69091713d6ea9cbfa6f07161c9f25c4442680f7d64aa0209c134.css"><meta property='og:title' content='電路學 - II'>
-<meta property='og:description' content='分析方法 節點分析 (Nodal Analysis) 解節點電壓 選取一個節點做為參考節點 (reference node) 或已知節點 (datum node)，其他節點的電壓相對於它 假設它電位為 0，稱為 ground 把 KCL 用在剩下的 n-1 個參考節點 (假設電流方向，可以隨便假設，只要一致，不要兩端電流都流入同個電阻) 求解聯立方程式，得到各節點電壓 包含電壓源的節點分析 (Nodal Analysis with Voltage Sources) 如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題 '>
+<link rel="stylesheet" href="/Blog/scss/style.min.d18ac33b6ad065b0f16300329174c6b6ce2f8b13aca6227c88c364d2f1fd4b41.css"><meta property='og:title' content='電路學 - II'>
+<meta property='og:description' content='分析方法 節點分析 (Nodal Analysis) 解節點電壓 選取一個節點做為參考節點 (reference node) 或已知節點 (datum node)，其他節點的電壓相對於它 假設它電位為 0，稱為 ground 把 KCL 用在剩下的 n-1 個參考節點 (假設電流方向，可以隨便假設，只要一致，不要兩端電流都流入同個電阻) 求解聯立方程式，得到各節點電壓 包含電壓源的節點分析 (Nodal Analysis with Voltage Sources) 如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題 超節點的屬性 超節點內部的電壓源提供限制方程式 超節點本身沒電壓 超節點要同時用 KCL 和 KVL 網目分析 (Mesh Analysis) 只能適用平面電路 (planer circuit)，不能用在非平面電路 (nonplaner circuit)
+在一個平面上沒有交互連接的分支 網目 (Mesh)
+不包含子迴路的單一迴路 網目電流 (mesh current)
+流經網目的電流 決定網目電流步驟
+在 n 個網目中，指定 n 個網目電流 對 n 個網目個別應用 KVL，把歐姆定律應用在網目電流上，以表示電壓 求解 n 個聯立方程式，計算網目電流 包含電流源的網目分析 (Mesh Analysis with Current Sources) 如果有兩個 Mesh 共用同一個電流源，會形成超網目 (supermesh)，把公用的電流源還有串聯的元件給移除掉 視察法 待補 節點分析 vs 網目分析 節點比網目少選節點分析，反之也是 要求電壓節點，求電流網目 可以用一種驗證另一種的結果 有些特殊問題只能用其中一種方法 直流電晶體電路 電子產品中的基本元件有三端主動元件&amp;ndash;電晶體 (transistor)'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-ii/'>
 <meta property='og:site_name' content='Roykesydon'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='electric-circuits' /><meta property='article:published_time' content='2023-04-10T00:00:54&#43;08:00'/><meta property='article:modified_time' content='2023-04-10T00:00:54&#43;08:00'/>
 <meta name="twitter:title" content="電路學 - II">
-<meta name="twitter:description" content="分析方法 節點分析 (Nodal Analysis) 解節點電壓 選取一個節點做為參考節點 (reference node) 或已知節點 (datum node)，其他節點的電壓相對於它 假設它電位為 0，稱為 ground 把 KCL 用在剩下的 n-1 個參考節點 (假設電流方向，可以隨便假設，只要一致，不要兩端電流都流入同個電阻) 求解聯立方程式，得到各節點電壓 包含電壓源的節點分析 (Nodal Analysis with Voltage Sources) 如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題 ">
+<meta name="twitter:description" content="分析方法 節點分析 (Nodal Analysis) 解節點電壓 選取一個節點做為參考節點 (reference node) 或已知節點 (datum node)，其他節點的電壓相對於它 假設它電位為 0，稱為 ground 把 KCL 用在剩下的 n-1 個參考節點 (假設電流方向，可以隨便假設，只要一致，不要兩端電流都流入同個電阻) 求解聯立方程式，得到各節點電壓 包含電壓源的節點分析 (Nodal Analysis with Voltage Sources) 如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題 超節點的屬性 超節點內部的電壓源提供限制方程式 超節點本身沒電壓 超節點要同時用 KCL 和 KVL 網目分析 (Mesh Analysis) 只能適用平面電路 (planer circuit)，不能用在非平面電路 (nonplaner circuit)
+在一個平面上沒有交互連接的分支 網目 (Mesh)
+不包含子迴路的單一迴路 網目電流 (mesh current)
+流經網目的電流 決定網目電流步驟
+在 n 個網目中，指定 n 個網目電流 對 n 個網目個別應用 KVL，把歐姆定律應用在網目電流上，以表示電壓 求解 n 個聯立方程式，計算網目電流 包含電流源的網目分析 (Mesh Analysis with Current Sources) 如果有兩個 Mesh 共用同一個電流源，會形成超網目 (supermesh)，把公用的電流源還有串聯的元件給移除掉 視察法 待補 節點分析 vs 網目分析 節點比網目少選節點分析，反之也是 要求電壓節點，求電流網目 可以用一種驗證另一種的結果 有些特殊問題只能用其中一種方法 直流電晶體電路 電子產品中的基本元件有三端主動元件&amp;ndash;電晶體 (transistor)">
 </head>
 
 <body class="
@@ -272,6 +284,23 @@
       <ol>
         <li><a href="#節點分析-nodal-analysis">節點分析 (Nodal Analysis)</a></li>
         <li><a href="#包含電壓源的節點分析-nodal-analysis-with-voltage-sources">包含電壓源的節點分析 (Nodal Analysis with Voltage Sources)</a></li>
+        <li><a href="#網目分析-mesh-analysis">網目分析 (Mesh Analysis)</a></li>
+        <li><a href="#包含電流源的網目分析-mesh-analysis-with-current-sources">包含電流源的網目分析 (Mesh Analysis with Current Sources)</a></li>
+        <li><a href="#視察法">視察法</a></li>
+        <li><a href="#節點分析-vs-網目分析">節點分析 vs 網目分析</a></li>
+        <li><a href="#直流電晶體電路">直流電晶體電路</a></li>
+      </ol>
+    </li>
+    <li><a href="#電路理論">電路理論</a>
+      <ol>
+        <li><a href="#線性性質-linear-property">線性性質 (Linear Property)</a></li>
+        <li><a href="#重疊-superposition">重疊 (Superposition)</a></li>
+        <li><a href="#電源變換-source-transformation">電源變換 (Source Transformation)</a></li>
+        <li><a href="#戴維寧定理-thevenins-theorem">戴維寧定理 (Thevenin&rsquo;s Theorem)</a></li>
+        <li><a href="#諾頓定理-nortons-theorem">諾頓定理 (Norton&rsquo;s Theorem)</a></li>
+        <li><a href="#最大功率轉移-maximum-power-transfer">最大功率轉移 (Maximum Power Transfer)</a></li>
+        <li><a href="#電源建模-source-modeling">電源建模 (Source Modeling)</a></li>
+        <li><a href="#電阻量測-resistance-measurement">電阻量測 (Resistance Measurement)</a></li>
       </ol>
     </li>
   </ol>
@@ -347,7 +376,7 @@
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    2 minute read
                 </time>
             </div>
         
@@ -379,7 +408,302 @@
 </ul>
 <h3 id="包含電壓源的節點分析-nodal-analysis-with-voltage-sources">包含電壓源的節點分析 (Nodal Analysis with Voltage Sources)</h3>
 <ul>
-<li>如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題</li>
+<li>如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題
+<ul>
+<li>超節點的屬性
+<ul>
+<li>超節點內部的電壓源提供限制方程式</li>
+<li>超節點本身沒電壓</li>
+<li>超節點要同時用 KCL 和 KVL</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="網目分析-mesh-analysis">網目分析 (Mesh Analysis)</h3>
+<ul>
+<li>
+<p>只能適用平面電路 (planer circuit)，不能用在非平面電路 (nonplaner circuit)</p>
+<ul>
+<li>在一個平面上沒有交互連接的分支</li>
+</ul>
+</li>
+<li>
+<p>網目 (Mesh)</p>
+<ul>
+<li>不包含子迴路的單一迴路</li>
+</ul>
+</li>
+<li>
+<p>網目電流 (mesh current)</p>
+<ul>
+<li>流經網目的電流</li>
+</ul>
+</li>
+<li>
+<p>決定網目電流步驟</p>
+<ul>
+<li>在 n 個網目中，指定 n 個網目電流</li>
+<li>對 n 個網目個別應用 KVL，把歐姆定律應用在網目電流上，以表示電壓</li>
+<li>求解 n 個聯立方程式，計算網目電流</li>
+</ul>
+</li>
+</ul>
+<h3 id="包含電流源的網目分析-mesh-analysis-with-current-sources">包含電流源的網目分析 (Mesh Analysis with Current Sources)</h3>
+<ul>
+<li>如果有兩個 Mesh 共用同一個電流源，會形成超網目 (supermesh)，把公用的電流源還有串聯的元件給移除掉</li>
+</ul>
+<h3 id="視察法">視察法</h3>
+<ul>
+<li>待補</li>
+</ul>
+<h3 id="節點分析-vs-網目分析">節點分析 vs 網目分析</h3>
+<ul>
+<li>節點比網目少選節點分析，反之也是</li>
+<li>要求電壓節點，求電流網目</li>
+<li>可以用一種驗證另一種的結果</li>
+<li>有些特殊問題只能用其中一種方法</li>
+</ul>
+<h3 id="直流電晶體電路">直流電晶體電路</h3>
+<ul>
+<li>
+<p>電子產品中的基本元件有三端主動元件&ndash;電晶體 (transistor)</p>
+<ul>
+<li>種類
+<ul>
+<li>雙極性接面電晶體 (biopolar junction transistor, BJT)
+<ul>
+<li>本節只討論這種</li>
+</ul>
+</li>
+<li>場效電晶體 (field-effect transistor, FET)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>BJT 類型</p>
+<ul>
+<li>NPN</li>
+<li>PNP</li>
+</ul>
+</li>
+<li>
+<p>Part</p>
+<ul>
+<li>射極 (emitter, E)</li>
+<li>基極 (base, B)</li>
+<li>集極 (collector, C)</li>
+</ul>
+</li>
+<li>
+<p>工作模式</p>
+<ul>
+<li>作用
+<ul>
+<li>$I_C=\alpha I_E$
+<ul>
+<li>$\alpha$ 是共基極電流增益 (common-base current gain)，表示射極注入的電子被基極收集的比例</li>
+</ul>
+</li>
+<li>$I_C=\beta I_B$
+<ul>
+<li>$\beta$ 是共射極電流增益 (common-emitter current gain)</li>
+<li>$I_E=(1+\beta) I_B$</li>
+<li>$\beta=\frac{\alpha}{1-\alpha}$</li>
+<li>因為 $\beta$ 很大，一個小的基極電流可以控制大電流的輸出，因此，雙極性電晶體可以當作放大器</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>截止</li>
+<li>飽和</li>
+</ul>
+</li>
+</ul>
+<h2 id="電路理論">電路理論</h2>
+<h3 id="線性性質-linear-property">線性性質 (Linear Property)</h3>
+<ul>
+<li>
+<p>線性</p>
+<ul>
+<li>齊次性
+<ul>
+<li>輸入 ( 激發 excitation) 乘以一個常數，輸出 ( 響應 response) 也會乘以相同的常數</li>
+<li>$kiR=kv$</li>
+</ul>
+</li>
+<li>可加性
+<ul>
+<li>輸入總和的 response 等於個別輸入的 response 的總和</li>
+<li>$v=(i_1+i_2)R=i_1R+i_2R=v_1+v_2$</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>因此稱電阻是一個線性元件，因為電阻、電壓、電流的關係滿足齊次性和可加性</p>
+</li>
+<li>
+<p>如果電路滿足可加性和齊次性，稱此電路為線性電路</p>
+<ul>
+<li>線性電路是輸出與輸入為線性關係的電路</li>
+<li>組成
+<ul>
+<li>線性元件</li>
+<li>線性相依電源</li>
+<li>獨立電源</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="重疊-superposition">重疊 (Superposition)</h3>
+<ul>
+<li>有兩個或更多的獨立電源時，除了節點和網目分析，可以求各獨立源對變數的貢獻，最後相加起來，這就是重疊</li>
+<li>重疊定理
+<ul>
+<li>
+<p>在一個線性電路中，跨接於元件上的電壓(流經元件的電流) = 每個獨立電源單獨作用於該元件二端的電壓(單獨流經該元件的電流)的代數和</p>
+</li>
+<li>
+<p>注意事項</p>
+<ul>
+<li>同一時間只考慮一個獨立電源，把其他的電壓源當作 0 V(短路)、電流源當作 0 A(開路)</li>
+<li>相依電源受電路變數控制，保持不變</li>
+</ul>
+</li>
+<li>
+<p>步驟</p>
+<ol>
+<li>保留一個獨立電源，算它的輸出(電壓或電流)</li>
+<li>對每個電源做步驟 1</li>
+<li>把每個獨立電源的貢獻相加</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="電源變換-source-transformation">電源變換 (Source Transformation)</h3>
+<ul>
+<li>把電阻並聯的電流源和電阻串聯的電壓源做轉換(或反過來)
+<ul>
+<li>電源變換條件
+<ul>
+<li>$V_s=i_sR$</li>
+</ul>
+</li>
+<li>也是用相依電源，但也要遵守條件</li>
+</ul>
+</li>
+</ul>
+<h3 id="戴維寧定理-thevenins-theorem">戴維寧定理 (Thevenin&rsquo;s Theorem)</h3>
+<ul>
+<li>常有一種情境，電路種有一個特殊的元件是可變的，又稱負載 (load)，比如插座可能連接不同家電所組成的負載，而每當 load 改變，就要重新分析電路。戴維寧定理可以把固定的部分換成一個等效電路</li>
+<li>戴維寧定理
+<ul>
+<li>線性二端電路可被由電壓源 $V_{Th}$ 和電阻 $R_{Th}$ 串聯所組成的戴維寧等效電路 (Thevenin equivalent circuit) 取代
+<ul>
+<li>$V_{Th}$ 是二端的開路電壓</li>
+<li>$R_{Th}$ 是關閉獨立電源後，端點上的輸入或等效電阻
+<ul>
+<li>關閉所有獨立電源(根據 電壓/電流 來 短路/開路)，但考慮相依電源</li>
+<li>$R_{Th}$ 有可能求出負值，這代表該電路提供功率，裡面有相依電源，雖然不可能出現在被動元件上，但等效電路是主動元件</li>
+<li>假設外接一個電壓源，求外面的 v 和 i 即可算出 $R_{Th}$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="諾頓定理-nortons-theorem">諾頓定理 (Norton&rsquo;s Theorem)</h3>
+<ul>
+<li>
+<p>和戴維寧定理很像，但是等效電路改成電流源和並聯的電阻，實際上，根據電源變換，可以知道諾頓定理和戴維寧定理的等效電阻相等</p>
+</li>
+<li>
+<p>$R_N=R_{Th}$</p>
+</li>
+<li>
+<p>$I_N=\frac{V_{Th}}{R_{Th}}$</p>
+</li>
+<li>
+<p>計算戴維寧或諾頓等效電路，要先求 $v_{oc}$、$i_{sc}$、$R_{in}$</p>
+<ul>
+<li>求出兩個就可以算第三個</li>
+<li>$V_{Th}=v_{oc}$
+<ul>
+<li>$v_{oc}$ 是 a 和 b 兩端的開路電壓</li>
+</ul>
+</li>
+<li>$I_N=i_{sc}$
+<ul>
+<li>$i_{sc}$ 是 a 和 b 兩端的短路電流</li>
+</ul>
+</li>
+<li>$R_{Th}=\frac{v_{oc}}{i_{sc}}=R_N$</li>
+</ul>
+</li>
+</ul>
+<h3 id="最大功率轉移-maximum-power-transfer">最大功率轉移 (Maximum Power Transfer)</h3>
+<ul>
+<li>轉移到 load 的功率是
+<ul>
+<li>$p=i^2R_{L}=(\frac{V_{Th}}{R_{Th}+R_L})^2R_L$</li>
+<li>最大值出現在 $R_L=R_{Th}$
+<ul>
+<li>最大功率定理 (maximum power theorem)</li>
+</ul>
+</li>
+<li>$p_{max}=\frac{V_{Th}^2}{4R_{Th}}$</li>
+</ul>
+</li>
+</ul>
+<h3 id="電源建模-source-modeling">電源建模 (Source Modeling)</h3>
+<ul>
+<li>實際的電源非理想電源
+<ul>
+<li>電壓源有串聯的內部電阻 (internal resistance)
+<ul>
+<li>下面稱為 $R_s$</li>
+<li>要理想要趨近於 0</li>
+<li>若不連接 load (開路)，$v_{oc}=v_s$
+<ul>
+<li>$v_s$ 可以看做無負載源電壓 (unloaded source voltage)，連接 load 會使端電壓下降，這就是負載效應 (loading effect)</li>
+<li>$R_L$ 越大會越接近理想電壓</li>
+</ul>
+</li>
+<li>量測 $v_s$ 和內部電阻
+<ul>
+<li>量開路電壓
+<ul>
+<li>$v_s=v_{oc}$</li>
+</ul>
+</li>
+<li>load 端連接可變電阻，調到 $v_L=v_{oc}/2$</li>
+<li>此時 $R_L=R_{Th}=R_s$</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>電流源有並聯的電源電阻 (source resistance)
+<ul>
+<li>要理想要趨近於無窮大</li>
+<li>$R_L$ 越小越接近理想電源</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="電阻量測-resistance-measurement">電阻量測 (Resistance Measurement)</h3>
+<ul>
+<li>惠斯登電橋 (Wheatstone bridge)
+<ul>
+<li>平衡電橋 (balanced bridge)</li>
+<li>非平衡電橋 (unbalanced bridge)</li>
+</ul>
+</li>
 </ul>
 
 </section>
