@@ -29,7 +29,302 @@
 &lt;/ul&gt;
 &lt;h3 id=&#34;包含電壓源的節點分析-nodal-analysis-with-voltage-sources&#34;&gt;包含電壓源的節點分析 (Nodal Analysis with Voltage Sources)&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題&lt;/li&gt;
+&lt;li&gt;如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題
+&lt;ul&gt;
+&lt;li&gt;超節點的屬性
+&lt;ul&gt;
+&lt;li&gt;超節點內部的電壓源提供限制方程式&lt;/li&gt;
+&lt;li&gt;超節點本身沒電壓&lt;/li&gt;
+&lt;li&gt;超節點要同時用 KCL 和 KVL&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;網目分析-mesh-analysis&#34;&gt;網目分析 (Mesh Analysis)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;只能適用平面電路 (planer circuit)，不能用在非平面電路 (nonplaner circuit)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在一個平面上沒有交互連接的分支&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;網目 (Mesh)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不包含子迴路的單一迴路&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;網目電流 (mesh current)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;流經網目的電流&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;決定網目電流步驟&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在 n 個網目中，指定 n 個網目電流&lt;/li&gt;
+&lt;li&gt;對 n 個網目個別應用 KVL，把歐姆定律應用在網目電流上，以表示電壓&lt;/li&gt;
+&lt;li&gt;求解 n 個聯立方程式，計算網目電流&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;包含電流源的網目分析-mesh-analysis-with-current-sources&#34;&gt;包含電流源的網目分析 (Mesh Analysis with Current Sources)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;如果有兩個 Mesh 共用同一個電流源，會形成超網目 (supermesh)，把公用的電流源還有串聯的元件給移除掉&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;視察法&#34;&gt;視察法&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;待補&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;節點分析-vs-網目分析&#34;&gt;節點分析 vs 網目分析&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;節點比網目少選節點分析，反之也是&lt;/li&gt;
+&lt;li&gt;要求電壓節點，求電流網目&lt;/li&gt;
+&lt;li&gt;可以用一種驗證另一種的結果&lt;/li&gt;
+&lt;li&gt;有些特殊問題只能用其中一種方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;直流電晶體電路&#34;&gt;直流電晶體電路&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;電子產品中的基本元件有三端主動元件&amp;ndash;電晶體 (transistor)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;種類
+&lt;ul&gt;
+&lt;li&gt;雙極性接面電晶體 (biopolar junction transistor, BJT)
+&lt;ul&gt;
+&lt;li&gt;本節只討論這種&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;場效電晶體 (field-effect transistor, FET)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;BJT 類型&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;NPN&lt;/li&gt;
+&lt;li&gt;PNP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Part&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;射極 (emitter, E)&lt;/li&gt;
+&lt;li&gt;基極 (base, B)&lt;/li&gt;
+&lt;li&gt;集極 (collector, C)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;工作模式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;作用
+&lt;ul&gt;
+&lt;li&gt;$I_C=\alpha I_E$
+&lt;ul&gt;
+&lt;li&gt;$\alpha$ 是共基極電流增益 (common-base current gain)，表示射極注入的電子被基極收集的比例&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$I_C=\beta I_B$
+&lt;ul&gt;
+&lt;li&gt;$\beta$ 是共射極電流增益 (common-emitter current gain)&lt;/li&gt;
+&lt;li&gt;$I_E=(1+\beta) I_B$&lt;/li&gt;
+&lt;li&gt;$\beta=\frac{\alpha}{1-\alpha}$&lt;/li&gt;
+&lt;li&gt;因為 $\beta$ 很大，一個小的基極電流可以控制大電流的輸出，因此，雙極性電晶體可以當作放大器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;截止&lt;/li&gt;
+&lt;li&gt;飽和&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;電路理論&#34;&gt;電路理論&lt;/h2&gt;
+&lt;h3 id=&#34;線性性質-linear-property&#34;&gt;線性性質 (Linear Property)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;線性&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;齊次性
+&lt;ul&gt;
+&lt;li&gt;輸入 ( 激發 excitation) 乘以一個常數，輸出 ( 響應 response) 也會乘以相同的常數&lt;/li&gt;
+&lt;li&gt;$kiR=kv$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可加性
+&lt;ul&gt;
+&lt;li&gt;輸入總和的 response 等於個別輸入的 response 的總和&lt;/li&gt;
+&lt;li&gt;$v=(i_1+i_2)R=i_1R+i_2R=v_1+v_2$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;因此稱電阻是一個線性元件，因為電阻、電壓、電流的關係滿足齊次性和可加性&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果電路滿足可加性和齊次性，稱此電路為線性電路&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;線性電路是輸出與輸入為線性關係的電路&lt;/li&gt;
+&lt;li&gt;組成
+&lt;ul&gt;
+&lt;li&gt;線性元件&lt;/li&gt;
+&lt;li&gt;線性相依電源&lt;/li&gt;
+&lt;li&gt;獨立電源&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;重疊-superposition&#34;&gt;重疊 (Superposition)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;有兩個或更多的獨立電源時，除了節點和網目分析，可以求各獨立源對變數的貢獻，最後相加起來，這就是重疊&lt;/li&gt;
+&lt;li&gt;重疊定理
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;在一個線性電路中，跨接於元件上的電壓(流經元件的電流) = 每個獨立電源單獨作用於該元件二端的電壓(單獨流經該元件的電流)的代數和&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;注意事項&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;同一時間只考慮一個獨立電源，把其他的電壓源當作 0 V(短路)、電流源當作 0 A(開路)&lt;/li&gt;
+&lt;li&gt;相依電源受電路變數控制，保持不變&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;步驟&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;保留一個獨立電源，算它的輸出(電壓或電流)&lt;/li&gt;
+&lt;li&gt;對每個電源做步驟 1&lt;/li&gt;
+&lt;li&gt;把每個獨立電源的貢獻相加&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;電源變換-source-transformation&#34;&gt;電源變換 (Source Transformation)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;把電阻並聯的電流源和電阻串聯的電壓源做轉換(或反過來)
+&lt;ul&gt;
+&lt;li&gt;電源變換條件
+&lt;ul&gt;
+&lt;li&gt;$V_s=i_sR$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;也是用相依電源，但也要遵守條件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;戴維寧定理-thevenins-theorem&#34;&gt;戴維寧定理 (Thevenin&amp;rsquo;s Theorem)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;常有一種情境，電路種有一個特殊的元件是可變的，又稱負載 (load)，比如插座可能連接不同家電所組成的負載，而每當 load 改變，就要重新分析電路。戴維寧定理可以把固定的部分換成一個等效電路&lt;/li&gt;
+&lt;li&gt;戴維寧定理
+&lt;ul&gt;
+&lt;li&gt;線性二端電路可被由電壓源 $V_{Th}$ 和電阻 $R_{Th}$ 串聯所組成的戴維寧等效電路 (Thevenin equivalent circuit) 取代
+&lt;ul&gt;
+&lt;li&gt;$V_{Th}$ 是二端的開路電壓&lt;/li&gt;
+&lt;li&gt;$R_{Th}$ 是關閉獨立電源後，端點上的輸入或等效電阻
+&lt;ul&gt;
+&lt;li&gt;關閉所有獨立電源(根據 電壓/電流 來 短路/開路)，但考慮相依電源&lt;/li&gt;
+&lt;li&gt;$R_{Th}$ 有可能求出負值，這代表該電路提供功率，裡面有相依電源，雖然不可能出現在被動元件上，但等效電路是主動元件&lt;/li&gt;
+&lt;li&gt;假設外接一個電壓源，求外面的 v 和 i 即可算出 $R_{Th}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;諾頓定理-nortons-theorem&#34;&gt;諾頓定理 (Norton&amp;rsquo;s Theorem)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;和戴維寧定理很像，但是等效電路改成電流源和並聯的電阻，實際上，根據電源變換，可以知道諾頓定理和戴維寧定理的等效電阻相等&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$R_N=R_{Th}$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$I_N=\frac{V_{Th}}{R_{Th}}$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;計算戴維寧或諾頓等效電路，要先求 $v_{oc}$、$i_{sc}$、$R_{in}$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;求出兩個就可以算第三個&lt;/li&gt;
+&lt;li&gt;$V_{Th}=v_{oc}$
+&lt;ul&gt;
+&lt;li&gt;$v_{oc}$ 是 a 和 b 兩端的開路電壓&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$I_N=i_{sc}$
+&lt;ul&gt;
+&lt;li&gt;$i_{sc}$ 是 a 和 b 兩端的短路電流&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$R_{Th}=\frac{v_{oc}}{i_{sc}}=R_N$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;最大功率轉移-maximum-power-transfer&#34;&gt;最大功率轉移 (Maximum Power Transfer)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;轉移到 load 的功率是
+&lt;ul&gt;
+&lt;li&gt;$p=i^2R_{L}=(\frac{V_{Th}}{R_{Th}+R_L})^2R_L$&lt;/li&gt;
+&lt;li&gt;最大值出現在 $R_L=R_{Th}$
+&lt;ul&gt;
+&lt;li&gt;最大功率定理 (maximum power theorem)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$p_{max}=\frac{V_{Th}^2}{4R_{Th}}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;電源建模-source-modeling&#34;&gt;電源建模 (Source Modeling)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;實際的電源非理想電源
+&lt;ul&gt;
+&lt;li&gt;電壓源有串聯的內部電阻 (internal resistance)
+&lt;ul&gt;
+&lt;li&gt;下面稱為 $R_s$&lt;/li&gt;
+&lt;li&gt;要理想要趨近於 0&lt;/li&gt;
+&lt;li&gt;若不連接 load (開路)，$v_{oc}=v_s$
+&lt;ul&gt;
+&lt;li&gt;$v_s$ 可以看做無負載源電壓 (unloaded source voltage)，連接 load 會使端電壓下降，這就是負載效應 (loading effect)&lt;/li&gt;
+&lt;li&gt;$R_L$ 越大會越接近理想電壓&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;量測 $v_s$ 和內部電阻
+&lt;ul&gt;
+&lt;li&gt;量開路電壓
+&lt;ul&gt;
+&lt;li&gt;$v_s=v_{oc}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;load 端連接可變電阻，調到 $v_L=v_{oc}/2$&lt;/li&gt;
+&lt;li&gt;此時 $R_L=R_{Th}=R_s$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;電流源有並聯的電源電阻 (source resistance)
+&lt;ul&gt;
+&lt;li&gt;要理想要趨近於無窮大&lt;/li&gt;
+&lt;li&gt;$R_L$ 越小越接近理想電源&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;電阻量測-resistance-measurement&#34;&gt;電阻量測 (Resistance Measurement)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;惠斯登電橋 (Wheatstone bridge)
+&lt;ul&gt;
+&lt;li&gt;平衡電橋 (balanced bridge)&lt;/li&gt;
+&lt;li&gt;非平衡電橋 (unbalanced bridge)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         </item>
