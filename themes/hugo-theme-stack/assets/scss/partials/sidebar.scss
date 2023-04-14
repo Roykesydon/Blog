@@ -556,7 +556,13 @@ body .cybr-text+.cybr-text {
 /* emoji image*/
 .emoji-image-container{
     opacity: 0;
-    transition: all 0.3s ease;
+    position: absolute;
+    left: -10%;
+    top: -20%;
+    width: 100% !important; /* 設置寬度 */ 
+    height: 100% !important; /* 設置高度 */
+    transform: rotate(-45deg);
+    transition: all 0.2s ease-in-out;
 }
 
 .emoji:hover .emoji-image {
@@ -571,7 +577,6 @@ body .cybr-text+.cybr-text {
     height: 150%;
     object-fit: cover;
     border-radius: 50%;
-    // transition: all 0.2s ease;
 }
 
 .emoji-image-bg:before {
@@ -585,7 +590,6 @@ body .cybr-text+.cybr-text {
     border-style: solid;
     border-width: 10px 0 10px 20px;
     border-color: transparent transparent transparent #fff;
-    // transition: all 0.2s ease;
 }
 
 .emoji-image-bg {
@@ -598,10 +602,10 @@ body .cybr-text+.cybr-text {
     transform: translateY(-50%);
     background-color: #fff;
     border-radius: 50%;
-    // transition: all 0.2s ease;
 }
 
 .emoji:hover .emoji-image-container{
     opacity: 1;
+    transform: rotate(0deg);
 }
 /**/
