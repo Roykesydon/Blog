@@ -552,3 +552,56 @@ body .cybr-text+.cybr-text {
 }
 
 /**/
+
+/* emoji image*/
+.emoji-image-container{
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.emoji:hover .emoji-image {
+    opacity: 1;
+}
+
+.emoji-image {
+    position: absolute;
+    top: -50%;
+    left: 150%;
+    width: 150%;
+    height: 150%;
+    object-fit: cover;
+    border-radius: 50%;
+    // transition: all 0.2s ease;
+}
+
+.emoji-image-bg:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 85%;
+    transform:  rotate(160deg);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 0 10px 20px;
+    border-color: transparent transparent transparent #fff;
+    // transition: all 0.2s ease;
+}
+
+.emoji-image-bg {
+    content: "";
+    position: absolute;
+    top: 25%;
+    left: 140%;
+    width: 170%;
+    height: 170%;
+    transform: translateY(-50%);
+    background-color: #fff;
+    border-radius: 50%;
+    // transition: all 0.2s ease;
+}
+
+.emoji:hover .emoji-image-container{
+    opacity: 1;
+}
+/**/
