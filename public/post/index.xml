@@ -6,7 +6,195 @@
         <description>Recent content in Posts on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 10 Apr 2023 00:00:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 14 Apr 2023 01:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Swin Transformer 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/swin-transformer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Fri, 14 Apr 2023 01:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/swin-transformer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2103.14030&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Swin Transformer: Hierarchical Vision Transformer using Shifted Windows&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;本文提出一個新的 vision Transformer，稱作 Swin Transformer，可以被用作 computer vision 中的 general-purpose backbone。&lt;/p&gt;
+&lt;p&gt;把 Transformer 從 language 移到 vision 具備挑戰性，比如同一個 visual entity 在大小上具備很大的 variance。還有 high resolution 下 pixel 和 word 的數量差異太大。&lt;/p&gt;
+&lt;p&gt;為了解決這些差異，作者提出 hierachical Transformer，用 shifted windows 來算出 representation。&lt;/p&gt;
+&lt;p&gt;shifted windowing 透過把 self-attention 限制在 non-overlapping 的 local window 和允許 cross-windows connection 來提高效率。&lt;/p&gt;
+&lt;p&gt;這種 hierarchical architecture 可以靈活地在各種 scale 下擴展 model，還可以對圖像大小有線性的計算時間複雜度。&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/Swin-Transformer/fig1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;ViT 把圖片打成 patch，每個 patch 是 16*16，feature maps 由 single low resolution 的輸入生成，而且由於自注意力始終都是在全局上計算的 (patch 和 patch 間做自注意力)，所以時間複雜度是 quadratic computation complexity。&lt;/p&gt;
+&lt;p&gt;Swin Transformer 從小 patch 開始，並在更深的 Transformer layers 合併相鄰的 patches。&lt;/p&gt;
+&lt;p&gt;有了這些 hierarchical feature maps，可以用在像是 FPN 或是 U-Net。&lt;/p&gt;
+&lt;p&gt;一個 Swin Transformer 的關鍵設計因素是 shifted window。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/Swin-Transformer/fig2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;透過 bridge 不同 layer 的 windows 來提供他們連接。&lt;/p&gt;
+&lt;h2 id=&#34;method&#34;&gt;Method&lt;/h2&gt;
+&lt;h3 id=&#34;overall-architecture&#34;&gt;Overall Architecture&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/Swin-Transformer/fig3.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Patch Merging
+&lt;ul&gt;
+&lt;li&gt;原本特徵圖是 H * W * C&lt;/li&gt;
+&lt;li&gt;以上下 stride=2 行走，會得到四張 H/2 * W/2 * C&lt;/li&gt;
+&lt;li&gt;concatenate 起來，變成 H/2 * W/2 * 4C&lt;/li&gt;
+&lt;li&gt;做 linear，變成 H/2 * W/2 * 2C&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;swin-transformer-block&#34;&gt;Swin Transformer block&lt;/h4&gt;
+&lt;p&gt;Swin Transformer 是透過把 Transformer block 中的 multi-head self attention(MSA) 換成基於 shifted windows 的 module 構成。&lt;/p&gt;
+&lt;h3 id=&#34;shifted-window-based-self-attention&#34;&gt;Shifted Window based Self-Attention&lt;/h3&gt;
+&lt;p&gt;標準的 Transformer 架構會算 global self-attention，計算所有 token 間彼此的關係，導致 quadratic complexity，使其不適用於需要大量 token 的許多 CV 問題&lt;/p&gt;
+&lt;h4 id=&#34;self-attention-in-non-overlapped-windows&#34;&gt;Self-attention in non-overlapped windows&lt;/h4&gt;
+&lt;p&gt;原來的圖片會以 non-overlapping 的方式切割。&lt;/p&gt;
+&lt;p&gt;假設每個 windows 有 M * M 個 patches，然後一張圖像有 h * w 塊 patches，計算複雜度如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$\Omega(MSA)=4hwC^2+2(hw)^2C$&lt;/li&gt;
+&lt;li&gt;$\Omega(W-MSA)=4hwC^2+2M^2hwC$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;shifted-window-partitioning-in-successive-blocks&#34;&gt;Shifted window partitioning in successive blocks&lt;/h4&gt;
+&lt;p&gt;window-based self-attention module 缺乏了 windows 間彼此的連接，會限制模型能力。&lt;/p&gt;
+&lt;p&gt;作者提出了一種 shifted window 的方法，保持 non-overlapping windows 的高效計算，同時引入 windows 間的連接。&lt;/p&gt;
+&lt;p&gt;再兩個連續的 windows 間，會移動 $(⌊ \frac{M}{2} ⌋, ⌊ \frac{M}{2} ⌋)$&lt;/p&gt;
+&lt;h4 id=&#34;efficient-batch-computation-for-shifted-configuration&#34;&gt;Efficient batch computation for shifted configuration&lt;/h4&gt;
+&lt;p&gt;shifted window 有個問題是，會導致更多的 windows，從 $⌈ \frac{h}{M} ⌉ * ⌈ \frac{w}{M} ⌉$ 到 $(⌈ \frac{h}{M} ⌉+1) * (⌈ \frac{w}{M} ⌉+1)$，而且有些 window 會小於 M*M。&lt;/p&gt;
+&lt;p&gt;這樣會導致無法把這些給壓成一個 batch 快速計算。&lt;/p&gt;
+&lt;p&gt;一種 naive 的解法就是直接在外面加 zero padding，但會增加計算量，當 windows 數量較少時，計算量會變很可觀 (從 2 * 2 個 windows 變成 3 * 3 個 windows，增加了 2.25 倍)&lt;/p&gt;
+&lt;p&gt;作者提出另外一種巧妙的做法，把一些部分挪移。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/Swin-Transformer/fig4.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;但現在有些 window 裡有多個不該相互做 attention 的部分，所以要用 mask 的方式計算。&lt;/p&gt;
+&lt;p&gt;不同 windows，做 self-attention 後，把不相干的部分做的 attention 減去一個很大的數值，最後再過 softmax。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/Swin-Transformer/mask.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;上圖來自作者在 github 提供的可視化&lt;/p&gt;
+&lt;p&gt;最後再把它挪回原本的位置。&lt;/p&gt;
+&lt;h4 id=&#34;relative-position-bias&#34;&gt;Relative position bias&lt;/h4&gt;
+&lt;p&gt;參考這個: &lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/qq_37541097/article/details/121119988&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://blog.csdn.net/qq_37541097/article/details/121119988&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;architecture-variants&#34;&gt;Architecture Variants&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;window size 預設是 M = 7&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;query dimension of each head 是 d = 32&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;expansion layer of each MLP is $\alpha$ = 4&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;C 是 first stage 的 hidden layers 的 channel numbers&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Swin-T&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;C = 96&lt;/li&gt;
+&lt;li&gt;layer numbers = {2, 2, 6, 2}&lt;/li&gt;
+&lt;li&gt;大小和計算量是 Base 的大約 0.25 倍&lt;/li&gt;
+&lt;li&gt;complexity 接近 ResNet-50&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Swin-S&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;C = 96&lt;/li&gt;
+&lt;li&gt;layer numbers = {2, 2, 18, 2}&lt;/li&gt;
+&lt;li&gt;大小和計算量是 Base 的大約 0.5 倍&lt;/li&gt;
+&lt;li&gt;complexity 接近 ResNet-101&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Swin-B&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;C = 128&lt;/li&gt;
+&lt;li&gt;layer numbers = {2, 2, 18, 2}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Swin-L&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;C = 192&lt;/li&gt;
+&lt;li&gt;layer numbers = {2, 2, 18, 2}&lt;/li&gt;
+&lt;li&gt;大小和計算量是 Base 的大約 2 倍&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;experiments&#34;&gt;Experiments&lt;/h2&gt;
+&lt;h3 id=&#34;image-classification-on-imagenet-1k&#34;&gt;Image Classification on ImageNet-1K&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/Swin-Transformer/table1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;object-detection-on-coco&#34;&gt;Object Detection on COCO&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/Swin-Transformer/table2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;semantic-segmentation-on-ade20k&#34;&gt;Semantic Segmentation on ADE20K&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/Swin-Transformer/table3.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;ablation-study&#34;&gt;Ablation Study&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/Swin-Transformer/table4.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;基於 self-attention 的 shifted window 是 Swin Transformer 關鍵部分，被顯示出他在 CV 領域有效率且有效，並期望未來把它應用在 NLP。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>電路學 - II</title>
         <link>https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-ii/</link>
         <pubDate>Mon, 10 Apr 2023 00:00:54 +0800</pubDate>

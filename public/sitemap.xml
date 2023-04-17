@@ -3,21 +3,45 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://roykesydon.github.io/Blog/</loc>
-    <lastmod>2023-04-10T00:00:54+08:00</lastmod>
+    <lastmod>2023-04-14T01:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/attention/</loc>
+    <lastmod>2023-04-14T01:08:46+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/categories/</loc>
-    <lastmod>2023-04-10T00:00:54+08:00</lastmod>
+    <lastmod>2023-04-14T01:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/computer-vision/</loc>
+    <lastmod>2023-04-14T01:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/categories/deep-learning/</loc>
+    <lastmod>2023-04-14T01:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/deep-learning/</loc>
+    <lastmod>2023-04-14T01:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/machine-learning/</loc>
+    <lastmod>2023-04-14T01:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/post/</loc>
+    <lastmod>2023-04-14T01:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/self-attention/</loc>
+    <lastmod>2023-04-14T01:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/p/swin-transformer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</loc>
+    <lastmod>2023-04-14T01:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/</loc>
+    <lastmod>2023-04-14T01:08:46+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/transformer/</loc>
+    <lastmod>2023-04-14T01:08:46+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/tags/electric-circuits/</loc>
     <lastmod>2023-04-10T00:00:54+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/categories/embedded-system/</loc>
-    <lastmod>2023-04-10T00:00:54+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/post/</loc>
-    <lastmod>2023-04-10T00:00:54+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/</loc>
     <lastmod>2023-04-10T00:00:54+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-ii/</loc>
@@ -44,28 +68,7 @@
     <loc>https://roykesydon.github.io/Blog/p/stm32cubeide-%E5%9F%BA%E6%9C%AC%E9%96%8B%E7%99%BC%E4%BD%BF%E7%94%A8/</loc>
     <lastmod>2023-04-02T00:32:54+08:00</lastmod>
   </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/attention/</loc>
-    <lastmod>2023-03-29T01:08:46+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/computer-vision/</loc>
-    <lastmod>2023-03-29T01:08:46+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/categories/deep-learning/</loc>
-    <lastmod>2023-03-29T01:08:46+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/deep-learning/</loc>
-    <lastmod>2023-03-29T01:08:46+08:00</lastmod>
-  </url><url>
     <loc>https://roykesydon.github.io/Blog/p/git-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</loc>
-    <lastmod>2023-03-29T01:08:46+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/machine-learning/</loc>
-    <lastmod>2023-03-29T01:08:46+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/self-attention/</loc>
-    <lastmod>2023-03-29T01:08:46+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/transformer/</loc>
     <lastmod>2023-03-29T01:08:46+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/p/roberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</loc>
