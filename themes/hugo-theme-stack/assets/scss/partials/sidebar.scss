@@ -72,7 +72,11 @@
 /* glitch part */
 $update-steps: 20;
 
+@import url('https://fonts.googleapis.com/css2?family=Carter+One&display=swap');
+
 .glitch {
+    font-family: 'Carter One', cursive;
+    font-weight: 100;
     // transform: scale(0.5);
     position: relative;
     // width: 100%;
@@ -371,6 +375,8 @@ body .cybr-text+.cybr-text {
     margin-top: 2rem;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Almarai&display=swap');
+
 .cybr-text {
     --primary: rgba(24, 24, 50);
     --shadow-primary: rgb(255, 107, 243);
@@ -392,7 +398,7 @@ body .cybr-text+.cybr-text {
     --clip-five: polygon(0 0, 100% 0, 100% 0, 95% 0, 95% 0, 85% 0, 85% 0, 8% 0, 0 0);
     --clip-six: polygon(0 40%, 100% 40%, 100% 85%, 95% 85%, 95% 85%, 85% 85%, 85% 85%, 8% 85%, 0 70%);
     --clip-seven: polygon(0 63%, 100% 63%, 100% 80%, 95% 80%, 95% 80%, 85% 80%, 85% 80%, 8% 80%, 0 70%);
-    font-family: 'Cyber', sans-serif;
+    font-family: 'Almarai', sans-serif;
     color: var(--color);
     cursor: default;
     background: transparent;

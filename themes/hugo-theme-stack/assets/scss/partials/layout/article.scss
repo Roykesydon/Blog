@@ -200,11 +200,26 @@
     }
 }
 
+@font-face {
+    font-family: 'cwTeXYen';
+    // font-style: normal;
+    font-weight: 800;
+    src: url(//fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.eot);
+    src: url(//fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.eot?#iefix) format('embedded-opentype'),
+         url(//fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.woff2) format('woff2'),
+         url(//fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.woff) format('woff'),
+         url(//fonts.gstatic.com/ea/cwtexyen/v3/cwTeXYen-zhonly.ttf) format('truetype');
+}
+
 .article-content {
     font-family: var(--article-font-family);
     font-size: var(--article-font-size);
     padding: 0 var(--card-padding);
     line-height: var(--article-line-height);
+
+    font-family: "cwTeXYen", Helvetica, Arial, sans-serif !important;
+    font-weight: 300;
+    font-size: 1.3em;
 
     & > p {
         margin: 1.5em 0;
