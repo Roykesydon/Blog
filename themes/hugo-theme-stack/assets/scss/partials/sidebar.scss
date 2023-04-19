@@ -389,11 +389,13 @@ body .cybr-text+.cybr-text {
 @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
 
 .cybr-text {
-    --primary: rgba(24, 24, 50);
+    // --primary: rgba(24, 24, 50);
+    --primary: rgb(6, 6, 12);
     --shadow-primary: rgb(255, 107, 243);
     --primary-hue: 0;
     --primary-lightness: 50;
     --color: hsl(0, 0%, 100%);
+    // --color: hsl(123, 97%, 63%);
     --font-size: 26px;
     --shadow-primary-hue: 180;
     --label-size: 9px;
@@ -415,7 +417,8 @@ body .cybr-text+.cybr-text {
     // letter-spacing: 0px;
     color: var(--color);
     cursor: default;
-    background: transparent;
+    // background: transparent;
+    
     max-width: 40vw;
     outline: transparent;
     letter-spacing: 2px;
@@ -427,6 +430,60 @@ body .cybr-text+.cybr-text {
     padding-left: 20px;
     transition: background 0.2s;
     
+    
+}
+
+.terminal-effect{
+    color: hsl(0, 0%, 99%);
+}
+.cybr-text-light{
+    background: radial-gradient(circle at center, rgba(79, 90, 80, 0.123) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.terminal-effect::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(rgb(44, 44, 44), 0.15),
+        transparent 1px,
+        rgba(rgb(28, 139, 84), 0.15) 3px,
+        
+        transparent 1px
+    );
+    clip-path: var(--clip);
+    z-index: 2;
+}
+
+.terminal-cursor{
+    // content: "";
+    // position: absolute;
+    position: relative;
+    display:inline-block;
+    // right: 0;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
+    bottom: -2px;
+    left: 4px;
+    width: 2px !important;
+    height: 1.0em;
+    background-color: hsl(0, 0%, 100%);
+    animation: cursor-blink 1.0s step-end infinite;
+}
+
+
+@keyframes cursor-blink {
+    from, to {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
 }
 
 .cybr-text:after {
@@ -437,7 +494,7 @@ body .cybr-text+.cybr-text {
     right: 0;
     bottom: 0;
     clip-path: var(--clip);
-    z-index: -1;
+    z-index: -2;
 }
 
 // .cybr-text:before {
@@ -467,7 +524,7 @@ body .cybr-text+.cybr-text {
     width: 102%;
     clip-path: var(--clip);
     background: linear-gradient(-45deg, #23a6d5, #d523bd);
-    z-index: -1;
+    z-index: -3;
     animation: gradientAnimation 4s ease infinite;
     background-size: 400% 400%;
 }
@@ -486,6 +543,7 @@ body .cybr-text+.cybr-text {
 
 .cybr-text:after {
     background: var(--primary);
+    // background: radial-gradient(circle at center, rgba(110, 255, 153, 0.123) 0%, black 100%);
 }
 
 .cybr-text__glitch {

@@ -57,7 +57,7 @@ params:
 
     sidebar:
         emoji: ⭐
-        subtitle: I write notes here during my free time.
+        subtitle: "> I write notes here during my free time."
         avatar:
             enabled: true
             local: true

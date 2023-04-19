@@ -51,13 +51,16 @@
         {{ end }}
         
         <h1 class="glitch" data-text="Roykesydon" style=""><a href="{{ .Site.BaseURL | relLangURL }}">{{ .Site.Title }}</a></h1>
-        <div class="site-meta cybr-text">
-            <!-- <h1 class="site-name" data-text="Roykesydon" ><a href="{{ .Site.BaseURL | relLangURL }}">{{ .Site.Title }}</a></h1> -->
-            
-            {{ .Site.Params.sidebar.subtitle }}
-            <!-- <h2 class="site-description cybr-text__glitch">{{ .Site.Params.sidebar.subtitle }}</h2> -->
-            
-            <!-- <h2 class="glitch-description" data-text="{{ .Site.Params.sidebar.subtitle }}">{{ .Site.Params.sidebar.subtitle }}</h2> -->
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                <!-- <h1 class="site-name" data-text="Roykesydon" ><a href="{{ .Site.BaseURL | relLangURL }}">{{ .Site.Title }}</a></h1> -->
+                <div class="terminal-effect" data-text="{{ .Site.Params.sidebar.subtitle }}">
+                    {{ .Site.Params.sidebar.subtitle }}<span class="terminal-cursor"></span>
+                </div>
+                <!-- <h2 class="site-description cybr-text__glitch">{{ .Site.Params.sidebar.subtitle }}</h2> -->
+                
+                <!-- <h2 class="glitch-description" data-text="{{ .Site.Params.sidebar.subtitle }}">{{ .Site.Params.sidebar.subtitle }}</h2> -->
+            </div>
         </div>
     </header>
 
