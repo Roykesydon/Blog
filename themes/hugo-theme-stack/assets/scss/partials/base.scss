@@ -20,6 +20,9 @@ body {
     font-size: 1.6rem;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
 }
 
 body::before {
@@ -66,16 +69,22 @@ body::before {
 
 
 @import url('https://fonts.googleapis.com/css2?family=Almarai&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300&display=swap');
 
 .menu-custom {
-    font-family: 'Almarai', sans-serif;
+    // font-family: 'Almarai', sans-serif;
+    font-family: 'Orbitron', sans-serif;
+    // font-family: 'Exo 2', sans-serif;
+    letter-spacing: 2px;
     position: relative;
     height: 100%;
     // width: 5em;
     // left: 5px;
-    font-size: 1.6em;
+    font-size: 1.4em;
     color: transparent;
     opacity: 1;
+    font-weight: 300;
     -webkit-text-stroke: 0.02em var(--color);
     // color: rgba(79, 220, 255, 0.849)
     // color: rgba(204, 245, 255, 0.932);
@@ -108,12 +117,16 @@ body::before {
 }
 
 .current-menu-custom {
-    font-family: 'Almarai', sans-serif;
+    // font-family: 'Almarai', sans-serif;
+    font-family: 'Orbitron', sans-serif;
+    // font-family: 'Exo 2', sans-serif;
+    letter-spacing: 2px;
+    font-weight: 300;
     position: relative;
     height: 100%;
     // width: 5em;
     // left: 5px;
-    font-size: 1.6em;
+    font-size: 1.4em;
     font-weight: 100;
     color: transparent;
     opacity: 1;

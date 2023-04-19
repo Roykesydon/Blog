@@ -11,7 +11,7 @@ Issue 雖然理論上 q 可以任意選，只要不要 q(x) 是 0 的時候 p(x)
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/proximal-policy-optimizationppo/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.dcbb0051730e2715f0a9890207ed654fb83f1b4fe8c92139b3c58177c520aa1d.css"><meta property='og:title' content='Proximal Policy Optimization(PPO)'>
+<link rel="stylesheet" href="/Blog/scss/style.min.979b2c7c55b0dbb03711d9a37e366fc241ce474c88cbc4e6c524d80c12c66a7a.css"><meta property='og:title' content='Proximal Policy Optimization(PPO)'>
 <meta property='og:description' content='On/Off-policy On-policy 學習的 agent 和與環境互動的 agent 是同一個 Off-policy 學習的 agent 和與環境互動的 agent 是不同個 想從 On-policy 轉 Off-policy On-policy 每次都要重新蒐集資料，很花時間 由另一個 $\pi_{\theta^{&amp;rsquo;}}$ 去 train $\theta$，$\theta^{&amp;rsquo;}$是固定的，所以我們可以 re-use sample data Importance Sampling 是一個 general 的想法，不限於 RL
 $E_{x \text{\textasciitilde} p}[f(x)]\approx \frac{1}{N}\displaystyle\sum_{i=1}^N f(x^i)$
 $x^i$ is sampled from p(x) 我們遇到的問題是沒辦法從 p 來 sample data，只能透過 q(x) 去 sample $x^i$
