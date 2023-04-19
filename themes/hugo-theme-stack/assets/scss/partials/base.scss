@@ -29,9 +29,14 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.40);
+    // background: linear-gradient(to bottom, #00000068, #00000068, #00000068, #00000068, #53ddff23);
+    // background: #00000068;
     z-index: -1;
 }
+
+
+
 
 /* scrollbar styles for Firefox */
 * {

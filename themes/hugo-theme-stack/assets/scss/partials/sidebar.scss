@@ -411,6 +411,7 @@ body .cybr-text+.cybr-text {
     line-height: 1.3em;
     padding: 10px;
     transition: background 0.2s;
+    
 }
 
 .cybr-text:after {
@@ -424,20 +425,48 @@ body .cybr-text+.cybr-text {
     z-index: -1;
 }
 
-.cybr-text:before {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    right: 0;
-    bottom: -3px;
-    clip-path: var(--clip);
-    z-index: -1;
-}
+// .cybr-text:before {
+//     content: '';
+//     position: absolute;
+//     top: 3px;
+//     left: 3px;
+//     right: 0;
+//     bottom: -3px;
+//     clip-path: var(--clip);
+//     z-index: -1;
+// }
+
+// .cybr-text:before {
+//     background: var(--shadow-primary);
+//     transform: translate(var(--border), 0);
+// }
 
 .cybr-text:before {
-    background: var(--shadow-primary);
-    transform: translate(var(--border), 0);
+    content: "";
+    position: absolute;
+    top: -2%;
+    left: -1%;
+    right: 0;
+    bottom: 0;
+    height: 104%;
+    width: 102%;
+    clip-path: var(--clip);
+    background: linear-gradient(-45deg, #23a6d5, #d523bd);
+    z-index: -1;
+    animation: gradientAnimation 4s ease infinite;
+    background-size: 400% 400%;
+}
+    
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .cybr-text:after {
@@ -557,6 +586,29 @@ body .cybr-text+.cybr-text {
     --primary-hue: 260;
 }
 
+/**/
+
+/*typing*/
+.typing {
+    position: relative;
+    &::after {
+        content: "|";
+        position: absolute;
+        right: 0;
+        width: 100%;
+        color: white;
+        // background: transparent;
+        animation: typing 5s steps(3) forwards,
+            caret 1s infinite;
+    }
+}
+// Animation
+@keyframes typing {
+    to { width: 0 }
+}
+@keyframes caret {
+    50% { color: transparent }
+}
 /**/
 
 /* emoji image*/
