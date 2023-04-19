@@ -410,8 +410,9 @@ body .cybr-text+.cybr-text {
     --clip-six: polygon(0 40%, 100% 40%, 100% 85%, 95% 85%, 95% 85%, 85% 85%, 85% 85%, 8% 85%, 0 70%);
     --clip-seven: polygon(0 63%, 100% 63%, 100% 80%, 95% 80%, 95% 80%, 85% 80%, 85% 80%, 8% 80%, 0 70%);
     // font-family: 'Almarai', sans-serif;
-    font-family: 'Orbitron', sans-serif;
-    letter-spacing: 0px;
+    // font-family: 'Orbitron', sans-serif;
+    font-family: 'Poppins', sans-serif;
+    // letter-spacing: 0px;
     color: var(--color);
     cursor: default;
     background: transparent;
@@ -419,7 +420,7 @@ body .cybr-text+.cybr-text {
     outline: transparent;
     letter-spacing: 2px;
     position: relative;
-    font-weight: 300;
+    font-weight: 400;
     border: 0;
     line-height: 1.3em;
     padding: 10px;
