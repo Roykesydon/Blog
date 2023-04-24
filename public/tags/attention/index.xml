@@ -6,7 +6,182 @@
         <description>Recent content in attention on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Fri, 14 Apr 2023 01:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/attention/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 24 Apr 2023 01:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/attention/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Relative Position 介紹 &#43; 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/relative-position-%E4%BB%8B%E7%B4%B9--%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Mon, 24 Apr 2023 01:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/relative-position-%E4%BB%8B%E7%B4%B9--%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;h2 id=&#34;說明&#34;&gt;說明&lt;/h2&gt;
+&lt;p&gt;本文寫於 &lt;a class=&#34;link&#34; href=&#34;https://roykesydon.github.io/Blog/p/swin-transformer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Swin Transformer 論文閱讀&lt;/a&gt; 之後，當時對 Relatvie position 的理解不夠清楚，本文將會做解釋，並附上原論文的筆記。&lt;/p&gt;
+&lt;p&gt;以下將會先用長度為 3 的序列作為示範。&lt;/p&gt;
+&lt;h3 id=&#34;absolute-position-encodings&#34;&gt;Absolute Position Encodings&lt;/h3&gt;
+&lt;p&gt;Absolute Position Encodings 的做法是把用某種方式生成或可學習的向量加在輸入，第一個位置用 $w_1$，第二個位置用 $w_2$，第三個位置用 $w_3$。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/relative-position/abs-pos.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;relative-position-encodings&#34;&gt;Relative Position Encodings&lt;/h3&gt;
+&lt;p&gt;Relative Position Encodings 顧名思義，就是改用相對位置來做這些向量。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/relative-position/rel-pos.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;上圖中，Position Encoding 的部分從 3 個向量變成 3*3 個向量，因為現在會以每個 token 為基準，生出 3 個相對位置向量。&lt;/p&gt;
+&lt;p&gt;我們以 $w_0$，代表處於原點，$w_x$ 代表往右 $x$ 格，$w_{-x}$ 代表往左 $x$ 格，其中 $x$ 是正整數。&lt;/p&gt;
+&lt;p&gt;第一個 row 有 $w_0$、$w_1$、$w_2$，意思是以第 0 個向量 (I) 為基準，他的位置是 $w_0$，對第 0 個向量來說，第 1 個向量 (like) 是 $w_1$，第 2 個向量 (cat) 是 $w_2$。&lt;/p&gt;
+&lt;p&gt;輪流以 $n$ 個 token 為基準，就會生出 n*n 個相對位置向量，而不是原先的 n 個絕對位置向量。&lt;/p&gt;
+&lt;p&gt;其中 $w_i$ 和 $w_j$ 如果 $i=j$，他們會共用同樣的 weight，上圖是以相同顏色表示。&lt;/p&gt;
+&lt;p&gt;如果序列長度是 $n$，就會有 $2n-1$ 個向量要學。&lt;/p&gt;
+&lt;p&gt;n*n 這個數量使其適合加入到 self-attention，原始論文的加入方式可以參考下方論文筆記，這邊晚點會介紹後續衍生的簡化版。&lt;/p&gt;
+&lt;h3 id=&#34;swin-transformer-如何導入-relative-position-encodings&#34;&gt;Swin Transformer 如何導入 Relative Position Encodings&lt;/h3&gt;
+&lt;p&gt;Swin Transformer 是借鑒許多 CNN 架構，為了 CV 而經過修改的 vision transformer。&lt;/p&gt;
+&lt;p&gt;其中一個重點是，他會在一小區塊的特徵圖上做 self-attention，而且是用 Relative Position Encodings。&lt;/p&gt;
+&lt;p&gt;和剛剛的差別在於，現在要在二維空間做 Relative Position Encodings。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/relative-position/rel-pos-2d-1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;假設有一張 2*2 的 feature map，我們先設定好 feature map 各個 token 的絕對位置座標。&lt;/p&gt;
+&lt;p&gt;然後我們輪流把 feature map 的每一個 token 作為基準點，把 feature map 的每個 token 的座標減去基準點的座標，就可以得到相對位置座標。&lt;/p&gt;
+&lt;p&gt;如果我們把四個相對位置座標各別攤平 (按照左上 -&amp;gt; 右上 -&amp;gt; 左下 -&amp;gt; 右下的順序)，並且從上到下排好，他會看起來如下圖。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/relative-position/rel-pos-2d-2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;此時我們幾乎完成了相對位置的表，和剛剛序列一樣生出了 n*n 個相對位置。&lt;/p&gt;
+&lt;p&gt;我們接下來要做的事情是把這個表給編號，把 (0, 0) 都編成某個數字，把 (1, 0) 都編成某個數字。&lt;/p&gt;
+&lt;p&gt;在此之前，先考慮總共會有幾種可能的相對座標，對於邊長 $M$ 的 feature map (這裡 M=2)，因為兩軸可能的數字皆有 (2M-1) 種，共會有 (2M-1)*(2M-1) 種可能性，這裡等於 9。&lt;/p&gt;
+&lt;p&gt;所以我們等等會把所有座標編為 0~8。&lt;/p&gt;
+&lt;p&gt;想從座標生出編號 0~8 可以考慮把座標兩軸的數字相加，但由於有負數的存在，要先把兩軸的數字都變成非負整數，所以先把兩軸的座標都各別加 M-1。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/relative-position/rel-pos-2d-3.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;此時如果相加，會使 (2, 1) 和 (1, 2) 都對應到數字 3，所以我們先把 row 座標乘上 2M-1 再相加，此時就可以獲得一個 n*n 的 index table ，對應一組相對位置向量。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/relative-position/rel-pos-2d-4.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Swin Transformer 是用簡化版的作法來引入相對位置，公式如下&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$Attention(Q,K,V)=SoftMax(QK^T/\sqrt{d}+B)V$
+&lt;ul&gt;
+&lt;li&gt;$B$ 是 relative position bias，$B \in R^{M^2 * M^2}$&lt;/li&gt;
+&lt;li&gt;$a_{ij}$ 是純量，不是向量，和原始論文不同&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;論文出處&#34;&gt;論文出處&lt;/h2&gt;
+&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/pdf/1803.02155.pdf&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Self-Attention with Relative Position Representations&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;依賴於 attention 機制的 Transformer 在機器翻譯方面取得 SOTA，但在結構中沒有相對或絕對的位置資訊，他需要在輸入中添加絕對位置的資訊。&lt;/p&gt;
+&lt;p&gt;因此本文提出一種替代方案，拓展 self-attention ，考慮相對位置的表示，並在一些任務中獲得更好的結果。&lt;/p&gt;
+&lt;p&gt;值得一題的事，作者觀察到結合相對和絕對位置不會進一步提高翻譯品質。&lt;/p&gt;
+&lt;p&gt;該機制可以拓展到任意 graph-labeled 的輸入&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Non-recurrent models 不一定按順序考慮輸入元素，因此可能需要明確的 position encoding 才才能用序列順序。&lt;/p&gt;
+&lt;p&gt;一種常見的方法是使用與輸入元素結合的 position encoding，以向模型傳達位置資訊。&lt;/p&gt;
+&lt;p&gt;可以是 deterministic function，或是 learned representations。&lt;/p&gt;
+&lt;p&gt;CNN 可以捕捉 kernel 的相對位置資訊，但被證明仍受益於 position encoding。&lt;/p&gt;
+&lt;p&gt;對於既不使用卷積也不使用遞歸的 Transformer，結合位置信息的 representation 是一個特別重要的考慮因素，因為該模型在其他方面對序列排序完全不變。&lt;/p&gt;
+&lt;p&gt;本文提出一種將相對位置合併到 Transformer 的 self-attention 的做法，即使完全換掉絕對位置編碼，也使兩個機器翻譯任務的品質有顯著提高。&lt;/p&gt;
+&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;原始 self-attention&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$z_i=\displaystyle\sum_{j=1}^n\alpha_{ij}(x_jW^V)$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$\alpha_{ij}=\frac{\text{exp } e_{ij}}{\sum_{k=1}^n\text{exp } e_{ik}}$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$e_{ij}=\frac{(x_iW^Q)(x_jW^K)^T}{\sqrt{d_z}}$&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;proposed-architecture&#34;&gt;Proposed Architecture&lt;/h2&gt;
+&lt;h3 id=&#34;relation-aware-self-attention&#34;&gt;Relation-aware Self-Attention&lt;/h3&gt;
+&lt;p&gt;有兩個要引入 relative position 的地方，而且都是向量&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$z_i = \displaystyle\sum_{j=1}^n \alpha_{ij}(x_jW^V+a_{ij}^V)$&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;$e_{ij}=\frac{x_iW^Q(x_jW^K+a_{ij}^K)^T}{\sqrt{d_z}}$&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/relative-position/fig1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;relative-position-representations&#34;&gt;Relative Position Representations&lt;/h3&gt;
+&lt;p&gt;可以引入 clip，把線性序列中，高於長度 k 的修剪成最大值&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$a_{ij}^K=w_{clip(j-i,k)}^K$&lt;/li&gt;
+&lt;li&gt;$a_{ij}^V=w_{clip(j-i,k)}^V$&lt;/li&gt;
+&lt;li&gt;$clip(x,k)=max(-k,min(k,x))$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;experiments&#34;&gt;Experiments&lt;/h2&gt;
+&lt;h3 id=&#34;model-variations&#34;&gt;Model Variations&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;clipping 的實驗
+&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/relative-position/table2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;V 和 K 的 ablation study
+&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/relative-position/table3.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>Swin Transformer 論文閱讀</title>
         <link>https://roykesydon.github.io/Blog/p/swin-transformer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
         <pubDate>Fri, 14 Apr 2023 01:08:46 +0800</pubDate>

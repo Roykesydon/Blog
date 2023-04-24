@@ -11,7 +11,7 @@ Issue 雖然理論上 q 可以任意選，只要不要 q(x) 是 0 的時候 p(x)
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/proximal-policy-optimizationppo/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.0fc73899c0de6e4da2bf9e39e2bb3b3743840b404dc69827cada910b655d45eb.css"><meta property='og:title' content='Proximal Policy Optimization(PPO)'>
+<link rel="stylesheet" href="/Blog/scss/style.min.7b1914ebdbb06cc6a6a87376d32e725891dfd35584c83eb3098cf39f88a868ee.css"><meta property='og:title' content='Proximal Policy Optimization(PPO)'>
 <meta property='og:description' content='On/Off-policy On-policy 學習的 agent 和與環境互動的 agent 是同一個 Off-policy 學習的 agent 和與環境互動的 agent 是不同個 想從 On-policy 轉 Off-policy On-policy 每次都要重新蒐集資料，很花時間 由另一個 $\pi_{\theta^{&amp;rsquo;}}$ 去 train $\theta$，$\theta^{&amp;rsquo;}$是固定的，所以我們可以 re-use sample data Importance Sampling 是一個 general 的想法，不限於 RL
 $E_{x \text{\textasciitilde} p}[f(x)]\approx \frac{1}{N}\displaystyle\sum_{i=1}^N f(x^i)$
 $x^i$ is sampled from p(x) 我們遇到的問題是沒辦法從 p 來 sample data，只能透過 q(x) 去 sample $x^i$
@@ -651,12 +651,12 @@ clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\vareps
             
                 
 <article class="">
-    <a href="/Blog/p/swin-transformer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/relative-position-%E4%BB%8B%E7%B4%B9--%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Swin Transformer 論文閱讀</h2>
+            <h2 class="article-title">Relative Position 介紹 &#43; 論文閱讀</h2>
         </div>
     </a>
 </article>
@@ -664,12 +664,12 @@ clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\vareps
             
                 
 <article class="">
-    <a href="/Blog/p/git-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/swin-transformer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">GIT 論文閱讀</h2>
+            <h2 class="article-title">Swin Transformer 論文閱讀</h2>
         </div>
     </a>
 </article>

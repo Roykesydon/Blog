@@ -394,7 +394,7 @@ body .cybr-text+.cybr-text {
     --shadow-primary: rgb(255, 107, 243);
     --primary-hue: 0;
     --primary-lightness: 50;
-    --color: hsl(0, 0%, 100%);
+    // --color: hsl(0, 93%, 58%);
     // --color: hsl(123, 97%, 63%);
     --font-size: 26px;
     --shadow-primary-hue: 180;
@@ -472,7 +472,7 @@ body .cybr-text+.cybr-text {
     left: 4px;
     width: 2px !important;
     height: 1.0em;
-    background-color: hsl(0, 0%, 100%);
+    background-color: hsla(0, 0%, 99%, 0.541);
     animation: cursor-blink 1.0s step-end infinite;
 }
 
