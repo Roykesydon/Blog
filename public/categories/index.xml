@@ -6,7 +6,15 @@
         <description>Recent content in Categories on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 24 Apr 2023 01:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 25 Apr 2023 14:26:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Software Engineering</title>
+        <link>https://roykesydon.github.io/Blog/categories/software-engineering/</link>
+        <pubDate>Tue, 25 Apr 2023 14:26:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/categories/software-engineering/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/software-engineering.jpg" alt="Featured image of post Software Engineering" /&gt;</description>
+        </item>
+        <item>
         <title>Deep Learning</title>
         <link>https://roykesydon.github.io/Blog/categories/deep-learning/</link>
         <pubDate>Mon, 24 Apr 2023 01:08:46 +0800</pubDate>
@@ -21,14 +29,6 @@
         
         <guid>https://roykesydon.github.io/Blog/categories/embedded-system/</guid>
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/embedded-system.jpg" alt="Featured image of post Embedded System" /&gt;</description>
-        </item>
-        <item>
-        <title>Software Engineering</title>
-        <link>https://roykesydon.github.io/Blog/categories/software-engineering/</link>
-        <pubDate>Tue, 14 Mar 2023 10:26:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/categories/software-engineering/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/software-engineering.jpg" alt="Featured image of post Software Engineering" /&gt;</description>
         </item>
         <item>
         <title>CTF</title>
