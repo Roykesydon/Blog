@@ -2,30 +2,24 @@
 <html lang="en-us" dir="ltr">
 
 <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='介紹 試用 STM32 UART 功能
-會透過 RealTerm 和 STM32L476RG 溝通，並用 DMA 接收訊息
-根據 User manual，USART2 預設會連接 ST-LINK，要連接外部設備的話要修改 solder bridge
-ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous Parameters Settings 可以設置各種資訊 Baud Rate Word Length Parity Stop Bits DMA Setting Add 一個 RX Mode 改成 circular，並打開 memory 的 increment address increment address 是因為資料是用 array 存 circular 是當資料滿了後，會回到 zero position NVIC Setting 設置 DMA 應該就會自動設置一個 interrupt，檢查一下 程式碼 發送
-1 2 uint8_t myTxData[13] = &amp;#34;Hello World\r\n&amp;#34;; HAL_UART_Transmit(&amp;amp;huart2, myTxData, 13, 10); 接收'>
-<title>STM32 UART 實驗</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='重構 在不改變軟體行為的情況下，對軟體內部構造進行改善
+Code Smell 也稱 Bad Smell，代表程式碼中需要重構的部分
+Duplicated Code 重複程式碼 在同個 Class Extract Method 在不同 Class Extract Class Long Method 用 Extract Method 拆解過長的 function Long Parameter List Preserve Whole Object 把來自同一物件的資料直接該物件取代 Introduce Parameter Object 把相關的資料包成一個 Object Large Class 一個 Class 有太多 fields / methods / lines Magic Number 特殊數值直接用數字表示，日後修改每個地方都要改 Lack of Comments 加註解的好時機：寫程式前寫上 Switch Statements 可利用「多型 (Polymorphism)」解決 Divergent Change 一個類別有太多改變的原因 盡量讓其遵守 SRP Shotgun Surgery 某個責任被分散到大量的 Class 身上，使修改其時要大量修改 Feature Envy 存取別的 Object 的 Data 的情形比自己的還頻繁 這方法可能應該屬於另一個 Object Data Clumps 常一起出現的資料群應該被單獨抽成一個 Class Primitive Obsession 過度使用基本類別，造成 Shotgun Surgery Message Chains Client 請求 A 物件，A 物件又請求 B 物件 Lazy Class 把冗員類別移除 Temporary Field Instance variable 只有在特殊情形才被使用，應該改為區域變數或參數 Inappropriate Intimacy Classes 間頻繁讀取對方資料 理解程式要同時看懂兩者 Alternative Classes with Different Interfaces 兩個 Class 具有功能相同、命名不同的 function 可汲取共同部分為 Super Class 來解決 '>
+<title>重構 Refactoring</title>
 
-<link rel='canonical' href='https://roykesydon.github.io/Blog/p/stm32-uart-%E5%AF%A6%E9%A9%97/'>
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/%E9%87%8D%E6%A7%8B-refactoring/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.36576e3a642572bad44f47c074a8cbba13e1f39a7bb51bc1cfc2e19bf93e7b25.css"><meta property='og:title' content='STM32 UART 實驗'>
-<meta property='og:description' content='介紹 試用 STM32 UART 功能
-會透過 RealTerm 和 STM32L476RG 溝通，並用 DMA 接收訊息
-根據 User manual，USART2 預設會連接 ST-LINK，要連接外部設備的話要修改 solder bridge
-ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous Parameters Settings 可以設置各種資訊 Baud Rate Word Length Parity Stop Bits DMA Setting Add 一個 RX Mode 改成 circular，並打開 memory 的 increment address increment address 是因為資料是用 array 存 circular 是當資料滿了後，會回到 zero position NVIC Setting 設置 DMA 應該就會自動設置一個 interrupt，檢查一下 程式碼 發送
-1 2 uint8_t myTxData[13] = &amp;#34;Hello World\r\n&amp;#34;; HAL_UART_Transmit(&amp;amp;huart2, myTxData, 13, 10); 接收'>
-<meta property='og:url' content='https://roykesydon.github.io/Blog/p/stm32-uart-%E5%AF%A6%E9%A9%97/'>
+<link rel="stylesheet" href="/Blog/scss/style.min.36576e3a642572bad44f47c074a8cbba13e1f39a7bb51bc1cfc2e19bf93e7b25.css"><meta property='og:title' content='重構 Refactoring'>
+<meta property='og:description' content='重構 在不改變軟體行為的情況下，對軟體內部構造進行改善
+Code Smell 也稱 Bad Smell，代表程式碼中需要重構的部分
+Duplicated Code 重複程式碼 在同個 Class Extract Method 在不同 Class Extract Class Long Method 用 Extract Method 拆解過長的 function Long Parameter List Preserve Whole Object 把來自同一物件的資料直接該物件取代 Introduce Parameter Object 把相關的資料包成一個 Object Large Class 一個 Class 有太多 fields / methods / lines Magic Number 特殊數值直接用數字表示，日後修改每個地方都要改 Lack of Comments 加註解的好時機：寫程式前寫上 Switch Statements 可利用「多型 (Polymorphism)」解決 Divergent Change 一個類別有太多改變的原因 盡量讓其遵守 SRP Shotgun Surgery 某個責任被分散到大量的 Class 身上，使修改其時要大量修改 Feature Envy 存取別的 Object 的 Data 的情形比自己的還頻繁 這方法可能應該屬於另一個 Object Data Clumps 常一起出現的資料群應該被單獨抽成一個 Class Primitive Obsession 過度使用基本類別，造成 Shotgun Surgery Message Chains Client 請求 A 物件，A 物件又請求 B 物件 Lazy Class 把冗員類別移除 Temporary Field Instance variable 只有在特殊情形才被使用，應該改為區域變數或參數 Inappropriate Intimacy Classes 間頻繁讀取對方資料 理解程式要同時看懂兩者 Alternative Classes with Different Interfaces 兩個 Class 具有功能相同、命名不同的 function 可汲取共同部分為 Super Class 來解決 '>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/%E9%87%8D%E6%A7%8B-refactoring/'>
 <meta property='og:site_name' content='Roykesydon'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='embedded-system' /><meta property='article:tag' content='stm32' /><meta property='article:tag' content='mcu' /><meta property='article:published_time' content='2023-04-09T01:32:54&#43;08:00'/><meta property='article:modified_time' content='2023-04-09T01:32:54&#43;08:00'/>
-<meta name="twitter:title" content="STM32 UART 實驗">
-<meta name="twitter:description" content="介紹 試用 STM32 UART 功能
-會透過 RealTerm 和 STM32L476RG 溝通，並用 DMA 接收訊息
-根據 User manual，USART2 預設會連接 ST-LINK，要連接外部設備的話要修改 solder bridge
-ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous Parameters Settings 可以設置各種資訊 Baud Rate Word Length Parity Stop Bits DMA Setting Add 一個 RX Mode 改成 circular，並打開 memory 的 increment address increment address 是因為資料是用 array 存 circular 是當資料滿了後，會回到 zero position NVIC Setting 設置 DMA 應該就會自動設置一個 interrupt，檢查一下 程式碼 發送
-1 2 uint8_t myTxData[13] = &amp;#34;Hello World\r\n&amp;#34;; HAL_UART_Transmit(&amp;amp;huart2, myTxData, 13, 10); 接收">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='software-engineering' /><meta property='article:tag' content='software-design' /><meta property='article:published_time' content='2023-04-25T14:26:17&#43;08:00'/><meta property='article:modified_time' content='2023-04-25T14:26:17&#43;08:00'/>
+<meta name="twitter:title" content="重構 Refactoring">
+<meta name="twitter:description" content="重構 在不改變軟體行為的情況下，對軟體內部構造進行改善
+Code Smell 也稱 Bad Smell，代表程式碼中需要重構的部分
+Duplicated Code 重複程式碼 在同個 Class Extract Method 在不同 Class Extract Class Long Method 用 Extract Method 拆解過長的 function Long Parameter List Preserve Whole Object 把來自同一物件的資料直接該物件取代 Introduce Parameter Object 把相關的資料包成一個 Object Large Class 一個 Class 有太多 fields / methods / lines Magic Number 特殊數值直接用數字表示，日後修改每個地方都要改 Lack of Comments 加註解的好時機：寫程式前寫上 Switch Statements 可利用「多型 (Polymorphism)」解決 Divergent Change 一個類別有太多改變的原因 盡量讓其遵守 SRP Shotgun Surgery 某個責任被分散到大量的 Class 身上，使修改其時要大量修改 Feature Envy 存取別的 Object 的 Data 的情形比自己的還頻繁 這方法可能應該屬於另一個 Object Data Clumps 常一起出現的資料群應該被單獨抽成一個 Class Primitive Obsession 過度使用基本類別，造成 Shotgun Surgery Message Chains Client 請求 A 物件，A 物件又請求 B 物件 Lazy Class 把冗員類別移除 Temporary Field Instance variable 只有在特殊情形才被使用，應該改為區域變數或參數 Inappropriate Intimacy Classes 間頻繁讀取對方資料 理解程式要同時看懂兩者 Alternative Classes with Different Interfaces 兩個 Class 具有功能相同、命名不同的 function 可汲取共同部分為 Super Class 來解決 ">
 </head>
 
 <body class="
@@ -286,19 +280,26 @@ ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#介紹">介紹</a></li>
-    <li><a href="#ioc-設置">ioc 設置</a></li>
-    <li><a href="#程式碼">程式碼</a></li>
-    <li><a href="#實驗">實驗</a>
+    <li><a href="#重構">重構</a></li>
+    <li><a href="#code-smell">Code Smell</a>
       <ol>
-        <li><a href="#realterm">RealTerm</a>
-          <ol>
-            <li><a href="#display">Display</a></li>
-            <li><a href="#port">Port</a></li>
-            <li><a href="#send">Send</a></li>
-          </ol>
-        </li>
-        <li><a href="#結果">結果</a></li>
+        <li><a href="#duplicated-code">Duplicated Code</a></li>
+        <li><a href="#long-method">Long Method</a></li>
+        <li><a href="#long-parameter-list">Long Parameter List</a></li>
+        <li><a href="#large-class">Large Class</a></li>
+        <li><a href="#magic-number">Magic Number</a></li>
+        <li><a href="#lack-of-comments">Lack of Comments</a></li>
+        <li><a href="#switch-statements">Switch Statements</a></li>
+        <li><a href="#divergent-change">Divergent Change</a></li>
+        <li><a href="#shotgun-surgery">Shotgun Surgery</a></li>
+        <li><a href="#feature-envy">Feature Envy</a></li>
+        <li><a href="#data-clumps">Data Clumps</a></li>
+        <li><a href="#primitive-obsession">Primitive Obsession</a></li>
+        <li><a href="#message-chains">Message Chains</a></li>
+        <li><a href="#lazy-class">Lazy Class</a></li>
+        <li><a href="#temporary-field">Temporary Field</a></li>
+        <li><a href="#inappropriate-intimacy">Inappropriate Intimacy</a></li>
+        <li><a href="#alternative-classes-with-different-interfaces">Alternative Classes with Different Interfaces</a></li>
       </ol>
     </li>
   </ol>
@@ -322,8 +323,8 @@ ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous
     
     <header class="article-category">
         
-            <a href="/Blog/categories/embedded-system/" style="background-color: #e17100; color: #fff;">
-                Embedded System
+            <a href="/Blog/categories/software-engineering/" style="background-color: #8a1337; color: #fff;">
+                Software Engineering
             </a>
         
     </header>
@@ -335,9 +336,9 @@ ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous
     
     
     
-    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/embedded-system.jpg');">
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/software-engineering.jpg');">
         <h2 class="article-title-custom">
-            <a href="/Blog/p/stm32-uart-%E5%AF%A6%E9%A9%97/">STM32 UART 實驗</a>
+            <a href="/Blog/p/%E9%87%8D%E6%A7%8B-refactoring/">重構 Refactoring</a>
         </h2>
         
     </div>
@@ -359,7 +360,7 @@ ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Apr 09, 2023</time>
+                <time class="article-time--published">Apr 25, 2023</time>
             </div>
         
 
@@ -374,7 +375,7 @@ ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous
 
 
                 <time class="article-time--reading">
-                    2 minute read
+                    1 minute read
                 </time>
             </div>
         
@@ -389,154 +390,104 @@ ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous
     <section class="article-content">
     
     
-    <h2 id="介紹">介紹</h2>
-<p>試用 STM32 UART 功能</p>
-<p>會透過 RealTerm 和 STM32L476RG 溝通，並用 DMA 接收訊息</p>
-<p>根據 User manual，USART2 預設會連接 ST-LINK，要連接外部設備的話要修改 solder bridge</p>
-<h2 id="ioc-設置">ioc 設置</h2>
+    <h2 id="重構">重構</h2>
+<p>在不改變軟體行為的情況下，對軟體內部構造進行改善</p>
+<h2 id="code-smell">Code Smell</h2>
+<p>也稱 Bad Smell，代表程式碼中需要重構的部分</p>
+<h3 id="duplicated-code">Duplicated Code</h3>
 <ul>
-<li>Connectivity 可以設置 USART2</li>
-<li>mode 從 disable 改選 Asynchronous</li>
-<li>Parameters Settings 可以設置各種資訊
+<li>重複程式碼
 <ul>
-<li>Baud Rate</li>
-<li>Word Length</li>
-<li>Parity</li>
-<li>Stop Bits</li>
+<li>在同個 Class
+<ul>
+<li>Extract Method</li>
 </ul>
 </li>
-<li>DMA Setting
+<li>在不同 Class
 <ul>
-<li>Add 一個 RX
-<ul>
-<li>Mode 改成 circular，並打開 memory 的 increment address
-<ul>
-<li>increment address 是因為資料是用 array 存</li>
-<li>circular 是當資料滿了後，會回到 zero position</li>
+<li>Extract Class</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-</li>
-<li>NVIC Setting
+<h3 id="long-method">Long Method</h3>
 <ul>
-<li>設置 DMA 應該就會自動設置一個 interrupt，檢查一下</li>
+<li>用 Extract Method 拆解過長的 function</li>
+</ul>
+<h3 id="long-parameter-list">Long Parameter List</h3>
+<ul>
+<li>Preserve Whole Object
+<ul>
+<li>把來自同一物件的資料直接該物件取代</li>
 </ul>
 </li>
-</ul>
-<h2 id="程式碼">程式碼</h2>
-<p>發送</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">uint8_t</span> <span class="n">myTxData</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#34;Hello World</span><span class="se">\r\n</span><span class="s">&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="nf">HAL_UART_Transmit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart2</span><span class="p">,</span> <span class="n">myTxData</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>接收</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">UART_HandleTypeDef</span> <span class="n">huart2</span><span class="p">;</span> <span class="c1">// generated code
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl"><span class="kt">uint8_t</span> <span class="n">myRxData</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl"><span class="nf">HAL_UART_Receive_DMA</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart2</span><span class="p">,</span> <span class="n">myRxData</span><span class="p">,</span> <span class="mi">20</span><span class="p">);</span> <span class="c1">// 在 Init 後，在 main 中執行一次就好
-</span></span></span></code></pre></td></tr></table>
-</div>
-</div><p>interrupt</p>
-<p>在 hal_uart.c 有</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">__weak</span> <span class="kt">void</span> <span class="nf">HAL_UART_RxCpltCallback</span><span class="p">(</span><span class="n">UART_HandleTypeDef</span> <span class="o">*</span><span class="n">huart</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="cm">/* Prevent unused argument(s) compilation warning */</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">UNUSED</span><span class="p">(</span><span class="n">huart</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="cm">/* NOTE : This function should not be modified, when the callback is needed,
-</span></span></span><span class="line"><span class="cl"><span class="cm">            the HAL_UART_RxCpltCallback can be implemented in the user file.
-</span></span></span><span class="line"><span class="cl"><span class="cm">   */</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>當 DMA 滿了就會呼叫這個 function</p>
-<h2 id="實驗">實驗</h2>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">HAL_UART_RxCpltCallback</span><span class="p">(</span><span class="n">UART_HandleTypeDef</span> <span class="o">*</span><span class="n">huart</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="cm">/* Prevent unused argument(s) compilation warning */</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">UNUSED</span><span class="p">(</span><span class="n">huart</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="cm">/* NOTE : This function should not be modified, when the callback is needed,
-</span></span></span><span class="line"><span class="cl"><span class="cm">            the HAL_UART_RxCpltCallback can be implemented in the user file.
-</span></span></span><span class="line"><span class="cl"><span class="cm">   */</span>
-</span></span><span class="line"><span class="cl">  <span class="nf">HAL_UART_Transmit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">huart2</span><span class="p">,</span> <span class="n">myRxData</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>當 20 個 Bytes 儲存滿了就回傳資訊給電腦</p>
-<h3 id="realterm">RealTerm</h3>
-<h4 id="display">Display</h4>
+<li>Introduce Parameter Object
 <ul>
-<li>勾選 Half Duplex
-<ul>
-<li>發送的訊息會顯示綠色，接收的是黃色</li>
+<li>把相關的資料包成一個 Object</li>
 </ul>
 </li>
 </ul>
-<h4 id="port">Port</h4>
+<h3 id="large-class">Large Class</h3>
 <ul>
-<li>設置 Baud 和其他有的沒的</li>
-<li>選 open</li>
+<li>一個 Class 有太多 fields / methods / lines</li>
 </ul>
-<h4 id="send">Send</h4>
+<h3 id="magic-number">Magic Number</h3>
 <ul>
-<li>EOL 可以勾選 CRLF</li>
-<li>打一些文字後按 Send ASCII</li>
+<li>特殊數值直接用數字表示，日後修改每個地方都要改</li>
 </ul>
-<h3 id="結果">結果</h3>
-<p><img src="/Blog/images/embedding/stm32-uart/result.jpg"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p><a class="link" href="https://github.com/Roykesydon/STM32-Playground/tree/main/STM32-UART/uart_test"  target="_blank" rel="noopener"
-    >程式碼</a></p>
+<h3 id="lack-of-comments">Lack of Comments</h3>
+<ul>
+<li>加註解的好時機：寫程式前寫上</li>
+</ul>
+<h3 id="switch-statements">Switch Statements</h3>
+<ul>
+<li>可利用「多型 (Polymorphism)」解決</li>
+</ul>
+<h3 id="divergent-change">Divergent Change</h3>
+<ul>
+<li>一個類別有太多改變的原因</li>
+<li>盡量讓其遵守 SRP</li>
+</ul>
+<h3 id="shotgun-surgery">Shotgun Surgery</h3>
+<ul>
+<li>某個責任被分散到大量的 Class 身上，使修改其時要大量修改</li>
+</ul>
+<h3 id="feature-envy">Feature Envy</h3>
+<ul>
+<li>存取別的 Object 的 Data 的情形比自己的還頻繁</li>
+<li>這方法可能應該屬於另一個 Object</li>
+</ul>
+<h3 id="data-clumps">Data Clumps</h3>
+<ul>
+<li>常一起出現的資料群應該被單獨抽成一個 Class</li>
+</ul>
+<h3 id="primitive-obsession">Primitive Obsession</h3>
+<ul>
+<li>過度使用基本類別，造成 Shotgun Surgery</li>
+</ul>
+<h3 id="message-chains">Message Chains</h3>
+<ul>
+<li>Client 請求 A 物件，A 物件又請求 B 物件</li>
+</ul>
+<h3 id="lazy-class">Lazy Class</h3>
+<ul>
+<li>把冗員類別移除</li>
+</ul>
+<h3 id="temporary-field">Temporary Field</h3>
+<ul>
+<li>Instance variable 只有在特殊情形才被使用，應該改為區域變數或參數</li>
+</ul>
+<h3 id="inappropriate-intimacy">Inappropriate Intimacy</h3>
+<ul>
+<li>Classes 間頻繁讀取對方資料</li>
+<li>理解程式要同時看懂兩者</li>
+</ul>
+<h3 id="alternative-classes-with-different-interfaces">Alternative Classes with Different Interfaces</h3>
+<ul>
+<li>兩個 Class 具有功能相同、命名不同的 function</li>
+<li>可汲取共同部分為 Super Class 來解決</li>
+</ul>
 
 </section>
 
@@ -545,11 +496,9 @@ ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous
     
     <section class="article-tags">
         
-            <a href="/Blog/tags/embedded-system/">embedded-system</a>
+            <a href="/Blog/tags/software-engineering/">software-engineering</a>
         
-            <a href="/Blog/tags/stm32/">stm32</a>
-        
-            <a href="/Blog/tags/mcu/">mcu</a>
+            <a href="/Blog/tags/software-design/">software-design</a>
         
     </section>
 
@@ -595,12 +544,12 @@ ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous
             
                 
 <article class="">
-    <a href="/Blog/p/stm32-gpio-%E5%AF%A6%E9%A9%97/">
+    <a href="/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88%E5%8E%9F%E5%89%87/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">STM32 GPIO 實驗</h2>
+            <h2 class="article-title">軟體設計原則</h2>
         </div>
     </a>
 </article>
@@ -608,51 +557,12 @@ ioc 設置 Connectivity 可以設置 USART2 mode 從 disable 改選 Asynchronous
             
                 
 <article class="">
-    <a href="/Blog/p/stm32cubeide-%E5%9F%BA%E6%9C%AC%E9%96%8B%E7%99%BC%E4%BD%BF%E7%94%A8/">
+    <a href="/Blog/p/database-normalization/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">STM32CubeIDE 基本開發使用</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/arm-%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80%E4%BB%8B%E7%B4%B9/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">ARM 組合語言介紹</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-ii/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">電路學 - II</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-i/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">電路學 - I</h2>
+            <h2 class="article-title">Database Normalization</h2>
         </div>
     </a>
 </article>
