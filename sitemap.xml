@@ -3,13 +3,31 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://roykesydon.github.io/Blog/</loc>
-    <lastmod>2023-04-25T14:26:17+08:00</lastmod>
+    <lastmod>2023-04-26T01:32:54+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/categories/</loc>
-    <lastmod>2023-04-25T14:26:17+08:00</lastmod>
+    <lastmod>2023-04-26T01:32:54+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/categories/embedded-system/</loc>
+    <lastmod>2023-04-26T01:32:54+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/embedded-system/</loc>
+    <lastmod>2023-04-26T01:32:54+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/mcu/</loc>
+    <lastmod>2023-04-26T01:32:54+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/post/</loc>
-    <lastmod>2023-04-25T14:26:17+08:00</lastmod>
+    <lastmod>2023-04-26T01:32:54+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/stm32/</loc>
+    <lastmod>2023-04-26T01:32:54+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/p/stm32-gpio-%E4%BB%8B%E7%B4%B9/</loc>
+    <lastmod>2023-04-26T01:32:54+08:00</lastmod>
+  </url><url>
+    <loc>https://roykesydon.github.io/Blog/tags/</loc>
+    <lastmod>2023-04-26T01:32:54+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/categories/software-engineering/</loc>
     <lastmod>2023-04-25T14:26:17+08:00</lastmod>
@@ -18,9 +36,6 @@
     <lastmod>2023-04-25T14:26:17+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/tags/software-engineering/</loc>
-    <lastmod>2023-04-25T14:26:17+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/</loc>
     <lastmod>2023-04-25T14:26:17+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/p/%E9%87%8D%E6%A7%8B-refactoring/</loc>
@@ -56,20 +71,8 @@
     <loc>https://roykesydon.github.io/Blog/tags/electric-circuits/</loc>
     <lastmod>2023-04-10T00:00:54+08:00</lastmod>
   </url><url>
-    <loc>https://roykesydon.github.io/Blog/categories/embedded-system/</loc>
-    <lastmod>2023-04-10T00:00:54+08:00</lastmod>
-  </url><url>
     <loc>https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-ii/</loc>
     <lastmod>2023-04-10T00:00:54+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/embedded-system/</loc>
-    <lastmod>2023-04-09T01:32:54+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/mcu/</loc>
-    <lastmod>2023-04-09T01:32:54+08:00</lastmod>
-  </url><url>
-    <loc>https://roykesydon.github.io/Blog/tags/stm32/</loc>
-    <lastmod>2023-04-09T01:32:54+08:00</lastmod>
   </url><url>
     <loc>https://roykesydon.github.io/Blog/p/stm32-uart-%E5%AF%A6%E9%A9%97/</loc>
     <lastmod>2023-04-09T01:32:54+08:00</lastmod>

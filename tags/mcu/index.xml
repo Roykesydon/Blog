@@ -6,7 +6,203 @@
         <description>Recent content in mcu on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 09 Apr 2023 01:32:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/mcu/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 26 Apr 2023 01:32:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/mcu/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>STM32 GPIO 介紹</title>
+        <link>https://roykesydon.github.io/Blog/p/stm32-gpio-%E4%BB%8B%E7%B4%B9/</link>
+        <pubDate>Wed, 26 Apr 2023 01:32:54 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/stm32-gpio-%E4%BB%8B%E7%B4%B9/</guid>
+        <description>&lt;h2 id=&#34;memory-map&#34;&gt;Memory Map&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;CPU 對 I/O 操作方法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Port I/O
+&lt;ul&gt;
+&lt;li&gt;用特殊 CPU 指令&lt;/li&gt;
+&lt;li&gt;I/O 設備和記憶體不共享地址空間&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Memory-Mapped I/O
+&lt;ul&gt;
+&lt;li&gt;I/O 設備和記憶體共享地址空間&lt;/li&gt;
+&lt;li&gt;像一般控制記憶體&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;這塊記憶體具有四個責任&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Command&lt;/li&gt;
+&lt;li&gt;Status&lt;/li&gt;
+&lt;li&gt;Output Data&lt;/li&gt;
+&lt;li&gt;Input Data&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;gpio-結構&#34;&gt;GPIO 結構&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-gpio/gpio-structure.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;GPIO mode
+&lt;ul&gt;
+&lt;li&gt;Open-Drain
+&lt;ul&gt;
+&lt;li&gt;由外部電壓決定輸出電壓&lt;/li&gt;
+&lt;li&gt;Output Register 是 0 會啟用 N-MOS，1 的話靠外部電壓推
+&lt;ul&gt;
+&lt;li&gt;好處是外部電壓可以自己決定&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Push-Pull
+&lt;ul&gt;
+&lt;li&gt;由內部電壓決定輸出電壓&lt;/li&gt;
+&lt;li&gt;Output Register 是 0 或 1 會決定啟用 N-MOS 或是 P-MOS&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;有關-register&#34;&gt;有關 Register&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Clock enable register
+&lt;ul&gt;
+&lt;li&gt;AHB2 peripheral clock enable regisetr (RCC_AHB2ENR)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Control register
+&lt;ul&gt;
+&lt;li&gt;GPIO port mode register&lt;/li&gt;
+&lt;li&gt;GPIO port output type register&lt;/li&gt;
+&lt;li&gt;GPIO port output speed register&lt;/li&gt;
+&lt;li&gt;GPIO port pull-up/pull-down register&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Data register
+&lt;ul&gt;
+&lt;li&gt;Output&lt;/li&gt;
+&lt;li&gt;Input&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;使用-gpio&#34;&gt;使用 GPIO&lt;/h2&gt;
+&lt;p&gt;先去 Memory map 找 Boudary address&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-gpio/gpio-structure.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;根據 table 確認要設置的數值&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-gpio/table-39-1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-gpio/table-39-2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;設定 RCC enable&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-gpio/rcc-en.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;把上面說的各種 Control register 設定好&lt;/p&gt;
+&lt;p&gt;比如 PUPDR
+&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-gpio/PUPDR.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;BSRR&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;修改 ODR 會一次改到整個 GPIO port，若只要改某個 pin，可以用 BSRR&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Delay&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CPU 4 MHz
+&lt;ul&gt;
+&lt;li&gt;1 cycle = 0.25$\mu$S&lt;/li&gt;
+&lt;li&gt;可以查每個組合語言指令要幾個 cycle&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;機械按鈕會有 Bouncing&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Debounce
+&lt;ul&gt;
+&lt;li&gt;Hardware method
+&lt;ul&gt;
+&lt;li&gt;加上濾波電容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Software method
+&lt;ul&gt;
+&lt;li&gt;讀取後等待一段時間才再次讀取&lt;/li&gt;
+&lt;li&gt;連續讀取 N 次，看數值是否穩定改變&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;7-segment&#34;&gt;7-Segment&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;COM 分共陽、共陰&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;8 個七段顯示器就要吃掉 8 * 8 個 GPIO 接腳，可以每次只顯示一個，那只需要 8 個 GPIO 接腳，快速閃過&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;也可用 Max 7219 控制，他有三個輸入 DIN、LOAD、CLK&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;DIN 輸入資料&lt;/li&gt;
+&lt;li&gt;CLK 上升的時候採樣，最多 10 MHz&lt;/li&gt;
+&lt;li&gt;LOAD(CS) 採用最後輸進去的 16 bits
+&lt;ul&gt;
+&lt;li&gt;最早的是 MSB&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>STM32 UART 實驗</title>
         <link>https://roykesydon.github.io/Blog/p/stm32-uart-%E5%AF%A6%E9%A9%97/</link>
         <pubDate>Sun, 09 Apr 2023 01:32:54 +0800</pubDate>
@@ -171,7 +367,7 @@
         <description>&lt;h2 id=&#34;目的&#34;&gt;目的&lt;/h2&gt;
 &lt;p&gt;本文會試用 GPIO output / input / interrupt&lt;/p&gt;
 &lt;h2 id=&#34;gpio-架構&#34;&gt;GPIO 架構&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-gpio-lab/gpio-structure.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-gpio/gpio-structure.jpg&#34;
 	
 	
 	
@@ -315,7 +511,7 @@
 &lt;/div&gt;&lt;h2 id=&#34;interrupt&#34;&gt;Interrupt&lt;/h2&gt;
 &lt;p&gt;ioc 選個 pin，設定 GPIO_EXTI，這邊我選 B1(PC13)，也就是開發版上的藍色按鈕&lt;/p&gt;
 &lt;p&gt;可以選 GPIO mode，這邊選 Falling Edge Trigger，值得一提的是他的設計是上拉電阻，所以這樣不是放開後觸發，是按下後觸發。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-gpio-lab/b1.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-gpio/b1.jpg&#34;
 	
 	
 	
@@ -447,7 +643,7 @@
 &lt;p&gt;B1(PC13、藍色按鈕) 按下去的時候，會發出 interrupt，並讓 RED_LED(PC10) 輸出和上次相反的電位，讓麵包版上的紅色 LED 亮滅，正極那邊接一條杜邦線給 GREEN_LED_INPUT (PC12)，並且 LD2(PA5、板子上的綠色 LED) 會輸出和紅色 LED 相反的結果。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-gpio-lab/result1.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-gpio/result1.jpg&#34;
 	
 	
 	
@@ -455,7 +651,7 @@
 	
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-gpio-lab/result2.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-gpio/result2.jpg&#34;
 	
 	
 	
