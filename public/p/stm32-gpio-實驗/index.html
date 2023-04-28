@@ -17,7 +17,7 @@ User Label
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/stm32-gpio-%E5%AF%A6%E9%A9%97/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.36576e3a642572bad44f47c074a8cbba13e1f39a7bb51bc1cfc2e19bf93e7b25.css"><meta property='og:title' content='STM32 GPIO 實驗'>
+<link rel="stylesheet" href="/Blog/scss/style.min.8cf6878866d6cafaf506792e708d85a93cf2fc3d4c17ea51688a78e78febf6ed.css"><meta property='og:title' content='STM32 GPIO 實驗'>
 <meta property='og:description' content='目的 本文會試用 GPIO output / input / interrupt
 GPIO 架構 Output 介紹 在 ioc 那邊選個 pin，選 GPIO_Output
 在左邊欄位 System Core 選擇 GPIO
@@ -401,7 +401,7 @@ User Label
     <h2 id="目的">目的</h2>
 <p>本文會試用 GPIO output / input / interrupt</p>
 <h2 id="gpio-架構">GPIO 架構</h2>
-<p><img src="/Blog/images/embedding/stm32-gpio-lab/gpio-structure.jpg"
+<p><img src="/Blog/images/embedding/stm32-gpio/gpio-structure.jpg"
 	
 	
 	
@@ -545,7 +545,7 @@ User Label
 </div><h2 id="interrupt">Interrupt</h2>
 <p>ioc 選個 pin，設定 GPIO_EXTI，這邊我選 B1(PC13)，也就是開發版上的藍色按鈕</p>
 <p>可以選 GPIO mode，這邊選 Falling Edge Trigger，值得一提的是他的設計是上拉電阻，所以這樣不是放開後觸發，是按下後觸發。</p>
-<p><img src="/Blog/images/embedding/stm32-gpio-lab/b1.jpg"
+<p><img src="/Blog/images/embedding/stm32-gpio/b1.jpg"
 	
 	
 	
@@ -677,7 +677,7 @@ User Label
 <p>B1(PC13、藍色按鈕) 按下去的時候，會發出 interrupt，並讓 RED_LED(PC10) 輸出和上次相反的電位，讓麵包版上的紅色 LED 亮滅，正極那邊接一條杜邦線給 GREEN_LED_INPUT (PC12)，並且 LD2(PA5、板子上的綠色 LED) 會輸出和紅色 LED 相反的結果。</p>
 </li>
 </ul>
-<p><img src="/Blog/images/embedding/stm32-gpio-lab/result1.jpg"
+<p><img src="/Blog/images/embedding/stm32-gpio/result1.jpg"
 	
 	
 	
@@ -685,7 +685,7 @@ User Label
 	
 	
 ></p>
-<p><img src="/Blog/images/embedding/stm32-gpio-lab/result2.jpg"
+<p><img src="/Blog/images/embedding/stm32-gpio/result2.jpg"
 	
 	
 	
@@ -753,6 +753,19 @@ User Label
             
                 
 <article class="">
+    <a href="/Blog/p/stm32-gpio-%E4%BB%8B%E7%B4%B9/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">STM32 GPIO 介紹</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
     <a href="/Blog/p/stm32-uart-%E5%AF%A6%E9%A9%97/">
         
         
@@ -798,19 +811,6 @@ User Label
 
         <div class="article-details">
             <h2 class="article-title">電路學 - II</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-i/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">電路學 - I</h2>
         </div>
     </a>
 </article>

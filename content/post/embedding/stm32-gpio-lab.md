@@ -13,7 +13,7 @@ categories : ["embedded-system"]
 
 ## GPIO 架構
 
-![](/Blog/images/embedding/stm32-gpio-lab/gpio-structure.jpg)
+![](/Blog/images/embedding/stm32-gpio/gpio-structure.jpg)
 
 ## Output 介紹
 
@@ -94,7 +94,7 @@ ioc 選個 pin，設定 GPIO_EXTI，這邊我選 B1(PC13)，也就是開發版�
 
 可以選 GPIO mode，這邊選 Falling Edge Trigger，值得一提的是他的設計是上拉電阻，所以這樣不是放開後觸發，是按下後觸發。
 
-![](/Blog/images/embedding/stm32-gpio-lab/b1.jpg)
+![](/Blog/images/embedding/stm32-gpio/b1.jpg)
 
 ioc 的 System Core 的 NVIC 還要把 EXTI line[15:10] interrupts 給 enabled，然後 Code generation 打開 Generate IRQ handler，還有 Call HAL handler。
 
@@ -166,8 +166,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 - B1(PC13、藍色按鈕) 按下去的時候，會發出 interrupt，並讓 RED_LED(PC10) 輸出和上次相反的電位，讓麵包版上的紅色 LED 亮滅，正極那邊接一條杜邦線給 GREEN_LED_INPUT (PC12)，並且 LD2(PA5、板子上的綠色 LED) 會輸出和紅色 LED 相反的結果。
 
-![](/Blog/images/embedding/stm32-gpio-lab/result1.jpg)
+![](/Blog/images/embedding/stm32-gpio/result1.jpg)
 
-![](/Blog/images/embedding/stm32-gpio-lab/result2.jpg)
+![](/Blog/images/embedding/stm32-gpio/result2.jpg)
 
 [程式碼](https://github.com/Roykesydon/STM32-Playground/tree/main/STM32-GPIO/gpio_testing)
