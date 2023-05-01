@@ -9,7 +9,7 @@ jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status fl
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/crack-simple-elf/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.8cf6878866d6cafaf506792e708d85a93cf2fc3d4c17ea51688a78e78febf6ed.css"><meta property='og:title' content='Crack simple ELF'>
+<link rel="stylesheet" href="/Blog/scss/style.min.323938b06228ecebeb017d0a6d49c113d742b8b78e553d1c133b72d1263204f7.css"><meta property='og:title' content='Crack simple ELF'>
 <meta property='og:description' content='Assembly language Control flow
 jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status flag 而 jump je 0x33 代表「如果 zero flag 是 1 就跳到 0x33」 call 是 unconditional GOTO，但會把下一個 address 放到 stack 那 RET instruction 可以晚點把它取出，並回到那邊 status flag
 在 register 上的多數 operation，比如加減法，會對 status flags 產生影響 只有很少的 status flags，而且他們通常存在在一個 special register 上 範例 zero flag 上個運算的結果是不是 0，在一些條件判斷很常用該 flag Register 從組合語言的角度來看，是一些有固定 size 的全域變數 special register Program Counter 記錄下個要執行的 instruction 別名 PC Intel x86 叫 Instruction Pointer 根據 16/32/64 bits，稱為 IP/EIP/RIP Stack pointer SP, ESP, RSP Base Pointer BP, EBP, RBP 繞過字串比對 該程式吃一個參數，比對是不是密碼'>
@@ -880,6 +880,11 @@ jumps, branches, calls jmp, jne, je, bne, be, call branch 就是根據 status fl
     <section class="powerby">
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
         Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
     </section>
 </footer>
 
