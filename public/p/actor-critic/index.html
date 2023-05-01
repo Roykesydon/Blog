@@ -11,7 +11,7 @@ $E[G_t^n]=Q^{\pi_\theta}(s_t^n,a_t^n)$ Q function 這樣定義 所以我們可�
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/actor-critic/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.8cf6878866d6cafaf506792e708d85a93cf2fc3d4c17ea51688a78e78febf6ed.css"><meta property='og:title' content='Actor-Critic'>
+<link rel="stylesheet" href="/Blog/scss/style.min.323938b06228ecebeb017d0a6d49c113d742b8b78e553d1c133b72d1263204f7.css"><meta property='og:title' content='Actor-Critic'>
 <meta property='og:description' content='Introduction 結合 policy-based 和 value-based
 A3C Actor-Critic 最知名的方法 Advantage Actor-Critic 是 A2C Advantage Actor-Critic Review: Policy gradient
 $\triangledown \overline{R_{\theta}}\approx \frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}(\displaystyle\sum_{t^{&amp;rsquo;}=t}^{T_n}\gamma^{t^{&amp;rsquo;}-t}r_{t^{&amp;rsquo;}}^n-b)\triangledown log p_{\theta}(a_t^n|s_t^n)$ $G_t^n=\displaystyle\sum_{t^{&amp;rsquo;}=t}^{T_n}\gamma^{t^{&amp;rsquo;}-t}r_{t^{&amp;rsquo;}}^n-b$ G very unstable，因為給同樣的 state 作同樣的 action 不一定會得到同樣的結果，G 是個 random variable 想要改獲得期望值，取代掉 sample 的值(G 的部分)，可以用 Q-Learning
@@ -597,12 +597,12 @@ $E[G_t^n]=Q^{\pi_\theta}(s_t^n,a_t^n)$ Q function 這樣定義 所以我們可�
             
                 
 <article class="">
-    <a href="/Blog/p/relative-position-%E4%BB%8B%E7%B4%B9--%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/self-instruct-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Relative Position 介紹 &#43; 論文閱讀</h2>
+            <h2 class="article-title">Self-Instruct 論文閱讀</h2>
         </div>
     </a>
 </article>
@@ -610,12 +610,12 @@ $E[G_t^n]=Q^{\pi_\theta}(s_t^n,a_t^n)$ Q function 這樣定義 所以我們可�
             
                 
 <article class="">
-    <a href="/Blog/p/swin-transformer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/relative-position-%E4%BB%8B%E7%B4%B9--%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Swin Transformer 論文閱讀</h2>
+            <h2 class="article-title">Relative Position 介紹 &#43; 論文閱讀</h2>
         </div>
     </a>
 </article>
@@ -640,6 +640,11 @@ $E[G_t^n]=Q^{\pi_\theta}(s_t^n,a_t^n)$ Q function 這樣定義 所以我們可�
     <section class="powerby">
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
         Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
     </section>
 </footer>
 

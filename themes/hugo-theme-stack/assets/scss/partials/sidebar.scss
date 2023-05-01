@@ -123,7 +123,7 @@ $update-steps: 20;
     text-shadow: -1px 0 red;
     top: 0;
     color: white;
-    background: rgb(20, 20, 20);
+    background: rgba(20, 20, 20,0);
     animation: noise-2 3s infinite linear forwards;
 }
 
@@ -134,7 +134,7 @@ $update-steps: 20;
     text-shadow: -1px 0 red;
     top: 0;
     color: white;
-    background: rgb(20, 20, 20);
+    background: rgba(20, 20, 20,0);
     animation: noise-2 3s infinite linear forwards;
 }
 
@@ -155,7 +155,7 @@ $update-steps: 20;
     text-align: center;
     top: 0;
     color: white;
-    background: rgb(20, 20, 20);
+    background: rgba(20, 20, 20,0);
     animation: noise 5s infinite linear alternate-reverse;
 }
 
@@ -169,7 +169,7 @@ $update-steps: 20;
     text-align: center;
     top: 0;
     color: white;
-    background: rgb(20, 20, 20);
+    background: rgba(20, 20, 20,0);
     animation: noise 5s infinite linear alternate-reverse;
 }
 

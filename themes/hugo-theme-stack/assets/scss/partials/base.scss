@@ -10,7 +10,7 @@ html {
 body {
     // background: var(--body-background);
     // background: "logo.png";
-    background-image: url("/Blog/images/background/kevin-laminto-7PqRZK6rbaE-unsplash.jpg");
+    background-image: url("/Blog/images/background/mountain_landscape15-0.png");
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -33,7 +33,8 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.40);
+    background: rgba(20, 20, 20, 0.5);
+    // background: linear-gradient(to bottom , rgba(0,0,0, 0.0), rgba(50, 50, 50, 0.50));
     // background: linear-gradient(to bottom, #00000068, #00000068, #00000068, #00000068, #53ddff23);
     // background: #00000068;
     z-index: -1;
@@ -142,10 +143,10 @@ body::before {
     content: attr(data-text);
     position: absolute;
     height: 100%;
-    // color: rgba(204, 245, 255, 0.932);
+    color: rgba(204, 245, 255, 0.932);
 
-    background: linear-gradient(to right, #3508ff 20%, #f700ff 40%, #1c0cff 60%, #eb13ff 80%);
-    animation: menu-text-gradient 5s linear infinite;
+    // background: linear-gradient(to right, #3508ff 20%, #f700ff 40%, #1c0cff 60%, #eb13ff 80%);
+    // animation: menu-text-gradient 5s linear infinite;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;

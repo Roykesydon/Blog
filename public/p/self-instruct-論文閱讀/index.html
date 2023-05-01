@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: Self-Instruct: Aligning Language Model with Self Generated Instructions
+Abstract 大型 &amp;ldquo;instruction-tuned&amp;rdquo; 語言模型 (經過微調好回應 instruction) 已經展現出在新任務上 zero-shot 的能力。
+然而他們嚴重依賴人工編寫的指令，在數量、多樣性和創造力上都受到了限制，阻礙了模型的通用性。
+作者介紹了 Self-Instruct 這個框架，可以透過自己生成的指令，來增強預訓練模型遵循指令的能力。
+將作者的方法應用在 GPT3，在 SuperNaturalInstructions 獲得了比原始模型高 33% 的改進，與使用 private user data 和 human annotations 的 $InstructGPT_{001}$ 性能相當。
+為了進一步評估，我們為新任務整理一組專家編寫的指令，並通過人工評估，顯示出使用 Self-Instruction 調整 GPT3 的性能大大優於使用現有公共指令資料集，只比 $InstructGPT_{001}$ 落後 5% 的差距。
+Self-Instruct 提供一個幾乎 annotation-free 的方法，aling 預訓練模型和 instructions，而且作者釋出了他們的大型合成資料集，以促進未來對 instruction tuning 的研究。
+Introduction 最近的 NLP 文獻見證了「建構可以遵循自然語言指令的模型方面」的大量活動。
+這些發展由兩個關鍵部分組成：
+大型預訓練語言模型 (LM) 人工編寫的指令資料 PromptSource 和 SuperNaturalInstructions 是最近兩個著名的資料集。 他們透過大量手動註釋來收集指令，以建造 T0 和 T$k$-Instruct。'>
+<title>Self-Instruct 論文閱讀</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/self-instruct-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.323938b06228ecebeb017d0a6d49c113d742b8b78e553d1c133b72d1263204f7.css"><meta property='og:title' content='Self-Instruct 論文閱讀'>
+<meta property='og:description' content='paper: Self-Instruct: Aligning Language Model with Self Generated Instructions
+Abstract 大型 &amp;ldquo;instruction-tuned&amp;rdquo; 語言模型 (經過微調好回應 instruction) 已經展現出在新任務上 zero-shot 的能力。
+然而他們嚴重依賴人工編寫的指令，在數量、多樣性和創造力上都受到了限制，阻礙了模型的通用性。
+作者介紹了 Self-Instruct 這個框架，可以透過自己生成的指令，來增強預訓練模型遵循指令的能力。
+將作者的方法應用在 GPT3，在 SuperNaturalInstructions 獲得了比原始模型高 33% 的改進，與使用 private user data 和 human annotations 的 $InstructGPT_{001}$ 性能相當。
+為了進一步評估，我們為新任務整理一組專家編寫的指令，並通過人工評估，顯示出使用 Self-Instruction 調整 GPT3 的性能大大優於使用現有公共指令資料集，只比 $InstructGPT_{001}$ 落後 5% 的差距。
+Self-Instruct 提供一個幾乎 annotation-free 的方法，aling 預訓練模型和 instructions，而且作者釋出了他們的大型合成資料集，以促進未來對 instruction tuning 的研究。
+Introduction 最近的 NLP 文獻見證了「建構可以遵循自然語言指令的模型方面」的大量活動。
+這些發展由兩個關鍵部分組成：
+大型預訓練語言模型 (LM) 人工編寫的指令資料 PromptSource 和 SuperNaturalInstructions 是最近兩個著名的資料集。 他們透過大量手動註釋來收集指令，以建造 T0 和 T$k$-Instruct。'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/self-instruct-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='nlp' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:published_time' content='2023-04-30T00:00:12&#43;08:00'/><meta property='article:modified_time' content='2023-04-30T00:00:12&#43;08:00'/>
+<meta name="twitter:title" content="Self-Instruct 論文閱讀">
+<meta name="twitter:description" content="paper: Self-Instruct: Aligning Language Model with Self Generated Instructions
+Abstract 大型 &amp;ldquo;instruction-tuned&amp;rdquo; 語言模型 (經過微調好回應 instruction) 已經展現出在新任務上 zero-shot 的能力。
+然而他們嚴重依賴人工編寫的指令，在數量、多樣性和創造力上都受到了限制，阻礙了模型的通用性。
+作者介紹了 Self-Instruct 這個框架，可以透過自己生成的指令，來增強預訓練模型遵循指令的能力。
+將作者的方法應用在 GPT3，在 SuperNaturalInstructions 獲得了比原始模型高 33% 的改進，與使用 private user data 和 human annotations 的 $InstructGPT_{001}$ 性能相當。
+為了進一步評估，我們為新任務整理一組專家編寫的指令，並通過人工評估，顯示出使用 Self-Instruction 調整 GPT3 的性能大大優於使用現有公共指令資料集，只比 $InstructGPT_{001}$ 落後 5% 的差距。
+Self-Instruct 提供一個幾乎 annotation-free 的方法，aling 預訓練模型和 instructions，而且作者釋出了他們的大型合成資料集，以促進未來對 instruction tuning 的研究。
+Introduction 最近的 NLP 文獻見證了「建構可以遵循自然語言指令的模型方面」的大量活動。
+這些發展由兩個關鍵部分組成：
+大型預訓練語言模型 (LM) 人工編寫的指令資料 PromptSource 和 SuperNaturalInstructions 是最近兩個著名的資料集。 他們透過大量手動註釋來收集指令，以建造 T0 和 T$k$-Instruct。">
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">⭐<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/StarRabbit.jpg"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#related-work">Related Work</a>
+      <ol>
+        <li><a href="#language-models-for-data-generation-and-augmentation">Language models for data generation and augmentation</a></li>
+        <li><a href="#self-training">Self-training</a></li>
+        <li><a href="#knowledge-distillation">Knowledge distillation</a></li>
+      </ol>
+    </li>
+    <li><a href="#method">Method</a>
+      <ol>
+        <li><a href="#defining-instruction-data">Defining Instruction Data</a></li>
+        <li><a href="#automatic-instruction-data-generation">Automatic Instruction Data Generation</a>
+          <ol>
+            <li><a href="#instruction-generation">Instruction Generation</a></li>
+            <li><a href="#classification-task-identification">Classification Task Identification</a></li>
+            <li><a href="#instance-generation">Instance Generation</a></li>
+            <li><a href="#filtering-and-postprocessing">Filtering and Postprocessing</a></li>
+          </ol>
+        </li>
+        <li><a href="#finetuning-the-lm-to-follow-instructions">Finetuning the LM to Follow Instructions</a></li>
+      </ol>
+    </li>
+    <li><a href="#self-instruct-data-from-gpt3">Self-Instruct Data from GPT3</a>
+      <ol>
+        <li><a href="#statistics">Statistics</a></li>
+        <li><a href="#diversity">Diversity</a></li>
+        <li><a href="#quality">Quality</a></li>
+      </ol>
+    </li>
+    <li><a href="#experimental-results">Experimental Results</a>
+      <ol>
+        <li><a href="#gpt3_self-inst-fine-tuning-gpt3-on-its-own-instruction-data">$GPT3_{SELF-INST}$: fine-tuning GPT3 on its own instruction data</a></li>
+        <li><a href="#baselines">Baselines</a>
+          <ol>
+            <li><a href="#off-the-shelf-language-models">Off-the-shelf language models</a></li>
+            <li><a href="#publicly-available-instruction-tuned-models">Publicly-available instruction-tuned models</a></li>
+            <li><a href="#instruction-tuned-gpt3-models">Instruction-tuned GPT3 models</a></li>
+          </ol>
+        </li>
+        <li><a href="#experiment-1-zero-shot-generalization-on-superni-benchmark">Experiment 1: Zero-Shot Generalization on SUPERNI benchmark</a>
+          <ol>
+            <li><a href="#results">Results</a></li>
+          </ol>
+        </li>
+        <li><a href="#experiment-2-generalization-to-user-oriented-instructions-on-novel-tasks">Experiment 2: Generalization to User-oriented Instructions on Novel Tasks</a>
+          <ol>
+            <li><a href="#human-evaluation-setup">Human evaluation setup</a></li>
+            <li><a href="#results-1">Results</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#discussion-and-limitation">Discussion and Limitation</a>
+      <ol>
+        <li><a href="#why-does-self-instruct-work">Why does SELF-INSTRUCT work?</a></li>
+        <li><a href="#broader-impact">Broader Impact</a></li>
+        <li><a href="#limitations-of-self-instruct">Limitations of Self-Instruct</a>
+          <ol>
+            <li><a href="#tail-phenomena">Tail phenomena</a></li>
+            <li><a href="#dependence-on-large-models">Dependence on large models</a></li>
+            <li><a href="#reinforcing-lm-biases">Reinforcing LM biases</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/deep-learning/" style="background-color: #936ce1; color: #fff;">
+                Deep Learning
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/deep-learning.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/self-instruct-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">Self-Instruct 論文閱讀</a>
+        </h2>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Apr 30, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>paper: <a class="link" href="https://arxiv.org/abs/2212.10560"  target="_blank" rel="noopener"
+    >Self-Instruct: Aligning Language Model with Self Generated Instructions</a></p>
+<h2 id="abstract">Abstract</h2>
+<p>大型 &ldquo;instruction-tuned&rdquo; 語言模型 (經過微調好回應 instruction) 已經展現出在新任務上 zero-shot 的能力。</p>
+<p>然而他們嚴重依賴人工編寫的指令，在數量、多樣性和創造力上都受到了限制，阻礙了模型的通用性。</p>
+<p>作者介紹了 Self-Instruct 這個框架，可以透過自己生成的指令，來增強預訓練模型遵循指令的能力。</p>
+<p>將作者的方法應用在 GPT3，在 SuperNaturalInstructions 獲得了比原始模型高 33% 的改進，與使用 private user data 和 human annotations 的 $InstructGPT_{001}$ 性能相當。</p>
+<p>為了進一步評估，我們為新任務整理一組專家編寫的指令，並通過人工評估，顯示出使用 Self-Instruction 調整 GPT3 的性能大大優於使用現有公共指令資料集，只比 $InstructGPT_{001}$ 落後 5% 的差距。</p>
+<p>Self-Instruct 提供一個幾乎 annotation-free 的方法，aling 預訓練模型和 instructions，而且作者釋出了他們的大型合成資料集，以促進未來對 instruction tuning 的研究。</p>
+<h2 id="introduction">Introduction</h2>
+<p>最近的 NLP 文獻見證了「建構可以遵循自然語言指令的模型方面」的大量活動。</p>
+<p>這些發展由兩個關鍵部分組成：</p>
+<ol>
+<li>大型預訓練語言模型 (LM)</li>
+<li>人工編寫的指令資料</li>
+</ol>
+<p>PromptSource 和 SuperNaturalInstructions 是最近兩個著名的資料集。
+他們透過大量手動註釋來收集指令，以建造 T0 和 T$k$-Instruct。</p>
+<p>然而這過程代價高昂，而且由於大多數人往往生成的都是流行的 NLP 任務，使其未能涵蓋真正多樣的任務，也不能涵蓋各種描述任務的不同方式，因此多樣性受侷限。</p>
+<p>鑒於這些限制，想要繼續提升 instruction-tuned models 的品質，需要幫 supervising instruction-tuned models 發展替代方案。</p>
+<p>本文介紹了 Self-Instruct，這是一種 semi-automated 的過程，用模型自身的 instructional signals 對 pretrained LM 進行 instruction-tuning。</p>
+<p>整個流程是一種 iterative bootstrapping algorithm，從手動編寫的 limited seed set 引導生成。</p>
+<p><img src="/Blog/images/gpt/self-instruct/fig1.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>在第一階段，模型要幫新任務生成指令。
+利用現有的指令集合，創建更廣泛的指令，好定義 (通常是新的) 任務。</p>
+<p>對於新生成的指令集，框架為他們創建 input-output instances，稍後可以透過 supervising 用於 instruction tuning。</p>
+<p>最後，透過各種手段，在低品質和重複的指令加到 task pool 前，把他們修剪掉。</p>
+<p>可以重複這個流程非常多次，直到獲得大量任務。</p>
+<p>該模型的跌代過程中產生了大約 52K 個指令，與大約 85K 個 instance inputs 和 target outputs 配對 (有些相同的指令會對應多種輸入輸出)。</p>
+<p>作者觀察到生成的資料提供了各種有創意的任務，其中超過 50% 的任務和 seed instructions 的 ROUGE-L overlap 小於 0.3。</p>
+<p>基於上述結果，作者通過微調 GPT3 (和生成指令資料是同個模型) 建構了 $GPT3_{SELF-INST}$。</p>
+<p>SuperNI 的結果表明，$GPT3_{SELF-INST}$ 性能大大優於 GPT3 (原始模型)，高了 33.1%，幾乎和 $InstructGPT_{001}$ 的性能相當。</p>
+<p>此外，作者在新創建的的指令集上進行人工評估，$GPT3_{SELF-INST}$ 顯示出廣泛的指令遵循能力，優於在其他公開可用指令數據集上訓練的模型，只比 InstrcutGPT001 落後 5%。</p>
+<p>本文貢獻：</p>
+<ol>
+<li>SelfInstrct：一種用最少的人工標記數據引導指令遵循能力的作法</li>
+<li>通過大量的 instruction-tuning 實驗，證明了有效性。</li>
+<li>發布了一個包含 52K 指令的大型綜合資料集，還有一組手動編寫的新任務，用於建構和評估未來的 instruction-following models。</li>
+</ol>
+<h2 id="related-work">Related Work</h2>
+<p>###　Instruction-following language models
+一系列工作顯示，使用 annotated &ldquo;instructional&rdquo; data，可以使普通語言模型遵循一般語言的指令。</p>
+<p>也顯示出 &ldquo;instructional&rdquo; data 的大小和多樣性直接影響模型的泛化能力。</p>
+<p>本文的工作目的在減少對人工註釋者的依賴。</p>
+<h3 id="language-models-for-data-generation-and-augmentation">Language models for data generation and augmentation</h3>
+<p>許多工作依賴生成式 LM 來生成數據或做 augmentation。</p>
+<p>雖然作者的工作可被視為一種 augmentation，但和這些工作的差別在於不限於特定任務。</p>
+<p>Self-Instruct 的一個明顯動機是引導出新的任務定義，而這些任務可能還未被 NLP 的研究者定義過。</p>
+<h3 id="self-training">Self-training</h3>
+<p>一種典型的 self-training 框架透過經過訓練的模型，幫 unlabeled 資料進行 label，然後用這些資料改進模型。</p>
+<p>雖然 Self-Instruct 和 self-training 有一些相似之處，但多數 self-training 的方法都假設了一個特定的目標任務。</p>
+<p>相比之下，Self-Instruct 從頭開始生出各種任務。</p>
+<h3 id="knowledge-distillation">Knowledge distillation</h3>
+<p><code>這邊我想不太通為什麼可以和 Knowledge distillation 扯上關係</code></p>
+<p>Knowledge distillation 通常涉及知識從較大模型到較小模型的轉移</p>
+<p>Self-Instruct 也可以看做是 Knowledge distillation 的一種形式，但區別如下</p>
+<ol>
+<li>distillation 的來源和目標是相同的，即模型的知識被 distill 到他自己</li>
+<li>distill 的內容以 instruction task 的形式出現</li>
+</ol>
+<h2 id="method">Method</h2>
+<p>標記大規模指令資料對人類來說可能具有挑戰性，因為他需要</p>
+<ol>
+<li>創意，好提出新任務</li>
+<li>為每個任務編寫 labeled instances 的專業知識</li>
+</ol>
+<h3 id="defining-instruction-data">Defining Instruction Data</h3>
+<p>我們要生成的指令資料集包含 {$I_t$}，每個指令用自然語言定義了任務 $t$。</p>
+<p>每個任務都有一個或多個 input-output instances ($X_t,Y_t$)。</p>
+<p>給定 task instruction $I_t$，還有 instance x，模型 M 要生出 y：</p>
+<p>$M(I_t,x)=y, for (x,y) \in (X_t,Y_t)$</p>
+<p>值得注意的是，instance input 和 instruction 沒有嚴格分界。</p>
+<p>比如 Instruction:&ldquo;write an essay about school safety&rdquo; x:&quot;&quot;，可以被改為 Instruction:&ldquo;write an essay about the following topic&rdquo; x:&ldquo;school safety&rdquo;</p>
+<h3 id="automatic-instruction-data-generation">Automatic Instruction Data Generation</h3>
+<p>生成指令資料的 pipeline 分成四個步驟：</p>
+<ol>
+<li>指令生成</li>
+<li>辨識指令是否是分類任務</li>
+<li>用 input-first 或 output-first 做 instance generation</li>
+<li>過濾掉低品質的資料</li>
+</ol>
+<h4 id="instruction-generation">Instruction Generation</h4>
+<p>Self-Instruct 是基於一個發現，也就是大型語言模型可以透過 context 中的現有指令，生出新穎的指令。</p>
+<p>為作者提供了一種從一小組人類編寫的指令中，使指令資料增長的做法。</p>
+<p>作者用他們編寫的 175 個任務 (每個任務 1 個 instruction 和 1 個 instance) 初始化 task pool。</p>
+<p>在每一個 step，作者從裡面 sample 8 個 instructions，作為 in-context 的範例。在這 8 個指令中，有 6 條來自人工編寫的任務，另外兩條來自前面步驟中模型生成的任務，以促進多樣性。</p>
+<h4 id="classification-task-identification">Classification Task Identification</h4>
+<p>因為對於分類和非分類的任務，作者會採取兩種做法，所以作者使用來自 seed taks 的 12 條分類指令和 19 條非分類指令，讓 GPT3 透過 few-shot 來判別。</p>
+<h4 id="instance-generation">Instance Generation</h4>
+<p>給予指令和他們的任務類別，作者獨立地為每條指令生成 instance。</p>
+<p>這具備挑戰性，原因在於他需要模型瞭解目標任務是什麼，根據指令找出需要那些額外的輸入內容，並生成他們。 (模型要根據 instruction 生出 instance input)</p>
+<p>作者發現，在 prompt 中放入其他包含 instruction-input-output 的任務範例的時候，模型可以實現這點。</p>
+<p>一種自然的方法是 Input-first Approach，可以要求語言模型先根據指令提出 input，再生出相應的 output。</p>
+<p>然而，這種方法在分類任務上，可能會偏向於生成某種 label。所以，對於分類任務，作者採用 Output-first Approach，先生成可能的 label，在每個 label 上再生成輸入。</p>
+<h4 id="filtering-and-postprocessing">Filtering and Postprocessing</h4>
+<p>為了鼓勵多樣性，只有當新的指令和任何現有的指令的 ROUGE-L overlapping 小於 0.7 的時候，才會被添加到 task pool。</p>
+<p>還排除了一些包含了通常不能被 LM 處理的關鍵字 (e.g. images, pictures, graphs) 的指令。</p>
+<p>在為每個指令生成新的 instance 的時候，會過濾掉完全相同或者是輸入相同但輸出不同的 instance。</p>
+<h3 id="finetuning-the-lm-to-follow-instructions">Finetuning the LM to Follow Instructions</h3>
+<p>在創建大規模指令資料後，用這些資料對原始語言模型進行 fine-tune。</p>
+<p>為此，將 instruction 和 instance input 連接起來，作為 prompt，然後訓練模型透過標準的監督式學習進行微調。</p>
+<p>為了讓模型對不同的格式 robust，使用多個模板將指令和輸入 encode 在一起。</p>
+<p>例如，指令可以有或沒有 Task: 前墜、輸入可以有或沒有 Input: 前墜，或是中間可以有不同數量的換行之類的。</p>
+<h2 id="self-instruct-data-from-gpt3">Self-Instruct Data from GPT3</h2>
+<p>作者透過 OpenAI API 訪問最大的 GPT3 (davinci)</p>
+<h3 id="statistics">Statistics</h3>
+<p><img src="/Blog/images/gpt/self-instruct/table1.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h3 id="diversity">Diversity</h3>
+<p><img src="/Blog/images/gpt/self-instruct/fig2.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h3 id="quality">Quality</h3>
+<p><img src="/Blog/images/gpt/self-instruct/table2.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h2 id="experimental-results">Experimental Results</h2>
+<h3 id="gpt3_self-inst-fine-tuning-gpt3-on-its-own-instruction-data">$GPT3_{SELF-INST}$: fine-tuning GPT3 on its own instruction data</h3>
+<p>使用生出來的指令資料，對 GPT3 進行微調。</p>
+<p>微調是透過 OpenAI finetuning API</p>
+<h3 id="baselines">Baselines</h3>
+<h4 id="off-the-shelf-language-models">Off-the-shelf language models</h4>
+<p>T5-LM 和 GPT3 是普通 LM baselines (只有 pre-training，沒有額外 fine-tune)</p>
+<p>這些 baseline 將表明現成的 LM 在預訓練後，能夠立刻自然地遵循指令的程度。</p>
+<h4 id="publicly-available-instruction-tuned-models">Publicly-available instruction-tuned models</h4>
+<p>T0 和 $T_k$-Instruct 是兩個 instruction-tuned models。</p>
+<p>兩者都是從 T5 進行微調的，對這兩種模型，都使用具有 11B 參數的最大版本。</p>
+<h4 id="instruction-tuned-gpt3-models">Instruction-tuned GPT3 models</h4>
+<p>作者評估了 InstructGPT，它是 OpenAI 基於 GPT3 開發的。</p>
+<p>對於 SuperNI 的實驗，只與 text-davinci-001 engine 進行比較，因為更新的 engine 用最新的用戶資料，而且很可能已經看過 SuperNI。</p>
+<p>對於新編寫的指令，評估時則包含了 001、002 和 003，以確保完整性。</p>
+<p>為了進一步比較 Self-Instruct 在其他公開可用的指令訓練集資料，使用 PromptSource 和 SuperNI 的資料微調 GPT3，這些資料用於訓練 T0 和 $T_k$-Instruct 模型。</p>
+<p>分別簡稱為 T0 訓練和 SuperNI 訓練。</p>
+<h3 id="experiment-1-zero-shot-generalization-on-superni-benchmark">Experiment 1: Zero-Shot Generalization on SUPERNI benchmark</h3>
+<p>首先以 zero-shot 的方式評估典型 NLP 任務遵循指令的能力。</p>
+<h4 id="results">Results</h4>
+<p><img src="/Blog/images/gpt/self-instruct/table3.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h3 id="experiment-2-generalization-to-user-oriented-instructions-on-novel-tasks">Experiment 2: Generalization to User-oriented Instructions on Novel Tasks</h3>
+<p>盡管 SuperNI 在現有的 NLP 任務具有全面性，多數的這些任務是初於研究理由提出的，而且偏向分類。</p>
+<p>為了更好的獲取指令遵循模型的實用價值，作者中的一部分人策劃了一組面向用戶應用的新指令集。</p>
+<p>他們先針對 Large LM 可能可以應用到的領域進行 brainstorm，並且制定與每個領域相關的 instruction 和 instance。</p>
+<p>總共創建了 252 條指令，每條指令有 1 個 instance。</p>
+<h4 id="human-evaluation-setup">Human evaluation setup</h4>
+<p>評估模型在這些不同任務的測試集上的表現極具挑戰性，因為不同的任務需要不同的專業知識。</p>
+<p>為了獲得更忠實的評價，作者請了 instructions 的作者對模型的預測結果進行評估。</p>
+<p>實施一個 four-level rating system：</p>
+<ul>
+<li>Rating A
+<ul>
+<li>回覆有效且令人滿意</li>
+</ul>
+</li>
+<li>Rating B
+<ul>
+<li>回覆可接受，但存在可以改進的地方</li>
+</ul>
+</li>
+<li>Rating C
+<ul>
+<li>回覆相關，但在內容上有重大錯誤</li>
+</ul>
+</li>
+<li>Rating D
+<ul>
+<li>回覆不相關或無效，包含重複輸入的部分，完全無關的輸出。</li>
+</ul>
+</li>
+</ul>
+<h4 id="results-1">Results</h4>
+<p><img src="/Blog/images/gpt/self-instruct/fig5.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>如果把 Rating B 以上視為有效，$GPT_{SELF-INST}$ 只和 $InstructGPT_{001}$ 相差 5%</p>
+<h2 id="discussion-and-limitation">Discussion and Limitation</h2>
+<h3 id="why-does-self-instruct-work">Why does SELF-INSTRUCT work?</h3>
+<p>值得反思的是，在最近成功的 instruction-tuning LMs 中，高品質的 human feedback 扮演的角色。</p>
+<p>這裡有兩個極端的假設：</p>
+<ol>
+<li>
+<p>Human feedback 是 instruction-tuning 中必要且不可或缺的角色，因為 LM 需要了解在預訓練過程中沒完全了解到的問題。</p>
+</li>
+<li>
+<p>Human feedback 是 instruction-tuning 一個可選的方向，因為 LM 在預訓練就已經很熟悉指令了。</p>
+</li>
+</ol>
+<p>雖然現實可能介於這兩個極端之間，作者推測可能更傾向於第二種假設，尤其是對於較大的模型。</p>
+<p>第二種，也是人類直覺，是 Self- Instruct 的關鍵動機，而且也從成功的結果獲得支持。</p>
+<h3 id="broader-impact">Broader Impact</h3>
+<p>除了本文的直接關注點外，作者相信 Self-Instruct 可能有助於揭露各種 instruction tuning 模型 &ldquo;幕後&rdquo; 發生的事情。</p>
+<p>不幸的是，由於他們的資料集尚未發布，這種業界模型仍處於 API 牆之後。</p>
+<p>人們對其結構以及為何能展現令人印象深刻的能力知之甚少。</p>
+<h3 id="limitations-of-self-instruct">Limitations of Self-Instruct</h3>
+<h4 id="tail-phenomena">Tail phenomena</h4>
+<p>Self-Instruct 依賴於 LM，繼承 LM 的所有限制。</p>
+<p>最近的研究顯示出 tail phenomena 對 LM 的成功構成嚴峻的挑戰。</p>
+<p>換句話說，LM 的最大收益出現於語言中最頻繁出現的部分 (語言分佈的頭部)，而低頻率出現的上下文中獲得的收益最小。</p>
+<p>同樣的，在這項工作背景下，如果 Self-Instruct 大部分的收益偏向預訓練 corpus 中頻繁出現的任務或指令，那也不令人感到意外。</p>
+<p>因此，該方法在不常見和有創意的指令下，可能會顯現出脆弱性。</p>
+<h4 id="dependence-on-large-models">Dependence on large models</h4>
+<p>因為 Self-Instruct 依賴於從 LM 中提取初的 inductive bias，因此它可能適合 larger model。</p>
+<p>如果這是對的，這會對那些沒有大量計算資源的人造成阻礙。</p>
+<h4 id="reinforcing-lm-biases">Reinforcing LM biases</h4>
+<p>作者擔心這種迭代作法可能會產生意料之外的結果，比如將有問題的社會偏見放大。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/nlp/">nlp</a>
+        
+            <a href="/Blog/tags/deep-learning/">deep-learning</a>
+        
+            <a href="/Blog/tags/machine-learning/">machine-learning</a>
+        
+            <a href="/Blog/tags/transformer/">transformer</a>
+        
+            <a href="/Blog/tags/attention/">attention</a>
+        
+            <a href="/Blog/tags/self-attention/">self-attention</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/instructgpt/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">InstructGPT</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/gpt-%E4%B8%89%E9%83%A8%E6%9B%B2/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT 三部曲</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/relative-position-%E4%BB%8B%E7%B4%B9--%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Relative Position 介紹 &#43; 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/swin-transformer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Swin Transformer 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/git-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GIT 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>
