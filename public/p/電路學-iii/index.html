@@ -7,13 +7,15 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-iii/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.2b9a5bf0320730c3eaf058804c8ef655795fb752c8d95792286f500bd6ec66b0.css"><meta property='og:title' content='電路學 - III'>
+<link rel="stylesheet" href="/Blog/scss/style.min.ff79bfc11f71eea1ec92db6a7cd6d70d32d081257ca195d1f6dabb62c4173c6d.css"><meta property='og:title' content='電路學 - III'>
 <meta property='og:description' content='運算放大器 (Operational Amplifiers) 介紹 運算放大器 (Operational Amplifiers) 特性 類似於電壓控制電壓相依電源的電子元件 主動電路元件 用於執行加、減、乘、除、微分與積分等運數學運算的主動電路元件 由電阻、電晶體、電容和二極體等所構成的電子元件，但因內部電路的討論已超出範圍，先看作是電路模組 封裝形式 DIP 輸出電壓 $v_O$ $v_O=Av_d=A(v_2-v_1)$ $v_2$ 是非反相輸入 (noninverting input) $v_1$ 是反相輸入 (inverting input) $A$ 是開迴路電壓增益 (open-loop voltage gain) 是沒有任何從輸出到輸入的回授 (feedback) 時，運算放大器的增益 回授 負回授 (negative feedback) 輸出回授至反相輸入端 閉迴路增益 (closed-loop gain) 如果存在由輸出到輸入的回授，輸出電壓與輸入電壓的比例稱為閉迴路增益 對負回授電路而言，可以證明閉迴路增益和開迴路增益無關，因此運算放大器總是用於具回授的電路中 工作模式 正飽和區 $v_O=V_{CC}$ 線性區 $-V_{CC} \leq v_O = Av_d \leq V_{CC}$ 負飽和區 $v_O=-V_{CC}$ 符號 $v_O$ 是輸出電壓 $v_d$ 是輸入電壓差 理想運算放大器 (Ideal Op Amp) 假定運算放大器是理想的是符合實際的，因位目前絕大多數運算放大器都有很大的增益和輸入電阻 具有以下特性的運算放大器，稱為理想運算放大器 $A \simeq \inf$ 開迴路增益無窮大 $R_i \simeq \inf$ 輸入電阻無窮大 $R_O \simeq 0$ 輸出電阻為零 特性 流入兩個輸入端的電流均為 0，因為輸入電阻無窮大，輸入端間開路 輸入端間的電壓差等於零，$v_d=v_2-v_1=0$ 反相放大器 (Inverting Amplifier) 對輸入信號放大的同時反轉極性 公式 $v_0=-\frac{R_f}{R_1}v_i$ $R_f$ 是回授電阻 $R_1$ 是進到負回授節點前的電阻 非反相放大器 (Noninverting Amplifier) 提供正電壓增益的運算放大器電路'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-iii/'>
 <meta property='og:site_name' content='Roykesydon'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='electric-circuits' /><meta property='article:published_time' content='2023-04-12T00:00:54&#43;08:00'/><meta property='article:modified_time' content='2023-04-12T00:00:54&#43;08:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='electric-circuits' /><meta property='article:published_time' content='2023-05-08T00:00:54&#43;08:00'/><meta property='article:modified_time' content='2023-05-08T00:00:54&#43;08:00'/>
 <meta name="twitter:title" content="電路學 - III">
 <meta name="twitter:description" content="運算放大器 (Operational Amplifiers) 介紹 運算放大器 (Operational Amplifiers) 特性 類似於電壓控制電壓相依電源的電子元件 主動電路元件 用於執行加、減、乘、除、微分與積分等運數學運算的主動電路元件 由電阻、電晶體、電容和二極體等所構成的電子元件，但因內部電路的討論已超出範圍，先看作是電路模組 封裝形式 DIP 輸出電壓 $v_O$ $v_O=Av_d=A(v_2-v_1)$ $v_2$ 是非反相輸入 (noninverting input) $v_1$ 是反相輸入 (inverting input) $A$ 是開迴路電壓增益 (open-loop voltage gain) 是沒有任何從輸出到輸入的回授 (feedback) 時，運算放大器的增益 回授 負回授 (negative feedback) 輸出回授至反相輸入端 閉迴路增益 (closed-loop gain) 如果存在由輸出到輸入的回授，輸出電壓與輸入電壓的比例稱為閉迴路增益 對負回授電路而言，可以證明閉迴路增益和開迴路增益無關，因此運算放大器總是用於具回授的電路中 工作模式 正飽和區 $v_O=V_{CC}$ 線性區 $-V_{CC} \leq v_O = Av_d \leq V_{CC}$ 負飽和區 $v_O=-V_{CC}$ 符號 $v_O$ 是輸出電壓 $v_d$ 是輸入電壓差 理想運算放大器 (Ideal Op Amp) 假定運算放大器是理想的是符合實際的，因位目前絕大多數運算放大器都有很大的增益和輸入電阻 具有以下特性的運算放大器，稱為理想運算放大器 $A \simeq \inf$ 開迴路增益無窮大 $R_i \simeq \inf$ 輸入電阻無窮大 $R_O \simeq 0$ 輸出電阻為零 特性 流入兩個輸入端的電流均為 0，因為輸入電阻無窮大，輸入端間開路 輸入端間的電壓差等於零，$v_d=v_2-v_1=0$ 反相放大器 (Inverting Amplifier) 對輸入信號放大的同時反轉極性 公式 $v_0=-\frac{R_f}{R_1}v_i$ $R_f$ 是回授電阻 $R_1$ 是進到負回授節點前的電阻 非反相放大器 (Noninverting Amplifier) 提供正電壓增益的運算放大器電路">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
 </head>
 
 <body class="
@@ -86,12 +88,16 @@
         
         
         <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
-        <div class="site-meta cybr-text">
-            
-            
-            I write notes here during my free time.
-            <h2 class="site-description cybr-text__glitch">I write notes here during my free time.</h2>
-            
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
         </div>
     </header><ol class="social-menu">
             
@@ -287,6 +293,16 @@
       <ol>
         <li><a href="#介紹-1">介紹</a></li>
         <li><a href="#電容器-capacitors">電容器 (Capacitors)</a></li>
+        <li><a href="#電容器串並聯">電容器串並聯</a></li>
+        <li><a href="#電感器-inductors">電感器 (Inductors)</a></li>
+        <li><a href="#電感器串並聯">電感器串並聯</a></li>
+        <li><a href="#應用">應用</a>
+          <ol>
+            <li><a href="#積分器-integrator">積分器 (Integrator)</a></li>
+            <li><a href="#微分器-differentiator">微分器 (Differentiator)</a></li>
+            <li><a href="#類比計算機-analog-computer">類比計算機 (Analog Computer)</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
   </ol>
@@ -347,7 +363,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Apr 12, 2023</time>
+                <time class="article-time--published">May 08, 2023</time>
             </div>
         
 
@@ -362,7 +378,7 @@
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    2 minute read
                 </time>
             </div>
         
@@ -603,6 +619,186 @@
 <li>電容器與電感器是能儲存能量的儲能元件 (storage element)</li>
 </ul>
 <h3 id="電容器-capacitors">電容器 (Capacitors)</h3>
+<ul>
+<li>
+<p>將能量儲存在電場中的被動元件</p>
+</li>
+<li>
+<p>由兩片導電板夾著絕緣體 (電介質) 組成</p>
+</li>
+<li>
+<p>公式</p>
+<ul>
+<li>$q=Cv$
+<ul>
+<li>q 是儲存的電荷量</li>
+<li>C 是比例常數，又稱電容 (capacitance)
+<ul>
+<li>單位是法拉 (farad, F)</li>
+<li>C 不是由 q 和 v 決定
+<ul>
+<li>$C=\frac{\epsilon A}{d}$
+<ul>
+<li>$\epsilon$ 是介電常數</li>
+<li>$A$ 是導電極版的截面積</li>
+<li>$d$ 是兩極板的間距</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>$v(t)=\frac{1}{C}\int_{t_0}^t i (\tau)d\tau + v(t_0)$</li>
+<li>$w=\frac{1}{2}Cv^2$
+<ul>
+<li>電場儲存的能量</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>線性電容 (linear capacitor)</p>
+<ul>
+<li>滿足 $i=C\frac{dv}{dt}$</li>
+</ul>
+</li>
+<li>
+<p>非線性電容 (nonlinear capacitor)</p>
+<ul>
+<li>電流電壓關係曲線非直線，不過多數電容是線性的</li>
+</ul>
+</li>
+<li>
+<p>重要性質</p>
+<ul>
+<li>電容器在直流下工作，等同開路
+<ul>
+<li>電壓不隨時間改變的話電流是 0</li>
+</ul>
+</li>
+<li>電容器上的電壓必須是連續的
+<ul>
+<li>因為不連續變化的電壓需要無限大的電流</li>
+<li>電容會反抗電壓的突然改變</li>
+</ul>
+</li>
+<li>理想電容器不消耗能量</li>
+<li>實際的非理想電容器會並聯一個漏電阻，可高達 $100M \Omega$，在多數情況可忽略不計</li>
+</ul>
+</li>
+</ul>
+<h3 id="電容器串並聯">電容器串並聯</h3>
+<ul>
+<li>並聯
+<ul>
+<li>$C_{eq} = C_1 + C_2 + C_3 + &hellip; + C_N$</li>
+</ul>
+</li>
+<li>串聯
+<ul>
+<li>$\frac{1}{C_{eq}} = \frac{1}{C_{1}} + \frac{1}{C_{2}} + \frac{1}{C_{3}} + &hellip; + \frac{1}{C_{N}}$</li>
+</ul>
+</li>
+</ul>
+<h3 id="電感器-inductors">電感器 (Inductors)</h3>
+<ul>
+<li>
+<p>將能量儲存於磁場中的被動元件</p>
+</li>
+<li>
+<p>公式</p>
+<ul>
+<li>$v=L\frac{di}{dt}$
+<ul>
+<li>L 是比例常數，又稱為電感 (inductance)
+<ul>
+<li>單位是亨利 (henry, H)</li>
+<li>由物理尺寸和結構決定</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>$i=\frac{1}{L}\int_{t_0}^t v (\tau)d\tau + i(t_0)$</li>
+<li>$w=\frac{1}{2}Li^2$
+<ul>
+<li>儲存的能量</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>電感反應電感器反抗電流變化的特性</p>
+</li>
+<li>
+<p>線性電感 (linear inductor)</p>
+<ul>
+<li>滿足 $v=L\frac{di}{dt}$</li>
+</ul>
+</li>
+<li>
+<p>非線性電感 (nonlinear inductor)</p>
+<ul>
+<li>$v$ 和 $di/dt$ 關係曲線非直線</li>
+</ul>
+</li>
+<li>
+<p>重要性質</p>
+<ul>
+<li>在直流中，電感器等同短路</li>
+<li>電感器上的電流必須是連續的
+<ul>
+<li>因為不連續變化的電流需要無限大的電壓</li>
+<li>電容會反抗電流的突然改變</li>
+</ul>
+</li>
+<li>理想電感器不消耗能量</li>
+<li>實際的非理想電容器會串聯一個繞線電阻 (winding resistance)，由製成電感的導電材料產生，通常很小。並由於線圈間的電容性耦合，也存在繞線電容 (winding capacitance)</li>
+</ul>
+</li>
+</ul>
+<h3 id="電感器串並聯">電感器串並聯</h3>
+<ul>
+<li>串聯
+<ul>
+<li>$L_{eq} = L_1 + L_2 + L_3 + &hellip; + L_N$</li>
+</ul>
+</li>
+<li>並聯
+<ul>
+<li>$\frac{1}{L_{eq}} = \frac{1}{L_{1}} + \frac{1}{L_{2}} + \frac{1}{L_{3}} + &hellip; + \frac{1}{L_{N}}$</li>
+</ul>
+</li>
+</ul>
+<h3 id="應用">應用</h3>
+<ul>
+<li>電感電容的特殊性質
+<ul>
+<li>能儲存能量，作為暫時的電壓源或電流源，可在短時間內產生大電流或電壓</li>
+<li>電容器反抗電壓的突然改變、電感器反抗電流的突然改變</li>
+<li>電容器和電感器對頻率很靈敏，可以區別不同頻率，這條用在交流電路中</li>
+</ul>
+</li>
+</ul>
+<h4 id="積分器-integrator">積分器 (Integrator)</h4>
+<ul>
+<li>採用儲能元件的運算放大器組成的積分器，輸出訊號和輸入訊號的積分成正比
+<ul>
+<li>$v_0=-\frac{1}{RC}\int_0^tv_i(\tau)d\tau$</li>
+</ul>
+</li>
+</ul>
+<h4 id="微分器-differentiator">微分器 (Differentiator)</h4>
+<ul>
+<li>採用儲能元件的運算放大器組成的微分器，輸出訊號和輸入訊號的變率成正比
+<ul>
+<li>$v_0=-RC\frac{dv_i}{dt}$</li>
+</ul>
+</li>
+</ul>
+<h4 id="類比計算機-analog-computer">類比計算機 (Analog Computer)</h4>
+<p>由各種運算放大器綜合使用，可算出任意微分方程式</p>
 
 </section>
 
@@ -683,38 +879,38 @@
             
                 
 <article class="">
+    <a href="/Blog/p/stm32-timer-/-counter-%E4%BB%8B%E7%B4%B9/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">STM32 Timer / Counter 介紹</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/stm32-gpio-%E4%BB%8B%E7%B4%B9/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">STM32 GPIO 介紹</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
     <a href="/Blog/p/stm32-uart-%E5%AF%A6%E9%A9%97/">
         
         
 
         <div class="article-details">
             <h2 class="article-title">STM32 UART 實驗</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/stm32-gpio-%E5%AF%A6%E9%A9%97/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">STM32 GPIO 實驗</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/stm32cubeide-%E5%9F%BA%E6%9C%AC%E9%96%8B%E7%99%BC%E4%BD%BF%E7%94%A8/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">STM32CubeIDE 基本開發使用</h2>
         </div>
     </a>
 </article>
@@ -739,6 +935,11 @@
     <section class="powerby">
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
         Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
     </section>
 </footer>
 

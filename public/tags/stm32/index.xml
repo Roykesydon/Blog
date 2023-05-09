@@ -6,7 +6,303 @@
         <description>Recent content in stm32 on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Wed, 26 Apr 2023 01:32:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/stm32/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 04 May 2023 01:32:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/stm32/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>STM32 Timer / Counter 介紹</title>
+        <link>https://roykesydon.github.io/Blog/p/stm32-timer-/-counter-%E4%BB%8B%E7%B4%B9/</link>
+        <pubDate>Thu, 04 May 2023 01:32:54 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/stm32-timer-/-counter-%E4%BB%8B%E7%B4%B9/</guid>
+        <description>&lt;h2 id=&#34;簡介&#34;&gt;簡介&lt;/h2&gt;
+&lt;p&gt;Timer 和 Counter 的差別是 Timer 是定期的數數&lt;/p&gt;
+&lt;h2 id=&#34;timing-functions&#34;&gt;Timing functions&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;定期對 CPU 發送 interrupt&lt;/li&gt;
+&lt;li&gt;產生準確時間的 delay&lt;/li&gt;
+&lt;li&gt;產生 pulses 或 periodic waveforms
+&lt;ul&gt;
+&lt;li&gt;PWM&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;量測 duration&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;stm32-timer--counter&#34;&gt;STM32 Timer / Counter&lt;/h2&gt;
+&lt;p&gt;從 Basic 到 Advanced，追加更多功能&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Basic TImer (Simple Timer)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;16 bit auto-reload register&lt;/li&gt;
+&lt;li&gt;programmable pre-scaler&lt;/li&gt;
+&lt;li&gt;可以 output 到 DAC&lt;/li&gt;
+&lt;li&gt;update event
+&lt;ul&gt;
+&lt;li&gt;CNT=ARR(up-count)&lt;/li&gt;
+&lt;li&gt;CNT=0 (down-count)&lt;/li&gt;
+&lt;li&gt;reset CNT to 0 or ARR&lt;/li&gt;
+&lt;li&gt;set UIF flag in status register&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;update event interrupt
+&lt;ul&gt;
+&lt;li&gt;如果 enabled (UIE=1)&lt;/li&gt;
+&lt;li&gt;UIF 被設置的時候發送訊號&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-timer/rm-fig-367.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;
+&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-timer/rm-fig-370.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$T_{EVENT}=Prescale \times Count \times T_{CK \_ INT} \\
+=(PSC+1)\times(ARR+1)\times T_{CK \_ INT}$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$T_{EVENT}$ 是兩次事件發生的間隔時間&lt;/li&gt;
+&lt;li&gt;PSC 是設定 (數值 - 1)，所以 Prescale 是 1 的話，要設 0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Control register&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CEN
+&lt;ul&gt;
+&lt;li&gt;是否啟用 counter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;UDIS
+&lt;ul&gt;
+&lt;li&gt;是否啟用 update event&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;URS
+&lt;ul&gt;
+&lt;li&gt;設定產生 update event 的 source&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;OPM
+&lt;ul&gt;
+&lt;li&gt;是否只算一次 counter 就停&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ARPE
+&lt;ul&gt;
+&lt;li&gt;關於中途改 ARR 的 reload 設定&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;UIF
+&lt;ul&gt;
+&lt;li&gt;interrupt&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;General Purpose Timer&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-timer/rm-fig-284.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;16-bit or 32-bit auto-reload register&lt;/li&gt;
+&lt;li&gt;use for a variety of puposes
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;measuring lengths of input signals (Input Capture)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Input Capture
+&lt;ul&gt;
+&lt;li&gt;測量 pulse width (高電位的時間) 或 period (一個週長)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;generating output waveforms (Output Compare and PWM Generation)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;one pulse mode output&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Up to 4 independent channel&lt;/li&gt;
+&lt;li&gt;Interrupt / DMA generation
+&lt;ul&gt;
+&lt;li&gt;event
+&lt;ul&gt;
+&lt;li&gt;counter overflow / underflow&lt;/li&gt;
+&lt;li&gt;counter initialization&lt;/li&gt;
+&lt;li&gt;trigger event&lt;/li&gt;
+&lt;li&gt;input capture&lt;/li&gt;
+&lt;li&gt;output compare&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Advanced Control Timer&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;16-bit auto-reload register&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;特殊 timer&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;low power timer
+&lt;ul&gt;
+&lt;li&gt;可以用在比如睡眠狀態&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;補充&#34;&gt;補充&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;24 bits system timer (SysTick)&lt;/li&gt;
+&lt;li&gt;reload
+&lt;ul&gt;
+&lt;li&gt;在 overflow 時回到 register 設定的數值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;stm32-timer-差異&#34;&gt;STM32 Timer 差異&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;可以去 Datasheet 找每個 Timer 的功能&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Counter resolution&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;16/32 bit&lt;/li&gt;
+&lt;li&gt;決定能從 0 數到多少個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Counter Type&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;決定能往上數或往下數或都可以&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Prescaler factor&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可以把進來的數字先除以某個數，減緩速度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;DMA request generation&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;能否用 DMA access 記憶體&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Capture / Compare channels&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一個 Timer 可能可以發多個訊號出去，並且經過多個 Compare register，比對不同 event&lt;/li&gt;
+&lt;li&gt;functions
+&lt;ul&gt;
+&lt;li&gt;Compare
+&lt;ul&gt;
+&lt;li&gt;和比對 register，比到了就送 event&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Capture
+&lt;ul&gt;
+&lt;li&gt;紀錄下 channel 的值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Complementary output&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;有些馬達控制需要反向波，就要這個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Max interface clock (MHz) and Max timer clock (MHz)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;進去和出來的速度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;system-clock---clock-tree&#34;&gt;System Clock - Clock tree&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Timer 源頭就是 clock&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;有四種來源幫忙驅動 system clock (SYSCLK)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;HSI16 (high speed internal)
+&lt;ul&gt;
+&lt;li&gt;16 MHz RC oscillator clock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;MSI (multispeed internal)
+&lt;ul&gt;
+&lt;li&gt;RC oscillator clock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;HSE (high speed external)
+&lt;ul&gt;
+&lt;li&gt;oscillator clock, from 4 to 48 MHz&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;PLL clock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;SYSCLK 往下接到 AHB，再接到 APB1、APB2&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;flash-read-access-latency&#34;&gt;Flash Read Access Latency&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;調整 clock 也要調整這部分&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;register&#34;&gt;Register&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;TIMx_CR1
+&lt;ul&gt;
+&lt;li&gt;control register&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;TIMx_PSC
+&lt;ul&gt;
+&lt;li&gt;設定 prescale&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;TIMx_ARR
+&lt;ul&gt;
+&lt;li&gt;auto-reload register&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>STM32 GPIO 介紹</title>
         <link>https://roykesydon.github.io/Blog/p/stm32-gpio-%E4%BB%8B%E7%B4%B9/</link>
         <pubDate>Wed, 26 Apr 2023 01:32:54 +0800</pubDate>

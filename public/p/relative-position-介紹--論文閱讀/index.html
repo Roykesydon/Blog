@@ -13,7 +13,7 @@ Relative Position Encodings Relative Position Encodings 顧名思義，就是改
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/relative-position-%E4%BB%8B%E7%B4%B9--%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.323938b06228ecebeb017d0a6d49c113d742b8b78e553d1c133b72d1263204f7.css"><meta property='og:title' content='Relative Position 介紹 &#43; 論文閱讀'>
+<link rel="stylesheet" href="/Blog/scss/style.min.ff79bfc11f71eea1ec92db6a7cd6d70d32d081257ca195d1f6dabb62c4173c6d.css"><meta property='og:title' content='Relative Position 介紹 &#43; 論文閱讀'>
 <meta property='og:description' content='說明 本文寫於 Swin Transformer 論文閱讀 之後，當時對 Relatvie position 的理解不夠清楚，本文將會做解釋，並附上原論文的筆記。
 以下將會先用長度為 3 的序列作為示範。
 Absolute Position Encodings Absolute Position Encodings 的做法是把用某種方式生成或可學習的向量加在輸入，第一個位置用 $w_1$，第二個位置用 $w_2$，第三個位置用 $w_3$。
@@ -32,6 +32,8 @@ Relative Position Encodings Relative Position Encodings 顧名思義，就是改
 上圖中，Position Encoding 的部分從 3 個向量變成 3*3 個向量，因為現在會以每個 token 為基準，生出 3 個相對位置向量。
 我們以 $w_0$，代表處於原點，$w_x$ 代表往右 $x$ 格，$w_{-x}$ 代表往左 $x$ 格，其中 $x$ 是正整數。
 第一個 row 有 $w_0$、$w_1$、$w_2$，意思是以第 0 個向量 (I) 為基準，他的位置是 $w_0$，對第 0 個向量來說，第 1 個向量 (like) 是 $w_1$，第 2 個向量 (cat) 是 $w_2$。">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
 </head>
 
 <body class="

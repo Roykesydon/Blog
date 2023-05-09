@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='簡介 Timer 和 Counter 的差別是 Timer 是定期的數數
+Timing functions 定期對 CPU 發送 interrupt 產生準確時間的 delay 產生 pulses 或 periodic waveforms PWM 量測 duration STM32 Timer / Counter 從 Basic 到 Advanced，追加更多功能
+Basic TImer (Simple Timer)
+16 bit auto-reload register programmable pre-scaler 可以 output 到 DAC update event CNT=ARR(up-count) CNT=0 (down-count) reset CNT to 0 or ARR set UIF flag in status register update event interrupt 如果 enabled (UIE=1) UIF 被設置的時候發送訊號 $T_{EVENT}=Prescale \times Count \times T_{CK \_ INT} \\ =(PSC&#43;1)\times(ARR&#43;1)\times T_{CK \_ INT}$'>
+<title>STM32 Timer / Counter 介紹</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/stm32-timer-/-counter-%E4%BB%8B%E7%B4%B9/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.ff79bfc11f71eea1ec92db6a7cd6d70d32d081257ca195d1f6dabb62c4173c6d.css"><meta property='og:title' content='STM32 Timer / Counter 介紹'>
+<meta property='og:description' content='簡介 Timer 和 Counter 的差別是 Timer 是定期的數數
+Timing functions 定期對 CPU 發送 interrupt 產生準確時間的 delay 產生 pulses 或 periodic waveforms PWM 量測 duration STM32 Timer / Counter 從 Basic 到 Advanced，追加更多功能
+Basic TImer (Simple Timer)
+16 bit auto-reload register programmable pre-scaler 可以 output 到 DAC update event CNT=ARR(up-count) CNT=0 (down-count) reset CNT to 0 or ARR set UIF flag in status register update event interrupt 如果 enabled (UIE=1) UIF 被設置的時候發送訊號 $T_{EVENT}=Prescale \times Count \times T_{CK \_ INT} \\ =(PSC&#43;1)\times(ARR&#43;1)\times T_{CK \_ INT}$'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/stm32-timer-/-counter-%E4%BB%8B%E7%B4%B9/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='embedded-system' /><meta property='article:tag' content='stm32' /><meta property='article:tag' content='mcu' /><meta property='article:published_time' content='2023-05-04T01:32:54&#43;08:00'/><meta property='article:modified_time' content='2023-05-04T01:32:54&#43;08:00'/>
+<meta name="twitter:title" content="STM32 Timer / Counter 介紹">
+<meta name="twitter:description" content="簡介 Timer 和 Counter 的差別是 Timer 是定期的數數
+Timing functions 定期對 CPU 發送 interrupt 產生準確時間的 delay 產生 pulses 或 periodic waveforms PWM 量測 duration STM32 Timer / Counter 從 Basic 到 Advanced，追加更多功能
+Basic TImer (Simple Timer)
+16 bit auto-reload register programmable pre-scaler 可以 output 到 DAC update event CNT=ARR(up-count) CNT=0 (down-count) reset CNT to 0 or ARR set UIF flag in status register update event interrupt 如果 enabled (UIE=1) UIF 被設置的時候發送訊號 $T_{EVENT}=Prescale \times Count \times T_{CK \_ INT} \\ =(PSC&#43;1)\times(ARR&#43;1)\times T_{CK \_ INT}$">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">⭐<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/StarRabbit.jpg"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#簡介">簡介</a></li>
+    <li><a href="#timing-functions">Timing functions</a></li>
+    <li><a href="#stm32-timer--counter">STM32 Timer / Counter</a>
+      <ol>
+        <li><a href="#補充">補充</a></li>
+      </ol>
+    </li>
+    <li><a href="#stm32-timer-差異">STM32 Timer 差異</a></li>
+    <li><a href="#system-clock---clock-tree">System Clock - Clock tree</a></li>
+    <li><a href="#flash-read-access-latency">Flash Read Access Latency</a></li>
+    <li><a href="#register">Register</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/embedded-system/" style="background-color: #e17100; color: #fff;">
+                Embedded System
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/embedded-system.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/stm32-timer-/-counter-%E4%BB%8B%E7%B4%B9/">STM32 Timer / Counter 介紹</a>
+        </h2>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">May 04, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    2 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="簡介">簡介</h2>
+<p>Timer 和 Counter 的差別是 Timer 是定期的數數</p>
+<h2 id="timing-functions">Timing functions</h2>
+<ul>
+<li>定期對 CPU 發送 interrupt</li>
+<li>產生準確時間的 delay</li>
+<li>產生 pulses 或 periodic waveforms
+<ul>
+<li>PWM</li>
+</ul>
+</li>
+<li>量測 duration</li>
+</ul>
+<h2 id="stm32-timer--counter">STM32 Timer / Counter</h2>
+<p>從 Basic 到 Advanced，追加更多功能</p>
+<ul>
+<li>
+<p>Basic TImer (Simple Timer)</p>
+<ul>
+<li>16 bit auto-reload register</li>
+<li>programmable pre-scaler</li>
+<li>可以 output 到 DAC</li>
+<li>update event
+<ul>
+<li>CNT=ARR(up-count)</li>
+<li>CNT=0 (down-count)</li>
+<li>reset CNT to 0 or ARR</li>
+<li>set UIF flag in status register</li>
+</ul>
+</li>
+<li>update event interrupt
+<ul>
+<li>如果 enabled (UIE=1)</li>
+<li>UIF 被設置的時候發送訊號</li>
+</ul>
+</li>
+</ul>
+<p><img src="/Blog/images/embedding/stm32-timer/rm-fig-367.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+>
+<img src="/Blog/images/embedding/stm32-timer/rm-fig-370.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<ul>
+<li>
+<p>$T_{EVENT}=Prescale \times Count \times T_{CK \_ INT} \\
+=(PSC+1)\times(ARR+1)\times T_{CK \_ INT}$</p>
+<ul>
+<li>$T_{EVENT}$ 是兩次事件發生的間隔時間</li>
+<li>PSC 是設定 (數值 - 1)，所以 Prescale 是 1 的話，要設 0</li>
+</ul>
+</li>
+<li>
+<p>Control register</p>
+<ul>
+<li>CEN
+<ul>
+<li>是否啟用 counter</li>
+</ul>
+</li>
+<li>UDIS
+<ul>
+<li>是否啟用 update event</li>
+</ul>
+</li>
+<li>URS
+<ul>
+<li>設定產生 update event 的 source</li>
+</ul>
+</li>
+<li>OPM
+<ul>
+<li>是否只算一次 counter 就停</li>
+</ul>
+</li>
+<li>ARPE
+<ul>
+<li>關於中途改 ARR 的 reload 設定</li>
+</ul>
+</li>
+<li>UIF
+<ul>
+<li>interrupt</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>General Purpose Timer</p>
+<p><img src="/Blog/images/embedding/stm32-timer/rm-fig-284.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<ul>
+<li>16-bit or 32-bit auto-reload register</li>
+<li>use for a variety of puposes
+<ul>
+<li>
+<p>measuring lengths of input signals (Input Capture)</p>
+<ul>
+<li>Input Capture
+<ul>
+<li>測量 pulse width (高電位的時間) 或 period (一個週長)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>generating output waveforms (Output Compare and PWM Generation)</p>
+<ul>
+<li>one pulse mode output</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Up to 4 independent channel</li>
+<li>Interrupt / DMA generation
+<ul>
+<li>event
+<ul>
+<li>counter overflow / underflow</li>
+<li>counter initialization</li>
+<li>trigger event</li>
+<li>input capture</li>
+<li>output compare</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Advanced Control Timer</p>
+<ul>
+<li>16-bit auto-reload register</li>
+</ul>
+</li>
+<li>
+<p>特殊 timer</p>
+<ul>
+<li>low power timer
+<ul>
+<li>可以用在比如睡眠狀態</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="補充">補充</h3>
+<ul>
+<li>24 bits system timer (SysTick)</li>
+<li>reload
+<ul>
+<li>在 overflow 時回到 register 設定的數值</li>
+</ul>
+</li>
+</ul>
+<h2 id="stm32-timer-差異">STM32 Timer 差異</h2>
+<ul>
+<li>
+<p>可以去 Datasheet 找每個 Timer 的功能</p>
+</li>
+<li>
+<p>Counter resolution</p>
+<ul>
+<li>16/32 bit</li>
+<li>決定能從 0 數到多少個</li>
+</ul>
+</li>
+<li>
+<p>Counter Type</p>
+<ul>
+<li>決定能往上數或往下數或都可以</li>
+</ul>
+</li>
+<li>
+<p>Prescaler factor</p>
+<ul>
+<li>可以把進來的數字先除以某個數，減緩速度</li>
+</ul>
+</li>
+<li>
+<p>DMA request generation</p>
+<ul>
+<li>能否用 DMA access 記憶體</li>
+</ul>
+</li>
+<li>
+<p>Capture / Compare channels</p>
+<ul>
+<li>一個 Timer 可能可以發多個訊號出去，並且經過多個 Compare register，比對不同 event</li>
+<li>functions
+<ul>
+<li>Compare
+<ul>
+<li>和比對 register，比到了就送 event</li>
+</ul>
+</li>
+<li>Capture
+<ul>
+<li>紀錄下 channel 的值</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Complementary output</p>
+<ul>
+<li>有些馬達控制需要反向波，就要這個</li>
+</ul>
+</li>
+<li>
+<p>Max interface clock (MHz) and Max timer clock (MHz)</p>
+<ul>
+<li>進去和出來的速度</li>
+</ul>
+</li>
+</ul>
+<h2 id="system-clock---clock-tree">System Clock - Clock tree</h2>
+<ul>
+<li>
+<p>Timer 源頭就是 clock</p>
+</li>
+<li>
+<p>有四種來源幫忙驅動 system clock (SYSCLK)</p>
+<ul>
+<li>HSI16 (high speed internal)
+<ul>
+<li>16 MHz RC oscillator clock</li>
+</ul>
+</li>
+<li>MSI (multispeed internal)
+<ul>
+<li>RC oscillator clock</li>
+</ul>
+</li>
+<li>HSE (high speed external)
+<ul>
+<li>oscillator clock, from 4 to 48 MHz</li>
+</ul>
+</li>
+<li>PLL clock</li>
+</ul>
+</li>
+<li>
+<p>SYSCLK 往下接到 AHB，再接到 APB1、APB2</p>
+</li>
+</ul>
+<h2 id="flash-read-access-latency">Flash Read Access Latency</h2>
+<ul>
+<li>調整 clock 也要調整這部分</li>
+</ul>
+<h2 id="register">Register</h2>
+<ul>
+<li>TIMx_CR1
+<ul>
+<li>control register</li>
+</ul>
+</li>
+<li>TIMx_PSC
+<ul>
+<li>設定 prescale</li>
+</ul>
+</li>
+<li>TIMx_ARR
+<ul>
+<li>auto-reload register</li>
+</ul>
+</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/embedded-system/">embedded-system</a>
+        
+            <a href="/Blog/tags/stm32/">stm32</a>
+        
+            <a href="/Blog/tags/mcu/">mcu</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/stm32-gpio-%E4%BB%8B%E7%B4%B9/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">STM32 GPIO 介紹</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/stm32-uart-%E5%AF%A6%E9%A9%97/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">STM32 UART 實驗</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/stm32-gpio-%E5%AF%A6%E9%A9%97/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">STM32 GPIO 實驗</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/stm32cubeide-%E5%9F%BA%E6%9C%AC%E9%96%8B%E7%99%BC%E4%BD%BF%E7%94%A8/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">STM32CubeIDE 基本開發使用</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/arm-%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80%E4%BB%8B%E7%B4%B9/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">ARM 組合語言介紹</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>

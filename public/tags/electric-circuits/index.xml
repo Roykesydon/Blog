@@ -6,7 +6,421 @@
         <description>Recent content in electric-circuits on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 10 Apr 2023 00:00:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/electric-circuits/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 08 May 2023 00:00:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/electric-circuits/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>電路學 - III</title>
+        <link>https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-iii/</link>
+        <pubDate>Mon, 08 May 2023 00:00:54 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-iii/</guid>
+        <description>&lt;h2 id=&#34;運算放大器-operational-amplifiers&#34;&gt;運算放大器 (Operational Amplifiers)&lt;/h2&gt;
+&lt;h3 id=&#34;介紹&#34;&gt;介紹&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;運算放大器 (Operational Amplifiers)
+&lt;ul&gt;
+&lt;li&gt;特性
+&lt;ul&gt;
+&lt;li&gt;類似於電壓控制電壓相依電源的電子元件&lt;/li&gt;
+&lt;li&gt;主動電路元件&lt;/li&gt;
+&lt;li&gt;用於執行加、減、乘、除、微分與積分等運數學運算的主動電路元件&lt;/li&gt;
+&lt;li&gt;由電阻、電晶體、電容和二極體等所構成的電子元件，但因內部電路的討論已超出範圍，先看作是電路模組&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;封裝形式
+&lt;ul&gt;
+&lt;li&gt;DIP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;輸出電壓 $v_O$
+&lt;ul&gt;
+&lt;li&gt;$v_O=Av_d=A(v_2-v_1)$
+&lt;ul&gt;
+&lt;li&gt;$v_2$ 是非反相輸入 (noninverting input)&lt;/li&gt;
+&lt;li&gt;$v_1$ 是反相輸入  (inverting input)&lt;/li&gt;
+&lt;li&gt;$A$ 是開迴路電壓增益 (open-loop voltage gain)
+&lt;ul&gt;
+&lt;li&gt;是沒有任何從輸出到輸入的回授 (feedback) 時，運算放大器的增益&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;回授
+&lt;ul&gt;
+&lt;li&gt;負回授 (negative feedback)
+&lt;ul&gt;
+&lt;li&gt;輸出回授至反相輸入端&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;閉迴路增益 (closed-loop gain)
+&lt;ul&gt;
+&lt;li&gt;如果存在由輸出到輸入的回授，輸出電壓與輸入電壓的比例稱為閉迴路增益&lt;/li&gt;
+&lt;li&gt;對負回授電路而言，可以證明閉迴路增益和開迴路增益無關，因此運算放大器總是用於具回授的電路中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;工作模式
+&lt;ul&gt;
+&lt;li&gt;正飽和區
+&lt;ul&gt;
+&lt;li&gt;$v_O=V_{CC}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;線性區
+&lt;ul&gt;
+&lt;li&gt;$-V_{CC} \leq v_O = Av_d \leq V_{CC}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;負飽和區
+&lt;ul&gt;
+&lt;li&gt;$v_O=-V_{CC}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;符號
+&lt;ul&gt;
+&lt;li&gt;$v_O$ 是輸出電壓&lt;/li&gt;
+&lt;li&gt;$v_d$ 是輸入電壓差&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;理想運算放大器-ideal-op-amp&#34;&gt;理想運算放大器 (Ideal Op Amp)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;假定運算放大器是理想的是符合實際的，因位目前絕大多數運算放大器都有很大的增益和輸入電阻&lt;/li&gt;
+&lt;li&gt;具有以下特性的運算放大器，稱為理想運算放大器
+&lt;ul&gt;
+&lt;li&gt;$A \simeq \inf$
+&lt;ul&gt;
+&lt;li&gt;開迴路增益無窮大&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$R_i \simeq \inf$
+&lt;ul&gt;
+&lt;li&gt;輸入電阻無窮大&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$R_O \simeq 0$
+&lt;ul&gt;
+&lt;li&gt;輸出電阻為零&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;特性
+&lt;ul&gt;
+&lt;li&gt;流入兩個輸入端的電流均為 0，因為輸入電阻無窮大，輸入端間開路&lt;/li&gt;
+&lt;li&gt;輸入端間的電壓差等於零，$v_d=v_2-v_1=0$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;反相放大器-inverting-amplifier&#34;&gt;反相放大器 (Inverting Amplifier)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;對輸入信號放大的同時反轉極性&lt;/li&gt;
+&lt;li&gt;公式
+&lt;ul&gt;
+&lt;li&gt;$v_0=-\frac{R_f}{R_1}v_i$
+&lt;ul&gt;
+&lt;li&gt;$R_f$ 是回授電阻&lt;/li&gt;
+&lt;li&gt;$R_1$ 是進到負回授節點前的電阻&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;非反相放大器-noninverting-amplifier&#34;&gt;非反相放大器 (Noninverting Amplifier)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;提供正電壓增益的運算放大器電路&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;公式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$v_0=(1+\frac{R_f}{R_1})v_i$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;電壓隨耦器 (voltage follewer)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;又稱單位增益放大器 (unity gain amplifier)&lt;/li&gt;
+&lt;li&gt;條件
+&lt;ul&gt;
+&lt;li&gt;$R_f=0 或 R_1=\inf 或 (R_f=0 且 R_1=\inf)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;公式
+&lt;ul&gt;
+&lt;li&gt;$v_0=v_i$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;加法放大器-summing-amplifier&#34;&gt;加法放大器 (Summing Amplifier)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;將多個輸入結合，在輸出產生輸入的加權總合&lt;/li&gt;
+&lt;li&gt;公式
+&lt;ul&gt;
+&lt;li&gt;$v_O=-(\frac{R_f}{R_1}v_1+\frac{R_f}{R_2}v_2+\frac{R_f}{R_3}v_3)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;差動放大器-difference-amplifier&#34;&gt;差動放大器 (Difference Amplifier)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;放大兩個輸入信號的差而抑制兩個輸入的共模信號 (Common-mode signal)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;公式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$v_O=\frac{R_2(1+R_1/R_2)}{R1(1+R_3/R_4)}v_2-\frac{R_2}{R_1}v_1$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果 $R_2=R_1$ 且 $R_3=R_4$，動差放大器為減法器 (subtractor)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$v_O=v_2-v_1$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;串級運算放大器電路-cascaded-op-amp-circuits&#34;&gt;串級運算放大器電路 (Cascaded Op Amp Circuits)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;串級
+&lt;ul&gt;
+&lt;li&gt;兩個以上的運算放大器首尾相接，前一級的輸出是下一級的輸入&lt;/li&gt;
+&lt;li&gt;多個運算放大器串級時，每個電路都稱為一級 (stage)&lt;/li&gt;
+&lt;li&gt;運算放大器的優點
+&lt;ul&gt;
+&lt;li&gt;串級不會改變各自輸入-輸出
+&lt;ul&gt;
+&lt;li&gt;因為理想的運算放大器輸入電阻無窮大，輸出電阻為 0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;總增益為個別增益的乘積
+&lt;ul&gt;
+&lt;li&gt;$A=A_1A_2A_3$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;數位-類比轉換器-digital-to-analog-converter-dac&#34;&gt;數位-類比轉換器 (Digital-to-Analog Converter, DAC)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;DAC 把數位信號轉成類比信號&lt;/li&gt;
+&lt;li&gt;實現方法
+&lt;ul&gt;
+&lt;li&gt;二進位加權階梯電路 (binary weighted ladder)
+&lt;ul&gt;
+&lt;li&gt;把權重設計成二進位的加法放大器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;輸入
+&lt;ul&gt;
+&lt;li&gt;最高位元 (most significant bit, MSB)&lt;/li&gt;
+&lt;li&gt;最低位元 (least significant bit, LSB)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;儀表放大器-instrumentation-amplifiers&#34;&gt;儀表放大器 (Instrumentation Amplifiers)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;差動放大器的延伸&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;電容器與電感器&#34;&gt;電容器與電感器&lt;/h2&gt;
+&lt;h3 id=&#34;介紹-1&#34;&gt;介紹&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;電容器與電感器是能儲存能量的儲能元件 (storage element)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;電容器-capacitors&#34;&gt;電容器 (Capacitors)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;將能量儲存在電場中的被動元件&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;由兩片導電板夾著絕緣體 (電介質) 組成&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;公式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$q=Cv$
+&lt;ul&gt;
+&lt;li&gt;q 是儲存的電荷量&lt;/li&gt;
+&lt;li&gt;C 是比例常數，又稱電容 (capacitance)
+&lt;ul&gt;
+&lt;li&gt;單位是法拉 (farad, F)&lt;/li&gt;
+&lt;li&gt;C 不是由 q 和 v 決定
+&lt;ul&gt;
+&lt;li&gt;$C=\frac{\epsilon A}{d}$
+&lt;ul&gt;
+&lt;li&gt;$\epsilon$ 是介電常數&lt;/li&gt;
+&lt;li&gt;$A$ 是導電極版的截面積&lt;/li&gt;
+&lt;li&gt;$d$ 是兩極板的間距&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$v(t)=\frac{1}{C}\int_{t_0}^t i (\tau)d\tau + v(t_0)$&lt;/li&gt;
+&lt;li&gt;$w=\frac{1}{2}Cv^2$
+&lt;ul&gt;
+&lt;li&gt;電場儲存的能量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;線性電容 (linear capacitor)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;滿足 $i=C\frac{dv}{dt}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;非線性電容 (nonlinear capacitor)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;電流電壓關係曲線非直線，不過多數電容是線性的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;重要性質&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;電容器在直流下工作，等同開路
+&lt;ul&gt;
+&lt;li&gt;電壓不隨時間改變的話電流是 0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;電容器上的電壓必須是連續的
+&lt;ul&gt;
+&lt;li&gt;因為不連續變化的電壓需要無限大的電流&lt;/li&gt;
+&lt;li&gt;電容會反抗電壓的突然改變&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;理想電容器不消耗能量&lt;/li&gt;
+&lt;li&gt;實際的非理想電容器會並聯一個漏電阻，可高達 $100M \Omega$，在多數情況可忽略不計&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;電容器串並聯&#34;&gt;電容器串並聯&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;並聯
+&lt;ul&gt;
+&lt;li&gt;$C_{eq} = C_1 + C_2 + C_3 + &amp;hellip; + C_N$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;串聯
+&lt;ul&gt;
+&lt;li&gt;$\frac{1}{C_{eq}} = \frac{1}{C_{1}} + \frac{1}{C_{2}} + \frac{1}{C_{3}} + &amp;hellip; + \frac{1}{C_{N}}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;電感器-inductors&#34;&gt;電感器 (Inductors)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;將能量儲存於磁場中的被動元件&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;公式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$v=L\frac{di}{dt}$
+&lt;ul&gt;
+&lt;li&gt;L 是比例常數，又稱為電感 (inductance)
+&lt;ul&gt;
+&lt;li&gt;單位是亨利 (henry, H)&lt;/li&gt;
+&lt;li&gt;由物理尺寸和結構決定&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$i=\frac{1}{L}\int_{t_0}^t v (\tau)d\tau + i(t_0)$&lt;/li&gt;
+&lt;li&gt;$w=\frac{1}{2}Li^2$
+&lt;ul&gt;
+&lt;li&gt;儲存的能量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;電感反應電感器反抗電流變化的特性&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;線性電感 (linear inductor)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;滿足 $v=L\frac{di}{dt}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;非線性電感 (nonlinear inductor)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$v$ 和 $di/dt$ 關係曲線非直線&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;重要性質&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在直流中，電感器等同短路&lt;/li&gt;
+&lt;li&gt;電感器上的電流必須是連續的
+&lt;ul&gt;
+&lt;li&gt;因為不連續變化的電流需要無限大的電壓&lt;/li&gt;
+&lt;li&gt;電容會反抗電流的突然改變&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;理想電感器不消耗能量&lt;/li&gt;
+&lt;li&gt;實際的非理想電容器會串聯一個繞線電阻 (winding resistance)，由製成電感的導電材料產生，通常很小。並由於線圈間的電容性耦合，也存在繞線電容 (winding capacitance)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;電感器串並聯&#34;&gt;電感器串並聯&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;串聯
+&lt;ul&gt;
+&lt;li&gt;$L_{eq} = L_1 + L_2 + L_3 + &amp;hellip; + L_N$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;並聯
+&lt;ul&gt;
+&lt;li&gt;$\frac{1}{L_{eq}} = \frac{1}{L_{1}} + \frac{1}{L_{2}} + \frac{1}{L_{3}} + &amp;hellip; + \frac{1}{L_{N}}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;應用&#34;&gt;應用&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;電感電容的特殊性質
+&lt;ul&gt;
+&lt;li&gt;能儲存能量，作為暫時的電壓源或電流源，可在短時間內產生大電流或電壓&lt;/li&gt;
+&lt;li&gt;電容器反抗電壓的突然改變、電感器反抗電流的突然改變&lt;/li&gt;
+&lt;li&gt;電容器和電感器對頻率很靈敏，可以區別不同頻率，這條用在交流電路中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;積分器-integrator&#34;&gt;積分器 (Integrator)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;採用儲能元件的運算放大器組成的積分器，輸出訊號和輸入訊號的積分成正比
+&lt;ul&gt;
+&lt;li&gt;$v_0=-\frac{1}{RC}\int_0^tv_i(\tau)d\tau$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;微分器-differentiator&#34;&gt;微分器 (Differentiator)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;採用儲能元件的運算放大器組成的微分器，輸出訊號和輸入訊號的變率成正比
+&lt;ul&gt;
+&lt;li&gt;$v_0=-RC\frac{dv_i}{dt}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;類比計算機-analog-computer&#34;&gt;類比計算機 (Analog Computer)&lt;/h4&gt;
+&lt;p&gt;由各種運算放大器綜合使用，可算出任意微分方程式&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>電路學 - II</title>
         <link>https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-ii/</link>
         <pubDate>Mon, 10 Apr 2023 00:00:54 +0800</pubDate>

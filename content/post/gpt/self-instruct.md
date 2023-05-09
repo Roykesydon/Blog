@@ -22,7 +22,7 @@ paper: [Self-Instruct: Aligning Language Model with Self Generated Instructions]
 
 為了進一步評估，我們為新任務整理一組專家編寫的指令，並通過人工評估，顯示出使用 Self-Instruction 調整 GPT3 的性能大大優於使用現有公共指令資料集，只比 $InstructGPT_{001}$ 落後 5% 的差距。
 
-Self-Instruct 提供一個幾乎 annotation-free 的方法，aling 預訓練模型和 instructions，而且作者釋出了他們的大型合成資料集，以促進未來對 instruction tuning 的研究。
+Self-Instruct 提供一個幾乎 annotation-free 的方法，align 預訓練模型和 instructions，而且作者釋出了他們的大型合成資料集，以促進未來對 instruction tuning 的研究。
 
 ## Introduction
 
@@ -67,14 +67,14 @@ SuperNI 的結果表明，$GPT3_{SELF-INST}$ 性能大大優於 GPT3 (原始模�
 此外，作者在新創建的的指令集上進行人工評估，$GPT3_{SELF-INST}$ 顯示出廣泛的指令遵循能力，優於在其他公開可用指令數據集上訓練的模型，只比 InstrcutGPT001 落後 5%。
 
 本文貢獻：
-1. SelfInstrct：一種用最少的人工標記數據引導指令遵循能力的作法
+1. Self-Instruct：一種用最少的人工標記數據引導指令遵循能力的作法
 2. 通過大量的 instruction-tuning 實驗，證明了有效性。
 3. 發布了一個包含 52K 指令的大型綜合資料集，還有一組手動編寫的新任務，用於建構和評估未來的 instruction-following models。
 
 
 ## Related Work
 
-###　Instruction-following language models
+### Instruction-following language models
 一系列工作顯示，使用 annotated "instructional" data，可以使普通語言模型遵循一般語言的指令。
 
 也顯示出 "instructional" data 的大小和多樣性直接影響模型的泛化能力。

@@ -6,7 +6,717 @@
         <description>Recent content in Posts on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 30 Apr 2023 00:00:12 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 08 May 2023 00:00:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>電路學 - III</title>
+        <link>https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-iii/</link>
+        <pubDate>Mon, 08 May 2023 00:00:54 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-iii/</guid>
+        <description>&lt;h2 id=&#34;運算放大器-operational-amplifiers&#34;&gt;運算放大器 (Operational Amplifiers)&lt;/h2&gt;
+&lt;h3 id=&#34;介紹&#34;&gt;介紹&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;運算放大器 (Operational Amplifiers)
+&lt;ul&gt;
+&lt;li&gt;特性
+&lt;ul&gt;
+&lt;li&gt;類似於電壓控制電壓相依電源的電子元件&lt;/li&gt;
+&lt;li&gt;主動電路元件&lt;/li&gt;
+&lt;li&gt;用於執行加、減、乘、除、微分與積分等運數學運算的主動電路元件&lt;/li&gt;
+&lt;li&gt;由電阻、電晶體、電容和二極體等所構成的電子元件，但因內部電路的討論已超出範圍，先看作是電路模組&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;封裝形式
+&lt;ul&gt;
+&lt;li&gt;DIP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;輸出電壓 $v_O$
+&lt;ul&gt;
+&lt;li&gt;$v_O=Av_d=A(v_2-v_1)$
+&lt;ul&gt;
+&lt;li&gt;$v_2$ 是非反相輸入 (noninverting input)&lt;/li&gt;
+&lt;li&gt;$v_1$ 是反相輸入  (inverting input)&lt;/li&gt;
+&lt;li&gt;$A$ 是開迴路電壓增益 (open-loop voltage gain)
+&lt;ul&gt;
+&lt;li&gt;是沒有任何從輸出到輸入的回授 (feedback) 時，運算放大器的增益&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;回授
+&lt;ul&gt;
+&lt;li&gt;負回授 (negative feedback)
+&lt;ul&gt;
+&lt;li&gt;輸出回授至反相輸入端&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;閉迴路增益 (closed-loop gain)
+&lt;ul&gt;
+&lt;li&gt;如果存在由輸出到輸入的回授，輸出電壓與輸入電壓的比例稱為閉迴路增益&lt;/li&gt;
+&lt;li&gt;對負回授電路而言，可以證明閉迴路增益和開迴路增益無關，因此運算放大器總是用於具回授的電路中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;工作模式
+&lt;ul&gt;
+&lt;li&gt;正飽和區
+&lt;ul&gt;
+&lt;li&gt;$v_O=V_{CC}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;線性區
+&lt;ul&gt;
+&lt;li&gt;$-V_{CC} \leq v_O = Av_d \leq V_{CC}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;負飽和區
+&lt;ul&gt;
+&lt;li&gt;$v_O=-V_{CC}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;符號
+&lt;ul&gt;
+&lt;li&gt;$v_O$ 是輸出電壓&lt;/li&gt;
+&lt;li&gt;$v_d$ 是輸入電壓差&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;理想運算放大器-ideal-op-amp&#34;&gt;理想運算放大器 (Ideal Op Amp)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;假定運算放大器是理想的是符合實際的，因位目前絕大多數運算放大器都有很大的增益和輸入電阻&lt;/li&gt;
+&lt;li&gt;具有以下特性的運算放大器，稱為理想運算放大器
+&lt;ul&gt;
+&lt;li&gt;$A \simeq \inf$
+&lt;ul&gt;
+&lt;li&gt;開迴路增益無窮大&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$R_i \simeq \inf$
+&lt;ul&gt;
+&lt;li&gt;輸入電阻無窮大&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$R_O \simeq 0$
+&lt;ul&gt;
+&lt;li&gt;輸出電阻為零&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;特性
+&lt;ul&gt;
+&lt;li&gt;流入兩個輸入端的電流均為 0，因為輸入電阻無窮大，輸入端間開路&lt;/li&gt;
+&lt;li&gt;輸入端間的電壓差等於零，$v_d=v_2-v_1=0$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;反相放大器-inverting-amplifier&#34;&gt;反相放大器 (Inverting Amplifier)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;對輸入信號放大的同時反轉極性&lt;/li&gt;
+&lt;li&gt;公式
+&lt;ul&gt;
+&lt;li&gt;$v_0=-\frac{R_f}{R_1}v_i$
+&lt;ul&gt;
+&lt;li&gt;$R_f$ 是回授電阻&lt;/li&gt;
+&lt;li&gt;$R_1$ 是進到負回授節點前的電阻&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;非反相放大器-noninverting-amplifier&#34;&gt;非反相放大器 (Noninverting Amplifier)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;提供正電壓增益的運算放大器電路&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;公式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$v_0=(1+\frac{R_f}{R_1})v_i$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;電壓隨耦器 (voltage follewer)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;又稱單位增益放大器 (unity gain amplifier)&lt;/li&gt;
+&lt;li&gt;條件
+&lt;ul&gt;
+&lt;li&gt;$R_f=0 或 R_1=\inf 或 (R_f=0 且 R_1=\inf)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;公式
+&lt;ul&gt;
+&lt;li&gt;$v_0=v_i$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;加法放大器-summing-amplifier&#34;&gt;加法放大器 (Summing Amplifier)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;將多個輸入結合，在輸出產生輸入的加權總合&lt;/li&gt;
+&lt;li&gt;公式
+&lt;ul&gt;
+&lt;li&gt;$v_O=-(\frac{R_f}{R_1}v_1+\frac{R_f}{R_2}v_2+\frac{R_f}{R_3}v_3)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;差動放大器-difference-amplifier&#34;&gt;差動放大器 (Difference Amplifier)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;放大兩個輸入信號的差而抑制兩個輸入的共模信號 (Common-mode signal)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;公式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$v_O=\frac{R_2(1+R_1/R_2)}{R1(1+R_3/R_4)}v_2-\frac{R_2}{R_1}v_1$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果 $R_2=R_1$ 且 $R_3=R_4$，動差放大器為減法器 (subtractor)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$v_O=v_2-v_1$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;串級運算放大器電路-cascaded-op-amp-circuits&#34;&gt;串級運算放大器電路 (Cascaded Op Amp Circuits)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;串級
+&lt;ul&gt;
+&lt;li&gt;兩個以上的運算放大器首尾相接，前一級的輸出是下一級的輸入&lt;/li&gt;
+&lt;li&gt;多個運算放大器串級時，每個電路都稱為一級 (stage)&lt;/li&gt;
+&lt;li&gt;運算放大器的優點
+&lt;ul&gt;
+&lt;li&gt;串級不會改變各自輸入-輸出
+&lt;ul&gt;
+&lt;li&gt;因為理想的運算放大器輸入電阻無窮大，輸出電阻為 0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;總增益為個別增益的乘積
+&lt;ul&gt;
+&lt;li&gt;$A=A_1A_2A_3$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;數位-類比轉換器-digital-to-analog-converter-dac&#34;&gt;數位-類比轉換器 (Digital-to-Analog Converter, DAC)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;DAC 把數位信號轉成類比信號&lt;/li&gt;
+&lt;li&gt;實現方法
+&lt;ul&gt;
+&lt;li&gt;二進位加權階梯電路 (binary weighted ladder)
+&lt;ul&gt;
+&lt;li&gt;把權重設計成二進位的加法放大器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;輸入
+&lt;ul&gt;
+&lt;li&gt;最高位元 (most significant bit, MSB)&lt;/li&gt;
+&lt;li&gt;最低位元 (least significant bit, LSB)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;儀表放大器-instrumentation-amplifiers&#34;&gt;儀表放大器 (Instrumentation Amplifiers)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;差動放大器的延伸&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;電容器與電感器&#34;&gt;電容器與電感器&lt;/h2&gt;
+&lt;h3 id=&#34;介紹-1&#34;&gt;介紹&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;電容器與電感器是能儲存能量的儲能元件 (storage element)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;電容器-capacitors&#34;&gt;電容器 (Capacitors)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;將能量儲存在電場中的被動元件&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;由兩片導電板夾著絕緣體 (電介質) 組成&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;公式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$q=Cv$
+&lt;ul&gt;
+&lt;li&gt;q 是儲存的電荷量&lt;/li&gt;
+&lt;li&gt;C 是比例常數，又稱電容 (capacitance)
+&lt;ul&gt;
+&lt;li&gt;單位是法拉 (farad, F)&lt;/li&gt;
+&lt;li&gt;C 不是由 q 和 v 決定
+&lt;ul&gt;
+&lt;li&gt;$C=\frac{\epsilon A}{d}$
+&lt;ul&gt;
+&lt;li&gt;$\epsilon$ 是介電常數&lt;/li&gt;
+&lt;li&gt;$A$ 是導電極版的截面積&lt;/li&gt;
+&lt;li&gt;$d$ 是兩極板的間距&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$v(t)=\frac{1}{C}\int_{t_0}^t i (\tau)d\tau + v(t_0)$&lt;/li&gt;
+&lt;li&gt;$w=\frac{1}{2}Cv^2$
+&lt;ul&gt;
+&lt;li&gt;電場儲存的能量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;線性電容 (linear capacitor)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;滿足 $i=C\frac{dv}{dt}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;非線性電容 (nonlinear capacitor)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;電流電壓關係曲線非直線，不過多數電容是線性的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;重要性質&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;電容器在直流下工作，等同開路
+&lt;ul&gt;
+&lt;li&gt;電壓不隨時間改變的話電流是 0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;電容器上的電壓必須是連續的
+&lt;ul&gt;
+&lt;li&gt;因為不連續變化的電壓需要無限大的電流&lt;/li&gt;
+&lt;li&gt;電容會反抗電壓的突然改變&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;理想電容器不消耗能量&lt;/li&gt;
+&lt;li&gt;實際的非理想電容器會並聯一個漏電阻，可高達 $100M \Omega$，在多數情況可忽略不計&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;電容器串並聯&#34;&gt;電容器串並聯&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;並聯
+&lt;ul&gt;
+&lt;li&gt;$C_{eq} = C_1 + C_2 + C_3 + &amp;hellip; + C_N$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;串聯
+&lt;ul&gt;
+&lt;li&gt;$\frac{1}{C_{eq}} = \frac{1}{C_{1}} + \frac{1}{C_{2}} + \frac{1}{C_{3}} + &amp;hellip; + \frac{1}{C_{N}}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;電感器-inductors&#34;&gt;電感器 (Inductors)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;將能量儲存於磁場中的被動元件&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;公式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$v=L\frac{di}{dt}$
+&lt;ul&gt;
+&lt;li&gt;L 是比例常數，又稱為電感 (inductance)
+&lt;ul&gt;
+&lt;li&gt;單位是亨利 (henry, H)&lt;/li&gt;
+&lt;li&gt;由物理尺寸和結構決定&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$i=\frac{1}{L}\int_{t_0}^t v (\tau)d\tau + i(t_0)$&lt;/li&gt;
+&lt;li&gt;$w=\frac{1}{2}Li^2$
+&lt;ul&gt;
+&lt;li&gt;儲存的能量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;電感反應電感器反抗電流變化的特性&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;線性電感 (linear inductor)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;滿足 $v=L\frac{di}{dt}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;非線性電感 (nonlinear inductor)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$v$ 和 $di/dt$ 關係曲線非直線&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;重要性質&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在直流中，電感器等同短路&lt;/li&gt;
+&lt;li&gt;電感器上的電流必須是連續的
+&lt;ul&gt;
+&lt;li&gt;因為不連續變化的電流需要無限大的電壓&lt;/li&gt;
+&lt;li&gt;電容會反抗電流的突然改變&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;理想電感器不消耗能量&lt;/li&gt;
+&lt;li&gt;實際的非理想電容器會串聯一個繞線電阻 (winding resistance)，由製成電感的導電材料產生，通常很小。並由於線圈間的電容性耦合，也存在繞線電容 (winding capacitance)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;電感器串並聯&#34;&gt;電感器串並聯&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;串聯
+&lt;ul&gt;
+&lt;li&gt;$L_{eq} = L_1 + L_2 + L_3 + &amp;hellip; + L_N$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;並聯
+&lt;ul&gt;
+&lt;li&gt;$\frac{1}{L_{eq}} = \frac{1}{L_{1}} + \frac{1}{L_{2}} + \frac{1}{L_{3}} + &amp;hellip; + \frac{1}{L_{N}}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;應用&#34;&gt;應用&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;電感電容的特殊性質
+&lt;ul&gt;
+&lt;li&gt;能儲存能量，作為暫時的電壓源或電流源，可在短時間內產生大電流或電壓&lt;/li&gt;
+&lt;li&gt;電容器反抗電壓的突然改變、電感器反抗電流的突然改變&lt;/li&gt;
+&lt;li&gt;電容器和電感器對頻率很靈敏，可以區別不同頻率，這條用在交流電路中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;積分器-integrator&#34;&gt;積分器 (Integrator)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;採用儲能元件的運算放大器組成的積分器，輸出訊號和輸入訊號的積分成正比
+&lt;ul&gt;
+&lt;li&gt;$v_0=-\frac{1}{RC}\int_0^tv_i(\tau)d\tau$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;微分器-differentiator&#34;&gt;微分器 (Differentiator)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;採用儲能元件的運算放大器組成的微分器，輸出訊號和輸入訊號的變率成正比
+&lt;ul&gt;
+&lt;li&gt;$v_0=-RC\frac{dv_i}{dt}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;類比計算機-analog-computer&#34;&gt;類比計算機 (Analog Computer)&lt;/h4&gt;
+&lt;p&gt;由各種運算放大器綜合使用，可算出任意微分方程式&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>STM32 Timer / Counter 介紹</title>
+        <link>https://roykesydon.github.io/Blog/p/stm32-timer-/-counter-%E4%BB%8B%E7%B4%B9/</link>
+        <pubDate>Thu, 04 May 2023 01:32:54 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/stm32-timer-/-counter-%E4%BB%8B%E7%B4%B9/</guid>
+        <description>&lt;h2 id=&#34;簡介&#34;&gt;簡介&lt;/h2&gt;
+&lt;p&gt;Timer 和 Counter 的差別是 Timer 是定期的數數&lt;/p&gt;
+&lt;h2 id=&#34;timing-functions&#34;&gt;Timing functions&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;定期對 CPU 發送 interrupt&lt;/li&gt;
+&lt;li&gt;產生準確時間的 delay&lt;/li&gt;
+&lt;li&gt;產生 pulses 或 periodic waveforms
+&lt;ul&gt;
+&lt;li&gt;PWM&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;量測 duration&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;stm32-timer--counter&#34;&gt;STM32 Timer / Counter&lt;/h2&gt;
+&lt;p&gt;從 Basic 到 Advanced，追加更多功能&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Basic TImer (Simple Timer)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;16 bit auto-reload register&lt;/li&gt;
+&lt;li&gt;programmable pre-scaler&lt;/li&gt;
+&lt;li&gt;可以 output 到 DAC&lt;/li&gt;
+&lt;li&gt;update event
+&lt;ul&gt;
+&lt;li&gt;CNT=ARR(up-count)&lt;/li&gt;
+&lt;li&gt;CNT=0 (down-count)&lt;/li&gt;
+&lt;li&gt;reset CNT to 0 or ARR&lt;/li&gt;
+&lt;li&gt;set UIF flag in status register&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;update event interrupt
+&lt;ul&gt;
+&lt;li&gt;如果 enabled (UIE=1)&lt;/li&gt;
+&lt;li&gt;UIF 被設置的時候發送訊號&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-timer/rm-fig-367.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;
+&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-timer/rm-fig-370.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;$T_{EVENT}=Prescale \times Count \times T_{CK \_ INT} \\
+=(PSC+1)\times(ARR+1)\times T_{CK \_ INT}$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$T_{EVENT}$ 是兩次事件發生的間隔時間&lt;/li&gt;
+&lt;li&gt;PSC 是設定 (數值 - 1)，所以 Prescale 是 1 的話，要設 0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Control register&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CEN
+&lt;ul&gt;
+&lt;li&gt;是否啟用 counter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;UDIS
+&lt;ul&gt;
+&lt;li&gt;是否啟用 update event&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;URS
+&lt;ul&gt;
+&lt;li&gt;設定產生 update event 的 source&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;OPM
+&lt;ul&gt;
+&lt;li&gt;是否只算一次 counter 就停&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ARPE
+&lt;ul&gt;
+&lt;li&gt;關於中途改 ARR 的 reload 設定&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;UIF
+&lt;ul&gt;
+&lt;li&gt;interrupt&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;General Purpose Timer&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/embedding/stm32-timer/rm-fig-284.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;16-bit or 32-bit auto-reload register&lt;/li&gt;
+&lt;li&gt;use for a variety of puposes
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;measuring lengths of input signals (Input Capture)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Input Capture
+&lt;ul&gt;
+&lt;li&gt;測量 pulse width (高電位的時間) 或 period (一個週長)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;generating output waveforms (Output Compare and PWM Generation)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;one pulse mode output&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Up to 4 independent channel&lt;/li&gt;
+&lt;li&gt;Interrupt / DMA generation
+&lt;ul&gt;
+&lt;li&gt;event
+&lt;ul&gt;
+&lt;li&gt;counter overflow / underflow&lt;/li&gt;
+&lt;li&gt;counter initialization&lt;/li&gt;
+&lt;li&gt;trigger event&lt;/li&gt;
+&lt;li&gt;input capture&lt;/li&gt;
+&lt;li&gt;output compare&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Advanced Control Timer&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;16-bit auto-reload register&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;特殊 timer&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;low power timer
+&lt;ul&gt;
+&lt;li&gt;可以用在比如睡眠狀態&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;補充&#34;&gt;補充&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;24 bits system timer (SysTick)&lt;/li&gt;
+&lt;li&gt;reload
+&lt;ul&gt;
+&lt;li&gt;在 overflow 時回到 register 設定的數值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;stm32-timer-差異&#34;&gt;STM32 Timer 差異&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;可以去 Datasheet 找每個 Timer 的功能&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Counter resolution&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;16/32 bit&lt;/li&gt;
+&lt;li&gt;決定能從 0 數到多少個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Counter Type&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;決定能往上數或往下數或都可以&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Prescaler factor&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可以把進來的數字先除以某個數，減緩速度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;DMA request generation&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;能否用 DMA access 記憶體&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Capture / Compare channels&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一個 Timer 可能可以發多個訊號出去，並且經過多個 Compare register，比對不同 event&lt;/li&gt;
+&lt;li&gt;functions
+&lt;ul&gt;
+&lt;li&gt;Compare
+&lt;ul&gt;
+&lt;li&gt;和比對 register，比到了就送 event&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Capture
+&lt;ul&gt;
+&lt;li&gt;紀錄下 channel 的值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Complementary output&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;有些馬達控制需要反向波，就要這個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Max interface clock (MHz) and Max timer clock (MHz)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;進去和出來的速度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;system-clock---clock-tree&#34;&gt;System Clock - Clock tree&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Timer 源頭就是 clock&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;有四種來源幫忙驅動 system clock (SYSCLK)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;HSI16 (high speed internal)
+&lt;ul&gt;
+&lt;li&gt;16 MHz RC oscillator clock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;MSI (multispeed internal)
+&lt;ul&gt;
+&lt;li&gt;RC oscillator clock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;HSE (high speed external)
+&lt;ul&gt;
+&lt;li&gt;oscillator clock, from 4 to 48 MHz&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;PLL clock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;SYSCLK 往下接到 AHB，再接到 APB1、APB2&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;flash-read-access-latency&#34;&gt;Flash Read Access Latency&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;調整 clock 也要調整這部分&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;register&#34;&gt;Register&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;TIMx_CR1
+&lt;ul&gt;
+&lt;li&gt;control register&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;TIMx_PSC
+&lt;ul&gt;
+&lt;li&gt;設定 prescale&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;TIMx_ARR
+&lt;ul&gt;
+&lt;li&gt;auto-reload register&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>Self-Instruct 論文閱讀</title>
         <link>https://roykesydon.github.io/Blog/p/self-instruct-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
         <pubDate>Sun, 30 Apr 2023 00:00:12 +0800</pubDate>
@@ -20,7 +730,7 @@
 &lt;p&gt;作者介紹了 Self-Instruct 這個框架，可以透過自己生成的指令，來增強預訓練模型遵循指令的能力。&lt;/p&gt;
 &lt;p&gt;將作者的方法應用在 GPT3，在 SuperNaturalInstructions 獲得了比原始模型高 33% 的改進，與使用 private user data 和 human annotations 的 $InstructGPT_{001}$ 性能相當。&lt;/p&gt;
 &lt;p&gt;為了進一步評估，我們為新任務整理一組專家編寫的指令，並通過人工評估，顯示出使用 Self-Instruction 調整 GPT3 的性能大大優於使用現有公共指令資料集，只比 $InstructGPT_{001}$ 落後 5% 的差距。&lt;/p&gt;
-&lt;p&gt;Self-Instruct 提供一個幾乎 annotation-free 的方法，aling 預訓練模型和 instructions，而且作者釋出了他們的大型合成資料集，以促進未來對 instruction tuning 的研究。&lt;/p&gt;
+&lt;p&gt;Self-Instruct 提供一個幾乎 annotation-free 的方法，align 預訓練模型和 instructions，而且作者釋出了他們的大型合成資料集，以促進未來對 instruction tuning 的研究。&lt;/p&gt;
 &lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;最近的 NLP 文獻見證了「建構可以遵循自然語言指令的模型方面」的大量活動。&lt;/p&gt;
 &lt;p&gt;這些發展由兩個關鍵部分組成：&lt;/p&gt;
@@ -54,13 +764,13 @@
 &lt;p&gt;此外，作者在新創建的的指令集上進行人工評估，$GPT3_{SELF-INST}$ 顯示出廣泛的指令遵循能力，優於在其他公開可用指令數據集上訓練的模型，只比 InstrcutGPT001 落後 5%。&lt;/p&gt;
 &lt;p&gt;本文貢獻：&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;SelfInstrct：一種用最少的人工標記數據引導指令遵循能力的作法&lt;/li&gt;
+&lt;li&gt;Self-Instruct：一種用最少的人工標記數據引導指令遵循能力的作法&lt;/li&gt;
 &lt;li&gt;通過大量的 instruction-tuning 實驗，證明了有效性。&lt;/li&gt;
 &lt;li&gt;發布了一個包含 52K 指令的大型綜合資料集，還有一組手動編寫的新任務，用於建構和評估未來的 instruction-following models。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;related-work&#34;&gt;Related Work&lt;/h2&gt;
-&lt;p&gt;###　Instruction-following language models
-一系列工作顯示，使用 annotated &amp;ldquo;instructional&amp;rdquo; data，可以使普通語言模型遵循一般語言的指令。&lt;/p&gt;
+&lt;h3 id=&#34;instruction-following-language-models&#34;&gt;Instruction-following language models&lt;/h3&gt;
+&lt;p&gt;一系列工作顯示，使用 annotated &amp;ldquo;instructional&amp;rdquo; data，可以使普通語言模型遵循一般語言的指令。&lt;/p&gt;
 &lt;p&gt;也顯示出 &amp;ldquo;instructional&amp;rdquo; data 的大小和多樣性直接影響模型的泛化能力。&lt;/p&gt;
 &lt;p&gt;本文的工作目的在減少對人工註釋者的依賴。&lt;/p&gt;
 &lt;h3 id=&#34;language-models-for-data-generation-and-augmentation&#34;&gt;Language models for data generation and augmentation&lt;/h3&gt;

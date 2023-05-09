@@ -11,7 +11,7 @@ Introduction 自監督的訓練方法帶來了顯著的性能提升，但要確�
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/roberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.323938b06228ecebeb017d0a6d49c113d742b8b78e553d1c133b72d1263204f7.css"><meta property='og:title' content='RoBERTa 論文閱讀'>
+<link rel="stylesheet" href="/Blog/scss/style.min.ff79bfc11f71eea1ec92db6a7cd6d70d32d081257ca195d1f6dabb62c4173c6d.css"><meta property='og:title' content='RoBERTa 論文閱讀'>
 <meta property='og:description' content='paper: RoBERTa: A Robustly Optimized BERT Pretraining Approach
 1 2 3 4 5 6 ██████╗ ██████╗ ██████╗ ███████╗██████╗ ████████╗ █████╗ ██╔══██╗██╔═══██╗██╔══██╗██╔════╝██╔══██╗╚══██╔══╝██╔══██╗ ██████╔╝██║ ██║██████╔╝█████╗ ██████╔╝ ██║ ███████║ ██╔══██╗██║ ██║██╔══██╗██╔══╝ ██╔══██╗ ██║ ██╔══██║ ██║ ██║╚██████╔╝██████╔╝███████╗██║ ██║ ██║ ██║ ██║ ╚═╝ ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝╚═╝ ╚═╝ ╚═╝ ╚═╝ ╚═╝ Abstract 發現 BERT 訓練不足，並且作者的模型在 4/9 的 GLUE 任務, RACE 和 SQuAD 取得 SOTA。
 Introduction 自監督的訓練方法帶來了顯著的性能提升，但要確定這一堆方法中的哪些方面貢獻最大，具備挑戰性。
@@ -26,6 +26,8 @@ Introduction 自監督的訓練方法帶來了顯著的性能提升，但要確�
 Introduction 自監督的訓練方法帶來了顯著的性能提升，但要確定這一堆方法中的哪些方面貢獻最大，具備挑戰性。
 訓練的計算量是昂貴的，使 fine-tune 受限，而且通常都是用不同大小的 private training data，使評估模型更加困難。
 作者提出了對 BERT 預訓練的 replication study，包括對超參數的調整，以及對訓練集大小的仔細評估。">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
 </head>
 
 <body class="
