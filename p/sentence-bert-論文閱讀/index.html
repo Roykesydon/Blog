@@ -13,7 +13,7 @@ Related Work BERT 透過輸入兩個句子，以 [SEP] 隔開，可以在 STS �
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/sentence-bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.323938b06228ecebeb017d0a6d49c113d742b8b78e553d1c133b72d1263204f7.css"><meta property='og:title' content='Sentence-BERT 論文閱讀'>
+<link rel="stylesheet" href="/Blog/scss/style.min.ff79bfc11f71eea1ec92db6a7cd6d70d32d081257ca195d1f6dabb62c4173c6d.css"><meta property='og:title' content='Sentence-BERT 論文閱讀'>
 <meta property='og:description' content='paper: Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks
 Abstract BERT 和 RoBERTa 在 semantic textual similarity (STS) 上太花時間，因為他需要將兩個句子都輸入網路，並且兩兩比對。
 Sentence-BERT(SBERT) 對預訓練的 BERT 作了一些修改，透過 siamese 和 triplet network 的結構來生出有意義的 embeddings，使其最後可以透過 cosine-similarity 比較相似度。
@@ -32,6 +32,8 @@ Introduction SBERT 使 BERT 可以用於某些迄今為止不適用於 BERT 的�
 以往的相關研究是把單個句子輸入 BERT，最後 average BERT output layer，或是使用第一個 output，但這樣會產生糟糕的 sentence embeddings。
 SentEval 是一個 evaluation toolkit for sentence embeddings
 Related Work BERT 透過輸入兩個句子，以 [SEP] 隔開，可以在 STS 取得 SOTA。">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
 </head>
 
 <body class="

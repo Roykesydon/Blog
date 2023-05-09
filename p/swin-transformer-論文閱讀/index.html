@@ -13,7 +13,7 @@ Introduction ViT 把圖片打成 patch，每個 patch 是 16*16，feature maps �
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/swin-transformer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.323938b06228ecebeb017d0a6d49c113d742b8b78e553d1c133b72d1263204f7.css"><meta property='og:title' content='Swin Transformer 論文閱讀'>
+<link rel="stylesheet" href="/Blog/scss/style.min.ff79bfc11f71eea1ec92db6a7cd6d70d32d081257ca195d1f6dabb62c4173c6d.css"><meta property='og:title' content='Swin Transformer 論文閱讀'>
 <meta property='og:description' content='paper: Swin Transformer: Hierarchical Vision Transformer using Shifted Windows
 Abstract 本文提出一個新的 vision Transformer，稱作 Swin Transformer，可以被用作 computer vision 中的 general-purpose backbone。
 把 Transformer 從 language 移到 vision 具備挑戰性，比如同一個 visual entity 在大小上具備很大的 variance。還有 high resolution 下 pixel 和 word 的數量差異太大。
@@ -32,6 +32,8 @@ Abstract 本文提出一個新的 vision Transformer，稱作 Swin Transformer�
 shifted windowing 透過把 self-attention 限制在 non-overlapping 的 local window 和允許 cross-windows connection 來提高效率。
 這種 hierarchical architecture 可以靈活地在各種 scale 下擴展 model，還可以對圖像大小有線性的計算時間複雜度。
 Introduction ViT 把圖片打成 patch，每個 patch 是 16*16，feature maps 由 single low resolution 的輸入生成，而且由於自注意力始終都是在全局上計算的 (patch 和 patch 間做自注意力)，所以時間複雜度是 quadratic computation complexity。">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
 </head>
 
 <body class="

@@ -11,7 +11,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-ii/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.323938b06228ecebeb017d0a6d49c113d742b8b78e553d1c133b72d1263204f7.css"><meta property='og:title' content='電路學 - II'>
+<link rel="stylesheet" href="/Blog/scss/style.min.ff79bfc11f71eea1ec92db6a7cd6d70d32d081257ca195d1f6dabb62c4173c6d.css"><meta property='og:title' content='電路學 - II'>
 <meta property='og:description' content='分析方法 節點分析 (Nodal Analysis) 解節點電壓 選取一個節點做為參考節點 (reference node) 或已知節點 (datum node)，其他節點的電壓相對於它 假設它電位為 0，稱為 ground 把 KCL 用在剩下的 n-1 個參考節點 (假設電流方向，可以隨便假設，只要一致，不要兩端電流都流入同個電阻) 求解聯立方程式，得到各節點電壓 包含電壓源的節點分析 (Nodal Analysis with Voltage Sources) 如果電壓源連接於兩個非參考節點間，可以把電壓源和這兩個節點和與其並聯的元件看做一個超節點 (supernode) 或廣義節點 (generalized node)，解決無法知道流過電壓源的電流的問題 超節點的屬性 超節點內部的電壓源提供限制方程式 超節點本身沒電壓 超節點要同時用 KCL 和 KVL 網目分析 (Mesh Analysis) 只能適用平面電路 (planer circuit)，不能用在非平面電路 (nonplaner circuit)
 在一個平面上沒有交互連接的分支 網目 (Mesh)
 不包含子迴路的單一迴路 網目電流 (mesh current)
@@ -26,6 +26,8 @@
 不包含子迴路的單一迴路 網目電流 (mesh current)
 流經網目的電流 決定網目電流步驟
 在 n 個網目中，指定 n 個網目電流 對 n 個網目個別應用 KVL，把歐姆定律應用在網目電流上，以表示電壓 求解 n 個聯立方程式，計算網目電流 包含電流源的網目分析 (Mesh Analysis with Current Sources) 如果有兩個 Mesh 共用同一個電流源，會形成超網目 (supermesh)，把公用的電流源還有串聯的元件給移除掉 視察法 待補 節點分析 vs 網目分析 節點比網目少選節點分析，反之也是 要求電壓節點，求電流網目 可以用一種驗證另一種的結果 有些特殊問題只能用其中一種方法 直流電晶體電路 電子產品中的基本元件有三端主動元件&amp;ndash;電晶體 (transistor)">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
 </head>
 
 <body class="
@@ -765,12 +767,38 @@
             
                 
 <article class="">
+    <a href="/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-iii/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">電路學 - III</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
     <a href="/Blog/p/%E9%9B%BB%E8%B7%AF%E5%AD%B8-i/">
         
         
 
         <div class="article-details">
             <h2 class="article-title">電路學 - I</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/stm32-timer-/-counter-%E4%BB%8B%E7%B4%B9/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">STM32 Timer / Counter 介紹</h2>
         </div>
     </a>
 </article>
@@ -797,32 +825,6 @@
 
         <div class="article-details">
             <h2 class="article-title">STM32 UART 實驗</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/stm32-gpio-%E5%AF%A6%E9%A9%97/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">STM32 GPIO 實驗</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/stm32cubeide-%E5%9F%BA%E6%9C%AC%E9%96%8B%E7%99%BC%E4%BD%BF%E7%94%A8/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">STM32CubeIDE 基本開發使用</h2>
         </div>
     </a>
 </article>

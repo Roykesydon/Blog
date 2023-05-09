@@ -12,7 +12,7 @@ Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督�
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/mae-%E8%AB%96%E6%96%87/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.323938b06228ecebeb017d0a6d49c113d742b8b78e553d1c133b72d1263204f7.css"><meta property='og:title' content='MAE 論文'>
+<link rel="stylesheet" href="/Blog/scss/style.min.ff79bfc11f71eea1ec92db6a7cd6d70d32d081257ca195d1f6dabb62c4173c6d.css"><meta property='og:title' content='MAE 論文'>
 <meta property='og:description' content='paper: Masked Autoencoders Are Scalable Vision Learners
 Abstract 這篇論文顯示出 MAE 是 CV 中的 scalable self-supervised learners。
 MAE 的方法很簡單
@@ -29,6 +29,8 @@ MAE 的方法很簡單
 隨機蓋住輸入影像的一些 patch 重建 missing pixels 具備兩個核心設計
 非對稱的 encoder-decoder 架構，encoder 只作用於可見的 patch 子集合(沒有 mask tokens)，lightweight decoder 則根據 latent representation 和 make tokens 來重建圖片。 當遮住高比例(比如 75%)的影像時，會得到一個 nontrivial 和 meaningful 的 self-supervisory task 結合這兩點設計，可以有效地訓練大模型。 以 ViT-Huge 用 ImageNet-1K 訓練(訓練集一百多萬張照片)可達到 87.8% 的準確度。
 Introduction 在 CV 中，常需要大量 labeled images。 NLP 中，自監督預訓練處理了需要大量標註資料的問題。 masked autoencoders 是一種更 general 的 denoising autoencoders 的形式。 BERT 非常成功，autoencoding methods 在 CV 的研究卻落後 NLP，作者思考是什麼讓 masked autoencoding 在 CV 和 NLP 產生不同。 有以下觀點">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
 </head>
 
 <body class="
