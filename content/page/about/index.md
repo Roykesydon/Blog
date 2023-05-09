@@ -17,48 +17,29 @@ Education
 ---------
 
 2023-2025 (expected)
-:   **MSc, Computer Science and Information Engineering**; National Cheng Kung University
+:   ****MSc, Computer Science and Information Engineering****; National Cheng Kung University
 
 2019-2023
-:   **BSc, Computer Science and Engineering**; National Taiwan Ocean University
+:   ****BSc, Computer Science and Engineering****; National Taiwan Ocean University
 
-Experience
-----------
-
-2020-2023
-:   **Adjunct research assistants**; Advanced Computation Laboratory
-
-Projects
---------------------
-
-漁港即時漁船檢測
-: 在漁港多處架設攝影機，透過 RTSP 取得攝影機畫面，達成自動化統計港口漁船的目標。後端結合 YOLOv4、FastAPI 以及一些影像處理的手法，將收到的攝影機畫面進行辨識。前端透過 Vue 來提供偵測的畫面結果，以及過往 48 小時的港口數據
-
-船上漁工檢測
-: 目的是想透過船上攝影機畫面的 ts 檔，自動化判斷哪些時間有漁工出現在畫面上，方便其他研究人員取得片中釣魚作業的片段。鑒於漁工衣著的特殊性，以及難以取得訓練資料，使用 pre-trained LightweightOpenPose model 結合各種過濾手段及 OCR 完成任務
-
-購衣網站
-: 個人 Side Project，透過 JWT 判斷權限。Nginx 負責反向代理及 web server。用 MariaDB 做 Replication，做 Master-slave 架構，最後用 Docker 把上述的東西和前後端包裝在各個 Container。
-
-Competitive Programming Contest
+Awards and Examination
 ----------------------------------------
 
+2020 / 11
+: Silver Medal (Rank: 13/101), The 2020 ICPC Asia Taipei-Hsinchu Site Programming Contest 
 
 2021 / 12
-: 大學程式能力檢定 (CPE) - **解題: 7/7 題 (排名: 2/2459)**
-
-2021 / 12 
-: 2021 東華杯程式設計競賽大專組  - **第二名**
-
+: solved: 7/7 problems (Rank: 2/2459), 大學程式能力檢定 (Collegiate Programming Examination, CPE)
 
 2021 / 10
-: 2021 National Collegiate Programming Contest  - **第四名**
+: $4^{th}$ place, 2021 National Collegiate Programming Contest (NCPC)
+
+2021 / 12 
+: $2^{nd}$ place, 2021 東華杯程式設計競賽大專組 ( National Dong Hwa University Programming Contest)
 
 2020 / 12
-: 2020 彰師大中區程式競賽  - **第三名**
+: $3^{rd}$ place, 2020 中區程式設計競賽 (Central Collegiate Programming Contest, CCPC)
 
-2020 / 11
-: The 2020 ICPC Asia Taipei-Hsinchu Site Programming Contest  - **銀牌 (排名: 13/101)**
 
 
 Skills
@@ -74,3 +55,55 @@ Database
 
 Others 
 : Git、Docker、Node.js
+
+Experience
+----------
+
+2020-2023
+:   ****Adjunct research assistants****; Advanced Computation Laboratory
+
+Working Experience
+----------
+
+Real-time Fishing Vessel Detection at the Fishing Port
+: Multiple cameras are installed at the fishing port to obtain the camera images through RTSP and achieve the automated counting of fishing vessels at the port. The backend integrates YOLOv4, FastAPI, and some image processing techniques to recognize the received camera images. The frontend uses Vue as framework to provide detection results and harbor data for the past 48 hours.
+
+Fisherman Detection on Fishing Boats
+: The goal is to automatically identify the times when fishermen appear in the ts video files from the cameras on the fishing boats. This makes it easier for other researchers to obtain clips of fishing operations. Due to the clothing worn by fishermen is different from what is commonly worn by the general public, and the difficulty of obtaining training data, a pre-trained LightweightOpenPose model is used in combination with various filtering methods and OCR to complete the task.
+
+Geospatial Data Visualization:
+: The original map production process is streamlined by using PyQGIS to write custom scripts, which results in a significant reduction of repetitive work in map production.
+
+Side Projects
+--------------------
+
+RoyKesyShop
+: This is an online clothing store that uses JWT to verify user permissions. Nginx is responsible for reverse proxying and web serving, while MariaDB is used for replication in a master-slave architecture. Finally, Docker is used to package the above components, along with the frontend and backend, into separate containers.
+
+    ![](https://github.com/Roykesydon/RoyKesyShop/blob/main/demo_pictures/home_dark.png?raw=true)
+
+    ![](https://github.com/Roykesydon/RoyKesyShop/blob/main/demo_pictures/shop_1.png?raw=true)
+
+
+Roykestereo
+: This is a cloud-based music player that offers the ability to upload music locally, as well as download and listen to music from the cloud. The backend uses Fourier transform and other processing techniques to compute the spectrum of music at each moment. In addition to basic features, there is also a chat room function supported by socket.io, and MongoDB is used for data access.
+
+    ![](https://github.com/Roykesydon/Roykestereo/blob/main/demo/home.png?raw=true)
+
+    ![](https://github.com/Roykesydon/Roykestereo/blob/main/demo/current_playing.png?raw=true)
+
+StellarTrack
+: This is a web frontend project without a backend, made using Three.js and Bootstrap, displaying the changing paths of the sun's rotation in different latitudes and regions
+
+    ![](/Blog/images/about/StellarTrack-1.jpg)
+
+    ![](/Blog/images/about/StellarTrack-2.jpg)
+
+WeAreFamily
+: This is a platform that allows people to find others to crowdfund with. The frontend is mainly composed of JavaFX, while the backend uses Flask as the framework. Users can post to find others to crowdfund with, or join other people's posts. Users can also send and receive chat messages in real time, with notifications appearing on their operating system.
+
+    ![](/Blog/images/about/WAF-1.jpg)
+
+    ![](/Blog/images/about/WAF-2.jpg)
+
+
