@@ -1,7 +1,7 @@
 ---
 title: "Crack simple ELF"
 date: 2023-03-07T14:26:17+08:00
-draft: false
+draft: true
 description: ""
 type: "post"
 tags: ["ctf","binary-exploitation"]

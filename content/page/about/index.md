@@ -1,8 +1,7 @@
 ---
 title: About
 description: 關於我
-date: '2023-02-26'
-lastmod: '2023-02-26'
+date: '2023-05-09'
 menu:
     main: 
         weight: -90
@@ -34,12 +33,11 @@ Awards and Examination
 2021 / 10
 : $4^{th}$ place, 2021 National Collegiate Programming Contest (NCPC)
 
-2021 / 12 
-: $2^{nd}$ place, 2021 東華杯程式設計競賽大專組 ( National Dong Hwa University Programming Contest)
-
 2020 / 12
 : $3^{rd}$ place, 2020 中區程式設計競賽 (Central Collegiate Programming Contest, CCPC)
 
+2021 / 12 
+: $2^{nd}$ place, 2021 東華杯程式設計競賽大專組 ( National Dong Hwa University Programming Contest)
 
 
 Skills
@@ -71,7 +69,7 @@ Real-time Fishing Vessel Detection at the Fishing Port
 Fisherman Detection on Fishing Boats
 : The goal is to automatically identify the times when fishermen appear in the ts video files from the cameras on the fishing boats. This makes it easier for other researchers to obtain clips of fishing operations. Due to the clothing worn by fishermen is different from what is commonly worn by the general public, and the difficulty of obtaining training data, a pre-trained LightweightOpenPose model is used in combination with various filtering methods and OCR to complete the task.
 
-Geospatial Data Visualization:
+Geospatial Data Visualization
 : The original map production process is streamlined by using PyQGIS to write custom scripts, which results in a significant reduction of repetitive work in map production.
 
 Side Projects
