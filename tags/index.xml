@@ -6,7 +6,23 @@
         <description>Recent content in Tags on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 08 May 2023 00:00:54 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 22 May 2023 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>software-design</title>
+        <link>https://roykesydon.github.io/Blog/tags/software-design/</link>
+        <pubDate>Mon, 22 May 2023 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/software-design/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>software-engineering</title>
+        <link>https://roykesydon.github.io/Blog/tags/software-engineering/</link>
+        <pubDate>Mon, 22 May 2023 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/software-engineering/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>electric-circuits</title>
         <link>https://roykesydon.github.io/Blog/tags/electric-circuits/</link>
         <pubDate>Mon, 08 May 2023 00:00:54 +0800</pubDate>
@@ -87,22 +103,6 @@
         <description></description>
         </item>
         <item>
-        <title>software-design</title>
-        <link>https://roykesydon.github.io/Blog/tags/software-design/</link>
-        <pubDate>Tue, 25 Apr 2023 14:26:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/software-design/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>software-engineering</title>
-        <link>https://roykesydon.github.io/Blog/tags/software-engineering/</link>
-        <pubDate>Tue, 25 Apr 2023 14:26:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/software-engineering/</guid>
-        <description></description>
-        </item>
-        <item>
         <title>computer-vision</title>
         <link>https://roykesydon.github.io/Blog/tags/computer-vision/</link>
         <pubDate>Fri, 14 Apr 2023 01:08:46 +0800</pubDate>
@@ -132,22 +132,6 @@
         <pubDate>Tue, 14 Mar 2023 10:26:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/database/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>binary-exploitation</title>
-        <link>https://roykesydon.github.io/Blog/tags/binary-exploitation/</link>
-        <pubDate>Tue, 07 Mar 2023 14:26:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/binary-exploitation/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>ctf</title>
-        <link>https://roykesydon.github.io/Blog/tags/ctf/</link>
-        <pubDate>Tue, 07 Mar 2023 14:26:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/ctf/</guid>
         <description></description>
         </item>
         <item>

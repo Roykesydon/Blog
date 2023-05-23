@@ -2,24 +2,45 @@
 <html lang="en-us" dir="ltr">
 
 <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Memory Map CPU 對 I/O 操作方法
-Port I/O 用特殊 CPU 指令 I/O 設備和記憶體不共享地址空間 Memory-Mapped I/O I/O 設備和記憶體共享地址空間 像一般控制記憶體 這塊記憶體具有四個責任
-Command Status Output Data Input Data GPIO 結構 GPIO mode Open-Drain 由外部電壓決定輸出電壓 Output Register 是 0 會啟用 N-MOS，1 的話靠外部電壓推 好處是外部電壓可以自己決定 Push-Pull 由內部電壓決定輸出電壓 Output Register 是 0 或 1 會決定啟用 N-MOS 或是 P-MOS 有關 Register Clock enable register AHB2 peripheral clock enable regisetr (RCC_AHB2ENR) Control register GPIO port mode register GPIO port output type register GPIO port output speed register GPIO port pull-up/pull-down register Data register Output Input 使用 GPIO 先去 Memory map 找 Boudary address'>
-<title>STM32 GPIO 介紹</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='前言 軟體要對 domain 做 Modeling，呈現出 domain 裡的核心概念，才能滿足使用者需求，因此不乏與領域專家的討論
+寫這篇的時候我還沒嗑完 Eric 的聖經，可能嗑完了之後會回來修改
+通用語言 Ubiquitous Language 鑒於程式開發人員與領域專家熟悉知識的差異，會產生交流困難
+因此領域專家和開發團隊要訂定共同的語言，並且盡可能少用自己知道的術語
+UML UML 適合用在小型模型上，它擅長表達類別間的關係，但對於抽象概念卻沒那麼好傳達
+因此用 UML 建構模型時，理想上要添加額外的文字，傳達一些圖所不能表達的 behavior 和 constraint
+並且不能一次寫過於複雜，而是分塊處理
+Layered Architecture 分為四個概念層，只會往下調用，可能會跨層
+可以達到關注點分離 (separation of concerns)，提高各個方面的 cohesive
+User Interface (Presentation Layer) 呈現給 user 的 UI，User 可能是另一個系統 Application Layer 不含 bussiness logic，指揮表達領域概念的物件來完成任務 Domain Layer 有關 domain 的資訊都在這裡，業務邏輯在此處理 表達業務概念、狀態、規則 劃分出這層是 Model-Driven Design 的關鍵 Infrastructure layer supporting library 保存業務狀態的技術細節在此實作 為前三個 layer 服務 Entity 具備 identity identity 在 status 經過改變後依然不變 追蹤 entity 需要高成本 mutable Value Object 沒有 identity 只關心 obejct 的 value 可以輕易創建丟棄 immutable (不變的) 如果想修改數值就創新的 可被共用 Service 有些動作不屬於某個 Entity 或 Value Object，因為它是跨物件的 Stateless 每個請求不互相影響 Aggregate 把複雜關聯的物件圈在一起考量 確保 consistency 和 inveraints consistency (一致性) 相關物件的資料一致 invariants (不變量) 資料改變時要維護的規則 Aggregate root 具備 global identity，其他內部 entity 只有 local identity 通常是 entity 擔任 外部只能存取它，不能存取 aggregate 的其他 entity 或 value obejct Factory 若創建 aggregate、entity、value object 的過程很複雜，或是涉及專業知識，就該用 factory 包起來 對於不複雜的情況，或是想控制更多細節，可以只依賴於簡單的建構函式 Repository 如果大家都直接存取資料庫的各種物件，會破壞原本精心設計的結構，破壞封裝性'>
+<title>領域驅動設計 Domain-Driven Design</title>
 
-<link rel='canonical' href='https://roykesydon.github.io/Blog/p/stm32-gpio-%E4%BB%8B%E7%B4%B9/'>
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88-domain-driven-design/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.b41dc1d44819ce7961017d74dcfa177bc918688f2a65ab99464a5ffa399cb313.css"><meta property='og:title' content='STM32 GPIO 介紹'>
-<meta property='og:description' content='Memory Map CPU 對 I/O 操作方法
-Port I/O 用特殊 CPU 指令 I/O 設備和記憶體不共享地址空間 Memory-Mapped I/O I/O 設備和記憶體共享地址空間 像一般控制記憶體 這塊記憶體具有四個責任
-Command Status Output Data Input Data GPIO 結構 GPIO mode Open-Drain 由外部電壓決定輸出電壓 Output Register 是 0 會啟用 N-MOS，1 的話靠外部電壓推 好處是外部電壓可以自己決定 Push-Pull 由內部電壓決定輸出電壓 Output Register 是 0 或 1 會決定啟用 N-MOS 或是 P-MOS 有關 Register Clock enable register AHB2 peripheral clock enable regisetr (RCC_AHB2ENR) Control register GPIO port mode register GPIO port output type register GPIO port output speed register GPIO port pull-up/pull-down register Data register Output Input 使用 GPIO 先去 Memory map 找 Boudary address'>
-<meta property='og:url' content='https://roykesydon.github.io/Blog/p/stm32-gpio-%E4%BB%8B%E7%B4%B9/'>
+<link rel="stylesheet" href="/Blog/scss/style.min.b41dc1d44819ce7961017d74dcfa177bc918688f2a65ab99464a5ffa399cb313.css"><meta property='og:title' content='領域驅動設計 Domain-Driven Design'>
+<meta property='og:description' content='前言 軟體要對 domain 做 Modeling，呈現出 domain 裡的核心概念，才能滿足使用者需求，因此不乏與領域專家的討論
+寫這篇的時候我還沒嗑完 Eric 的聖經，可能嗑完了之後會回來修改
+通用語言 Ubiquitous Language 鑒於程式開發人員與領域專家熟悉知識的差異，會產生交流困難
+因此領域專家和開發團隊要訂定共同的語言，並且盡可能少用自己知道的術語
+UML UML 適合用在小型模型上，它擅長表達類別間的關係，但對於抽象概念卻沒那麼好傳達
+因此用 UML 建構模型時，理想上要添加額外的文字，傳達一些圖所不能表達的 behavior 和 constraint
+並且不能一次寫過於複雜，而是分塊處理
+Layered Architecture 分為四個概念層，只會往下調用，可能會跨層
+可以達到關注點分離 (separation of concerns)，提高各個方面的 cohesive
+User Interface (Presentation Layer) 呈現給 user 的 UI，User 可能是另一個系統 Application Layer 不含 bussiness logic，指揮表達領域概念的物件來完成任務 Domain Layer 有關 domain 的資訊都在這裡，業務邏輯在此處理 表達業務概念、狀態、規則 劃分出這層是 Model-Driven Design 的關鍵 Infrastructure layer supporting library 保存業務狀態的技術細節在此實作 為前三個 layer 服務 Entity 具備 identity identity 在 status 經過改變後依然不變 追蹤 entity 需要高成本 mutable Value Object 沒有 identity 只關心 obejct 的 value 可以輕易創建丟棄 immutable (不變的) 如果想修改數值就創新的 可被共用 Service 有些動作不屬於某個 Entity 或 Value Object，因為它是跨物件的 Stateless 每個請求不互相影響 Aggregate 把複雜關聯的物件圈在一起考量 確保 consistency 和 inveraints consistency (一致性) 相關物件的資料一致 invariants (不變量) 資料改變時要維護的規則 Aggregate root 具備 global identity，其他內部 entity 只有 local identity 通常是 entity 擔任 外部只能存取它，不能存取 aggregate 的其他 entity 或 value obejct Factory 若創建 aggregate、entity、value object 的過程很複雜，或是涉及專業知識，就該用 factory 包起來 對於不複雜的情況，或是想控制更多細節，可以只依賴於簡單的建構函式 Repository 如果大家都直接存取資料庫的各種物件，會破壞原本精心設計的結構，破壞封裝性'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88-domain-driven-design/'>
 <meta property='og:site_name' content='Roykesydon'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='embedded-system' /><meta property='article:tag' content='stm32' /><meta property='article:tag' content='mcu' /><meta property='article:published_time' content='2023-04-26T01:32:54&#43;08:00'/><meta property='article:modified_time' content='2023-04-26T01:32:54&#43;08:00'/>
-<meta name="twitter:title" content="STM32 GPIO 介紹">
-<meta name="twitter:description" content="Memory Map CPU 對 I/O 操作方法
-Port I/O 用特殊 CPU 指令 I/O 設備和記憶體不共享地址空間 Memory-Mapped I/O I/O 設備和記憶體共享地址空間 像一般控制記憶體 這塊記憶體具有四個責任
-Command Status Output Data Input Data GPIO 結構 GPIO mode Open-Drain 由外部電壓決定輸出電壓 Output Register 是 0 會啟用 N-MOS，1 的話靠外部電壓推 好處是外部電壓可以自己決定 Push-Pull 由內部電壓決定輸出電壓 Output Register 是 0 或 1 會決定啟用 N-MOS 或是 P-MOS 有關 Register Clock enable register AHB2 peripheral clock enable regisetr (RCC_AHB2ENR) Control register GPIO port mode register GPIO port output type register GPIO port output speed register GPIO port pull-up/pull-down register Data register Output Input 使用 GPIO 先去 Memory map 找 Boudary address">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='software-engineering' /><meta property='article:tag' content='software-design' /><meta property='article:published_time' content='2023-05-22T00:00:17&#43;08:00'/><meta property='article:modified_time' content='2023-05-22T00:00:17&#43;08:00'/>
+<meta name="twitter:title" content="領域驅動設計 Domain-Driven Design">
+<meta name="twitter:description" content="前言 軟體要對 domain 做 Modeling，呈現出 domain 裡的核心概念，才能滿足使用者需求，因此不乏與領域專家的討論
+寫這篇的時候我還沒嗑完 Eric 的聖經，可能嗑完了之後會回來修改
+通用語言 Ubiquitous Language 鑒於程式開發人員與領域專家熟悉知識的差異，會產生交流困難
+因此領域專家和開發團隊要訂定共同的語言，並且盡可能少用自己知道的術語
+UML UML 適合用在小型模型上，它擅長表達類別間的關係，但對於抽象概念卻沒那麼好傳達
+因此用 UML 建構模型時，理想上要添加額外的文字，傳達一些圖所不能表達的 behavior 和 constraint
+並且不能一次寫過於複雜，而是分塊處理
+Layered Architecture 分為四個概念層，只會往下調用，可能會跨層
+可以達到關注點分離 (separation of concerns)，提高各個方面的 cohesive
+User Interface (Presentation Layer) 呈現給 user 的 UI，User 可能是另一個系統 Application Layer 不含 bussiness logic，指揮表達領域概念的物件來完成任務 Domain Layer 有關 domain 的資訊都在這裡，業務邏輯在此處理 表達業務概念、狀態、規則 劃分出這層是 Model-Driven Design 的關鍵 Infrastructure layer supporting library 保存業務狀態的技術細節在此實作 為前三個 layer 服務 Entity 具備 identity identity 在 status 經過改變後依然不變 追蹤 entity 需要高成本 mutable Value Object 沒有 identity 只關心 obejct 的 value 可以輕易創建丟棄 immutable (不變的) 如果想修改數值就創新的 可被共用 Service 有些動作不屬於某個 Entity 或 Value Object，因為它是跨物件的 Stateless 每個請求不互相影響 Aggregate 把複雜關聯的物件圈在一起考量 確保 consistency 和 inveraints consistency (一致性) 相關物件的資料一致 invariants (不變量) 資料改變時要維護的規則 Aggregate root 具備 global identity，其他內部 entity 只有 local identity 通常是 entity 擔任 外部只能存取它，不能存取 aggregate 的其他 entity 或 value obejct Factory 若創建 aggregate、entity、value object 的過程很複雜，或是涉及專業知識，就該用 factory 包起來 對於不複雜的情況，或是想控制更多細節，可以只依賴於簡單的建構函式 Repository 如果大家都直接存取資料庫的各種物件，會破壞原本精心設計的結構，破壞封裝性">
     <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
 
 </head>
@@ -282,14 +303,26 @@ Command Status Output Data Input Data GPIO 結構 GPIO mode Open-Drain 由外部
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#memory-map">Memory Map</a></li>
-    <li><a href="#gpio-結構">GPIO 結構</a>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#通用語言-ubiquitous-language">通用語言 Ubiquitous Language</a></li>
+    <li><a href="#uml">UML</a></li>
+    <li><a href="#layered-architecture">Layered Architecture</a></li>
+    <li><a href="#entity">Entity</a></li>
+    <li><a href="#value-object">Value Object</a></li>
+    <li><a href="#service">Service</a></li>
+    <li><a href="#aggregate">Aggregate</a>
       <ol>
-        <li><a href="#有關-register">有關 Register</a></li>
+        <li><a href="#aggregate-root">Aggregate root</a></li>
       </ol>
     </li>
-    <li><a href="#使用-gpio">使用 GPIO</a></li>
-    <li><a href="#7-segment">7-Segment</a></li>
+    <li><a href="#factory">Factory</a></li>
+    <li><a href="#repository">Repository</a></li>
+    <li><a href="#domain-event">Domain event</a></li>
+    <li><a href="#anti-pattern">Anti-Pattern</a></li>
+    <li><a href="#subdomain">Subdomain</a></li>
+    <li><a href="#bounded-context">Bounded Context</a></li>
+    <li><a href="#context-map">Context Map</a></li>
+    <li><a href="#pratical-ddd">Pratical DDD</a></li>
   </ol>
 </nav>
         </div>
@@ -311,8 +344,8 @@ Command Status Output Data Input Data GPIO 結構 GPIO mode Open-Drain 由外部
     
     <header class="article-category">
         
-            <a href="/Blog/categories/embedded-system/" style="background-color: #e17100; color: #fff;">
-                Embedded System
+            <a href="/Blog/categories/software-engineering/" style="background-color: #8a1337; color: #fff;">
+                Software Engineering
             </a>
         
     </header>
@@ -324,9 +357,9 @@ Command Status Output Data Input Data GPIO 結構 GPIO mode Open-Drain 由外部
     
     
     
-    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/embedded-system.jpg');">
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/software-engineering.jpg');">
         <h2 class="article-title-custom">
-            <a href="/Blog/p/stm32-gpio-%E4%BB%8B%E7%B4%B9/">STM32 GPIO 介紹</a>
+            <a href="/Blog/p/%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88-domain-driven-design/">領域驅動設計 Domain-Driven Design</a>
         </h2>
         
     </div>
@@ -348,7 +381,7 @@ Command Status Output Data Input Data GPIO 結構 GPIO mode Open-Drain 由外部
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Apr 26, 2023</time>
+                <time class="article-time--published">May 22, 2023</time>
             </div>
         
 
@@ -363,7 +396,7 @@ Command Status Output Data Input Data GPIO 結構 GPIO mode Open-Drain 由外部
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    2 minute read
                 </time>
             </div>
         
@@ -378,191 +411,206 @@ Command Status Output Data Input Data GPIO 結構 GPIO mode Open-Drain 由外部
     <section class="article-content">
     
     
-    <h2 id="memory-map">Memory Map</h2>
+    <h2 id="前言">前言</h2>
+<p>軟體要對 domain 做 Modeling，呈現出 domain 裡的核心概念，才能滿足使用者需求，因此不乏與領域專家的討論</p>
+<p>寫這篇的時候我還沒嗑完 Eric 的聖經，可能嗑完了之後會回來修改</p>
+<h2 id="通用語言-ubiquitous-language">通用語言 Ubiquitous Language</h2>
+<p>鑒於程式開發人員與領域專家熟悉知識的差異，會產生交流困難</p>
+<p>因此領域專家和開發團隊要訂定共同的語言，並且盡可能少用自己知道的術語</p>
+<h2 id="uml">UML</h2>
+<p>UML 適合用在小型模型上，它擅長表達類別間的關係，但對於抽象概念卻沒那麼好傳達</p>
+<p>因此用 UML 建構模型時，理想上要添加額外的文字，傳達一些圖所不能表達的 behavior 和 constraint</p>
+<p>並且不能一次寫過於複雜，而是分塊處理</p>
+<h2 id="layered-architecture">Layered Architecture</h2>
+<p>分為四個概念層，只會往下調用，可能會跨層</p>
+<p>可以達到關注點分離 (separation of concerns)，提高各個方面的 cohesive</p>
 <ul>
-<li>
-<p>CPU 對 I/O 操作方法</p>
+<li>User Interface (Presentation Layer)
 <ul>
-<li>Port I/O
-<ul>
-<li>用特殊 CPU 指令</li>
-<li>I/O 設備和記憶體不共享地址空間</li>
+<li>呈現給 user 的 UI，User 可能是另一個系統</li>
 </ul>
 </li>
-<li>Memory-Mapped I/O
+<li>Application Layer
 <ul>
-<li>I/O 設備和記憶體共享地址空間</li>
-<li>像一般控制記憶體</li>
+<li>不含 bussiness logic，指揮表達領域概念的物件來完成任務</li>
 </ul>
 </li>
+<li>Domain Layer
+<ul>
+<li>有關 domain 的資訊都在這裡，業務邏輯在此處理</li>
+<li>表達業務概念、狀態、規則</li>
+<li>劃分出這層是 Model-Driven Design 的關鍵</li>
 </ul>
 </li>
-<li>
-<p>這塊記憶體具有四個責任</p>
+<li>Infrastructure layer
 <ul>
-<li>Command</li>
-<li>Status</li>
-<li>Output Data</li>
-<li>Input Data</li>
-</ul>
-</li>
-</ul>
-<h2 id="gpio-結構">GPIO 結構</h2>
-<p><img src="/Blog/images/embedding/stm32-gpio/gpio-structure.jpg"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<ul>
-<li>GPIO mode
-<ul>
-<li>Open-Drain
-<ul>
-<li>由外部電壓決定輸出電壓</li>
-<li>Output Register 是 0 會啟用 N-MOS，1 的話靠外部電壓推
-<ul>
-<li>好處是外部電壓可以自己決定</li>
+<li>supporting library</li>
+<li>保存業務狀態的技術細節在此實作</li>
+<li>為前三個 layer 服務</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>Push-Pull
+<h2 id="entity">Entity</h2>
 <ul>
-<li>由內部電壓決定輸出電壓</li>
-<li>Output Register 是 0 或 1 會決定啟用 N-MOS 或是 P-MOS</li>
+<li>具備 identity</li>
+<li>identity 在 status 經過改變後依然不變</li>
+<li>追蹤 entity 需要高成本</li>
+<li>mutable</li>
+</ul>
+<h2 id="value-object">Value Object</h2>
+<ul>
+<li>沒有 identity</li>
+<li>只關心 obejct 的 value</li>
+<li>可以輕易創建丟棄</li>
+<li>immutable (不變的)
+<ul>
+<li>如果想修改數值就創新的</li>
 </ul>
 </li>
+<li>可被共用</li>
 </ul>
-</li>
-</ul>
-<h3 id="有關-register">有關 Register</h3>
+<h2 id="service">Service</h2>
 <ul>
-<li>Clock enable register
+<li>有些動作不屬於某個 Entity 或 Value Object，因為它是跨物件的</li>
+<li>Stateless
 <ul>
-<li>AHB2 peripheral clock enable regisetr (RCC_AHB2ENR)</li>
-</ul>
-</li>
-<li>Control register
-<ul>
-<li>GPIO port mode register</li>
-<li>GPIO port output type register</li>
-<li>GPIO port output speed register</li>
-<li>GPIO port pull-up/pull-down register</li>
-</ul>
-</li>
-<li>Data register
-<ul>
-<li>Output</li>
-<li>Input</li>
+<li>每個請求不互相影響</li>
 </ul>
 </li>
 </ul>
-<h2 id="使用-gpio">使用 GPIO</h2>
-<p>先去 Memory map 找 Boudary address</p>
-<p><img src="/Blog/images/embedding/stm32-gpio/gpio-structure.jpg"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p>根據 table 確認要設置的數值</p>
-<p><img src="/Blog/images/embedding/stm32-gpio/table-39-1.jpg"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p><img src="/Blog/images/embedding/stm32-gpio/table-39-2.jpg"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p>設定 RCC enable</p>
-<p><img src="/Blog/images/embedding/stm32-gpio/rcc-en.jpg"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p>把上面說的各種 Control register 設定好</p>
-<p>比如 PUPDR
-<img src="/Blog/images/embedding/stm32-gpio/PUPDR.jpg"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
+<h2 id="aggregate">Aggregate</h2>
 <ul>
-<li>
-<p>BSRR</p>
+<li>把複雜關聯的物件圈在一起考量</li>
+<li>確保 consistency 和 inveraints
 <ul>
-<li>修改 ODR 會一次改到整個 GPIO port，若只要改某個 pin，可以用 BSRR</li>
+<li>consistency (一致性)
+<ul>
+<li>相關物件的資料一致</li>
 </ul>
 </li>
-<li>
-<p>Delay</p>
+<li>invariants (不變量)
 <ul>
-<li>CPU 4 MHz
-<ul>
-<li>1 cycle = 0.25$\mu$S</li>
-<li>可以查每個組合語言指令要幾個 cycle</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>機械按鈕會有 Bouncing</p>
-<ul>
-<li>Debounce
-<ul>
-<li>Hardware method
-<ul>
-<li>加上濾波電容</li>
-</ul>
-</li>
-<li>Software method
-<ul>
-<li>讀取後等待一段時間才再次讀取</li>
-<li>連續讀取 N 次，看數值是否穩定改變</li>
+<li>資料改變時要維護的規則</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
+<h3 id="aggregate-root">Aggregate root</h3>
+<ul>
+<li>具備 global identity，其他內部 entity 只有 local identity</li>
+<li>通常是 entity 擔任</li>
+<li>外部只能存取它，不能存取 aggregate 的其他 entity 或 value obejct</li>
+</ul>
+<h2 id="factory">Factory</h2>
+<ul>
+<li>若創建 aggregate、entity、value object 的過程很複雜，或是涉及專業知識，就該用 factory 包起來</li>
+<li>對於不複雜的情況，或是想控制更多細節，可以只依賴於簡單的建構函式</li>
+</ul>
+<h2 id="repository">Repository</h2>
+<p>如果大家都直接存取資料庫的各種物件，會破壞原本精心設計的結構，破壞封裝性</p>
+<p>Repositoy 用來存取物件，封裝了資料庫操作</p>
+<h2 id="domain-event">Domain event</h2>
+<ul>
+<li>Domain 中重要的事情</li>
+<li>可以用在其他物件和 aggrgate 訂閱，讓 aggregate 通知他們 domain event 的發生</li>
+</ul>
+<h2 id="anti-pattern">Anti-Pattern</h2>
+<ul>
+<li>應該避免的情形</li>
+<li>Smart UI
+<ul>
+<li>超肥的萬能 UI</li>
+</ul>
+</li>
+<li>Anemic Domain Model
+<ul>
+<li>貧血模型</li>
+<li>只有 getter 和 setter，沒有業務邏輯的模型</li>
+</ul>
 </li>
 </ul>
-<h2 id="7-segment">7-Segment</h2>
+<h2 id="subdomain">Subdomain</h2>
+<p>把 domain 切分成小塊，理想上 subdomain 和 bounded context 有 one-to-one 的關係</p>
 <ul>
-<li>
-<p>COM 分共陽、共陰</p>
-</li>
-<li>
-<p>8 個七段顯示器就要吃掉 8 * 8 個 GPIO 接腳，可以每次只顯示一個，那只需要 8 個 GPIO 接腳，快速閃過</p>
-</li>
-<li>
-<p>也可用 Max 7219 控制，他有三個輸入 DIN、LOAD、CLK</p>
+<li>Types
 <ul>
-<li>DIN 輸入資料</li>
-<li>CLK 上升的時候採樣，最多 10 MHz</li>
-<li>LOAD(CS) 採用最後輸進去的 16 bits
+<li>core subdomain
 <ul>
-<li>最早的是 MSB</li>
+<li>和其他競爭者相比不同的部分，最核心的業務，比如搜尋引擎中的搜尋演算法</li>
 </ul>
 </li>
+<li>generic subdomain
+<ul>
+<li>大家都會弄的部分，比如登入系統</li>
+</ul>
+</li>
+<li>supporting subdomain
+<ul>
+<li>用來輔助 core subdomain 的部分，比如篩選網頁</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="bounded-context">Bounded Context</h2>
+<ul>
+<li>劃出 boundary，確保 boundary 內用的概念、規則皆一致</li>
+<li>同個名詞可能出現在不同的 context，但有不同意思</li>
+</ul>
+<h2 id="context-map">Context Map</h2>
+<p>描述 BC 和 BC 間的關係</p>
+<ul>
+<li>上下游 (U/D)
+<ul>
+<li>上游提供下游 (下游依賴上游)</li>
+</ul>
+</li>
+<li>Shared Kernel
+<ul>
+<li>兩個 BC 共用的部份</li>
+<li>違反 BC 的基本原則，是一種例外設計</li>
+</ul>
+</li>
+<li>Customer-Supplier
+<ul>
+<li>一個子系統重度依賴另一個子系統</li>
+<li>Conformist
+<ul>
+<li>Customer 完全配合 Supplier</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Partnership
+<ul>
+<li>兩個 BC 互相合作，沒有以誰為主</li>
+<li>一起成功或一起失敗</li>
+</ul>
+</li>
+<li>Anticorruption Layer (ACL)
+<ul>
+<li>開發系統和外部系統的中間層</li>
+<li>可能出現在調用 legacy system</li>
+<li>常用到 Facade 和 Adapter</li>
+</ul>
+</li>
+<li>Open Host Service (OHS)
+<ul>
+<li>如果外部子系統要給一堆用戶端子系統調用，就得在所有用戶端子系統搞 ACL</li>
+<li>外部系統做為服務提供，常會搭配 Published Language (PL)
+<ul>
+<li>PL 是協定傳送資料的格式，比如 XML、JSON 或是 Protocol Buffer</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="pratical-ddd">Pratical DDD</h2>
+<ul>
+<li>The strangler migration
+<ul>
+<li>透過 Facade，把一些服務慢慢移植給新系統，最後取代 legacy</li>
 </ul>
 </li>
 </ul>
@@ -574,11 +622,9 @@ Command Status Output Data Input Data GPIO 結構 GPIO mode Open-Drain 由外部
     
     <section class="article-tags">
         
-            <a href="/Blog/tags/embedded-system/">embedded-system</a>
+            <a href="/Blog/tags/software-engineering/">software-engineering</a>
         
-            <a href="/Blog/tags/stm32/">stm32</a>
-        
-            <a href="/Blog/tags/mcu/">mcu</a>
+            <a href="/Blog/tags/software-design/">software-design</a>
         
     </section>
 
@@ -624,12 +670,12 @@ Command Status Output Data Input Data GPIO 結構 GPIO mode Open-Drain 由外部
             
                 
 <article class="">
-    <a href="/Blog/p/stm32-timer-/-counter-%E4%BB%8B%E7%B4%B9/">
+    <a href="/Blog/p/%E9%87%8D%E6%A7%8B-refactoring/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">STM32 Timer / Counter 介紹</h2>
+            <h2 class="article-title">重構 Refactoring</h2>
         </div>
     </a>
 </article>
@@ -637,12 +683,12 @@ Command Status Output Data Input Data GPIO 結構 GPIO mode Open-Drain 由外部
             
                 
 <article class="">
-    <a href="/Blog/p/stm32-uart-%E5%AF%A6%E9%A9%97/">
+    <a href="/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88%E5%8E%9F%E5%89%87/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">STM32 UART 實驗</h2>
+            <h2 class="article-title">軟體設計原則</h2>
         </div>
     </a>
 </article>
@@ -650,38 +696,12 @@ Command Status Output Data Input Data GPIO 結構 GPIO mode Open-Drain 由外部
             
                 
 <article class="">
-    <a href="/Blog/p/stm32-gpio-%E5%AF%A6%E9%A9%97/">
+    <a href="/Blog/p/database-normalization/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">STM32 GPIO 實驗</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/stm32cubeide-%E5%9F%BA%E6%9C%AC%E9%96%8B%E7%99%BC%E4%BD%BF%E7%94%A8/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">STM32CubeIDE 基本開發使用</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/arm-%E7%B5%84%E5%90%88%E8%AA%9E%E8%A8%80%E4%BB%8B%E7%B4%B9/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">ARM 組合語言介紹</h2>
+            <h2 class="article-title">Database Normalization</h2>
         </div>
     </a>
 </article>

@@ -6,7 +6,218 @@
         <description>Recent content in software-engineering on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 25 Apr 2023 14:26:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/software-engineering/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 22 May 2023 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/software-engineering/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>領域驅動設計 Domain-Driven Design</title>
+        <link>https://roykesydon.github.io/Blog/p/%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88-domain-driven-design/</link>
+        <pubDate>Mon, 22 May 2023 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88-domain-driven-design/</guid>
+        <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+&lt;p&gt;軟體要對 domain 做 Modeling，呈現出 domain 裡的核心概念，才能滿足使用者需求，因此不乏與領域專家的討論&lt;/p&gt;
+&lt;p&gt;寫這篇的時候我還沒嗑完 Eric 的聖經，可能嗑完了之後會回來修改&lt;/p&gt;
+&lt;h2 id=&#34;通用語言-ubiquitous-language&#34;&gt;通用語言 Ubiquitous Language&lt;/h2&gt;
+&lt;p&gt;鑒於程式開發人員與領域專家熟悉知識的差異，會產生交流困難&lt;/p&gt;
+&lt;p&gt;因此領域專家和開發團隊要訂定共同的語言，並且盡可能少用自己知道的術語&lt;/p&gt;
+&lt;h2 id=&#34;uml&#34;&gt;UML&lt;/h2&gt;
+&lt;p&gt;UML 適合用在小型模型上，它擅長表達類別間的關係，但對於抽象概念卻沒那麼好傳達&lt;/p&gt;
+&lt;p&gt;因此用 UML 建構模型時，理想上要添加額外的文字，傳達一些圖所不能表達的 behavior 和 constraint&lt;/p&gt;
+&lt;p&gt;並且不能一次寫過於複雜，而是分塊處理&lt;/p&gt;
+&lt;h2 id=&#34;layered-architecture&#34;&gt;Layered Architecture&lt;/h2&gt;
+&lt;p&gt;分為四個概念層，只會往下調用，可能會跨層&lt;/p&gt;
+&lt;p&gt;可以達到關注點分離 (separation of concerns)，提高各個方面的 cohesive&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;User Interface (Presentation Layer)
+&lt;ul&gt;
+&lt;li&gt;呈現給 user 的 UI，User 可能是另一個系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Application Layer
+&lt;ul&gt;
+&lt;li&gt;不含 bussiness logic，指揮表達領域概念的物件來完成任務&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Domain Layer
+&lt;ul&gt;
+&lt;li&gt;有關 domain 的資訊都在這裡，業務邏輯在此處理&lt;/li&gt;
+&lt;li&gt;表達業務概念、狀態、規則&lt;/li&gt;
+&lt;li&gt;劃分出這層是 Model-Driven Design 的關鍵&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Infrastructure layer
+&lt;ul&gt;
+&lt;li&gt;supporting library&lt;/li&gt;
+&lt;li&gt;保存業務狀態的技術細節在此實作&lt;/li&gt;
+&lt;li&gt;為前三個 layer 服務&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;entity&#34;&gt;Entity&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;具備 identity&lt;/li&gt;
+&lt;li&gt;identity 在 status 經過改變後依然不變&lt;/li&gt;
+&lt;li&gt;追蹤 entity 需要高成本&lt;/li&gt;
+&lt;li&gt;mutable&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;value-object&#34;&gt;Value Object&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;沒有 identity&lt;/li&gt;
+&lt;li&gt;只關心 obejct 的 value&lt;/li&gt;
+&lt;li&gt;可以輕易創建丟棄&lt;/li&gt;
+&lt;li&gt;immutable (不變的)
+&lt;ul&gt;
+&lt;li&gt;如果想修改數值就創新的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可被共用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;service&#34;&gt;Service&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;有些動作不屬於某個 Entity 或 Value Object，因為它是跨物件的&lt;/li&gt;
+&lt;li&gt;Stateless
+&lt;ul&gt;
+&lt;li&gt;每個請求不互相影響&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;aggregate&#34;&gt;Aggregate&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;把複雜關聯的物件圈在一起考量&lt;/li&gt;
+&lt;li&gt;確保 consistency 和 inveraints
+&lt;ul&gt;
+&lt;li&gt;consistency (一致性)
+&lt;ul&gt;
+&lt;li&gt;相關物件的資料一致&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;invariants (不變量)
+&lt;ul&gt;
+&lt;li&gt;資料改變時要維護的規則&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;aggregate-root&#34;&gt;Aggregate root&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;具備 global identity，其他內部 entity 只有 local identity&lt;/li&gt;
+&lt;li&gt;通常是 entity 擔任&lt;/li&gt;
+&lt;li&gt;外部只能存取它，不能存取 aggregate 的其他 entity 或 value obejct&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;factory&#34;&gt;Factory&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;若創建 aggregate、entity、value object 的過程很複雜，或是涉及專業知識，就該用 factory 包起來&lt;/li&gt;
+&lt;li&gt;對於不複雜的情況，或是想控制更多細節，可以只依賴於簡單的建構函式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;repository&#34;&gt;Repository&lt;/h2&gt;
+&lt;p&gt;如果大家都直接存取資料庫的各種物件，會破壞原本精心設計的結構，破壞封裝性&lt;/p&gt;
+&lt;p&gt;Repositoy 用來存取物件，封裝了資料庫操作&lt;/p&gt;
+&lt;h2 id=&#34;domain-event&#34;&gt;Domain event&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Domain 中重要的事情&lt;/li&gt;
+&lt;li&gt;可以用在其他物件和 aggrgate 訂閱，讓 aggregate 通知他們 domain event 的發生&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;anti-pattern&#34;&gt;Anti-Pattern&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;應該避免的情形&lt;/li&gt;
+&lt;li&gt;Smart UI
+&lt;ul&gt;
+&lt;li&gt;超肥的萬能 UI&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Anemic Domain Model
+&lt;ul&gt;
+&lt;li&gt;貧血模型&lt;/li&gt;
+&lt;li&gt;只有 getter 和 setter，沒有業務邏輯的模型&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;subdomain&#34;&gt;Subdomain&lt;/h2&gt;
+&lt;p&gt;把 domain 切分成小塊，理想上 subdomain 和 bounded context 有 one-to-one 的關係&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Types
+&lt;ul&gt;
+&lt;li&gt;core subdomain
+&lt;ul&gt;
+&lt;li&gt;和其他競爭者相比不同的部分，最核心的業務，比如搜尋引擎中的搜尋演算法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;generic subdomain
+&lt;ul&gt;
+&lt;li&gt;大家都會弄的部分，比如登入系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;supporting subdomain
+&lt;ul&gt;
+&lt;li&gt;用來輔助 core subdomain 的部分，比如篩選網頁&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;bounded-context&#34;&gt;Bounded Context&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;劃出 boundary，確保 boundary 內用的概念、規則皆一致&lt;/li&gt;
+&lt;li&gt;同個名詞可能出現在不同的 context，但有不同意思&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;context-map&#34;&gt;Context Map&lt;/h2&gt;
+&lt;p&gt;描述 BC 和 BC 間的關係&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;上下游 (U/D)
+&lt;ul&gt;
+&lt;li&gt;上游提供下游 (下游依賴上游)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Shared Kernel
+&lt;ul&gt;
+&lt;li&gt;兩個 BC 共用的部份&lt;/li&gt;
+&lt;li&gt;違反 BC 的基本原則，是一種例外設計&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Customer-Supplier
+&lt;ul&gt;
+&lt;li&gt;一個子系統重度依賴另一個子系統&lt;/li&gt;
+&lt;li&gt;Conformist
+&lt;ul&gt;
+&lt;li&gt;Customer 完全配合 Supplier&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Partnership
+&lt;ul&gt;
+&lt;li&gt;兩個 BC 互相合作，沒有以誰為主&lt;/li&gt;
+&lt;li&gt;一起成功或一起失敗&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Anticorruption Layer (ACL)
+&lt;ul&gt;
+&lt;li&gt;開發系統和外部系統的中間層&lt;/li&gt;
+&lt;li&gt;可能出現在調用 legacy system&lt;/li&gt;
+&lt;li&gt;常用到 Facade 和 Adapter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Open Host Service (OHS)
+&lt;ul&gt;
+&lt;li&gt;如果外部子系統要給一堆用戶端子系統調用，就得在所有用戶端子系統搞 ACL&lt;/li&gt;
+&lt;li&gt;外部系統做為服務提供，常會搭配 Published Language (PL)
+&lt;ul&gt;
+&lt;li&gt;PL 是協定傳送資料的格式，比如 XML、JSON 或是 Protocol Buffer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;pratical-ddd&#34;&gt;Pratical DDD&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;The strangler migration
+&lt;ul&gt;
+&lt;li&gt;透過 Facade，把一些服務慢慢移植給新系統，最後取代 legacy&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>重構 Refactoring</title>
         <link>https://roykesydon.github.io/Blog/p/%E9%87%8D%E6%A7%8B-refactoring/</link>
         <pubDate>Tue, 25 Apr 2023 14:26:17 +0800</pubDate>
