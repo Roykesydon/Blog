@@ -6,7 +6,15 @@
         <description>Recent content in Categories on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 22 May 2023 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 05 Jun 2023 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Full Stack</title>
+        <link>https://roykesydon.github.io/Blog/categories/full-stack/</link>
+        <pubDate>Mon, 05 Jun 2023 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/categories/full-stack/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/full-stack.jpg" alt="Featured image of post Full Stack" /&gt;</description>
+        </item>
+        <item>
         <title>Software Engineering</title>
         <link>https://roykesydon.github.io/Blog/categories/software-engineering/</link>
         <pubDate>Mon, 22 May 2023 00:00:17 +0800</pubDate>

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>cache on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/cache/</link>
+        <description>Recent content in cache on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Mon, 05 Jun 2023 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/cache/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Redis</title>
+        <link>https://roykesydon.github.io/Blog/p/redis/</link>
+        <pubDate>Mon, 05 Jun 2023 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/redis/</guid>
+        <description>&lt;h2 id=&#34;use-cases&#34;&gt;Use Cases&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Cache
+&lt;ul&gt;
+&lt;li&gt;把常用的資料回傳，省略長時間的 IO 操作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Shared Session
+&lt;ul&gt;
+&lt;li&gt;在 stateless server 間共享 session&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Distributed lock
+&lt;ul&gt;
+&lt;li&gt;用在程式間想共用某種資源的時候&lt;/li&gt;
+&lt;li&gt;用 &lt;code&gt;setnx&lt;/code&gt; (set if not exists)
+&lt;ul&gt;
+&lt;li&gt;atomic&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Rate Limiter
+&lt;ul&gt;
+&lt;li&gt;用 increment 和 expiration 實現&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;feature&#34;&gt;Feature&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;NoSQL&lt;/li&gt;
+&lt;li&gt;In-memory&lt;/li&gt;
+&lt;li&gt;Key-Value&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;basic-command&#34;&gt;Basic Command&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;redis-server&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;default port: 6379&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;redis-cli&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;access-data&#34;&gt;Access data&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;set &amp;lt;key&amp;gt; &amp;lt;value&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Pretty much everything stored in Redis is going to be a type of string by default&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;get &amp;lt;key&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;del &amp;lt;key&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;exists &amp;lt;key&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;keys &amp;lt;pattern&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;find keys with certain pattern&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;keys *&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;get all keys&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;flushall&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;get rid of everything&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;expiration&#34;&gt;Expiration&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;ttl &amp;lt;key&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;show time to live
+&lt;ul&gt;
+&lt;li&gt;&amp;ldquo;-1&amp;rdquo; for no expiration&lt;/li&gt;
+&lt;li&gt;&amp;ldquo;-2&amp;rdquo; already expired&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;expire &amp;lt;key&amp;gt; &amp;lt;second&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;setex &amp;lt;key&amp;gt; &amp;lt;seconds&amp;gt; &amp;lt;value&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;set with expiration&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;data-structure&#34;&gt;Data Structure&lt;/h3&gt;
+&lt;h4 id=&#34;list&#34;&gt;List&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;lpush/rpush &amp;lt;key&amp;gt; &amp;lt;value&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;lrange &amp;lt;key&amp;gt; &amp;lt;start index&amp;gt; &amp;lt;end index&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;end index&amp;gt;&lt;/code&gt; can be -1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;lpop/rpop &amp;lt;key&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;set&#34;&gt;Set&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sadd &amp;lt;key&amp;gt; &amp;lt;value&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;smembers &amp;lt;key&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;srem &amp;lt;key&amp;gt; &amp;lt;value&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;remove&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;hash&#34;&gt;Hash&lt;/h4&gt;
+&lt;p&gt;Key-value in Key-value&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;hset &amp;lt;key&amp;gt; &amp;lt;field&amp;gt; &amp;lt;value&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;hget &amp;lt;key&amp;gt; &amp;lt;field&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;hgetall &amp;lt;key&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;get everything about &lt;code&gt;&amp;lt;key&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;hdel&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;hexists &amp;lt;key&amp;gt; &amp;lt;field&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Redis doesn&amp;rsquo;t support nested hash struct&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;刪除過期-key&#34;&gt;刪除過期 key&lt;/h2&gt;
+&lt;h3 id=&#34;定期刪除&#34;&gt;定期刪除&lt;/h3&gt;
+&lt;p&gt;在固定間隔時間隨機抽 key 檢查並刪除&lt;/p&gt;
+&lt;h3 id=&#34;惰性刪除&#34;&gt;惰性刪除&lt;/h3&gt;
+&lt;p&gt;在訪問 key 的時候發現過期就刪除&lt;/p&gt;
+&lt;h2 id=&#34;maxmemory-policy-eviction&#34;&gt;maxmemory-policy (Eviction)&lt;/h2&gt;
+&lt;p&gt;可以設定這些 policy，在記憶體依然額滿的情況下做對應的處理&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;noeviction&lt;/li&gt;
+&lt;li&gt;allkeys-lru&lt;/li&gt;
+&lt;li&gt;allkeys-lfu&lt;/li&gt;
+&lt;li&gt;volatile-lru&lt;/li&gt;
+&lt;li&gt;volatile-lfu&lt;/li&gt;
+&lt;li&gt;allkeys-random&lt;/li&gt;
+&lt;li&gt;volatile-random&lt;/li&gt;
+&lt;li&gt;volatile-ttl&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;快取情境問題&#34;&gt;快取情境問題&lt;/h2&gt;
+&lt;h3 id=&#34;快取雪崩-cache-avalanche&#34;&gt;快取雪崩 Cache Avalanche&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;某個時刻大量 cache 失效，使資料庫需要承擔很大的流量。&lt;/li&gt;
+&lt;li&gt;解法
+&lt;ul&gt;
+&lt;li&gt;幫 cache 加上額外的隨機過期時間&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;快取擊穿-hotspot-invalid&#34;&gt;快取擊穿 Hotspot Invalid&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;某個 hotspot 的 cache 失效，使大量請求跑到資料庫&lt;/li&gt;
+&lt;li&gt;解法
+&lt;ul&gt;
+&lt;li&gt;讓 hotspot 永不過期&lt;/li&gt;
+&lt;li&gt;查詢資料庫的部分加上 lock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;快取穿透-cache-penetration&#34;&gt;快取穿透 Cache Penetration&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;client request 不存在的資料，因為同時不存在於 cache 和資料庫中，所以直接跑到資料庫&lt;/li&gt;
+&lt;li&gt;解法
+&lt;ul&gt;
+&lt;li&gt;在 application 先過濾掉非法請求&lt;/li&gt;
+&lt;li&gt;Bloom Filter 布隆過濾器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;persistence&#34;&gt;Persistence&lt;/h2&gt;
+&lt;h3 id=&#34;rdb&#34;&gt;RDB&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;固定時間對所有資料做快照，memory dump 出來&lt;/li&gt;
+&lt;li&gt;recovery 比 AOF 快&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;save&lt;/code&gt;、&lt;code&gt;bgsave&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;aof&#34;&gt;AOF&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;紀錄操作流程&lt;/li&gt;
+&lt;li&gt;檔案比較肥&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;rewrite&#34;&gt;Rewrite&lt;/h4&gt;
+&lt;p&gt;當 AOF 太大，Redis 會生一個新文件取代舊的，用最少操作生出目前的資料&lt;/p&gt;
+&lt;h3 id=&#34;混合&#34;&gt;混合&lt;/h3&gt;
+&lt;p&gt;在 AOF 重寫的時候也利用 RDB
+前面是 RDB，後面是 AOF&lt;/p&gt;
+&lt;h2 id=&#34;availability&#34;&gt;Availability&lt;/h2&gt;
+&lt;h3 id=&#34;主從同步&#34;&gt;主從同步&lt;/h3&gt;
+&lt;p&gt;一主多從，把讀取壓力分擔到 slave 上&lt;/p&gt;
+&lt;h3 id=&#34;哨兵模式-sentinel&#34;&gt;哨兵模式 Sentinel&lt;/h3&gt;
+&lt;p&gt;會有哨兵不斷地 Ping 主從伺服器，確認是否有異常&lt;/p&gt;
+&lt;p&gt;如果哨兵是集群，有哨兵檢測到異常，會判斷某伺服器主觀下線，當有一定數量的哨兵投票認為伺服器不可能用，就會變成客觀下線，進行 failover&lt;/p&gt;
+&lt;h3 id=&#34;cluster&#34;&gt;Cluster&lt;/h3&gt;
+&lt;p&gt;分擔寫入壓力&lt;/p&gt;
+&lt;p&gt;Redis 有 16384 個 slot，透過 hash 分配 key 到不同的 slot&lt;/p&gt;
+&lt;p&gt;預設會另外用 port 16379 來讓節點間溝通&lt;/p&gt;
+&lt;p&gt;可以混和主從同步達到高可用&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
