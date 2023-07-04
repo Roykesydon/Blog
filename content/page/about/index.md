@@ -43,13 +43,13 @@ Awards and Examination
 Skills
 ---------------------
 Language
-: C、C++、Python、Javascript、Java、HTML、CSS、PHP、SCSS
+: C、C++、Python、Javascript、Java、HTML、CSS、PHP、SCSS、Swift
 
 Framework
 : Vue、Laravel、Pytorch、Flask、FastAPI
 
 Database
-: MySQL、MongoDB
+: MySQL、MongoDB、Redis
 
 Others 
 : Git、Docker、Node.js

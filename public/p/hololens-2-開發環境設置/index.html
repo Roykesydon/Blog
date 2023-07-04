@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='前言 要弄 Hololens 2 的開發環境要一堆有的沒的麻煩東西，紀錄一下避免之後要重裝
+原本很怕版本對不上很麻煩，但實際用起來好像還好
+注意，這不是最小安裝，有些東西我不確定是不是必要的，但我怕麻煩就裝了
+後續請參考微軟的教學
+計畫版本紀錄 (2023/07/03) Unity 2020.3.48f1 (LTS) MRTK 2.8.3 Mixed Reality OpenXR Plugin 1.8.0 我個人的版本紀錄 (2021/07/03) Unity 2021.3.27f1 (LTS) 我沒注意到我一開始選錯，但也可以跑，之後 MRTK 2.8.3 Visual Studio 2022 Mixed Reality OpenXR Plugin 1.8.0 作業系統要求 必須是 Windows 專業版以上，因為要用 Hyper-V 先去 BIOS 開 Virtualization Technology 開啟 Hyper-V 前置步驟 安裝 windows SDK
+聽說裝完最新的後，建議再多裝幾個版本 我個人只有裝最新的 安裝 visual studio
+好像會根據 MRTK 的版本有對應的版本要求，不能無腦裝最新 據說要選 「C&#43;&#43; 開發」和「通用 Windows 平台開發」 右邊好像還要選 USB 設備連接 C&#43;&#43; 通用 Windows 平台工具 安裝 Hololens 2 模擬器'>
+<title>Hololens 2 開發環境設置</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/hololens-2-%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83%E8%A8%AD%E7%BD%AE/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.31c079706f35ded388ea01189b0f78e7e955850edc2d2153bd984714f6cf6042.css"><meta property='og:title' content='Hololens 2 開發環境設置'>
+<meta property='og:description' content='前言 要弄 Hololens 2 的開發環境要一堆有的沒的麻煩東西，紀錄一下避免之後要重裝
+原本很怕版本對不上很麻煩，但實際用起來好像還好
+注意，這不是最小安裝，有些東西我不確定是不是必要的，但我怕麻煩就裝了
+後續請參考微軟的教學
+計畫版本紀錄 (2023/07/03) Unity 2020.3.48f1 (LTS) MRTK 2.8.3 Mixed Reality OpenXR Plugin 1.8.0 我個人的版本紀錄 (2021/07/03) Unity 2021.3.27f1 (LTS) 我沒注意到我一開始選錯，但也可以跑，之後 MRTK 2.8.3 Visual Studio 2022 Mixed Reality OpenXR Plugin 1.8.0 作業系統要求 必須是 Windows 專業版以上，因為要用 Hyper-V 先去 BIOS 開 Virtualization Technology 開啟 Hyper-V 前置步驟 安裝 windows SDK
+聽說裝完最新的後，建議再多裝幾個版本 我個人只有裝最新的 安裝 visual studio
+好像會根據 MRTK 的版本有對應的版本要求，不能無腦裝最新 據說要選 「C&#43;&#43; 開發」和「通用 Windows 平台開發」 右邊好像還要選 USB 設備連接 C&#43;&#43; 通用 Windows 平台工具 安裝 Hololens 2 模擬器'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/hololens-2-%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83%E8%A8%AD%E7%BD%AE/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='unity' /><meta property='article:tag' content='mr' /><meta property='article:tag' content='mrtk' /><meta property='article:tag' content='hololens' /><meta property='article:published_time' content='2023-07-03T00:00:01&#43;08:00'/><meta property='article:modified_time' content='2023-07-03T00:00:01&#43;08:00'/>
+<meta name="twitter:title" content="Hololens 2 開發環境設置">
+<meta name="twitter:description" content="前言 要弄 Hololens 2 的開發環境要一堆有的沒的麻煩東西，紀錄一下避免之後要重裝
+原本很怕版本對不上很麻煩，但實際用起來好像還好
+注意，這不是最小安裝，有些東西我不確定是不是必要的，但我怕麻煩就裝了
+後續請參考微軟的教學
+計畫版本紀錄 (2023/07/03) Unity 2020.3.48f1 (LTS) MRTK 2.8.3 Mixed Reality OpenXR Plugin 1.8.0 我個人的版本紀錄 (2021/07/03) Unity 2021.3.27f1 (LTS) 我沒注意到我一開始選錯，但也可以跑，之後 MRTK 2.8.3 Visual Studio 2022 Mixed Reality OpenXR Plugin 1.8.0 作業系統要求 必須是 Windows 專業版以上，因為要用 Hyper-V 先去 BIOS 開 Virtualization Technology 開啟 Hyper-V 前置步驟 安裝 windows SDK
+聽說裝完最新的後，建議再多裝幾個版本 我個人只有裝最新的 安裝 visual studio
+好像會根據 MRTK 的版本有對應的版本要求，不能無腦裝最新 據說要選 「C&#43;&#43; 開發」和「通用 Windows 平台開發」 右邊好像還要選 USB 設備連接 C&#43;&#43; 通用 Windows 平台工具 安裝 Hololens 2 模擬器">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">⭐<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/StarRabbit.jpg"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#計畫版本紀錄-20230703">計畫版本紀錄 (2023/07/03)</a></li>
+    <li><a href="#我個人的版本紀錄-20210703">我個人的版本紀錄 (2021/07/03)</a></li>
+    <li><a href="#作業系統要求">作業系統要求</a></li>
+    <li><a href="#前置步驟">前置步驟</a></li>
+    <li><a href="#創建專案">創建專案</a></li>
+    <li><a href="#在模擬器上執行">在模擬器上執行</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/unclassified/" style="background-color: #349a7e; color: #ffffff;">
+                Unclassified
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/unclassified.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/hololens-2-%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83%E8%A8%AD%E7%BD%AE/">Hololens 2 開發環境設置</a>
+        </h2>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jul 03, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    1 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="前言">前言</h2>
+<p>要弄 Hololens 2 的開發環境要一堆有的沒的麻煩東西，紀錄一下避免之後要重裝</p>
+<p>原本很怕版本對不上很麻煩，但實際用起來好像還好</p>
+<p>注意，這不是最小安裝，有些東西我不確定是不是必要的，但我怕麻煩就裝了</p>
+<p>後續請參考微軟的教學</p>
+<h2 id="計畫版本紀錄-20230703">計畫版本紀錄 (2023/07/03)</h2>
+<ul>
+<li>Unity
+<ul>
+<li>2020.3.48f1 (LTS)</li>
+</ul>
+</li>
+<li>MRTK
+<ul>
+<li>2.8.3</li>
+</ul>
+</li>
+<li>Mixed Reality OpenXR Plugin
+<ul>
+<li>1.8.0</li>
+</ul>
+</li>
+</ul>
+<h2 id="我個人的版本紀錄-20210703">我個人的版本紀錄 (2021/07/03)</h2>
+<ul>
+<li>Unity
+<ul>
+<li>2021.3.27f1 (LTS)
+<ul>
+<li>我沒注意到我一開始選錯，但也可以跑，之後</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>MRTK
+<ul>
+<li>2.8.3</li>
+</ul>
+</li>
+<li>Visual Studio
+<ul>
+<li>2022</li>
+</ul>
+</li>
+<li>Mixed Reality OpenXR Plugin
+<ul>
+<li>1.8.0</li>
+</ul>
+</li>
+</ul>
+<h2 id="作業系統要求">作業系統要求</h2>
+<ul>
+<li>必須是 Windows 專業版以上，因為要用 Hyper-V
+<ol>
+<li>先去 BIOS 開 Virtualization Technology</li>
+<li>開啟 Hyper-V</li>
+</ol>
+</li>
+</ul>
+<h2 id="前置步驟">前置步驟</h2>
+<ol>
+<li>
+<p>安裝 windows SDK</p>
+<ul>
+<li>聽說裝完最新的後，建議再多裝幾個版本
+<ul>
+<li>我個人只有裝最新的</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>安裝 visual studio</p>
+<ul>
+<li>好像會根據 MRTK 的版本有對應的版本要求，不能無腦裝最新</li>
+<li>據說要選 「C++ 開發」和「通用 Windows 平台開發」
+<ul>
+<li>右邊好像還要選
+<ul>
+<li>USB 設備連接</li>
+<li>C++ 通用 Windows 平台工具</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>安裝 Hololens 2 模擬器</p>
+<ul>
+<li>這是給 build 好的程式用的，不是在說 Unity Editor 裡面的手</li>
+</ul>
+</li>
+<li>
+<p>安裝 Unity</p>
+<ul>
+<li>建議透過 Unity Hub 管理 Unity 版本</li>
+<li>據說裝的 Unity 要裝以下兩個 module
+<ul>
+<li>Universal Windows Platform Build Support</li>
+<li>Windows Build Support (IL2CPP)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Windows 和 Hololens 都要開啟「開發者模式」</p>
+</li>
+<li>
+<p>下載 Mixed Reality Feature Tool</p>
+<ul>
+<li>注意看這不是 MRTK</li>
+<li>這可以往 Unity 專案導入 MRTK</li>
+<li>可以導入 MRTK 2.6 以後的工具包</li>
+</ul>
+</li>
+</ol>
+<h2 id="創建專案">創建專案</h2>
+<ol>
+<li>
+<p>Unity 開個 3D 專案</p>
+<ul>
+<li>File -&gt; Build Settings</li>
+<li>選擇 Universal Windows Platform</li>
+<li>點選 Switch Platform</li>
+</ul>
+</li>
+<li>
+<p>開啟 Mixed Reality Feature Tool</p>
+<ul>
+<li>針對專案安裝 MRTK
+<ul>
+<li>
+<p>必裝</p>
+<ul>
+<li>MRTK Foundation</li>
+<li>Mixed Reality OpenXR Plugin</li>
+</ul>
+</li>
+<li>
+<p>可選</p>
+<ul>
+<li>MRTK
+<ul>
+<li>Examples</li>
+<li>Extensions</li>
+<li>Tools</li>
+<li>TestUtilities</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="在模擬器上執行">在模擬器上執行</h2>
+<p>這坑真的有夠多，我結合上 stack overflow 的解法，所用的步驟:</p>
+<ol>
+<li>
+<p>要用管理員模式開 Visual Studio，不然有可能遇到權限問題</p>
+</li>
+<li>
+<p>Visual studio 要部屬程式的時候，會自己開一個 Hololens 2 Simulator，但他會開超久，然後造成 Timeout，無法部屬，部屬失敗後不要選繼續，也不要關掉模擬器</p>
+</li>
+<li>
+<p>這時候再看情況按 實心 / 空心綠色三角形 (without debugging)</p>
+</li>
+<li>
+<p>有可能可以 deploy，但運行時有問題，此時按紅色方塊終止，繼續綠色三角形，不要關掉模擬器</p>
+</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/unity/">unity</a>
+        
+            <a href="/Blog/tags/mr/">mr</a>
+        
+            <a href="/Blog/tags/mrtk/">mrtk</a>
+        
+            <a href="/Blog/tags/hololens/">hololens</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>
