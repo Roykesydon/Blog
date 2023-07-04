@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>unity on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/unity/</link>
+        <description>Recent content in unity on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Mon, 03 Jul 2023 00:00:01 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/unity/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Hololens 2 開發環境設置</title>
+        <link>https://roykesydon.github.io/Blog/p/hololens-2-%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83%E8%A8%AD%E7%BD%AE/</link>
+        <pubDate>Mon, 03 Jul 2023 00:00:01 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/hololens-2-%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83%E8%A8%AD%E7%BD%AE/</guid>
+        <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+&lt;p&gt;要弄 Hololens 2 的開發環境要一堆有的沒的麻煩東西，紀錄一下避免之後要重裝&lt;/p&gt;
+&lt;p&gt;原本很怕版本對不上很麻煩，但實際用起來好像還好&lt;/p&gt;
+&lt;p&gt;注意，這不是最小安裝，有些東西我不確定是不是必要的，但我怕麻煩就裝了&lt;/p&gt;
+&lt;p&gt;後續請參考微軟的教學&lt;/p&gt;
+&lt;h2 id=&#34;計畫版本紀錄-20230703&#34;&gt;計畫版本紀錄 (2023/07/03)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Unity
+&lt;ul&gt;
+&lt;li&gt;2020.3.48f1 (LTS)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;MRTK
+&lt;ul&gt;
+&lt;li&gt;2.8.3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Mixed Reality OpenXR Plugin
+&lt;ul&gt;
+&lt;li&gt;1.8.0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;我個人的版本紀錄-20210703&#34;&gt;我個人的版本紀錄 (2021/07/03)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Unity
+&lt;ul&gt;
+&lt;li&gt;2021.3.27f1 (LTS)
+&lt;ul&gt;
+&lt;li&gt;我沒注意到我一開始選錯，但也可以跑，之後&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;MRTK
+&lt;ul&gt;
+&lt;li&gt;2.8.3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Visual Studio
+&lt;ul&gt;
+&lt;li&gt;2022&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Mixed Reality OpenXR Plugin
+&lt;ul&gt;
+&lt;li&gt;1.8.0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;作業系統要求&#34;&gt;作業系統要求&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;必須是 Windows 專業版以上，因為要用 Hyper-V
+&lt;ol&gt;
+&lt;li&gt;先去 BIOS 開 Virtualization Technology&lt;/li&gt;
+&lt;li&gt;開啟 Hyper-V&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;前置步驟&#34;&gt;前置步驟&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;安裝 windows SDK&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;聽說裝完最新的後，建議再多裝幾個版本
+&lt;ul&gt;
+&lt;li&gt;我個人只有裝最新的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;安裝 visual studio&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;好像會根據 MRTK 的版本有對應的版本要求，不能無腦裝最新&lt;/li&gt;
+&lt;li&gt;據說要選 「C++ 開發」和「通用 Windows 平台開發」
+&lt;ul&gt;
+&lt;li&gt;右邊好像還要選
+&lt;ul&gt;
+&lt;li&gt;USB 設備連接&lt;/li&gt;
+&lt;li&gt;C++ 通用 Windows 平台工具&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;安裝 Hololens 2 模擬器&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;這是給 build 好的程式用的，不是在說 Unity Editor 裡面的手&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;安裝 Unity&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;建議透過 Unity Hub 管理 Unity 版本&lt;/li&gt;
+&lt;li&gt;據說裝的 Unity 要裝以下兩個 module
+&lt;ul&gt;
+&lt;li&gt;Universal Windows Platform Build Support&lt;/li&gt;
+&lt;li&gt;Windows Build Support (IL2CPP)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Windows 和 Hololens 都要開啟「開發者模式」&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;下載 Mixed Reality Feature Tool&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;注意看這不是 MRTK&lt;/li&gt;
+&lt;li&gt;這可以往 Unity 專案導入 MRTK&lt;/li&gt;
+&lt;li&gt;可以導入 MRTK 2.6 以後的工具包&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;創建專案&#34;&gt;創建專案&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Unity 開個 3D 專案&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;File -&amp;gt; Build Settings&lt;/li&gt;
+&lt;li&gt;選擇 Universal Windows Platform&lt;/li&gt;
+&lt;li&gt;點選 Switch Platform&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;開啟 Mixed Reality Feature Tool&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;針對專案安裝 MRTK
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;必裝&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;MRTK Foundation&lt;/li&gt;
+&lt;li&gt;Mixed Reality OpenXR Plugin&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可選&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;MRTK
+&lt;ul&gt;
+&lt;li&gt;Examples&lt;/li&gt;
+&lt;li&gt;Extensions&lt;/li&gt;
+&lt;li&gt;Tools&lt;/li&gt;
+&lt;li&gt;TestUtilities&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;在模擬器上執行&#34;&gt;在模擬器上執行&lt;/h2&gt;
+&lt;p&gt;這坑真的有夠多，我結合上 stack overflow 的解法，所用的步驟:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;要用管理員模式開 Visual Studio，不然有可能遇到權限問題&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Visual studio 要部屬程式的時候，會自己開一個 Hololens 2 Simulator，但他會開超久，然後造成 Timeout，無法部屬，部屬失敗後不要選繼續，也不要關掉模擬器&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;這時候再看情況按 實心 / 空心綠色三角形 (without debugging)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;有可能可以 deploy，但運行時有問題，此時按紅色方塊終止，繼續綠色三角形，不要關掉模擬器&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
