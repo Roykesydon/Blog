@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>graph on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/graph/</link>
+        <description>Recent content in graph on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Fri, 04 Aug 2023 00:27:55 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/graph/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>GNN 介紹</title>
+        <link>https://roykesydon.github.io/Blog/p/gnn-%E4%BB%8B%E7%B4%B9/</link>
+        <pubDate>Fri, 04 Aug 2023 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/gnn-%E4%BB%8B%E7%B4%B9/</guid>
+        <description>&lt;h2 id=&#34;圖簡介&#34;&gt;圖簡介&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Graph&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;表示 Entity (nodes) 間的 relations (edges)&lt;/li&gt;
+&lt;li&gt;組成
+&lt;ul&gt;
+&lt;li&gt;Vertex attributes (V)&lt;/li&gt;
+&lt;li&gt;Edge attributes and directions (E)&lt;/li&gt;
+&lt;li&gt;Global attributes (U)&lt;/li&gt;
+&lt;li&gt;下文簡稱 U, V, E&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可以表示成圖的範例&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Images
+&lt;ul&gt;
+&lt;li&gt;相鄰 pixel 建無向邊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Text
+&lt;ul&gt;
+&lt;li&gt;詞和下一個詞建單向邊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Molecules
+&lt;ul&gt;
+&lt;li&gt;分子的連接處建無向邊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Social networks
+&lt;ul&gt;
+&lt;li&gt;人和人之間建無向邊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;定義問題&#34;&gt;定義問題&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;種類
+&lt;ul&gt;
+&lt;li&gt;Graph-level&lt;/li&gt;
+&lt;li&gt;Node-level&lt;/li&gt;
+&lt;li&gt;Edge-level&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;個別講的是基於什麼東西做分類，比如對每個人（node）分類一個陣營，就算 Node-level&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;挑戰&#34;&gt;挑戰&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;儲存邊的關係
+&lt;ul&gt;
+&lt;li&gt;鄰接矩陣
+&lt;ul&gt;
+&lt;li&gt;在節點多的情況下佔用空間大，而且可能非常稀疏&lt;/li&gt;
+&lt;li&gt;同一張圖，換個點的順序後鄰接矩陣看起來就會不同
+&lt;ul&gt;
+&lt;li&gt;難以保證這些東西餵入神經網路後輸出相同&lt;/li&gt;
+&lt;li&gt;可以用兩個 list，一個儲存邊的向量，另一個是 Adjacency list，依序紀錄邊的關係&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;稀疏矩陣
+&lt;ul&gt;
+&lt;li&gt;難以用 GPU 運算&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;graph-neural-network&#34;&gt;Graph Neural Network&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;GNN 是對圖上所有屬性的 optimizable transformation，而且可以保持 graph symmetries (permutation invariances，把 node 排序後結果不變)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;下文用的 GNN 是 message passing neural network&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;graph-in, graph-out&lt;/li&gt;
+&lt;li&gt;不改變圖的 connectivity&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;最簡單的-gnn&#34;&gt;最簡單的 GNN&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;U, V, E 個別餵給不同的 MLP，組成一個 GNN 的 layer
+&lt;ul&gt;
+&lt;li&gt;MLP 單獨餵入每一個點，不考慮連接訊息，保持了 graph symmetries&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;預測&#34;&gt;預測&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;假如要對每個頂點做預測，最後再加個全連接層分類&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;pooling&#34;&gt;pooling&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;假如要對一個沒有向量的頂點做預測，我們可以用 pooling，蒐集相鄰邊和全局向量的資訊&lt;/li&gt;
+&lt;li&gt;對於沒有頂點資訊的圖，我們可以用 pooling layer 獲取全部點的資訊，再做分類&lt;/li&gt;
+&lt;li&gt;對於沒有邊資訊的圖，我們也可以用 pooling 去從相鄰點和全局向量獲得資訊&lt;/li&gt;
+&lt;li&gt;對於沒有全局向量的圖，我們可以用 pooling 去從全部的點或邊獲得資訊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;缺陷&#34;&gt;缺陷&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;中間的 layer 沒有利用圖的訊息，都是各自進入各自的 MLP 做轉換&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;passing-messages&#34;&gt;Passing messages&lt;/h3&gt;
+&lt;p&gt;在做轉換前，先做一些 pooling&lt;/p&gt;
+&lt;h4 id=&#34;匯聚頂點資訊&#34;&gt;匯聚頂點資訊&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;不是單單把點向量進行轉換，而是和相鄰的點一起做 aggregation 後再做轉換
+&lt;ul&gt;
+&lt;li&gt;如果 aggregation 是加總，和卷積有一點像，只不過是權重一樣的版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;匯聚頂點和邊的資訊&#34;&gt;匯聚頂點和邊的資訊&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;可以先把頂點匯聚給邊，再把邊匯聚回頂點，反之亦然
+&lt;ul&gt;
+&lt;li&gt;順序不同會導致不同結果&lt;/li&gt;
+&lt;li&gt;兩種方法可以一起同步做，交替更新&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;全局資訊&#34;&gt;全局資訊&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;每次 layer 只看鄰居，要傳遞到遠的點須要走很多層&lt;/li&gt;
+&lt;li&gt;導入 master node (context vector)，他連接了所有的點和邊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;相關主題&#34;&gt;相關主題&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;採樣&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;考量到計算梯度可能需要儲存過多的中間資訊，可以考慮採樣一些點，只在子圖上做計算&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Batch&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每個點鄰居各數不同，使做 batch 成為有挑戰性的問題。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Inductive Bias&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;graph symmetries&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Aggregation&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;目前沒有一個最佳選擇&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Graph Convolutional Network&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;node 是根據鄰居 node 去做某種 aggregate，事後再做更新&lt;/li&gt;
+&lt;li&gt;由於每次都看鄰居，假如有 k 層，可以把圖看做解 n 個子圖，每個子圖就是基於每個點去走 k 步所形成的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Graph Attention Network&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用 attention 決定其它點的權重，而不像 GCN 一樣把鄰居加起來&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

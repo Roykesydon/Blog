@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: Quo Vadis, Action Recognition? A New Model and the Kinetics Dataset
+Abstract 目前的動作分類資料集 (UCF-101 和 HMDB-51) 的影片非常缺乏，使辨識「良好的影像架構」變得困難， 使多數方法在現有的小規模 benchmark 的表現差不多。為此本文根據新的 Kinetics Human Action Video dataset 對 SOTA 架構進行了重新評估。
+Kinetics 有 400 個人類動作類別。每個類別有 400 個 clip。從 YouTube 上獲取的，而且每個 clip 來自 unique 的 youtube 影片。
+本文分析了當前架構在 Kinetics 上動作分類任務的表現，也評估 Kinetcis 用作預訓練的效果。
+本文提出了一種基於 2D ConvNet inflation 的 Two-Stream Inflated 3D ConvNet (I3D)。
+I3D 的擴展方法讓 ImageNet 上已經取得成功的架構可以被利用在解決影像任務上。
+結果表明，經過在 Kinetics 上預訓練後，I3D 在動作分類方面顯著提高了 SOTA，在 HMDB-51 上達到 80.'>
+<title>I3D 論文</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/i3d-%E8%AB%96%E6%96%87/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.2433f55402684910d9124d7eda8b4343840e5a67bb9d728e894592be4ef660a6.css"><meta property='og:title' content='I3D 論文'>
+<meta property='og:description' content='paper: Quo Vadis, Action Recognition? A New Model and the Kinetics Dataset
+Abstract 目前的動作分類資料集 (UCF-101 和 HMDB-51) 的影片非常缺乏，使辨識「良好的影像架構」變得困難， 使多數方法在現有的小規模 benchmark 的表現差不多。為此本文根據新的 Kinetics Human Action Video dataset 對 SOTA 架構進行了重新評估。
+Kinetics 有 400 個人類動作類別。每個類別有 400 個 clip。從 YouTube 上獲取的，而且每個 clip 來自 unique 的 youtube 影片。
+本文分析了當前架構在 Kinetics 上動作分類任務的表現，也評估 Kinetcis 用作預訓練的效果。
+本文提出了一種基於 2D ConvNet inflation 的 Two-Stream Inflated 3D ConvNet (I3D)。
+I3D 的擴展方法讓 ImageNet 上已經取得成功的架構可以被利用在解決影像任務上。
+結果表明，經過在 Kinetics 上預訓練後，I3D 在動作分類方面顯著提高了 SOTA，在 HMDB-51 上達到 80.'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/i3d-%E8%AB%96%E6%96%87/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='computer-vision' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='convolution' /><meta property='article:published_time' content='2023-07-23T00:27:55&#43;08:00'/><meta property='article:modified_time' content='2023-07-23T00:27:55&#43;08:00'/>
+<meta name="twitter:title" content="I3D 論文">
+<meta name="twitter:description" content="paper: Quo Vadis, Action Recognition? A New Model and the Kinetics Dataset
+Abstract 目前的動作分類資料集 (UCF-101 和 HMDB-51) 的影片非常缺乏，使辨識「良好的影像架構」變得困難， 使多數方法在現有的小規模 benchmark 的表現差不多。為此本文根據新的 Kinetics Human Action Video dataset 對 SOTA 架構進行了重新評估。
+Kinetics 有 400 個人類動作類別。每個類別有 400 個 clip。從 YouTube 上獲取的，而且每個 clip 來自 unique 的 youtube 影片。
+本文分析了當前架構在 Kinetics 上動作分類任務的表現，也評估 Kinetcis 用作預訓練的效果。
+本文提出了一種基於 2D ConvNet inflation 的 Two-Stream Inflated 3D ConvNet (I3D)。
+I3D 的擴展方法讓 ImageNet 上已經取得成功的架構可以被利用在解決影像任務上。
+結果表明，經過在 Kinetics 上預訓練後，I3D 在動作分類方面顯著提高了 SOTA，在 HMDB-51 上達到 80.">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">⭐<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/StarRabbit.jpg"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#action-classification-architectures">Action Classification Architectures</a>
+      <ol>
+        <li><a href="#之前的做法">之前的做法</a></li>
+        <li><a href="#the-new-two-stream-inflated-3d-convnets">The New: Two-Stream Inflated 3D ConvNets</a>
+          <ol>
+            <li><a href="#inflating">Inflating</a></li>
+            <li><a href="#bootstraping">Bootstraping</a></li>
+            <li><a href="#pacing-receptive-field-growth-in-space-time-and-network-depth">Pacing receptive field growth in space, time and network depth</a></li>
+            <li><a href="#two-3d-streams">Two 3D Streams</a></li>
+            <li><a href="#implementation-details">Implementation Details</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#the-kinetics-human-action-video-dataset">The Kinetics Human Action Video Dataset</a></li>
+    <li><a href="#experimental-comparison-of-architectures">Experimental Comparison of Architectures</a></li>
+    <li><a href="#experimental-evaluation-of-features">Experimental Evaluation of Features</a></li>
+    <li><a href="#discussion">Discussion</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/deep-learning/" style="background-color: #936ce1; color: #fff;">
+                Deep Learning
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/deep-learning.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/i3d-%E8%AB%96%E6%96%87/">I3D 論文</a>
+        </h2>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jul 23, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    3 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>paper: <a class="link" href="https://arxiv.org/abs/1705.07750"  target="_blank" rel="noopener"
+    >Quo Vadis, Action Recognition? A New Model and the Kinetics Dataset</a></p>
+<h2 id="abstract">Abstract</h2>
+<p>目前的動作分類資料集 (UCF-101 和 HMDB-51) 的影片非常缺乏，使辨識「良好的影像架構」變得困難，
+使多數方法在現有的小規模 benchmark 的表現差不多。為此本文根據新的 Kinetics Human Action Video dataset 對 SOTA 架構進行了重新評估。</p>
+<p>Kinetics 有 400 個人類動作類別。每個類別有 400 個 clip。從 YouTube 上獲取的，而且每個 clip 來自 unique 的 youtube 影片。</p>
+<p>本文分析了當前架構在 Kinetics 上動作分類任務的表現，也評估 Kinetcis 用作預訓練的效果。</p>
+<p>本文提出了一種基於 2D ConvNet inflation 的 Two-Stream Inflated 3D ConvNet (I3D)。</p>
+<p>I3D 的擴展方法讓 ImageNet 上已經取得成功的架構可以被利用在解決影像任務上。</p>
+<p>結果表明，經過在 Kinetics 上預訓練後，I3D 在動作分類方面顯著提高了 SOTA，在 HMDB-51 上達到 80.9%，在 UCF-101 上達到 98.0%。</p>
+<h2 id="introduction">Introduction</h2>
+<p>在 ImageNet 上預訓練模型的效果很好，但在影片領域，預訓練成效一直是一個未知的問題。因為流行的動作識別 benchmark 都非常小，約略只有 10k 個影片。</p>
+<p>Kinetics 有 400 個人類動作類別。每個類別有 400 個 clip，而且每個 clip 都來自一個 unique 的 Youtube 影片。</p>
+<p>本文實驗策略是在 Kinetics 上預訓練，再在 HMDB-51 和 USC-101 上微調，結果顯示出預訓練總是能提高性能，但提升多寡因架構而異。</p>
+<p>本文提出新架構，稱為「Two-Stream Inflated 3D ConvNets」(I3D)，建立在 SOTA 的影像分類架構上，並將 filters 和 pooling kernel 膨脹成 3D。</p>
+<p>基於 Inceptionv1 的 I3D 在 Knetics 上預訓練後，性能遠超過當前的 SOTA 架構。</p>
+<p>在本文的模型中，並沒有考慮更多經典方法，比如 bag-of-visual-words representation，但 Kinetics 是公開的，因此其他人可以進行後續研究。</p>
+<h2 id="action-classification-architectures">Action Classification Architectures</h2>
+<p>目前影片架構中的一些主要區別如下：</p>
+<ul>
+<li>卷積是 2D 還 3D 的</li>
+<li>是否只是 RGB 影片，還是包含事先計算的 optical flow</li>
+<li>對於 2D ConvNets，訊息是怎麼在 frame 之間傳遞的
+<ul>
+<li>這部分可以使用 temporally-recurrent layers，比如 LSTM，或是用隨時間的 feature aggregation 來完成。</li>
+</ul>
+</li>
+</ul>
+<p>在本文中，考慮了涵蓋大部分現有架構的模型子集：</p>
+<ul>
+<li>2D ConvNets
+<ul>
+<li>頂部有 LSTM 的 ConvNet</li>
+<li>有兩種 stream fusion 的 two-stream networks</li>
+</ul>
+</li>
+<li>3D ConvNets
+<ul>
+<li>C3D</li>
+</ul>
+</li>
+</ul>
+<p>由於參數維度較高，以及缺乏 labeled video data，以前的 3D ConvNet 相對較淺（最多 8 層）。</p>
+<p>本文發現諸如 VGG-16 和 ResNet 等很深的影像分類網路可以輕鬆擴展成 spatio-temporal feature extractors，並且他們的預訓練權重也可以提供有價值的初始化。</p>
+<p>本文也發現 two-stream 的作法依然有用。</p>
+<p><img src="/Blog/images/deep-learning/i3d/fig2.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+>
+fig2. K 是影片中的 frame 的總數，N 是相鄰 frames 的子集合。</p>
+<p><img src="/Blog/images/deep-learning/i3d/table1.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>上圖是本文實驗的五種架構，前四種是之前的做法，最後一種是提出的新作法。
+上圖中除了 C3D 外都有用到 ImageNet 預訓練的模型。</p>
+<p>時間是根據 input 的 frame 換算出來的，fps 是 25，除了 LSTM 那個比較特別，因為 LSTM 那個是每 5 frame 取 1 frame，所以時間是 5 倍。</p>
+<h3 id="之前的做法">之前的做法</h3>
+<ol>
+<li>
+<p>ConvNet+LSTM</p>
+<p>有一種做法是把每個 frame 獨立餵給 2D Conv，然後再把預測做彙整，符合 bag of words image modeling 的精神，但這樣會忽略時間結構上的資訊，比如無法判斷開門或關門。</p>
+<p>所以最好在後面加一個 recurrent layer，所以這邊就用 Inception-V1 結合 LSTM。</p>
+<p>原始的影片 stream 是 25 fps，這邊每 5 frame 採樣一次。</p>
+</li>
+<li>
+<p>3D ConvNets</p>
+<p>和一般的卷積神經網路差不多，只是具有 spatio-temporal filters。</p>
+<p>但由於額外的 kernel 維度，相比 2D Conv 會有更多參數，也使他們更難訓練。</p>
+<p>而且這樣會無法發揮 ImageNet 預訓練的好處，因此之前的工作都定義了相對淺層的架構，並且從頭訓練。</p>
+<p>benchmark 中的表現備受期待，但和 SOTA 比沒有競爭力，也因此成為本文實驗的良好候選者。</p>
+<p>本文用的是 C3D 的小變體，差異在於所有卷積層和 FC 層的後面都用了 BN。
+而且在第一個 pooling layer 用的 stride 是 2，好減少記憶體的使用，比用更大的 batch，這在 BN 中非常重要。</p>
+</li>
+<li>
+<p>Two-Stream Networks</p>
+<p>Roy：這裡由於比較複雜，我要改提 two-stream 的原始論文（<a class="link" href="https://arxiv.org/abs/1406.2199"  target="_blank" rel="noopener"
+    >Two-Stream Convolutional Networks for Action Recognition in Videos</a>）說明這東西是什麼</p>
+<p>簡而言之就是分成兩個部分：</p>
+<ol>
+<li>
+<p>空間資訊：</p>
+<p>用影片的一個 frame　經過卷積神經網路達成，這個 frame 用來提取影像中的物件資訊，比如打排球這動作可能辨識出排球就非常好判定，所以用某個 frame 來提取空間資訊。</p>
+</li>
+<li>
+<p>動作資訊：</p>
+<p>這邊用一連串的光流（optical flow）圖來達成，光流是物體（pixel）在兩個 frame 間的位移向量，估計方法有很多，這裡不一一舉例。</p>
+<p><img src="/Blog/images/deep-learning/i3d/ex-fig2.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>上圖出自 <a class="link" href="https://arxiv.org/abs/1406.2199"  target="_blank" rel="noopener"
+    >Two-Stream Convolutional Networks for Action Recognition in Videos</a>，圖 c 就是光流，具有兩個方向，指出像素的位移，圖 d 是水平方向的視覺化，圖 e 是垂直方向的視覺化。</p>
+<p>再把這些光流圖餵給卷積神經網路，用作動作資訊的判別。</p>
+</li>
+</ol>
+<p>值得一提的是他是 late fusion，而且是用加權平均，不是像一般想的把特徵結合再做其他處理。</p>
+</li>
+</ol>
+<h3 id="the-new-two-stream-inflated-3d-convnets">The New: Two-Stream Inflated 3D ConvNets</h3>
+<p>作者把成功的 2D 分類模型簡單地轉換為 3D</p>
+<h4 id="inflating">Inflating</h4>
+<p>做法是把方形的 filter 改成立方體，把 N x N 的 filter 改成 N x N x N 的 filter，但這只有架構上的參考。</p>
+<h4 id="bootstraping">Bootstraping</h4>
+<p>把權重也給轉換到 3D 架構的方法。</p>
+<p>作者觀察到影像可以透過反覆複製貼上來生出一個「不會動的無聊影片」，
+透過這些影片，3D 模型可以透過這種方式在 ImageNet 上 implicitly pretrain，做法就是讓 3D filter 吃無聊影片的輸出和 2D filter 吃單一 frame 的輸出相同，做法如下：</p>
+<p>我們可以沿時間維度重複 2D filter N 次，把這權重給 3D filter，同時把權重除以 N，達到這種效果。</p>
+<h4 id="pacing-receptive-field-growth-in-space-time-and-network-depth">Pacing receptive field growth in space, time and network depth</h4>
+<p>以往在圖片上對水平和垂直軸的對待是平等的，pooling kernel 和 stride 都一樣。
+使感受野在兩個維度上隨著模型越來越深，慢慢平等增長。</p>
+<p>但是時間軸用對稱的感受野不一定最好，而該取決於 frame rate 和 image dimensinos。
+如果時間相對於空間增長太快，可能會混淆不同對象的邊緣，影響早期的特徵檢測。如果增長太慢，可能無法很好地捕捉場景動態。</p>
+<p>實驗中，輸入影片的 fps 是 25。</p>
+<p><img src="/Blog/images/deep-learning/i3d/fig3.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>作者發現在前兩個 max pooling layer 不在時間軸 pooling（透過用 1 x 3 x 3 的 kernel，並且時間軸的 stride 是 1），並在其他 max pooling layer 都用 symmetric kernels 和 stride 是有幫助的。</p>
+<p>最後的 average pooling layer 是用 2 x 7 x 7 的 kernel。</p>
+<p>作者用 64 frame 訓練，但用整個影片測試。（averaging predictions temporally）</p>
+<p>我想了一下，250 / 64 除不進，但是我看 code 發現他好像寬高 224 * 224 的照片會在最後經過 Average pool 後變成 1 * 1，所以他可以直接用 1 * 1 * 1 的卷積核把輸入通道改成分類數，再把時間軸的結果平均。</p>
+<h4 id="two-3d-streams">Two 3D Streams</h4>
+<p>分別訓練兩個網路，並在測試階段對預測進行平均。</p>
+<p>這邊作者說光流的演算法某種意義上是 recurrent（例如，對於 flow fields 進行 iterative optimization），我不太懂這邊是什麼意思，我想作者用的光流演算法應該是透過某種類似 EM 演算法那種不斷迭代去逼近數值的演算法，但作者提到「或許是因為缺乏 recurrence，我們發現雙流有價值」，我不太懂為什麼需要 recurrence 效果才會好。</p>
+<p>但結論是 two-stream 依然具備價值。</p>
+<h4 id="implementation-details">Implementation Details</h4>
+<p>這邊講滿詳細的，有興趣可以去原文看。
+只提一下幾點:</p>
+<ul>
+<li>光流演算法是用 TV-L1。</li>
+<li>除了類似 C3D 的 3D ConvNet 都用使用 ImageNet 預訓練的 Inception-V1 作為 base network。</li>
+<li>對於較短的影片，會重複循環以滿足模型的輸入介面</li>
+<li>測試時會在中間剪裁 224 x 224</li>
+</ul>
+<h2 id="the-kinetics-human-action-video-dataset">The Kinetics Human Action Video Dataset</h2>
+<p>Kinetics 有 400 個人類動作類別。每個類別有 400 個 clip，而且每個 clip 都來自一個 unique 的 Youtube 影片，共有 24 萬個訓練影片。</p>
+<p>每個 clip 都大約 10 秒，而且沒有未剪的影片。</p>
+<p>測試集每個 class 包含 100 個 clip。</p>
+<h2 id="experimental-comparison-of-architectures">Experimental Comparison of Architectures</h2>
+<p><img src="/Blog/images/deep-learning/i3d/table2and3.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>I3D 在所有資料集上都表現最好，甚至是在 UCF-101 和 HMDB-51 這種小資料集上也是如此，這意味著 ImageNet 預訓練的好處有成功擴展到 3D ConvNet。</p>
+<p>多數模型在 UCF 上都表現得比 Kinetics 上好，顯現出資料集的難度差距。</p>
+<p>但是在 HMDB 表現得較差，原因可能是 HMDB 故意弄得很難，作者有舉例，很多 clip 在完全相同的場景會有不同的動作。</p>
+<p>作者有提到說 I3D 特徵比較好遷移的一種解釋是它具備 high temporal resolution，
+I3D 在 25 fps 的影片中用 64 frames 做訓練，使它能捕捉動作的 fine-grained 時間結構。</p>
+<h2 id="experimental-evaluation-of-features">Experimental Evaluation of Features</h2>
+<p><img src="/Blog/images/deep-learning/i3d/table4and5.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>Kinetics 上做預訓練效果明顯比 ImageNet 好。</p>
+<h2 id="discussion">Discussion</h2>
+<p>Kinetics 上的預訓練對於遷移學習有明顯好處，但對於其他影像任務，比如影像語義分割是否有好處仍待觀察。</p>
+<p>目前對於架構沒有全面探索，比如沒有採用 action tubes 或是 attention 機制。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/computer-vision/">computer-vision</a>
+        
+            <a href="/Blog/tags/deep-learning/">deep-learning</a>
+        
+            <a href="/Blog/tags/machine-learning/">machine-learning</a>
+        
+            <a href="/Blog/tags/convolution/">convolution</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/swin-transformer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Swin Transformer 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/git-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GIT 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">MAE 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/vit-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">ViT 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">BERT 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>
