@@ -44,7 +44,7 @@ categories : ["software-engineering"]
 - 實際使用的情境，可以把常改變的東西放在 interface 後，使日後改變實作時不影響呼叫該 interface 的程式碼
 
 ### Favor Composition over Inheritance
-- Composition(組合)在很多情境可以取代掉 Inheritance(繼承)，可藉由 Polymorphism(多型)來達成
+- Composition(組合)在很多情境可以取代掉 Inheritance(繼承)，甚至實現 Polymorphism(多型)
 - 只有當 is-a 的情境出現，才用繼承比較好
 - Composition 使用起來更有彈性
 

@@ -397,7 +397,7 @@
 &lt;/ul&gt;
 &lt;h3 id=&#34;favor-composition-over-inheritance&#34;&gt;Favor Composition over Inheritance&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;Composition(組合)在很多情境可以取代掉 Inheritance(繼承)，可藉由 Polymorphism(多型)來達成&lt;/li&gt;
+&lt;li&gt;Composition(組合)在很多情境可以取代掉 Inheritance(繼承)，甚至實現 Polymorphism(多型)&lt;/li&gt;
 &lt;li&gt;只有當 is-a 的情境出現，才用繼承比較好&lt;/li&gt;
 &lt;li&gt;Composition 使用起來更有彈性&lt;/li&gt;
 &lt;/ul&gt;

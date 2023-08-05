@@ -6,7 +6,546 @@
         <description>Recent content in Deep Learning on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 30 Apr 2023 00:00:12 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/deep-learning/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 05 Aug 2023 00:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/deep-learning/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>BERT 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Sat, 05 Aug 2023 00:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1810.04805&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;現在回頭寫 BERT 論文筆記感覺有點怪，之前已經寫過什麼 RoBERTa 之類的。&lt;/p&gt;
+&lt;p&gt;不過現在因應實驗室讀書會要求，還是看一下論文也寫一下筆記。&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;本文提出了 BERT，一種基於 Transformer Bidirectional Encoder 的語言表示模型。&lt;/p&gt;
+&lt;p&gt;BERT 旨在透過 unlabeled text 進行 pretrain。&lt;/p&gt;
+&lt;p&gt;因此，只需要一個額外的輸出層就可以對預訓練的 BERT 進行微調，在各種任務上取得 SOTA。&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;「語言模型做預訓練」已被證明可以有效改善多種 NLP 任務。&lt;/p&gt;
+&lt;p&gt;將預訓練模型應用在下游任務，有兩種策略：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Feature-based
+&lt;ul&gt;
+&lt;li&gt;把 pretrained 的 representations 作為額外的特徵&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Fine-tuning
+&lt;ul&gt;
+&lt;li&gt;根據特定任務引入額外參數，並簡單地微調所有參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;這兩種方法在預訓練期間共用同個 objective function，並用單向語言模型來學習 representation。&lt;/p&gt;
+&lt;p&gt;作者認為當前的技術限制了預訓練的表示能力，特別是在 Fine-tuning 方法上。&lt;/p&gt;
+&lt;p&gt;主要的問題在於語言模型是單向的，限制了預訓練期間可以使用的架構的選擇。這種單向的架構可能在一些任務有害，特別是對於那些需要兩個方向的 context 的任務。&lt;/p&gt;
+&lt;p&gt;本文提出的 BERT 改善了現有的 Fine-tuning 方法，用 Transformer 的 Bidirectional Encoder 來訓練語言模型。&lt;/p&gt;
+&lt;p&gt;BERT 透過受到 Cloze task（填空）啟發的 masked language model(MLM)，作為預訓練目標。MLM 隨機地遮蔽一些輸入的一些 token，目標是根據上下文來回推原詞，使 representation 可以融合左右兩邊的 context。&lt;/p&gt;
+&lt;p&gt;除了 MLM，作者還利用 next sentence prediction（NSP）任務來訓練 BERT。&lt;/p&gt;
+&lt;p&gt;本文貢獻如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;BERT 證明了雙向預訓練對 representation 的重要性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;BERT 展現出預訓練的 representation 減少了許多針對 NLP 任務精心設計架構的需求。 BERT 是第一個基於 Fine-tuning，在大量 sentence-level 和 token-level 任務上取得 SOTA 的模型。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;BERT 推進了 11 個 NLP 任務的 SOTA。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;related-work&#34;&gt;Related Work&lt;/h2&gt;
+&lt;h3 id=&#34;unsupervised-feature-based-approaches&#34;&gt;Unsupervised Feature-based Approaches&lt;/h3&gt;
+&lt;p&gt;學習廣泛適用的 representation of words 一直是活躍的研究領域，甚至在非神經網路的領域也是。&lt;/p&gt;
+&lt;p&gt;預訓練的 word embeddings 與從頭訓練的 embedding 相比，有顯著改進。&lt;/p&gt;
+&lt;p&gt;這些方法頁被推廣到 coarser granularities，像是 sentence embedding 或是 paragraph embedding。&lt;/p&gt;
+&lt;p&gt;有研究證明 cloze task 提高了生成模型的 robustness。&lt;/p&gt;
+&lt;h2 id=&#34;bert&#34;&gt;BERT&lt;/h2&gt;
+&lt;p&gt;框架有兩步驟：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Pre-training
+&lt;ul&gt;
+&lt;li&gt;在不同的預訓練任務中，用 unlabeled data 來 fine-tune。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Fine-tuning
+&lt;ul&gt;
+&lt;li&gt;使用預訓練的參數初始化，在利用下游任務的 labeled data 對所有參數微調。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;BERT 的一個特點是他具備跨不同任務的統一架構，預訓練架構和下游任務最終架構差異不大。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Model Architecture&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;本文表示方法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;L: Transformer 的層數&lt;/li&gt;
+&lt;li&gt;H: hidden size&lt;/li&gt;
+&lt;li&gt;A: self-attention heads 的數量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;model size&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;BASE: L=12, H=768, A=12, 110M parameters
+&lt;ul&gt;
+&lt;li&gt;和 GPT 相同&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;LARGE: L=24, H=1024, A=16, 340M parameters&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Input/Output Representations&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Input representation 可以在 token sequence 中明確表示單個 sentence 和一對 sentence。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;sentence 可以是連續文本的任意範圍，而不是實際的句子。&lt;/li&gt;
+&lt;li&gt;sequence 是輸入的 token sequence，可以是單個 sentence 或是一對 sentence。&lt;/li&gt;
+&lt;li&gt;每個 sequence 的第一個 token 始終是特殊的分類 token &amp;ndash; [CLS]&lt;/li&gt;
+&lt;li&gt;對於兩個句子放在一個序列的情況，用 [SEP] 隔開&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Token Embeddings&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;作者使用 WordPiece embeddings，有 30000 個詞彙。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;learned embedding&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;對每個 token 添加這個東西，表示屬於 sentence A 還 sentence B&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;pre-training-bert&#34;&gt;Pre-training BERT&lt;/h3&gt;
+&lt;h4 id=&#34;masked-lm&#34;&gt;Masked LM&lt;/h4&gt;
+&lt;p&gt;直觀上，有理由相信深度的雙向模型會比單像串連起來的淺層模型更強大。&lt;/p&gt;
+&lt;p&gt;不幸的是 standard condition language model 只能單向訓練，因為雙向會允許每個單詞「間接看到自己」。&lt;/p&gt;
+&lt;p&gt;為了訓練 deep bidirectional representations，本文隨機遮蔽了一定比例的 tokens，並預測這些 token，這種方法稱為 masked language model，或常被稱為 cloze task。&lt;/p&gt;
+&lt;p&gt;作者會用 [MASK] 做預訓練，但有個問題是 [MASK] 在 fine-tuning 期間不會出現，造成預訓練和微調之間的 mismatching，為了緩減這種情況，並不會總是用 [MASK] 替代 masked token。&lt;/p&gt;
+&lt;p&gt;要替換 token 的時候，有 80% 的時間是 [MASK]，10% 是隨機 token，10% 是原本的 token。&lt;/p&gt;
+&lt;h4 id=&#34;next-sentence-prediction-nsp&#34;&gt;Next Sentence Prediction (NSP)&lt;/h4&gt;
+&lt;p&gt;許多重要下游任務，比如 Question Answering (QA) 和 Natural Language Inference (NLI) 是基於兩個句子間的關係。&lt;/p&gt;
+&lt;p&gt;NSP 就是為了理解句子間的關係而用的。&lt;/p&gt;
+&lt;p&gt;每次挑句子 A 和 B 的時候，有 50% 的機會 B 是 A 的下一個句子，有 50% 是隨機的。&lt;/p&gt;
+&lt;p&gt;針對 NSP 的預訓練對 QA 和 NLI 都很有用。&lt;/p&gt;
+&lt;h4 id=&#34;預訓練資料&#34;&gt;預訓練資料&lt;/h4&gt;
+&lt;p&gt;用 BookCorpus 和 English Wikipedia 來訓練 BERT。&lt;/p&gt;
+&lt;p&gt;對於 English Wikipedia，只提取 text passages，忽略 lists, tables, headers。&lt;/p&gt;
+&lt;p&gt;為了提取長的連續序列，用 document-level 的 corpus 而不是打亂的 sentence-level corpus 非常重要。&lt;/p&gt;
+&lt;h2 id=&#34;ablation-studies&#34;&gt;Ablation Studies&lt;/h2&gt;
+&lt;h3 id=&#34;effect-of-pre-training-tasks&#34;&gt;Effect of Pre-training Tasks&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;No NSP
+&lt;ul&gt;
+&lt;li&gt;只有 MLM&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;LTR &amp;amp; No NSP
+&lt;ul&gt;
+&lt;li&gt;Left-to-Right&lt;/li&gt;
+&lt;li&gt;只看左邊的 context&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;發現刪除 NSP 會顯著傷害對 QNLI 等資料集的性能。&lt;/p&gt;
+&lt;p&gt;LTR 在所有任務上都比 MLM 差。&lt;/p&gt;
+&lt;p&gt;雖然可以像 ELMo 單獨訓練 LTR 和 RTL，並且把他們結合起來&lt;/p&gt;
+&lt;p&gt;但有以下缺點：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;比單向模型貴兩倍&lt;/li&gt;
+&lt;li&gt;對 QA 任務不直觀，因為 RTL 無法根據問題給出答案&lt;/li&gt;
+&lt;li&gt;不如深度雙向模型強大，因為其可以直接在每一層看到左右的 context&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;feature-based-approach-with-bert&#34;&gt;Feature-based Approach with BERT&lt;/h3&gt;
+&lt;p&gt;作者也研究了用 feature-based 的效果，發現具備競爭力。&lt;/p&gt;
+&lt;p&gt;在他的實驗中，用預訓練 Transformer 的 top 4 隱藏層的 token 串街效果最好。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>GNN 介紹</title>
+        <link>https://roykesydon.github.io/Blog/p/gnn-%E4%BB%8B%E7%B4%B9/</link>
+        <pubDate>Fri, 04 Aug 2023 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/gnn-%E4%BB%8B%E7%B4%B9/</guid>
+        <description>&lt;h2 id=&#34;圖簡介&#34;&gt;圖簡介&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Graph&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;表示 Entity (nodes) 間的 relations (edges)&lt;/li&gt;
+&lt;li&gt;組成
+&lt;ul&gt;
+&lt;li&gt;Vertex attributes (V)&lt;/li&gt;
+&lt;li&gt;Edge attributes and directions (E)&lt;/li&gt;
+&lt;li&gt;Global attributes (U)&lt;/li&gt;
+&lt;li&gt;下文簡稱 U, V, E&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可以表示成圖的範例&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Images
+&lt;ul&gt;
+&lt;li&gt;相鄰 pixel 建無向邊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Text
+&lt;ul&gt;
+&lt;li&gt;詞和下一個詞建單向邊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Molecules
+&lt;ul&gt;
+&lt;li&gt;分子的連接處建無向邊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Social networks
+&lt;ul&gt;
+&lt;li&gt;人和人之間建無向邊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;定義問題&#34;&gt;定義問題&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;種類
+&lt;ul&gt;
+&lt;li&gt;Graph-level&lt;/li&gt;
+&lt;li&gt;Node-level&lt;/li&gt;
+&lt;li&gt;Edge-level&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;個別講的是基於什麼東西做分類，比如對每個人（node）分類一個陣營，就算 Node-level&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;挑戰&#34;&gt;挑戰&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;儲存邊的關係
+&lt;ul&gt;
+&lt;li&gt;鄰接矩陣
+&lt;ul&gt;
+&lt;li&gt;在節點多的情況下佔用空間大，而且可能非常稀疏&lt;/li&gt;
+&lt;li&gt;同一張圖，換個點的順序後鄰接矩陣看起來就會不同
+&lt;ul&gt;
+&lt;li&gt;難以保證這些東西餵入神經網路後輸出相同&lt;/li&gt;
+&lt;li&gt;可以用兩個 list，一個儲存邊的向量，另一個是 Adjacency list，依序紀錄邊的關係&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;稀疏矩陣
+&lt;ul&gt;
+&lt;li&gt;難以用 GPU 運算&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;graph-neural-network&#34;&gt;Graph Neural Network&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;GNN 是對圖上所有屬性的 optimizable transformation，而且可以保持 graph symmetries (permutation invariances，把 node 排序後結果不變)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;下文用的 GNN 是 message passing neural network&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;graph-in, graph-out&lt;/li&gt;
+&lt;li&gt;不改變圖的 connectivity&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;最簡單的-gnn&#34;&gt;最簡單的 GNN&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;U, V, E 個別餵給不同的 MLP，組成一個 GNN 的 layer
+&lt;ul&gt;
+&lt;li&gt;MLP 單獨餵入每一個點，不考慮連接訊息，保持了 graph symmetries&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;預測&#34;&gt;預測&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;假如要對每個頂點做預測，最後再加個全連接層分類&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;pooling&#34;&gt;pooling&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;假如要對一個沒有向量的頂點做預測，我們可以用 pooling，蒐集相鄰邊和全局向量的資訊&lt;/li&gt;
+&lt;li&gt;對於沒有頂點資訊的圖，我們可以用 pooling layer 獲取全部點的資訊，再做分類&lt;/li&gt;
+&lt;li&gt;對於沒有邊資訊的圖，我們也可以用 pooling 去從相鄰點和全局向量獲得資訊&lt;/li&gt;
+&lt;li&gt;對於沒有全局向量的圖，我們可以用 pooling 去從全部的點或邊獲得資訊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;缺陷&#34;&gt;缺陷&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;中間的 layer 沒有利用圖的訊息，都是各自進入各自的 MLP 做轉換&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;passing-messages&#34;&gt;Passing messages&lt;/h3&gt;
+&lt;p&gt;在做轉換前，先做一些 pooling&lt;/p&gt;
+&lt;h4 id=&#34;匯聚頂點資訊&#34;&gt;匯聚頂點資訊&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;不是單單把點向量進行轉換，而是和相鄰的點一起做 aggregation 後再做轉換
+&lt;ul&gt;
+&lt;li&gt;如果 aggregation 是加總，和卷積有一點像，只不過是權重一樣的版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;匯聚頂點和邊的資訊&#34;&gt;匯聚頂點和邊的資訊&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;可以先把頂點匯聚給邊，再把邊匯聚回頂點，反之亦然
+&lt;ul&gt;
+&lt;li&gt;順序不同會導致不同結果&lt;/li&gt;
+&lt;li&gt;兩種方法可以一起同步做，交替更新&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;全局資訊&#34;&gt;全局資訊&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;每次 layer 只看鄰居，要傳遞到遠的點須要走很多層&lt;/li&gt;
+&lt;li&gt;導入 master node (context vector)，他連接了所有的點和邊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;相關主題&#34;&gt;相關主題&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;採樣&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;考量到計算梯度可能需要儲存過多的中間資訊，可以考慮採樣一些點，只在子圖上做計算&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Batch&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每個點鄰居各數不同，使做 batch 成為有挑戰性的問題。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Inductive Bias&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;graph symmetries&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Aggregation&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;目前沒有一個最佳選擇&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Graph Convolutional Network&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;node 是根據鄰居 node 去做某種 aggregate，事後再做更新&lt;/li&gt;
+&lt;li&gt;由於每次都看鄰居，假如有 k 層，可以把圖看做解 n 個子圖，每個子圖就是基於每個點去走 k 步所形成的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Graph Attention Network&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用 attention 決定其它點的權重，而不像 GCN 一樣把鄰居加起來&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>I3D 論文</title>
+        <link>https://roykesydon.github.io/Blog/p/i3d-%E8%AB%96%E6%96%87/</link>
+        <pubDate>Sun, 23 Jul 2023 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/i3d-%E8%AB%96%E6%96%87/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1705.07750&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Quo Vadis, Action Recognition? A New Model and the Kinetics Dataset&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;目前的動作分類資料集 (UCF-101 和 HMDB-51) 的影片非常缺乏，使辨識「良好的影像架構」變得困難，
+使多數方法在現有的小規模 benchmark 的表現差不多。為此本文根據新的 Kinetics Human Action Video dataset 對 SOTA 架構進行了重新評估。&lt;/p&gt;
+&lt;p&gt;Kinetics 有 400 個人類動作類別。每個類別有 400 個 clip。從 YouTube 上獲取的，而且每個 clip 來自 unique 的 youtube 影片。&lt;/p&gt;
+&lt;p&gt;本文分析了當前架構在 Kinetics 上動作分類任務的表現，也評估 Kinetcis 用作預訓練的效果。&lt;/p&gt;
+&lt;p&gt;本文提出了一種基於 2D ConvNet inflation 的 Two-Stream Inflated 3D ConvNet (I3D)。&lt;/p&gt;
+&lt;p&gt;I3D 的擴展方法讓 ImageNet 上已經取得成功的架構可以被利用在解決影像任務上。&lt;/p&gt;
+&lt;p&gt;結果表明，經過在 Kinetics 上預訓練後，I3D 在動作分類方面顯著提高了 SOTA，在 HMDB-51 上達到 80.9%，在 UCF-101 上達到 98.0%。&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;在 ImageNet 上預訓練模型的效果很好，但在影片領域，預訓練成效一直是一個未知的問題。因為流行的動作識別 benchmark 都非常小，約略只有 10k 個影片。&lt;/p&gt;
+&lt;p&gt;Kinetics 有 400 個人類動作類別。每個類別有 400 個 clip，而且每個 clip 都來自一個 unique 的 Youtube 影片。&lt;/p&gt;
+&lt;p&gt;本文實驗策略是在 Kinetics 上預訓練，再在 HMDB-51 和 USC-101 上微調，結果顯示出預訓練總是能提高性能，但提升多寡因架構而異。&lt;/p&gt;
+&lt;p&gt;本文提出新架構，稱為「Two-Stream Inflated 3D ConvNets」(I3D)，建立在 SOTA 的影像分類架構上，並將 filters 和 pooling kernel 膨脹成 3D。&lt;/p&gt;
+&lt;p&gt;基於 Inceptionv1 的 I3D 在 Knetics 上預訓練後，性能遠超過當前的 SOTA 架構。&lt;/p&gt;
+&lt;p&gt;在本文的模型中，並沒有考慮更多經典方法，比如 bag-of-visual-words representation，但 Kinetics 是公開的，因此其他人可以進行後續研究。&lt;/p&gt;
+&lt;h2 id=&#34;action-classification-architectures&#34;&gt;Action Classification Architectures&lt;/h2&gt;
+&lt;p&gt;目前影片架構中的一些主要區別如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;卷積是 2D 還 3D 的&lt;/li&gt;
+&lt;li&gt;是否只是 RGB 影片，還是包含事先計算的 optical flow&lt;/li&gt;
+&lt;li&gt;對於 2D ConvNets，訊息是怎麼在 frame 之間傳遞的
+&lt;ul&gt;
+&lt;li&gt;這部分可以使用 temporally-recurrent layers，比如 LSTM，或是用隨時間的 feature aggregation 來完成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在本文中，考慮了涵蓋大部分現有架構的模型子集：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;2D ConvNets
+&lt;ul&gt;
+&lt;li&gt;頂部有 LSTM 的 ConvNet&lt;/li&gt;
+&lt;li&gt;有兩種 stream fusion 的 two-stream networks&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;3D ConvNets
+&lt;ul&gt;
+&lt;li&gt;C3D&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;由於參數維度較高，以及缺乏 labeled video data，以前的 3D ConvNet 相對較淺（最多 8 層）。&lt;/p&gt;
+&lt;p&gt;本文發現諸如 VGG-16 和 ResNet 等很深的影像分類網路可以輕鬆擴展成 spatio-temporal feature extractors，並且他們的預訓練權重也可以提供有價值的初始化。&lt;/p&gt;
+&lt;p&gt;本文也發現 two-stream 的作法依然有用。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/i3d/fig2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;
+fig2. K 是影片中的 frame 的總數，N 是相鄰 frames 的子集合。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/i3d/table1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;上圖是本文實驗的五種架構，前四種是之前的做法，最後一種是提出的新作法。
+上圖中除了 C3D 外都有用到 ImageNet 預訓練的模型。&lt;/p&gt;
+&lt;p&gt;時間是根據 input 的 frame 換算出來的，fps 是 25，除了 LSTM 那個比較特別，因為 LSTM 那個是每 5 frame 取 1 frame，所以時間是 5 倍。&lt;/p&gt;
+&lt;h3 id=&#34;之前的做法&#34;&gt;之前的做法&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;ConvNet+LSTM&lt;/p&gt;
+&lt;p&gt;有一種做法是把每個 frame 獨立餵給 2D Conv，然後再把預測做彙整，符合 bag of words image modeling 的精神，但這樣會忽略時間結構上的資訊，比如無法判斷開門或關門。&lt;/p&gt;
+&lt;p&gt;所以最好在後面加一個 recurrent layer，所以這邊就用 Inception-V1 結合 LSTM。&lt;/p&gt;
+&lt;p&gt;原始的影片 stream 是 25 fps，這邊每 5 frame 採樣一次。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;3D ConvNets&lt;/p&gt;
+&lt;p&gt;和一般的卷積神經網路差不多，只是具有 spatio-temporal filters。&lt;/p&gt;
+&lt;p&gt;但由於額外的 kernel 維度，相比 2D Conv 會有更多參數，也使他們更難訓練。&lt;/p&gt;
+&lt;p&gt;而且這樣會無法發揮 ImageNet 預訓練的好處，因此之前的工作都定義了相對淺層的架構，並且從頭訓練。&lt;/p&gt;
+&lt;p&gt;benchmark 中的表現備受期待，但和 SOTA 比沒有競爭力，也因此成為本文實驗的良好候選者。&lt;/p&gt;
+&lt;p&gt;本文用的是 C3D 的小變體，差異在於所有卷積層和 FC 層的後面都用了 BN。
+而且在第一個 pooling layer 用的 stride 是 2，好減少記憶體的使用，比用更大的 batch，這在 BN 中非常重要。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Two-Stream Networks&lt;/p&gt;
+&lt;p&gt;Roy：這裡由於比較複雜，我要改提 two-stream 的原始論文（&lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1406.2199&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Two-Stream Convolutional Networks for Action Recognition in Videos&lt;/a&gt;）說明這東西是什麼&lt;/p&gt;
+&lt;p&gt;簡而言之就是分成兩個部分：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;空間資訊：&lt;/p&gt;
+&lt;p&gt;用影片的一個 frame　經過卷積神經網路達成，這個 frame 用來提取影像中的物件資訊，比如打排球這動作可能辨識出排球就非常好判定，所以用某個 frame 來提取空間資訊。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;動作資訊：&lt;/p&gt;
+&lt;p&gt;這邊用一連串的光流（optical flow）圖來達成，光流是物體（pixel）在兩個 frame 間的位移向量，估計方法有很多，這裡不一一舉例。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/i3d/ex-fig2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;上圖出自 &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1406.2199&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Two-Stream Convolutional Networks for Action Recognition in Videos&lt;/a&gt;，圖 c 就是光流，具有兩個方向，指出像素的位移，圖 d 是水平方向的視覺化，圖 e 是垂直方向的視覺化。&lt;/p&gt;
+&lt;p&gt;再把這些光流圖餵給卷積神經網路，用作動作資訊的判別。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;值得一提的是他是 late fusion，而且是用加權平均，不是像一般想的把特徵結合再做其他處理。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;the-new-two-stream-inflated-3d-convnets&#34;&gt;The New: Two-Stream Inflated 3D ConvNets&lt;/h3&gt;
+&lt;p&gt;作者把成功的 2D 分類模型簡單地轉換為 3D&lt;/p&gt;
+&lt;h4 id=&#34;inflating&#34;&gt;Inflating&lt;/h4&gt;
+&lt;p&gt;做法是把方形的 filter 改成立方體，把 N x N 的 filter 改成 N x N x N 的 filter，但這只有架構上的參考。&lt;/p&gt;
+&lt;h4 id=&#34;bootstraping&#34;&gt;Bootstraping&lt;/h4&gt;
+&lt;p&gt;把權重也給轉換到 3D 架構的方法。&lt;/p&gt;
+&lt;p&gt;作者觀察到影像可以透過反覆複製貼上來生出一個「不會動的無聊影片」，
+透過這些影片，3D 模型可以透過這種方式在 ImageNet 上 implicitly pretrain，做法就是讓 3D filter 吃無聊影片的輸出和 2D filter 吃單一 frame 的輸出相同，做法如下：&lt;/p&gt;
+&lt;p&gt;我們可以沿時間維度重複 2D filter N 次，把這權重給 3D filter，同時把權重除以 N，達到這種效果。&lt;/p&gt;
+&lt;h4 id=&#34;pacing-receptive-field-growth-in-space-time-and-network-depth&#34;&gt;Pacing receptive field growth in space, time and network depth&lt;/h4&gt;
+&lt;p&gt;以往在圖片上對水平和垂直軸的對待是平等的，pooling kernel 和 stride 都一樣。
+使感受野在兩個維度上隨著模型越來越深，慢慢平等增長。&lt;/p&gt;
+&lt;p&gt;但是時間軸用對稱的感受野不一定最好，而該取決於 frame rate 和 image dimensinos。
+如果時間相對於空間增長太快，可能會混淆不同對象的邊緣，影響早期的特徵檢測。如果增長太慢，可能無法很好地捕捉場景動態。&lt;/p&gt;
+&lt;p&gt;實驗中，輸入影片的 fps 是 25。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/i3d/fig3.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;作者發現在前兩個 max pooling layer 不在時間軸 pooling（透過用 1 x 3 x 3 的 kernel，並且時間軸的 stride 是 1），並在其他 max pooling layer 都用 symmetric kernels 和 stride 是有幫助的。&lt;/p&gt;
+&lt;p&gt;最後的 average pooling layer 是用 2 x 7 x 7 的 kernel。&lt;/p&gt;
+&lt;p&gt;作者用 64 frame 訓練，但用整個影片測試。（averaging predictions temporally）&lt;/p&gt;
+&lt;p&gt;我想了一下，250 / 64 除不進，但是我看 code 發現他好像寬高 224 * 224 的照片會在最後經過 Average pool 後變成 1 * 1，所以他可以直接用 1 * 1 * 1 的卷積核把輸入通道改成分類數，再把時間軸的結果平均。&lt;/p&gt;
+&lt;h4 id=&#34;two-3d-streams&#34;&gt;Two 3D Streams&lt;/h4&gt;
+&lt;p&gt;分別訓練兩個網路，並在測試階段對預測進行平均。&lt;/p&gt;
+&lt;p&gt;這邊作者說光流的演算法某種意義上是 recurrent（例如，對於 flow fields 進行 iterative optimization），我不太懂這邊是什麼意思，我想作者用的光流演算法應該是透過某種類似 EM 演算法那種不斷迭代去逼近數值的演算法，但作者提到「或許是因為缺乏 recurrence，我們發現雙流有價值」，我不太懂為什麼需要 recurrence 效果才會好。&lt;/p&gt;
+&lt;p&gt;但結論是 two-stream 依然具備價值。&lt;/p&gt;
+&lt;h4 id=&#34;implementation-details&#34;&gt;Implementation Details&lt;/h4&gt;
+&lt;p&gt;這邊講滿詳細的，有興趣可以去原文看。
+只提一下幾點:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;光流演算法是用 TV-L1。&lt;/li&gt;
+&lt;li&gt;除了類似 C3D 的 3D ConvNet 都用使用 ImageNet 預訓練的 Inception-V1 作為 base network。&lt;/li&gt;
+&lt;li&gt;對於較短的影片，會重複循環以滿足模型的輸入介面&lt;/li&gt;
+&lt;li&gt;測試時會在中間剪裁 224 x 224&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;the-kinetics-human-action-video-dataset&#34;&gt;The Kinetics Human Action Video Dataset&lt;/h2&gt;
+&lt;p&gt;Kinetics 有 400 個人類動作類別。每個類別有 400 個 clip，而且每個 clip 都來自一個 unique 的 Youtube 影片，共有 24 萬個訓練影片。&lt;/p&gt;
+&lt;p&gt;每個 clip 都大約 10 秒，而且沒有未剪的影片。&lt;/p&gt;
+&lt;p&gt;測試集每個 class 包含 100 個 clip。&lt;/p&gt;
+&lt;h2 id=&#34;experimental-comparison-of-architectures&#34;&gt;Experimental Comparison of Architectures&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/i3d/table2and3.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;I3D 在所有資料集上都表現最好，甚至是在 UCF-101 和 HMDB-51 這種小資料集上也是如此，這意味著 ImageNet 預訓練的好處有成功擴展到 3D ConvNet。&lt;/p&gt;
+&lt;p&gt;多數模型在 UCF 上都表現得比 Kinetics 上好，顯現出資料集的難度差距。&lt;/p&gt;
+&lt;p&gt;但是在 HMDB 表現得較差，原因可能是 HMDB 故意弄得很難，作者有舉例，很多 clip 在完全相同的場景會有不同的動作。&lt;/p&gt;
+&lt;p&gt;作者有提到說 I3D 特徵比較好遷移的一種解釋是它具備 high temporal resolution，
+I3D 在 25 fps 的影片中用 64 frames 做訓練，使它能捕捉動作的 fine-grained 時間結構。&lt;/p&gt;
+&lt;h2 id=&#34;experimental-evaluation-of-features&#34;&gt;Experimental Evaluation of Features&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/i3d/table4and5.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Kinetics 上做預訓練效果明顯比 ImageNet 好。&lt;/p&gt;
+&lt;h2 id=&#34;discussion&#34;&gt;Discussion&lt;/h2&gt;
+&lt;p&gt;Kinetics 上的預訓練對於遷移學習有明顯好處，但對於其他影像任務，比如影像語義分割是否有好處仍待觀察。&lt;/p&gt;
+&lt;p&gt;目前對於架構沒有全面探索，比如沒有採用 action tubes 或是 attention 機制。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>Self-Instruct 論文閱讀</title>
         <link>https://roykesydon.github.io/Blog/p/self-instruct-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
         <pubDate>Sun, 30 Apr 2023 00:00:12 +0800</pubDate>

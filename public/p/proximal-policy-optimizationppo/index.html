@@ -11,7 +11,7 @@ Issue 雖然理論上 q 可以任意選，只要不要 q(x) 是 0 的時候 p(x)
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/proximal-policy-optimizationppo/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.31c079706f35ded388ea01189b0f78e7e955850edc2d2153bd984714f6cf6042.css"><meta property='og:title' content='Proximal Policy Optimization(PPO)'>
+<link rel="stylesheet" href="/Blog/scss/style.min.2433f55402684910d9124d7eda8b4343840e5a67bb9d728e894592be4ef660a6.css"><meta property='og:title' content='Proximal Policy Optimization(PPO)'>
 <meta property='og:description' content='On/Off-policy On-policy 學習的 agent 和與環境互動的 agent 是同一個 Off-policy 學習的 agent 和與環境互動的 agent 是不同個 想從 On-policy 轉 Off-policy On-policy 每次都要重新蒐集資料，很花時間 由另一個 $\pi_{\theta^{&amp;rsquo;}}$ 去 train $\theta$，$\theta^{&amp;rsquo;}$是固定的，所以我們可以 re-use sample data Importance Sampling 是一個 general 的想法，不限於 RL
 $E_{x \text{\textasciitilde} p}[f(x)]\approx \frac{1}{N}\displaystyle\sum_{i=1}^N f(x^i)$
 $x^i$ is sampled from p(x) 我們遇到的問題是沒辦法從 p 來 sample data，只能透過 q(x) 去 sample $x^i$
@@ -653,12 +653,12 @@ clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\vareps
             
                 
 <article class="">
-    <a href="/Blog/p/self-instruct-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Self-Instruct 論文閱讀</h2>
+            <h2 class="article-title">BERT 論文閱讀</h2>
         </div>
     </a>
 </article>
@@ -666,12 +666,12 @@ clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\vareps
             
                 
 <article class="">
-    <a href="/Blog/p/relative-position-%E4%BB%8B%E7%B4%B9--%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/gnn-%E4%BB%8B%E7%B4%B9/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Relative Position 介紹 &#43; 論文閱讀</h2>
+            <h2 class="article-title">GNN 介紹</h2>
         </div>
     </a>
 </article>

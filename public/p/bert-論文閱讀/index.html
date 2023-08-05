@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding
+現在回頭寫 BERT 論文筆記感覺有點怪，之前已經寫過什麼 RoBERTa 之類的。
+不過現在因應實驗室讀書會要求，還是看一下論文也寫一下筆記。
+Abstract 本文提出了 BERT，一種基於 Transformer Bidirectional Encoder 的語言表示模型。
+BERT 旨在透過 unlabeled text 進行 pretrain。
+因此，只需要一個額外的輸出層就可以對預訓練的 BERT 進行微調，在各種任務上取得 SOTA。
+Introduction 「語言模型做預訓練」已被證明可以有效改善多種 NLP 任務。
+將預訓練模型應用在下游任務，有兩種策略：
+Feature-based 把 pretrained 的 representations 作為額外的特徵 Fine-tuning 根據特定任務引入額外參數，並簡單地微調所有參數 這兩種方法在預訓練期間共用同個 objective function，並用單向語言模型來學習 representation。
+作者認為當前的技術限制了預訓練的表示能力，特別是在 Fine-tuning 方法上。
+主要的問題在於語言模型是單向的，限制了預訓練期間可以使用的架構的選擇。這種單向的架構可能在一些任務有害，特別是對於那些需要兩個方向的 context 的任務。
+本文提出的 BERT 改善了現有的 Fine-tuning 方法，用 Transformer 的 Bidirectional Encoder 來訓練語言模型。
+BERT 透過受到 Cloze task（填空）啟發的 masked language model(MLM)，作為預訓練目標。MLM 隨機地遮蔽一些輸入的一些 token，目標是根據上下文來回推原詞，使 representation 可以融合左右兩邊的 context。'>
+<title>BERT 論文閱讀</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.2433f55402684910d9124d7eda8b4343840e5a67bb9d728e894592be4ef660a6.css"><meta property='og:title' content='BERT 論文閱讀'>
+<meta property='og:description' content='paper: BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding
+現在回頭寫 BERT 論文筆記感覺有點怪，之前已經寫過什麼 RoBERTa 之類的。
+不過現在因應實驗室讀書會要求，還是看一下論文也寫一下筆記。
+Abstract 本文提出了 BERT，一種基於 Transformer Bidirectional Encoder 的語言表示模型。
+BERT 旨在透過 unlabeled text 進行 pretrain。
+因此，只需要一個額外的輸出層就可以對預訓練的 BERT 進行微調，在各種任務上取得 SOTA。
+Introduction 「語言模型做預訓練」已被證明可以有效改善多種 NLP 任務。
+將預訓練模型應用在下游任務，有兩種策略：
+Feature-based 把 pretrained 的 representations 作為額外的特徵 Fine-tuning 根據特定任務引入額外參數，並簡單地微調所有參數 這兩種方法在預訓練期間共用同個 objective function，並用單向語言模型來學習 representation。
+作者認為當前的技術限制了預訓練的表示能力，特別是在 Fine-tuning 方法上。
+主要的問題在於語言模型是單向的，限制了預訓練期間可以使用的架構的選擇。這種單向的架構可能在一些任務有害，特別是對於那些需要兩個方向的 context 的任務。
+本文提出的 BERT 改善了現有的 Fine-tuning 方法，用 Transformer 的 Bidirectional Encoder 來訓練語言模型。
+BERT 透過受到 Cloze task（填空）啟發的 masked language model(MLM)，作為預訓練目標。MLM 隨機地遮蔽一些輸入的一些 token，目標是根據上下文來回推原詞，使 representation 可以融合左右兩邊的 context。'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:published_time' content='2023-08-05T00:08:46&#43;08:00'/><meta property='article:modified_time' content='2023-08-05T00:08:46&#43;08:00'/>
+<meta name="twitter:title" content="BERT 論文閱讀">
+<meta name="twitter:description" content="paper: BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding
+現在回頭寫 BERT 論文筆記感覺有點怪，之前已經寫過什麼 RoBERTa 之類的。
+不過現在因應實驗室讀書會要求，還是看一下論文也寫一下筆記。
+Abstract 本文提出了 BERT，一種基於 Transformer Bidirectional Encoder 的語言表示模型。
+BERT 旨在透過 unlabeled text 進行 pretrain。
+因此，只需要一個額外的輸出層就可以對預訓練的 BERT 進行微調，在各種任務上取得 SOTA。
+Introduction 「語言模型做預訓練」已被證明可以有效改善多種 NLP 任務。
+將預訓練模型應用在下游任務，有兩種策略：
+Feature-based 把 pretrained 的 representations 作為額外的特徵 Fine-tuning 根據特定任務引入額外參數，並簡單地微調所有參數 這兩種方法在預訓練期間共用同個 objective function，並用單向語言模型來學習 representation。
+作者認為當前的技術限制了預訓練的表示能力，特別是在 Fine-tuning 方法上。
+主要的問題在於語言模型是單向的，限制了預訓練期間可以使用的架構的選擇。這種單向的架構可能在一些任務有害，特別是對於那些需要兩個方向的 context 的任務。
+本文提出的 BERT 改善了現有的 Fine-tuning 方法，用 Transformer 的 Bidirectional Encoder 來訓練語言模型。
+BERT 透過受到 Cloze task（填空）啟發的 masked language model(MLM)，作為預訓練目標。MLM 隨機地遮蔽一些輸入的一些 token，目標是根據上下文來回推原詞，使 representation 可以融合左右兩邊的 context。">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">⭐<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/StarRabbit.jpg"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#related-work">Related Work</a>
+      <ol>
+        <li><a href="#unsupervised-feature-based-approaches">Unsupervised Feature-based Approaches</a></li>
+      </ol>
+    </li>
+    <li><a href="#bert">BERT</a>
+      <ol>
+        <li><a href="#pre-training-bert">Pre-training BERT</a>
+          <ol>
+            <li><a href="#masked-lm">Masked LM</a></li>
+            <li><a href="#next-sentence-prediction-nsp">Next Sentence Prediction (NSP)</a></li>
+            <li><a href="#預訓練資料">預訓練資料</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#ablation-studies">Ablation Studies</a>
+      <ol>
+        <li><a href="#effect-of-pre-training-tasks">Effect of Pre-training Tasks</a></li>
+        <li><a href="#feature-based-approach-with-bert">Feature-based Approach with BERT</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/deep-learning/" style="background-color: #936ce1; color: #fff;">
+                Deep Learning
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/deep-learning.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">BERT 論文閱讀</a>
+        </h2>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Aug 05, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    2 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>paper: <a class="link" href="https://arxiv.org/abs/1810.04805"  target="_blank" rel="noopener"
+    >BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</a></p>
+<p>現在回頭寫 BERT 論文筆記感覺有點怪，之前已經寫過什麼 RoBERTa 之類的。</p>
+<p>不過現在因應實驗室讀書會要求，還是看一下論文也寫一下筆記。</p>
+<h2 id="abstract">Abstract</h2>
+<p>本文提出了 BERT，一種基於 Transformer Bidirectional Encoder 的語言表示模型。</p>
+<p>BERT 旨在透過 unlabeled text 進行 pretrain。</p>
+<p>因此，只需要一個額外的輸出層就可以對預訓練的 BERT 進行微調，在各種任務上取得 SOTA。</p>
+<h2 id="introduction">Introduction</h2>
+<p>「語言模型做預訓練」已被證明可以有效改善多種 NLP 任務。</p>
+<p>將預訓練模型應用在下游任務，有兩種策略：</p>
+<ol>
+<li>Feature-based
+<ul>
+<li>把 pretrained 的 representations 作為額外的特徵</li>
+</ul>
+</li>
+<li>Fine-tuning
+<ul>
+<li>根據特定任務引入額外參數，並簡單地微調所有參數</li>
+</ul>
+</li>
+</ol>
+<p>這兩種方法在預訓練期間共用同個 objective function，並用單向語言模型來學習 representation。</p>
+<p>作者認為當前的技術限制了預訓練的表示能力，特別是在 Fine-tuning 方法上。</p>
+<p>主要的問題在於語言模型是單向的，限制了預訓練期間可以使用的架構的選擇。這種單向的架構可能在一些任務有害，特別是對於那些需要兩個方向的 context 的任務。</p>
+<p>本文提出的 BERT 改善了現有的 Fine-tuning 方法，用 Transformer 的 Bidirectional Encoder 來訓練語言模型。</p>
+<p>BERT 透過受到 Cloze task（填空）啟發的 masked language model(MLM)，作為預訓練目標。MLM 隨機地遮蔽一些輸入的一些 token，目標是根據上下文來回推原詞，使 representation 可以融合左右兩邊的 context。</p>
+<p>除了 MLM，作者還利用 next sentence prediction（NSP）任務來訓練 BERT。</p>
+<p>本文貢獻如下：</p>
+<ul>
+<li>
+<p>BERT 證明了雙向預訓練對 representation 的重要性。</p>
+</li>
+<li>
+<p>BERT 展現出預訓練的 representation 減少了許多針對 NLP 任務精心設計架構的需求。 BERT 是第一個基於 Fine-tuning，在大量 sentence-level 和 token-level 任務上取得 SOTA 的模型。</p>
+</li>
+<li>
+<p>BERT 推進了 11 個 NLP 任務的 SOTA。</p>
+</li>
+</ul>
+<h2 id="related-work">Related Work</h2>
+<h3 id="unsupervised-feature-based-approaches">Unsupervised Feature-based Approaches</h3>
+<p>學習廣泛適用的 representation of words 一直是活躍的研究領域，甚至在非神經網路的領域也是。</p>
+<p>預訓練的 word embeddings 與從頭訓練的 embedding 相比，有顯著改進。</p>
+<p>這些方法頁被推廣到 coarser granularities，像是 sentence embedding 或是 paragraph embedding。</p>
+<p>有研究證明 cloze task 提高了生成模型的 robustness。</p>
+<h2 id="bert">BERT</h2>
+<p>框架有兩步驟：</p>
+<ol>
+<li>Pre-training
+<ul>
+<li>在不同的預訓練任務中，用 unlabeled data 來 fine-tune。</li>
+</ul>
+</li>
+<li>Fine-tuning
+<ul>
+<li>使用預訓練的參數初始化，在利用下游任務的 labeled data 對所有參數微調。</li>
+</ul>
+</li>
+</ol>
+<p>BERT 的一個特點是他具備跨不同任務的統一架構，預訓練架構和下游任務最終架構差異不大。</p>
+<ul>
+<li>
+<p>Model Architecture</p>
+<ul>
+<li>
+<p>本文表示方法</p>
+<ul>
+<li>L: Transformer 的層數</li>
+<li>H: hidden size</li>
+<li>A: self-attention heads 的數量</li>
+</ul>
+</li>
+<li>
+<p>model size</p>
+<ul>
+<li>BASE: L=12, H=768, A=12, 110M parameters
+<ul>
+<li>和 GPT 相同</li>
+</ul>
+</li>
+<li>LARGE: L=24, H=1024, A=16, 340M parameters</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Input/Output Representations</p>
+<ul>
+<li>
+<p>Input representation 可以在 token sequence 中明確表示單個 sentence 和一對 sentence。</p>
+<ul>
+<li>sentence 可以是連續文本的任意範圍，而不是實際的句子。</li>
+<li>sequence 是輸入的 token sequence，可以是單個 sentence 或是一對 sentence。</li>
+<li>每個 sequence 的第一個 token 始終是特殊的分類 token &ndash; [CLS]</li>
+<li>對於兩個句子放在一個序列的情況，用 [SEP] 隔開</li>
+</ul>
+</li>
+<li>
+<p>Token Embeddings</p>
+<ul>
+<li>作者使用 WordPiece embeddings，有 30000 個詞彙。</li>
+</ul>
+</li>
+<li>
+<p>learned embedding</p>
+<ul>
+<li>對每個 token 添加這個東西，表示屬於 sentence A 還 sentence B</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="pre-training-bert">Pre-training BERT</h3>
+<h4 id="masked-lm">Masked LM</h4>
+<p>直觀上，有理由相信深度的雙向模型會比單像串連起來的淺層模型更強大。</p>
+<p>不幸的是 standard condition language model 只能單向訓練，因為雙向會允許每個單詞「間接看到自己」。</p>
+<p>為了訓練 deep bidirectional representations，本文隨機遮蔽了一定比例的 tokens，並預測這些 token，這種方法稱為 masked language model，或常被稱為 cloze task。</p>
+<p>作者會用 [MASK] 做預訓練，但有個問題是 [MASK] 在 fine-tuning 期間不會出現，造成預訓練和微調之間的 mismatching，為了緩減這種情況，並不會總是用 [MASK] 替代 masked token。</p>
+<p>要替換 token 的時候，有 80% 的時間是 [MASK]，10% 是隨機 token，10% 是原本的 token。</p>
+<h4 id="next-sentence-prediction-nsp">Next Sentence Prediction (NSP)</h4>
+<p>許多重要下游任務，比如 Question Answering (QA) 和 Natural Language Inference (NLI) 是基於兩個句子間的關係。</p>
+<p>NSP 就是為了理解句子間的關係而用的。</p>
+<p>每次挑句子 A 和 B 的時候，有 50% 的機會 B 是 A 的下一個句子，有 50% 是隨機的。</p>
+<p>針對 NSP 的預訓練對 QA 和 NLI 都很有用。</p>
+<h4 id="預訓練資料">預訓練資料</h4>
+<p>用 BookCorpus 和 English Wikipedia 來訓練 BERT。</p>
+<p>對於 English Wikipedia，只提取 text passages，忽略 lists, tables, headers。</p>
+<p>為了提取長的連續序列，用 document-level 的 corpus 而不是打亂的 sentence-level corpus 非常重要。</p>
+<h2 id="ablation-studies">Ablation Studies</h2>
+<h3 id="effect-of-pre-training-tasks">Effect of Pre-training Tasks</h3>
+<ul>
+<li>No NSP
+<ul>
+<li>只有 MLM</li>
+</ul>
+</li>
+<li>LTR &amp; No NSP
+<ul>
+<li>Left-to-Right</li>
+<li>只看左邊的 context</li>
+</ul>
+</li>
+</ul>
+<p>發現刪除 NSP 會顯著傷害對 QNLI 等資料集的性能。</p>
+<p>LTR 在所有任務上都比 MLM 差。</p>
+<p>雖然可以像 ELMo 單獨訓練 LTR 和 RTL，並且把他們結合起來</p>
+<p>但有以下缺點：</p>
+<ul>
+<li>比單向模型貴兩倍</li>
+<li>對 QA 任務不直觀，因為 RTL 無法根據問題給出答案</li>
+<li>不如深度雙向模型強大，因為其可以直接在每一層看到左右的 context</li>
+</ul>
+<h3 id="feature-based-approach-with-bert">Feature-based Approach with BERT</h3>
+<p>作者也研究了用 feature-based 的效果，發現具備競爭力。</p>
+<p>在他的實驗中，用預訓練 Transformer 的 top 4 隱藏層的 token 串街效果最好。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/deep-learning/">deep-learning</a>
+        
+            <a href="/Blog/tags/machine-learning/">machine-learning</a>
+        
+            <a href="/Blog/tags/transformer/">transformer</a>
+        
+            <a href="/Blog/tags/attention/">attention</a>
+        
+            <a href="/Blog/tags/self-attention/">self-attention</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/self-instruct-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Self-Instruct 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/relative-position-%E4%BB%8B%E7%B4%B9--%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Relative Position 介紹 &#43; 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/swin-transformer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Swin Transformer 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/git-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GIT 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/roberta-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">RoBERTa 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>
