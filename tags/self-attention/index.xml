@@ -6,7 +6,132 @@
         <description>Recent content in self-attention on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sat, 05 Aug 2023 00:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/self-attention/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 10 Aug 2023 00:27:55 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/self-attention/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>DETR 論文</title>
+        <link>https://roykesydon.github.io/Blog/p/detr-%E8%AB%96%E6%96%87/</link>
+        <pubDate>Thu, 10 Aug 2023 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/detr-%E8%AB%96%E6%96%87/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2005.12872&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;End-to-End Object Detection with Transformers&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;作者把 object detection 視作一個 set prediction 問題。&lt;/p&gt;
+&lt;p&gt;簡化了 pipeline，消除了許多 hand-designed components，比如 non-maximum suppression 和 anchor generation，這些 component 由我們對於任務的先驗知識構成。&lt;/p&gt;
+&lt;p&gt;提出了一個新的目標函數，透過二分匹配（bipartite matching）進行預測，也用 Transformer encoder-decoder 架構。&lt;/p&gt;
+&lt;p&gt;給予一組固定的 learned object query，DETR 可以推理 objects 和 globol image context 的關係，並「並行」輸出一組預測集。&lt;/p&gt;
+&lt;p&gt;DETR 概念非常簡單。&lt;/p&gt;
+&lt;p&gt;DETR 在 COCO 上和 Faster RCNN baseline 在準確度和 performance 上相當。&lt;/p&gt;
+&lt;p&gt;DETR 可以很簡單地推廣到 Panoptic Segmentation。&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;目標檢測的目標就是集合預測。&lt;/p&gt;
+&lt;p&gt;但目前都用一些很間接的方式去做，像是用 proposals, anchors 或 window centers。&lt;/p&gt;
+&lt;p&gt;但是這些方法性能明顯受限於後處理步驟，比如 non-maximum suppression，因為他們會產生大量冗餘的框。&lt;/p&gt;
+&lt;p&gt;為了簡化 pipeline，作者提出了一種 End-to-End 的方法，以往也有一些嘗試，但他們要不添加了其他的先驗知識，不然就是在具有挑戰性的 benchmark 上表現不好。&lt;/p&gt;
+&lt;p&gt;在 COCO 上和 Faster R-CNN 的性能相當，表現和速度都差不多。&lt;/p&gt;
+&lt;p&gt;DETR 在大物體表現很好，可能是歸功於 Transformer non-local 的計算能力。
+雖然 DETR 在小物體上表現倒不怎麼樣。&lt;/p&gt;
+&lt;p&gt;DETR 需要超長的訓練時間，但 DETR 的設計理念可以拓展到 Panoptic Segmentation。&lt;/p&gt;
+&lt;h2 id=&#34;related-work&#34;&gt;Related Work&lt;/h2&gt;
+&lt;h3 id=&#34;set-prediction&#34;&gt;Set Prediction&lt;/h3&gt;
+&lt;p&gt;沒有規範的深度學習模型可以直接預測集合。&lt;/p&gt;
+&lt;p&gt;這些任務中的一個困難點是避免 near-dulicates（相近的重複檢測框） 當前多數檢測器用 NMS 來解決此問題，如果是 direct set prediction 就不用後處理。&lt;/p&gt;
+&lt;h3 id=&#34;transformers-and-parallel-decoding&#34;&gt;Transformers and Parallel Decoding&lt;/h3&gt;
+&lt;p&gt;Transformer 在各種地方表現出色，但推理成本令人望而生畏。&lt;/p&gt;
+&lt;h3 id=&#34;object-detection&#34;&gt;Object detection&lt;/h3&gt;
+&lt;p&gt;現在多數的目標檢測方法是基於一些初始的猜測，再去做預測。&lt;/p&gt;
+&lt;p&gt;比如對於 two-stage 的方法，就是對於 proposals 往下做預測。&lt;/p&gt;
+&lt;p&gt;對於 single-stage，初始猜測就是 anchors。&lt;/p&gt;
+&lt;h4 id=&#34;set-based-loss&#34;&gt;Set-based loss&lt;/h4&gt;
+&lt;p&gt;以前的一些作法比如 Learnable NMS 或 relation networks 都可以透過 attention 來處理不同預測之間的關係。&lt;/p&gt;
+&lt;p&gt;用 direct set losses，他們不需要任何後處理。&lt;/p&gt;
+&lt;p&gt;但是這些方法往往用額外的 hand-crafted context feature，比如 proposal box coordinates。作者尋找減少模型中先驗知識的方案。&lt;/p&gt;
+&lt;h4 id=&#34;recurrent-detectors&#34;&gt;Recurrent detectors&lt;/h4&gt;
+&lt;p&gt;以往有類似的工作，但他們是用 RNN。&lt;/p&gt;
+&lt;h2 id=&#34;the-detr-model&#34;&gt;The DETR model&lt;/h2&gt;
+&lt;h4 id=&#34;object-detection-set-prediction-loss&#34;&gt;Object detection set prediction loss&lt;/h4&gt;
+&lt;p&gt;DETE 會給 N 個固定大小的集合預測。&lt;/p&gt;
+&lt;p&gt;要解二分圖匹配，本文用 scipy 的 linear_sum_assignment 處理，他背後是匈牙利演算法。&lt;/p&gt;
+&lt;p&gt;其實這種方法和 proposals 和 anchors 有差不多的作用，差別在於這裡會找一對一的匹配，而不用重複。&lt;/p&gt;
+&lt;p&gt;目標函數：&lt;/p&gt;
+&lt;p&gt;$L_{Hungarian}(y, \text{\^{y}}) = \displaystyle\sum^{N}_{i=1} [-log \text{\^{p}} $
+$_{\^{\sigma}(i)}(c_i) + \text{1}$
+$_\{$
+$_{c_i \neq \text{\o}}$
+$_\}$
+$\mathcal{L}$
+$_{\text{box}} (b_i, \text{\^{b}}$
+$_{\^{\sigma}}(i))]$&lt;/p&gt;
+&lt;p&gt;前面是分類的 loss，後面是 bounding box 的 loss。&lt;/p&gt;
+&lt;p&gt;這邊有兩個改動，第一個是分類那邊不用 log，使值和 bounding box 的 loss 比較接近。&lt;/p&gt;
+&lt;p&gt;另一個是 bounding box 那邊並不是用最常見的 L1，因為 L1 對於大的目標 loss 比較高，這裡除了 L1 還選用 generalized IoU loss，它在尺度上與 loss 無關。&lt;/p&gt;
+&lt;h4 id=&#34;detr-architecture&#34;&gt;DETR architecture&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/DETR/fig2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;用 CNN 從圖片抽特徵，拉直，餵給 Transformer encoder-decoder，得到一組預測集合。&lt;/p&gt;
+&lt;p&gt;這裡 encoder 有助於特徵間彼此交互。&lt;/p&gt;
+&lt;p&gt;訓練的時候，預測的框和 GT 做匹配，沒匹配到的就放到 &amp;ldquo;no object&amp;rdquo; class。&lt;/p&gt;
+&lt;p&gt;decoder 會餵入 object queries，這些是 learnable positional encodings。&lt;/p&gt;
+&lt;h2 id=&#34;experiments&#34;&gt;Experiments&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/DETR/table1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/DETR/table2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;ablations&#34;&gt;Ablations&lt;/h3&gt;
+&lt;h4 id=&#34;number-of-encoder-layers&#34;&gt;Number of encoder layers&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/DETR/fig3.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;作者透過改變 Encoder layer 的數量來評估 global imagelevel self-attention 的重要性。&lt;/p&gt;
+&lt;p&gt;作者推論 encoder 可能對於判斷分開對象很重要，圖 3 可視化了最後一個 encoder layer 的 attention map。&lt;/p&gt;
+&lt;p&gt;encoder 看似已經分離了 instance，可能簡化了 decoder 對於 object extraction 和 localization 的工作。&lt;/p&gt;
+&lt;h4 id=&#34;number-of-decoder-layers&#34;&gt;Number of decoder layers&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/DETR/fig6.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在圖 6 做了 decoder 的注意力可視化，可以注意到觀察的注意力相當局部。&lt;/p&gt;
+&lt;p&gt;推論是 encoder 主要分離實體，decoder 只需要關注四肢即可提取出對象的邊界和分類。&lt;/p&gt;
+&lt;h3 id=&#34;analysis&#34;&gt;Analysis&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/DETR/fig7.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;圖 7 把 100 個預測槽中的 20 個做可視化。&lt;/p&gt;
+&lt;p&gt;每個預測框代表一點，可以注意到不同的槽位會專注在不同區域。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>BERT 論文閱讀</title>
         <link>https://roykesydon.github.io/Blog/p/bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
         <pubDate>Sat, 05 Aug 2023 00:08:46 +0800</pubDate>
