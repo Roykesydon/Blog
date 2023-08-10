@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: End-to-End Object Detection with Transformers
+Abstract 作者把 object detection 視作一個 set prediction 問題。
+簡化了 pipeline，消除了許多 hand-designed components，比如 non-maximum suppression 和 anchor generation，這些 component 由我們對於任務的先驗知識構成。
+提出了一個新的目標函數，透過二分匹配（bipartite matching）進行預測，也用 Transformer encoder-decoder 架構。
+給予一組固定的 learned object query，DETR 可以推理 objects 和 globol image context 的關係，並「並行」輸出一組預測集。
+DETR 概念非常簡單。
+DETR 在 COCO 上和 Faster RCNN baseline 在準確度和 performance 上相當。
+DETR 可以很簡單地推廣到 Panoptic Segmentation。
+Introduction 目標檢測的目標就是集合預測。
+但目前都用一些很間接的方式去做，像是用 proposals, anchors 或 window centers。
+但是這些方法性能明顯受限於後處理步驟，比如 non-maximum suppression，因為他們會產生大量冗餘的框。
+為了簡化 pipeline，作者提出了一種 End-to-End 的方法，以往也有一些嘗試，但他們要不添加了其他的先驗知識，不然就是在具有挑戰性的 benchmark 上表現不好。'>
+<title>DETR 論文</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/detr-%E8%AB%96%E6%96%87/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.68896897cd93c3f19dfd63ae84ba5198069416574270b3d7a178852148dad101.css"><meta property='og:title' content='DETR 論文'>
+<meta property='og:description' content='paper: End-to-End Object Detection with Transformers
+Abstract 作者把 object detection 視作一個 set prediction 問題。
+簡化了 pipeline，消除了許多 hand-designed components，比如 non-maximum suppression 和 anchor generation，這些 component 由我們對於任務的先驗知識構成。
+提出了一個新的目標函數，透過二分匹配（bipartite matching）進行預測，也用 Transformer encoder-decoder 架構。
+給予一組固定的 learned object query，DETR 可以推理 objects 和 globol image context 的關係，並「並行」輸出一組預測集。
+DETR 概念非常簡單。
+DETR 在 COCO 上和 Faster RCNN baseline 在準確度和 performance 上相當。
+DETR 可以很簡單地推廣到 Panoptic Segmentation。
+Introduction 目標檢測的目標就是集合預測。
+但目前都用一些很間接的方式去做，像是用 proposals, anchors 或 window centers。
+但是這些方法性能明顯受限於後處理步驟，比如 non-maximum suppression，因為他們會產生大量冗餘的框。
+為了簡化 pipeline，作者提出了一種 End-to-End 的方法，以往也有一些嘗試，但他們要不添加了其他的先驗知識，不然就是在具有挑戰性的 benchmark 上表現不好。'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/detr-%E8%AB%96%E6%96%87/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='computer-vision' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:published_time' content='2023-08-10T00:27:55&#43;08:00'/><meta property='article:modified_time' content='2023-08-10T00:27:55&#43;08:00'/>
+<meta name="twitter:title" content="DETR 論文">
+<meta name="twitter:description" content="paper: End-to-End Object Detection with Transformers
+Abstract 作者把 object detection 視作一個 set prediction 問題。
+簡化了 pipeline，消除了許多 hand-designed components，比如 non-maximum suppression 和 anchor generation，這些 component 由我們對於任務的先驗知識構成。
+提出了一個新的目標函數，透過二分匹配（bipartite matching）進行預測，也用 Transformer encoder-decoder 架構。
+給予一組固定的 learned object query，DETR 可以推理 objects 和 globol image context 的關係，並「並行」輸出一組預測集。
+DETR 概念非常簡單。
+DETR 在 COCO 上和 Faster RCNN baseline 在準確度和 performance 上相當。
+DETR 可以很簡單地推廣到 Panoptic Segmentation。
+Introduction 目標檢測的目標就是集合預測。
+但目前都用一些很間接的方式去做，像是用 proposals, anchors 或 window centers。
+但是這些方法性能明顯受限於後處理步驟，比如 non-maximum suppression，因為他們會產生大量冗餘的框。
+為了簡化 pipeline，作者提出了一種 End-to-End 的方法，以往也有一些嘗試，但他們要不添加了其他的先驗知識，不然就是在具有挑戰性的 benchmark 上表現不好。">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">⭐<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/StarRabbit.jpg"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#related-work">Related Work</a>
+      <ol>
+        <li><a href="#set-prediction">Set Prediction</a></li>
+        <li><a href="#transformers-and-parallel-decoding">Transformers and Parallel Decoding</a></li>
+        <li><a href="#object-detection">Object detection</a>
+          <ol>
+            <li><a href="#set-based-loss">Set-based loss</a></li>
+            <li><a href="#recurrent-detectors">Recurrent detectors</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#the-detr-model">The DETR model</a>
+      <ol>
+        <li>
+          <ol>
+            <li><a href="#object-detection-set-prediction-loss">Object detection set prediction loss</a></li>
+            <li><a href="#detr-architecture">DETR architecture</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#experiments">Experiments</a>
+      <ol>
+        <li><a href="#ablations">Ablations</a>
+          <ol>
+            <li><a href="#number-of-encoder-layers">Number of encoder layers</a></li>
+            <li><a href="#number-of-decoder-layers">Number of decoder layers</a></li>
+          </ol>
+        </li>
+        <li><a href="#analysis">Analysis</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/deep-learning/" style="background-color: #936ce1; color: #fff;">
+                Deep Learning
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/deep-learning.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/detr-%E8%AB%96%E6%96%87/">DETR 論文</a>
+        </h2>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Aug 10, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    2 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>paper: <a class="link" href="https://arxiv.org/abs/2005.12872"  target="_blank" rel="noopener"
+    >End-to-End Object Detection with Transformers</a></p>
+<h2 id="abstract">Abstract</h2>
+<p>作者把 object detection 視作一個 set prediction 問題。</p>
+<p>簡化了 pipeline，消除了許多 hand-designed components，比如 non-maximum suppression 和 anchor generation，這些 component 由我們對於任務的先驗知識構成。</p>
+<p>提出了一個新的目標函數，透過二分匹配（bipartite matching）進行預測，也用 Transformer encoder-decoder 架構。</p>
+<p>給予一組固定的 learned object query，DETR 可以推理 objects 和 globol image context 的關係，並「並行」輸出一組預測集。</p>
+<p>DETR 概念非常簡單。</p>
+<p>DETR 在 COCO 上和 Faster RCNN baseline 在準確度和 performance 上相當。</p>
+<p>DETR 可以很簡單地推廣到 Panoptic Segmentation。</p>
+<h2 id="introduction">Introduction</h2>
+<p>目標檢測的目標就是集合預測。</p>
+<p>但目前都用一些很間接的方式去做，像是用 proposals, anchors 或 window centers。</p>
+<p>但是這些方法性能明顯受限於後處理步驟，比如 non-maximum suppression，因為他們會產生大量冗餘的框。</p>
+<p>為了簡化 pipeline，作者提出了一種 End-to-End 的方法，以往也有一些嘗試，但他們要不添加了其他的先驗知識，不然就是在具有挑戰性的 benchmark 上表現不好。</p>
+<p>在 COCO 上和 Faster R-CNN 的性能相當，表現和速度都差不多。</p>
+<p>DETR 在大物體表現很好，可能是歸功於 Transformer non-local 的計算能力。
+雖然 DETR 在小物體上表現倒不怎麼樣。</p>
+<p>DETR 需要超長的訓練時間，但 DETR 的設計理念可以拓展到 Panoptic Segmentation。</p>
+<h2 id="related-work">Related Work</h2>
+<h3 id="set-prediction">Set Prediction</h3>
+<p>沒有規範的深度學習模型可以直接預測集合。</p>
+<p>這些任務中的一個困難點是避免 near-dulicates（相近的重複檢測框） 當前多數檢測器用 NMS 來解決此問題，如果是 direct set prediction 就不用後處理。</p>
+<h3 id="transformers-and-parallel-decoding">Transformers and Parallel Decoding</h3>
+<p>Transformer 在各種地方表現出色，但推理成本令人望而生畏。</p>
+<h3 id="object-detection">Object detection</h3>
+<p>現在多數的目標檢測方法是基於一些初始的猜測，再去做預測。</p>
+<p>比如對於 two-stage 的方法，就是對於 proposals 往下做預測。</p>
+<p>對於 single-stage，初始猜測就是 anchors。</p>
+<h4 id="set-based-loss">Set-based loss</h4>
+<p>以前的一些作法比如 Learnable NMS 或 relation networks 都可以透過 attention 來處理不同預測之間的關係。</p>
+<p>用 direct set losses，他們不需要任何後處理。</p>
+<p>但是這些方法往往用額外的 hand-crafted context feature，比如 proposal box coordinates。作者尋找減少模型中先驗知識的方案。</p>
+<h4 id="recurrent-detectors">Recurrent detectors</h4>
+<p>以往有類似的工作，但他們是用 RNN。</p>
+<h2 id="the-detr-model">The DETR model</h2>
+<h4 id="object-detection-set-prediction-loss">Object detection set prediction loss</h4>
+<p>DETE 會給 N 個固定大小的集合預測。</p>
+<p>要解二分圖匹配，本文用 scipy 的 linear_sum_assignment 處理，他背後是匈牙利演算法。</p>
+<p>其實這種方法和 proposals 和 anchors 有差不多的作用，差別在於這裡會找一對一的匹配，而不用重複。</p>
+<p>目標函數：</p>
+<p>$L_{Hungarian}(y, \text{\^{y}}) = \displaystyle\sum^{N}_{i=1} [-log \text{\^{p}} $
+$_{\^{\sigma}(i)}(c_i) + \text{1}$
+$_\{$
+$_{c_i \neq \text{\o}}$
+$_\}$
+$\mathcal{L}$
+$_{\text{box}} (b_i, \text{\^{b}}$
+$_{\^{\sigma}}(i))]$</p>
+<p>前面是分類的 loss，後面是 bounding box 的 loss。</p>
+<p>這邊有兩個改動，第一個是分類那邊不用 log，使值和 bounding box 的 loss 比較接近。</p>
+<p>另一個是 bounding box 那邊並不是用最常見的 L1，因為 L1 對於大的目標 loss 比較高，這裡除了 L1 還選用 generalized IoU loss，它在尺度上與 loss 無關。</p>
+<h4 id="detr-architecture">DETR architecture</h4>
+<p><img src="/Blog/images/deep-learning/DETR/fig2.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>用 CNN 從圖片抽特徵，拉直，餵給 Transformer encoder-decoder，得到一組預測集合。</p>
+<p>這裡 encoder 有助於特徵間彼此交互。</p>
+<p>訓練的時候，預測的框和 GT 做匹配，沒匹配到的就放到 &ldquo;no object&rdquo; class。</p>
+<p>decoder 會餵入 object queries，這些是 learnable positional encodings。</p>
+<h2 id="experiments">Experiments</h2>
+<p><img src="/Blog/images/deep-learning/DETR/table1.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p><img src="/Blog/images/deep-learning/DETR/table2.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h3 id="ablations">Ablations</h3>
+<h4 id="number-of-encoder-layers">Number of encoder layers</h4>
+<p><img src="/Blog/images/deep-learning/DETR/fig3.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>作者透過改變 Encoder layer 的數量來評估 global imagelevel self-attention 的重要性。</p>
+<p>作者推論 encoder 可能對於判斷分開對象很重要，圖 3 可視化了最後一個 encoder layer 的 attention map。</p>
+<p>encoder 看似已經分離了 instance，可能簡化了 decoder 對於 object extraction 和 localization 的工作。</p>
+<h4 id="number-of-decoder-layers">Number of decoder layers</h4>
+<p><img src="/Blog/images/deep-learning/DETR/fig6.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>在圖 6 做了 decoder 的注意力可視化，可以注意到觀察的注意力相當局部。</p>
+<p>推論是 encoder 主要分離實體，decoder 只需要關注四肢即可提取出對象的邊界和分類。</p>
+<h3 id="analysis">Analysis</h3>
+<p><img src="/Blog/images/deep-learning/DETR/fig7.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>圖 7 把 100 個預測槽中的 20 個做可視化。</p>
+<p>每個預測框代表一點，可以注意到不同的槽位會專注在不同區域。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/computer-vision/">computer-vision</a>
+        
+            <a href="/Blog/tags/deep-learning/">deep-learning</a>
+        
+            <a href="/Blog/tags/machine-learning/">machine-learning</a>
+        
+            <a href="/Blog/tags/transformer/">transformer</a>
+        
+            <a href="/Blog/tags/attention/">attention</a>
+        
+            <a href="/Blog/tags/self-attention/">self-attention</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/swin-transformer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Swin Transformer 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/git-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GIT 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/mae-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">MAE 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/vit-%E8%AB%96%E6%96%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">ViT 論文</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">BERT 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>
