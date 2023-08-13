@@ -18,15 +18,7 @@ categories : ["unclassified"]
 
 後續請參考微軟的教學
 
-## 計畫版本紀錄 (2023/07/03)
-- Unity
-    - 2020.3.48f1 (LTS)
-- MRTK
-    - 2.8.3
-- Mixed Reality OpenXR Plugin
-    - 1.8.0
-
-## 我個人的版本紀錄 (2021/07/03)
+## 我個人的版本紀錄 (2023/07/03)
 - Unity
     - 2021.3.27f1 (LTS)
         - 我沒注意到我一開始選錯，但也可以跑，之後
@@ -91,6 +83,8 @@ categories : ["unclassified"]
                 - Extensions
                 - Tools
                 - TestUtilities
+
+3. 剩下的看微軟專案建置教學，實在太多要弄了
 
 ## 在模擬器上執行
 
