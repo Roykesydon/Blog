@@ -17,25 +17,7 @@
 &lt;p&gt;原本很怕版本對不上很麻煩，但實際用起來好像還好&lt;/p&gt;
 &lt;p&gt;注意，這不是最小安裝，有些東西我不確定是不是必要的，但我怕麻煩就裝了&lt;/p&gt;
 &lt;p&gt;後續請參考微軟的教學&lt;/p&gt;
-&lt;h2 id=&#34;計畫版本紀錄-20230703&#34;&gt;計畫版本紀錄 (2023/07/03)&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Unity
-&lt;ul&gt;
-&lt;li&gt;2020.3.48f1 (LTS)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;MRTK
-&lt;ul&gt;
-&lt;li&gt;2.8.3&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Mixed Reality OpenXR Plugin
-&lt;ul&gt;
-&lt;li&gt;1.8.0&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;我個人的版本紀錄-20210703&#34;&gt;我個人的版本紀錄 (2021/07/03)&lt;/h2&gt;
+&lt;h2 id=&#34;我個人的版本紀錄-20230703&#34;&gt;我個人的版本紀錄 (2023/07/03)&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Unity
 &lt;ul&gt;
@@ -167,6 +149,9 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;剩下的看微軟專案建置教學，實在太多要弄了&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;在模擬器上執行&#34;&gt;在模擬器上執行&lt;/h2&gt;
