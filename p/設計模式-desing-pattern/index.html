@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Creational patterns 關於 object creation 的 patterns。
+Factory Method 將不同 Product 定義一個共有的 Interface，並由子類別實作，透過工廠類別來產生實體。
+將建立 Product 的方法獨立出來，符合 Single Responsibility Principle。 可以輕易擴充新的 Product，而不用修改原本的程式碼，符合 Open-Closed Principle。
+Abstract Factory 相比 Factory Method，現在的情境是有多個 Product，而且每次都是使用同一系列的 Product。
+Builder 對於建構一個複雜且具備多種組合的產品，可以透過建構巨大的建構函式或是覆蓋所有可能的子類別來解決。
+但都存在其問題，要不是大量的子類別，不然就是難以呼叫的建構函式。
+把建立物件的每個 component 獨立出來，並且切成多個可分開執行的 step。
+由 Builder 來負責生出每一個 component，Director 不是必需的，但有需要的話可以讓他幫忙調用 Builder 的 method，好在專案中重複使用。
+Prototype 使用在想要獲得某個對象的 clone 的情境。
+把 clone 的責任交給對象本身，而不是交給 Client。由對象本身提供 clone method。
+Singleton 確保某個類別只有一個 instance，並且提供一個 global access point。
+但是這樣違反了 Single Responsibility Principle，因為除了原本的功能外，還要負責管理自己的 instance。
+Structural patterns 探討如何組裝類別和物件成為更大的結構。
+Adapter 轉換某個對象的 interface 到另外一種 interface，讓另外一個 Object 可以理解他。 就像 XML 要轉到 JSON。'>
+<title>設計模式 Desing Pattern</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/%E8%A8%AD%E8%A8%88%E6%A8%A1%E5%BC%8F-desing-pattern/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.606df23915cf4b6419dd356224776156a8eca6fe6fc871e0e88832371c7b403d.css"><meta property='og:title' content='設計模式 Desing Pattern'>
+<meta property='og:description' content='Creational patterns 關於 object creation 的 patterns。
+Factory Method 將不同 Product 定義一個共有的 Interface，並由子類別實作，透過工廠類別來產生實體。
+將建立 Product 的方法獨立出來，符合 Single Responsibility Principle。 可以輕易擴充新的 Product，而不用修改原本的程式碼，符合 Open-Closed Principle。
+Abstract Factory 相比 Factory Method，現在的情境是有多個 Product，而且每次都是使用同一系列的 Product。
+Builder 對於建構一個複雜且具備多種組合的產品，可以透過建構巨大的建構函式或是覆蓋所有可能的子類別來解決。
+但都存在其問題，要不是大量的子類別，不然就是難以呼叫的建構函式。
+把建立物件的每個 component 獨立出來，並且切成多個可分開執行的 step。
+由 Builder 來負責生出每一個 component，Director 不是必需的，但有需要的話可以讓他幫忙調用 Builder 的 method，好在專案中重複使用。
+Prototype 使用在想要獲得某個對象的 clone 的情境。
+把 clone 的責任交給對象本身，而不是交給 Client。由對象本身提供 clone method。
+Singleton 確保某個類別只有一個 instance，並且提供一個 global access point。
+但是這樣違反了 Single Responsibility Principle，因為除了原本的功能外，還要負責管理自己的 instance。
+Structural patterns 探討如何組裝類別和物件成為更大的結構。
+Adapter 轉換某個對象的 interface 到另外一種 interface，讓另外一個 Object 可以理解他。 就像 XML 要轉到 JSON。'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/%E8%A8%AD%E8%A8%88%E6%A8%A1%E5%BC%8F-desing-pattern/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='software-engineering' /><meta property='article:tag' content='software-design' /><meta property='article:published_time' content='2023-10-10T00:00:17&#43;08:00'/><meta property='article:modified_time' content='2023-10-10T00:00:17&#43;08:00'/>
+<meta name="twitter:title" content="設計模式 Desing Pattern">
+<meta name="twitter:description" content="Creational patterns 關於 object creation 的 patterns。
+Factory Method 將不同 Product 定義一個共有的 Interface，並由子類別實作，透過工廠類別來產生實體。
+將建立 Product 的方法獨立出來，符合 Single Responsibility Principle。 可以輕易擴充新的 Product，而不用修改原本的程式碼，符合 Open-Closed Principle。
+Abstract Factory 相比 Factory Method，現在的情境是有多個 Product，而且每次都是使用同一系列的 Product。
+Builder 對於建構一個複雜且具備多種組合的產品，可以透過建構巨大的建構函式或是覆蓋所有可能的子類別來解決。
+但都存在其問題，要不是大量的子類別，不然就是難以呼叫的建構函式。
+把建立物件的每個 component 獨立出來，並且切成多個可分開執行的 step。
+由 Builder 來負責生出每一個 component，Director 不是必需的，但有需要的話可以讓他幫忙調用 Builder 的 method，好在專案中重複使用。
+Prototype 使用在想要獲得某個對象的 clone 的情境。
+把 clone 的責任交給對象本身，而不是交給 Client。由對象本身提供 clone method。
+Singleton 確保某個類別只有一個 instance，並且提供一個 global access point。
+但是這樣違反了 Single Responsibility Principle，因為除了原本的功能外，還要負責管理自己的 instance。
+Structural patterns 探討如何組裝類別和物件成為更大的結構。
+Adapter 轉換某個對象的 interface 到另外一種 interface，讓另外一個 Object 可以理解他。 就像 XML 要轉到 JSON。">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">⭐<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/StarRabbit.jpg"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#creational-patterns">Creational patterns</a>
+      <ol>
+        <li><a href="#factory-method">Factory Method</a></li>
+        <li><a href="#abstract-factory">Abstract Factory</a></li>
+        <li><a href="#builder">Builder</a></li>
+        <li><a href="#prototype">Prototype</a></li>
+        <li><a href="#singleton">Singleton</a></li>
+      </ol>
+    </li>
+    <li><a href="#structural-patterns">Structural patterns</a>
+      <ol>
+        <li><a href="#adapter">Adapter</a></li>
+        <li><a href="#brdige">Brdige</a></li>
+        <li><a href="#composite">Composite</a></li>
+        <li><a href="#decorator">Decorator</a></li>
+        <li><a href="#facade">Facade</a></li>
+        <li><a href="#flyweight">Flyweight</a></li>
+        <li><a href="#proxy">Proxy</a></li>
+      </ol>
+    </li>
+    <li><a href="#behavioral-patterns">Behavioral patterns</a>
+      <ol>
+        <li><a href="#chain-of-responsibility">Chain of Responsibility</a></li>
+        <li><a href="#command">Command</a></li>
+        <li><a href="#iterator">Iterator</a></li>
+        <li><a href="#mediator">Mediator</a></li>
+        <li><a href="#memento">Memento</a></li>
+        <li><a href="#observer">Observer</a></li>
+        <li><a href="#state">State</a></li>
+        <li><a href="#strategy">Strategy</a></li>
+        <li><a href="#template-method">Template Method</a></li>
+        <li><a href="#visitor">Visitor</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/software-engineering/" style="background-color: #8a1337; color: #fff;">
+                Software Engineering
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/software-engineering.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/%E8%A8%AD%E8%A8%88%E6%A8%A1%E5%BC%8F-desing-pattern/">設計模式 Desing Pattern</a>
+        </h2>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Oct 10, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    2 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="creational-patterns">Creational patterns</h2>
+<p>關於 object creation 的 patterns。</p>
+<h3 id="factory-method">Factory Method</h3>
+<p>將不同 Product 定義一個共有的 Interface，並由子類別實作，透過工廠類別來產生實體。</p>
+<p>將建立 Product 的方法獨立出來，符合 Single Responsibility Principle。
+可以輕易擴充新的 Product，而不用修改原本的程式碼，符合 Open-Closed Principle。</p>
+<h3 id="abstract-factory">Abstract Factory</h3>
+<p>相比 Factory Method，現在的情境是有多個 Product，而且每次都是使用同一系列的 Product。</p>
+<h3 id="builder">Builder</h3>
+<p>對於建構一個複雜且具備多種組合的產品，可以透過建構巨大的建構函式或是覆蓋所有可能的子類別來解決。</p>
+<p>但都存在其問題，要不是大量的子類別，不然就是難以呼叫的建構函式。</p>
+<p>把建立物件的每個 component 獨立出來，並且切成多個可分開執行的 step。</p>
+<p>由 Builder 來負責生出每一個 component，Director 不是必需的，但有需要的話可以讓他幫忙調用 Builder 的 method，好在專案中重複使用。</p>
+<h3 id="prototype">Prototype</h3>
+<p>使用在想要獲得某個對象的 clone 的情境。</p>
+<p>把 clone 的責任交給對象本身，而不是交給 Client。由對象本身提供 clone method。</p>
+<h3 id="singleton">Singleton</h3>
+<p>確保某個類別只有一個 instance，並且提供一個 global access point。</p>
+<p>但是這樣違反了 Single Responsibility Principle，因為除了原本的功能外，還要負責管理自己的 instance。</p>
+<h2 id="structural-patterns">Structural patterns</h2>
+<p>探討如何組裝類別和物件成為更大的結構。</p>
+<h3 id="adapter">Adapter</h3>
+<p>轉換某個對象的 interface 到另外一種 interface，讓另外一個 Object 可以理解他。
+就像 XML 要轉到 JSON。</p>
+<h3 id="brdige">Brdige</h3>
+<p>使用在需要在多個 orthogonal (independent) 的維度上擴展類別時的情境。
+讓情況從難以計數的子類別數，變成多組功能聯合起來。</p>
+<p>拆成 abstraction (high-level control) 和 implementation (實際工作)，
+由 abstraction 來控制 implementation，比如 GUI 來控制底下的 API</p>
+<h3 id="composite">Composite</h3>
+<p>用在某些層級結構。</p>
+<p>對於 Composite (Container)，不但實現 Component，也提供一個 list 來存放子 component。</p>
+<p>對 Composite 的操作，會被委託給子 component，不需要 client 擔心。</p>
+<p>就像指揮官只需要對高階軍官下命令。</p>
+<h3 id="decorator">Decorator</h3>
+<p>當今天有多種同類型的東西，你可以能會同時用到多種子類別所形成的組合時，就可以用 Decorator。</p>
+<p>比如多種類型的 notification，你可能同時想要 FB 和 TG 的，或是只想要其中一個。
+或是多件衣服，有超級多種的穿搭。</p>
+<p>但這是一層層的感覺，具有順序性。
+Decorator 和 Component 都繼承同一個 interface。
+就像是 <code>Data data = new Encrypt(new Compress(new FileData()))</code>。</p>
+<p>存在很難從 stack 中刪除特定 decorator 的缺點。</p>
+<h3 id="facade">Facade</h3>
+<p>為複雜的一堆子系統提供一個 Class，讓 client 可以使用他們關心的功能。
+實際怎麼調用 client 無須知道。</p>
+<p>容易形成 god object。</p>
+<h3 id="flyweight">Flyweight</h3>
+<p>對於大量類似的物件，為求節省記憶體而誕生的 pattern。</p>
+<p>把物件的內容分成 intrinsic 和 extrinsic，intrinsic 是不會改變的 (unique)，而 extrinsic 是會改變的 (repeating)。</p>
+<p>讓 extrinsic 的東西用同一塊記憶體。</p>
+<h3 id="proxy">Proxy</h3>
+<p>用在多個服務想要調用某個重量級資源的情境下。</p>
+<p>存在多種 proxy 的應用類型，比如 cache 機制來加速資源的存取，並減少系統資源消耗。</p>
+<h2 id="behavioral-patterns">Behavioral patterns</h2>
+<h3 id="chain-of-responsibility">Chain of Responsibility</h3>
+<p>對於一系列檢查的情況，可以用這種作法，有兩種形式：</p>
+<ol>
+<li>一路檢查，檢查失敗則中斷請求。</li>
+<li>每個 Handler 自行決定要不要處理該請求，要的話則不會往下傳。
+<ul>
+<li>這樣可能會最後沒人處理</li>
+</ul>
+</li>
+</ol>
+<p>就像網頁點擊事件，一層層元素往下問。</p>
+<h3 id="command">Command</h3>
+<p>把請求獨立出來，讓該請求可以被用作參數、佇列、撤銷行為等。</p>
+<p>比如多種不同的按鈕背後都執行同一個存檔功能。存檔就可以作為 command 獨立出來。
+背後再根據這個 command 實施對應的業務邏輯。</p>
+<h3 id="iterator">Iterator</h3>
+<p>用來需要遍歷集合中元素的情境，把不同種類的遍歷行為細節隱藏起來。</p>
+<p>提供多種不同的 iterator，但遵循同一種 interface，讓使用者可以根據需要選擇 iterator。
+對於不關心用哪種 iterator 的使用者，也能受益於 iterator 的 interface，而不必耦合於特定的演算法。</p>
+<h3 id="mediator">Mediator</h3>
+<p>禁止多個 component 間的直接溝通，迫使他們透過 mediator 來溝通，避免複雜的關係。
+所有人只能透過 notify mediator 來溝通，mediator 根據 sender 和 event，來做出相應處理。</p>
+<h3 id="memento">Memento</h3>
+<p>讓你可以儲存和復原到先前的狀態。</p>
+<p>讓要儲存的對象自己生成 snapshot。</p>
+<p>建議存在名為 momento 的 special object，這個 object 不能讓除了 producer 外的其他 object 直接存取。
+其他 object 只能透過 limited interface 來取得 metadata。</p>
+<p>這些限制讓 momento 可以交給其他 object 來管理，稱為 caretaker。</p>
+<h3 id="observer">Observer</h3>
+<p>定義 subscription 機制。</p>
+<p>有 interesting state 的 object 稱為 subject，但由於他也會通知其他人，所以又稱為 publisher。追蹤它的人稱為 Subscriber。</p>
+<h3 id="state">State</h3>
+<p>用在類似 Finite-State Machine 的情況。</p>
+<p>該 pattern 把每個 state 獨立成一個 Class，把實際的行為委託給 state，而不是由 context (原始物件) 來控制。Context 只管切換 state。</p>
+<h3 id="strategy">Strategy</h3>
+<p>把不同實現方法的演算法定義為遵循同一個 interface 的類別，讓使用者可以根據需要選擇演算法。</p>
+<h3 id="template-method">Template Method</h3>
+<p>把演算法拆成多個步驟，讓子類別可以覆寫其中的步驟，但不改變演算法的結構。</p>
+<h3 id="visitor">Visitor</h3>
+<p>讓我們可以把演算法從執行他們的 object 中分離出來。</p>
+<p>假設我們要對一堆繼承 client 屬性的公司新增 sendEmail 功能，如果我們在 client 新增 sendEmail 並且 override 每個子 class，就會違反 Single Responsibility Principle 和 Open-Closed Principle。</p>
+<p>要利用 Double-Dispatch，讓 Object 本身選擇該用的演算法。</p>
+<p>雖然這樣依然會修改到子 class，但這屬於微不足道的改變，而且可以讓之後新增的一些功能不用再去修改這些子 class。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/software-engineering/">software-engineering</a>
+        
+            <a href="/Blog/tags/software-design/">software-design</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88-domain-driven-design/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">領域驅動設計 Domain-Driven Design</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E9%87%8D%E6%A7%8B-refactoring/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">重構 Refactoring</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88%E5%8E%9F%E5%89%87/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">軟體設計原則</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/database-normalization/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Database Normalization</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>

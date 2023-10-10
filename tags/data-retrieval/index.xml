@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>data-retrieval on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/data-retrieval/</link>
+        <description>Recent content in data-retrieval on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Fri, 06 Oct 2023 00:27:55 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/data-retrieval/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>查找相似向量</title>
+        <link>https://roykesydon.github.io/Blog/p/%E6%9F%A5%E6%89%BE%E7%9B%B8%E4%BC%BC%E5%90%91%E9%87%8F/</link>
+        <pubDate>Fri, 06 Oct 2023 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/%E6%9F%A5%E6%89%BE%E7%9B%B8%E4%BC%BC%E5%90%91%E9%87%8F/</guid>
+        <description>&lt;h2 id=&#34;提高查找相似向量的速度&#34;&gt;提高查找相似向量的速度&lt;/h2&gt;
+&lt;p&gt;任何非暴力搜尋的搜尋方法，都會一定程度上的降低搜索品質。
+需要在搜索品質和速度進行 trade-off。&lt;/p&gt;
+&lt;h3 id=&#34;k-means&#34;&gt;K-Means&lt;/h3&gt;
+&lt;p&gt;可用在將向量資料庫分群，以便縮小查找相似向量的範圍。&lt;/p&gt;
+&lt;p&gt;迭代計算群心，直到收斂&lt;/p&gt;
+&lt;p&gt;依據離群心的遠近分類&lt;/p&gt;
+&lt;h4 id=&#34;問題&#34;&gt;問題&lt;/h4&gt;
+&lt;p&gt;相近的向量有可能被分到不同群&lt;/p&gt;
+&lt;p&gt;可以透過「用更多類，並搜索多個最近群」來緩解問題&lt;/p&gt;
+&lt;p&gt;可以找其他 ANN (Approximate Nearest Neighbors) 演算法來面對該問題&lt;/p&gt;
+&lt;h3 id=&#34;位置敏感哈希-locality-sensitive-hashing-lsh&#34;&gt;位置敏感哈希 (Locality Sensitive Hashing, LSH)&lt;/h3&gt;
+&lt;p&gt;讓越相似的向量越容易碰撞，找相似向量就在同個 bucket 找&lt;/p&gt;
+&lt;h4 id=&#34;實現方法&#34;&gt;實現方法&lt;/h4&gt;
+&lt;p&gt;此處挑一種方式舉例，此處用隨機超平面舉例。&lt;/p&gt;
+&lt;p&gt;可以在空間中隨機生成多個 (n-1) 維度的超平面，將兩邊分類為 0 和 1。
+距離較遠的點對被切割開的機率會比距離較近的點對還大。
+用這樣的方法，會讓相近的點對生出的 Hash 值較接近。&lt;/p&gt;
+&lt;h4 id=&#34;問題-1&#34;&gt;問題&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;接近的向量有可能因為機率因素被分到不同 bucket
+&lt;ul&gt;
+&lt;li&gt;將向量分段，每段有匹配到同個 bucket 就視作候選項&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;減少查找相似向量的記憶體開銷&#34;&gt;減少查找相似向量的記憶體開銷&lt;/h2&gt;
+&lt;p&gt;大量的高維向量會造成大量的記憶體開銷&lt;/p&gt;
+&lt;h3 id=&#34;k-means-1&#34;&gt;K-Means&lt;/h3&gt;
+&lt;p&gt;把同一群的向量都用群心向量代替，是一種有損壓縮。&lt;/p&gt;
+&lt;h4 id=&#34;問題-2&#34;&gt;問題&lt;/h4&gt;
+&lt;p&gt;但這樣需要另外的空間來存取 codebook (向量對應表)，在某些情況不見得比原本的向量還省空間，甚至可能花更多。&lt;/p&gt;
+&lt;p&gt;n 維的向量可能需要 $2^{\frac{n}{2}}$ 的 class 才可以較好的分類 (來源未知)&lt;/p&gt;
+&lt;p&gt;可以透過把高維向量切割成多個低維子向量個別處理再合併來緩解該問題。&lt;/p&gt;
+&lt;p&gt;該方法稱為 Product Quntization (PQ)&lt;/p&gt;
+&lt;h2 id=&#34;其他做法&#34;&gt;其他做法&lt;/h2&gt;
+&lt;h3 id=&#34;nsw&#34;&gt;NSW&lt;/h3&gt;
+&lt;h4 id=&#34;六度分隔理論-six-degrees-of-separation&#34;&gt;六度分隔理論 (Six degrees of separation)&lt;/h4&gt;
+&lt;p&gt;對於世界上兩個互不相識的人，只需要六個中間人就可以建立起連結。&lt;/p&gt;
+&lt;h4 id=&#34;做法&#34;&gt;做法&lt;/h4&gt;
+&lt;p&gt;我們想找對於某個目標向量而言最相似的向量。&lt;/p&gt;
+&lt;p&gt;先隨機找一個點，找他的相鄰節點誰和目標向量最相近，並反覆此過程，直到所有相鄰節點都沒有自己離目標相近。&lt;/p&gt;
+&lt;p&gt;六度分隔理論讓我們推測這過程可能很快就會結束。&lt;/p&gt;
+&lt;h4 id=&#34;建立結構&#34;&gt;建立結構&lt;/h4&gt;
+&lt;p&gt;我們得幫這些向量建立圖關係。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Delaunay triangulation algorithm
+&lt;ul&gt;
+&lt;li&gt;可以用來建立圖關係&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;但靠 Delaunay triangulation algorithm，有可能隨機的向量和目標向量距離很遠，查找很慢。&lt;/p&gt;
+&lt;p&gt;NSW 的實際做法是將所有向量隨機地放回圖中，並和最近的 k 個點連接。&lt;/p&gt;
+&lt;p&gt;只看較短的連接，會發現和 Delaunay triangulation algorithm 產的圖相近，可以進行細粒度的查找。
+只看較長的連接，則可達到快速導航的效果。&lt;/p&gt;
+&lt;h4 id=&#34;hnsw&#34;&gt;HNSW&lt;/h4&gt;
+&lt;p&gt;建立一個分層結構，越上層的點越稀疏、連線越長。&lt;/p&gt;
+&lt;p&gt;和 NSW 相比，讓粗粒度到細粒度的導航過程更加穩定。&lt;/p&gt;
+&lt;p&gt;但占用的記憶體空間更大。&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

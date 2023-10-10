@@ -6,13 +6,37 @@
         <description>Recent content in Categories on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Thu, 10 Aug 2023 00:27:55 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 10 Oct 2023 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Software Engineering</title>
+        <link>https://roykesydon.github.io/Blog/categories/software-engineering/</link>
+        <pubDate>Tue, 10 Oct 2023 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/categories/software-engineering/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/software-engineering.jpg" alt="Featured image of post Software Engineering" /&gt;</description>
+        </item>
+        <item>
         <title>Deep Learning</title>
         <link>https://roykesydon.github.io/Blog/categories/deep-learning/</link>
-        <pubDate>Thu, 10 Aug 2023 00:27:55 +0800</pubDate>
+        <pubDate>Fri, 06 Oct 2023 00:27:55 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/categories/deep-learning/</guid>
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/deep-learning.jpg" alt="Featured image of post Deep Learning" /&gt;</description>
+        </item>
+        <item>
+        <title>Interview</title>
+        <link>https://roykesydon.github.io/Blog/categories/interview/</link>
+        <pubDate>Tue, 29 Aug 2023 00:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/categories/interview/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/interview.jpg" alt="Featured image of post Interview" /&gt;</description>
+        </item>
+        <item>
+        <title>Full Stack</title>
+        <link>https://roykesydon.github.io/Blog/categories/full-stack/</link>
+        <pubDate>Tue, 22 Aug 2023 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/categories/full-stack/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/full-stack.jpg" alt="Featured image of post Full Stack" /&gt;</description>
         </item>
         <item>
         <title>Unclassified</title>
@@ -21,22 +45,6 @@
         
         <guid>https://roykesydon.github.io/Blog/categories/unclassified/</guid>
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/unclassified.jpg" alt="Featured image of post Unclassified" /&gt;</description>
-        </item>
-        <item>
-        <title>Full Stack</title>
-        <link>https://roykesydon.github.io/Blog/categories/full-stack/</link>
-        <pubDate>Mon, 05 Jun 2023 00:00:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/categories/full-stack/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/full-stack.jpg" alt="Featured image of post Full Stack" /&gt;</description>
-        </item>
-        <item>
-        <title>Software Engineering</title>
-        <link>https://roykesydon.github.io/Blog/categories/software-engineering/</link>
-        <pubDate>Mon, 22 May 2023 00:00:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/categories/software-engineering/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/software-engineering.jpg" alt="Featured image of post Software Engineering" /&gt;</description>
         </item>
         <item>
         <title>Embedded System</title>
