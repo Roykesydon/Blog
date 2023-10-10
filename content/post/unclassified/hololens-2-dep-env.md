@@ -21,7 +21,6 @@ categories : ["unclassified"]
 ## 我個人的版本紀錄 (2023/07/03)
 - Unity
     - 2021.3.27f1 (LTS)
-        - 我沒注意到我一開始選錯，但也可以跑，之後
 - MRTK
     - 2.8.3
 - Visual Studio

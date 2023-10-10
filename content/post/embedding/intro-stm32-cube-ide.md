@@ -56,8 +56,11 @@ ioc 那邊還可以設置 clock
 
 ## Programming
 在 USER CODE section 寫上程式碼
+這是由於生成程式碼的機制所致
 
 選取的部分可以按 F3，看他是從哪邊來的，或看 macro 之類的
+
+按下 ```alt + /``` 會出現自動補全的提示
 
 ## DEBUG
 上面有個 BUG 符號的東西，旁邊的箭頭可以用 DEBUG 的設定

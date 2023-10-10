@@ -2117,8 +2117,10 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;programming&#34;&gt;Programming&lt;/h2&gt;
-&lt;p&gt;在 USER CODE section 寫上程式碼&lt;/p&gt;
+&lt;p&gt;在 USER CODE section 寫上程式碼
+這是由於生成程式碼的機制所致&lt;/p&gt;
 &lt;p&gt;選取的部分可以按 F3，看他是從哪邊來的，或看 macro 之類的&lt;/p&gt;
+&lt;p&gt;按下 &lt;code&gt;alt + /&lt;/code&gt; 會出現自動補全的提示&lt;/p&gt;
 &lt;h2 id=&#34;debug&#34;&gt;DEBUG&lt;/h2&gt;
 &lt;p&gt;上面有個 BUG 符號的東西，旁邊的箭頭可以用 DEBUG 的設定&lt;/p&gt;
 &lt;p&gt;又建 STM32 C/C++ Application，可以 New 新設定&lt;/p&gt;

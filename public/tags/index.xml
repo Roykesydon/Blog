@@ -6,7 +6,55 @@
         <description>Recent content in Tags on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Thu, 10 Aug 2023 00:27:55 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 10 Oct 2023 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>software-design</title>
+        <link>https://roykesydon.github.io/Blog/tags/software-design/</link>
+        <pubDate>Tue, 10 Oct 2023 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/software-design/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>software-engineering</title>
+        <link>https://roykesydon.github.io/Blog/tags/software-engineering/</link>
+        <pubDate>Tue, 10 Oct 2023 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/software-engineering/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>data-retrieval</title>
+        <link>https://roykesydon.github.io/Blog/tags/data-retrieval/</link>
+        <pubDate>Fri, 06 Oct 2023 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/data-retrieval/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>deep-learning</title>
+        <link>https://roykesydon.github.io/Blog/tags/deep-learning/</link>
+        <pubDate>Fri, 06 Oct 2023 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/deep-learning/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>algorithm</title>
+        <link>https://roykesydon.github.io/Blog/tags/algorithm/</link>
+        <pubDate>Tue, 29 Aug 2023 00:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/algorithm/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>data-structure</title>
+        <link>https://roykesydon.github.io/Blog/tags/data-structure/</link>
+        <pubDate>Tue, 29 Aug 2023 00:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/data-structure/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>attention</title>
         <link>https://roykesydon.github.io/Blog/tags/attention/</link>
         <pubDate>Thu, 10 Aug 2023 00:27:55 +0800</pubDate>
@@ -20,14 +68,6 @@
         <pubDate>Thu, 10 Aug 2023 00:27:55 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/computer-vision/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>deep-learning</title>
-        <link>https://roykesydon.github.io/Blog/tags/deep-learning/</link>
-        <pubDate>Thu, 10 Aug 2023 00:27:55 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/deep-learning/</guid>
         <description></description>
         </item>
         <item>
@@ -124,22 +164,6 @@
         <pubDate>Mon, 05 Jun 2023 00:00:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/nosql/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>software-design</title>
-        <link>https://roykesydon.github.io/Blog/tags/software-design/</link>
-        <pubDate>Mon, 22 May 2023 00:00:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/software-design/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>software-engineering</title>
-        <link>https://roykesydon.github.io/Blog/tags/software-engineering/</link>
-        <pubDate>Mon, 22 May 2023 00:00:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/software-engineering/</guid>
         <description></description>
         </item>
         <item>
