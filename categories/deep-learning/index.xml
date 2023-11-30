@@ -6,7 +6,407 @@
         <description>Recent content in Deep Learning on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Fri, 06 Oct 2023 00:27:55 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/deep-learning/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 21 Nov 2023 01:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/deep-learning/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>CLIP 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/clip-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Tue, 21 Nov 2023 01:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/clip-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2103.00020&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Learning Transferable Visual Models From Natural Language Supervision&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;現有的 SOTA CV system 可以經過訓練預測一組固定的類別。
+但這種監督式的方法也受限了通用性，因為需要額外的 labeled data 來擴展。&lt;/p&gt;
+&lt;p&gt;直接從 raw text 學習 image 是個有前途的替代方案。&lt;/p&gt;
+&lt;p&gt;本文證明了「預測哪個是圖片的 caption」這種形式的預訓練是一種高效且可擴展的方法，可以從 internet 上蒐集的 4 億對資料從頭學習到 SOTA image representation。&lt;/p&gt;
+&lt;p&gt;預訓練後，透過自然語言來引導，就可以在下游任務十線 zero-shot。&lt;/p&gt;
+&lt;p&gt;本文對 30 個不同的現有電腦視覺資料集進行比較，可以在多數任務和監督式學習的 baseline 競爭，而且無須任資料集來做特別的訓練。&lt;/p&gt;
+&lt;p&gt;例如在 ImageNet 上做 zero-shot 可以和 ResNet-50 取得相近的準確度。&lt;/p&gt;
+&lt;h2 id=&#34;introduction-and-motivating-work&#34;&gt;Introduction and Motivating Work&lt;/h2&gt;
+&lt;p&gt;直接從原始文本學習的預訓練方法在過去幾年徹底改變了 NLP。&lt;/p&gt;
+&lt;p&gt;Task-agnostic (與下游任務無關) objectives，比如 autoregressive 和 masked language modeling，讓模型得以隨著 compute, model capacity, 和 data 規模的增長，使能力也逐步提升。&lt;/p&gt;
+&lt;p&gt;在 &amp;ldquo;text-to-text&amp;rdquo; 這種輸入輸出形式的預訓練，使模型轉移到下游任務的時候，不用特地客製化 output head，或對資料集做特別地處理。&lt;/p&gt;
+&lt;p&gt;這些結果表明，現代的預訓練方法在 web-scale 的文字集合的表現已經超過了用高品質的人為標記 NLP 資料集。&lt;/p&gt;
+&lt;p&gt;然而在 CV 等領域，在 ImageNet 這種人為標記的資料集上做預訓練卻依然是標準做法。&lt;/p&gt;
+&lt;p&gt;直接從網路文本學習的可擴展預訓練方法或許能在 CV 帶來類似的突破。&lt;/p&gt;
+&lt;p&gt;以往有一些工作嘗試利用幾乎無限量的原始文本而不是有限數量的 &amp;ldquo;gold-labels&amp;rdquo;，
+但是這些方法都有一些妥協，比如都利用 softmax 來執行預測，使其沒辦法應付新類別，嚴重限制了 zero-shot 的能力。&lt;/p&gt;
+&lt;p&gt;作者提了幾個弱監督學習的例子，他們利用額外的資料結合預訓練，來幫忙改善監督式學習的結果。&lt;/p&gt;
+&lt;p&gt;也提了幾個和 CLIP 類似的工作 VirTex, ICMLM, ConVIRT，想利用 Transformer，從 Natural Language 中學習 image representation。&lt;/p&gt;
+&lt;p&gt;這些 weakly supervised model 和最近從 NLP 學習 image representation 的方法有一個重大差異，規模。&lt;/p&gt;
+&lt;p&gt;最近的一些研究，比如一些弱監督學習在數百萬到數十億張照片上訓練了多個 accelerator years。但是和 CLIP 相似的研究只在二十萬張圖片上訓練了幾天。&lt;/p&gt;
+&lt;p&gt;本文將規模拉高，以縮短規模上的差距。&lt;/p&gt;
+&lt;p&gt;作者在 internet 上蒐集了 4 億對圖片和文字的資料，做成新的資料集，並提出了 CLIP，ConVIRT 的簡化版本。&lt;/p&gt;
+&lt;p&gt;作者在 30 幾個資料集上測試，基本上能和監督式的模型競爭。&lt;/p&gt;
+&lt;p&gt;如果用 linear-probe，比公開可用的 SOTA ImageNet model 還更好。&lt;/p&gt;
+&lt;h2 id=&#34;approach&#34;&gt;Approach&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/CLIP/fig1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/CLIP/ex1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;natural-language-supervision&#34;&gt;Natural Language Supervision&lt;/h3&gt;
+&lt;p&gt;核心想法是利用 natural language 來學習 perception。&lt;/p&gt;
+&lt;p&gt;作者稱這不是一個新想法，但以往相似的方法的用語多樣，他介紹了四篇文章，但把從文字和圖片中學習 image representation 的方法個別稱為：無監督、自監督、弱監督、監督式。&lt;/p&gt;
+&lt;p&gt;擴展 natural language supervision 比起圖像分類簡單的多，不必定好類別，再去標註每張照片的類別。&lt;/p&gt;
+&lt;p&gt;而且 natural language supervision 還有個優勢，他不只能學習 image representation，還能將其和文字相關聯，使其更好做 zero-shot 的遷移。&lt;/p&gt;
+&lt;h3 id=&#34;creating-a-sufficiently-large-dataset&#34;&gt;Creating a Sufficiently Large Dataset&lt;/h3&gt;
+&lt;p&gt;現有工作主要用三個資料集:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;MS-COCO&lt;/li&gt;
+&lt;li&gt;Visual Genome&lt;/li&gt;
+&lt;li&gt;YFCC100M&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;MS-COCO 和 Visual Genome 都是高品質的人為標記資料集，但是按照現代標準來看，它們很小，每個資料集大約有 100,000 張訓練照片。&lt;/p&gt;
+&lt;p&gt;相較之下，作者舉了一個最近的研究，用了 3.5 Billion 張 Instagram 照片作為訓練資料。&lt;/p&gt;
+&lt;p&gt;YFCC100M 是一個可能的替代方案，它有 100 million 張照片，但每張照片的 metadata 資料稀疏，而且良莠不齊。&lt;/p&gt;
+&lt;p&gt;比如許多檔名是自動產生的，可能是時間，或是相機的參數。&lt;/p&gt;
+&lt;p&gt;經過過濾，保留帶有自然語言的標題或描述的圖像，資料集縮小了 6 倍，只剩 15000 萬張照片，和 ImageNet 的大小相當。&lt;/p&gt;
+&lt;p&gt;natural language supervision 的一個主要動機是網路上公開著大量這種形式的 data。
+由於現有資料集沒有反映這種可能性，因此只考慮這些資料集會低估這方面研究的潛力。&lt;/p&gt;
+&lt;p&gt;所以作者建立了一個新的包含 400 million pairs 的資料集，從網路上各種公開的來源蒐集的。&lt;/p&gt;
+&lt;p&gt;為了盡可能涵蓋所有的 visual concepts，作者在建構資料集的時候準備了 50 萬組特定的 query，每組 query 最多包含 20,000 個 pair，來進行 class balance。&lt;/p&gt;
+&lt;p&gt;產生的資料集的總字數和 GPT-2 用的 WebText 差不多。&lt;/p&gt;
+&lt;p&gt;將此資料集稱為 WIT，全名是 WebImageText。&lt;/p&gt;
+&lt;h3 id=&#34;selecting-an-efficient-pre-training-method&#34;&gt;Selecting an Efficient Pre-Training Method&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/CLIP/fig2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;最先進的 CV System 需要大量的計算。&lt;/p&gt;
+&lt;p&gt;作者舉了兩個計算量都非常恐怖的模型，而且他們只能預測 1000 個 ImageNet 的類別。
+其中一個花了 19 個 GPU years，另一個花了 33 個 TPUv3 core-years。
+乍看之下，從自然語言中學習一組開放的視覺概念似乎令人生畏。&lt;/p&gt;
+&lt;p&gt;但在作者努力的過程中，他們發現訓練效率是成功擴展自然語言監督的關鍵，也根據該指標選定最終的預訓練方法。&lt;/p&gt;
+&lt;p&gt;最初的方法和 VirTex 相似，從頭開始訓練一個 CNN，和 text transformer 來預測 caption。&lt;/p&gt;
+&lt;p&gt;Fig.2 展示的 Transformer 語言模型的計算量是 ResNet-50 Image encoder 的兩倍。
+預測 caption 比預測 caption 但採用詞袋的方式還慢三倍。&lt;/p&gt;
+&lt;p&gt;這樣預測 caption 是一個困難的任務，同一張照片對應的 caption 可能出現的描述甚至有非常多種。
+最近在 Contrastive representation learning 方面的研究發現 contrastive objectives 有不錯的表現。&lt;/p&gt;
+&lt;p&gt;因此作者探索一種方法是，只預測文本和哪一個圖片配對，而不是預測確切的單字。&lt;/p&gt;
+&lt;p&gt;因為資料集超級大，overfitting 的問題影響不大。&lt;/p&gt;
+&lt;p&gt;此外，作者發現對於 encoder 的 representation，要轉換到 multi-model embedding space，只需要使用 linear projection 即可，不需要 non-linear，兩者之間差別不大。&lt;/p&gt;
+&lt;p&gt;Data augmentation 只有使用 random crop，而沒有使用其他的。&lt;/p&gt;
+&lt;h3 id=&#34;choosing-and-scaling-a-model&#34;&gt;Choosing and Scaling a Model&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# image_encoder - ResNet or Vision Transformer&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# text_encoder - CBOW or Text Transformer&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# I[n, h, w, c] - minibatch of aligned images&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# T[n, l] - minibatch of aligned texts&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# W_i[d_i, d_e] - learned proj of image to embed&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# W_t[d_t, d_e] - learned proj of text to embed&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# t - learned temperature parameter&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# extract feature representations of each modality&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;I_f&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;image_encoder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;I&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;#[n, d_i]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;T_f&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;text_encoder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;#[n, d_t]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# joint multimodal embedding [n, d_e]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;I_e&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;l2_normalize&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;I_f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;W_i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;axis&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;T_e&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;l2_normalize&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T_f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;W_t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;axis&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# scaled pairwise cosine similarities [n, n]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;logits&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;I_e&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;T_e&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;exp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# symmetric loss function&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;labels&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;np&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;arange&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;loss_i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cross_entropy_loss&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;logits&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;axis&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;loss_t&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;cross_entropy_loss&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;logits&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;labels&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;axis&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;loss&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;loss_i&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;loss_t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;experiments&#34;&gt;Experiments&lt;/h2&gt;
+&lt;h3 id=&#34;prompt-engineering-and-ensembling&#34;&gt;Prompt Engineering and Ensembling&lt;/h3&gt;
+&lt;p&gt;一種常見的問題是 polysemy，一個單字可能有多種意思，比如 &amp;ldquo;boxer&amp;rdquo; 可能是一種狗，或是拳擊手。
+如果一張圖片對應一個單字就會面臨這問題。&lt;/p&gt;
+&lt;p&gt;另一種是 distribution gap，比如訓練用句子，但測試用單字。
+為了緩解這問題，作者發現用 prompt template &amp;ldquo;A photo of a {label}.&amp;rdquo; 比直接用 label 好。&lt;/p&gt;
+&lt;p&gt;光用這個 prompt template 就提高 1.3 % 在 ImageNet 上的準確度。&lt;/p&gt;
+&lt;p&gt;如果可以給其他額外訊息會更有幫助，比如對於寵物的資料集，可以用 &amp;ldquo;A photo of a {label}, a type of pet.&amp;quot;。&lt;/p&gt;
+&lt;p&gt;對於 OCR 資料集，作者發現在要識別的文字或數字前後加上引號可以提高效能。&lt;/p&gt;
+&lt;p&gt;再來是 prompt ensembling，作者發現用多個 prompt template 來預測，然後綜合結果，可以提高效能。
+作者用了 80 個 template。在 ImageNet 上比用單一的 prompt template 提高 3.5 % 的 performance。&lt;/p&gt;
+&lt;p&gt;綜合考慮 prompt engineering 和 prompt ensembling，作者在 ImageNet 上的準確度提高大概 5%。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;這裡列幾個作者用的 prompt template:
+&lt;ul&gt;
+&lt;li&gt;&amp;ldquo;a bad photo of a {}.&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;&amp;ldquo;a photo of many {}.&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;&amp;ldquo;a sculpture of a {}.&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;&amp;ldquo;a photo of the hard to see {}.&amp;rdquo;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;analysis-of-zero-shot-clip-performance&#34;&gt;Analysis of Zero-Shot CLIP Performance&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/CLIP/fig5.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;對於一般的物體分類的資料集，CLIP 表現較好。&lt;/p&gt;
+&lt;p&gt;下面有些複雜、專門、抽象的任務，CLIP 則表現的很差，比如計算場景中有多少物體的 （CLEVRCounts）、衛星圖像分類（EuroSAT）或是 識別最近的汽車距離（KITTI Distance）&lt;/p&gt;
+&lt;p&gt;對於這種特別難的任務，讓 CLIP 做 zero-shot 不太合理。
+可能用 few-shot 的方式會比較好。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/CLIP/fig6.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;BiT 是 google 為 Transfer Learning 設計的預訓練模型，在分類問題，Few-shot learning 上有良好的表現。&lt;/p&gt;
+&lt;h3 id=&#34;representation-learning&#34;&gt;Representation Learning&lt;/h3&gt;
+&lt;p&gt;這節探討完全使用下游任務資料集而非 Zero-shot 或 few-shot 的情況。&lt;/p&gt;
+&lt;p&gt;作者選用 linear-probe 而不是 finetune 來做下游任務的評估。&lt;/p&gt;
+&lt;p&gt;因為他們的重點是開發與資料集無關的預訓練方法，finetune 有可能讓一個預訓練學習 representation 失敗的模型在微調過程中變好。
+而 linear-probe 的限制可以凸顯這些失敗。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/CLIP/fig10.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;comparison-to-human-performance&#34;&gt;Comparison to Human Performance&lt;/h2&gt;
+&lt;p&gt;再來是 CLIP 和人類相比的結果。
+挑選了五個人在寵物資料集上比較的結果。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/CLIP/table2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;data-overlap-analysis&#34;&gt;Data Overlap Analysis&lt;/h2&gt;
+&lt;p&gt;可能會有人質疑，CLIP 的表現是因為訓練資料集和測試資料集有重疊。
+但作者做了一些實驗，有些資料集完全沒有偵測到重疊。
+對有重疊的做實驗，發現有重疊的對效果提升影響很小。&lt;/p&gt;
+&lt;h2 id=&#34;limitations&#34;&gt;Limitations&lt;/h2&gt;
+&lt;p&gt;CLIP 雖然可以和作為 Baseline 的 ResNet-50 打平手，但現在的 SOTA 遠高於該 Baseline。&lt;/p&gt;
+&lt;p&gt;作者發現再繼續加大模型和資料是可以繼續提升性能的，但作者估計要達到現有的 SOTA 需要增加大概 1000 倍的計算量才能達到，使用現有的硬體是不可行的。&lt;/p&gt;
+&lt;p&gt;CLIP 對細分類、抽象或更難的任務表現不好，作者相信還有許多任務是 CLIP 用 zero-shot 只能達到亂猜等級的。&lt;/p&gt;
+&lt;p&gt;Zero-Shot 的 CLIP 很難泛化到 out-of-distribution 的資料，比如在 MNIST 上只能達到 88% 的準確度。
+作者發現預訓練資料幾乎沒有類似 MNIST 的圖片。&lt;/p&gt;
+&lt;p&gt;盡管 CLIP 可以靈活應用各種 Zero-Shot 的分類，但基本上還是從你給定的分類選擇。
+和真正靈活的方法（生成 image caption）相比，是重大的限制。&lt;/p&gt;
+&lt;p&gt;一個值得嘗試的簡單想法是把 contrastive objective 和 generative objective，結合。&lt;/p&gt;
+&lt;p&gt;CLIP 也沒有解決深度學習資料效率低下的問題，CLIP 訓練了 32 個 epoch，如果把預訓練期間的照片以一秒一張來呈現，需要 405 年。
+把 CLIP 和 self-supervision 或者和 self-training 做結合是有前途的方向。&lt;/p&gt;
+&lt;p&gt;雖然作者強調 Zero-Shot Learning，但是作者還是有反覆檢查下游任務測試集的表現，來調整 CLIP。
+每次都用 ImageNet 來確認，並不算真正的 zero-shot 的情況。
+如果能再創一個新的資料集，專門用來評估 zero-shot 遷移的能力會更恰當。&lt;/p&gt;
+&lt;p&gt;爬下來的資料有可能帶有社會偏見。&lt;/p&gt;
+&lt;p&gt;有一些複雜的任務很難用文字來傳達，雖然實際的訓練樣本有用，但 CLIP 並不會針對 few-shot 最佳化。有個違反直覺的結果，可以注意到在某些情況下，few-shot 不見得比 zero-shot 好。&lt;/p&gt;
+&lt;h2 id=&#34;額外應用&#34;&gt;額外應用&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;圖片生成
+&lt;ul&gt;
+&lt;li&gt;StyleCLIP: Text-Driven Manipulation of StyleGAN Imagery
+&lt;ul&gt;
+&lt;li&gt;用文字引導生成圖片&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;CLIPDraw: Exploring Text-to-Drawing Synthesis through Language-Image Encoders&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;物件偵測
+&lt;ul&gt;
+&lt;li&gt;Open-Vocabulary Object Detection via Vision and Language Knowledge Distillation
+&lt;ul&gt;
+&lt;li&gt;將基礎類別再做細分類&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;OCR
+&lt;ul&gt;
+&lt;li&gt;Contrastive Language-Image Forensic Search
+&lt;ul&gt;
+&lt;li&gt;搜索影片中有沒有文本描述的物體&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;筆記&#34;&gt;筆記&lt;/h2&gt;
+&lt;p&gt;prompt engineering
+prompt ensemble&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>MLP-Mixer 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/mlp-mixer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Mon, 30 Oct 2023 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/mlp-mixer-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2107.05407&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;PonderNet: Learning to Ponder&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;CNN 在  CV 領域是首選，但基於 attention 的網路也在變流行。&lt;/p&gt;
+&lt;p&gt;本文證明雖然 convolution 和 attention 都可以獲得良好的 performance，但皆非必須。&lt;/p&gt;
+&lt;p&gt;本文提出了 MLP-Mixer，一種純 MLP 的架構，包含兩種 layer：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;將 MLP 獨立用在 patch
+&lt;ul&gt;
+&lt;li&gt;mixing per-location features&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;將 MLP 用在 patches 之間。
+&lt;ul&gt;
+&lt;li&gt;mixing spatial information&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;本文提出了完全基於 MLP 的 MLP-Mixer ( 又簡稱 Mixer )，有競爭力卻概念和技術上都很簡單。&lt;/p&gt;
+&lt;p&gt;有兩種 MLP layer：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Channel-Mixing MLP&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用在每個 patch 上&lt;/li&gt;
+&lt;li&gt;讓不同 channel 之間的資訊互相交換&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Token-Mixing MLP&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用在所有 patch 上&lt;/li&gt;
+&lt;li&gt;讓空間資訊互相交換&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;這兩者交錯出現，讓兩個輸入維度可以交互作用&lt;/p&gt;
+&lt;p&gt;在極端情況下，本文的架構可以看做是一個非常特殊的 CNN，使用 1*1 卷積做 channel mixing，並用 single-channel 且 full receptive field 的 1D 卷積做 token mixing。&lt;/p&gt;
+&lt;p&gt;反之則不然，因為經典的 CNN 並不是 Mixer 的特例。&lt;/p&gt;
+&lt;p&gt;盡管很簡單，但 Mixer 卻取得有競爭力的結果。&lt;/p&gt;
+&lt;p&gt;然而與 ViT 一樣，在一切特有的 CNN 架構下略有欠缺。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MLP-Mixer/fig1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;mixer-architecture&#34;&gt;Mixer Architecture&lt;/h2&gt;
+&lt;p&gt;Mixer 的核心概念是想把&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;mix features at a given spatial location&lt;/li&gt;
+&lt;li&gt;mix features between different spatial locations&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;給分開來&lt;/p&gt;
+&lt;p&gt;所有的 patch 都是用同一個 projection matrix&lt;/p&gt;
+&lt;p&gt;注意 fig1 的 MLP2，他們共享同樣的參數，這樣綁定參數可以預防 C 和 S 增加時使架構增長過快。在 seperable convolution 中，不同通道使用不同的 kernel。不過作者這樣的選擇並不影響實際的 performance。&lt;/p&gt;
+&lt;p&gt;Mixer 的所有 Layer 都具備相同的輸入大小。&lt;/p&gt;
+&lt;p&gt;這種「isotropic」的設計和 Transformer 或 RNN 比較像。&lt;/p&gt;
+&lt;p&gt;與大多數具有 pyramidal structure 的 CNN 不同，它們在更深的層有更低的 resolution，但有更多 channel。&lt;/p&gt;
+&lt;p&gt;不過上面只是探討典型的設計，也存在例外，比如 isotropic Resnet 或 pyramidal ViT。&lt;/p&gt;
+&lt;p&gt;除了 MLP，Mixer 還有用到 LayerNorm 和 skip connection。&lt;/p&gt;
+&lt;p&gt;但是 Mixer 沒有用到 positional encoding，因為 token-mixing MLP 本身就對位置敏感。\&lt;/p&gt;
+&lt;h2 id=&#34;experiments&#34;&gt;Experiments&lt;/h2&gt;
+&lt;p&gt;Mixer 用中大型資料集預訓練，然後在一系列中小資料集上評估。&lt;/p&gt;
+&lt;p&gt;目標不是拿到 SOTA，而是顯示出與 SOTA 的 CNN 和 attention-based model 相比，Mixer 有競爭力。&lt;/p&gt;
+&lt;h3 id=&#34;fine-tuning&#34;&gt;Fine-tuning&lt;/h3&gt;
+&lt;p&gt;在 fine-tuning 時，用比預訓練時還要高的 resolution。
+由於每個 patch 的 resolution 是固定的，這樣會導致有更多的 patches。&lt;/p&gt;
+&lt;p&gt;對於這個問題，採用以下解法：&lt;/p&gt;
+&lt;p&gt;我們原先預計吃 S 個 patch，現在我們由於輸入解析度更高，而且 patch 大小不變，所以我們得到一個比 S 還大的 $S&amp;rsquo;$。
+所以我們在很多地方就需要比原先權重矩陣 W 還更大的 $W&#39;$&lt;/p&gt;
+&lt;p&gt;我們要把 $S&amp;rsquo;$ 拆成 $K^2$ 個長度為 $S$ 的 sequence，K 是整數。&lt;/p&gt;
+&lt;p&gt;並且我們把 $W&amp;rsquo;$ 的 shape 改成 $(W.shape[0] * K^2, W.shape[1] * K^2)$&lt;/p&gt;
+&lt;p&gt;然後我們把 $W&amp;rsquo;$ 作為 block-diagonal matrix 來初始化，把 $W$ copy 好幾份，放在 main diagonal 上。&lt;/p&gt;
+&lt;p&gt;所有權重都用類似的處理方法。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Diffusion 入門</title>
+        <link>https://roykesydon.github.io/Blog/p/diffusion-%E5%85%A5%E9%96%80/</link>
+        <pubDate>Mon, 23 Oct 2023 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/diffusion-%E5%85%A5%E9%96%80/</guid>
+        <description>&lt;h2 id=&#34;大致概念&#34;&gt;大致概念&lt;/h2&gt;
+&lt;p&gt;屬於生成式 AI，一開始用在生成圖片，後來也有應用到諸如 NLP 等領域。&lt;/p&gt;
+&lt;p&gt;下文稱呼原圖為 sprite。&lt;/p&gt;
+&lt;p&gt;與 AutoEncoder 有點類似，先取得一張 sprite，隨著時間推進，每次都在圖片上加一層雜訊，反覆疊加，迭代多次後，就會得到一張難以看出原圖的雜訊。&lt;/p&gt;
+&lt;p&gt;從 sprite 到只能看出是一團雜訊並非是一步到位的過程。一開始沒有雜訊時可以看出原本的 sprite，一個迭代後可能可以勉強看出原本的 sprite，再幾個迭代後可能也還能看出原本的 outline，經過許多次後才會變成完全辨識不了的雜訊。&lt;/p&gt;
+&lt;p&gt;我們期望模型做的事情則是從 gaussian noise 逐步推回 sprite，同樣不是一步到位，而是讓模型預測上一個時間點的雜訊，相減後再逐步推回 sprite，這過程稱為 denoise。&lt;/p&gt;
+&lt;h2 id=&#34;ddpm&#34;&gt;DDPM&lt;/h2&gt;
+&lt;p&gt;實現 Diffusion 可能會有點 confusing，因為他實作上和上面說的不太相同。
+在訓練的時候，我們會採樣三個東西：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;訓練圖片 (sprite)&lt;/li&gt;
+&lt;li&gt;雜訊&lt;/li&gt;
+&lt;li&gt;時間點 (t)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;訓練階段的時候，我們會把「原始乾淨的圖片」和「雜訊」根據時間進行不同比例的相加 (混合)，t 越大，雜訊的比例越大。&lt;/p&gt;
+&lt;p&gt;模型預測的目標是前面 sample 出的雜訊。&lt;/p&gt;
+&lt;p&gt;這與前面說的概念相悖。按照前面的說法，對於時間點 t，應該是以一張加了 t-1 次雜訊的 sprite 作為輸入，再加上 t 所 sample 出的雜訊。&lt;/p&gt;
+&lt;p&gt;現在實作卻是原始乾淨的 sprite 直接根據時間點混和某個雜訊。&lt;/p&gt;
+&lt;p&gt;這背後的數學推導十分冗長，這裡不敘述，但需知道實作差異。&lt;/p&gt;
+&lt;h3 id=&#34;inference&#34;&gt;Inference&lt;/h3&gt;
+&lt;p&gt;在推論階段的時候，每次 denoise 後需要把圖片和額外 sample 的 noise 相加。這個 noise 和前面的 noise 一樣，都是從 mean=0, std=1 的 gaussian distribution 中 sample 出來的。&lt;/p&gt;
+&lt;p&gt;不加的話似乎還容易有 Mode Collapse 的現象。
+看到一個說法是，模型喜歡吃圖片加上雜訊的圖像作為圖片，在圖片上加上 noise 似乎會更符合模型預期的輸入。&lt;/p&gt;
+&lt;p&gt;看了李弘毅的影片，也有基於隨機性的觀點。&lt;/p&gt;
+&lt;p&gt;生成式 Model 生成文章時永遠取機率最大的，不見得有更好的效果：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;有研究是讓 Model 選機率最大的，結果容易生出反覆跳針的文章。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;也有把人類寫的文章去餵給 Model 看，從他的角度看人類寫的下一個字的機率是多少，發現人類寫的文章很常出現一下機率高一下機率低的字。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;某篇語音合成的文章需要在推論階段「啟用」dropout 才可以有好的結果。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Diffusion 也有可能成功的點是在於並非「一次到位」而是「N 次到位」。
+從這樣的角度看，Diffusion 是 autoregressive 模型。&lt;/p&gt;
+&lt;p&gt;類似的作法也有 Mask-Predict，大致概念是從原本都是 Mask 的情境開始，將一些信心高的預測留住，信心低的保持為 Mask，一步步預測出所有資訊。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>查找相似向量</title>
         <link>https://roykesydon.github.io/Blog/p/%E6%9F%A5%E6%89%BE%E7%9B%B8%E4%BC%BC%E5%90%91%E9%87%8F/</link>
         <pubDate>Fri, 06 Oct 2023 00:27:55 +0800</pubDate>
@@ -75,11 +475,11 @@
 </description>
         </item>
         <item>
-        <title>DETR 論文</title>
-        <link>https://roykesydon.github.io/Blog/p/detr-%E8%AB%96%E6%96%87/</link>
+        <title>DETR 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/detr-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
         <pubDate>Thu, 10 Aug 2023 00:27:55 +0800</pubDate>
         
-        <guid>https://roykesydon.github.io/Blog/p/detr-%E8%AB%96%E6%96%87/</guid>
+        <guid>https://roykesydon.github.io/Blog/p/detr-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
         <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2005.12872&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;End-to-End Object Detection with Transformers&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
