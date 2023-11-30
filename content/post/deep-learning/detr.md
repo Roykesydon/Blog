@@ -1,5 +1,5 @@
 ---
-title: "DETR 論文"
+title: "DETR 論文閱讀"
 date: 2023-08-10T00:27:55+08:00
 draft: false
 type: "post"
