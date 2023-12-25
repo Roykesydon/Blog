@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: Reading Wikipedia to Answer Open-Domain Questions
+Abstract 本文提出以 Wikipedia 為知識來源來解決 open-domain question answering 問題
+任何問題的答案都是 Wikipedia 中的一段文字
+這項挑戰結合了文件檢索和理解文字的能力
+本文的作法基於一個 search component，由 bigram hashing 和 TF-IDF matching 構成，並結合 RNN
+對多個 QA 資料集做的實驗表明：
+這兩個 components 對於現有的對應模塊具有高度競爭力 在他們的組合上使用 distant supervision 十分有效 Introduction 要把 wikipedia 當作知識來源，回答任何一個問題，都必須先從超過 5 百萬篇文章中找出少數相關的文章，並仔細掃描以找出答案。
+本文將這稱為 machine reading at scale (MRS)
+本文把 wikipedia 當作一個文章的集合，並且不依賴內部的 graph structure
+因此該方法是通用的，可以套到諸如新聞、網路論壇等等的資料集上
+本文開發了 DrQA，強大的維基百科問答系統，由以下部分組成：
+Document Retriever 一個用 bigram hashing 和 TF-IDF matching 的 module 用於在給定問題的情況下，返回有效相關文章的子集 Document Reader RNN，用來 detect 文章中答案的位置 實驗表明 Document Retriever 的性能優於 Wikipedia 的內部搜尋引擎，Document Reader 在 SQuAD 上達到 SOTA'>
+<title>DrQA 論文閱讀</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/drqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.7c82827ec91a2557de37d1985da06dac3fa95cda12705c4cf151f99af331bc46.css"><meta property='og:title' content='DrQA 論文閱讀'>
+<meta property='og:description' content='paper: Reading Wikipedia to Answer Open-Domain Questions
+Abstract 本文提出以 Wikipedia 為知識來源來解決 open-domain question answering 問題
+任何問題的答案都是 Wikipedia 中的一段文字
+這項挑戰結合了文件檢索和理解文字的能力
+本文的作法基於一個 search component，由 bigram hashing 和 TF-IDF matching 構成，並結合 RNN
+對多個 QA 資料集做的實驗表明：
+這兩個 components 對於現有的對應模塊具有高度競爭力 在他們的組合上使用 distant supervision 十分有效 Introduction 要把 wikipedia 當作知識來源，回答任何一個問題，都必須先從超過 5 百萬篇文章中找出少數相關的文章，並仔細掃描以找出答案。
+本文將這稱為 machine reading at scale (MRS)
+本文把 wikipedia 當作一個文章的集合，並且不依賴內部的 graph structure
+因此該方法是通用的，可以套到諸如新聞、網路論壇等等的資料集上
+本文開發了 DrQA，強大的維基百科問答系統，由以下部分組成：
+Document Retriever 一個用 bigram hashing 和 TF-IDF matching 的 module 用於在給定問題的情況下，返回有效相關文章的子集 Document Reader RNN，用來 detect 文章中答案的位置 實驗表明 Document Retriever 的性能優於 Wikipedia 的內部搜尋引擎，Document Reader 在 SQuAD 上達到 SOTA'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/drqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='nlp' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:published_time' content='2023-12-25T00:00:12&#43;08:00'/><meta property='article:modified_time' content='2023-12-25T00:00:12&#43;08:00'/>
+<meta name="twitter:title" content="DrQA 論文閱讀">
+<meta name="twitter:description" content="paper: Reading Wikipedia to Answer Open-Domain Questions
+Abstract 本文提出以 Wikipedia 為知識來源來解決 open-domain question answering 問題
+任何問題的答案都是 Wikipedia 中的一段文字
+這項挑戰結合了文件檢索和理解文字的能力
+本文的作法基於一個 search component，由 bigram hashing 和 TF-IDF matching 構成，並結合 RNN
+對多個 QA 資料集做的實驗表明：
+這兩個 components 對於現有的對應模塊具有高度競爭力 在他們的組合上使用 distant supervision 十分有效 Introduction 要把 wikipedia 當作知識來源，回答任何一個問題，都必須先從超過 5 百萬篇文章中找出少數相關的文章，並仔細掃描以找出答案。
+本文將這稱為 machine reading at scale (MRS)
+本文把 wikipedia 當作一個文章的集合，並且不依賴內部的 graph structure
+因此該方法是通用的，可以套到諸如新聞、網路論壇等等的資料集上
+本文開發了 DrQA，強大的維基百科問答系統，由以下部分組成：
+Document Retriever 一個用 bigram hashing 和 TF-IDF matching 的 module 用於在給定問題的情況下，返回有效相關文章的子集 Document Reader RNN，用來 detect 文章中答案的位置 實驗表明 Document Retriever 的性能優於 Wikipedia 的內部搜尋引擎，Document Reader 在 SQuAD 上達到 SOTA">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">🍤<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/old avatar.png"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#related-work">Related Work</a></li>
+    <li><a href="#drqa">DrQA</a>
+      <ol>
+        <li><a href="#document-retriever">Document Retriever</a></li>
+        <li><a href="#document-reader">Document Reader</a>
+          <ol>
+            <li><a href="#paragraph-encoding">Paragraph encoding</a></li>
+            <li><a href="#question-encoding">Question encoding</a></li>
+            <li><a href="#prediction">Prediction</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#data">Data</a>
+      <ol>
+        <li><a href="#wikipedia-knowledge-source">Wikipedia (Knowledge Source)</a></li>
+        <li><a href="#squad">SQuAD</a></li>
+        <li><a href="#open-domain-qa-evaluation-resources">Open-domain QA Evaluation Resources</a>
+          <ol>
+            <li><a href="#curatedtrec">CuratedTREC</a></li>
+            <li><a href="#webquestions">WebQuestions</a></li>
+            <li><a href="#wikimovies">WikiMovies</a></li>
+          </ol>
+        </li>
+        <li><a href="#distantly-supervised-data">Distantly Supervised Data</a></li>
+      </ol>
+    </li>
+    <li><a href="#experiments">Experiments</a>
+      <ol>
+        <li><a href="#finding-relevant-articles">Finding Relevant Articles</a></li>
+        <li><a href="#reader-evaluation-on-squad">Reader Evaluation on SQuAD</a>
+          <ol>
+            <li><a href="#implementation-details">Implementation details</a></li>
+            <li><a href="#result-and-analysis">Result and analysis</a></li>
+          </ol>
+        </li>
+        <li><a href="#full-wikipedia-question-answering">Full Wikipedia Question Answering</a></li>
+        <li><a href="#results">Results</a></li>
+      </ol>
+    </li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/deep-learning/" style="background-color: #936ce1; color: #fff;">
+                Deep Learning
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/deep-learning.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/drqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">DrQA 論文閱讀</a>
+        </h2>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Dec 25, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>paper: <a class="link" href="https://arxiv.org/abs/1704.00051"  target="_blank" rel="noopener"
+    >Reading Wikipedia to Answer Open-Domain Questions</a></p>
+<h2 id="abstract">Abstract</h2>
+<p>本文提出以 Wikipedia 為知識來源來解決 open-domain question answering 問題</p>
+<p>任何問題的答案都是 Wikipedia 中的一段文字</p>
+<p>這項挑戰結合了文件檢索和理解文字的能力</p>
+<p>本文的作法基於一個 search component，由 bigram hashing 和 TF-IDF matching 構成，並結合 RNN</p>
+<p>對多個 QA 資料集做的實驗表明：</p>
+<ol>
+<li>這兩個 components 對於現有的對應模塊具有高度競爭力</li>
+<li>在他們的組合上使用 distant supervision 十分有效</li>
+</ol>
+<h2 id="introduction">Introduction</h2>
+<p>要把 wikipedia 當作知識來源，回答任何一個問題，都必須先從超過 5 百萬篇文章中找出少數相關的文章，並仔細掃描以找出答案。</p>
+<p>本文將這稱為 machine reading at scale (MRS)</p>
+<p>本文把 wikipedia 當作一個文章的集合，並且不依賴內部的 graph structure</p>
+<p>因此該方法是通用的，可以套到諸如新聞、網路論壇等等的資料集上</p>
+<p>本文開發了 DrQA，強大的維基百科問答系統，由以下部分組成：</p>
+<ol>
+<li>Document Retriever
+<ul>
+<li>一個用 bigram hashing 和 TF-IDF matching 的 module</li>
+<li>用於在給定問題的情況下，返回有效相關文章的子集</li>
+</ul>
+</li>
+<li>Document Reader
+<ul>
+<li>RNN，用來 detect 文章中答案的位置</li>
+</ul>
+</li>
+</ol>
+<p>實驗表明 Document Retriever 的性能優於 Wikipedia 的內部搜尋引擎，Document Reader 在 SQuAD 上達到 SOTA</p>
+<p>此外，與 single task training 相比，作者表明 multitask learning 和 distant supervision 有助於提高模型的性能</p>
+<h2 id="related-work">Related Work</h2>
+<p>隨著 Knowledge Base (KB) 的發展，QA 出現了許多創新，但是 KB 具備固有限制（incompleteness, fixed schema），促使研究人員轉回從 raw text 中提取答案</p>
+<p>有些工作嘗試利用 multitask learning 來組合多個 QA 資料集，目標是：</p>
+<ol>
+<li>透過 task transfer 來實現跨資料集的改進</li>
+<li>提供一個單一通用的系統，可以回答不同種類的問題，因為資料來源中不可避免地存在不同的資料分布</li>
+</ol>
+<p>本文的工作在先 retrive 再 read 的 setting 下，沒有利用 KB，取得了正面成果</p>
+<h2 id="drqa">DrQA</h2>
+<p>由兩個 Components 組成：</p>
+<ol>
+<li>Document Retriever
+<ul>
+<li>用來尋找相關文章</li>
+</ul>
+</li>
+<li>Document Reader
+<ul>
+<li>用於從單一文件或一小部分文件提取答案</li>
+</ul>
+</li>
+</ol>
+<h3 id="document-retriever">Document Retriever</h3>
+<p>遵循經典的 QA System，先用高效的 （非機器學習）的 document retrieval system 縮小搜索範圍，並專注於比較可能有關的文章</p>
+<p>與基於 ElasticSearch 的 Wikipedia Search API 相比，簡單的 inverted index lookup 和 term vector model scoring 表現的十分好</p>
+<p>文章和問題被表示為 TF-IDF weighted bag-of-words vectors</p>
+<p>作者考慮透過考慮 local word order 和 n-gram features 來進一步改善</p>
+<p>表現最佳的系統用 bigram counts，並利用 hashing 映射到 $2^{24}$ bins 來保持 speed 和 memory efficiency，用的是 unsigned murmur3 hash</p>
+<p>Document Retriever 作為模型的第一部分，設定為對任何問題返回 5 個相關的文章</p>
+<p>這些文章再交由 Document Reader 來處理</p>
+<h3 id="document-reader">Document Reader</h3>
+<h4 id="paragraph-encoding">Paragraph encoding</h4>
+<p>$p_i$ 是段落 $p$ 中的 token，期望 $p_i$ 可以被 encode 成帶有周圍資訊的向量</p>
+<p>採用的是 multi-layer bidirectional LSTM</p>
+<p>特徵向量 $p_i$ 由以下部分組成：</p>
+<ol>
+<li>
+<p>Word embedding</p>
+<ul>
+<li>用 300 維的 Glove word embedding，固定大部分預訓練的 word embedding，只 finetune 最常見的 1000 個 question words，例如 what, how, which</li>
+</ul>
+</li>
+<li>
+<p>Exact match</p>
+<ul>
+<li>採用三個簡單的 binary features，用來表示 $p_i$ 是否與問題中的 question word $q$ 精確匹配，無論是原始形式、小寫，還是 lemma form</li>
+</ul>
+</li>
+<li>
+<p>Token features</p>
+<ul>
+<li>作者添加了一些 manual feature 好反應 $p_i$ 在 context 中的屬性，比如 part-of-speech (POS)、named entity recognition (NER) tags 和它的 (normalized) term frequency (TF)</li>
+</ul>
+</li>
+<li>
+<p>Aligned question embedding</p>
+<ul>
+<li>$f_{align}(p_i)=\sum_j a_{i,j}E(q_j)$
+<ul>
+<li>$E$ 是 word embedding</li>
+<li>$a_{i,j}$ 是 attention score，計算 $p_i$ 和每個 $q_j$ 之間的 similarity</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="question-encoding">Question encoding</h4>
+<p>這個比較簡單，只是在 word embedding 上加上一層 RNN，並把 hidden units 重新結合成一個向量</p>
+<h4 id="prediction">Prediction</h4>
+<p>把 $\{p_1,&hellip;,p_m\}$ 和 $q$ 作為 input，並個別單獨訓練兩個分類器預測開頭和結尾的位置</p>
+<p>具體來說，作者用 bilinear term 來計算每個 $p_i$ 和 $q$ 之間的相似度，並計算每個 $p_i$ 是開頭的機率和結尾的機率</p>
+<p>最後選擇最佳範圍，從 token $i$ 到 token $i'$</p>
+<p>$i \le i&rsquo; \le i+15$</p>
+<p>並且使 $P_{start}(i) \times P_{end}(i&rsquo;)$ 最大化</p>
+<h2 id="data">Data</h2>
+<p>本文的工作依賴三種資料：</p>
+<ol>
+<li>Wikipedia
+<ul>
+<li>尋找答案的來源</li>
+</ul>
+</li>
+<li>SQuAD
+<ul>
+<li>用來訓練和評估模型</li>
+</ul>
+</li>
+<li>另外三個 QA 資料集 (WebQuestions, CuratedTREC, WikiMovies)
+<ul>
+<li>用來測試模型在 Open-domain QA 上的泛化能力，並評估模型從 multitask learning 和 distant supervision 中獲益的程度</li>
+</ul>
+</li>
+</ol>
+<h3 id="wikipedia-knowledge-source">Wikipedia (Knowledge Source)</h3>
+<p>用 2016-12-21 dump2 的 English Wikipedia</p>
+<p>對於每頁，只提取文本，並刪除結構化的資料（lists and figures）</p>
+<p>丟棄 disambiguation pages, list, index 和 outline pages，保留了 5,075,182 篇文章</p>
+<h3 id="squad">SQuAD</h3>
+<p>使用兩個 evaluation metrics：</p>
+<ol>
+<li>Exact string match (EM)</li>
+<li>F1 score</li>
+</ol>
+<p>為了評估 open-domain QA 的能力，作者只有使用 SQuAD 的 QA pairs，要求系統在無法存取相關段落的情況下發現正確的 answer span</p>
+<p>不像標準的 SQuAD setting 會給出相關段落</p>
+<h3 id="open-domain-qa-evaluation-resources">Open-domain QA Evaluation Resources</h3>
+<p>SQuAD 是目前可用的最大的 general purpose QA 資料集之一</p>
+<p>收集過程包括向每個 human annotator 展示一個段落，並寫一個問題</p>
+<p>因此，distribution 非常特定</p>
+<p>作者建議在其他 open-domain QA 資料集上評估系統，他們以不同的方式建構</p>
+<h4 id="curatedtrec">CuratedTREC</h4>
+<p>使用大版本，包含 TREC 1999, 2000, 2001 和 2002 的 2180 個問題</p>
+<h4 id="webquestions">WebQuestions</h4>
+<p>這資料集旨在回答 Freebase KB 的問題</p>
+<p>透過 Google Suggest API 抓問題，再用 Amazon Mechanical Turk 來獲取答案</p>
+<p>作者用 entity names 把每個 answer 轉成答案，以便不引入 Freebase IDs</p>
+<h4 id="wikimovies">WikiMovies</h4>
+<p>包含對電影領域的 96k 個問答對</p>
+<h3 id="distantly-supervised-data">Distantly Supervised Data</h3>
+<p>上面說的資料集除了 SQuAD 都沒有相關段落，因此不能直接訓練 Document Reader</p>
+<p>追隨之前已有的利用 distant supervision (DS) 來做 relation extraction 的工作，作者用一個程式自動把段落和此類訓練範例做相關聯</p>
+<p>對每個問答對使用以下過程來建立訓練集：</p>
+<p>首先，對問題用 Document Retriever 找到前 5 個相關的段落</p>
+<p>與已知答案沒有 exact match 的段落都被直接丟棄</p>
+<p>短於 25 個字元或長於 1500 個字元的段落也被丟棄</p>
+<p>如果在問題中找到 named entity，不包含該 named entity 的段落也被丟棄</p>
+<p>對於每個 retrived page 的每個段落，使用 question 和 20 token window 間的 unigram  和 bigram overlap 來計算相似度，保留重疊度最高的前五個段落</p>
+<p>將找到的每個 pair 加入到 DS 訓練集中</p>
+<p>大約一半的 DS 範例來自 SQuAD 以外的頁面</p>
+<h2 id="experiments">Experiments</h2>
+<h3 id="finding-relevant-articles">Finding Relevant Articles</h3>
+<p>先檢查 Retriever 在所有 QA 資料集上的性能</p>
+<p>計算 ration 是根據特定的問題，考慮這些問題對應的文本在前 5 個相關文章中的比例</p>
+<p>結果表明，比 Wikipedia Search 還更好，尤其是使用 bigram hashing 的情況下</p>
+<h3 id="reader-evaluation-on-squad">Reader Evaluation on SQuAD</h3>
+<h4 id="implementation-details">Implementation details</h4>
+<p>使用 h=128 的 3 層雙向 LSTM，來做 paragraph encoding 和 question encoding</p>
+<p>使用 Stanford CoreNLP 來做 tokenization 並生成 lemma, part-of-speech 和 named entity tags</p>
+<p>Optimizer 使用 Adamax</p>
+<p>Dropout rate 為 0.3</p>
+<h4 id="result-and-analysis">Result and analysis</h4>
+<p>作者的系統可以在 SQuAD 上達到 SOTA</p>
+<p>做了 ablation study，結果表明所有功能都會影響性能</p>
+<p>有趣的是，單獨沒有 $f_{alignd}$ 或 $f_{exact_match}$ 對性能不會有極大的影響，但兩個都沒有就會急遽下降</p>
+<h3 id="full-wikipedia-question-answering">Full Wikipedia Question Answering</h3>
+<p>比較三個版本的 DrQA：</p>
+<ol>
+<li>SQuAD
+<ul>
+<li>只在 SQuAD 上訓練，並用於所有評估資料集</li>
+</ul>
+</li>
+<li>Fine-tune (DS)
+<ul>
+<li>先在 SQuAD 上預訓練，在用 DS 訓練集對每個資料集進行微調</li>
+</ul>
+</li>
+<li>Multitask (DS)
+<ul>
+<li>在 SQuAD 和 DS 訓練集上聯合訓練</li>
+</ul>
+</li>
+</ol>
+<h3 id="results">Results</h3>
+<p><img src="/Blog/images/deep-learning/DrQA/table6.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>兩個明顯的 angles of attack：</p>
+<ol>
+<li>把多個段落直接納入 Document Reader 的訓練，因為他目前獨立訓練每個段落</li>
+<li>實作一個 end-to-end training 的 pipeline，可以在一個模型中結合 Document Retriever 和 Document Reader</li>
+</ol>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/nlp/">nlp</a>
+        
+            <a href="/Blog/tags/deep-learning/">deep-learning</a>
+        
+            <a href="/Blog/tags/machine-learning/">machine-learning</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/orqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">ORQA 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/self-instruct-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Self-Instruct 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/instructgpt/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">InstructGPT</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/gpt-%E4%B8%89%E9%83%A8%E6%9B%B2/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT 三部曲</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/clip-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">CLIP 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>

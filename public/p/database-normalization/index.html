@@ -8,7 +8,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/database-normalization/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.4caf1027c282d15ee13c4653037ea9841d5139b7a63d429484073ffbe5907eea.css"><meta property='og:title' content='Database Normalization'>
+<link rel="stylesheet" href="/Blog/scss/style.min.7c82827ec91a2557de37d1985da06dac3fa95cda12705c4cf151f99af331bc46.css"><meta property='og:title' content='Database Normalization'>
 <meta property='og:description' content='Normalization 目的 避免 redundent information 更容易 understand、enhance、extend 避免 anomalies 隨著 1NF ~ 5NF，有更多的 safety guarantee
 1NF 違反條件 用 row order 傳達資訊 mixing data types in single column 但 relational database 不會讓你這樣做 存在沒有 primary key 的 table repeating groups 同一個 column 有多個數值，或是在同一個 row 存多個同類型的數值。 ex : player item roy 1 item_1, 4 item_2 star 4 item_4 player item_type1 quantity1 item_type2 quantity2 roy item1 1 item2 4 star item_4 4 2NF 所有的 non-key attribute 都要 depend on 整個 PK 非正式定義，有點細微差異 functional dependency ex: {player_id, item_type} -&amp;gt; {item_Quantity} 3NF transitive dependency {A} -&amp;gt; {B} -&amp;gt; {C} 所有 non-key attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute Boyce-Codd Normal Form 所有 attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute 4NF multivalued dependency 不像 functional dependency，箭頭後方的那項可以有多個 value {Model} $\twoheadrightarrow$ {Color} 一個 table 中的所有 multivalued dependency 必須依賴於 key 5NF 沒有 Join Dependency table 不能表示成其他 table join 起來的結果 '>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/database-normalization/'>
@@ -83,7 +83,7 @@
                 </div>
                 
                     
-                    <span class="emoji">⭐<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/StarRabbit.jpg"></img></span></span>
+                    <span class="emoji">🍤<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/old avatar.png"></img></span></span>
                     
                 
             </figure>
