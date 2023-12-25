@@ -6,18 +6,10 @@
         <description>Recent content in Tags on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 21 Nov 2023 01:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>computer-vision</title>
-        <link>https://roykesydon.github.io/Blog/tags/computer-vision/</link>
-        <pubDate>Tue, 21 Nov 2023 01:08:46 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/computer-vision/</guid>
-        <description></description>
-        </item>
-        <item>
+        <lastBuildDate>Mon, 25 Dec 2023 00:00:13 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>deep-learning</title>
         <link>https://roykesydon.github.io/Blog/tags/deep-learning/</link>
-        <pubDate>Tue, 21 Nov 2023 01:08:46 +0800</pubDate>
+        <pubDate>Mon, 25 Dec 2023 00:00:13 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/deep-learning/</guid>
         <description></description>
@@ -25,9 +17,25 @@
         <item>
         <title>machine-learning</title>
         <link>https://roykesydon.github.io/Blog/tags/machine-learning/</link>
-        <pubDate>Tue, 21 Nov 2023 01:08:46 +0800</pubDate>
+        <pubDate>Mon, 25 Dec 2023 00:00:13 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/machine-learning/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>nlp</title>
+        <link>https://roykesydon.github.io/Blog/tags/nlp/</link>
+        <pubDate>Mon, 25 Dec 2023 00:00:13 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/nlp/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>computer-vision</title>
+        <link>https://roykesydon.github.io/Blog/tags/computer-vision/</link>
+        <pubDate>Tue, 21 Nov 2023 01:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/computer-vision/</guid>
         <description></description>
         </item>
         <item>
@@ -212,14 +220,6 @@
         <pubDate>Thu, 04 May 2023 01:32:54 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/stm32/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>nlp</title>
-        <link>https://roykesydon.github.io/Blog/tags/nlp/</link>
-        <pubDate>Sun, 30 Apr 2023 00:00:12 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/nlp/</guid>
         <description></description>
         </item>
         <item>

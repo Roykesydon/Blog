@@ -6,7 +6,640 @@
         <description>Recent content on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 21 Nov 2023 01:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 25 Dec 2023 00:00:13 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>ORQA 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/orqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Mon, 25 Dec 2023 00:00:13 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/orqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1906.00300&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Latent Retrieval for Weakly Supervised Open Domain Question Answering&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;最近的工作常依賴於兩個假設，一個是對 supporting evidence 做 strong supervision，另一個是假設 blackbox information retrieval (IR) system 可以找到所有的 evidence candidates&lt;/p&gt;
+&lt;p&gt;作者認為兩者都不是最理想的，因為 gold evidence 不總是可用，而且 QA 和 IR 有著根本上的不同&lt;/p&gt;
+&lt;p&gt;作者首次證明，在沒有任何 IR 的情況下，可以從 question-answer pair 中共同學習 retriver 和 reader&lt;/p&gt;
+&lt;p&gt;在這種 setting 下，來自 Wikipedia 的 evidence retrieval 被視作 latent variable&lt;/p&gt;
+&lt;p&gt;由於 learn from scratch 不切實際，因此用 Inverse Cloze Task (ICT) 來預訓練 retriever&lt;/p&gt;
+&lt;p&gt;作者對五個 QA 資料集進行評估&lt;/p&gt;
+&lt;p&gt;在提問者已經知道答案的情況下，傳統的 IR 系統（比如 BM25）已足夠&lt;/p&gt;
+&lt;p&gt;在使用者真正尋求答案的資料集上，作者顯示出 learned retrival 的重要性，在 exact match 上比 BM25 好 19 個點&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;由於閱讀理解系統的發展，人們對 open domain question answering (QA) 的興趣重新燃起&lt;/p&gt;
+&lt;p&gt;其中 evidence 得從 open corpus 取得，而不是直接從輸入給入&lt;/p&gt;
+&lt;p&gt;現有的方法需要 blackbox IR system 來完成大部分繁重的工作，即使它無法對下遊任務進行微調&lt;/p&gt;
+&lt;p&gt;在 DrQA 推廣的強監督環境中，他們也假設了一個訓練在 question-answer-evidence triple 上的閱讀理解模型&lt;/p&gt;
+&lt;p&gt;在某些人提出的 weakly supervised setting 中，他們假設 IR system 提供 noisy gold evidence&lt;/p&gt;
+&lt;p&gt;這些方法利用 IR system 來大幅減少搜尋空間&lt;/p&gt;
+&lt;p&gt;然而 QA 和 IR 有著根本性的差異&lt;/p&gt;
+&lt;p&gt;雖然 IR 關心的是 lexical 和 semantic matching，但 question 的定義並不具體，而且需要更多 language understanding，因為 user 在找的是未知資訊&lt;/p&gt;
+&lt;p&gt;我們應該直接 用 QA data 學習 retrieve，而不是受限於 blackbox IR system&lt;/p&gt;
+&lt;p&gt;在本文中，作者介紹了第一個 OpenRetrieval Question Answering system (ORQA) 框架&lt;/p&gt;
+&lt;p&gt;ORQA 學習從 open corpus retrieve evidence，並且只做 question-answer pair 的監督訓練&lt;/p&gt;
+&lt;p&gt;雖然最近的工作在改進 evidence retrieval 上取得了巨大的進展，但是他們依然只是在 closed evidence set 下 rerank&lt;/p&gt;
+&lt;p&gt;fully end-to-end 的挑戰是，open corpus 的 retrieval 必須被視為 latent variable，要 train from scratch 是不切實際的&lt;/p&gt;
+&lt;p&gt;IR system 提供了一個合理但可能非最好的起點&lt;/p&gt;
+&lt;p&gt;本文的一個關鍵是，如果用無監督 的 ICT 對 retriever 做預訓練，那 end-to-end learning 是有可能的&lt;/p&gt;
+&lt;p&gt;在 ICT 中，一個句子被視作 pseudo-question，而它的 context 被視作 pseudo-evdience&lt;/p&gt;
+&lt;p&gt;給定一個 pseudo-question，retriever 的目標是從 batch 中的 candidate 找出對應的 pseudo-evidence&lt;/p&gt;
+&lt;p&gt;ICT pretraining 提供了強大的初始化，使 ORQA 可以簡單地優化&lt;/p&gt;
+&lt;p&gt;作者在五個 QA 資料集上進行了評估，在問題作者已知答案的資料集上 (SQuAD、TriviaQA)，檢索問題類似傳統的 IR，並且 BM25 是 SOTA retrieval&lt;/p&gt;
+&lt;p&gt;在問題作者不知道答案的資料集上 (Natural Questions、WebQuestions、CuratedTrec)，作者顯示出 learned retrieval 的重要性，比 BM25 在 exact match 上好 6~19 個點&lt;/p&gt;
+&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;
+&lt;h3 id=&#34;task&#34;&gt;Task&lt;/h3&gt;
+&lt;p&gt;在 open-domain QA 中，$q$ 是 question string，而 $a$ 是 answer string&lt;/p&gt;
+&lt;p&gt;與閱讀理解不同，evidence 的來源是 modeling choice，而非 task definition 的一部分&lt;/p&gt;
+&lt;h3 id=&#34;formal-definitions&#34;&gt;Formal Definitions&lt;/h3&gt;
+&lt;p&gt;Model 把一個 unstructured text corpus 切成 B 塊的 evidence text&lt;/p&gt;
+&lt;p&gt;一個 answer derivation 是一個 pair $(b,s)$&lt;/p&gt;
+&lt;p&gt;$1 \le b \le B$ 是 block 的 index&lt;/p&gt;
+&lt;p&gt;$s$ 是 block $b$ 的 span&lt;/p&gt;
+&lt;p&gt;scoring function $S(b,s,q)$ 用來計算 $(b,s)$ 對於 $q$ 的分數&lt;/p&gt;
+&lt;p&gt;一般來說 scoring function 會被分解成 retrieval component $S_{retr}(b,q)$ 和 $S_{read}(b,s,q)$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$S(b,s,q) = S_{retr}(b,q) + S_{read}(b,s,q)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在推論階段：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$a^* = TEXT(argmax_{b,s} S(b,s,q))$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;open-domain QA 的一個主要挑戰是 handling the scale&lt;/p&gt;
+&lt;p&gt;作者在 English Wikipedia 上做實驗，包含超過 13M 個 blocks，每個 block 都有超過 2000 個可能的 spans&lt;/p&gt;
+&lt;h3 id=&#34;existing-pipelined-models&#34;&gt;Existing Pipelined Models&lt;/h3&gt;
+&lt;p&gt;在現有的 retrieval-based open-domain QA 模型中，blackbox IR system 先選擇一組 closed set of evidence candidates&lt;/p&gt;
+&lt;p&gt;然後 DrQA 之後的多數工作都用 TF-IDF 來挑選 candidate，並專注於閱讀理解或 reranking 的部分&lt;/p&gt;
+&lt;p&gt;reading component $S_{read}(b,s,q)$ 是從 gold answer 學習的&lt;/p&gt;
+&lt;p&gt;在最接近我們的方法的工作中，reader 是透過 weak supervision 學習的&lt;/p&gt;
+&lt;p&gt;retrieval system 會啟發式（heuristically）地刪除 spurious ambiguities，並把清理後的結果視為 gold evidence&lt;/p&gt;
+&lt;h2 id=&#34;open-retrieval-question-answering-orqa&#34;&gt;Open-Retrieval Question Answering (ORQA)&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/ORQA/fig1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;$BERT(x_1, [x_2]) = \{CLS: h_{CLS}, 1: h_1, 2: h_2,&amp;hellip;\}$&lt;/p&gt;
+&lt;h3 id=&#34;retriever-component&#34;&gt;Retriever component&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;$h_q = W_q BERT(q)[CLS]$&lt;/li&gt;
+&lt;li&gt;$h_b = W_b BERT(b)[CLS]$&lt;/li&gt;
+&lt;li&gt;$S_{retr}(b,q) = h_q^T h_b$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;reader-component&#34;&gt;Reader component&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;$h_{start} = BERT_R(q,b)[START(s)]$&lt;/li&gt;
+&lt;li&gt;$h_{end} = BERT_R(q,b)[END(s)]$&lt;/li&gt;
+&lt;li&gt;$S_{read}(b,s,q) = MLP([h_{start};h_{end}])$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;inference--learning-challenges&#34;&gt;Inference &amp;amp; Learning Challenges&lt;/h3&gt;
+&lt;p&gt;上面的模型概念很簡單&lt;/p&gt;
+&lt;p&gt;但推論和學習上具有挑戰性，因為：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;open evidence corpus 有巨大的搜尋空間（超過 13M 個 blocks）&lt;/li&gt;
+&lt;li&gt;要如何在空間 navigate 是 latent&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;因此標準的 teacher forcing 不能用，latent variable 也不能用，因為存在大量 spuriously ambiguous derivations（比如答案是 &amp;ldquo;seven&amp;rdquo;，很多 evidence 都會有 &amp;ldquo;seven&amp;rdquo; 這個字眼）&lt;/p&gt;
+&lt;p&gt;作者透過非監督預訓練來良好地初始化 retriever 來解決這些挑戰&lt;/p&gt;
+&lt;p&gt;預訓練的 retriever 使作者能夠：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;pre-encode Wikipedia blocks，從而在 finetune 階段實現動態且快速的 top-k retrieval&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使 retrieval 可以遠離 spuriously ambiguities 並偏向 supportive evidence&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;inverse-cloze-task&#34;&gt;Inverse Cloze Task&lt;/h2&gt;
+&lt;p&gt;作者提出的預訓練流程的目標是想讓 retriever 解決和 evidence retrieval for QA 相似的無監督任務&lt;/p&gt;
+&lt;p&gt;直覺上，useful evidence 通常會討論問題中的 entities, events 和 relations&lt;/p&gt;
+&lt;p&gt;還包含問題中不存在的額外資訊 (the answer)&lt;/p&gt;
+&lt;p&gt;question-evidence pair 是 setence-context pair，句子的上下文在語意上是相關的，可以推論句子中缺少的資訊&lt;/p&gt;
+&lt;p&gt;憑這種想法，作者建議使用 ICT 來預訓練 retriever&lt;/p&gt;
+&lt;p&gt;在 standard cloze task 中，目標是根據上下文預測 masked-out text&lt;/p&gt;
+&lt;p&gt;相反，ICT 要逆向預測，給定一個句子，預測上下文&lt;/p&gt;
+&lt;p&gt;使用類似 downstream retrieval 的 discriminative objective：&lt;/p&gt;
+&lt;p&gt;$P_{ICT}(b|q)=\frac{exp(S_{retr}(b,q))}{\sum_{b&amp;rsquo; \in BATCH} exp(S_{retr}(b&amp;rsquo;,q))}$&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/ORQA/fig2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;預測哪個上下文是 query 的&lt;/p&gt;
+&lt;p&gt;ICT 有個重點是，它要做的不僅僅是單字匹配，因為 evidence 中沒有 pseudo-question&lt;/p&gt;
+&lt;p&gt;例如 fig.2 的 pseudo-question 完全沒有提及 zebra，但 retriever 要能夠選擇 zebra 的 context&lt;/p&gt;
+&lt;p&gt;能夠從非指定的語言推論出語意是 QA 和傳統 IR 的差異&lt;/p&gt;
+&lt;p&gt;然而作者也不想阻止 retriever 學習單字匹配，因為 lexical overlap 最終是一個非常有用的特徵&lt;/p&gt;
+&lt;p&gt;因此，作者只在 90 % 的例子中把 sentence 從 context 中移除，鼓勵模型在需要的時候學習抽象表示，也在可用時學習 low-level word matching features&lt;/p&gt;
+&lt;p&gt;ICT 預訓練實現兩個主要目標：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;儘管預訓練的句子和微調時的 question 不匹配，但作者預期 zero-shot evidence retrieval performance 足以引導 latent variable 的學習&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;pretrained evidence blocks 和 downstream evidence blocks 間沒有這種不匹配的問題&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;因此可預期 $BERT_{B}(b)$ 無須進一步訓練即可正常工作&lt;/p&gt;
+&lt;p&gt;只有 question encoder 需要針對下遊資料微調&lt;/p&gt;
+&lt;h2 id=&#34;inference&#34;&gt;Inference&lt;/h2&gt;
+&lt;p&gt;由於 fixed block encoder 已經為 retrieval 提供了有用的 representation，可以預先計算所有 block 的 encoding&lt;/p&gt;
+&lt;p&gt;因此在微調的時候不需要對大量 evidence block 重新 encode，並且可以使用比如 locality-sensitive hashing 之類的現有工具來建立索引&lt;/p&gt;
+&lt;p&gt;透過 pre-compiled index，推理遵循 standard beam-search&lt;/p&gt;
+&lt;p&gt;檢索 top-k evidence block，並只計算這 k 個 block 的 reader score&lt;/p&gt;
+&lt;h2 id=&#34;learning&#34;&gt;Learning&lt;/h2&gt;
+&lt;p&gt;這邊太複雜，建議看原文&lt;/p&gt;
+&lt;h2 id=&#34;experimental-setup&#34;&gt;Experimental Setup&lt;/h2&gt;
+&lt;h3 id=&#34;open-domain-qa-datasets&#34;&gt;Open Domain QA Datasets&lt;/h3&gt;
+&lt;p&gt;對 5 個現有 question answering 或閱讀理解資料集進行評估&lt;/p&gt;
+&lt;p&gt;並非所有資料集的原始形式都是 open-domain QA，因此作者遵循 DrQA 的做法，轉成 open format&lt;/p&gt;
+&lt;p&gt;每個 example 都有一個 single question 和一「組」 reference answer&lt;/p&gt;
+&lt;h4 id=&#34;natural-questions&#34;&gt;Natural Questions&lt;/h4&gt;
+&lt;p&gt;包含了從 Google Search 的 aggregated queries 中的 question&lt;/p&gt;
+&lt;p&gt;為了蒐集這個資料集的 open version，作者只保留 short answer 並丟棄 evidence document&lt;/p&gt;
+&lt;p&gt;具有許多 token 的答案通常類似 extractive snippets 而不是 canonical answer，因此作者丟棄長度超過 5 個 token 的答案&lt;/p&gt;
+&lt;h4 id=&#34;webquestions&#34;&gt;WebQuestions&lt;/h4&gt;
+&lt;p&gt;包含從 Google Suggest API 抽取的問題&lt;/p&gt;
+&lt;p&gt;答案是根據 Freebase 標註的，但是只保留 entities 的 string representation&lt;/p&gt;
+&lt;h4 id=&#34;curatedtrec&#34;&gt;CuratedTrec&lt;/h4&gt;
+&lt;p&gt;問題來自真實查詢的各種來源，比如 MSNSearch&lt;/p&gt;
+&lt;h4 id=&#34;triviaqa&#34;&gt;TriviaQA&lt;/h4&gt;
+&lt;p&gt;從網路上抓的 question-answer pairs&lt;/p&gt;
+&lt;p&gt;作者使用 unfiltered set 並捨棄 distanly supervised evidence&lt;/p&gt;
+&lt;h4 id=&#34;squad&#34;&gt;SQuAD&lt;/h4&gt;
+&lt;p&gt;被設計來用作閱讀理解，而不是 open-domain QA&lt;/p&gt;
+&lt;p&gt;答案範圍是從 Wikipedia 的段落中選擇的，問題由 annotators 編寫，annotators 被指示提出問題，要由給定的 context 中的 span 來回答&lt;/p&gt;
+&lt;h3 id=&#34;dataset-biases&#34;&gt;Dataset Biases&lt;/h3&gt;
+&lt;p&gt;在 Natural Questions、WebQuestions 和 CuratedTrec 中，提問者不知道答案，反映了真實的尋求問題的分佈&lt;/p&gt;
+&lt;p&gt;但是，annotators 必須單獨找到正確的答案，因此需要 automatic tools，並可能會對這些工具的結果產生 bias&lt;/p&gt;
+&lt;p&gt;在 TriviaQA 和 SQuAD 中，不需要 automatic tools，因為 annotators 是根據已知答案寫問題的&lt;/p&gt;
+&lt;p&gt;然而這引入了另一組可能更成問題的 bias，就是撰寫問題並非出於資訊需求&lt;/p&gt;
+&lt;p&gt;導致問題中有許多自然出現的問題中沒有的提示&lt;/p&gt;
+&lt;p&gt;這在 SQuAD 中問題特別嚴重，使問題和 evidence 間人為地出現大量詞彙重疊&lt;/p&gt;
+&lt;p&gt;但上述這些只是想表達資料集的屬性，而非可採取行動的批評，因為要取得大規模資料必定會遇到這些狀況，目前還不清楚如何在合理的成本下收集公正的資料集&lt;/p&gt;
+&lt;h3 id=&#34;implementation-details&#34;&gt;Implementation Details&lt;/h3&gt;
+&lt;h4 id=&#34;evidence-corpus&#34;&gt;Evidence Corpus&lt;/h4&gt;
+&lt;p&gt;corpus 被分成最多 288 個單字的 chunk，並且保留 sentence boundaries&lt;/p&gt;
+&lt;p&gt;導致有超過 13M 個 blocks&lt;/p&gt;
+&lt;h2 id=&#34;main-results&#34;&gt;Main Results&lt;/h2&gt;
+&lt;h3 id=&#34;baselines&#34;&gt;Baselines&lt;/h3&gt;
+&lt;h4 id=&#34;bm25&#34;&gt;BM25&lt;/h4&gt;
+&lt;p&gt;BM25 是事實上的非監督搜索方法 SOTA
+被證明對於傳統資訊檢索任務和 QA 的 evidence retrieval 任務都是 robust&lt;/p&gt;
+&lt;h4 id=&#34;language-models&#34;&gt;Language Models&lt;/h4&gt;
+&lt;p&gt;非監督的 neural retrieval 對於傳統 IR 來說很難改進，但這裡視作比較的 baseline&lt;/p&gt;
+&lt;p&gt;作者對 LM 進行實驗，並且這已被證明是 SOTA unsupervised representation&lt;/p&gt;
+&lt;p&gt;我們與兩種廣泛使用的 128-dimensional representation 進行比較：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;NNLM
+&lt;ul&gt;
+&lt;li&gt;context-independent embedding&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ELMO
+&lt;ul&gt;
+&lt;li&gt;context-dependent bidirectional LSTM&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;就像 ICT 一樣，使用 alternate encoder 來預先計算 encoded evidence blocks 還有初始化經過 finetune 的 question encoding&lt;/p&gt;
+&lt;p&gt;根據現有的 IR 文獻，還有 LM 沒有顯著優化 retrieval 的直覺，作者並不期望這些成為強大的 baseline，但是他們證明了將文本編碼為 128 維的難度&lt;/p&gt;
+&lt;h3 id=&#34;results&#34;&gt;Results&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/ORQA/table5.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在提問者已經知道答案的資料集中&lt;/p&gt;
+&lt;p&gt;證實壓縮到 128維的向量無法與 BM25 精確表示 evidence 中每個單字的能力相符&lt;/p&gt;
+&lt;p&gt;SQuAD 的 dev 和 test 間的顯著下降反映了資料集中的某個特性 - 10 萬個問題僅源自 536 個文件&lt;/p&gt;
+&lt;p&gt;因此，SQuAD 的好的檢索目標，會和訓練範例高度相關，違反了 IID 假設，使其不適合學習檢索&lt;/p&gt;
+&lt;p&gt;因此，作者強烈建議對 end-to-end open-domain QA models 有興趣的人不再使用 SQuAD 進行訓練和評估&lt;/p&gt;
+&lt;h2 id=&#34;analysis&#34;&gt;Analysis&lt;/h2&gt;
+&lt;h3 id=&#34;strongly-supervised-comparison&#34;&gt;Strongly supervised comparison&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/ORQA/table6.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;為了證實作者的 BM25 Baseline 是 SOTA，提供了和 DrQA 的比較&lt;/p&gt;
+&lt;p&gt;DrQA 的 reader 是 DocReader，用 TF-IDF 取得 top k documents&lt;/p&gt;
+&lt;p&gt;還包括基於 TF-IDF retrieval 的 distant supervision&lt;/p&gt;
+&lt;p&gt;BERTserini 的 reader 是一個基於 base BERT（類似作者的 reader），並用 BM25 搜索 top-k 個段落（像作者的 BM25 baseline）&lt;/p&gt;
+&lt;p&gt;主要區別在 BERTserini 使用 Wikipedia 中的真實段落，而不是任意 block，從而由於長度不均導致更多 evidence blocks&lt;/p&gt;
+&lt;p&gt;為了和這些強監督系統進行比較，作者在 SQuAD 上預訓練 reader&lt;/p&gt;
+&lt;h3 id=&#34;masking-rate-in-the-inverse-cloze-task&#34;&gt;Masking Rate in the Inverse Cloze Task&lt;/h3&gt;
+&lt;p&gt;pseudo-query 在 90% 的時間裡都從 evidence block 遮蔽&lt;/p&gt;
+&lt;p&gt;如果總是屏蔽 pseudo-query，那麼 retriever 永遠不會知道 n-gram overlap 是一個強大的 retrieval signal，導致損失 10 個點&lt;/p&gt;
+&lt;p&gt;如果從不屏蔽，問題就會簡化為記憶，導致不能很好地推廣到問題&lt;/p&gt;
+&lt;h3 id=&#34;example-predictions&#34;&gt;Example Predictions&lt;/h3&gt;
+&lt;p&gt;發現 ORQA 在具有高度詞彙重疊的文本更加 robust&lt;/p&gt;
+&lt;p&gt;但是由於 128 維向量的資訊有限&lt;/p&gt;
+&lt;p&gt;很難精確地表示極為具體的概念，比如準確日期&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>DrQA 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/drqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Mon, 25 Dec 2023 00:00:12 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/drqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1704.00051&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Reading Wikipedia to Answer Open-Domain Questions&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;本文提出以 Wikipedia 為知識來源來解決 open-domain question answering 問題&lt;/p&gt;
+&lt;p&gt;任何問題的答案都是 Wikipedia 中的一段文字&lt;/p&gt;
+&lt;p&gt;這項挑戰結合了文件檢索和理解文字的能力&lt;/p&gt;
+&lt;p&gt;本文的作法基於一個 search component，由 bigram hashing 和 TF-IDF matching 構成，並結合 RNN&lt;/p&gt;
+&lt;p&gt;對多個 QA 資料集做的實驗表明：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;這兩個 components 對於現有的對應模塊具有高度競爭力&lt;/li&gt;
+&lt;li&gt;在他們的組合上使用 distant supervision 十分有效&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;要把 wikipedia 當作知識來源，回答任何一個問題，都必須先從超過 5 百萬篇文章中找出少數相關的文章，並仔細掃描以找出答案。&lt;/p&gt;
+&lt;p&gt;本文將這稱為 machine reading at scale (MRS)&lt;/p&gt;
+&lt;p&gt;本文把 wikipedia 當作一個文章的集合，並且不依賴內部的 graph structure&lt;/p&gt;
+&lt;p&gt;因此該方法是通用的，可以套到諸如新聞、網路論壇等等的資料集上&lt;/p&gt;
+&lt;p&gt;本文開發了 DrQA，強大的維基百科問答系統，由以下部分組成：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Document Retriever
+&lt;ul&gt;
+&lt;li&gt;一個用 bigram hashing 和 TF-IDF matching 的 module&lt;/li&gt;
+&lt;li&gt;用於在給定問題的情況下，返回有效相關文章的子集&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Document Reader
+&lt;ul&gt;
+&lt;li&gt;RNN，用來 detect 文章中答案的位置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;實驗表明 Document Retriever 的性能優於 Wikipedia 的內部搜尋引擎，Document Reader 在 SQuAD 上達到 SOTA&lt;/p&gt;
+&lt;p&gt;此外，與 single task training 相比，作者表明 multitask learning 和 distant supervision 有助於提高模型的性能&lt;/p&gt;
+&lt;h2 id=&#34;related-work&#34;&gt;Related Work&lt;/h2&gt;
+&lt;p&gt;隨著 Knowledge Base (KB) 的發展，QA 出現了許多創新，但是 KB 具備固有限制（incompleteness, fixed schema），促使研究人員轉回從 raw text 中提取答案&lt;/p&gt;
+&lt;p&gt;有些工作嘗試利用 multitask learning 來組合多個 QA 資料集，目標是：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;透過 task transfer 來實現跨資料集的改進&lt;/li&gt;
+&lt;li&gt;提供一個單一通用的系統，可以回答不同種類的問題，因為資料來源中不可避免地存在不同的資料分布&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;本文的工作在先 retrive 再 read 的 setting 下，沒有利用 KB，取得了正面成果&lt;/p&gt;
+&lt;h2 id=&#34;drqa&#34;&gt;DrQA&lt;/h2&gt;
+&lt;p&gt;由兩個 Components 組成：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Document Retriever
+&lt;ul&gt;
+&lt;li&gt;用來尋找相關文章&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Document Reader
+&lt;ul&gt;
+&lt;li&gt;用於從單一文件或一小部分文件提取答案&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;document-retriever&#34;&gt;Document Retriever&lt;/h3&gt;
+&lt;p&gt;遵循經典的 QA System，先用高效的 （非機器學習）的 document retrieval system 縮小搜索範圍，並專注於比較可能有關的文章&lt;/p&gt;
+&lt;p&gt;與基於 ElasticSearch 的 Wikipedia Search API 相比，簡單的 inverted index lookup 和 term vector model scoring 表現的十分好&lt;/p&gt;
+&lt;p&gt;文章和問題被表示為 TF-IDF weighted bag-of-words vectors&lt;/p&gt;
+&lt;p&gt;作者考慮透過考慮 local word order 和 n-gram features 來進一步改善&lt;/p&gt;
+&lt;p&gt;表現最佳的系統用 bigram counts，並利用 hashing 映射到 $2^{24}$ bins 來保持 speed 和 memory efficiency，用的是 unsigned murmur3 hash&lt;/p&gt;
+&lt;p&gt;Document Retriever 作為模型的第一部分，設定為對任何問題返回 5 個相關的文章&lt;/p&gt;
+&lt;p&gt;這些文章再交由 Document Reader 來處理&lt;/p&gt;
+&lt;h3 id=&#34;document-reader&#34;&gt;Document Reader&lt;/h3&gt;
+&lt;h4 id=&#34;paragraph-encoding&#34;&gt;Paragraph encoding&lt;/h4&gt;
+&lt;p&gt;$p_i$ 是段落 $p$ 中的 token，期望 $p_i$ 可以被 encode 成帶有周圍資訊的向量&lt;/p&gt;
+&lt;p&gt;採用的是 multi-layer bidirectional LSTM&lt;/p&gt;
+&lt;p&gt;特徵向量 $p_i$ 由以下部分組成：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Word embedding&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用 300 維的 Glove word embedding，固定大部分預訓練的 word embedding，只 finetune 最常見的 1000 個 question words，例如 what, how, which&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Exact match&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;採用三個簡單的 binary features，用來表示 $p_i$ 是否與問題中的 question word $q$ 精確匹配，無論是原始形式、小寫，還是 lemma form&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Token features&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;作者添加了一些 manual feature 好反應 $p_i$ 在 context 中的屬性，比如 part-of-speech (POS)、named entity recognition (NER) tags 和它的 (normalized) term frequency (TF)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Aligned question embedding&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$f_{align}(p_i)=\sum_j a_{i,j}E(q_j)$
+&lt;ul&gt;
+&lt;li&gt;$E$ 是 word embedding&lt;/li&gt;
+&lt;li&gt;$a_{i,j}$ 是 attention score，計算 $p_i$ 和每個 $q_j$ 之間的 similarity&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;question-encoding&#34;&gt;Question encoding&lt;/h4&gt;
+&lt;p&gt;這個比較簡單，只是在 word embedding 上加上一層 RNN，並把 hidden units 重新結合成一個向量&lt;/p&gt;
+&lt;h4 id=&#34;prediction&#34;&gt;Prediction&lt;/h4&gt;
+&lt;p&gt;把 $\{p_1,&amp;hellip;,p_m\}$ 和 $q$ 作為 input，並個別單獨訓練兩個分類器預測開頭和結尾的位置&lt;/p&gt;
+&lt;p&gt;具體來說，作者用 bilinear term 來計算每個 $p_i$ 和 $q$ 之間的相似度，並計算每個 $p_i$ 是開頭的機率和結尾的機率&lt;/p&gt;
+&lt;p&gt;最後選擇最佳範圍，從 token $i$ 到 token $i&#39;$&lt;/p&gt;
+&lt;p&gt;$i \le i&amp;rsquo; \le i+15$&lt;/p&gt;
+&lt;p&gt;並且使 $P_{start}(i) \times P_{end}(i&amp;rsquo;)$ 最大化&lt;/p&gt;
+&lt;h2 id=&#34;data&#34;&gt;Data&lt;/h2&gt;
+&lt;p&gt;本文的工作依賴三種資料：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Wikipedia
+&lt;ul&gt;
+&lt;li&gt;尋找答案的來源&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;SQuAD
+&lt;ul&gt;
+&lt;li&gt;用來訓練和評估模型&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;另外三個 QA 資料集 (WebQuestions, CuratedTREC, WikiMovies)
+&lt;ul&gt;
+&lt;li&gt;用來測試模型在 Open-domain QA 上的泛化能力，並評估模型從 multitask learning 和 distant supervision 中獲益的程度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;wikipedia-knowledge-source&#34;&gt;Wikipedia (Knowledge Source)&lt;/h3&gt;
+&lt;p&gt;用 2016-12-21 dump2 的 English Wikipedia&lt;/p&gt;
+&lt;p&gt;對於每頁，只提取文本，並刪除結構化的資料（lists and figures）&lt;/p&gt;
+&lt;p&gt;丟棄 disambiguation pages, list, index 和 outline pages，保留了 5,075,182 篇文章&lt;/p&gt;
+&lt;h3 id=&#34;squad&#34;&gt;SQuAD&lt;/h3&gt;
+&lt;p&gt;使用兩個 evaluation metrics：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Exact string match (EM)&lt;/li&gt;
+&lt;li&gt;F1 score&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;為了評估 open-domain QA 的能力，作者只有使用 SQuAD 的 QA pairs，要求系統在無法存取相關段落的情況下發現正確的 answer span&lt;/p&gt;
+&lt;p&gt;不像標準的 SQuAD setting 會給出相關段落&lt;/p&gt;
+&lt;h3 id=&#34;open-domain-qa-evaluation-resources&#34;&gt;Open-domain QA Evaluation Resources&lt;/h3&gt;
+&lt;p&gt;SQuAD 是目前可用的最大的 general purpose QA 資料集之一&lt;/p&gt;
+&lt;p&gt;收集過程包括向每個 human annotator 展示一個段落，並寫一個問題&lt;/p&gt;
+&lt;p&gt;因此，distribution 非常特定&lt;/p&gt;
+&lt;p&gt;作者建議在其他 open-domain QA 資料集上評估系統，他們以不同的方式建構&lt;/p&gt;
+&lt;h4 id=&#34;curatedtrec&#34;&gt;CuratedTREC&lt;/h4&gt;
+&lt;p&gt;使用大版本，包含 TREC 1999, 2000, 2001 和 2002 的 2180 個問題&lt;/p&gt;
+&lt;h4 id=&#34;webquestions&#34;&gt;WebQuestions&lt;/h4&gt;
+&lt;p&gt;這資料集旨在回答 Freebase KB 的問題&lt;/p&gt;
+&lt;p&gt;透過 Google Suggest API 抓問題，再用 Amazon Mechanical Turk 來獲取答案&lt;/p&gt;
+&lt;p&gt;作者用 entity names 把每個 answer 轉成答案，以便不引入 Freebase IDs&lt;/p&gt;
+&lt;h4 id=&#34;wikimovies&#34;&gt;WikiMovies&lt;/h4&gt;
+&lt;p&gt;包含對電影領域的 96k 個問答對&lt;/p&gt;
+&lt;h3 id=&#34;distantly-supervised-data&#34;&gt;Distantly Supervised Data&lt;/h3&gt;
+&lt;p&gt;上面說的資料集除了 SQuAD 都沒有相關段落，因此不能直接訓練 Document Reader&lt;/p&gt;
+&lt;p&gt;追隨之前已有的利用 distant supervision (DS) 來做 relation extraction 的工作，作者用一個程式自動把段落和此類訓練範例做相關聯&lt;/p&gt;
+&lt;p&gt;對每個問答對使用以下過程來建立訓練集：&lt;/p&gt;
+&lt;p&gt;首先，對問題用 Document Retriever 找到前 5 個相關的段落&lt;/p&gt;
+&lt;p&gt;與已知答案沒有 exact match 的段落都被直接丟棄&lt;/p&gt;
+&lt;p&gt;短於 25 個字元或長於 1500 個字元的段落也被丟棄&lt;/p&gt;
+&lt;p&gt;如果在問題中找到 named entity，不包含該 named entity 的段落也被丟棄&lt;/p&gt;
+&lt;p&gt;對於每個 retrived page 的每個段落，使用 question 和 20 token window 間的 unigram  和 bigram overlap 來計算相似度，保留重疊度最高的前五個段落&lt;/p&gt;
+&lt;p&gt;將找到的每個 pair 加入到 DS 訓練集中&lt;/p&gt;
+&lt;p&gt;大約一半的 DS 範例來自 SQuAD 以外的頁面&lt;/p&gt;
+&lt;h2 id=&#34;experiments&#34;&gt;Experiments&lt;/h2&gt;
+&lt;h3 id=&#34;finding-relevant-articles&#34;&gt;Finding Relevant Articles&lt;/h3&gt;
+&lt;p&gt;先檢查 Retriever 在所有 QA 資料集上的性能&lt;/p&gt;
+&lt;p&gt;計算 ration 是根據特定的問題，考慮這些問題對應的文本在前 5 個相關文章中的比例&lt;/p&gt;
+&lt;p&gt;結果表明，比 Wikipedia Search 還更好，尤其是使用 bigram hashing 的情況下&lt;/p&gt;
+&lt;h3 id=&#34;reader-evaluation-on-squad&#34;&gt;Reader Evaluation on SQuAD&lt;/h3&gt;
+&lt;h4 id=&#34;implementation-details&#34;&gt;Implementation details&lt;/h4&gt;
+&lt;p&gt;使用 h=128 的 3 層雙向 LSTM，來做 paragraph encoding 和 question encoding&lt;/p&gt;
+&lt;p&gt;使用 Stanford CoreNLP 來做 tokenization 並生成 lemma, part-of-speech 和 named entity tags&lt;/p&gt;
+&lt;p&gt;Optimizer 使用 Adamax&lt;/p&gt;
+&lt;p&gt;Dropout rate 為 0.3&lt;/p&gt;
+&lt;h4 id=&#34;result-and-analysis&#34;&gt;Result and analysis&lt;/h4&gt;
+&lt;p&gt;作者的系統可以在 SQuAD 上達到 SOTA&lt;/p&gt;
+&lt;p&gt;做了 ablation study，結果表明所有功能都會影響性能&lt;/p&gt;
+&lt;p&gt;有趣的是，單獨沒有 $f_{alignd}$ 或 $f_{exact_match}$ 對性能不會有極大的影響，但兩個都沒有就會急遽下降&lt;/p&gt;
+&lt;h3 id=&#34;full-wikipedia-question-answering&#34;&gt;Full Wikipedia Question Answering&lt;/h3&gt;
+&lt;p&gt;比較三個版本的 DrQA：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;SQuAD
+&lt;ul&gt;
+&lt;li&gt;只在 SQuAD 上訓練，並用於所有評估資料集&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Fine-tune (DS)
+&lt;ul&gt;
+&lt;li&gt;先在 SQuAD 上預訓練，在用 DS 訓練集對每個資料集進行微調&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Multitask (DS)
+&lt;ul&gt;
+&lt;li&gt;在 SQuAD 和 DS 訓練集上聯合訓練&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;results&#34;&gt;Results&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/DrQA/table6.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;兩個明顯的 angles of attack：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;把多個段落直接納入 Document Reader 的訓練，因為他目前獨立訓練每個段落&lt;/li&gt;
+&lt;li&gt;實作一個 end-to-end training 的 pipeline，可以在一個模型中結合 Document Retriever 和 Document Reader&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
+        <title>LangChain 筆記</title>
+        <link>https://roykesydon.github.io/Blog/p/langchain-%E7%AD%86%E8%A8%98/</link>
+        <pubDate>Mon, 18 Dec 2023 00:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/langchain-%E7%AD%86%E8%A8%98/</guid>
+        <description>&lt;h2 id=&#34;介紹&#34;&gt;介紹&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;ChatGPT 的缺陷&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;沒有一定時間後的資料 (當時)&lt;/li&gt;
+&lt;li&gt;沒有辦法連結外部私人資料 (e.g. Google Drive)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;LangChain 的優點&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Integration
+&lt;ul&gt;
+&lt;li&gt;可以連結外部資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Agency
+&lt;ul&gt;
+&lt;li&gt;讓 LLM 可以和環境互動，做出決策&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;components&#34;&gt;Components&lt;/h2&gt;
+&lt;h3 id=&#34;結構&#34;&gt;結構&lt;/h3&gt;
+&lt;h4 id=&#34;schema&#34;&gt;Schema&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;對話
+&lt;ul&gt;
+&lt;li&gt;System: 對話的 context&lt;/li&gt;
+&lt;li&gt;Human: 你的詢問&lt;/li&gt;
+&lt;li&gt;AI: AI 的回答&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;document&#34;&gt;Document&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;儲存一段文字以集 metadata 的結構&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;embedding&#34;&gt;Embedding&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;OpenAIEmbeddings
+&lt;ul&gt;
+&lt;li&gt;可以把文字轉換成向量，預設是 1536 維&lt;/li&gt;
+&lt;li&gt;但是有最大長度限制&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;文字處理&#34;&gt;文字處理&lt;/h3&gt;
+&lt;h4 id=&#34;output-parser&#34;&gt;Output Parser&lt;/h4&gt;
+&lt;p&gt;讓模型重生你想要的格式，並轉換成你想要的結構，比如 json&lt;/p&gt;
+&lt;h3 id=&#34;資料儲存&#34;&gt;資料儲存&lt;/h3&gt;
+&lt;h4 id=&#34;indexes&#34;&gt;Indexes&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Document_loaders&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可以從不同的來源獲得資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;text_splitter&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;把大量的文字切成多個 chunks&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;retriever&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用來找到相近的文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;VectorStores&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Chroma
+&lt;ul&gt;
+&lt;li&gt;local storage&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;交互&#34;&gt;交互&lt;/h3&gt;
+&lt;h4 id=&#34;prompttemplate&#34;&gt;PromptTemplate&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;用來往 String Template 填入變數&lt;/li&gt;
+&lt;li&gt;有些 Component 會和這個用法組合，所以不適合直接換成 f-string&lt;/li&gt;
+&lt;li&gt;FewShotPromptTemplate
+&lt;ul&gt;
+&lt;li&gt;可以用自己準備的一些例子結合 PromptTemplate 來做 Few-shot learning&lt;/li&gt;
+&lt;li&gt;可以透過 FAISS 來找到最相近的例子&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;chain&#34;&gt;Chain&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;用在有多個有序的問題的情況&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;multi-step workflow&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;VectorDBQA&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可以用在搜索 local 的向量資料庫&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Instruction 結合 context 的模式 (Summarize)&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;模式&lt;/th&gt;
+&lt;th&gt;Stuffing&lt;/th&gt;
+&lt;th&gt;Map Reduce&lt;/th&gt;
+&lt;th&gt;Refine&lt;/th&gt;
+&lt;th&gt;Map-Rerank&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;說明&lt;/td&gt;
+&lt;td&gt;直接把 context 和 query 結合&lt;/td&gt;
+&lt;td&gt;把 Document 切成多塊 ，把每塊交給 LLM，轉換成 summary，反覆從這些 summary 生 summary&lt;/td&gt;
+&lt;td&gt;每次切一小塊，並且和先前的結果做 summary&lt;/td&gt;
+&lt;td&gt;讓每個 chunk 和 query 去生答案，並要模型對自己的答案評分，最後選分數高的&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;優點&lt;/td&gt;
+&lt;td&gt;只需 call 一次 API、涵蓋所有資料&lt;/td&gt;
+&lt;td&gt;可以餵入更大的文件、可以平行運算&lt;/td&gt;
+&lt;td&gt;可以餵入更大的文件&lt;/td&gt;
+&lt;td&gt;對於簡單的問題可能比較有效&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;缺點&lt;/td&gt;
+&lt;td&gt;容易達到 token 上限&lt;/td&gt;
+&lt;td&gt;call 多次 API、summary 的過程中會流失資訊&lt;/td&gt;
+&lt;td&gt;call 多次 API、summary 的過程中會流失資訊&lt;/td&gt;
+&lt;td&gt;沒有辦法結合多個 Document 的資訊&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;agent&#34;&gt;Agent&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;有些應用中，你可能不知道該遵循什麼流程來讓 LLM 完成任務，這時候你會需要讓 LLM 自行決定要採取哪些動作以及採取的順序&lt;/li&gt;
+&lt;li&gt;可以動態地利用 Chain&lt;/li&gt;
+&lt;li&gt;verbose=True 的時候會印出思考過程&lt;/li&gt;
+&lt;li&gt;Tools
+&lt;ul&gt;
+&lt;li&gt;有比如 Google Search 之類的 Tool 可以結合應用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;memory&#34;&gt;Memory&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;ConversationChain&lt;/li&gt;
+&lt;li&gt;讓 Chain 和 Agent 可以保留之前的對話&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>CLIP 論文閱讀</title>
         <link>https://roykesydon.github.io/Blog/p/clip-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
         <pubDate>Tue, 21 Nov 2023 01:08:46 +0800</pubDate>

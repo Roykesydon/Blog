@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='paper: Latent Retrieval for Weakly Supervised Open Domain Question Answering
+Abstract 最近的工作常依賴於兩個假設，一個是對 supporting evidence 做 strong supervision，另一個是假設 blackbox information retrieval (IR) system 可以找到所有的 evidence candidates
+作者認為兩者都不是最理想的，因為 gold evidence 不總是可用，而且 QA 和 IR 有著根本上的不同
+作者首次證明，在沒有任何 IR 的情況下，可以從 question-answer pair 中共同學習 retriver 和 reader
+在這種 setting 下，來自 Wikipedia 的 evidence retrieval 被視作 latent variable
+由於 learn from scratch 不切實際，因此用 Inverse Cloze Task (ICT) 來預訓練 retriever
+作者對五個 QA 資料集進行評估
+在提問者已經知道答案的情況下，傳統的 IR 系統（比如 BM25）已足夠'>
+<title>ORQA 論文閱讀</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/orqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.7c82827ec91a2557de37d1985da06dac3fa95cda12705c4cf151f99af331bc46.css"><meta property='og:title' content='ORQA 論文閱讀'>
+<meta property='og:description' content='paper: Latent Retrieval for Weakly Supervised Open Domain Question Answering
+Abstract 最近的工作常依賴於兩個假設，一個是對 supporting evidence 做 strong supervision，另一個是假設 blackbox information retrieval (IR) system 可以找到所有的 evidence candidates
+作者認為兩者都不是最理想的，因為 gold evidence 不總是可用，而且 QA 和 IR 有著根本上的不同
+作者首次證明，在沒有任何 IR 的情況下，可以從 question-answer pair 中共同學習 retriver 和 reader
+在這種 setting 下，來自 Wikipedia 的 evidence retrieval 被視作 latent variable
+由於 learn from scratch 不切實際，因此用 Inverse Cloze Task (ICT) 來預訓練 retriever
+作者對五個 QA 資料集進行評估
+在提問者已經知道答案的情況下，傳統的 IR 系統（比如 BM25）已足夠'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/orqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='nlp' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:published_time' content='2023-12-25T00:00:13&#43;08:00'/><meta property='article:modified_time' content='2023-12-25T00:00:13&#43;08:00'/>
+<meta name="twitter:title" content="ORQA 論文閱讀">
+<meta name="twitter:description" content="paper: Latent Retrieval for Weakly Supervised Open Domain Question Answering
+Abstract 最近的工作常依賴於兩個假設，一個是對 supporting evidence 做 strong supervision，另一個是假設 blackbox information retrieval (IR) system 可以找到所有的 evidence candidates
+作者認為兩者都不是最理想的，因為 gold evidence 不總是可用，而且 QA 和 IR 有著根本上的不同
+作者首次證明，在沒有任何 IR 的情況下，可以從 question-answer pair 中共同學習 retriver 和 reader
+在這種 setting 下，來自 Wikipedia 的 evidence retrieval 被視作 latent variable
+由於 learn from scratch 不切實際，因此用 Inverse Cloze Task (ICT) 來預訓練 retriever
+作者對五個 QA 資料集進行評估
+在提問者已經知道答案的情況下，傳統的 IR 系統（比如 BM25）已足夠">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">🍤<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/old avatar.png"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#overview">Overview</a>
+      <ol>
+        <li><a href="#task">Task</a></li>
+        <li><a href="#formal-definitions">Formal Definitions</a></li>
+        <li><a href="#existing-pipelined-models">Existing Pipelined Models</a></li>
+      </ol>
+    </li>
+    <li><a href="#open-retrieval-question-answering-orqa">Open-Retrieval Question Answering (ORQA)</a>
+      <ol>
+        <li><a href="#retriever-component">Retriever component</a></li>
+        <li><a href="#reader-component">Reader component</a></li>
+        <li><a href="#inference--learning-challenges">Inference &amp; Learning Challenges</a></li>
+      </ol>
+    </li>
+    <li><a href="#inverse-cloze-task">Inverse Cloze Task</a></li>
+    <li><a href="#inference">Inference</a></li>
+    <li><a href="#learning">Learning</a></li>
+    <li><a href="#experimental-setup">Experimental Setup</a>
+      <ol>
+        <li><a href="#open-domain-qa-datasets">Open Domain QA Datasets</a>
+          <ol>
+            <li><a href="#natural-questions">Natural Questions</a></li>
+            <li><a href="#webquestions">WebQuestions</a></li>
+            <li><a href="#curatedtrec">CuratedTrec</a></li>
+            <li><a href="#triviaqa">TriviaQA</a></li>
+            <li><a href="#squad">SQuAD</a></li>
+          </ol>
+        </li>
+        <li><a href="#dataset-biases">Dataset Biases</a></li>
+        <li><a href="#implementation-details">Implementation Details</a>
+          <ol>
+            <li><a href="#evidence-corpus">Evidence Corpus</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#main-results">Main Results</a>
+      <ol>
+        <li><a href="#baselines">Baselines</a>
+          <ol>
+            <li><a href="#bm25">BM25</a></li>
+            <li><a href="#language-models">Language Models</a></li>
+          </ol>
+        </li>
+        <li><a href="#results">Results</a></li>
+      </ol>
+    </li>
+    <li><a href="#analysis">Analysis</a>
+      <ol>
+        <li><a href="#strongly-supervised-comparison">Strongly supervised comparison</a></li>
+        <li><a href="#masking-rate-in-the-inverse-cloze-task">Masking Rate in the Inverse Cloze Task</a></li>
+        <li><a href="#example-predictions">Example Predictions</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/deep-learning/" style="background-color: #936ce1; color: #fff;">
+                Deep Learning
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/deep-learning.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/orqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">ORQA 論文閱讀</a>
+        </h2>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Dec 25, 2023</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    5 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>paper: <a class="link" href="https://arxiv.org/abs/1906.00300"  target="_blank" rel="noopener"
+    >Latent Retrieval for Weakly Supervised Open Domain Question Answering</a></p>
+<h2 id="abstract">Abstract</h2>
+<p>最近的工作常依賴於兩個假設，一個是對 supporting evidence 做 strong supervision，另一個是假設 blackbox information retrieval (IR) system 可以找到所有的 evidence candidates</p>
+<p>作者認為兩者都不是最理想的，因為 gold evidence 不總是可用，而且 QA 和 IR 有著根本上的不同</p>
+<p>作者首次證明，在沒有任何 IR 的情況下，可以從 question-answer pair 中共同學習 retriver 和 reader</p>
+<p>在這種 setting 下，來自 Wikipedia 的 evidence retrieval 被視作 latent variable</p>
+<p>由於 learn from scratch 不切實際，因此用 Inverse Cloze Task (ICT) 來預訓練 retriever</p>
+<p>作者對五個 QA 資料集進行評估</p>
+<p>在提問者已經知道答案的情況下，傳統的 IR 系統（比如 BM25）已足夠</p>
+<p>在使用者真正尋求答案的資料集上，作者顯示出 learned retrival 的重要性，在 exact match 上比 BM25 好 19 個點</p>
+<h2 id="introduction">Introduction</h2>
+<p>由於閱讀理解系統的發展，人們對 open domain question answering (QA) 的興趣重新燃起</p>
+<p>其中 evidence 得從 open corpus 取得，而不是直接從輸入給入</p>
+<p>現有的方法需要 blackbox IR system 來完成大部分繁重的工作，即使它無法對下遊任務進行微調</p>
+<p>在 DrQA 推廣的強監督環境中，他們也假設了一個訓練在 question-answer-evidence triple 上的閱讀理解模型</p>
+<p>在某些人提出的 weakly supervised setting 中，他們假設 IR system 提供 noisy gold evidence</p>
+<p>這些方法利用 IR system 來大幅減少搜尋空間</p>
+<p>然而 QA 和 IR 有著根本性的差異</p>
+<p>雖然 IR 關心的是 lexical 和 semantic matching，但 question 的定義並不具體，而且需要更多 language understanding，因為 user 在找的是未知資訊</p>
+<p>我們應該直接 用 QA data 學習 retrieve，而不是受限於 blackbox IR system</p>
+<p>在本文中，作者介紹了第一個 OpenRetrieval Question Answering system (ORQA) 框架</p>
+<p>ORQA 學習從 open corpus retrieve evidence，並且只做 question-answer pair 的監督訓練</p>
+<p>雖然最近的工作在改進 evidence retrieval 上取得了巨大的進展，但是他們依然只是在 closed evidence set 下 rerank</p>
+<p>fully end-to-end 的挑戰是，open corpus 的 retrieval 必須被視為 latent variable，要 train from scratch 是不切實際的</p>
+<p>IR system 提供了一個合理但可能非最好的起點</p>
+<p>本文的一個關鍵是，如果用無監督 的 ICT 對 retriever 做預訓練，那 end-to-end learning 是有可能的</p>
+<p>在 ICT 中，一個句子被視作 pseudo-question，而它的 context 被視作 pseudo-evdience</p>
+<p>給定一個 pseudo-question，retriever 的目標是從 batch 中的 candidate 找出對應的 pseudo-evidence</p>
+<p>ICT pretraining 提供了強大的初始化，使 ORQA 可以簡單地優化</p>
+<p>作者在五個 QA 資料集上進行了評估，在問題作者已知答案的資料集上 (SQuAD、TriviaQA)，檢索問題類似傳統的 IR，並且 BM25 是 SOTA retrieval</p>
+<p>在問題作者不知道答案的資料集上 (Natural Questions、WebQuestions、CuratedTrec)，作者顯示出 learned retrieval 的重要性，比 BM25 在 exact match 上好 6~19 個點</p>
+<h2 id="overview">Overview</h2>
+<h3 id="task">Task</h3>
+<p>在 open-domain QA 中，$q$ 是 question string，而 $a$ 是 answer string</p>
+<p>與閱讀理解不同，evidence 的來源是 modeling choice，而非 task definition 的一部分</p>
+<h3 id="formal-definitions">Formal Definitions</h3>
+<p>Model 把一個 unstructured text corpus 切成 B 塊的 evidence text</p>
+<p>一個 answer derivation 是一個 pair $(b,s)$</p>
+<p>$1 \le b \le B$ 是 block 的 index</p>
+<p>$s$ 是 block $b$ 的 span</p>
+<p>scoring function $S(b,s,q)$ 用來計算 $(b,s)$ 對於 $q$ 的分數</p>
+<p>一般來說 scoring function 會被分解成 retrieval component $S_{retr}(b,q)$ 和 $S_{read}(b,s,q)$</p>
+<ul>
+<li>$S(b,s,q) = S_{retr}(b,q) + S_{read}(b,s,q)$</li>
+</ul>
+<p>在推論階段：</p>
+<ul>
+<li>$a^* = TEXT(argmax_{b,s} S(b,s,q))$</li>
+</ul>
+<p>open-domain QA 的一個主要挑戰是 handling the scale</p>
+<p>作者在 English Wikipedia 上做實驗，包含超過 13M 個 blocks，每個 block 都有超過 2000 個可能的 spans</p>
+<h3 id="existing-pipelined-models">Existing Pipelined Models</h3>
+<p>在現有的 retrieval-based open-domain QA 模型中，blackbox IR system 先選擇一組 closed set of evidence candidates</p>
+<p>然後 DrQA 之後的多數工作都用 TF-IDF 來挑選 candidate，並專注於閱讀理解或 reranking 的部分</p>
+<p>reading component $S_{read}(b,s,q)$ 是從 gold answer 學習的</p>
+<p>在最接近我們的方法的工作中，reader 是透過 weak supervision 學習的</p>
+<p>retrieval system 會啟發式（heuristically）地刪除 spurious ambiguities，並把清理後的結果視為 gold evidence</p>
+<h2 id="open-retrieval-question-answering-orqa">Open-Retrieval Question Answering (ORQA)</h2>
+<p><img src="/Blog/images/deep-learning/ORQA/fig1.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>$BERT(x_1, [x_2]) = \{CLS: h_{CLS}, 1: h_1, 2: h_2,&hellip;\}$</p>
+<h3 id="retriever-component">Retriever component</h3>
+<ul>
+<li>$h_q = W_q BERT(q)[CLS]$</li>
+<li>$h_b = W_b BERT(b)[CLS]$</li>
+<li>$S_{retr}(b,q) = h_q^T h_b$</li>
+</ul>
+<h3 id="reader-component">Reader component</h3>
+<ul>
+<li>$h_{start} = BERT_R(q,b)[START(s)]$</li>
+<li>$h_{end} = BERT_R(q,b)[END(s)]$</li>
+<li>$S_{read}(b,s,q) = MLP([h_{start};h_{end}])$</li>
+</ul>
+<h3 id="inference--learning-challenges">Inference &amp; Learning Challenges</h3>
+<p>上面的模型概念很簡單</p>
+<p>但推論和學習上具有挑戰性，因為：</p>
+<ol>
+<li>open evidence corpus 有巨大的搜尋空間（超過 13M 個 blocks）</li>
+<li>要如何在空間 navigate 是 latent</li>
+</ol>
+<p>因此標準的 teacher forcing 不能用，latent variable 也不能用，因為存在大量 spuriously ambiguous derivations（比如答案是 &ldquo;seven&rdquo;，很多 evidence 都會有 &ldquo;seven&rdquo; 這個字眼）</p>
+<p>作者透過非監督預訓練來良好地初始化 retriever 來解決這些挑戰</p>
+<p>預訓練的 retriever 使作者能夠：</p>
+<ol>
+<li>
+<p>pre-encode Wikipedia blocks，從而在 finetune 階段實現動態且快速的 top-k retrieval</p>
+</li>
+<li>
+<p>使 retrieval 可以遠離 spuriously ambiguities 並偏向 supportive evidence</p>
+</li>
+</ol>
+<h2 id="inverse-cloze-task">Inverse Cloze Task</h2>
+<p>作者提出的預訓練流程的目標是想讓 retriever 解決和 evidence retrieval for QA 相似的無監督任務</p>
+<p>直覺上，useful evidence 通常會討論問題中的 entities, events 和 relations</p>
+<p>還包含問題中不存在的額外資訊 (the answer)</p>
+<p>question-evidence pair 是 setence-context pair，句子的上下文在語意上是相關的，可以推論句子中缺少的資訊</p>
+<p>憑這種想法，作者建議使用 ICT 來預訓練 retriever</p>
+<p>在 standard cloze task 中，目標是根據上下文預測 masked-out text</p>
+<p>相反，ICT 要逆向預測，給定一個句子，預測上下文</p>
+<p>使用類似 downstream retrieval 的 discriminative objective：</p>
+<p>$P_{ICT}(b|q)=\frac{exp(S_{retr}(b,q))}{\sum_{b&rsquo; \in BATCH} exp(S_{retr}(b&rsquo;,q))}$</p>
+<p><img src="/Blog/images/deep-learning/ORQA/fig2.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>預測哪個上下文是 query 的</p>
+<p>ICT 有個重點是，它要做的不僅僅是單字匹配，因為 evidence 中沒有 pseudo-question</p>
+<p>例如 fig.2 的 pseudo-question 完全沒有提及 zebra，但 retriever 要能夠選擇 zebra 的 context</p>
+<p>能夠從非指定的語言推論出語意是 QA 和傳統 IR 的差異</p>
+<p>然而作者也不想阻止 retriever 學習單字匹配，因為 lexical overlap 最終是一個非常有用的特徵</p>
+<p>因此，作者只在 90 % 的例子中把 sentence 從 context 中移除，鼓勵模型在需要的時候學習抽象表示，也在可用時學習 low-level word matching features</p>
+<p>ICT 預訓練實現兩個主要目標：</p>
+<ol>
+<li>
+<p>儘管預訓練的句子和微調時的 question 不匹配，但作者預期 zero-shot evidence retrieval performance 足以引導 latent variable 的學習</p>
+</li>
+<li>
+<p>pretrained evidence blocks 和 downstream evidence blocks 間沒有這種不匹配的問題</p>
+</li>
+</ol>
+<p>因此可預期 $BERT_{B}(b)$ 無須進一步訓練即可正常工作</p>
+<p>只有 question encoder 需要針對下遊資料微調</p>
+<h2 id="inference">Inference</h2>
+<p>由於 fixed block encoder 已經為 retrieval 提供了有用的 representation，可以預先計算所有 block 的 encoding</p>
+<p>因此在微調的時候不需要對大量 evidence block 重新 encode，並且可以使用比如 locality-sensitive hashing 之類的現有工具來建立索引</p>
+<p>透過 pre-compiled index，推理遵循 standard beam-search</p>
+<p>檢索 top-k evidence block，並只計算這 k 個 block 的 reader score</p>
+<h2 id="learning">Learning</h2>
+<p>這邊太複雜，建議看原文</p>
+<h2 id="experimental-setup">Experimental Setup</h2>
+<h3 id="open-domain-qa-datasets">Open Domain QA Datasets</h3>
+<p>對 5 個現有 question answering 或閱讀理解資料集進行評估</p>
+<p>並非所有資料集的原始形式都是 open-domain QA，因此作者遵循 DrQA 的做法，轉成 open format</p>
+<p>每個 example 都有一個 single question 和一「組」 reference answer</p>
+<h4 id="natural-questions">Natural Questions</h4>
+<p>包含了從 Google Search 的 aggregated queries 中的 question</p>
+<p>為了蒐集這個資料集的 open version，作者只保留 short answer 並丟棄 evidence document</p>
+<p>具有許多 token 的答案通常類似 extractive snippets 而不是 canonical answer，因此作者丟棄長度超過 5 個 token 的答案</p>
+<h4 id="webquestions">WebQuestions</h4>
+<p>包含從 Google Suggest API 抽取的問題</p>
+<p>答案是根據 Freebase 標註的，但是只保留 entities 的 string representation</p>
+<h4 id="curatedtrec">CuratedTrec</h4>
+<p>問題來自真實查詢的各種來源，比如 MSNSearch</p>
+<h4 id="triviaqa">TriviaQA</h4>
+<p>從網路上抓的 question-answer pairs</p>
+<p>作者使用 unfiltered set 並捨棄 distanly supervised evidence</p>
+<h4 id="squad">SQuAD</h4>
+<p>被設計來用作閱讀理解，而不是 open-domain QA</p>
+<p>答案範圍是從 Wikipedia 的段落中選擇的，問題由 annotators 編寫，annotators 被指示提出問題，要由給定的 context 中的 span 來回答</p>
+<h3 id="dataset-biases">Dataset Biases</h3>
+<p>在 Natural Questions、WebQuestions 和 CuratedTrec 中，提問者不知道答案，反映了真實的尋求問題的分佈</p>
+<p>但是，annotators 必須單獨找到正確的答案，因此需要 automatic tools，並可能會對這些工具的結果產生 bias</p>
+<p>在 TriviaQA 和 SQuAD 中，不需要 automatic tools，因為 annotators 是根據已知答案寫問題的</p>
+<p>然而這引入了另一組可能更成問題的 bias，就是撰寫問題並非出於資訊需求</p>
+<p>導致問題中有許多自然出現的問題中沒有的提示</p>
+<p>這在 SQuAD 中問題特別嚴重，使問題和 evidence 間人為地出現大量詞彙重疊</p>
+<p>但上述這些只是想表達資料集的屬性，而非可採取行動的批評，因為要取得大規模資料必定會遇到這些狀況，目前還不清楚如何在合理的成本下收集公正的資料集</p>
+<h3 id="implementation-details">Implementation Details</h3>
+<h4 id="evidence-corpus">Evidence Corpus</h4>
+<p>corpus 被分成最多 288 個單字的 chunk，並且保留 sentence boundaries</p>
+<p>導致有超過 13M 個 blocks</p>
+<h2 id="main-results">Main Results</h2>
+<h3 id="baselines">Baselines</h3>
+<h4 id="bm25">BM25</h4>
+<p>BM25 是事實上的非監督搜索方法 SOTA
+被證明對於傳統資訊檢索任務和 QA 的 evidence retrieval 任務都是 robust</p>
+<h4 id="language-models">Language Models</h4>
+<p>非監督的 neural retrieval 對於傳統 IR 來說很難改進，但這裡視作比較的 baseline</p>
+<p>作者對 LM 進行實驗，並且這已被證明是 SOTA unsupervised representation</p>
+<p>我們與兩種廣泛使用的 128-dimensional representation 進行比較：</p>
+<ol>
+<li>NNLM
+<ul>
+<li>context-independent embedding</li>
+</ul>
+</li>
+<li>ELMO
+<ul>
+<li>context-dependent bidirectional LSTM</li>
+</ul>
+</li>
+</ol>
+<p>就像 ICT 一樣，使用 alternate encoder 來預先計算 encoded evidence blocks 還有初始化經過 finetune 的 question encoding</p>
+<p>根據現有的 IR 文獻，還有 LM 沒有顯著優化 retrieval 的直覺，作者並不期望這些成為強大的 baseline，但是他們證明了將文本編碼為 128 維的難度</p>
+<h3 id="results">Results</h3>
+<p><img src="/Blog/images/deep-learning/ORQA/table5.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>在提問者已經知道答案的資料集中</p>
+<p>證實壓縮到 128維的向量無法與 BM25 精確表示 evidence 中每個單字的能力相符</p>
+<p>SQuAD 的 dev 和 test 間的顯著下降反映了資料集中的某個特性 - 10 萬個問題僅源自 536 個文件</p>
+<p>因此，SQuAD 的好的檢索目標，會和訓練範例高度相關，違反了 IID 假設，使其不適合學習檢索</p>
+<p>因此，作者強烈建議對 end-to-end open-domain QA models 有興趣的人不再使用 SQuAD 進行訓練和評估</p>
+<h2 id="analysis">Analysis</h2>
+<h3 id="strongly-supervised-comparison">Strongly supervised comparison</h3>
+<p><img src="/Blog/images/deep-learning/ORQA/table6.jpg"
+	
+	
+	
+	loading="lazy"
+	
+	
+></p>
+<p>為了證實作者的 BM25 Baseline 是 SOTA，提供了和 DrQA 的比較</p>
+<p>DrQA 的 reader 是 DocReader，用 TF-IDF 取得 top k documents</p>
+<p>還包括基於 TF-IDF retrieval 的 distant supervision</p>
+<p>BERTserini 的 reader 是一個基於 base BERT（類似作者的 reader），並用 BM25 搜索 top-k 個段落（像作者的 BM25 baseline）</p>
+<p>主要區別在 BERTserini 使用 Wikipedia 中的真實段落，而不是任意 block，從而由於長度不均導致更多 evidence blocks</p>
+<p>為了和這些強監督系統進行比較，作者在 SQuAD 上預訓練 reader</p>
+<h3 id="masking-rate-in-the-inverse-cloze-task">Masking Rate in the Inverse Cloze Task</h3>
+<p>pseudo-query 在 90% 的時間裡都從 evidence block 遮蔽</p>
+<p>如果總是屏蔽 pseudo-query，那麼 retriever 永遠不會知道 n-gram overlap 是一個強大的 retrieval signal，導致損失 10 個點</p>
+<p>如果從不屏蔽，問題就會簡化為記憶，導致不能很好地推廣到問題</p>
+<h3 id="example-predictions">Example Predictions</h3>
+<p>發現 ORQA 在具有高度詞彙重疊的文本更加 robust</p>
+<p>但是由於 128 維向量的資訊有限</p>
+<p>很難精確地表示極為具體的概念，比如準確日期</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/nlp/">nlp</a>
+        
+            <a href="/Blog/tags/deep-learning/">deep-learning</a>
+        
+            <a href="/Blog/tags/machine-learning/">machine-learning</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/drqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DrQA 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/self-instruct-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Self-Instruct 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/instructgpt/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">InstructGPT</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/gpt-%E4%B8%89%E9%83%A8%E6%9B%B2/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GPT 三部曲</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/clip-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">CLIP 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2023 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>
