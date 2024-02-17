@@ -3,6 +3,7 @@ title: "MLP-Mixer 論文閱讀"
 date: 2023-10-30T00:27:55+08:00
 draft: false
 type: "post"
+description: "MLP 的文藝復興"
 tags: ["deep-learning","machine-learning"]
 categories : ["deep-learning"]
 ---

@@ -2,7 +2,7 @@
 title: "DrQA 論文閱讀"
 date: 2023-12-25T00:00:12+08:00
 draft: false
-description: ""
+description: "以 Wikipedia 為知識來源來解決 open-domain question answering 問題"
 type: "post"
 tags: ["nlp","deep-learning","machine-learning"]
 categories : ["deep-learning"]

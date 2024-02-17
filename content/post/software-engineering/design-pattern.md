@@ -2,7 +2,7 @@
 title: "設計模式 Desing Pattern"
 date: 2023-10-10T00:00:17+08:00
 draft: false
-description: ""
+description: "Creational, Structural, Behavioral"
 type: "post"
 tags: ["software-engineering", "software-design"]
 categories : ["software-engineering"]

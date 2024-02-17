@@ -3,6 +3,7 @@ title: "Diffusion 入門"
 date: 2023-10-23T00:27:55+08:00
 draft: false
 type: "post"
+description: "無法一步到位，那就不要一步到位"
 tags: ["computer-vision","deep-learning","machine-learning", "self-attention"]
 categories : ["deep-learning"]
 ---

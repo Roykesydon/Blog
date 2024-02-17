@@ -2,7 +2,7 @@
 title: "ORQA 論文閱讀"
 date: 2023-12-25T00:00:13+08:00
 draft: false
-description: ""
+description: "把 retriever 和 reader 做 end-to-end 的訓練，而不是用 blackbox IR system 來找 evidence"
 type: "post"
 tags: ["nlp","deep-learning","machine-learning"]
 categories : ["deep-learning"]

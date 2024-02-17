@@ -210,6 +210,12 @@ menu:
           params:
               icon: brand-twitter
 
+        - identifier: pixiv
+          name: Pixiv
+          url: https://www.pixiv.net/users/18855729
+          params:
+              icon: brand-pixiv
+
 related:
     includeNewer: true
     threshold: 60

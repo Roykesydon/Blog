@@ -3,6 +3,7 @@ title: "CLIP 論文閱讀"
 date: 2023-11-21T01:08:46+08:00
 draft: false
 type: "post"
+description: "從 Natural Language 中學習 image representation"
 tags: ["deep-learning","machine-learning", "zero-shot-learning", "multimodal", "computer-vision"]
 categories : ["deep-learning"]
 ---

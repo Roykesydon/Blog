@@ -17,9 +17,9 @@
 &lt;h2 id=&#34;education&#34;&gt;Education&lt;/h2&gt;
 &lt;dl&gt;
 &lt;dt&gt;2023-2025 (expected)&lt;/dt&gt;
-&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;MSc, Computer Science and Information Engineering&lt;/strong&gt;&lt;/strong&gt;; National Cheng Kung University&lt;/dd&gt;
+&lt;dd&gt;*&lt;strong&gt;*MSc, Computer Science and Information Engineering**&lt;/strong&gt;; National Cheng Kung University&lt;/dd&gt;
 &lt;dt&gt;2019-2023&lt;/dt&gt;
-&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;BSc, Computer Science and Engineering&lt;/strong&gt;&lt;/strong&gt;; National Taiwan Ocean University&lt;/dd&gt;
+&lt;dd&gt;*&lt;strong&gt;*BSc, Computer Science and Engineering**&lt;/strong&gt;; National Taiwan Ocean University&lt;/dd&gt;
 &lt;/dl&gt;
 &lt;h2 id=&#34;awards-and-examination&#34;&gt;Awards and Examination&lt;/h2&gt;
 &lt;dl&gt;
@@ -33,6 +33,8 @@
 &lt;dd&gt;$3^{rd}$ place, 2020 中區程式設計競賽 (Central Collegiate Programming Contest, CCPC)&lt;/dd&gt;
 &lt;dt&gt;2021 / 12&lt;/dt&gt;
 &lt;dd&gt;$2^{nd}$ place, 2021 東華杯程式設計競賽大專組 ( National Dong Hwa University Programming Contest)&lt;/dd&gt;
+&lt;dt&gt;2024 / 01&lt;/dt&gt;
+&lt;dd&gt;$1^{st}$ place, 2024 TSMC IT CareerHack (廠務知識機器人)&lt;/dd&gt;
 &lt;/dl&gt;
 &lt;h2 id=&#34;skills&#34;&gt;Skills&lt;/h2&gt;
 &lt;dl&gt;
@@ -48,7 +50,7 @@
 &lt;h2 id=&#34;experience&#34;&gt;Experience&lt;/h2&gt;
 &lt;dl&gt;
 &lt;dt&gt;2020-2023&lt;/dt&gt;
-&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;Adjunct research assistants&lt;/strong&gt;&lt;/strong&gt;; Advanced Computation Laboratory&lt;/dd&gt;
+&lt;dd&gt;*&lt;strong&gt;*Adjunct research assistants**&lt;/strong&gt;; Advanced Computation Laboratory&lt;/dd&gt;
 &lt;/dl&gt;
 &lt;h2 id=&#34;working-experience&#34;&gt;Working Experience&lt;/h2&gt;
 &lt;dl&gt;
@@ -81,7 +83,7 @@
 &gt;&lt;/p&gt;
 &lt;/dd&gt;
 &lt;dt&gt;Roykestereo&lt;/dt&gt;
-&lt;dd&gt;This is a cloud-based music player that offers the ability to upload music locally, as well as download and listen to music from the cloud. The backend uses Fourier transform and other processing techniques to compute the spectrum of music at each moment. In addition to basic features, there is also a chat room function supported by socket.io, and MongoDB is used for data access.
+&lt;dd&gt;This is a cloud-based music player that offers the ability to upload local music, as well as download and listen to music from the cloud. The backend uses Fourier transform and other processing techniques to compute the spectrum of music at each moment. In addition to basic features, there is also a chat room function supported by socket.io, and MongoDB is used for data access.
 &lt;p&gt;&lt;img src=&#34;https://github.com/Roykesydon/Roykestereo/blob/main/demo/home.png?raw=true&#34;
 	
 	
@@ -138,6 +140,71 @@
 &gt;&lt;/p&gt;
 &lt;/dd&gt;
 &lt;/dl&gt;
+&lt;h2 id=&#34;painting&#34;&gt;Painting&lt;/h2&gt;
+&lt;p&gt;I enjoy drawing ACG themed artwork.&lt;/p&gt;
+&lt;p&gt;My work is primarily published on Pixiv or Twitter, with occasional posts on Reddit and Bahamut as well.&lt;/p&gt;
+
+
+
+&lt;style&gt;
+.painting {
+display: block;
+margin-left: auto;
+margin-right: auto;
+height:70vh !important;
+width: auto !important;
+}
+
+@media (max-aspect-ratio: 3/4) {
+  .painting {
+    height: auto !important;
+    width: 100% !important;
+  }
+}
+&lt;/style&gt;
+
+
+&lt;p&gt;2024 / 02 - 楓丹的預言&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/GGYFRLdb0AAq0ns?format=jpg&amp;name=4096x4096&#34; alt=&#34;&#34;&gt;
+
+
+&lt;p&gt;2022 / 07 - Gura&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/FWgt23xUYAA_N2C?format=jpg&amp;name=medium&#34; alt=&#34;&#34; &gt;
+
+&lt;p&gt;2022 / 03 - アスカ&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/FN57PJFUYAMiqpZ?format=jpg&amp;name=large&#34;
+ alt=&#34;&#34;&gt;
+
+&lt;p&gt;2021 / 08 - Sundae&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/E9NWJmpVkAQJ2Cv?format=jpg&amp;name=medium&#34;
+ alt=&#34;&#34;&gt;
+
+&lt;p&gt;2021 / 07 - Gawr Gura&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/E6eg5-vVkAA1l-X?format=jpg&amp;name=4096x4096&#34;
+ alt=&#34;&#34;&gt;
+
+&lt;p&gt;2021 / 05 - CatShark&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/E1KCtZdVUAAxQp7?format=jpg&amp;name=4096x4096&#34;
+ alt=&#34;&#34;&gt;
+
+&lt;p&gt;2020 / 02 - 牧瀨紅莉栖 メイドさん&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/EuMTVM4VEAM9HJY?format=jpg&amp;name=4096x4096&#34;
+ alt=&#34;&#34;&gt;
+
 </description>
         </item>
         <item>

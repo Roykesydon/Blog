@@ -3,6 +3,7 @@ title: "DETR 論文閱讀"
 date: 2023-08-10T00:27:55+08:00
 draft: false
 type: "post"
+description: "簡化目標檢測的 pipeline"
 tags: ["computer-vision","deep-learning","machine-learning", "transformer", "attention", "self-attention"]
 categories : ["deep-learning"]
 ---
