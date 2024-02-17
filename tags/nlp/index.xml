@@ -6,7 +6,354 @@
         <description>Recent content in nlp on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 25 Dec 2023 00:00:13 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/nlp/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 05 Jan 2024 00:00:13 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/nlp/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>REALM 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/realm-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Fri, 05 Jan 2024 00:00:13 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/realm-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2002.08909&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;REALM: Retrieval-Augmented Language Model Pre-Training&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;為了用更加模組化和可解釋的方式獲取知識，作者用 latent knowledge retriever 來加強語言模型的預訓練，latent knowledge retriever 允許模型檢索 large corpus 的 document，並在預訓練、微調和推理時使用。&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/REALM/fig1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在諸如 BERT 的語言模型中，學到的 world knowledge 隱式地儲存在神經網路的參數中，使其很難確定儲存了哪些知識以及儲存在何處。而且儲存空間受網路大小限制，但訓練更大的網路可能非常昂貴&lt;/p&gt;
+&lt;p&gt;本文為了以更加可解釋和模組化的方式獲取知識，提出了一個新穎的框架，Retrieval-Augmented Language Model (REALM) 預訓練，透過 learned textual knowledge retriever 來加強預訓練&lt;/p&gt;
+&lt;p&gt;和把知識儲存在參數中的模型相比，該方法顯示地揭示 world knowledge 扮演的角色，做法是要求模型在推理過程中決定哪些知識來 retrieve，並用在推理階段&lt;/p&gt;
+&lt;p&gt;在每次預測前，語言模型使用 retriever 在 large corpus 搜索文件，並用這些文件幫助預測&lt;/p&gt;
+&lt;p&gt;End to End 的學習需要考慮整個檢索步驟，好進行反向傳播&lt;/p&gt;
+&lt;p&gt;REALM 有個關鍵直覺，就是訓練 retriever 的時候用的是 unsupervised text 的 performance-based signal：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一個可以提高語言模型複雜性的檢索是有幫助，且該被獎勵的&lt;/li&gt;
+&lt;li&gt;資訊不足的檢索應該受到懲罰&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;比如圖 Fig.1 找到的文件就該獲得獎勵&lt;/p&gt;
+&lt;p&gt;作者將 retrieve-then-predict 的方法建模並視作 latent variable language model 並優化 marginal likelihood&lt;/p&gt;
+&lt;p&gt;但在預訓練期間要訓練大規模的 retrieval module 成為問題，因為 Retriever 得為每個預訓練步驟考慮數百萬個候選文檔，而且必須根據決策反向傳播。為了解決這問題，作者建構了 retriever，以便快取和非同步更新每個文件的計算，並將最佳文件的選擇表示為 Maximum Inner Product Search (MIPS)&lt;/p&gt;
+&lt;p&gt;透過在 Open-QA 任務上使用 REALM 預訓練的 model 來 finetune 進行評估，OpenQA 是最 knowledge-intensive 的任務之一&lt;/p&gt;
+&lt;p&gt;作者挑了三個流行的 Open-QA benchmark，比如 NaturalQuestions-Open、WebQuestions、CuratedTrec，並和 SOTA Open-QA model 比較&lt;/p&gt;
+&lt;p&gt;在三個基準都取得了 SOTA 的結果，absolute accuracy 明顯高於先前系統 4-16%&lt;/p&gt;
+&lt;p&gt;也展示了 REALM 的 qualitative benefit，比如可解釋性和模組化&lt;/p&gt;
+&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
+&lt;h3 id=&#34;open-domain-question-answering-open-qa&#34;&gt;Open-domain question answering (Open-QA)&lt;/h3&gt;
+&lt;p&gt;OpenQA 的 open 是指模型不會接收到包含答案的預提供文件，和傳統的閱讀理解不同&lt;/p&gt;
+&lt;h2 id=&#34;approach&#34;&gt;Approach&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/REALM/fig2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;realms-generative-process&#34;&gt;REALM’s generative process&lt;/h3&gt;
+&lt;p&gt;預訓練做 masked language modeling，微調的任務是 Open-QA&lt;/p&gt;
+&lt;h3 id=&#34;model-architecture&#34;&gt;Model architecture&lt;/h3&gt;
+&lt;p&gt;neural knowledge retriever 是 $p(z|x)$&lt;/p&gt;
+&lt;p&gt;knowledge-augmented encoder 是 $p(y|z,x)$&lt;/p&gt;
+&lt;h4 id=&#34;knowledge-retriever&#34;&gt;Knowledge Retriever&lt;/h4&gt;
+&lt;p&gt;$p(z|x)=\frac{\text{exp }f(x,z)}{\sum_{z&amp;rsquo;}\text{exp }f(x,z&amp;rsquo;)}$&lt;/p&gt;
+&lt;p&gt;$f(x,z) = Embed_{input}(x)^T Embed_{doc}(z)$&lt;/p&gt;
+&lt;p&gt;$join_{BERT}(x)=[CLS]x[SEP]$&lt;/p&gt;
+&lt;p&gt;$join_{BERT}(x_1, x_2)=[CLS]x_1[SEP]x_2[SEP]$&lt;/p&gt;
+&lt;p&gt;$Embed_{input}(x)=W_{input}BERT_{CLS}(join_{BERT}(x))$&lt;/p&gt;
+&lt;p&gt;$Embed_{doc}(z)=W_{doc}BERT_{CLS}(join_{BERT}(z_{title}, z_{body}))$&lt;/p&gt;
+&lt;h4 id=&#34;knowledge-augmented-encoder&#34;&gt;Knowledge-Augmented Encoder&lt;/h4&gt;
+&lt;p&gt;Finetune:&lt;/p&gt;
+&lt;p&gt;$p(y|z,x) \propto \displaystyle\sum_{s\in S(z,y)}exp(MLP([h_{START(s)};h_{END(s)}]))$&lt;/p&gt;
+&lt;p&gt;$h_{START(s)}=BERT_{START(s)}(join_{BERT}(x,z_{body}))$&lt;/p&gt;
+&lt;p&gt;$h_{END(s)}=BERT_{END(s)}(join_{BERT}(x,z_{body}))$&lt;/p&gt;
+&lt;h3 id=&#34;training&#34;&gt;Training&lt;/h3&gt;
+&lt;p&gt;關鍵的計算挑戰是 $p(y|x)=\sum_{z\in Z}p(y|x,z)p(z,x)$，涉及到 Z knowledge corpus 中的 所有 document z，因此只取機率 $p(z|x)$ 最高的 top k 文件來求和，考量到多數文件的機率應該為 0，這是合理的&lt;/p&gt;
+&lt;p&gt;但是依然需要一個有效的方法來尋找前 k 個文件&lt;/p&gt;
+&lt;p&gt;前面的 $f(x,z)$ 是一個內積，可以用  Maximum Inner Product Search (MIPS) 演算法來尋找近似前 k 個文檔&lt;/p&gt;
+&lt;p&gt;為了用 MIPS，要先用一種 embedding 函式來幫 z encode，但是如果更新了這個函式，資料結構和 $p(z|x)$ 又會不一致&lt;/p&gt;
+&lt;p&gt;因此，每次對 embedding 函式更新後，search index 都會變 &amp;ldquo;stale&amp;rdquo; (陳舊)&lt;/p&gt;
+&lt;p&gt;每隔數百個訓練步驟非同步重新 embed 和 index 所有 document 來刷新 index&lt;/p&gt;
+&lt;p&gt;MIPS 的 index 在刷新之前會有點 stale，但它只用於挑選前 k 個文件&lt;/p&gt;
+&lt;p&gt;結果證明，只要在恰當的刷新率下，還是可以穩定 optimize&lt;/p&gt;
+&lt;h4 id=&#34;what-does-the-retriever-learn&#34;&gt;What does the retriever learn?&lt;/h4&gt;
+&lt;p&gt;這裡展示了它如何獎勵提高預測準確性的檢索&lt;/p&gt;
+&lt;p&gt;$\triangledown \text{log }p(y|x)=\displaystyle\sum_{z\in Z}r(z)\triangledown f(x,z)$&lt;/p&gt;
+&lt;p&gt;$r(z)=[\frac{p(y|z,x)}{p(y|x)}-1]p(z|x)$&lt;/p&gt;
+&lt;p&gt;如果 $r(z)$ 是正的，會讓 f(x,z) 提高，否則減低&lt;/p&gt;
+&lt;p&gt;$r(z)$ 只有在 $p(y|z,x)&amp;gt;p(y|x)$ 的情況下才會是正的&lt;/p&gt;
+&lt;p&gt;$p(y|x)$ 是 $p(y|x,z)$ 在隨機取樣的情況下的期望值&lt;/p&gt;
+&lt;p&gt;只要文檔 z 好過預期，就會持續正面更新&lt;/p&gt;
+&lt;h3 id=&#34;injecting-inductive-biases-into-pre-training&#34;&gt;Injecting inductive biases into pre-training&lt;/h3&gt;
+&lt;p&gt;在發展 REALM 的過程中，作者發現幾個額外策略，可以進一步引導模型進行有意義的檢索&lt;/p&gt;
+&lt;h4 id=&#34;salient-span-masking&#34;&gt;Salient span masking&lt;/h4&gt;
+&lt;p&gt;有一些 MLM span 只需要 local context，但作者想專注於 world knowledge&lt;/p&gt;
+&lt;p&gt;所以作者會 mask 一些 salient span，比如「英國」、「1969 年 7 月」&lt;/p&gt;
+&lt;p&gt;作者用在 CoNLL-2003 上訓練的 BERT-based tagger，來找出 named entities，並用正規表達式來找出日期&lt;/p&gt;
+&lt;p&gt;結果表明這顯著優於其他 mask 策略&lt;/p&gt;
+&lt;h4 id=&#34;null-document&#34;&gt;Null document&lt;/h4&gt;
+&lt;p&gt;雖然 Salient span masking 表現很好，但不是所有 mask 都需要 world knowledge&lt;/p&gt;
+&lt;p&gt;透過向前 top k 文檔中多加一個空的文檔，允許在不需要檢索有空白選項&lt;/p&gt;
+&lt;h4 id=&#34;prohibiting-trivial-retrievals&#34;&gt;Prohibiting trivial retrievals&lt;/h4&gt;
+&lt;p&gt;如果 mask 的句子來自文件 z，可以透過查看 z 中 x 的 unmasked 版本來輕鬆預測 y，使 p(z|x) 出現較大的梯度，如果這種情況太頻繁，會使 retriever 最終學會的東西偏向 exact match，而不會捕獲其他形式的相關性&lt;/p&gt;
+&lt;p&gt;因此，在預訓練期間排除了 trivial candidate&lt;/p&gt;
+&lt;h4 id=&#34;initialization&#34;&gt;Initialization&lt;/h4&gt;
+&lt;p&gt;在訓練開始時，如果 input 和 document 各自的 Embedding function 沒有良好的效能，會使檢索到的 z 和 x 無關&lt;/p&gt;
+&lt;p&gt;會導致模型學習忽略檢索到的文件，檢索器就不會收到有意義的梯度，也無法改進&lt;/p&gt;
+&lt;p&gt;為了避免 cold-start problem，作者採用 warm-start 方案，先以  Inverse Cloze Task (ICT) 這種簡單的目標來處理兩個 embedding function，給定一個句子，訓練模型檢索句子來自的文檔&lt;/p&gt;
+&lt;h2 id=&#34;experiments&#34;&gt;Experiments&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/REALM/table1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/REALM/table2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;open-qa-benchmarks&#34;&gt;Open-QA Benchmarks&lt;/h3&gt;
+&lt;p&gt;本文將重點放在問題作者不知道答案的資料集，比較能反映現實中的問題&lt;/p&gt;
+&lt;h4 id=&#34;naturalquestions-open&#34;&gt;NaturalQuestions-Open&lt;/h4&gt;
+&lt;p&gt;由自然發生的 google 查詢和答案組成，每個答案還帶有 answer type&lt;/p&gt;
+&lt;p&gt;本文只用屬於 &amp;ldquo;short answer type&amp;rdquo; 的問題，最多有 5 個 token&lt;/p&gt;
+&lt;h4 id=&#34;webquestions&#34;&gt;WebQuestions&lt;/h4&gt;
+&lt;p&gt;從 Google Suggest API 收集的&lt;/p&gt;
+&lt;h4 id=&#34;curatedtrec&#34;&gt;CuratedTrec&lt;/h4&gt;
+&lt;p&gt;從 MSNSearch 和 AskJeeves 等網站上真實使用者查詢中提取的問答&lt;/p&gt;
+&lt;h3 id=&#34;approaches-compared&#34;&gt;Approaches compared&lt;/h3&gt;
+&lt;h4 id=&#34;retrieval-based-open-qa&#34;&gt;Retrieval-based Open-QA&lt;/h4&gt;
+&lt;p&gt;最近的一些方法提出用 MIPS index 來實現可訓練的檢索&lt;/p&gt;
+&lt;p&gt;ORQA 與 REALM 類似&lt;/p&gt;
+&lt;p&gt;但 REALM 提出了更新穎的模型預訓練步驟，並反向傳播到 MIPS index 中，而不用固定的 index&lt;/p&gt;
+&lt;p&gt;上面指的應該是有關於非同步更新 index 的部分，還可以梯度更新&lt;/p&gt;
+&lt;p&gt;值得注意的是，REALM 和 OrQA 的預訓練都是用 ICT 初始化的&lt;/p&gt;
+&lt;h4 id=&#34;generation-based-open-qa&#34;&gt;Generation-based Open-QA&lt;/h4&gt;
+&lt;p&gt;Open-QA 的新興替代方案是將其建模為序列預測任務，只需對問題進行編碼，然後根據編碼逐個標記編碼答案&lt;/p&gt;
+&lt;p&gt;GPT2 可以透過 sequence to sequence 直接產生答案，而不需要給指定的上下文，但可能由於缺乏 finetune 而沒有競爭力&lt;/p&gt;
+&lt;p&gt;同時，T5 表明，直接生成答案而不從給定上下文中明確提取是可行的方法，但他們只在提供上下文文檔的閱讀理解任務上進行實驗&lt;/p&gt;
+&lt;p&gt;為了和最具競爭力的 baseline 比較，本文與針對 Open-QA finetune 的 T5 進行比較&lt;/p&gt;
+&lt;h3 id=&#34;implementation-details&#34;&gt;Implementation Details&lt;/h3&gt;
+&lt;h4 id=&#34;fine-tuning&#34;&gt;Fine-tuning&lt;/h4&gt;
+&lt;p&gt;文件被貪婪地分割成多達 288 個 BERT wordpieces 的 chunk，產生超過 1300 萬個 retrieval candidates&lt;/p&gt;
+&lt;p&gt;在微調推理過程中，考慮前五個候選者&lt;/p&gt;
+&lt;h4 id=&#34;pre-training&#34;&gt;Pre-training&lt;/h4&gt;
+&lt;p&gt;使用 BERT 的預設優化器在 64 個 Google Cloud TPU 上預訓練 20 萬步&lt;/p&gt;
+&lt;p&gt;MIPS 在 16 個 TPU 上並行&lt;/p&gt;
+&lt;h3 id=&#34;main-results&#34;&gt;Main results&lt;/h3&gt;
+&lt;p&gt;REALM 在 table.1 明顯優於之前的所有方法&lt;/p&gt;
+&lt;p&gt;REALM 最直接的比較是 ORQA，微調設定、超參數和訓練資料都相通&lt;/p&gt;
+&lt;p&gt;REALM 對比 ORQA 的改進純粹是更好的預訓練方法&lt;/p&gt;
+&lt;p&gt;而且本文表明他們的預訓練方法可以用在 single-corpus setting 或 seperate corpus setting&lt;/p&gt;
+&lt;p&gt;兩者的差別在 X 和 Z 來源一不一樣&lt;/p&gt;
+&lt;h3 id=&#34;analysis&#34;&gt;Analysis&lt;/h3&gt;
+&lt;p&gt;table.2 展現了去除 REALM 關鍵組件後的結果&lt;/p&gt;
+&lt;p&gt;還展現了 finetune 前 gold answer 出現在前五個檢索中的頻率&lt;/p&gt;
+&lt;h4 id=&#34;masking-scheme&#34;&gt;Masking scheme&lt;/h4&gt;
+&lt;p&gt;salient span masking 在先前標準的 BERT 訓練中尚未被證明具有影響力，但對於 REALM 至關重要&lt;/p&gt;
+&lt;h4 id=&#34;mips-index-refresh-rate&#34;&gt;MIPS index refresh rate&lt;/h4&gt;
+&lt;p&gt;在預訓練期間，運行並行過程來重新 embed document 和重建 MIPS index&lt;/p&gt;
+&lt;p&gt;導致每大約 500 個訓練步驟刷新一次 index&lt;/p&gt;
+&lt;p&gt;為了證明頻繁刷新的重要性，也和較慢刷新率比較&lt;/p&gt;
+&lt;p&gt;table.2 顯示，stale index 可能會傷害模型，進一步減少這種過時性可以提供更好的最佳化&lt;/p&gt;
+&lt;h2 id=&#34;discussion-and-related-work&#34;&gt;Discussion and Related Work&lt;/h2&gt;
+&lt;h3 id=&#34;scalable-grounded-neural-memory&#34;&gt;Scalable grounded neural memory&lt;/h3&gt;
+&lt;p&gt;document index 可以被視為一種 memory，key 是 document embedding&lt;/p&gt;
+&lt;p&gt;從這角度來看，本文的工作和 product key memory 有共同的動機，它能夠在記憶體網路中實現低於線性的存取&lt;/p&gt;
+&lt;p&gt;一個主要的區別是本文的記憶體是有根據的，每個 memory 都和一個文檔相關聯，而不是和 unnamed value vector 相關聯&lt;/p&gt;
+&lt;p&gt;這種程度的可解釋性對 Open-QA 至關重要，在這些應用程式中，用戶需要出處才能使預測答案值得信賴&lt;/p&gt;
+&lt;h2 id=&#34;future-work&#34;&gt;Future Work&lt;/h2&gt;
+</description>
+        </item>
+        <item>
+        <title>DPR 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/dpr-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Thu, 28 Dec 2023 00:00:13 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/dpr-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2004.04906&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Dense Passage Retrieval for Open-Domain Question Answering&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;Open-domain question answering 依賴有效的 passage retrieval 來選擇 candidate context，傳統上用的 sparse vector space models，有 TF-IDF、BM25 等等&lt;/p&gt;
+&lt;p&gt;本文顯示出檢索實際上可以只用 dense representation，embedding 是從少量的 question 和 passage 學到的，利用簡單的 dual-encoder framework&lt;/p&gt;
+&lt;p&gt;在廣泛的 open-domain QA 資料集上，本文的 dense retriever 在 top-20 passage retrieval accuracy 上比 Lucene BM25 好 9%-19%&lt;/p&gt;
+&lt;p&gt;並幫助作者的 end-to-end QA system 在 multiple open-domain QA benchmarks 上取得 SOTA&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;早期閱讀理解模型提出了簡單的 two-stage framework：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;一個 context retriever 先選定一些 passage 子集合，其中某一些 passage 包含答案&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;一個 machine reader，可以徹底檢查選出的 context 並找到答案&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;盡管將 open-domain QA 簡化為 machine reading 是一個合理的策略，但是實際上經常看到嚴重的性能下降，顯示出需要改進 retrieval&lt;/p&gt;
+&lt;p&gt;open-domain QA 中的 retrieval 通常用 TF-IDF 或 BM25 來實現，可以透過 inverted index 有效地 match keywords，而且把 question 和 context 表示為 high-dimensional sparse vectors&lt;/p&gt;
+&lt;p&gt;相反的，Dense latent semantic encoding 在設計上和 sparse representation 是互補的&lt;/p&gt;
+&lt;p&gt;例如，由完全不同的 token 組成的兩個同義詞依然可以映射到接近的向量&lt;/p&gt;
+&lt;p&gt;term-based system 相較 dense retrieval system 很難將比如「壞人」和「惡棍」匹配&lt;/p&gt;
+&lt;p&gt;Dense encoding 也可以透過調整 embedding function 來學習，對於 task-specific 的 representation 提供了彈性&lt;/p&gt;
+&lt;p&gt;透過特殊的 in-memory data structure 和 indexing scheme，可以用 maximum inner product search (MIPS) 來快速檢索&lt;/p&gt;
+&lt;p&gt;然而，人們普遍認為學習良好的 dense vector representation 需要大量的 QA labeled pair&lt;/p&gt;
+&lt;p&gt;因此，在 ORQA 之前，Dense retrieval 從沒被證明過可以在 open-domain QA 上贏過 TF-IDF 或 BM25&lt;/p&gt;
+&lt;p&gt;ORQA 提出了 ICT 來做額外的預訓練&lt;/p&gt;
+&lt;p&gt;盡管 ORQA 證明了 dense retrieval 可以超越 BM25，在多個 open-domain QA 資料集上取得 SOTA，但他也存在兩個弱點：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;ICT 預訓練是 compute-intensive，而且不確定 regular sentence 是否能很好的替代 objective function 中的 question&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;由於 context encoder 沒有用 QA pair 進行 finetune，因此相應的 representation 可能不是最佳的&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在本文中，本文將解決一個問題 &amp;ndash; 我們是否可以只用 QA pair 來訓練更好的 dense embedding model，而不用額外的預訓練？&lt;/p&gt;
+&lt;p&gt;利用現在的 standard BERT pre-trained model 以及 dual-encoder architecture，本文專注於用相對少量的 question and passage pair 來訓練 dense retriever&lt;/p&gt;
+&lt;p&gt;經過一系列的 ablation study，本文的解決方案出奇的簡單&lt;/p&gt;
+&lt;p&gt;embedding 可以用最大化 question 和 相關的 passage 的 inner product 來訓練&lt;/p&gt;
+&lt;p&gt;作者的 Dense Passage Retrieval (DPR)  非常強大，不僅大幅優於 BM25，而且和 ORQA 相比，end-to-end QA 準確度也有大幅提升&lt;/p&gt;
+&lt;p&gt;作者的貢獻有兩部分：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;作者證明在適當的設置下，只需在現有 question-passge pair 上 finetune question and passage encoder，就可以大幅超過 BM25，實驗結果也證明可能不用額外的預訓練&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;作者證明了在 open-domain QA 的背景下，更高的 retrieval accuracy 可以轉化為更高的 end-to-end QA accuracy&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;透過對 top retrived passage 使用 modern reader model，和幾個非常複雜的系統相比，作者在 open-retrieval setting 下的多個資料集取得了可比較或更好的結果&lt;/p&gt;
+&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
+&lt;p&gt;本文研究的 open-domain QA 的描述如下：&lt;/p&gt;
+&lt;p&gt;先給出一個事實性問題，不屬於特定主題，需要一個系統使用大量多樣化主題的 corpus 來回答&lt;/p&gt;
+&lt;p&gt;更具體地說，作者假設 extractive QA setting，答案僅限於 corpus 中的一個或多個 passage 中出現的範圍&lt;/p&gt;
+&lt;p&gt;假設有 D 個 documents，先把每個 document 拆成多個等長的 text passage，好做為 basic retrieval unit，最後得到 M 個 passage in corpus C&lt;/p&gt;
+&lt;p&gt;每個 passage 可以被視作一個 token 序列&lt;/p&gt;
+&lt;p&gt;對於 question q，則是要找到某段 passage 中的一串連續的 token 來回答&lt;/p&gt;
+&lt;p&gt;值得注意的一點是，為了涵蓋盡可能廣泛的概念，corpus 的大小可能會從數百萬個文件到數十億個文件不等&lt;/p&gt;
+&lt;p&gt;因此，任何 open-domain QA system 都需要一個高效的 retriever，可以在 reader 提取答案前選擇一小組相關的文本&lt;/p&gt;
+&lt;h2 id=&#34;dense-passage-retriever-dpr&#34;&gt;Dense Passage Retriever (DPR)&lt;/h2&gt;
+&lt;p&gt;作者的研究重點是改進 open-domain QA 的 retrieval component&lt;/p&gt;
+&lt;p&gt;給定 M 個 passage，DPR 的目標是把所有 low-dimensional continuous space 的所有 passage 都給 index，使它可以有效地檢所和輸入問題相關的 top-k passage&lt;/p&gt;
+&lt;p&gt;M 有可能非常大，比如本文有 21M 個 passage，而 k 通常很小，可能只有 20~100 個&lt;/p&gt;
+&lt;h3 id=&#34;overview&#34;&gt;Overview&lt;/h3&gt;
+&lt;p&gt;用 dense encoder $E_P(．)$ 和 $E_Q(．)$ 來分別 encode passage 和 question，在計算兩者的 inner product 來衡量相似度&lt;/p&gt;
+&lt;p&gt;盡管確實存在測量 question 和 passage 之間更具表現力的模型形式，比如帶有 cross-attention 的 multi-layer networks，但是 similarity function 需要可以分解，才可以預先計算 passage 的 embedding&lt;/p&gt;
+&lt;p&gt;大多數 decomposable similarity function 是 Euclidean distance (L2) 的變換&lt;/p&gt;
+&lt;p&gt;比如，consine 是 unit vector 的 inner product，而 Mahalanobis distance 等同於在 transformed space 的 L2 distance&lt;/p&gt;
+&lt;p&gt;由於 ablation study 表示其他相似含數的表現相當，因此選擇更簡單的內積函數，並透過學習更好的 encoder 來改善 dense passage retriever&lt;/p&gt;
+&lt;h4 id=&#34;encoder&#34;&gt;Encoder&lt;/h4&gt;
+&lt;p&gt;本文採用兩個獨立的 BERT，並把 [CLS] token 的 representation 當作 output&lt;/p&gt;
+&lt;h4 id=&#34;inference&#34;&gt;Inference&lt;/h4&gt;
+&lt;p&gt;推理階段，將 passage encoder $E_P$ 應用在所有 passage，並用 FAISS offline index&lt;/p&gt;
+&lt;p&gt;FAISS 是一個非常高效的 open-source library，用在 similarity search 和 clustering of dense vectors，可以輕鬆應用在數十億個向量上&lt;/p&gt;
+&lt;p&gt;在推論接段，計算 q 的 embedding，然後用 FAISS 來找到 top-k passages&lt;/p&gt;
+&lt;h3 id=&#34;training&#34;&gt;Training&lt;/h3&gt;
+&lt;p&gt;每一個 training instance 都包含問題 q，還有一個正 (相關) passage，以及 n 個負 (不相關) passages&lt;/p&gt;
+&lt;h4 id=&#34;positive-and-negative-passages&#34;&gt;Positive and negative passages&lt;/h4&gt;
+&lt;p&gt;對於檢索問題，正例通常明確可用，而反例則通常要從非常大的 pool 中選擇&lt;/p&gt;
+&lt;p&gt;正例可能會在 QA 資料集給出，或是可以從答案找到，其他的段落預設情況下都可視為不相關&lt;/p&gt;
+&lt;p&gt;在實踐中，如何選擇負例常被忽視，但對於學習 high-quality encoder 可能很關鍵&lt;/p&gt;
+&lt;p&gt;考慮三種負例：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;隨機
+&lt;ul&gt;
+&lt;li&gt;Corpus 中隨機選擇&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;BM25
+&lt;ul&gt;
+&lt;li&gt;BM25 返回的 passage 不含答案，但包含最多 question token&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Gold
+&lt;ul&gt;
+&lt;li&gt;positive 和 question 配對&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;第 2 和 3 種是在說拿其他問題的正例當負例&lt;/p&gt;
+&lt;h4 id=&#34;in-batch-negatives&#34;&gt;In-batch negatives&lt;/h4&gt;
+&lt;p&gt;有 B 訓練實體，每個問題有 B-1 個 negative passage，只有 i = j 時，$(q_i, p_j)$ 是正例，其他都是負例&lt;/p&gt;
+&lt;p&gt;in-batch negative 的技巧已被用在 full batch setting 和 mini-batch setting&lt;/p&gt;
+&lt;p&gt;已被證明是學習 dual-encoder 的有效策略，可以增加訓練範例的數量&lt;/p&gt;
+&lt;h2 id=&#34;experimental-setup&#34;&gt;Experimental Setup&lt;/h2&gt;
+&lt;h3 id=&#34;wikipedia-data-pre-processing&#34;&gt;Wikipedia Data Pre-processing&lt;/h3&gt;
+&lt;p&gt;用 DrQA 提供的預處理程式碼從 Wikipedia dump 中提取文章中乾淨的文字部分&lt;/p&gt;
+&lt;p&gt;此步驟將刪除 semi-structured data，比如表格和 info-boxes&lt;/p&gt;
+&lt;p&gt;接著將每天文章分成多個不相交的文字區塊，每個文字區塊由 100 個單字組成，作為 basic retrieval unit，最後會有 21,015,324 個 passage&lt;/p&gt;
+&lt;p&gt;每個 passage 也帶有標題以及 [SEP]&lt;/p&gt;
+&lt;h3 id=&#34;selection-of-positive-passages&#34;&gt;Selection of positive passages&lt;/h3&gt;
+&lt;p&gt;由於 TREC, WebQuestions 和 TriviaQA 中只有 question-answer pair，因此使用 BM25 把包含答案最多的 passage 當作正例&lt;/p&gt;
+&lt;p&gt;如果檢索到的前 100 篇文章中沒有答案，則該問題會被丟棄&lt;/p&gt;
+&lt;h2 id=&#34;experiments-passage-retrieval&#34;&gt;Experiments: Passage Retrieval&lt;/h2&gt;
+&lt;h3 id=&#34;main-results&#34;&gt;Main Results&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/DPR/table2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;SQuAD 表現較差有可能是因為 passage 和 question 存在高度詞彙重疊，給 BM25 帶來優勢，而且資料僅從 500 多篇 wiki 文章中蒐集，因此訓練範例的分佈存在極大的 bias&lt;/p&gt;
+&lt;p&gt;當用多個資料集訓練時，TREC（裡面最小的資料集）獲益最多&lt;/p&gt;
+&lt;h3 id=&#34;ablation-study-on-model-training&#34;&gt;Ablation Study on Model Training&lt;/h3&gt;
+&lt;h4 id=&#34;sample-efficiency&#34;&gt;Sample efficiency&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/DPR/fig1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h4 id=&#34;in-batch-negative-training&#34;&gt;In-batch negative training&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/DPR/table3.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;in-batch negative 可以顯著改善結果，還簡單且節省記憶體，可以重複使用 batch 中已經有的負例&lt;/p&gt;
+&lt;p&gt;它會產生更多 pair，從而增加訓練資料的數量&lt;/p&gt;
+&lt;h4 id=&#34;impact-of-gold-passages&#34;&gt;Impact of gold passages&lt;/h4&gt;
+&lt;p&gt;做了 distant supervision，只有很小的影響，降低了 1 個點&lt;/p&gt;
+&lt;h4 id=&#34;similarity-and-loss&#34;&gt;Similarity and loss&lt;/h4&gt;
+&lt;p&gt;L2 和 inner product 的表現相當，兩個都比 cosine 好&lt;/p&gt;
+&lt;p&gt;有一種流行的 ranking loss 叫做 triplet loss，但是在本文中，作者發現它的表現不會對結果產生太大影響&lt;/p&gt;
+&lt;h4 id=&#34;cross-dataset-generalization&#34;&gt;Cross-dataset generalization&lt;/h4&gt;
+&lt;p&gt;為了測試泛化能力，只在 Natural Questions 上訓練，在較小的 WebQuestions 和 CuratedTREC 上測試，發現泛化能力很好，輸給 SOTA finetune model 3~5 個點，但仍大大優於 BM25 baseline&lt;/p&gt;
+&lt;h2 id=&#34;experiments-question-answering&#34;&gt;Experiments: Question Answering&lt;/h2&gt;
+&lt;h3 id=&#34;result&#34;&gt;Result&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/DPR/table4.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;related-work&#34;&gt;Related Work&lt;/h2&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;證明了 dense retrieval 可以 outperform 甚至可能取代傳統的 sparse retrieval&lt;/p&gt;
+&lt;p&gt;雖然簡單的 dual-encoder framework 可以達到很棒的效果，但作者顯示出要成功訓練也有一些關鍵因素&lt;/p&gt;
+&lt;p&gt;此外，根據 empirical analysis 和 ablation study，更複雜的 model framework 或 similarity function 不一定能提供額外價值&lt;/p&gt;
+&lt;p&gt;由於檢索性能的提高，在多個 open-domain QA benchmarks 上取得了 SOTA&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>ORQA 論文閱讀</title>
         <link>https://roykesydon.github.io/Blog/p/orqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
         <pubDate>Mon, 25 Dec 2023 00:00:13 +0800</pubDate>

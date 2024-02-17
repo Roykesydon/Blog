@@ -11,7 +11,7 @@ Issue 雖然理論上 q 可以任意選，只要不要 q(x) 是 0 的時候 p(x)
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/proximal-policy-optimizationppo/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.7c82827ec91a2557de37d1985da06dac3fa95cda12705c4cf151f99af331bc46.css"><meta property='og:title' content='Proximal Policy Optimization(PPO)'>
+<link rel="stylesheet" href="/Blog/scss/style.min.25175a266eaf84ae9b579db540189510860500aa990cbf672f2b4b465111b6b9.css"><meta property='og:title' content='Proximal Policy Optimization(PPO)'>
 <meta property='og:description' content='On/Off-policy On-policy 學習的 agent 和與環境互動的 agent 是同一個 Off-policy 學習的 agent 和與環境互動的 agent 是不同個 想從 On-policy 轉 Off-policy On-policy 每次都要重新蒐集資料，很花時間 由另一個 $\pi_{\theta^{&amp;rsquo;}}$ 去 train $\theta$，$\theta^{&amp;rsquo;}$是固定的，所以我們可以 re-use sample data Importance Sampling 是一個 general 的想法，不限於 RL
 $E_{x \text{\textasciitilde} p}[f(x)]\approx \frac{1}{N}\displaystyle\sum_{i=1}^N f(x^i)$
 $x^i$ is sampled from p(x) 我們遇到的問題是沒辦法從 p 來 sample data，只能透過 q(x) 去 sample $x^i$
@@ -135,6 +135,28 @@ Issue 雖然理論上 q 可以任意選，只要不要 q(x) 是 0 的時候 p(x)
             
                 <li>
                     <a 
+                        href='https://www.pixiv.net/users/18855729'
+                        target="_blank"
+                        title="Pixiv"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" stroke="currentColor" vector-effect="non-scaling-stroke" fill="">
+  <path stroke-width="1" vector-effect="non-scaling-stroke"
+    d="M701.515 301.152c-44.44-46.092-100.245-64.919-163.08-65.107-29.552-0.089-58.595 4.617-87.095 12.455-28.961 7.965-56.673 18.839-81.996 35.306-3.347 2.176-4.69 4.686-4.695 8.694-0.034 29.713-0.333 59.424-0.426 89.137-0.085 27.263-0.018 54.527-0.021 81.79-0.004 56.836 0.053 113.674-0.097 170.51-0.015 5.326 1.57 8.393 6.639 10.576 17.881 7.7 36.245 13.85 55.161 18.37 30.808 7.36 62.082 10.876 93.715 12.36 33.75 1.583 66.83-1.28 98.832-12.378 61.328-21.265 105.46-61.217 129.447-121.99 15.492-39.25 17.417-80.058 10.877-121.393-7.146-45.173-25.384-85.268-57.26-118.33z"
+    fill="none" />
+  <path stroke-width="1" vector-effect="non-scaling-stroke"
+    d="M512 17.482C238.886 17.482 17.482 238.886 17.482 512S238.886 1006.518 512 1006.518 1006.518 785.114 1006.518 512 785.114 17.482 512 17.482z m327.127 530.516c-18.962 47.58-50.687 84.816-92.709 113.517-43.734 29.872-92.452 46.554-144.647 53.74-66.355 9.136-131.115 0.236-195.108-17.307-12.485-3.423-24.767-7.483-37.009-11.676-4.732-1.62-5.413-1.201-5.42 3.878-0.049 33.583 0.004 67.165-0.069 100.748-0.008 3.782 1.314 5.86 5.093 7.004 7.233 2.187 14.26 5.003 20.384 9.602 3.594 2.699 6.19 5.968 5.824 10.873-0.43 5.752-3.64 8.957-9.432 8.968-19.872 0.039-39.744 0.014-59.617 0.014-19.41 0.006-38.82-0.103-58.23 0.082-4.736 0.045-8.025-1.288-9.814-5.842-1.798-4.575-0.752-8.45 2.566-11.847 5.698-5.833 13.181-8.404 20.593-11 7.625-2.668 7.8-0.933 7.8-10.86-0.02-151.738-0.02-303.476-0.076-455.215-0.001-2.353 1.227-5.726-1.09-6.829-2.297-1.094-4.167 1.976-6 3.442-22.584 18.058-43.474 37.783-60.052 61.694-0.527 0.76-1.03 1.537-1.588 2.273-5.878 7.727-9.827 15.6-5.76 25.855 1.946 4.91 1.707 10.59 0.282 15.968-0.937 3.532-2.436 6.64-5.44 8.865-5.016 3.718-8.469 3.16-11.788-2.085-12.847-20.308-25.59-40.682-38.532-60.928-2.117-3.313-1.999-5.634 0.715-8.492 17.758-18.692 37.058-35.675 57.256-51.635 51.148-40.413 106.911-72.725 168.335-94.902 40.036-14.455 81.234-23.72 123.709-27.312 49.596-4.194 98.488-0.765 146.365 13.295 50.8 14.919 95.584 40.146 131.966 79.103 36.324 38.896 58.162 84.856 65.163 137.62 5.425 40.866 1.694 80.839-13.67 119.389z"
+    fill="none" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
                         href='https://twitter.com/Roykesydon'
                         target="_blank"
                         title="Twitter"
@@ -142,13 +164,13 @@ Issue 雖然理論上 q 可以任意選，只要不要 q(x) 是 0 的時候 p(x)
                     >
                         
                         
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" 
+class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
+  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+  <path
+    d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
 </svg>
-
-
-
                         
                     </a>
                 </li>
@@ -653,12 +675,12 @@ clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\vareps
             
                 
 <article class="">
-    <a href="/Blog/p/orqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/realm-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">ORQA 論文閱讀</h2>
+            <h2 class="article-title">REALM 論文閱讀</h2>
         </div>
     </a>
 </article>
@@ -666,12 +688,12 @@ clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\vareps
             
                 
 <article class="">
-    <a href="/Blog/p/drqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/dpr-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">DrQA 論文閱讀</h2>
+            <h2 class="article-title">DPR 論文閱讀</h2>
         </div>
     </a>
 </article>
@@ -690,7 +712,9 @@ clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\vareps
     <section class="copyright">
         &copy; 
         
-        2023 Roykesydon
+            2023 - 
+        
+        2024 Roykesydon
     </section>
     
     <section class="powerby">
