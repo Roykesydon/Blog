@@ -15,10 +15,10 @@ menu:
 ## Education
 
 2023-2025 (expected)
-: \***\*MSc, Computer Science and Information Engineering\*\***; National Cheng Kung University
+: ****MSc, Computer Science and Information Engineering****; National Cheng Kung University
 
 2019-2023
-: \***\*BSc, Computer Science and Engineering\*\***; National Taiwan Ocean University
+: ****BSc, Computer Science and Engineering****; National Taiwan Ocean University
 
 ## Awards and Examination
 

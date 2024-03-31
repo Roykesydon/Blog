@@ -6,10 +6,26 @@
         <description>Recent content in Tags on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Fri, 05 Jan 2024 00:00:13 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 31 Mar 2024 00:27:55 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>attention</title>
+        <link>https://roykesydon.github.io/Blog/tags/attention/</link>
+        <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/attention/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>computer-vision</title>
+        <link>https://roykesydon.github.io/Blog/tags/computer-vision/</link>
+        <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/computer-vision/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>deep-learning</title>
         <link>https://roykesydon.github.io/Blog/tags/deep-learning/</link>
-        <pubDate>Fri, 05 Jan 2024 00:00:13 +0800</pubDate>
+        <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/deep-learning/</guid>
         <description></description>
@@ -17,9 +33,49 @@
         <item>
         <title>machine-learning</title>
         <link>https://roykesydon.github.io/Blog/tags/machine-learning/</link>
-        <pubDate>Fri, 05 Jan 2024 00:00:13 +0800</pubDate>
+        <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/machine-learning/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>self-attention</title>
+        <link>https://roykesydon.github.io/Blog/tags/self-attention/</link>
+        <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/self-attention/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>transformer</title>
+        <link>https://roykesydon.github.io/Blog/tags/transformer/</link>
+        <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/transformer/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>extended-reality</title>
+        <link>https://roykesydon.github.io/Blog/tags/extended-reality/</link>
+        <pubDate>Sat, 30 Mar 2024 00:00:01 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/extended-reality/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>xr</title>
+        <link>https://roykesydon.github.io/Blog/tags/xr/</link>
+        <pubDate>Sat, 30 Mar 2024 00:00:01 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/xr/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>embedding</title>
+        <link>https://roykesydon.github.io/Blog/tags/embedding/</link>
+        <pubDate>Mon, 26 Feb 2024 00:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/embedding/</guid>
         <description></description>
         </item>
         <item>
@@ -28,14 +84,6 @@
         <pubDate>Fri, 05 Jan 2024 00:00:13 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/nlp/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>computer-vision</title>
-        <link>https://roykesydon.github.io/Blog/tags/computer-vision/</link>
-        <pubDate>Tue, 21 Nov 2023 01:08:46 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/computer-vision/</guid>
         <description></description>
         </item>
         <item>
@@ -52,14 +100,6 @@
         <pubDate>Tue, 21 Nov 2023 01:08:46 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/zero-shot-learning/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>self-attention</title>
-        <link>https://roykesydon.github.io/Blog/tags/self-attention/</link>
-        <pubDate>Mon, 23 Oct 2023 00:27:55 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/self-attention/</guid>
         <description></description>
         </item>
         <item>
@@ -100,22 +140,6 @@
         <pubDate>Tue, 29 Aug 2023 00:08:46 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/data-structure/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>attention</title>
-        <link>https://roykesydon.github.io/Blog/tags/attention/</link>
-        <pubDate>Thu, 10 Aug 2023 00:27:55 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/attention/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>transformer</title>
-        <link>https://roykesydon.github.io/Blog/tags/transformer/</link>
-        <pubDate>Thu, 10 Aug 2023 00:27:55 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/transformer/</guid>
         <description></description>
         </item>
         <item>
