@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>container orchestration on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/container-orchestration/</link>
+        <description>Recent content in container orchestration on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Fri, 14 Jun 2024 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/container-orchestration/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Kubernetes 筆記</title>
+        <link>https://roykesydon.github.io/Blog/p/kubernetes-%E7%AD%86%E8%A8%98/</link>
+        <pubDate>Fri, 14 Jun 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/kubernetes-%E7%AD%86%E8%A8%98/</guid>
+        <description>&lt;h2 id=&#34;基礎概念&#34;&gt;基礎概念&lt;/h2&gt;
+&lt;h3 id=&#34;node&#34;&gt;Node&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Kubernetes 集群中的一台機器&lt;/li&gt;
+&lt;li&gt;過去叫做 Minion&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;cluster&#34;&gt;Cluster&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;由多個 Node 組成的集群&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;node-type&#34;&gt;Node Type&lt;/h4&gt;
+&lt;h5 id=&#34;master&#34;&gt;Master&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;控制整個集群的 Node&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;worker&#34;&gt;Worker&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;其他非 Master 的 Node 叫做 Worker Node&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;master-vs-worker&#34;&gt;Master vs Worker&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;Master
+&lt;ul&gt;
+&lt;li&gt;擁有的 Component
+&lt;ul&gt;
+&lt;li&gt;API Server&lt;/li&gt;
+&lt;li&gt;etcd&lt;/li&gt;
+&lt;li&gt;Controller&lt;/li&gt;
+&lt;li&gt;Scheduler&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Worker
+&lt;ul&gt;
+&lt;li&gt;擁有的 Component
+&lt;ul&gt;
+&lt;li&gt;Container Runtime&lt;/li&gt;
+&lt;li&gt;Kubelet&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;component&#34;&gt;Component&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;安裝 Kubernetes，實際上是安裝以下幾個 Component
+&lt;ul&gt;
+&lt;li&gt;API Server
+&lt;ul&gt;
+&lt;li&gt;front-end of the Kubernetes&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;etcd
+&lt;ul&gt;
+&lt;li&gt;distributed key-value store&lt;/li&gt;
+&lt;li&gt;會實現 lock mechanism，確保沒有 conflict&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;kubelet
+&lt;ul&gt;
+&lt;li&gt;在每個 node 上運行的 agent&lt;/li&gt;
+&lt;li&gt;負責確保 container 在 node 上如期運行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Container Runtime
+&lt;ul&gt;
+&lt;li&gt;用來 run container 的 underlying software&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Controller
+&lt;ul&gt;
+&lt;li&gt;當 node、container、endpoint 掛掉的時候，他要負責監控和回應&lt;/li&gt;
+&lt;li&gt;type
+&lt;ul&gt;
+&lt;li&gt;Replication Controller
+&lt;ul&gt;
+&lt;li&gt;確保指定數量的 Pod 在任何時間都在運行&lt;/li&gt;
+&lt;li&gt;load balancing &amp;amp; scaling&lt;/li&gt;
+&lt;li&gt;後來被 ReplicaSet 取代&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Scheduler
+&lt;ul&gt;
+&lt;li&gt;負責處理 node 間的 distributing work&lt;/li&gt;
+&lt;li&gt;會尋找新創的 container，並分配到 node&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;pod&#34;&gt;Pod&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Kubernetes 的最小單位&lt;/li&gt;
+&lt;li&gt;一個 Pod 封裝一個應用程式，可能包含一個或多個 container&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;replicaset&#34;&gt;ReplicaSet&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;新版本的 Replication Controller&lt;/li&gt;
+&lt;li&gt;yaml
+&lt;ul&gt;
+&lt;li&gt;spec
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;template&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定要創建的 Pod 的 template&lt;/li&gt;
+&lt;li&gt;把 pod 的 metadata 和 spec 都放在這裡&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;replicas&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定要創建的 Pod 的數量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;selector&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定要選擇的 Pod&lt;/li&gt;
+&lt;li&gt;需要這個是因為 ReplicaSet 也可以管理那些不是他創建的 Pod&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;matchLabels&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定要選擇的 Pod 的 label&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;command
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;kubectl scale --replicas=3 -f &amp;lt;file&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;scale up/down replicas&lt;/li&gt;
+&lt;li&gt;這樣不會修改檔案，所以檔案的如果原本是 2，檔案依然會寫 2，只是 replicas 會變成 3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl scale --replicas=3 replicaset &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;scale up/down replicas&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl edit replicaset &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;想要 scale up/down replicas 也可以用這個，他會立刻生效&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;簡寫
+&lt;ul&gt;
+&lt;li&gt;rs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;deployment&#34;&gt;Deployment&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;管理 ReplicaSet 和 Replica Controller&lt;/li&gt;
+&lt;li&gt;yaml 和 ReplicaSet 很像，把 kind 從 ReplicaSet 改成 Deployment 就好
+&lt;ul&gt;
+&lt;li&gt;會自動創建 ReplicaSet&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;使用情境
+&lt;ol&gt;
+&lt;li&gt;Rolling update&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;想要更新每個 Pod，但不是同時更新，而是一個一個更新，確保不會有 downtime&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;Rollback&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;如果更新失敗，可以回到之前的版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Pause and Resume&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;當需要做 multiple changes，不想要一下指令就馬上做，可以先 pause，等所有指令下完再 resume&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;rollout
+&lt;ul&gt;
+&lt;li&gt;創建 Deployment 的時候，會自動創建一個 rollout&lt;/li&gt;
+&lt;li&gt;創建一個 rollout 的時候，會自動創建一個 Deployment revision&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Deployment Strategy
+&lt;ul&gt;
+&lt;li&gt;Recreate
+&lt;ul&gt;
+&lt;li&gt;先刪除所有舊的 Pod，再創建新的 Pod&lt;/li&gt;
+&lt;li&gt;中間會有 Application downtime&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Rolling Update
+&lt;ul&gt;
+&lt;li&gt;一個一個更新 Pod&lt;/li&gt;
+&lt;li&gt;這個是預設的 strategy&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;command
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;kubectl rollout status deployment &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;查看 rollout 的狀態&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl rollout history deployment &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;查看 rollout 的 history (revision)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl rollout undo deployment &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;回到上一個 revision&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;簡寫
+&lt;ul&gt;
+&lt;li&gt;deploy&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;service&#34;&gt;Service&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;讓不同 group 的 Pod 互相通信&lt;/li&gt;
+&lt;li&gt;像一個 virtaul server，可以連接到一個或多個 Pod&lt;/li&gt;
+&lt;li&gt;type
+&lt;ul&gt;
+&lt;li&gt;NodePort
+&lt;ul&gt;
+&lt;li&gt;會在每個 node 上開一個 port，讓外部可以連進來&lt;/li&gt;
+&lt;li&gt;default valid port range: 30000-32767&lt;/li&gt;
+&lt;li&gt;yaml
+&lt;ul&gt;
+&lt;li&gt;spec
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;type&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ports&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;port&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;service 的 port&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;targetPort&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;pod 的 port&lt;/li&gt;
+&lt;li&gt;如果不設置，會用 &lt;code&gt;port&lt;/code&gt; 的值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;nodePort&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;如果不設置，會從 default port range 選一個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;selector&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定要連接的 Pod&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;預設會用 load balancing，策略是 Random，像是一個內建的 load balancer&lt;/li&gt;
+&lt;li&gt;如果有在同個 cluster 跨 node 的情況，不需要其他設定，就可以創建一個跨 node 的 service，會幫他們都設同一個 nodePort&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ClusterIP
+&lt;ul&gt;
+&lt;li&gt;只有在 cluster 內部可以連進來&lt;/li&gt;
+&lt;li&gt;用來幫某一組的 pod 提供一個統一的界面並做轉發&lt;/li&gt;
+&lt;li&gt;不能依賴 internal IP，因為每個 pod 都有可能會 down 或 up&lt;/li&gt;
+&lt;li&gt;yaml
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;spec&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;type&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ports&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;port&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;targetPort&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;selector&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;service 可以用 cluster IP 或是 service name 來連接&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;LoadBalancer
+&lt;ul&gt;
+&lt;li&gt;會在 cloud provider 上開一個 load balancer&lt;/li&gt;
+&lt;li&gt;nodePort 的 load balancer 是在 node 內部的，現在是要幫多個 node 做 load balancing&lt;/li&gt;
+&lt;li&gt;這只有在 cloud provider 上才有&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;name 很重要，因為其他的 Pod 會用這個 name 來連接 (就像 domain name)&lt;/li&gt;
+&lt;li&gt;簡寫
+&lt;ul&gt;
+&lt;li&gt;svc&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;yaml&#34;&gt;YAML&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Kubernetes 的配置文件&lt;/li&gt;
+&lt;li&gt;root level properties
+&lt;ul&gt;
+&lt;li&gt;apiVersion
+&lt;ul&gt;
+&lt;li&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;kind&lt;/th&gt;
+&lt;th&gt;apiVersion&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Pod&lt;/td&gt;
+&lt;td&gt;v1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Service&lt;/td&gt;
+&lt;td&gt;v1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ReplicaSet&lt;/td&gt;
+&lt;td&gt;apps/v1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Deployment&lt;/td&gt;
+&lt;td&gt;apps/v1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;kind
+&lt;ul&gt;
+&lt;li&gt;Pod, Service, ReplicaSet, Deployment&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;metadata
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;labels&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;可以加入任何 key-value pair&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;spec
+&lt;ul&gt;
+&lt;li&gt;specification section&lt;/li&gt;
+&lt;li&gt;pod
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;containers&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;image&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;env&lt;/code&gt;: list of environment variables
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;value&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;cloud&#34;&gt;Cloud&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;two type of cluster
+&lt;ul&gt;
+&lt;li&gt;Self hosted / Turnkey solutions
+&lt;ul&gt;
+&lt;li&gt;用來在自己的 server 上建立 cluster&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Hosted solutions / Managed solutions
+&lt;ul&gt;
+&lt;li&gt;用來在 cloud 上建立 cluster&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Hosted solutions
+&lt;ul&gt;
+&lt;li&gt;Google Kubernetes Engine (GKE)&lt;/li&gt;
+&lt;li&gt;Amazon Elastic Kubernetes Service (EKS)&lt;/li&gt;
+&lt;li&gt;Azure Kubernetes Service (AKS)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;tool&#34;&gt;Tool&lt;/h2&gt;
+&lt;h3 id=&#34;kubectl&#34;&gt;kubectl&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;kubectl&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;用來 deploy、inspect、manage application on a Kubernetes cluster&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;commands
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;kubectl run &amp;lt;name&amp;gt; --image=&amp;lt;image&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;創建一個 Pod&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl get pods&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;查看所有 Podllll&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-o wide&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;顯示更多資訊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;column
+&lt;ul&gt;
+&lt;li&gt;READY
+&lt;ul&gt;
+&lt;li&gt;&lt;!-- raw HTML omitted --&gt;/&lt;!-- raw HTML omitted --&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;也可以用 &lt;code&gt;kubectl get all&lt;/code&gt; 來查看 Pod、Service、ReplicaSet、Deployment&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl describe pod &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;查看 Pod 的詳細資訊&lt;/li&gt;
+&lt;li&gt;欄位
+&lt;ul&gt;
+&lt;li&gt;Node
+&lt;ul&gt;
+&lt;li&gt;Pod 在哪個 Node 上運行，包含了 Node 的 IP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;IP
+&lt;ul&gt;
+&lt;li&gt;Pod 的 IP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl delete pod &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;刪除 Pod&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl create -f &amp;lt;file&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;根據 YAML file 創建 resource&lt;/li&gt;
+&lt;li&gt;如果 resource 已經存在，會報錯&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl apply -f &amp;lt;file&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;根據 YAML file 創建 resource&lt;/li&gt;
+&lt;li&gt;如果 resource 已經存在，會更新 resource&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl replace -f &amp;lt;file&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;根據 YAML file 創建 resource&lt;/li&gt;
+&lt;li&gt;如果 resource 已經存在，會刪除舊的 resource，並創建新的 resource&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl edit replicaset &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;可以直接編輯 Replica Set 的 yaml 檔，但他不是一開始創建用的檔案，而是 Kubernetes 在 memory 暫時生成的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl set image deployment &amp;lt;name&amp;gt; &amp;lt;container-name&amp;gt;=&amp;lt;new-image&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;更新 Deployment 的 image&lt;/li&gt;
+&lt;li&gt;注意這裡是 Container name，不是 Pod name&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--record=true&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;會記錄每次的操作&lt;/li&gt;
+&lt;li&gt;用在 rollout 的時候，可以看到每次的操作，不然會顯示 &lt;!-- raw HTML omitted --&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;minikube&#34;&gt;minikube&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來在 local machine 上建立一個 single-node cluster&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;kubeadm&#34;&gt;kubeadm&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來在多個 node 上建立 cluster&lt;/li&gt;
+&lt;li&gt;在多個 node 上安裝 Kubernetes
+&lt;ul&gt;
+&lt;li&gt;流程
+&lt;ol&gt;
+&lt;li&gt;安裝 container runtime&lt;/li&gt;
+&lt;li&gt;安裝 kubeadm&lt;/li&gt;
+&lt;li&gt;初始化 master node&lt;/li&gt;
+&lt;li&gt;建立 pod network&lt;/li&gt;
+&lt;li&gt;加入 worker node&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;networking&#34;&gt;Networking&lt;/h2&gt;
+&lt;h3 id=&#34;cluster-networking&#34;&gt;Cluster Networking&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;每個 Pod 都有自己的 IP&lt;/li&gt;
+&lt;li&gt;兩個不同屬於同一個 cluster 的 Pod 可能會有相同的 IP&lt;/li&gt;
+&lt;li&gt;Kubernetes 要求所有的 Pod 要可以在不用 NAT 的情況下互相通信
+&lt;ul&gt;
+&lt;li&gt;所有的 container 和 node 都要可以在沒有 NAT 的情況下互相通信&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可以用 Calico 等方案實現
+&lt;ul&gt;
+&lt;li&gt;他會把每個 node network 都設成不同的，底下的 pod IP 自然就不會重複&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

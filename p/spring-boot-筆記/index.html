@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Spring IoC Invocation of Constructor 把物件交給 Spring 管理 loose coupling Dependency Injection Bean 給 Spring 管理的物件 創建方法 @Component 創建出的 Bean 名字是 class 的開頭轉小寫 注入方法 @Autowired 種類 field injection spring boot 會先建立所有 component，在逐一注入，使元件可能短暫處於初始化不完整狀態 constructor injection 建立 bean 時就注入 確保 component 被使用時是處於完整的狀態 有利於 unit test，因為可以把設計好的 mock bean 從 constructor 傳入 spring 建議使用 constructor injection 限制 該 Class 也得是 Bean 會根據類型注入 bean 如果同時有多個同類型的 bean，會報錯，可以用 @Qualifier 指定要注入的 bean 名稱 @Qualifier 指定要注入的 bean 名稱 @Primary 如果有多個同類型的 bean，會優先注入這個 bean 初始化 @PostConstruct 創建 bean 後，就會執行這個方法 限制 必須是 public void 不能有參數 AOP Aspect Oriented Programming 透過 Aspect 統一處理不同方法的共同邏輯 要導入 aop 的 starter 只有 Bean 才能設置 @Aspect Annotation @Aspect 這個 class 是一個切面 @Before 加上切入點，就可以在切入點 (Pointcut) 的方法執行前執行 @After 在方法之後執行 @Around 在方法之前和之後都執行 常用的功能都已經被封裝好了，開發較少用到 AOP 特性 Starter Spring Boot Starters 官方的 starter 命名是 spring-boot-starter-* 第三方的 starter 命名是 *-spring-boot-starter'>
+<title>Spring Boot 筆記</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.7aa5a9a7ebbbeb6218dff3101ef5f9aa6dd04fe28034a6f45b9552c4f2a11e94.css"><meta property='og:title' content='Spring Boot 筆記'>
+<meta property='og:description' content='Spring IoC Invocation of Constructor 把物件交給 Spring 管理 loose coupling Dependency Injection Bean 給 Spring 管理的物件 創建方法 @Component 創建出的 Bean 名字是 class 的開頭轉小寫 注入方法 @Autowired 種類 field injection spring boot 會先建立所有 component，在逐一注入，使元件可能短暫處於初始化不完整狀態 constructor injection 建立 bean 時就注入 確保 component 被使用時是處於完整的狀態 有利於 unit test，因為可以把設計好的 mock bean 從 constructor 傳入 spring 建議使用 constructor injection 限制 該 Class 也得是 Bean 會根據類型注入 bean 如果同時有多個同類型的 bean，會報錯，可以用 @Qualifier 指定要注入的 bean 名稱 @Qualifier 指定要注入的 bean 名稱 @Primary 如果有多個同類型的 bean，會優先注入這個 bean 初始化 @PostConstruct 創建 bean 後，就會執行這個方法 限制 必須是 public void 不能有參數 AOP Aspect Oriented Programming 透過 Aspect 統一處理不同方法的共同邏輯 要導入 aop 的 starter 只有 Bean 才能設置 @Aspect Annotation @Aspect 這個 class 是一個切面 @Before 加上切入點，就可以在切入點 (Pointcut) 的方法執行前執行 @After 在方法之後執行 @Around 在方法之前和之後都執行 常用的功能都已經被封裝好了，開發較少用到 AOP 特性 Starter Spring Boot Starters 官方的 starter 命名是 spring-boot-starter-* 第三方的 starter 命名是 *-spring-boot-starter'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='framework' /><meta property='article:tag' content='java' /><meta property='article:published_time' content='2024-05-06T00:00:17&#43;08:00'/><meta property='article:modified_time' content='2024-05-06T00:00:17&#43;08:00'/>
+<meta name="twitter:title" content="Spring Boot 筆記">
+<meta name="twitter:description" content="Spring IoC Invocation of Constructor 把物件交給 Spring 管理 loose coupling Dependency Injection Bean 給 Spring 管理的物件 創建方法 @Component 創建出的 Bean 名字是 class 的開頭轉小寫 注入方法 @Autowired 種類 field injection spring boot 會先建立所有 component，在逐一注入，使元件可能短暫處於初始化不完整狀態 constructor injection 建立 bean 時就注入 確保 component 被使用時是處於完整的狀態 有利於 unit test，因為可以把設計好的 mock bean 從 constructor 傳入 spring 建議使用 constructor injection 限制 該 Class 也得是 Bean 會根據類型注入 bean 如果同時有多個同類型的 bean，會報錯，可以用 @Qualifier 指定要注入的 bean 名稱 @Qualifier 指定要注入的 bean 名稱 @Primary 如果有多個同類型的 bean，會優先注入這個 bean 初始化 @PostConstruct 創建 bean 後，就會執行這個方法 限制 必須是 public void 不能有參數 AOP Aspect Oriented Programming 透過 Aspect 統一處理不同方法的共同邏輯 要導入 aop 的 starter 只有 Bean 才能設置 @Aspect Annotation @Aspect 這個 class 是一個切面 @Before 加上切入點，就可以在切入點 (Pointcut) 的方法執行前執行 @After 在方法之後執行 @Around 在方法之前和之後都執行 常用的功能都已經被封裝好了，開發較少用到 AOP 特性 Starter Spring Boot Starters 官方的 starter 命名是 spring-boot-starter-* 第三方的 starter 命名是 *-spring-boot-starter">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">🍤<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/old avatar.png"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://www.pixiv.net/users/18855729'
+                        target="_blank"
+                        title="Pixiv"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" stroke="currentColor" vector-effect="non-scaling-stroke" fill="">
+  <path stroke-width="1" vector-effect="non-scaling-stroke"
+    d="M701.515 301.152c-44.44-46.092-100.245-64.919-163.08-65.107-29.552-0.089-58.595 4.617-87.095 12.455-28.961 7.965-56.673 18.839-81.996 35.306-3.347 2.176-4.69 4.686-4.695 8.694-0.034 29.713-0.333 59.424-0.426 89.137-0.085 27.263-0.018 54.527-0.021 81.79-0.004 56.836 0.053 113.674-0.097 170.51-0.015 5.326 1.57 8.393 6.639 10.576 17.881 7.7 36.245 13.85 55.161 18.37 30.808 7.36 62.082 10.876 93.715 12.36 33.75 1.583 66.83-1.28 98.832-12.378 61.328-21.265 105.46-61.217 129.447-121.99 15.492-39.25 17.417-80.058 10.877-121.393-7.146-45.173-25.384-85.268-57.26-118.33z"
+    fill="none" />
+  <path stroke-width="1" vector-effect="non-scaling-stroke"
+    d="M512 17.482C238.886 17.482 17.482 238.886 17.482 512S238.886 1006.518 512 1006.518 1006.518 785.114 1006.518 512 785.114 17.482 512 17.482z m327.127 530.516c-18.962 47.58-50.687 84.816-92.709 113.517-43.734 29.872-92.452 46.554-144.647 53.74-66.355 9.136-131.115 0.236-195.108-17.307-12.485-3.423-24.767-7.483-37.009-11.676-4.732-1.62-5.413-1.201-5.42 3.878-0.049 33.583 0.004 67.165-0.069 100.748-0.008 3.782 1.314 5.86 5.093 7.004 7.233 2.187 14.26 5.003 20.384 9.602 3.594 2.699 6.19 5.968 5.824 10.873-0.43 5.752-3.64 8.957-9.432 8.968-19.872 0.039-39.744 0.014-59.617 0.014-19.41 0.006-38.82-0.103-58.23 0.082-4.736 0.045-8.025-1.288-9.814-5.842-1.798-4.575-0.752-8.45 2.566-11.847 5.698-5.833 13.181-8.404 20.593-11 7.625-2.668 7.8-0.933 7.8-10.86-0.02-151.738-0.02-303.476-0.076-455.215-0.001-2.353 1.227-5.726-1.09-6.829-2.297-1.094-4.167 1.976-6 3.442-22.584 18.058-43.474 37.783-60.052 61.694-0.527 0.76-1.03 1.537-1.588 2.273-5.878 7.727-9.827 15.6-5.76 25.855 1.946 4.91 1.707 10.59 0.282 15.968-0.937 3.532-2.436 6.64-5.44 8.865-5.016 3.718-8.469 3.16-11.788-2.085-12.847-20.308-25.59-40.682-38.532-60.928-2.117-3.313-1.999-5.634 0.715-8.492 17.758-18.692 37.058-35.675 57.256-51.635 51.148-40.413 106.911-72.725 168.335-94.902 40.036-14.455 81.234-23.72 123.709-27.312 49.596-4.194 98.488-0.765 146.365 13.295 50.8 14.919 95.584 40.146 131.966 79.103 36.324 38.896 58.162 84.856 65.163 137.62 5.425 40.866 1.694 80.839-13.67 119.389z"
+    fill="none" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" 
+class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
+  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+  <path
+    d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#spring">Spring</a>
+      <ol>
+        <li><a href="#ioc">IoC</a></li>
+        <li><a href="#aop">AOP</a></li>
+      </ol>
+    </li>
+    <li><a href="#特性">特性</a>
+      <ol>
+        <li><a href="#starter">Starter</a></li>
+        <li><a href="#外部化配置">外部化配置</a></li>
+        <li><a href="#dependency-management">Dependency Management</a></li>
+        <li><a href="#auto-configuration">Auto Configuration</a></li>
+      </ol>
+    </li>
+    <li><a href="#common-annotations">Common Annotations</a>
+      <ol>
+        <li><a href="#component-registration">Component registration</a></li>
+        <li><a href="#conditional-annotations">Conditional Annotations</a></li>
+        <li><a href="#property-binding">Property Binding</a></li>
+      </ol>
+    </li>
+    <li><a href="#logging">Logging</a>
+      <ol>
+        <li><a href="#log-format">Log Format</a></li>
+        <li><a href="#log-level">Log Level</a></li>
+        <li><a href="#log-configuration">Log Configuration</a></li>
+      </ol>
+    </li>
+    <li><a href="#filter">Filter</a>
+      <ol>
+        <li><a href="#註冊-filter">註冊 Filter</a></li>
+      </ol>
+    </li>
+    <li><a href="#spring-security">Spring Security</a>
+      <ol>
+        <li><a href="#流程">流程</a></li>
+        <li><a href="#configuration">Configuration</a></li>
+        <li><a href="#userdetails">UserDetails</a></li>
+        <li><a href="#securitycontextholder">SecurityContextHolder</a></li>
+      </ol>
+    </li>
+    <li><a href="#jpa">JPA</a>
+      <ol>
+        <li><a href="#repository">Repository</a></li>
+      </ol>
+    </li>
+    <li><a href="#validation">Validation</a></li>
+    <li><a href="#testing">Testing</a>
+      <ol>
+        <li><a href="#integration-test">Integration Test</a>
+          <ol>
+            <li><a href="#mockmvc">MockMvc</a></li>
+          </ol>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#其他">其他</a>
+      <ol>
+        <li><a href="#lombok">Lombok</a></li>
+        <li><a href="#jackson">Jackson</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/full-stack/" style="background-color: #131313; color: #43c559;">
+                Full Stack
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/full-stack.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/">Spring Boot 筆記</a>
+        </h2>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">May 06, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="spring">Spring</h2>
+<h3 id="ioc">IoC</h3>
+<ul>
+<li>Invocation of Constructor
+<ul>
+<li>把物件交給 Spring 管理</li>
+<li>loose coupling</li>
+<li>Dependency Injection</li>
+</ul>
+</li>
+<li>Bean
+<ul>
+<li>給 Spring 管理的物件</li>
+<li>創建方法
+<ul>
+<li>@Component
+<ul>
+<li>創建出的 Bean 名字是 class 的開頭轉小寫</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>注入方法
+<ul>
+<li>@Autowired
+<ul>
+<li>種類
+<ul>
+<li>field injection
+<ul>
+<li>spring boot 會先建立所有 component，在逐一注入，使元件可能短暫處於初始化不完整狀態</li>
+</ul>
+</li>
+<li>constructor injection
+<ul>
+<li>建立 bean 時就注入</li>
+<li>確保 component 被使用時是處於完整的狀態</li>
+<li>有利於 unit test，因為可以把設計好的 mock bean 從 constructor 傳入</li>
+<li>spring 建議使用 constructor injection</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>限制
+<ol>
+<li>該 Class 也得是 Bean</li>
+<li>會根據類型注入 bean
+<ul>
+<li>如果同時有多個同類型的 bean，會報錯，可以用 @Qualifier 指定要注入的 bean 名稱</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>@Qualifier
+<ul>
+<li>指定要注入的 bean 名稱</li>
+</ul>
+</li>
+<li>@Primary
+<ul>
+<li>如果有多個同類型的 bean，會優先注入這個 bean</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>初始化
+<ul>
+<li>@PostConstruct
+<ul>
+<li>創建 bean 後，就會執行這個方法</li>
+<li>限制
+<ul>
+<li>必須是 public void</li>
+<li>不能有參數</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="aop">AOP</h3>
+<ul>
+<li>Aspect Oriented Programming</li>
+<li>透過 Aspect 統一處理不同方法的共同邏輯</li>
+<li>要導入 aop 的 starter</li>
+<li>只有 Bean 才能設置 @Aspect</li>
+<li>Annotation
+<ul>
+<li>@Aspect
+<ul>
+<li>這個 class 是一個切面</li>
+</ul>
+</li>
+<li>@Before
+<ul>
+<li>加上切入點，就可以在切入點 (Pointcut) 的方法執行前執行</li>
+</ul>
+</li>
+<li>@After
+<ul>
+<li>在方法之後執行</li>
+</ul>
+</li>
+<li>@Around
+<ul>
+<li>在方法之前和之後都執行</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>常用的功能都已經被封裝好了，開發較少用到 AOP</li>
+</ul>
+<h2 id="特性">特性</h2>
+<h3 id="starter">Starter</h3>
+<ul>
+<li><a class="link" href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using.build-systems.starters"  target="_blank" rel="noopener"
+    >Spring Boot Starters</a></li>
+</ul>
+<p>官方的 starter 命名是 <code>spring-boot-starter-*</code>
+第三方的 starter 命名是 <code>*-spring-boot-starter</code></p>
+<h3 id="外部化配置">外部化配置</h3>
+<ul>
+<li><code>application.properties</code>
+<ul>
+<li>重新啟動 jar 時會自動載入，不用改配置要重新 build jar</li>
+<li>集中管理</li>
+<li>@Value
+<ul>
+<li>可以注入到變數中</li>
+<li>可以用 <code>:</code> 來設定預設值</li>
+<li>限制
+<ul>
+<li>只能在 Bean 和 Configuration 中使用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>YAML
+<ul>
+<li>application.properties 寫多後，沒有層級辨識度</li>
+<li>application.yml</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>profiles
+<ul>
+<li>可以根據不同的環境來設定不同的配置 (dev, test, prod)</li>
+<li><code>application-{profile}.properties</code></li>
+<li><code>application-{profile}.yml</code></li>
+<li><code>spring.profiles.active</code>
+<ul>
+<li>指定啟用的 profile</li>
+</ul>
+</li>
+<li>jar
+<ul>
+<li><code>-Dspring.profiles.active=dev</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>指定配置文件
+<ul>
+<li>cli
+<ul>
+<li><code>--spring.config.location</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Config 資料夾
+<ul>
+<li>可以在 jar 目錄下建立 config 資料夾，放配置文件，不用輸入額外的 args</li>
+</ul>
+</li>
+</ul>
+<h3 id="dependency-management">Dependency Management</h3>
+<ul>
+<li>parent 寫了版本號，故 dependency 可以不用寫版本號</li>
+<li>真的要指定的話，可以利用 maven 的就近原則</li>
+</ul>
+<h3 id="auto-configuration">Auto Configuration</h3>
+<ul>
+<li>Component Scan
+<ul>
+<li>Spring Boot 會掃描主程式所在的 package 以及子 package</li>
+<li>也可以在主程式上加以下註解來指定掃描的 package
+<ul>
+<li><code>@SpringBootApplication(scanBasePackages = &quot;com.example&quot;)</code></li>
+</ul>
+</li>
+<li>所有 starter 都有 <code>spring-boot-starter</code>，<code>spring-boot-starter</code> 又有 <code>spring-boot-autoconfigure</code>，這個就是自動配置的地方</li>
+</ul>
+</li>
+<li>spring boot 默認掃描不到 spring-boot-autoconfigure 的所有配置類 (因為預設只掃描 Main Application Class 的 package)，但是 @SpringBootApplication 的 @EnableAutoConfiguration 會預設掃描 spring-boot-autoconfigure 的所有配置類
+<ul>
+<li>它們再依據 conditional annotation 來決定是否要啟用這個配置類</li>
+</ul>
+</li>
+</ul>
+<h2 id="common-annotations">Common Annotations</h2>
+<p>Spring Boot 放棄了 XML 配置，改用 Annotation 配置</p>
+<h3 id="component-registration">Component registration</h3>
+<ul>
+<li>@Configuration, @SpringBootConfiguration
+<ul>
+<li>@Bean</li>
+</ul>
+</li>
+<li>@Controller, @Service, @Repository, @Component
+<ul>
+<li>三層式架構
+<ul>
+<li>@Controller
+<ul>
+<li>用來處理請求</li>
+</ul>
+</li>
+<li>@Service
+<ul>
+<li>用來處理業務邏輯</li>
+</ul>
+</li>
+<li>@Repository
+<ul>
+<li>用來處理資料庫操作</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>@SpringBootApplication
+<ul>
+<li>由以下組成
+<ul>
+<li>@SpringBootConfiguration</li>
+<li>@EnableAutoConfiguration</li>
+<li>@ComponentScan</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Web
+<ul>
+<li>@RestController
+<ul>
+<li>@Controller + @ResponseBody</li>
+</ul>
+</li>
+<li>@RequestMapping
+<ul>
+<li>設置 route</li>
+<li>Method
+<ul>
+<li>@GetMapping</li>
+<li>@PostMapping</li>
+<li>@PutMapping</li>
+<li>@DeleteMapping</li>
+<li>@PatchMapping</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>取得參數
+<ul>
+<li>@RequestParam
+<ul>
+<li>取得 url 中的參數</li>
+</ul>
+</li>
+<li>@RequestBody
+<ul>
+<li>取得 request body</li>
+<li>根據欄位名字調用對應的 setter</li>
+</ul>
+</li>
+<li>@RequestHeader
+<ul>
+<li>取得 header</li>
+</ul>
+</li>
+<li>@PathVariable
+<ul>
+<li>取得 route 中的參數</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>@Scope
+<ul>
+<li>mode
+<ul>
+<li>singleton
+<ul>
+<li>預設，共用一個 instance</li>
+</ul>
+</li>
+<li>prototype
+<ul>
+<li>每次注入都創建新的 instance</li>
+<li>可以用 proxy.mode = ScopedProxyMode.TARGET_CLASS，會變成每次調用 method 都創建新的 instance</li>
+<li>prototype 的元件生出後，spring 不會再管理，要自己管理生命週期，相當於 new 出物件的替代作法</li>
+</ul>
+</li>
+<li>request
+<ul>
+<li>每個 request 都有一個獨立的 instance</li>
+<li>request 指的是 HTTP request，從進入 controller 到離開 controller</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="conditional-annotations">Conditional Annotations</h3>
+<ul>
+<li>條件成立則觸發指定行為</li>
+<li>ConditionalOn<!-- raw HTML omitted -->
+<ul>
+<li>example
+<ul>
+<li>ConditionalOnClass
+<ul>
+<li>如果 classpath 有指定的 class 才會觸發</li>
+</ul>
+</li>
+<li>ConditionalOnMissingClass
+<ul>
+<li>如果 classpath 沒有指定的 class 才會觸發</li>
+</ul>
+</li>
+<li>ConditionalOnBean
+<ul>
+<li>如果容器中有指定的 bean 才會觸發</li>
+</ul>
+</li>
+<li>ConditionalOnMissingBean
+<ul>
+<li>如果容器中沒有指定的 bean 才會觸發</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Scenario
+<ul>
+<li>如果有某個 dependency，則創建某個 bean</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="property-binding">Property Binding</h3>
+<ul>
+<li>把任意 Bean 的 property 與配置文件 (application.properties) 中的 property 綁定</li>
+<li>annotations
+<ul>
+<li>@ConfigurationProperties
+<ul>
+<li>prefix</li>
+</ul>
+</li>
+<li>@EnableConfigurationProperties
+<ul>
+<li>如果 class 只有 @ConfigurationProperties，沒有 @Component，需要加這個 annotation</li>
+<li>用在第三方 package 上，因為默認掃不到第三方的 @component</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="logging">Logging</h2>
+<ul>
+<li>
+<p>Logging 選擇</p>
+<ul>
+<li>Logging API
+<ul>
+<li>JCL</li>
+<li>SLF4J (Simple Logging Facade for Java)</li>
+<li>jboss-logging</li>
+</ul>
+</li>
+<li>Logging implementation
+<ul>
+<li>Logback</li>
+<li>Log4j2</li>
+<li>JUL (java.util.logging)</li>
+</ul>
+</li>
+<li>Spring Boot 預設使用 Logback 和 SLF4J</li>
+</ul>
+</li>
+<li>
+<p>spring-boot-starter 引用了 spring-boot-starter-logging</p>
+</li>
+</ul>
+<h3 id="log-format">Log Format</h3>
+<ul>
+<li>Default example
+<ul>
+<li>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">2024-05-06T19:21:40.751+08:00  INFO 22932 --- [demo] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path &#39;&#39;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>時間, 日誌等級, pid, 分割符, thread, logger, message</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="log-level">Log Level</h3>
+<ul>
+<li>Type (由低到高)
+<ul>
+<li>ALL</li>
+<li>TRACE
+<ul>
+<li>一般不用</li>
+</ul>
+</li>
+<li>DEBUG</li>
+<li>INFO</li>
+<li>WARN</li>
+<li>ERROR</li>
+<li>FATAL</li>
+<li>OFF</li>
+</ul>
+</li>
+<li>會 print 出比設定的等級高的 log</li>
+</ul>
+<h3 id="log-configuration">Log Configuration</h3>
+<ul>
+<li>
+<p>logging.level.*</p>
+<ul>
+<li>設定不同 package 的 log 等級</li>
+<li>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">logging.level.com.example=DEBUG
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+<li>
+<p>logging.group.<!-- raw HTML omitted --></p>
+<ul>
+<li>把多個 package 放在一組，可以統一設定</li>
+<li>預設有 web, sql 組</li>
+</ul>
+</li>
+<li>
+<p>logging.file</p>
+<ul>
+<li>.name
+<ul>
+<li>檔名</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>歸檔 and 切割</p>
+<ul>
+<li>歸檔
+<ul>
+<li>每天單獨存</li>
+<li>.logback.rolllingpolicy.file-name-pattern</li>
+</ul>
+</li>
+<li>切割
+<ul>
+<li>超過指定大小就切割</li>
+<li>.logback.rolllingpolicy.max-file-size</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="filter">Filter</h2>
+<ul>
+<li>實做 javax.servlet.Filter，就能註冊為 spring 的 filter</li>
+<li>OncePerRequestFilter
+<ul>
+<li>保證一次 request 只會執行一次</li>
+<li>doFilterInternal
+<ul>
+<li>chain.doFilter(request, response)
+<ul>
+<li>這行之後代表後面的 filter 都執行完了</li>
+<li>如果只有一個 filter，就代表 controller 執行完了</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>shouldNotFilter
+<ul>
+<li>可以設定不要執行的 url pattern</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="註冊-filter">註冊 Filter</h3>
+<ul>
+<li>
+<p>流程</p>
+<ul>
+<li>設定 @Configuration</li>
+<li>加到 Bean
+<ul>
+<li>
+<!-- raw HTML omitted -->
+</li>
+<li>
+<!-- raw HTML omitted -->
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>如果 filter 要取得 request 和 response 的內容，可以用 ContentCachingRequestWrapper 和 ContentCachingResponseWrapper 重新包裝</p>
+<ul>
+<li>因為原本的作法是用 stream 讀取資料，只能讀一次</li>
+</ul>
+</li>
+<li>
+<p>@WebFilter</p>
+<ul>
+<li>屬於 Java servlet 而非 Spring
+<ul>
+<li>要在 application 補上 @ServletComponentScan</li>
+</ul>
+</li>
+<li>可以直接註冊 filter</li>
+</ul>
+</li>
+</ul>
+<h2 id="spring-security">Spring Security</h2>
+<ul>
+<li>名詞
+<ul>
+<li>Authentication
+<ul>
+<li>認證
+<ul>
+<li>檢查是不是系統的使用者，以及是哪個使用者</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Authorization
+<ul>
+<li>授權
+<ul>
+<li>檢查使用者有沒有權限做某件事</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="流程">流程</h3>
+<ul>
+<li>
+<p>filter chain</p>
+<ul>
+<li>example
+<ul>
+<li>UsernamePasswordAuthenticationFilter
+<ul>
+<li>檢查使用者名稱和密碼</li>
+</ul>
+</li>
+<li>ExceptionTranslationFilter
+<ul>
+<li>處理例外</li>
+</ul>
+</li>
+<li>FilterSecurityInterceptor
+<ul>
+<li>檢查授權</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>authorizeHttpRequests
+<ul>
+<li>設定哪些 request 需要什麼權限</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>example: JWT 驗證流程</p>
+<ul>
+<li>先透過 filter chain 經過 JWT filter</li>
+<li>透過 UserDetailsService 取得使用者資訊</li>
+<li>驗證使用者資訊</li>
+<li>更新 SecurityContextHolder
+<ul>
+<li>用來判斷使用者是否已經通過 authentication</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="configuration">Configuration</h3>
+<ul>
+<li>@EnableWebSecurity
+<ul>
+<li>啟用 web security</li>
+</ul>
+</li>
+<li>example
+<ul>
+<li>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Configuration</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@EnableWebSecurity</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SecurityConfig</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nd">@Bean</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">SecurityFilterChain</span> <span class="nf">securityFilterChain</span><span class="o">(</span><span class="n">HttpSecurity</span> <span class="n">http</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">http</span><span class="o">.</span><span class="na">authorizeHttpRequests</span><span class="o">((</span><span class="n">requests</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="o">((</span><span class="n">AuthorizeHttpRequestsConfigurer</span><span class="o">.</span><span class="na">AuthorizedUrl</span><span class="o">)</span><span class="n">requests</span><span class="o">.</span><span class="na">anyRequest</span><span class="o">()).</span><span class="na">authenticated</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="o">});</span>
+</span></span><span class="line"><span class="cl">        <span class="n">http</span><span class="o">.</span><span class="na">httpBasic</span><span class="o">(</span><span class="n">Customizer</span><span class="o">.</span><span class="na">withDefaults</span><span class="o">());</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">(</span><span class="n">SecurityFilterChain</span><span class="o">)</span><span class="n">http</span><span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>把 Spring Boot 預設實作的 fitler chain 的 @Order 拿掉，這是決定誰的優先序高</li>
+<li>也把 formLogin 拿掉，就不會有登入頁面</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="userdetails">UserDetails</h3>
+<ul>
+<li>實現 UserDetailsService 的 Bean 可以被用來取得 UserDetails</li>
+<li>implements UserDetails
+<ul>
+<li>getAuthorities</li>
+<li>getUsername</li>
+<li>getPassword</li>
+<li>isAccountNonExpired</li>
+<li>isAccountNonLocked</li>
+<li>isCredentialsNonExpired</li>
+<li>isEnabled</li>
+</ul>
+</li>
+</ul>
+<h3 id="securitycontextholder">SecurityContextHolder</h3>
+<ul>
+<li>用來存放 authentication</li>
+</ul>
+<h2 id="jpa">JPA</h2>
+<ul>
+<li>Java Persistence API</li>
+<li>Annotation
+<ul>
+<li>@Entity, @Table
+<ul>
+<li>也要記得寫 getter, setter</li>
+</ul>
+</li>
+<li>@Transient
+<ul>
+<li>不會被序列化，不會被存到資料庫</li>
+<li>可用在可以單獨計算的欄位，比如用資料庫的生日可以算出年齡</li>
+</ul>
+</li>
+<li>@Transactional</li>
+</ul>
+</li>
+<li>語法範例
+<ul>
+<li>findByXxx
+<ul>
+<li>用 XXX 的欄位來查詢</li>
+</ul>
+</li>
+<li>findByXXXLike
+<ul>
+<li>用 XXX 的欄位來模糊查詢</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="repository">Repository</h3>
+<ul>
+<li>@Repository
+<ul>
+<li>用來標記 DAO</li>
+<li>extends JpaRepository&lt;Entity, ID&gt;
+<ul>
+<li>第一個參數是 entity</li>
+<li>第二個參數是 entity 的 id 的型態</li>
+</ul>
+</li>
+<li>可以自定義方法
+<ul>
+<li>遵循命名規則，他會自己轉 SQL</li>
+<li>也可以用 @Query 來自定義 SQL
+<ul>
+<li>
+<!-- raw HTML omitted -->
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="validation">Validation</h2>
+<ul>
+<li>
+<p>field validation</p>
+<ul>
+<li>@NotEmpty</li>
+<li>@Min</li>
+<li>@Max</li>
+</ul>
+</li>
+<li>
+<p>@Valid</p>
+<ul>
+<li>用在 controller 上，才會自動檢查參數</li>
+</ul>
+</li>
+</ul>
+<h2 id="testing">Testing</h2>
+<h3 id="integration-test">Integration Test</h3>
+<ul>
+<li>在 test class 前面的 annotation
+<ul>
+<li>@RunWith(SpringRunner.class)</li>
+<li>@SpringBootTest</li>
+<li>@AutoConfigureMockMvc
+<ul>
+<li>測試開始時會在容器中創建 MockMvc</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在 test method 前面加的 annotation
+<ul>
+<li>@Test</li>
+<li>@Before, @After
+<ul>
+<li>在每個測試前後執行，可以用來清空資料庫和設置 header</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="mockmvc">MockMvc</h4>
+<ul>
+<li>用來模擬 HTTP request</li>
+<li>example
+<ul>
+<li>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Autowired</span>
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="n">MockMvc</span> <span class="n">mockMvc</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@Test</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">test</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mockMvc</span><span class="o">.</span><span class="na">perform</span><span class="o">(</span><span class="n">get</span><span class="o">(</span><span class="s">&#34;/hello&#34;</span><span class="o">))</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">andExpect</span><span class="o">(</span><span class="n">status</span><span class="o">().</span><span class="na">isOk</span><span class="o">())</span>
+</span></span><span class="line"><span class="cl">        <span class="o">.</span><span class="na">andExpect</span><span class="o">(</span><span class="n">content</span><span class="o">().</span><span class="na">string</span><span class="o">(</span><span class="s">&#34;Hello World&#34;</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+</li>
+</ul>
+<h2 id="其他">其他</h2>
+<h3 id="lombok">Lombok</h3>
+<ul>
+<li>@Getter, @Setter
+<ul>
+<li>生成 getter, setter</li>
+</ul>
+</li>
+<li>@ToString
+<ul>
+<li>印出所有變數</li>
+</ul>
+</li>
+<li>@EqualsAndHashCode
+<ul>
+<li>生成 equals, hashCode</li>
+</ul>
+</li>
+<li>Args
+<ul>
+<li>@NoArgsConstructor
+<ul>
+<li>生成無參數建構子</li>
+</ul>
+</li>
+<li>@AllArgsConstructor
+<ul>
+<li>生成所有參數建構子</li>
+</ul>
+</li>
+<li>@RequiredArgsConstructor
+<ul>
+<li>只幫 final 變數生成建構子</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>@Data
+<ul>
+<li>同時用 @Getter, @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor</li>
+</ul>
+</li>
+<li>@Value
+<ul>
+<li>把所有變數都設成 final</li>
+<li>同時用 @Getter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor</li>
+<li>和 Spring boot 的 @Value 撞名</li>
+</ul>
+</li>
+<li>@Builder
+<ul>
+<li>生成 builder pattern</li>
+</ul>
+</li>
+<li>@Slf4j
+<ul>
+<li>生成 log 變數</li>
+</ul>
+</li>
+</ul>
+<h3 id="jackson">Jackson</h3>
+<ul>
+<li>ObjectMapper
+<ul>
+<li>用來轉換物件和 JSON</li>
+<li>readValue
+<ul>
+<li>把 JSON 轉成物件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>用 getter, setter 來判斷欄位</li>
+<li>Annotation
+<ul>
+<li>@JsonIgnore
+<ul>
+<li>不轉換</li>
+</ul>
+</li>
+<li>@JsonProperty
+<ul>
+<li>指定欄位名字</li>
+</ul>
+</li>
+<li>@JsonUnwrapped
+<ul>
+<li>把物件的欄位展開，從巢狀變成平面</li>
+</ul>
+</li>
+<li>@JsonInclude
+<ul>
+<li>設定要不要轉換 null</li>
+<li>如果設定為 Include.NON_NULL，給 null 的話，就不會轉換</li>
+</ul>
+</li>
+<li>@JsonFormat
+<ul>
+<li>設定日期格式</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/framework/">framework</a>
+        
+            <a href="/Blog/tags/java/">java</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/angular-%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Angular 筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/kubernetes-%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Kubernetes 筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/graphql-%E7%B0%A1%E4%BB%8B/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GraphQL 簡介</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/redis/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>

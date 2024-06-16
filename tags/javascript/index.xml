@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>javascript on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/javascript/</link>
+        <description>Recent content in javascript on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Fri, 24 May 2024 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/javascript/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Angular 筆記</title>
+        <link>https://roykesydon.github.io/Blog/p/angular-%E7%AD%86%E8%A8%98/</link>
+        <pubDate>Fri, 24 May 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/angular-%E7%AD%86%E8%A8%98/</guid>
+        <description>&lt;h2 id=&#34;基礎概念&#34;&gt;基礎概念&lt;/h2&gt;
+&lt;h3 id=&#34;module&#34;&gt;Module&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;把相關的 Component、Directive、Pipe、Service 等打包在一起的容器&lt;/li&gt;
+&lt;li&gt;Lazy Loading&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;component&#34;&gt;Component&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Angular 應用程式的基本組成單位&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;pipe&#34;&gt;Pipe&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來轉換資料的工具，可以把字串格式化、日期格式化等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;directive&#34;&gt;Directive&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來修改 DOM 元素的外觀或行為
+&lt;ul&gt;
+&lt;li&gt;比如說 ngIf、ngFor、ngStyle、ngClass&lt;/li&gt;
+&lt;li&gt;類型
+&lt;ul&gt;
+&lt;li&gt;Structural Directive: 修改 DOM 的結構
+&lt;ul&gt;
+&lt;li&gt;可以搭配
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ng-container&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;不會產生額外的 DOM 元素，可以用在想要用 ngIf 和 ngFor 但不想產生額外元素的情況&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;*ngFor&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;let item of items; index as i&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Attribute Directive: 修改 DOM 的屬性&lt;/li&gt;
+&lt;li&gt;Component Directive: 包含 template 的 directive&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;service&#34;&gt;Service&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;負責 API 請求、資料處理等工作&lt;/li&gt;
+&lt;li&gt;Dependency Injection&lt;/li&gt;
+&lt;li&gt;@Injectable
+&lt;ul&gt;
+&lt;li&gt;providedIn
+&lt;ul&gt;
+&lt;li&gt;root: 全域共用&lt;/li&gt;
+&lt;li&gt;也可以在 component 的 providers 中設定要注入的 service&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;router&#34;&gt;Router&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;負責處理 URL 路由&lt;/li&gt;
+&lt;li&gt;routes
+&lt;ul&gt;
+&lt;li&gt;path&lt;/li&gt;
+&lt;li&gt;component&lt;/li&gt;
+&lt;li&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;guard
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ng g guard &amp;lt;guard-name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;h2 id=&#34;canactivate&#34;&gt;CanActivate&lt;/h2&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;cli-command&#34;&gt;CLI Command&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ng new my-app&lt;/code&gt;: 建立新的 Angular 專案&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng serve&lt;/code&gt;: 啟動開發伺服器&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng build&lt;/code&gt;: 打包專案&lt;/li&gt;
+&lt;li&gt;generate
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ng generate module my-module&lt;/code&gt;: 建立新的 Module&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng generate component my-component&lt;/code&gt;: 建立新的 Component
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--module=app&lt;/code&gt;: 指定 Component 所屬的 Module&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng generate service my-service&lt;/code&gt;: 建立新的 Service&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng generate pipe my-pipe&lt;/code&gt;: 建立新的 Pipe&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng generate directive my-directive&lt;/code&gt;: 建立新的 Directive&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;module-1&#34;&gt;Module&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;NgModule
+&lt;ul&gt;
+&lt;li&gt;declarations: 定義同一 Module 中的 Component、Directive、Pipe&lt;/li&gt;
+&lt;li&gt;imports: 匯入其他 Module&lt;/li&gt;
+&lt;li&gt;providers: 定義 Service&lt;/li&gt;
+&lt;li&gt;bootstrap: 定義啟動的 Component&lt;/li&gt;
+&lt;li&gt;exports: 定義要匯出的 Component、Directive、Pipe&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;component-1&#34;&gt;Component&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;包含元素
+&lt;ul&gt;
+&lt;li&gt;Template&lt;/li&gt;
+&lt;li&gt;TypeScript Class
+&lt;ul&gt;
+&lt;li&gt;.spec.ts: 測試檔&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Selector: 定義 Component 的名稱&lt;/li&gt;
+&lt;li&gt;CSS Style&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;standalone
+&lt;ul&gt;
+&lt;li&gt;新版 Angular 預設 app 使用 Standalone 模式，使 component 不再需要透過 NgModule 管理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;lifecycle-hooks&#34;&gt;Lifecycle Hooks&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;ngOnChanges
+&lt;ul&gt;
+&lt;li&gt;當 Angular 重新綁定輸入屬性時調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ngOnInit
+&lt;ul&gt;
+&lt;li&gt;當 Angular 初始化指令/元件時調用&lt;/li&gt;
+&lt;li&gt;在第一輪 ngOnChanges 後調用&lt;/li&gt;
+&lt;li&gt;只調用一次&lt;/li&gt;
+&lt;li&gt;使用場景
+&lt;ul&gt;
+&lt;li&gt;初始化資料（需要根據 @Input 變數）&lt;/li&gt;
+&lt;li&gt;fetch data from API&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ngDoCheck
+&lt;ul&gt;
+&lt;li&gt;在 ngOnChange 和 ngOnInit 之後調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ngAfterContentInit
+&lt;ul&gt;
+&lt;li&gt;在 Angular 把 ng-content 投影到 view 後調用&lt;/li&gt;
+&lt;li&gt;在第一個 ngDoCheck 之後調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ngAfterContentChecked
+&lt;ul&gt;
+&lt;li&gt;在 ng-content 的內容變更後調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ngAfterViewInit
+&lt;ul&gt;
+&lt;li&gt;在 Angular 初始化完 view 後調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ngAfterViewChecked
+&lt;ul&gt;
+&lt;li&gt;在每次做完 view 的變更檢查後調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ngOnDestroy
+&lt;ul&gt;
+&lt;li&gt;在 Angular 銷毀 directive/component 前調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;component-check&#34;&gt;Component check&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;操作
+&lt;ul&gt;
+&lt;li&gt;update child component input binding&lt;/li&gt;
+&lt;li&gt;update DOM interpolation&lt;/li&gt;
+&lt;li&gt;update query list&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;sharing-data&#34;&gt;Sharing Data&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;@Input
+&lt;ul&gt;
+&lt;li&gt;父元件傳遞資料給子元件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Output
+&lt;ul&gt;
+&lt;li&gt;子元件傳遞資料給父元件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;binding&#34;&gt;Binding&lt;/h2&gt;
+&lt;h3 id=&#34;property-binding&#34;&gt;Property Binding&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來設定 HTML 元素的屬性&lt;/li&gt;
+&lt;li&gt;用中括號 &lt;code&gt;[]&lt;/code&gt; 包住屬性名稱&lt;/li&gt;
+&lt;li&gt;ex: &lt;code&gt;&amp;lt;img [src]=&amp;quot;imageUrl&amp;quot;&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;event-binding&#34;&gt;Event Binding&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來設定 HTML 元素的事件&lt;/li&gt;
+&lt;li&gt;用小括號 &lt;code&gt;()&lt;/code&gt; 包住事件名稱&lt;/li&gt;
+&lt;li&gt;ex: &lt;code&gt;&amp;lt;button (click)=&amp;quot;onClick()&amp;quot;&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$event&lt;/code&gt;: 可以取得事件物件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;two-way-binding&#34;&gt;Two-way Binding&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;把屬性和事件綁定在一起&lt;/li&gt;
+&lt;li&gt;用中括號和小括號 &lt;code&gt;[(ngModel)]&lt;/code&gt; 包住屬性名稱&lt;/li&gt;
+&lt;li&gt;ex: &lt;code&gt;&amp;lt;input [(ngModel)]=&amp;quot;name&amp;quot;&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
