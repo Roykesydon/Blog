@@ -6,12 +6,179 @@
         <description>Recent content in computer-vision on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 31 Mar 2024 00:27:55 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/computer-vision/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>🦑SQUID🦑 論文</title>
-        <link>https://roykesydon.github.io/Blog/p/squid-%E8%AB%96%E6%96%87/</link>
+        <lastBuildDate>Tue, 30 Apr 2024 00:00:55 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/computer-vision/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>MemAE 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/memae-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Tue, 30 Apr 2024 00:00:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/memae-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1904.02639&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Memorizing Normality to Detect Anomaly: Memory-augmented Deep Autoencoder for Unsupervised Anomaly Detection&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;autoencoder 在收到異常輸入的時，預期會生出較高的 reconstruction error。但是這個假設實際上並不總是發生。他有可能「泛化」的很好，導致異常的也可以正常重建。&lt;/p&gt;
+&lt;p&gt;為了緩解這個問題，本文幫 auto-encoder 加上一個 memory 的機制。&lt;/p&gt;
+&lt;p&gt;訓練階段，memory 要學習生成 normal data 的 prototypical elements。&lt;/p&gt;
+&lt;p&gt;測試階段，learned memory 會被固定住，然後要根據 few selected memory 進行重建。&lt;/p&gt;
+&lt;p&gt;對於異常輸入，這個重建出的東西就會比較像是 normal sample。這樣 reconstruction error 就會被增強。&lt;/p&gt;
+&lt;p&gt;MemAE 是 free of assumption，所以可以用在各種不同的任務上。&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;AE 有可能「泛化」的很好，導致對於異常輸入也可以正常重建。如果 anomolies 和 normal pattern 有共享某些 composition pattern，或是 decoder 強到連 abnormal encoding 都可以重建，就可能發生這樣的狀況。&lt;/p&gt;
+&lt;p&gt;MemAE 多了一個 memory module，從 encoder 出來的東西會被視作 query，用來把 memory 中最相關的元素取出，然後作 aggregation。&lt;/p&gt;
+&lt;p&gt;作者還進一步提出了一個不同的 hard shrinkage operator，可以生出 sparsity of  memory addressing weight。&lt;/p&gt;
+&lt;p&gt;在訓練階段，會把 memory content 連同 encoder 和 decoder 一起訓練，透過 sparse addressing strategy，MemAE 可以有效地利用有限的 memory slot 來製造出 prototypical normal patterns，來製造出夠低的 reconstruction error。&lt;/p&gt;
+&lt;p&gt;在測試階段，memory content 會被固定住，然後根據 few selected memory 來重建。因為 memory module 並不是基於某種特定資料的假設，所以可以用在各種不同的任務上。&lt;/p&gt;
+&lt;h2 id=&#34;memory-augmented-autoencoder&#34;&gt;Memory-augmented Autoencoder&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MemAE/fig2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;memory-module-with-attention-based-sparse-addressing&#34;&gt;Memory Module with Attention-based Sparse Addressing&lt;/h3&gt;
+&lt;h4 id=&#34;attention-for-memory-addressing&#34;&gt;Attention for Memory Addressing&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;attention weight $w_i$
+&lt;ul&gt;
+&lt;li&gt;$w_i=\frac{exp(d(z,m_i))}{\sum^{N}_{j=1}exp(d(z,m_j))}$&lt;/li&gt;
+&lt;li&gt;$d(\cdot, \cdot)$ 是 similarity measurement，這裡是 cosine similarity
+&lt;ul&gt;
+&lt;li&gt;$d(z,m_i)=\frac{zm_i^T}{||z|| \text{ } ||m_i||}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;hard-shrinkage-for-sparse-addressing&#34;&gt;Hard Shrinkage for Sparse Addressing&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;hard shrinkage
+&lt;ul&gt;
+&lt;li&gt;$\hat{w}_i=h(w_i;\lambda)=\begin{cases} w_i &amp;amp; \text{if } w_i&amp;gt;\lambda \\ 0 &amp;amp; \text{otherwise} \end{cases}$
+&lt;ul&gt;
+&lt;li&gt;這東西不好做 backpropagation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;改良版
+&lt;ul&gt;
+&lt;li&gt;$\hat{w}_i=\frac{max(w_i-\lambda,0)}{|w_i-\lambda|+\epsilon}$
+&lt;ul&gt;
+&lt;li&gt;$max(\cdot, 0)$ 就是 ReLU&lt;/li&gt;
+&lt;li&gt;根據實驗，把 $\lambda$ 設在 [1/N, 3/N] 會得到還不錯的結果&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;shrinkage 後會再 normalize
+&lt;ul&gt;
+&lt;li&gt;$\hat{w}_i=\hat{w}_i/||\hat{w}||_1$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Sparse addressing 有助於鼓勵模型用更少但相關的 memory item 來表示 query。&lt;/p&gt;
+&lt;p&gt;鼓勵 memory addressing 的 sparsity 是有益的，因為 memory M 被訓練來適應 sparse w。&lt;/p&gt;
+&lt;p&gt;鼓勵 sparsity 也可以緩解異常樣本可以被很好的重建的問題。&lt;/p&gt;
+&lt;h3 id=&#34;training&#34;&gt;Training&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;分成兩個 loss
+&lt;ul&gt;
+&lt;li&gt;Reconstruction error
+&lt;ul&gt;
+&lt;li&gt;$R(x^t, \hat{x}^t)=||x^t-\hat{x}^t||^2_2$
+&lt;ul&gt;
+&lt;li&gt;$l2-norm$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;entropy of $\hat{w}^t$
+&lt;ul&gt;
+&lt;li&gt;用來進一步提升 sparsity&lt;/li&gt;
+&lt;li&gt;$E(\hat{w}^t)=\sum^{T}_{i=1}-\hat{w}_i \cdot log(\hat{w}_i)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Combine
+&lt;ul&gt;
+&lt;li&gt;$L(\theta_e, \theta_d, M)=\frac{1}{T}\sum^{T}_{t=1}(R(x^t, \hat{x}^t)+\alpha E(\hat{w}^t))$
+&lt;ul&gt;
+&lt;li&gt;根據實驗，$\alpha$ 設成 0.0002&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>SimSID 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/simsid-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Sat, 13 Apr 2024 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/simsid-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2403.08689&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Exploiting Structural Consistency of Chest Anatomy for Unsupervised Anomaly Detection in Radiography Images&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;個人前言&#34;&gt;個人前言&lt;/h2&gt;
+&lt;p&gt;這篇文章提出了許多在 SQUID 論文有出現過的的內容，特別是有關於放射線成像的描述等等，建議先看過 SQUID，重複的論點不再提及。&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;提出一種簡單的 Space-aware Memory，用於修復放射線成像的異常。&lt;/p&gt;
+&lt;p&gt;將異常檢定制定為 image reconstruction task，用 space-aware memory matrix 和 in-painting block 組成。&lt;/p&gt;
+&lt;h2 id=&#34;related-work&#34;&gt;Related Work&lt;/h2&gt;
+&lt;h3 id=&#34;our-previous-work&#34;&gt;Our Previous Work&lt;/h3&gt;
+&lt;p&gt;相對於 SQUID，本文有以下四點改進：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;引入了新的符號、公式和圖表，以及詳細的方法說明及學習目標&lt;/li&gt;
+&lt;li&gt;刪除 Memory Queue 和 Masked shortcut，簡化框架，還提高了效能&lt;/li&gt;
+&lt;li&gt;在三種放射線成像任務勝過其他 21 種 SOTA 方法&lt;/li&gt;
+&lt;li&gt;研究了 SimSID 對於 desease-free (訓練集中對異常資料的容忍) 的穩健性&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;simsid&#34;&gt;SimSID&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/SimSID/fig2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;developing-space-aware-and-hierarchical-memory&#34;&gt;Developing Space-aware and Hierarchical Memory&lt;/h3&gt;
+&lt;h4 id=&#34;space-aware-memory&#34;&gt;Space-aware memory&lt;/h4&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;$\hat{z}_{i,j}$ (augmented feature)&lt;/p&gt;
+&lt;p&gt;$=\displaystyle\sum^N_{k=1}G(s^{k})M^k_{i,j}$&lt;/p&gt;
+&lt;p&gt;$s^k$ 是做內積算出來的相似度&lt;/p&gt;
+&lt;p&gt;$G(\cdot)$ 是 Gumbel-softmax (用 SQUID 的 Gumbel Shrinkage)&lt;/p&gt;
+&lt;p&gt;$Memory Matrix$ 被拆成多個 block，才有 $M_{i,j}$&lt;/p&gt;
+&lt;h4 id=&#34;hierarchical-memory&#34;&gt;Hierarchical memory&lt;/h4&gt;
+&lt;p&gt;在 encoder 最深處使用一個 memory matrix (in-painting block) 不足以重建具有細節的高品質圖像。&lt;/p&gt;
+&lt;p&gt;為了捕捉不同尺度的 anatomic patterns，提出在 generator 的多個 level 放置 space-aware memory。&lt;/p&gt;
+&lt;p&gt;研究發現，太多的 memory 會導致過度的 information filtering，還會 degrade 模型，導致他只會保留最具代表性的 normal pattern，而不是所有需要的 pattern。&lt;/p&gt;
+&lt;p&gt;這個問題可以透過添加 skip connection 來解決。&lt;/p&gt;
+&lt;p&gt;從經驗發現三個 memory matrix 就已足夠。&lt;/p&gt;
+&lt;h2 id=&#34;results&#34;&gt;Results&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/SimSID/fig7.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;benchmarking-simsid-on-three-public-datasets&#34;&gt;Benchmarking SimSID on Three Public Datasets&lt;/h3&gt;
+&lt;p&gt;對於正常的情況， SimSID 可以在 memory 中找到相似的匹配，然後順利重建。&lt;/p&gt;
+&lt;p&gt;對於異常，將偽造的正常特徵強加到異常特徵，就會產生矛盾。&lt;/p&gt;
+&lt;p&gt;圖 7 繪製 Discriminator 的 heatmap 來指示出重建效果不佳的部分。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>🦑SQUID🦑 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/squid-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
         <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
         
-        <guid>https://roykesydon.github.io/Blog/p/squid-%E8%AB%96%E6%96%87/</guid>
+        <guid>https://roykesydon.github.io/Blog/p/squid-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
         <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2111.13495&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;SQUID: Deep Feature In-Painting for Unsupervised Anomaly Detection&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;

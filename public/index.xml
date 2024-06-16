@@ -6,12 +6,2707 @@
         <description>Recent content on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 31 Mar 2024 00:27:55 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>🦑SQUID🦑 論文</title>
-        <link>https://roykesydon.github.io/Blog/p/squid-%E8%AB%96%E6%96%87/</link>
+        <lastBuildDate>Fri, 14 Jun 2024 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Kubernetes 筆記</title>
+        <link>https://roykesydon.github.io/Blog/p/kubernetes-%E7%AD%86%E8%A8%98/</link>
+        <pubDate>Fri, 14 Jun 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/kubernetes-%E7%AD%86%E8%A8%98/</guid>
+        <description>&lt;h2 id=&#34;基礎概念&#34;&gt;基礎概念&lt;/h2&gt;
+&lt;h3 id=&#34;node&#34;&gt;Node&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Kubernetes 集群中的一台機器&lt;/li&gt;
+&lt;li&gt;過去叫做 Minion&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;cluster&#34;&gt;Cluster&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;由多個 Node 組成的集群&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;node-type&#34;&gt;Node Type&lt;/h4&gt;
+&lt;h5 id=&#34;master&#34;&gt;Master&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;控制整個集群的 Node&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;worker&#34;&gt;Worker&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;其他非 Master 的 Node 叫做 Worker Node&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;master-vs-worker&#34;&gt;Master vs Worker&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;Master
+&lt;ul&gt;
+&lt;li&gt;擁有的 Component
+&lt;ul&gt;
+&lt;li&gt;API Server&lt;/li&gt;
+&lt;li&gt;etcd&lt;/li&gt;
+&lt;li&gt;Controller&lt;/li&gt;
+&lt;li&gt;Scheduler&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Worker
+&lt;ul&gt;
+&lt;li&gt;擁有的 Component
+&lt;ul&gt;
+&lt;li&gt;Container Runtime&lt;/li&gt;
+&lt;li&gt;Kubelet&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;component&#34;&gt;Component&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;安裝 Kubernetes，實際上是安裝以下幾個 Component
+&lt;ul&gt;
+&lt;li&gt;API Server
+&lt;ul&gt;
+&lt;li&gt;front-end of the Kubernetes&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;etcd
+&lt;ul&gt;
+&lt;li&gt;distributed key-value store&lt;/li&gt;
+&lt;li&gt;會實現 lock mechanism，確保沒有 conflict&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;kubelet
+&lt;ul&gt;
+&lt;li&gt;在每個 node 上運行的 agent&lt;/li&gt;
+&lt;li&gt;負責確保 container 在 node 上如期運行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Container Runtime
+&lt;ul&gt;
+&lt;li&gt;用來 run container 的 underlying software&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Controller
+&lt;ul&gt;
+&lt;li&gt;當 node、container、endpoint 掛掉的時候，他要負責監控和回應&lt;/li&gt;
+&lt;li&gt;type
+&lt;ul&gt;
+&lt;li&gt;Replication Controller
+&lt;ul&gt;
+&lt;li&gt;確保指定數量的 Pod 在任何時間都在運行&lt;/li&gt;
+&lt;li&gt;load balancing &amp;amp; scaling&lt;/li&gt;
+&lt;li&gt;後來被 ReplicaSet 取代&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Scheduler
+&lt;ul&gt;
+&lt;li&gt;負責處理 node 間的 distributing work&lt;/li&gt;
+&lt;li&gt;會尋找新創的 container，並分配到 node&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;pod&#34;&gt;Pod&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Kubernetes 的最小單位&lt;/li&gt;
+&lt;li&gt;一個 Pod 封裝一個應用程式，可能包含一個或多個 container&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;replicaset&#34;&gt;ReplicaSet&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;新版本的 Replication Controller&lt;/li&gt;
+&lt;li&gt;yaml
+&lt;ul&gt;
+&lt;li&gt;spec
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;template&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定要創建的 Pod 的 template&lt;/li&gt;
+&lt;li&gt;把 pod 的 metadata 和 spec 都放在這裡&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;replicas&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定要創建的 Pod 的數量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;selector&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定要選擇的 Pod&lt;/li&gt;
+&lt;li&gt;需要這個是因為 ReplicaSet 也可以管理那些不是他創建的 Pod&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;matchLabels&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定要選擇的 Pod 的 label&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;command
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;kubectl scale --replicas=3 -f &amp;lt;file&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;scale up/down replicas&lt;/li&gt;
+&lt;li&gt;這樣不會修改檔案，所以檔案的如果原本是 2，檔案依然會寫 2，只是 replicas 會變成 3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl scale --replicas=3 replicaset &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;scale up/down replicas&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl edit replicaset &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;想要 scale up/down replicas 也可以用這個，他會立刻生效&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;簡寫
+&lt;ul&gt;
+&lt;li&gt;rs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;deployment&#34;&gt;Deployment&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;管理 ReplicaSet 和 Replica Controller&lt;/li&gt;
+&lt;li&gt;yaml 和 ReplicaSet 很像，把 kind 從 ReplicaSet 改成 Deployment 就好
+&lt;ul&gt;
+&lt;li&gt;會自動創建 ReplicaSet&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;使用情境
+&lt;ol&gt;
+&lt;li&gt;Rolling update&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;想要更新每個 Pod，但不是同時更新，而是一個一個更新，確保不會有 downtime&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;Rollback&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;如果更新失敗，可以回到之前的版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Pause and Resume&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;當需要做 multiple changes，不想要一下指令就馬上做，可以先 pause，等所有指令下完再 resume&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;rollout
+&lt;ul&gt;
+&lt;li&gt;創建 Deployment 的時候，會自動創建一個 rollout&lt;/li&gt;
+&lt;li&gt;創建一個 rollout 的時候，會自動創建一個 Deployment revision&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Deployment Strategy
+&lt;ul&gt;
+&lt;li&gt;Recreate
+&lt;ul&gt;
+&lt;li&gt;先刪除所有舊的 Pod，再創建新的 Pod&lt;/li&gt;
+&lt;li&gt;中間會有 Application downtime&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Rolling Update
+&lt;ul&gt;
+&lt;li&gt;一個一個更新 Pod&lt;/li&gt;
+&lt;li&gt;這個是預設的 strategy&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;command
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;kubectl rollout status deployment &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;查看 rollout 的狀態&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl rollout history deployment &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;查看 rollout 的 history (revision)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl rollout undo deployment &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;回到上一個 revision&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;簡寫
+&lt;ul&gt;
+&lt;li&gt;deploy&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;service&#34;&gt;Service&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;讓不同 group 的 Pod 互相通信&lt;/li&gt;
+&lt;li&gt;像一個 virtaul server，可以連接到一個或多個 Pod&lt;/li&gt;
+&lt;li&gt;type
+&lt;ul&gt;
+&lt;li&gt;NodePort
+&lt;ul&gt;
+&lt;li&gt;會在每個 node 上開一個 port，讓外部可以連進來&lt;/li&gt;
+&lt;li&gt;default valid port range: 30000-32767&lt;/li&gt;
+&lt;li&gt;yaml
+&lt;ul&gt;
+&lt;li&gt;spec
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;type&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ports&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;port&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;service 的 port&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;targetPort&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;pod 的 port&lt;/li&gt;
+&lt;li&gt;如果不設置，會用 &lt;code&gt;port&lt;/code&gt; 的值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;nodePort&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;如果不設置，會從 default port range 選一個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;selector&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定要連接的 Pod&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;預設會用 load balancing，策略是 Random，像是一個內建的 load balancer&lt;/li&gt;
+&lt;li&gt;如果有在同個 cluster 跨 node 的情況，不需要其他設定，就可以創建一個跨 node 的 service，會幫他們都設同一個 nodePort&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ClusterIP
+&lt;ul&gt;
+&lt;li&gt;只有在 cluster 內部可以連進來&lt;/li&gt;
+&lt;li&gt;用來幫某一組的 pod 提供一個統一的界面並做轉發&lt;/li&gt;
+&lt;li&gt;不能依賴 internal IP，因為每個 pod 都有可能會 down 或 up&lt;/li&gt;
+&lt;li&gt;yaml
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;spec&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;type&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ports&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;port&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;targetPort&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;selector&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;service 可以用 cluster IP 或是 service name 來連接&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;LoadBalancer
+&lt;ul&gt;
+&lt;li&gt;會在 cloud provider 上開一個 load balancer&lt;/li&gt;
+&lt;li&gt;nodePort 的 load balancer 是在 node 內部的，現在是要幫多個 node 做 load balancing&lt;/li&gt;
+&lt;li&gt;這只有在 cloud provider 上才有&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;name 很重要，因為其他的 Pod 會用這個 name 來連接 (就像 domain name)&lt;/li&gt;
+&lt;li&gt;簡寫
+&lt;ul&gt;
+&lt;li&gt;svc&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;yaml&#34;&gt;YAML&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Kubernetes 的配置文件&lt;/li&gt;
+&lt;li&gt;root level properties
+&lt;ul&gt;
+&lt;li&gt;apiVersion
+&lt;ul&gt;
+&lt;li&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;kind&lt;/th&gt;
+&lt;th&gt;apiVersion&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Pod&lt;/td&gt;
+&lt;td&gt;v1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Service&lt;/td&gt;
+&lt;td&gt;v1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ReplicaSet&lt;/td&gt;
+&lt;td&gt;apps/v1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Deployment&lt;/td&gt;
+&lt;td&gt;apps/v1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;kind
+&lt;ul&gt;
+&lt;li&gt;Pod, Service, ReplicaSet, Deployment&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;metadata
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;labels&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;可以加入任何 key-value pair&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;spec
+&lt;ul&gt;
+&lt;li&gt;specification section&lt;/li&gt;
+&lt;li&gt;pod
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;containers&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;image&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;env&lt;/code&gt;: list of environment variables
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;name&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;value&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;cloud&#34;&gt;Cloud&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;two type of cluster
+&lt;ul&gt;
+&lt;li&gt;Self hosted / Turnkey solutions
+&lt;ul&gt;
+&lt;li&gt;用來在自己的 server 上建立 cluster&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Hosted solutions / Managed solutions
+&lt;ul&gt;
+&lt;li&gt;用來在 cloud 上建立 cluster&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Hosted solutions
+&lt;ul&gt;
+&lt;li&gt;Google Kubernetes Engine (GKE)&lt;/li&gt;
+&lt;li&gt;Amazon Elastic Kubernetes Service (EKS)&lt;/li&gt;
+&lt;li&gt;Azure Kubernetes Service (AKS)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;tool&#34;&gt;Tool&lt;/h2&gt;
+&lt;h3 id=&#34;kubectl&#34;&gt;kubectl&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;kubectl&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;用來 deploy、inspect、manage application on a Kubernetes cluster&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;commands
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;kubectl run &amp;lt;name&amp;gt; --image=&amp;lt;image&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;創建一個 Pod&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl get pods&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;查看所有 Podllll&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-o wide&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;顯示更多資訊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;column
+&lt;ul&gt;
+&lt;li&gt;READY
+&lt;ul&gt;
+&lt;li&gt;&lt;!-- raw HTML omitted --&gt;/&lt;!-- raw HTML omitted --&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;也可以用 &lt;code&gt;kubectl get all&lt;/code&gt; 來查看 Pod、Service、ReplicaSet、Deployment&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl describe pod &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;查看 Pod 的詳細資訊&lt;/li&gt;
+&lt;li&gt;欄位
+&lt;ul&gt;
+&lt;li&gt;Node
+&lt;ul&gt;
+&lt;li&gt;Pod 在哪個 Node 上運行，包含了 Node 的 IP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;IP
+&lt;ul&gt;
+&lt;li&gt;Pod 的 IP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl delete pod &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;刪除 Pod&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl create -f &amp;lt;file&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;根據 YAML file 創建 resource&lt;/li&gt;
+&lt;li&gt;如果 resource 已經存在，會報錯&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl apply -f &amp;lt;file&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;根據 YAML file 創建 resource&lt;/li&gt;
+&lt;li&gt;如果 resource 已經存在，會更新 resource&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl replace -f &amp;lt;file&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;根據 YAML file 創建 resource&lt;/li&gt;
+&lt;li&gt;如果 resource 已經存在，會刪除舊的 resource，並創建新的 resource&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl edit replicaset &amp;lt;name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;可以直接編輯 Replica Set 的 yaml 檔，但他不是一開始創建用的檔案，而是 Kubernetes 在 memory 暫時生成的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kubectl set image deployment &amp;lt;name&amp;gt; &amp;lt;container-name&amp;gt;=&amp;lt;new-image&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;更新 Deployment 的 image&lt;/li&gt;
+&lt;li&gt;注意這裡是 Container name，不是 Pod name&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--record=true&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;會記錄每次的操作&lt;/li&gt;
+&lt;li&gt;用在 rollout 的時候，可以看到每次的操作，不然會顯示 &lt;!-- raw HTML omitted --&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;minikube&#34;&gt;minikube&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來在 local machine 上建立一個 single-node cluster&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;kubeadm&#34;&gt;kubeadm&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來在多個 node 上建立 cluster&lt;/li&gt;
+&lt;li&gt;在多個 node 上安裝 Kubernetes
+&lt;ul&gt;
+&lt;li&gt;流程
+&lt;ol&gt;
+&lt;li&gt;安裝 container runtime&lt;/li&gt;
+&lt;li&gt;安裝 kubeadm&lt;/li&gt;
+&lt;li&gt;初始化 master node&lt;/li&gt;
+&lt;li&gt;建立 pod network&lt;/li&gt;
+&lt;li&gt;加入 worker node&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;networking&#34;&gt;Networking&lt;/h2&gt;
+&lt;h3 id=&#34;cluster-networking&#34;&gt;Cluster Networking&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;每個 Pod 都有自己的 IP&lt;/li&gt;
+&lt;li&gt;兩個不同屬於同一個 cluster 的 Pod 可能會有相同的 IP&lt;/li&gt;
+&lt;li&gt;Kubernetes 要求所有的 Pod 要可以在不用 NAT 的情況下互相通信
+&lt;ul&gt;
+&lt;li&gt;所有的 container 和 node 都要可以在沒有 NAT 的情況下互相通信&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可以用 Calico 等方案實現
+&lt;ul&gt;
+&lt;li&gt;他會把每個 node network 都設成不同的，底下的 pod IP 自然就不會重複&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>論文閱讀：Robust Packet Classification with Field Missing</title>
+        <link>https://roykesydon.github.io/Blog/p/%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80robust-packet-classification-with-field-missing/</link>
+        <pubDate>Sun, 02 Jun 2024 00:00:01 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80robust-packet-classification-with-field-missing/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://ieeexplore.ieee.org/document/9843560&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Robust Packet Classification with Field Missing&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;隨著網路規模成長，由於資源限制，用戶有時候得放棄 packet classification 中的一些欄位。
+此外，某些欄位在某些網路中並不總是可用。&lt;/p&gt;
+&lt;p&gt;如果某些欄位遺失，傳統的 packet classification 方法就很難處理分類任務。&lt;/p&gt;
+&lt;p&gt;本文提出了一個新穎的模型來建構一個 robust packet classification 系統。&lt;/p&gt;
+&lt;p&gt;在分類氣的部分，作者採用 Recursive Flow Classification 來同步處理各種欄位。
+然後用一個新的 worflow 來處理遺失欄位的問題。&lt;/p&gt;
+&lt;p&gt;作者還設計了兩個 complementary bitmap model 來加速 packet 和 flow 的匹配，還有一個 buffer 機制來進一步提高分類準確度。&lt;/p&gt;
+&lt;p&gt;實驗表明，當 field missing 機率低於 0.3 時，模型可以用 94% ~ 99.5% 的準確度對 packet 進行分類。&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Packet classification 是將 packet 對應到 ruleset 並確定下一步處理方案的過程。
+會先根據分類要求提取 packet 的欄位，然後對這些欄位匹配到優先序最高的 rule。&lt;/p&gt;
+&lt;p&gt;然而，由於網路規模的增長，packet classification 變得越來越困難。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;field missing 的情境：
+&lt;ol&gt;
+&lt;li&gt;用戶主動放棄欄位&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;比如，一個 protocol 包含了多個 field，而網路設備只關注齊中的某些 field。這樣就可以放棄某些 field 的提取和匹配，好得到更高的性能。&lt;/li&gt;
+&lt;li&gt;某些協定中的 optional field 也會導致此問題。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;不可用的欄位&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;在一些 autonomous network 中，有些欄位可能來自外部設備（比如感測器）&lt;/li&gt;
+&lt;li&gt;因為來源資訊不穩定，可能會導致某些 field value 是 illegal 的，比如 undefined 或者 -1
+&lt;ul&gt;
+&lt;li&gt;比如一個 wireless receiver 可能會因為訊號干擾而無法取得訊號，所以把「訊號強度」設為 -1。對於網路設備，-1 會當作 legal，但我們無法用於分類。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;上面的問題沒辦法被 router 偵測到，因為 packet 依然是 complete 和 legal 的。&lt;/p&gt;
+&lt;p&gt;有三種傳統的 packet classification 方法：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;decision tree&lt;/li&gt;
+&lt;li&gt;tuple space&lt;/li&gt;
+&lt;li&gt;recursive flow classification (RFC)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;許多後來的模型都基於這些演算法。&lt;/p&gt;
+&lt;p&gt;之前有學者意識到如今 packet classification 越來越困難，在考量 cost 以及 field 的可用性的情況下，他們嘗試用 flow information 去 recover packet，使製作一個 robust 且 flexible 的 packet classification 系統產生可能性。&lt;/p&gt;
+&lt;p&gt;然而，該分類器最後沒有實現並用於 online case。&lt;/p&gt;
+&lt;p&gt;考慮到 RFC 對於 field processing 有很明顯的獨立性，作者設計了一個基於 RFC 的 online robust packet classifier，可以處理 field missing 的情況。&lt;/p&gt;
+&lt;p&gt;首先，作者用 RFC 處理帶有 miss fields 的封包，並且記錄 complete packet 的 flow information。
+然後作者會把 field-missing packet 給分類到這些 flow，去猜 missing field 的值。&lt;/p&gt;
+&lt;p&gt;差別在於，作者是用 bitmap 把 packet match 到 flow，並提出用兩個 bitmap model 來加速 packet 和 flow 的匹配。&lt;/p&gt;
+&lt;p&gt;此外，由於資訊損失，所以分類失敗是不可避免的。透過設計一個 buffer 機制，有很大一部分的封包有很高的機率在 re-classification 後可以成功分類。&lt;/p&gt;
+&lt;p&gt;最後本文設計了一些實驗去分析和評估參數。
+在不同的的 field missing probability 下，作者的模型可以達到 93% ~ 99.5% 的準確度。&lt;/p&gt;
+&lt;h2 id=&#34;proposed-model&#34;&gt;Proposed Model&lt;/h2&gt;
+&lt;p&gt;分為三個 module：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;RFC processing module&lt;/li&gt;
+&lt;li&gt;packet recovery module&lt;/li&gt;
+&lt;li&gt;buffer module&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;rfc-processing-module&#34;&gt;RFC Processing Module&lt;/h3&gt;
+&lt;p&gt;RFC 演算法會把 packet 的每個 field 獨立分類，先對每個 field 做 single constraint matching，然後再對他們做 &amp;ldquo;&amp;amp;&amp;rdquo; operation。&lt;/p&gt;
+&lt;p&gt;對於 complete packet，把所有 fields 的結果組合在一起，可以得到 matching rule。&lt;/p&gt;
+&lt;p&gt;但是如果有 filed missing，一些 &amp;ldquo;&amp;amp;&amp;rdquo; operation 就沒有辦法執行，導致這個過程被中斷。&lt;/p&gt;
+&lt;p&gt;對於這種情況，作者會把中斷時有的所有 result 拿來組合出一個近似的結果，充分利用已知訊息，以便下一步可以更好地 recover packet。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/unclassified/robust-packet-classification/fig1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Fig. 1 的 field C 是 missing 的，所以圖中 3 個灰色的方塊會沒辦法往下做 &amp;ldquo;&amp;amp;&amp;rdquo; operation。但是我們可以用這三個 result 做 &amp;ldquo;&amp;amp;&amp;rdquo; operation，得出 packet 可能會 hit rule 3。&lt;/p&gt;
+&lt;h3 id=&#34;packet-recovery-module&#34;&gt;Packet Recovery Module&lt;/h3&gt;
+&lt;p&gt;不管 packet 有沒有 missing field，RFC 的結果都是 bitmap (像是 0100100011)。bitmap 的 length 就是 ruleset 中 rule 的總數。第 i 個 bit 是 1，就代表當前的 constraint  可以 match 到第 i 個 rule。&lt;/p&gt;
+&lt;p&gt;差別在於，對於 complete packet，bitmap 是準確的，對應的 rule 一定可以被 match 到。
+而有 field missing 的 packet 的 bitmap 只是近似的，因為缺乏訊息，所以 constraint 被放鬆，因此，這樣的 bitmap 可能會有 false positive。bitmap 說有 1 的可能與 packet match 或不 match。&lt;/p&gt;
+&lt;p&gt;不過如果有某個 bit 對應 0，則一定不可以 match。&lt;/p&gt;
+&lt;p&gt;幸運的是，packet 在現有的網路中總是出現在 flow 裡。一個 packet 會帶有一個 field value，是 flow sequence number，被標作 $Seq_{pkt}$。他被用在相關的 flow 中，好排序 packet。&lt;/p&gt;
+&lt;p&gt;屬於同一個 flow 中的 packet field value 應該要一樣。換句話說，當對 flow 中的 packet 分類的時候，他們的 RFC 輸出應該要一樣。&lt;/p&gt;
+&lt;p&gt;所以，我們可以用一個 bitmap 來表示一個 flow。在這種情況下，recover packet (flow matching) 就變成了 search of bitmap。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/unclassified/robust-packet-classification/fig2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;Fig. 2 示範了用 bitmap 來實現 flow matching。&lt;/p&gt;
+&lt;p&gt;field-missing packet 近似出的結果在第一行。&lt;/p&gt;
+&lt;p&gt;因為沒有 false negative，如果近似是 0，那有 1 的可以排除掉。&lt;/p&gt;
+&lt;p&gt;然而還有個問題，就是 bitmap comparison 是一個很耗時的操作。作者提出了兩個 bitmap model 來加速這個過程。&lt;/p&gt;
+&lt;h4 id=&#34;tree-model&#34;&gt;Tree Model&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/unclassified/robust-packet-classification/fig3.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;做 BFS。&lt;/p&gt;
+&lt;p&gt;如果 bitmap 遇到 1 的話就左右都要往下搜，如果遇到 0 的話就只需要往左搜。&lt;/p&gt;
+&lt;p&gt;更新的話就是根據 flow 的 bitmap 繪製路徑，然後把 flow sequence number 加入到 leaf node。&lt;/p&gt;
+&lt;h4 id=&#34;table-model&#34;&gt;Table Model&lt;/h4&gt;
+&lt;p&gt;這種 Model 被用來處理包含有大量的 1 的 bitmap。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/unclassified/robust-packet-classification/fig4.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;只需要訪問那些是 0 的 index，然後表上有的 flow 都排除掉即可。&lt;/p&gt;
+&lt;p&gt;以 110100 為例，只需要訪問 3, 5, 6 這三個 index。
+然後可以對應到 1, 2, 3, 4, 5, 8, 9 這些 flow。&lt;/p&gt;
+&lt;p&gt;所以代表我們有可能的 flow 只有 6, 7, 10 這些剩下的。&lt;/p&gt;
+&lt;p&gt;他的搜尋過程比更新過程慢得多。&lt;/p&gt;
+&lt;p&gt;當有一個 complete packet 出現時，兩種 Model 都會更新，但當出現 field missing packet 時，會根據「1」的數量去選擇一種 Model 來匹配。&lt;/p&gt;
+&lt;p&gt;它稍微增加了更新時間並顯著減少了匹配時間。&lt;/p&gt;
+&lt;h3 id=&#34;buffer-mechanism&#34;&gt;Buffer Mechanism&lt;/h3&gt;
+&lt;p&gt;無論用哪種 Model，最後會有三種 Case：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;沒有 match 到任何 flow
+&lt;ul&gt;
+&lt;li&gt;它可能是 flow 的第一個 packet，也可能是前面的 packet 都不完整，這種情況要放在 buffer 等待重新分類。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;match 到一個 flow
+&lt;ul&gt;
+&lt;li&gt;由於忽略了一些 constraint，所以只找到一個 flow 不代表它一定正確。&lt;/li&gt;
+&lt;li&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/unclassified/robust-packet-classification/fig5.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/li&gt;
+&lt;li&gt;可能會有一些封包被誤分類，通常是某些 flow 的前幾個 packet 被過早分類造成的。為了盡可能消除這種因素，會導入「Initial Range」，把 sequence number 小於某個 threshold 的 packet 給放在 buffer。&lt;/li&gt;
+&lt;li&gt;$Seq_{pkt} &amp;lt; L_e$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;match 到多個 flow
+&lt;ul&gt;
+&lt;li&gt;這種情況可以視作分類失敗，但是 flow information 可以幫助我們進一步分類這些 packet。&lt;/li&gt;
+&lt;li&gt;比如 $Seq_{pkt}$ 不能夠和該 flow 現有的封包中的 maximum sequence number 差很多
+&lt;ul&gt;
+&lt;li&gt;如果 $Seq_{pkt}$ 是 64，三個 flow 的 maximum sequence number 分別是 108, 12, 60，那屬於第三個 flow 的機率比另外兩個高。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;$|Seq_{max}-Seq_{pkt}|&amp;gt;\Delta$ 會被濾掉
+&lt;ul&gt;
+&lt;li&gt;$\Delta$ 是一個 predifined threshold&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;如果處理後的情況屬於 Case 1 或 Case 2，那就處理，否則就放到 buffer。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;每個 packet 都有「maximum number of waiting packets」和「maximum number of waiting flows」的限制。&lt;/p&gt;
+&lt;p&gt;當有新的 flow 被記錄，就會把 buffer 中的 packet 重新匹配。&lt;/p&gt;
+&lt;p&gt;如果 packet 因為答到限制而被刪除時，也會被重新匹配。&lt;/p&gt;
+&lt;p&gt;如果 packet 依然沒有命中任何 flow 或是有多種 flow，就會被丟棄，並記錄為匹配失敗。&lt;/p&gt;
+&lt;h2 id=&#34;experiments&#34;&gt;Experiments&lt;/h2&gt;
+&lt;p&gt;作者從 Classbench 中選擇 1000 條 rule，並且每條 rule 選擇 100 個相關的 packet 用來生成 flow。&lt;/p&gt;
+&lt;p&gt;然後根據 field missing probability 隨機刪除一些 field。&lt;/p&gt;
+&lt;p&gt;Classification accuracy 是用正確分類的 packet 數量除以總 packet 數量。&lt;/p&gt;
+&lt;p&gt;Recovery accuracy 是指 packet recovery module 的成功率。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Angular 筆記</title>
+        <link>https://roykesydon.github.io/Blog/p/angular-%E7%AD%86%E8%A8%98/</link>
+        <pubDate>Fri, 24 May 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/angular-%E7%AD%86%E8%A8%98/</guid>
+        <description>&lt;h2 id=&#34;基礎概念&#34;&gt;基礎概念&lt;/h2&gt;
+&lt;h3 id=&#34;module&#34;&gt;Module&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;把相關的 Component、Directive、Pipe、Service 等打包在一起的容器&lt;/li&gt;
+&lt;li&gt;Lazy Loading&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;component&#34;&gt;Component&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Angular 應用程式的基本組成單位&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;pipe&#34;&gt;Pipe&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來轉換資料的工具，可以把字串格式化、日期格式化等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;directive&#34;&gt;Directive&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來修改 DOM 元素的外觀或行為
+&lt;ul&gt;
+&lt;li&gt;比如說 ngIf、ngFor、ngStyle、ngClass&lt;/li&gt;
+&lt;li&gt;類型
+&lt;ul&gt;
+&lt;li&gt;Structural Directive: 修改 DOM 的結構
+&lt;ul&gt;
+&lt;li&gt;可以搭配
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ng-container&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;不會產生額外的 DOM 元素，可以用在想要用 ngIf 和 ngFor 但不想產生額外元素的情況&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;*ngFor&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;let item of items; index as i&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Attribute Directive: 修改 DOM 的屬性&lt;/li&gt;
+&lt;li&gt;Component Directive: 包含 template 的 directive&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;service&#34;&gt;Service&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;負責 API 請求、資料處理等工作&lt;/li&gt;
+&lt;li&gt;Dependency Injection&lt;/li&gt;
+&lt;li&gt;@Injectable
+&lt;ul&gt;
+&lt;li&gt;providedIn
+&lt;ul&gt;
+&lt;li&gt;root: 全域共用&lt;/li&gt;
+&lt;li&gt;也可以在 component 的 providers 中設定要注入的 service&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;router&#34;&gt;Router&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;負責處理 URL 路由&lt;/li&gt;
+&lt;li&gt;routes
+&lt;ul&gt;
+&lt;li&gt;path&lt;/li&gt;
+&lt;li&gt;component&lt;/li&gt;
+&lt;li&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;guard
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ng g guard &amp;lt;guard-name&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;h2 id=&#34;canactivate&#34;&gt;CanActivate&lt;/h2&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;cli-command&#34;&gt;CLI Command&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ng new my-app&lt;/code&gt;: 建立新的 Angular 專案&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng serve&lt;/code&gt;: 啟動開發伺服器&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng build&lt;/code&gt;: 打包專案&lt;/li&gt;
+&lt;li&gt;generate
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ng generate module my-module&lt;/code&gt;: 建立新的 Module&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng generate component my-component&lt;/code&gt;: 建立新的 Component
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--module=app&lt;/code&gt;: 指定 Component 所屬的 Module&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng generate service my-service&lt;/code&gt;: 建立新的 Service&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng generate pipe my-pipe&lt;/code&gt;: 建立新的 Pipe&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng generate directive my-directive&lt;/code&gt;: 建立新的 Directive&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;module-1&#34;&gt;Module&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;NgModule
+&lt;ul&gt;
+&lt;li&gt;declarations: 定義同一 Module 中的 Component、Directive、Pipe&lt;/li&gt;
+&lt;li&gt;imports: 匯入其他 Module&lt;/li&gt;
+&lt;li&gt;providers: 定義 Service&lt;/li&gt;
+&lt;li&gt;bootstrap: 定義啟動的 Component&lt;/li&gt;
+&lt;li&gt;exports: 定義要匯出的 Component、Directive、Pipe&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;component-1&#34;&gt;Component&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;包含元素
+&lt;ul&gt;
+&lt;li&gt;Template&lt;/li&gt;
+&lt;li&gt;TypeScript Class
+&lt;ul&gt;
+&lt;li&gt;.spec.ts: 測試檔&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Selector: 定義 Component 的名稱&lt;/li&gt;
+&lt;li&gt;CSS Style&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;standalone
+&lt;ul&gt;
+&lt;li&gt;新版 Angular 預設 app 使用 Standalone 模式，使 component 不再需要透過 NgModule 管理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;lifecycle-hooks&#34;&gt;Lifecycle Hooks&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;ngOnChanges
+&lt;ul&gt;
+&lt;li&gt;當 Angular 重新綁定輸入屬性時調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ngOnInit
+&lt;ul&gt;
+&lt;li&gt;當 Angular 初始化指令/元件時調用&lt;/li&gt;
+&lt;li&gt;在第一輪 ngOnChanges 後調用&lt;/li&gt;
+&lt;li&gt;只調用一次&lt;/li&gt;
+&lt;li&gt;使用場景
+&lt;ul&gt;
+&lt;li&gt;初始化資料（需要根據 @Input 變數）&lt;/li&gt;
+&lt;li&gt;fetch data from API&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ngDoCheck
+&lt;ul&gt;
+&lt;li&gt;在 ngOnChange 和 ngOnInit 之後調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ngAfterContentInit
+&lt;ul&gt;
+&lt;li&gt;在 Angular 把 ng-content 投影到 view 後調用&lt;/li&gt;
+&lt;li&gt;在第一個 ngDoCheck 之後調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ngAfterContentChecked
+&lt;ul&gt;
+&lt;li&gt;在 ng-content 的內容變更後調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ngAfterViewInit
+&lt;ul&gt;
+&lt;li&gt;在 Angular 初始化完 view 後調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ngAfterViewChecked
+&lt;ul&gt;
+&lt;li&gt;在每次做完 view 的變更檢查後調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ngOnDestroy
+&lt;ul&gt;
+&lt;li&gt;在 Angular 銷毀 directive/component 前調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;component-check&#34;&gt;Component check&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;操作
+&lt;ul&gt;
+&lt;li&gt;update child component input binding&lt;/li&gt;
+&lt;li&gt;update DOM interpolation&lt;/li&gt;
+&lt;li&gt;update query list&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;sharing-data&#34;&gt;Sharing Data&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;@Input
+&lt;ul&gt;
+&lt;li&gt;父元件傳遞資料給子元件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Output
+&lt;ul&gt;
+&lt;li&gt;子元件傳遞資料給父元件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;binding&#34;&gt;Binding&lt;/h2&gt;
+&lt;h3 id=&#34;property-binding&#34;&gt;Property Binding&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來設定 HTML 元素的屬性&lt;/li&gt;
+&lt;li&gt;用中括號 &lt;code&gt;[]&lt;/code&gt; 包住屬性名稱&lt;/li&gt;
+&lt;li&gt;ex: &lt;code&gt;&amp;lt;img [src]=&amp;quot;imageUrl&amp;quot;&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;event-binding&#34;&gt;Event Binding&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來設定 HTML 元素的事件&lt;/li&gt;
+&lt;li&gt;用小括號 &lt;code&gt;()&lt;/code&gt; 包住事件名稱&lt;/li&gt;
+&lt;li&gt;ex: &lt;code&gt;&amp;lt;button (click)=&amp;quot;onClick()&amp;quot;&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$event&lt;/code&gt;: 可以取得事件物件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;two-way-binding&#34;&gt;Two-way Binding&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;把屬性和事件綁定在一起&lt;/li&gt;
+&lt;li&gt;用中括號和小括號 &lt;code&gt;[(ngModel)]&lt;/code&gt; 包住屬性名稱&lt;/li&gt;
+&lt;li&gt;ex: &lt;code&gt;&amp;lt;input [(ngModel)]=&amp;quot;name&amp;quot;&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Spring Boot 筆記</title>
+        <link>https://roykesydon.github.io/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/</link>
+        <pubDate>Mon, 06 May 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/</guid>
+        <description>&lt;h2 id=&#34;spring&#34;&gt;Spring&lt;/h2&gt;
+&lt;h3 id=&#34;ioc&#34;&gt;IoC&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Invocation of Constructor
+&lt;ul&gt;
+&lt;li&gt;把物件交給 Spring 管理&lt;/li&gt;
+&lt;li&gt;loose coupling&lt;/li&gt;
+&lt;li&gt;Dependency Injection&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Bean
+&lt;ul&gt;
+&lt;li&gt;給 Spring 管理的物件&lt;/li&gt;
+&lt;li&gt;創建方法
+&lt;ul&gt;
+&lt;li&gt;@Component
+&lt;ul&gt;
+&lt;li&gt;創建出的 Bean 名字是 class 的開頭轉小寫&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;注入方法
+&lt;ul&gt;
+&lt;li&gt;@Autowired
+&lt;ul&gt;
+&lt;li&gt;種類
+&lt;ul&gt;
+&lt;li&gt;field injection
+&lt;ul&gt;
+&lt;li&gt;spring boot 會先建立所有 component，在逐一注入，使元件可能短暫處於初始化不完整狀態&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;constructor injection
+&lt;ul&gt;
+&lt;li&gt;建立 bean 時就注入&lt;/li&gt;
+&lt;li&gt;確保 component 被使用時是處於完整的狀態&lt;/li&gt;
+&lt;li&gt;有利於 unit test，因為可以把設計好的 mock bean 從 constructor 傳入&lt;/li&gt;
+&lt;li&gt;spring 建議使用 constructor injection&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;限制
+&lt;ol&gt;
+&lt;li&gt;該 Class 也得是 Bean&lt;/li&gt;
+&lt;li&gt;會根據類型注入 bean
+&lt;ul&gt;
+&lt;li&gt;如果同時有多個同類型的 bean，會報錯，可以用 @Qualifier 指定要注入的 bean 名稱&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;@Qualifier
+&lt;ul&gt;
+&lt;li&gt;指定要注入的 bean 名稱&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Primary
+&lt;ul&gt;
+&lt;li&gt;如果有多個同類型的 bean，會優先注入這個 bean&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;初始化
+&lt;ul&gt;
+&lt;li&gt;@PostConstruct
+&lt;ul&gt;
+&lt;li&gt;創建 bean 後，就會執行這個方法&lt;/li&gt;
+&lt;li&gt;限制
+&lt;ul&gt;
+&lt;li&gt;必須是 public void&lt;/li&gt;
+&lt;li&gt;不能有參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;aop&#34;&gt;AOP&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Aspect Oriented Programming&lt;/li&gt;
+&lt;li&gt;透過 Aspect 統一處理不同方法的共同邏輯&lt;/li&gt;
+&lt;li&gt;要導入 aop 的 starter&lt;/li&gt;
+&lt;li&gt;只有 Bean 才能設置 @Aspect&lt;/li&gt;
+&lt;li&gt;Annotation
+&lt;ul&gt;
+&lt;li&gt;@Aspect
+&lt;ul&gt;
+&lt;li&gt;這個 class 是一個切面&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Before
+&lt;ul&gt;
+&lt;li&gt;加上切入點，就可以在切入點 (Pointcut) 的方法執行前執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@After
+&lt;ul&gt;
+&lt;li&gt;在方法之後執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Around
+&lt;ul&gt;
+&lt;li&gt;在方法之前和之後都執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;常用的功能都已經被封裝好了，開發較少用到 AOP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;特性&#34;&gt;特性&lt;/h2&gt;
+&lt;h3 id=&#34;starter&#34;&gt;Starter&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using.build-systems.starters&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Spring Boot Starters&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;官方的 starter 命名是 &lt;code&gt;spring-boot-starter-*&lt;/code&gt;
+第三方的 starter 命名是 &lt;code&gt;*-spring-boot-starter&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;外部化配置&#34;&gt;外部化配置&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;application.properties&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;重新啟動 jar 時會自動載入，不用改配置要重新 build jar&lt;/li&gt;
+&lt;li&gt;集中管理&lt;/li&gt;
+&lt;li&gt;@Value
+&lt;ul&gt;
+&lt;li&gt;可以注入到變數中&lt;/li&gt;
+&lt;li&gt;可以用 &lt;code&gt;:&lt;/code&gt; 來設定預設值&lt;/li&gt;
+&lt;li&gt;限制
+&lt;ul&gt;
+&lt;li&gt;只能在 Bean 和 Configuration 中使用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;YAML
+&lt;ul&gt;
+&lt;li&gt;application.properties 寫多後，沒有層級辨識度&lt;/li&gt;
+&lt;li&gt;application.yml&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;profiles
+&lt;ul&gt;
+&lt;li&gt;可以根據不同的環境來設定不同的配置 (dev, test, prod)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;application-{profile}.properties&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;application-{profile}.yml&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;spring.profiles.active&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定啟用的 profile&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;jar
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-Dspring.profiles.active=dev&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;指定配置文件
+&lt;ul&gt;
+&lt;li&gt;cli
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--spring.config.location&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Config 資料夾
+&lt;ul&gt;
+&lt;li&gt;可以在 jar 目錄下建立 config 資料夾，放配置文件，不用輸入額外的 args&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;dependency-management&#34;&gt;Dependency Management&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;parent 寫了版本號，故 dependency 可以不用寫版本號&lt;/li&gt;
+&lt;li&gt;真的要指定的話，可以利用 maven 的就近原則&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;auto-configuration&#34;&gt;Auto Configuration&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Component Scan
+&lt;ul&gt;
+&lt;li&gt;Spring Boot 會掃描主程式所在的 package 以及子 package&lt;/li&gt;
+&lt;li&gt;也可以在主程式上加以下註解來指定掃描的 package
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;@SpringBootApplication(scanBasePackages = &amp;quot;com.example&amp;quot;)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;所有 starter 都有 &lt;code&gt;spring-boot-starter&lt;/code&gt;，&lt;code&gt;spring-boot-starter&lt;/code&gt; 又有 &lt;code&gt;spring-boot-autoconfigure&lt;/code&gt;，這個就是自動配置的地方&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;spring boot 默認掃描不到 spring-boot-autoconfigure 的所有配置類 (因為預設只掃描 Main Application Class 的 package)，但是 @SpringBootApplication 的 @EnableAutoConfiguration 會預設掃描 spring-boot-autoconfigure 的所有配置類
+&lt;ul&gt;
+&lt;li&gt;它們再依據 conditional annotation 來決定是否要啟用這個配置類&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;common-annotations&#34;&gt;Common Annotations&lt;/h2&gt;
+&lt;p&gt;Spring Boot 放棄了 XML 配置，改用 Annotation 配置&lt;/p&gt;
+&lt;h3 id=&#34;component-registration&#34;&gt;Component registration&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;@Configuration, @SpringBootConfiguration
+&lt;ul&gt;
+&lt;li&gt;@Bean&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Controller, @Service, @Repository, @Component
+&lt;ul&gt;
+&lt;li&gt;三層式架構
+&lt;ul&gt;
+&lt;li&gt;@Controller
+&lt;ul&gt;
+&lt;li&gt;用來處理請求&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Service
+&lt;ul&gt;
+&lt;li&gt;用來處理業務邏輯&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Repository
+&lt;ul&gt;
+&lt;li&gt;用來處理資料庫操作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@SpringBootApplication
+&lt;ul&gt;
+&lt;li&gt;由以下組成
+&lt;ul&gt;
+&lt;li&gt;@SpringBootConfiguration&lt;/li&gt;
+&lt;li&gt;@EnableAutoConfiguration&lt;/li&gt;
+&lt;li&gt;@ComponentScan&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Web
+&lt;ul&gt;
+&lt;li&gt;@RestController
+&lt;ul&gt;
+&lt;li&gt;@Controller + @ResponseBody&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@RequestMapping
+&lt;ul&gt;
+&lt;li&gt;設置 route&lt;/li&gt;
+&lt;li&gt;Method
+&lt;ul&gt;
+&lt;li&gt;@GetMapping&lt;/li&gt;
+&lt;li&gt;@PostMapping&lt;/li&gt;
+&lt;li&gt;@PutMapping&lt;/li&gt;
+&lt;li&gt;@DeleteMapping&lt;/li&gt;
+&lt;li&gt;@PatchMapping&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;取得參數
+&lt;ul&gt;
+&lt;li&gt;@RequestParam
+&lt;ul&gt;
+&lt;li&gt;取得 url 中的參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@RequestBody
+&lt;ul&gt;
+&lt;li&gt;取得 request body&lt;/li&gt;
+&lt;li&gt;根據欄位名字調用對應的 setter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@RequestHeader
+&lt;ul&gt;
+&lt;li&gt;取得 header&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@PathVariable
+&lt;ul&gt;
+&lt;li&gt;取得 route 中的參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Scope
+&lt;ul&gt;
+&lt;li&gt;mode
+&lt;ul&gt;
+&lt;li&gt;singleton
+&lt;ul&gt;
+&lt;li&gt;預設，共用一個 instance&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;prototype
+&lt;ul&gt;
+&lt;li&gt;每次注入都創建新的 instance&lt;/li&gt;
+&lt;li&gt;可以用 proxy.mode = ScopedProxyMode.TARGET_CLASS，會變成每次調用 method 都創建新的 instance&lt;/li&gt;
+&lt;li&gt;prototype 的元件生出後，spring 不會再管理，要自己管理生命週期，相當於 new 出物件的替代作法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;request
+&lt;ul&gt;
+&lt;li&gt;每個 request 都有一個獨立的 instance&lt;/li&gt;
+&lt;li&gt;request 指的是 HTTP request，從進入 controller 到離開 controller&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;conditional-annotations&#34;&gt;Conditional Annotations&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;條件成立則觸發指定行為&lt;/li&gt;
+&lt;li&gt;ConditionalOn&lt;!-- raw HTML omitted --&gt;
+&lt;ul&gt;
+&lt;li&gt;example
+&lt;ul&gt;
+&lt;li&gt;ConditionalOnClass
+&lt;ul&gt;
+&lt;li&gt;如果 classpath 有指定的 class 才會觸發&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ConditionalOnMissingClass
+&lt;ul&gt;
+&lt;li&gt;如果 classpath 沒有指定的 class 才會觸發&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ConditionalOnBean
+&lt;ul&gt;
+&lt;li&gt;如果容器中有指定的 bean 才會觸發&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ConditionalOnMissingBean
+&lt;ul&gt;
+&lt;li&gt;如果容器中沒有指定的 bean 才會觸發&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Scenario
+&lt;ul&gt;
+&lt;li&gt;如果有某個 dependency，則創建某個 bean&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;property-binding&#34;&gt;Property Binding&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;把任意 Bean 的 property 與配置文件 (application.properties) 中的 property 綁定&lt;/li&gt;
+&lt;li&gt;annotations
+&lt;ul&gt;
+&lt;li&gt;@ConfigurationProperties
+&lt;ul&gt;
+&lt;li&gt;prefix&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@EnableConfigurationProperties
+&lt;ul&gt;
+&lt;li&gt;如果 class 只有 @ConfigurationProperties，沒有 @Component，需要加這個 annotation&lt;/li&gt;
+&lt;li&gt;用在第三方 package 上，因為默認掃不到第三方的 @component&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;logging&#34;&gt;Logging&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Logging 選擇&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Logging API
+&lt;ul&gt;
+&lt;li&gt;JCL&lt;/li&gt;
+&lt;li&gt;SLF4J (Simple Logging Facade for Java)&lt;/li&gt;
+&lt;li&gt;jboss-logging&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Logging implementation
+&lt;ul&gt;
+&lt;li&gt;Logback&lt;/li&gt;
+&lt;li&gt;Log4j2&lt;/li&gt;
+&lt;li&gt;JUL (java.util.logging)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Spring Boot 預設使用 Logback 和 SLF4J&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;spring-boot-starter 引用了 spring-boot-starter-logging&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;log-format&#34;&gt;Log Format&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Default example
+&lt;ul&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;2024-05-06T19:21:40.751+08:00  INFO 22932 --- [demo] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path &amp;#39;&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;時間, 日誌等級, pid, 分割符, thread, logger, message&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;log-level&#34;&gt;Log Level&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Type (由低到高)
+&lt;ul&gt;
+&lt;li&gt;ALL&lt;/li&gt;
+&lt;li&gt;TRACE
+&lt;ul&gt;
+&lt;li&gt;一般不用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;DEBUG&lt;/li&gt;
+&lt;li&gt;INFO&lt;/li&gt;
+&lt;li&gt;WARN&lt;/li&gt;
+&lt;li&gt;ERROR&lt;/li&gt;
+&lt;li&gt;FATAL&lt;/li&gt;
+&lt;li&gt;OFF&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;會 print 出比設定的等級高的 log&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;log-configuration&#34;&gt;Log Configuration&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;logging.level.*&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;設定不同 package 的 log 等級&lt;/li&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;logging.level.com.example=DEBUG
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;logging.group.&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;把多個 package 放在一組，可以統一設定&lt;/li&gt;
+&lt;li&gt;預設有 web, sql 組&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;logging.file&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;.name
+&lt;ul&gt;
+&lt;li&gt;檔名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;歸檔 and 切割&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;歸檔
+&lt;ul&gt;
+&lt;li&gt;每天單獨存&lt;/li&gt;
+&lt;li&gt;.logback.rolllingpolicy.file-name-pattern&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;切割
+&lt;ul&gt;
+&lt;li&gt;超過指定大小就切割&lt;/li&gt;
+&lt;li&gt;.logback.rolllingpolicy.max-file-size&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;filter&#34;&gt;Filter&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;實做 javax.servlet.Filter，就能註冊為 spring 的 filter&lt;/li&gt;
+&lt;li&gt;OncePerRequestFilter
+&lt;ul&gt;
+&lt;li&gt;保證一次 request 只會執行一次&lt;/li&gt;
+&lt;li&gt;doFilterInternal
+&lt;ul&gt;
+&lt;li&gt;chain.doFilter(request, response)
+&lt;ul&gt;
+&lt;li&gt;這行之後代表後面的 filter 都執行完了&lt;/li&gt;
+&lt;li&gt;如果只有一個 filter，就代表 controller 執行完了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;shouldNotFilter
+&lt;ul&gt;
+&lt;li&gt;可以設定不要執行的 url pattern&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;註冊-filter&#34;&gt;註冊 Filter&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;流程&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;設定 @Configuration&lt;/li&gt;
+&lt;li&gt;加到 Bean
+&lt;ul&gt;
+&lt;li&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果 filter 要取得 request 和 response 的內容，可以用 ContentCachingRequestWrapper 和 ContentCachingResponseWrapper 重新包裝&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;因為原本的作法是用 stream 讀取資料，只能讀一次&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;@WebFilter&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;屬於 Java servlet 而非 Spring
+&lt;ul&gt;
+&lt;li&gt;要在 application 補上 @ServletComponentScan&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可以直接註冊 filter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;spring-security&#34;&gt;Spring Security&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;名詞
+&lt;ul&gt;
+&lt;li&gt;Authentication
+&lt;ul&gt;
+&lt;li&gt;認證
+&lt;ul&gt;
+&lt;li&gt;檢查是不是系統的使用者，以及是哪個使用者&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Authorization
+&lt;ul&gt;
+&lt;li&gt;授權
+&lt;ul&gt;
+&lt;li&gt;檢查使用者有沒有權限做某件事&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;流程&#34;&gt;流程&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;filter chain&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;example
+&lt;ul&gt;
+&lt;li&gt;UsernamePasswordAuthenticationFilter
+&lt;ul&gt;
+&lt;li&gt;檢查使用者名稱和密碼&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ExceptionTranslationFilter
+&lt;ul&gt;
+&lt;li&gt;處理例外&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;FilterSecurityInterceptor
+&lt;ul&gt;
+&lt;li&gt;檢查授權&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;authorizeHttpRequests
+&lt;ul&gt;
+&lt;li&gt;設定哪些 request 需要什麼權限&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;example: JWT 驗證流程&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;先透過 filter chain 經過 JWT filter&lt;/li&gt;
+&lt;li&gt;透過 UserDetailsService 取得使用者資訊&lt;/li&gt;
+&lt;li&gt;驗證使用者資訊&lt;/li&gt;
+&lt;li&gt;更新 SecurityContextHolder
+&lt;ul&gt;
+&lt;li&gt;用來判斷使用者是否已經通過 authentication&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;configuration&#34;&gt;Configuration&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;@EnableWebSecurity
+&lt;ul&gt;
+&lt;li&gt;啟用 web security&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;example
+&lt;ul&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@Configuration&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@EnableWebSecurity&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;SecurityConfig&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nd&#34;&gt;@Bean&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SecurityFilterChain&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;securityFilterChain&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;HttpSecurity&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;throws&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Exception&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;authorizeHttpRequests&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;requests&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;o&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;AuthorizeHttpRequestsConfigurer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;AuthorizedUrl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;requests&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;anyRequest&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;authenticated&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;o&#34;&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;httpBasic&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Customizer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;withDefaults&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;SecurityFilterChain&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;build&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;把 Spring Boot 預設實作的 fitler chain 的 @Order 拿掉，這是決定誰的優先序高&lt;/li&gt;
+&lt;li&gt;也把 formLogin 拿掉，就不會有登入頁面&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;userdetails&#34;&gt;UserDetails&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;實現 UserDetailsService 的 Bean 可以被用來取得 UserDetails&lt;/li&gt;
+&lt;li&gt;implements UserDetails
+&lt;ul&gt;
+&lt;li&gt;getAuthorities&lt;/li&gt;
+&lt;li&gt;getUsername&lt;/li&gt;
+&lt;li&gt;getPassword&lt;/li&gt;
+&lt;li&gt;isAccountNonExpired&lt;/li&gt;
+&lt;li&gt;isAccountNonLocked&lt;/li&gt;
+&lt;li&gt;isCredentialsNonExpired&lt;/li&gt;
+&lt;li&gt;isEnabled&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;securitycontextholder&#34;&gt;SecurityContextHolder&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來存放 authentication&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;jpa&#34;&gt;JPA&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Java Persistence API&lt;/li&gt;
+&lt;li&gt;Annotation
+&lt;ul&gt;
+&lt;li&gt;@Entity, @Table
+&lt;ul&gt;
+&lt;li&gt;也要記得寫 getter, setter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Transient
+&lt;ul&gt;
+&lt;li&gt;不會被序列化，不會被存到資料庫&lt;/li&gt;
+&lt;li&gt;可用在可以單獨計算的欄位，比如用資料庫的生日可以算出年齡&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Transactional&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;語法範例
+&lt;ul&gt;
+&lt;li&gt;findByXxx
+&lt;ul&gt;
+&lt;li&gt;用 XXX 的欄位來查詢&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;findByXXXLike
+&lt;ul&gt;
+&lt;li&gt;用 XXX 的欄位來模糊查詢&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;repository&#34;&gt;Repository&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;@Repository
+&lt;ul&gt;
+&lt;li&gt;用來標記 DAO&lt;/li&gt;
+&lt;li&gt;extends JpaRepository&amp;lt;Entity, ID&amp;gt;
+&lt;ul&gt;
+&lt;li&gt;第一個參數是 entity&lt;/li&gt;
+&lt;li&gt;第二個參數是 entity 的 id 的型態&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可以自定義方法
+&lt;ul&gt;
+&lt;li&gt;遵循命名規則，他會自己轉 SQL&lt;/li&gt;
+&lt;li&gt;也可以用 @Query 來自定義 SQL
+&lt;ul&gt;
+&lt;li&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;validation&#34;&gt;Validation&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;field validation&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;@NotEmpty&lt;/li&gt;
+&lt;li&gt;@Min&lt;/li&gt;
+&lt;li&gt;@Max&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;@Valid&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用在 controller 上，才會自動檢查參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;testing&#34;&gt;Testing&lt;/h2&gt;
+&lt;h3 id=&#34;integration-test&#34;&gt;Integration Test&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在 test class 前面的 annotation
+&lt;ul&gt;
+&lt;li&gt;@RunWith(SpringRunner.class)&lt;/li&gt;
+&lt;li&gt;@SpringBootTest&lt;/li&gt;
+&lt;li&gt;@AutoConfigureMockMvc
+&lt;ul&gt;
+&lt;li&gt;測試開始時會在容器中創建 MockMvc&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;在 test method 前面加的 annotation
+&lt;ul&gt;
+&lt;li&gt;@Test&lt;/li&gt;
+&lt;li&gt;@Before, @After
+&lt;ul&gt;
+&lt;li&gt;在每個測試前後執行，可以用來清空資料庫和設置 header&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;mockmvc&#34;&gt;MockMvc&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;用來模擬 HTTP request&lt;/li&gt;
+&lt;li&gt;example
+&lt;ul&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@Autowired&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;private&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MockMvc&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mockMvc&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@Test&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;throws&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Exception&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;mockMvc&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;perform&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;get&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;/hello&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;andExpect&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;status&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;().&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;isOk&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;())&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;andExpect&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;content&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;().&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Hello World&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;其他&#34;&gt;其他&lt;/h2&gt;
+&lt;h3 id=&#34;lombok&#34;&gt;Lombok&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;@Getter, @Setter
+&lt;ul&gt;
+&lt;li&gt;生成 getter, setter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@ToString
+&lt;ul&gt;
+&lt;li&gt;印出所有變數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@EqualsAndHashCode
+&lt;ul&gt;
+&lt;li&gt;生成 equals, hashCode&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Args
+&lt;ul&gt;
+&lt;li&gt;@NoArgsConstructor
+&lt;ul&gt;
+&lt;li&gt;生成無參數建構子&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@AllArgsConstructor
+&lt;ul&gt;
+&lt;li&gt;生成所有參數建構子&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@RequiredArgsConstructor
+&lt;ul&gt;
+&lt;li&gt;只幫 final 變數生成建構子&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Data
+&lt;ul&gt;
+&lt;li&gt;同時用 @Getter, @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Value
+&lt;ul&gt;
+&lt;li&gt;把所有變數都設成 final&lt;/li&gt;
+&lt;li&gt;同時用 @Getter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor&lt;/li&gt;
+&lt;li&gt;和 Spring boot 的 @Value 撞名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Builder
+&lt;ul&gt;
+&lt;li&gt;生成 builder pattern&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Slf4j
+&lt;ul&gt;
+&lt;li&gt;生成 log 變數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;jackson&#34;&gt;Jackson&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;ObjectMapper
+&lt;ul&gt;
+&lt;li&gt;用來轉換物件和 JSON&lt;/li&gt;
+&lt;li&gt;readValue
+&lt;ul&gt;
+&lt;li&gt;把 JSON 轉成物件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;用 getter, setter 來判斷欄位&lt;/li&gt;
+&lt;li&gt;Annotation
+&lt;ul&gt;
+&lt;li&gt;@JsonIgnore
+&lt;ul&gt;
+&lt;li&gt;不轉換&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@JsonProperty
+&lt;ul&gt;
+&lt;li&gt;指定欄位名字&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@JsonUnwrapped
+&lt;ul&gt;
+&lt;li&gt;把物件的欄位展開，從巢狀變成平面&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@JsonInclude
+&lt;ul&gt;
+&lt;li&gt;設定要不要轉換 null&lt;/li&gt;
+&lt;li&gt;如果設定為 Include.NON_NULL，給 null 的話，就不會轉換&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@JsonFormat
+&lt;ul&gt;
+&lt;li&gt;設定日期格式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>MemAE 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/memae-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Tue, 30 Apr 2024 00:00:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/memae-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/1904.02639&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Memorizing Normality to Detect Anomaly: Memory-augmented Deep Autoencoder for Unsupervised Anomaly Detection&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;autoencoder 在收到異常輸入的時，預期會生出較高的 reconstruction error。但是這個假設實際上並不總是發生。他有可能「泛化」的很好，導致異常的也可以正常重建。&lt;/p&gt;
+&lt;p&gt;為了緩解這個問題，本文幫 auto-encoder 加上一個 memory 的機制。&lt;/p&gt;
+&lt;p&gt;訓練階段，memory 要學習生成 normal data 的 prototypical elements。&lt;/p&gt;
+&lt;p&gt;測試階段，learned memory 會被固定住，然後要根據 few selected memory 進行重建。&lt;/p&gt;
+&lt;p&gt;對於異常輸入，這個重建出的東西就會比較像是 normal sample。這樣 reconstruction error 就會被增強。&lt;/p&gt;
+&lt;p&gt;MemAE 是 free of assumption，所以可以用在各種不同的任務上。&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;AE 有可能「泛化」的很好，導致對於異常輸入也可以正常重建。如果 anomolies 和 normal pattern 有共享某些 composition pattern，或是 decoder 強到連 abnormal encoding 都可以重建，就可能發生這樣的狀況。&lt;/p&gt;
+&lt;p&gt;MemAE 多了一個 memory module，從 encoder 出來的東西會被視作 query，用來把 memory 中最相關的元素取出，然後作 aggregation。&lt;/p&gt;
+&lt;p&gt;作者還進一步提出了一個不同的 hard shrinkage operator，可以生出 sparsity of  memory addressing weight。&lt;/p&gt;
+&lt;p&gt;在訓練階段，會把 memory content 連同 encoder 和 decoder 一起訓練，透過 sparse addressing strategy，MemAE 可以有效地利用有限的 memory slot 來製造出 prototypical normal patterns，來製造出夠低的 reconstruction error。&lt;/p&gt;
+&lt;p&gt;在測試階段，memory content 會被固定住，然後根據 few selected memory 來重建。因為 memory module 並不是基於某種特定資料的假設，所以可以用在各種不同的任務上。&lt;/p&gt;
+&lt;h2 id=&#34;memory-augmented-autoencoder&#34;&gt;Memory-augmented Autoencoder&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/MemAE/fig2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;memory-module-with-attention-based-sparse-addressing&#34;&gt;Memory Module with Attention-based Sparse Addressing&lt;/h3&gt;
+&lt;h4 id=&#34;attention-for-memory-addressing&#34;&gt;Attention for Memory Addressing&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;attention weight $w_i$
+&lt;ul&gt;
+&lt;li&gt;$w_i=\frac{exp(d(z,m_i))}{\sum^{N}_{j=1}exp(d(z,m_j))}$&lt;/li&gt;
+&lt;li&gt;$d(\cdot, \cdot)$ 是 similarity measurement，這裡是 cosine similarity
+&lt;ul&gt;
+&lt;li&gt;$d(z,m_i)=\frac{zm_i^T}{||z|| \text{ } ||m_i||}$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;hard-shrinkage-for-sparse-addressing&#34;&gt;Hard Shrinkage for Sparse Addressing&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;hard shrinkage
+&lt;ul&gt;
+&lt;li&gt;$\hat{w}_i=h(w_i;\lambda)=\begin{cases} w_i &amp;amp; \text{if } w_i&amp;gt;\lambda \\ 0 &amp;amp; \text{otherwise} \end{cases}$
+&lt;ul&gt;
+&lt;li&gt;這東西不好做 backpropagation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;改良版
+&lt;ul&gt;
+&lt;li&gt;$\hat{w}_i=\frac{max(w_i-\lambda,0)}{|w_i-\lambda|+\epsilon}$
+&lt;ul&gt;
+&lt;li&gt;$max(\cdot, 0)$ 就是 ReLU&lt;/li&gt;
+&lt;li&gt;根據實驗，把 $\lambda$ 設在 [1/N, 3/N] 會得到還不錯的結果&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;shrinkage 後會再 normalize
+&lt;ul&gt;
+&lt;li&gt;$\hat{w}_i=\hat{w}_i/||\hat{w}||_1$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Sparse addressing 有助於鼓勵模型用更少但相關的 memory item 來表示 query。&lt;/p&gt;
+&lt;p&gt;鼓勵 memory addressing 的 sparsity 是有益的，因為 memory M 被訓練來適應 sparse w。&lt;/p&gt;
+&lt;p&gt;鼓勵 sparsity 也可以緩解異常樣本可以被很好的重建的問題。&lt;/p&gt;
+&lt;h3 id=&#34;training&#34;&gt;Training&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;分成兩個 loss
+&lt;ul&gt;
+&lt;li&gt;Reconstruction error
+&lt;ul&gt;
+&lt;li&gt;$R(x^t, \hat{x}^t)=||x^t-\hat{x}^t||^2_2$
+&lt;ul&gt;
+&lt;li&gt;$l2-norm$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;entropy of $\hat{w}^t$
+&lt;ul&gt;
+&lt;li&gt;用來進一步提升 sparsity&lt;/li&gt;
+&lt;li&gt;$E(\hat{w}^t)=\sum^{T}_{i=1}-\hat{w}_i \cdot log(\hat{w}_i)$&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Combine
+&lt;ul&gt;
+&lt;li&gt;$L(\theta_e, \theta_d, M)=\frac{1}{T}\sum^{T}_{t=1}(R(x^t, \hat{x}^t)+\alpha E(\hat{w}^t))$
+&lt;ul&gt;
+&lt;li&gt;根據實驗，$\alpha$ 設成 0.0002&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>磁碟管理</title>
+        <link>https://roykesydon.github.io/Blog/p/%E7%A3%81%E7%A2%9F%E7%AE%A1%E7%90%86/</link>
+        <pubDate>Wed, 24 Apr 2024 00:00:43 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/%E7%A3%81%E7%A2%9F%E7%AE%A1%E7%90%86/</guid>
+        <description>&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;有關名詞&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;扇區: 最小的儲存單位&lt;/li&gt;
+&lt;li&gt;block: 一次讀取的最小單位，是多個連續的扇區&lt;/li&gt;
+&lt;li&gt;inode
+&lt;ul&gt;
+&lt;li&gt;OS 用來記錄檔案的 metadata&lt;/li&gt;
+&lt;li&gt;每個文件的 inode number 是唯一的&lt;/li&gt;
+&lt;li&gt;可以用 &lt;code&gt;ls -li&lt;/code&gt; 來看 inode number
+&lt;ul&gt;
+&lt;li&gt;inode data
+&lt;ul&gt;
+&lt;li&gt;檔案的大小&lt;/li&gt;
+&lt;li&gt;擁有者&lt;/li&gt;
+&lt;li&gt;擁有者的 group&lt;/li&gt;
+&lt;li&gt;權限&lt;/li&gt;
+&lt;li&gt;修改時間&lt;/li&gt;
+&lt;li&gt;文件的實體指針，指向 block&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;格式化分區&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;主分區&lt;/li&gt;
+&lt;li&gt;擴展分區
+&lt;ul&gt;
+&lt;li&gt;邏輯分區&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;默認分區 1~4 給主分區和擴展分區，邏輯分區從 5 開始
+&lt;ul&gt;
+&lt;li&gt;/dev/sda1、/dev/sda2 這種就是分區&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;fdisk&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;小於 2TB 的磁碟，可以用 fdisk，但是大於 2TB 的磁碟，要用 parted，且要用 GPT&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;fdisk -l&lt;/code&gt; 列出所有分區&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;fdisk /dev/sda&lt;/code&gt; 進入 fdisk
+&lt;ul&gt;
+&lt;li&gt;n 新增分區
+&lt;ul&gt;
+&lt;li&gt;再設置 sector 的起始位置和結束位置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;d 刪除分區&lt;/li&gt;
+&lt;li&gt;t 更改分區的 system id&lt;/li&gt;
+&lt;li&gt;w 寫入並且離開&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;parted&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;parted /dev/sda&lt;/code&gt; 進入 parted
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mklabel gpt&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;可以把 disk 轉成 GPT&lt;/li&gt;
+&lt;li&gt;GPT 區分主分區和邏輯分區&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;mkpart primary &amp;lt;start&amp;gt; &amp;lt;end&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;創建一個 primary partition，從 start 到 end (MB)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;軟硬連結&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;軟連結
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ln -s &amp;lt;source&amp;gt; &amp;lt;destination&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;如果刪除軟連結的檔案的話，不會影響原本的檔案&lt;/li&gt;
+&lt;li&gt;源文件刪除後，軟連結失效&lt;/li&gt;
+&lt;li&gt;支持資料夾&lt;/li&gt;
+&lt;li&gt;支持跨文件系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;硬連結
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ln &amp;lt;source&amp;gt; &amp;lt;destination&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;一般情況，inode 和檔案名稱是一對一的關係&lt;/li&gt;
+&lt;li&gt;軟連結 inode 號碼是不一樣的，代表是兩個個體，硬連結 inode 號碼是一樣的&lt;/li&gt;
+&lt;li&gt;刪除硬連結對源文件沒有影響&lt;/li&gt;
+&lt;li&gt;刪除源文件對硬連結沒有影響
+&lt;ul&gt;
+&lt;li&gt;但是如果刪除所有硬連結，文件的連結數變成 0，則文件會被刪除&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;不能對資料夾使用&lt;/li&gt;
+&lt;li&gt;不能跨文件系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;mkfs&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;對分區進行格式化文件系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;fsck&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;file system check&lt;/li&gt;
+&lt;li&gt;檢查和修復文件系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;lsblk&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;lsblk -f&lt;/code&gt; 列出所有分區的文件系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;vfs&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;virtual file system&lt;/li&gt;
+&lt;li&gt;linux 可能有多種文件系統，在上面有一層 vfs，讓所有文件系統都可以通過一個統一的接口來訪問&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Mount&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;設備要 mount 才可以使用，給設備提供一個出入口&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;mount&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-l&lt;/code&gt; 列出所有已經 mount 的設備&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-t&lt;/code&gt; 指定文件系統，不指定的話，會自動判斷&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-o&lt;/code&gt; 一些有關於 mount 的參數
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;async&lt;/code&gt; 非同步讀寫，效率高，但是喪失安全性&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;sync&lt;/code&gt; 同步讀寫，效率低，但是讀寫安全&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;atime/noatime&lt;/code&gt; 是否要紀錄文件的訪問時間&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-r&lt;/code&gt; read-only&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;LVM&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;logical volume manager&lt;/li&gt;
+&lt;li&gt;把一個或多個硬碟在邏輯上進行合併，可以動態調整大小&lt;/li&gt;
+&lt;li&gt;硬盤的多個分區，由 LVM 統一管理為 volume group&lt;/li&gt;
+&lt;li&gt;名詞
+&lt;ul&gt;
+&lt;li&gt;PP: physical partition&lt;/li&gt;
+&lt;li&gt;PV: physical volume
+&lt;ul&gt;
+&lt;li&gt;通常一個 PV 對應一個 PP&lt;/li&gt;
+&lt;li&gt;PE: physical extends
+&lt;ul&gt;
+&lt;li&gt;PV 中可以分配的最小單位，同一個 VG 中，所有 PV 的 PE 大小都是一樣的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;VG: volume group
+&lt;ul&gt;
+&lt;li&gt;創建在 PV 上，可以劃分成多個 PV&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;LV: logical volume
+&lt;ul&gt;
+&lt;li&gt;創建在 VG 上，可以動態擴容的分區&lt;/li&gt;
+&lt;li&gt;LE: logical extends
+&lt;ul&gt;
+&lt;li&gt;LV 中的基本單位，一個 LE 對應一個 PE&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;創建
+&lt;ul&gt;
+&lt;li&gt;PP 階段
+&lt;ul&gt;
+&lt;li&gt;用 fdisk 格式化，修改 system id 為 8e (預設是 83)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;PV 階段
+&lt;ul&gt;
+&lt;li&gt;用 pvcreate, pvdisplay 把 linux 分區轉成 PV&lt;/li&gt;
+&lt;li&gt;指令
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pvcreate /dev/sda /dev/sdb&lt;/code&gt;: 把 sda 和 sdb 轉成 PV
+&lt;ul&gt;
+&lt;li&gt;適用硬碟和分區&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pvs&lt;/code&gt;: 查看 PV&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;VG 階段
+&lt;ul&gt;
+&lt;li&gt;用 vgcreate, vgdisplay 創建 VG&lt;/li&gt;
+&lt;li&gt;指令
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;vgcreate vg1 /dev/sda /dev/sdb&lt;/code&gt;: 創建 VG vg1，用 sda 和 sdb&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;vgs&lt;/code&gt;: 查看 VG&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;vgextend vg1 /dev/sdc&lt;/code&gt;: 把 sdc 加入 vg1&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;vgdisplay&lt;/code&gt;: 查看 VG&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;LV 階段
+&lt;ul&gt;
+&lt;li&gt;用 lvcreate, lvdisplay 創建 LV&lt;/li&gt;
+&lt;li&gt;把 VG 分成多個 LV&lt;/li&gt;
+&lt;li&gt;也要幫 LV 創建文件系統&lt;/li&gt;
+&lt;li&gt;指令
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;lvs&lt;/code&gt;: 查看 LV&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;lvextend -L +1000G /dev/vg1/lv1&lt;/code&gt;: 把 lv1 增加 1000G
+&lt;ul&gt;
+&lt;li&gt;ex4 可以不用 umount&lt;/li&gt;
+&lt;li&gt;還要 &lt;code&gt;resize2fs /dev/vg1/lv1&lt;/code&gt; 來調整文件系統大小
+&lt;ul&gt;
+&lt;li&gt;可以用 &lt;code&gt;df -h&lt;/code&gt; 來檢查&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>ReALM 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/realm-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Thu, 18 Apr 2024 00:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/realm-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2403.20329&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;ReALM: Reference Resolution As Language Modeling&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;Reference resolution 是一個重要的問題，對於理解和充分處理不同類型的 context 很重要。&lt;/p&gt;
+&lt;p&gt;Context 包含 previous turns 和 non-conversational entities，比如使用者螢幕上的 entity，或是在背景執行的 entity。&lt;/p&gt;
+&lt;p&gt;LLM 雖然在各種任務都很強大，但對於 reference resolution 的使用，特別是 non-conversational entities 方面，依然沒有充分利用。&lt;/p&gt;
+&lt;p&gt;本文將展示如何引用 LLM 創建一個系統來處理不同類型的 reference，方法是展示如何把 reference resolution 轉換成 language modeling problem。
+盡管螢幕上的 entity 傳統上不利於簡化成 text-only modality。&lt;/p&gt;
+&lt;p&gt;對於 GPT-4，本文最小的模型實現了和 GPT-4 相當的性能，而更大的模型則大幅領先。&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;人類的語言很長包含 ambiguous reference，比如「這個」、「那個」等等，這些 reference 需要根據 context 來解決。&lt;/p&gt;
+&lt;p&gt;能夠能夠理解 context 對 conversational assistant 來說很重要。&lt;/p&gt;
+&lt;p&gt;讓使用者能夠對螢幕上看到的內容發出查詢是確保語音助理可以提供 hands-free 體驗的第一步。&lt;/p&gt;
+&lt;hr&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Speaker&lt;/th&gt;
+&lt;th&gt;Dialogue&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;User&lt;/td&gt;
+&lt;td&gt;Show me pharmacies near me&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Agent&lt;/td&gt;
+&lt;td&gt;Here is a list I found.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Agent&lt;/td&gt;
+&lt;td&gt;&amp;hellip; (list presented)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;User&lt;/td&gt;
+&lt;td&gt;Call the one on Rainbow Rd.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;User&lt;/td&gt;
+&lt;td&gt;Call the bottom one.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;User&lt;/td&gt;
+&lt;td&gt;Call this number (present onscreen)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Table 1:  Sample Interactions between a user and an
+agent.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;以 Table 1 為例，如果沒有理解 context 的能力，agent 不可能完成查詢。&lt;/p&gt;
+&lt;p&gt;照理來說，處理用戶的查詢需要多種類型的 context，Conversational context 和 on-screen context 就是兩個主要的例子。&lt;/p&gt;
+&lt;p&gt;最近的 LLM 通常可以實現 End-to-End 的體驗，甚至可能可以消除包含 reference resolution 的多階段 piepline。&lt;/p&gt;
+&lt;p&gt;但是在一些實際案例中，pipeline 有他的價值，考慮以下情境：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;在運算能力有限的設備上運作 (例如手機)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;由於功耗和延遲需求，單一大型 End-to-End 模型可能不適用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;需要與 API 整合的情境&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;雖然存在可以用 LLM 編寫呼叫 API 的方法，但依然需要超大的模型還有對現有 pipeline 的徹底處理。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用 focused model 可以允許現有的 reference resolution module 替換成更新的版本，而且由於系統是模組化的，可以改進能力和可解釋性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;對於本文所考慮的任務，reference resolution 不只限定於 conversational context，還包含 on-screen entities，這些 entities 是使用者可以感知到的一部份，但是還未出現在對話歷史紀錄中。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;因此，盡管一些 LLM 可以 implicit 地處理 reference resolution，但是傳統的 NLP 任務 (比如 reference resolution) 仍然有價值。&lt;/p&gt;
+&lt;p&gt;因此本文提倡用較小的語言模型，但針對 reference resolution 進行了專門且明確的 fine-tuning。&lt;/p&gt;
+&lt;p&gt;然而這種語音助理會遇到最大的挑戰就是要怎麼讓 LM 「看」到螢幕。而且還要以有利於 LM 解析的方式對螢幕上的 entity 進行編碼，然後編碼還得足夠一致，讓 LM 可以成功執行 reference resolution。&lt;/p&gt;
+&lt;p&gt;本文建議使用使用 parsed entity 及其位置來重件螢幕，以產生螢幕的純文字表示。&lt;/p&gt;
+&lt;p&gt;然後螢幕上屬於 entity 的部分會被標記，以便 LM 能夠了解實體出現的位置及他們周圍的文字。&lt;/p&gt;
+&lt;p&gt;據作者所知，這是第一個目標是從螢幕 encode context 的 LLM 工作。&lt;/p&gt;
+&lt;h2 id=&#34;related-work-and-motivation&#34;&gt;Related Work and Motivation&lt;/h2&gt;
+&lt;p&gt;解析螢幕上的 reference 是一個目前探索比較不足的領域。&lt;/p&gt;
+&lt;p&gt;螢幕上的東西通常更加結構化和高度文字化，使的可以利用更輕的模型來轉換成文字。但雖然容易解析，分布和那種大型育訓練的基於圖像的系統不同，因為他們多半都用自然的現實圖片。&lt;/p&gt;
+&lt;p&gt;此外那些模型的訓練成本通常都非常高，而且在這種大量文字的情境也表現不佳。
+常用於文字理解的方法又常常依賴多個模組，比如 bounding box detection 和 OCR。&lt;/p&gt;
+&lt;p&gt;聯合視覺 + 文字的模型在計算成本也更加昂貴。&lt;/p&gt;
+&lt;p&gt;對於螢幕上的參考有一些相關工作，被用作本文的 baseline。&lt;/p&gt;
+&lt;p&gt;然後他們有些缺點，在本文解決了這些缺點。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;他們的方法依賴專用的 「Category Module」來處理 type-based reference，每次建立新類型，都需要手動加入 Entity&lt;/li&gt;
+&lt;li&gt;此類 Module 將每種類別視為不同的，忽略了他們的相似性&lt;/li&gt;
+&lt;li&gt;依賴手工製作的規則，往往需要大量特徵工程，而且不 robust&lt;/li&gt;
+&lt;li&gt;不考慮語意相似性，也沒法對現實的理解和常識進行推理&lt;/li&gt;
+&lt;li&gt;這些方法會獨立地判斷實體和 Query 的關聯性，而不考慮其他所有的實體，查詢既不考慮整個螢幕也不考慮其他實體&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;task&#34;&gt;Task&lt;/h2&gt;
+&lt;p&gt;作者提了三種和使用者相關的 Entity:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;On-screen Entities&lt;/li&gt;
+&lt;li&gt;Conversational Entities
+&lt;ul&gt;
+&lt;li&gt;可能是來自上一輪的對話，也可能是 virtual assistant 產生的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Background Entities
+&lt;ul&gt;
+&lt;li&gt;來自後台 process 的相關實體，使用者不一定在螢幕上看的到，比如背景的音樂&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;本文將 reference resolution 作為 LLM 的 multiple choice task，預期輸出是用戶螢幕上顯示的其中一個 Entity。&lt;/p&gt;
+&lt;p&gt;答案也可能是「None of these」。&lt;/p&gt;
+&lt;h2 id=&#34;datasets&#34;&gt;Datasets&lt;/h2&gt;
+&lt;p&gt;每筆資料包含使用者查詢和 Entity list，還有與對應使用者查詢相關的 ground truth entity。&lt;/p&gt;
+&lt;p&gt;每個實體又包含與其相關的訊息，比如與實體關聯的名稱和其他文字描述訊息。&lt;/p&gt;
+&lt;p&gt;對於存在 on-screen context 的資料，context 以 Entity 的邊界框，圍繞它的物件清單還有周圍物件的屬性 (比如類型、文字內容、位置) 來提供&lt;/p&gt;
+&lt;hr&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Dataset&lt;/th&gt;
+&lt;th&gt;Train Set&lt;/th&gt;
+&lt;th&gt;Test Set&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Conversational&lt;/td&gt;
+&lt;td&gt;2.3k&lt;/td&gt;
+&lt;td&gt;1.2k&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Synthetic&lt;/td&gt;
+&lt;td&gt;3.9k&lt;/td&gt;
+&lt;td&gt;1.1k&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;On-screen&lt;/td&gt;
+&lt;td&gt;10.1k&lt;/td&gt;
+&lt;td&gt;1.9k&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Table 2: Dataset Sizes (Train Set and Test Set)&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;conversational-data&#34;&gt;Conversational Data&lt;/h3&gt;
+&lt;p&gt;收集使用者和 agent 的相關資料。&lt;/p&gt;
+&lt;p&gt;評分者會看到帶有所提供 Entity 清單的截圖，並要求提供引用清單中任意挑選的 Entity 的 Query。&lt;/p&gt;
+&lt;p&gt;比如，可能會給使用者看企業清單，使用者可能會說「Call the one on Main Street」。&lt;/p&gt;
+&lt;h3 id=&#34;synthetic-data&#34;&gt;Synthetic Data&lt;/h3&gt;
+&lt;p&gt;透過 template 去合成資料。&lt;/p&gt;
+&lt;p&gt;有兩種 template:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Base Template
+&lt;ul&gt;
+&lt;li&gt;包含 mentions, entities, possible slots&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Language Template
+&lt;ul&gt;
+&lt;li&gt;除了 Base 還會新增不同變體的 query&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;on-screen-data&#34;&gt;On-screen Data&lt;/h3&gt;
+&lt;p&gt;從存在電話、電子郵件和實際地址的各種網頁蒐集的。&lt;/p&gt;
+&lt;p&gt;進行兩階段的 annotation：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;根據螢幕 extract query
+&lt;ul&gt;
+&lt;li&gt;評分者會收到一張帶有綠色方框和紅色方框的截圖，要把綠方框方類為電話、電子郵件或地址等等&lt;/li&gt;
+&lt;li&gt;然後要為綠框提供三個獨特的 query&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;根據 query 識別 entity 和 mention
+&lt;ul&gt;
+&lt;li&gt;前面蒐集的 query 會被一一展示給評分者，並帶有相應的截圖，但沒有 bounding box，還會提供所有 screen entity list&lt;/li&gt;
+&lt;li&gt;評分者要評估 query 是否包含給定的 visual entity，還有聽起來自不自然&lt;/li&gt;
+&lt;li&gt;此外，評分者還要從清單中選出 query 提及的 entity，還要標記它們在 query 的哪裡&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;models&#34;&gt;Models&lt;/h2&gt;
+&lt;h3 id=&#34;marrs&#34;&gt;MARRS&lt;/h3&gt;
+&lt;p&gt;這個是 baseline，非 LLM，和前人的方法去做比較。&lt;/p&gt;
+&lt;p&gt;前人的方法著重於螢幕上的 entity，MARRS 也傾向於 conversational 和 background entities。&lt;/p&gt;
+&lt;p&gt;要注意的是，和其他通用的 LLM 相比，作者的 baseline 是專門為了 reference resolution 而設計的。&lt;/p&gt;
+&lt;h3 id=&#34;chatgpt&#34;&gt;ChatGPT&lt;/h3&gt;
+&lt;p&gt;作者考慮 GPT-3.5 和 GPT-4 作為另外一個 baseline。&lt;/p&gt;
+&lt;p&gt;對於 GPT-3.5，輸入只包含 prompt。&lt;/p&gt;
+&lt;p&gt;對於 GPT-4，因為他可以接受圖片的 context，所以為系統提供了螢幕截圖，發現可以有效提高其效能。&lt;/p&gt;
+&lt;h3 id=&#34;our-approach&#34;&gt;Our Approach&lt;/h3&gt;
+&lt;p&gt;作者遵循以下 pipeline 來微調模型 (FLAN-T5)&lt;/p&gt;
+&lt;p&gt;向模型提供解析後的輸入，並用來微調。&lt;/p&gt;
+&lt;p&gt;和 Baseline 不同，作者沒有在 FLAN-T5 上進行大規模的超參數搜索，而是堅持使用預設的參數。&lt;/p&gt;
+&lt;h4 id=&#34;conversational-references&#34;&gt;Conversational References&lt;/h4&gt;
+&lt;p&gt;作者假設 conversational references 有兩種：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Type-based
+&lt;ul&gt;
+&lt;li&gt;這種非常依賴要將 query 和 entity type 結合，好進行識別&lt;/li&gt;
+&lt;li&gt;比如「打給他」，可以知道要的是電話號碼，而不是地址&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Descriptive
+&lt;ul&gt;
+&lt;li&gt;傾向於用唯一的實體屬性來標記他，比如「時代廣場的那個」&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;referenece 通常會同時依賴 type 和描述，比如「play the one from Abbey Road」和「directions to the one on Abbey Road」。&lt;/p&gt;
+&lt;h4 id=&#34;onscreen-references&#34;&gt;Onscreen References&lt;/h4&gt;
+&lt;p&gt;作者假設存在能夠解析螢幕文字以提取 Entity 的上游資料偵測器。&lt;/p&gt;
+&lt;p&gt;為了以僅涉及文字的方式將其編碼到 LM 中，使用 Algorithm 2。&lt;/p&gt;
+&lt;p&gt;直觀上，假設所有實體和周圍物件的位置都可以用它們各自的邊界框的中心來表示。&lt;/p&gt;
+&lt;p&gt;然後從上到下對這些中心進行排序，並用 stable sort 從左到右排序。&lt;/p&gt;
+&lt;p&gt;然後，所有在一個 margin 內的物件都會被視作在 same line，並用 tab 隔開。&lt;/p&gt;
+&lt;p&gt;在 margin 下方外面的會被放在下一行，然後不斷重複。&lt;/p&gt;
+&lt;h2 id=&#34;results&#34;&gt;Results&lt;/h2&gt;
+&lt;hr&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Model&lt;/th&gt;
+&lt;th&gt;Conv&lt;/th&gt;
+&lt;th&gt;Synth&lt;/th&gt;
+&lt;th&gt;Screen&lt;/th&gt;
+&lt;th&gt;Unseen&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;MARRS&lt;/td&gt;
+&lt;td&gt;92.1&lt;/td&gt;
+&lt;td&gt;99.4&lt;/td&gt;
+&lt;td&gt;83.5&lt;/td&gt;
+&lt;td&gt;84.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GPT-3.5&lt;/td&gt;
+&lt;td&gt;84.1&lt;/td&gt;
+&lt;td&gt;34.2&lt;/td&gt;
+&lt;td&gt;74.1&lt;/td&gt;
+&lt;td&gt;67.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GPT-4&lt;/td&gt;
+&lt;td&gt;97.0&lt;/td&gt;
+&lt;td&gt;58.7&lt;/td&gt;
+&lt;td&gt;90.1&lt;/td&gt;
+&lt;td&gt;98.4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ReALM-80M&lt;/td&gt;
+&lt;td&gt;96.7&lt;/td&gt;
+&lt;td&gt;99.5&lt;/td&gt;
+&lt;td&gt;88.9&lt;/td&gt;
+&lt;td&gt;99.3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ReALM-250M&lt;/td&gt;
+&lt;td&gt;97.8&lt;/td&gt;
+&lt;td&gt;99.8&lt;/td&gt;
+&lt;td&gt;90.6&lt;/td&gt;
+&lt;td&gt;97.2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ReALM-1B&lt;/td&gt;
+&lt;td&gt;97.9&lt;/td&gt;
+&lt;td&gt;99.7&lt;/td&gt;
+&lt;td&gt;91.4&lt;/td&gt;
+&lt;td&gt;94.8&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ReALM-3B&lt;/td&gt;
+&lt;td&gt;97.9&lt;/td&gt;
+&lt;td&gt;99.8&lt;/td&gt;
+&lt;td&gt;93.0&lt;/td&gt;
+&lt;td&gt;97.8&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Table 3:&lt;/p&gt;
+&lt;p&gt;預測正確的標準是要正確預測所有相關實體，不然就是錯的&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;作者發現它們的方法贏 MARRS 和 GPT-3.5。
+GPT-3.5 的餐數量還多出了幾個數量級。&lt;/p&gt;
+&lt;p&gt;盡管模型相較 GPT-4 輕的多，但是性能大致相同。&lt;/p&gt;
+&lt;p&gt;而且作者採用文字編碼的方法能夠讓模型和 GPT-4 幾乎同等效能，後者還提供了螢幕截圖。&lt;/p&gt;
+&lt;p&gt;隨著模型加大，提升也很明顯，特別是 Screen，暗示任務本質上更加複雜。&lt;/p&gt;
+&lt;h3 id=&#34;analysis&#34;&gt;Analysis&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;$GPT-4 \approx ReALM &amp;raquo; MARRS$ for new use-cases
+&lt;ul&gt;
+&lt;li&gt;測試了 zero-shot learning 的能力，Table 3 最後一個 column 就是在比較從未見過的資料集。&lt;/li&gt;
+&lt;li&gt;作者發現對於測試集，所有 LLM-based 的方法都贏過 Fine-tuned Model&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ReaLM &amp;gt; GPT-4 for domain-specific queries
+&lt;ul&gt;
+&lt;li&gt;作者發現 ReALM 因為有對 user requests 做 fine-tuning，所以更能理解 domain-specific questions，如下表 (Table 4)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;User Request: Can you make it brighter?
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Entities Shown to User:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1. Type: Settings
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;2. Type: UserEntity | homeAutomationAccessoryName
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;GPT-4 Prediction: 1 Ground Truth: 1, 2
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Table 4&lt;/p&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>SimSID 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/simsid-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Sat, 13 Apr 2024 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/simsid-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2403.08689&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Exploiting Structural Consistency of Chest Anatomy for Unsupervised Anomaly Detection in Radiography Images&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;個人前言&#34;&gt;個人前言&lt;/h2&gt;
+&lt;p&gt;這篇文章提出了許多在 SQUID 論文有出現過的的內容，特別是有關於放射線成像的描述等等，建議先看過 SQUID，重複的論點不再提及。&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;提出一種簡單的 Space-aware Memory，用於修復放射線成像的異常。&lt;/p&gt;
+&lt;p&gt;將異常檢定制定為 image reconstruction task，用 space-aware memory matrix 和 in-painting block 組成。&lt;/p&gt;
+&lt;h2 id=&#34;related-work&#34;&gt;Related Work&lt;/h2&gt;
+&lt;h3 id=&#34;our-previous-work&#34;&gt;Our Previous Work&lt;/h3&gt;
+&lt;p&gt;相對於 SQUID，本文有以下四點改進：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;引入了新的符號、公式和圖表，以及詳細的方法說明及學習目標&lt;/li&gt;
+&lt;li&gt;刪除 Memory Queue 和 Masked shortcut，簡化框架，還提高了效能&lt;/li&gt;
+&lt;li&gt;在三種放射線成像任務勝過其他 21 種 SOTA 方法&lt;/li&gt;
+&lt;li&gt;研究了 SimSID 對於 desease-free (訓練集中對異常資料的容忍) 的穩健性&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;simsid&#34;&gt;SimSID&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/SimSID/fig2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;developing-space-aware-and-hierarchical-memory&#34;&gt;Developing Space-aware and Hierarchical Memory&lt;/h3&gt;
+&lt;h4 id=&#34;space-aware-memory&#34;&gt;Space-aware memory&lt;/h4&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;$\hat{z}_{i,j}$ (augmented feature)&lt;/p&gt;
+&lt;p&gt;$=\displaystyle\sum^N_{k=1}G(s^{k})M^k_{i,j}$&lt;/p&gt;
+&lt;p&gt;$s^k$ 是做內積算出來的相似度&lt;/p&gt;
+&lt;p&gt;$G(\cdot)$ 是 Gumbel-softmax (用 SQUID 的 Gumbel Shrinkage)&lt;/p&gt;
+&lt;p&gt;$Memory Matrix$ 被拆成多個 block，才有 $M_{i,j}$&lt;/p&gt;
+&lt;h4 id=&#34;hierarchical-memory&#34;&gt;Hierarchical memory&lt;/h4&gt;
+&lt;p&gt;在 encoder 最深處使用一個 memory matrix (in-painting block) 不足以重建具有細節的高品質圖像。&lt;/p&gt;
+&lt;p&gt;為了捕捉不同尺度的 anatomic patterns，提出在 generator 的多個 level 放置 space-aware memory。&lt;/p&gt;
+&lt;p&gt;研究發現，太多的 memory 會導致過度的 information filtering，還會 degrade 模型，導致他只會保留最具代表性的 normal pattern，而不是所有需要的 pattern。&lt;/p&gt;
+&lt;p&gt;這個問題可以透過添加 skip connection 來解決。&lt;/p&gt;
+&lt;p&gt;從經驗發現三個 memory matrix 就已足夠。&lt;/p&gt;
+&lt;h2 id=&#34;results&#34;&gt;Results&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/SimSID/fig7.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;benchmarking-simsid-on-three-public-datasets&#34;&gt;Benchmarking SimSID on Three Public Datasets&lt;/h3&gt;
+&lt;p&gt;對於正常的情況， SimSID 可以在 memory 中找到相似的匹配，然後順利重建。&lt;/p&gt;
+&lt;p&gt;對於異常，將偽造的正常特徵強加到異常特徵，就會產生矛盾。&lt;/p&gt;
+&lt;p&gt;圖 7 繪製 Discriminator 的 heatmap 來指示出重建效果不佳的部分。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>🦑SQUID🦑 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/squid-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
         <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
         
-        <guid>https://roykesydon.github.io/Blog/p/squid-%E8%AB%96%E6%96%87/</guid>
+        <guid>https://roykesydon.github.io/Blog/p/squid-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
         <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2111.13495&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;SQUID: Deep Feature In-Painting for Unsupervised Anomaly Detection&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;

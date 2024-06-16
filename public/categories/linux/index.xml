@@ -6,7 +6,271 @@
         <description>Recent content in Linux on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Mon, 20 Feb 2023 21:12:52 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/linux/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 24 Apr 2024 00:00:43 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/linux/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>磁碟管理</title>
+        <link>https://roykesydon.github.io/Blog/p/%E7%A3%81%E7%A2%9F%E7%AE%A1%E7%90%86/</link>
+        <pubDate>Wed, 24 Apr 2024 00:00:43 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/%E7%A3%81%E7%A2%9F%E7%AE%A1%E7%90%86/</guid>
+        <description>&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;有關名詞&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;扇區: 最小的儲存單位&lt;/li&gt;
+&lt;li&gt;block: 一次讀取的最小單位，是多個連續的扇區&lt;/li&gt;
+&lt;li&gt;inode
+&lt;ul&gt;
+&lt;li&gt;OS 用來記錄檔案的 metadata&lt;/li&gt;
+&lt;li&gt;每個文件的 inode number 是唯一的&lt;/li&gt;
+&lt;li&gt;可以用 &lt;code&gt;ls -li&lt;/code&gt; 來看 inode number
+&lt;ul&gt;
+&lt;li&gt;inode data
+&lt;ul&gt;
+&lt;li&gt;檔案的大小&lt;/li&gt;
+&lt;li&gt;擁有者&lt;/li&gt;
+&lt;li&gt;擁有者的 group&lt;/li&gt;
+&lt;li&gt;權限&lt;/li&gt;
+&lt;li&gt;修改時間&lt;/li&gt;
+&lt;li&gt;文件的實體指針，指向 block&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;格式化分區&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;主分區&lt;/li&gt;
+&lt;li&gt;擴展分區
+&lt;ul&gt;
+&lt;li&gt;邏輯分區&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;默認分區 1~4 給主分區和擴展分區，邏輯分區從 5 開始
+&lt;ul&gt;
+&lt;li&gt;/dev/sda1、/dev/sda2 這種就是分區&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;fdisk&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;小於 2TB 的磁碟，可以用 fdisk，但是大於 2TB 的磁碟，要用 parted，且要用 GPT&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;fdisk -l&lt;/code&gt; 列出所有分區&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;fdisk /dev/sda&lt;/code&gt; 進入 fdisk
+&lt;ul&gt;
+&lt;li&gt;n 新增分區
+&lt;ul&gt;
+&lt;li&gt;再設置 sector 的起始位置和結束位置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;d 刪除分區&lt;/li&gt;
+&lt;li&gt;t 更改分區的 system id&lt;/li&gt;
+&lt;li&gt;w 寫入並且離開&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;parted&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;parted /dev/sda&lt;/code&gt; 進入 parted
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mklabel gpt&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;可以把 disk 轉成 GPT&lt;/li&gt;
+&lt;li&gt;GPT 區分主分區和邏輯分區&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;mkpart primary &amp;lt;start&amp;gt; &amp;lt;end&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;創建一個 primary partition，從 start 到 end (MB)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;軟硬連結&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;軟連結
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ln -s &amp;lt;source&amp;gt; &amp;lt;destination&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;如果刪除軟連結的檔案的話，不會影響原本的檔案&lt;/li&gt;
+&lt;li&gt;源文件刪除後，軟連結失效&lt;/li&gt;
+&lt;li&gt;支持資料夾&lt;/li&gt;
+&lt;li&gt;支持跨文件系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;硬連結
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ln &amp;lt;source&amp;gt; &amp;lt;destination&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;一般情況，inode 和檔案名稱是一對一的關係&lt;/li&gt;
+&lt;li&gt;軟連結 inode 號碼是不一樣的，代表是兩個個體，硬連結 inode 號碼是一樣的&lt;/li&gt;
+&lt;li&gt;刪除硬連結對源文件沒有影響&lt;/li&gt;
+&lt;li&gt;刪除源文件對硬連結沒有影響
+&lt;ul&gt;
+&lt;li&gt;但是如果刪除所有硬連結，文件的連結數變成 0，則文件會被刪除&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;不能對資料夾使用&lt;/li&gt;
+&lt;li&gt;不能跨文件系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;mkfs&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;對分區進行格式化文件系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;fsck&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;file system check&lt;/li&gt;
+&lt;li&gt;檢查和修復文件系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;lsblk&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;lsblk -f&lt;/code&gt; 列出所有分區的文件系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;vfs&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;virtual file system&lt;/li&gt;
+&lt;li&gt;linux 可能有多種文件系統，在上面有一層 vfs，讓所有文件系統都可以通過一個統一的接口來訪問&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Mount&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;設備要 mount 才可以使用，給設備提供一個出入口&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;mount&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-l&lt;/code&gt; 列出所有已經 mount 的設備&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-t&lt;/code&gt; 指定文件系統，不指定的話，會自動判斷&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-o&lt;/code&gt; 一些有關於 mount 的參數
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;async&lt;/code&gt; 非同步讀寫，效率高，但是喪失安全性&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;sync&lt;/code&gt; 同步讀寫，效率低，但是讀寫安全&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;atime/noatime&lt;/code&gt; 是否要紀錄文件的訪問時間&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-r&lt;/code&gt; read-only&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;LVM&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;logical volume manager&lt;/li&gt;
+&lt;li&gt;把一個或多個硬碟在邏輯上進行合併，可以動態調整大小&lt;/li&gt;
+&lt;li&gt;硬盤的多個分區，由 LVM 統一管理為 volume group&lt;/li&gt;
+&lt;li&gt;名詞
+&lt;ul&gt;
+&lt;li&gt;PP: physical partition&lt;/li&gt;
+&lt;li&gt;PV: physical volume
+&lt;ul&gt;
+&lt;li&gt;通常一個 PV 對應一個 PP&lt;/li&gt;
+&lt;li&gt;PE: physical extends
+&lt;ul&gt;
+&lt;li&gt;PV 中可以分配的最小單位，同一個 VG 中，所有 PV 的 PE 大小都是一樣的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;VG: volume group
+&lt;ul&gt;
+&lt;li&gt;創建在 PV 上，可以劃分成多個 PV&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;LV: logical volume
+&lt;ul&gt;
+&lt;li&gt;創建在 VG 上，可以動態擴容的分區&lt;/li&gt;
+&lt;li&gt;LE: logical extends
+&lt;ul&gt;
+&lt;li&gt;LV 中的基本單位，一個 LE 對應一個 PE&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;創建
+&lt;ul&gt;
+&lt;li&gt;PP 階段
+&lt;ul&gt;
+&lt;li&gt;用 fdisk 格式化，修改 system id 為 8e (預設是 83)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;PV 階段
+&lt;ul&gt;
+&lt;li&gt;用 pvcreate, pvdisplay 把 linux 分區轉成 PV&lt;/li&gt;
+&lt;li&gt;指令
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;pvcreate /dev/sda /dev/sdb&lt;/code&gt;: 把 sda 和 sdb 轉成 PV
+&lt;ul&gt;
+&lt;li&gt;適用硬碟和分區&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pvs&lt;/code&gt;: 查看 PV&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;VG 階段
+&lt;ul&gt;
+&lt;li&gt;用 vgcreate, vgdisplay 創建 VG&lt;/li&gt;
+&lt;li&gt;指令
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;vgcreate vg1 /dev/sda /dev/sdb&lt;/code&gt;: 創建 VG vg1，用 sda 和 sdb&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;vgs&lt;/code&gt;: 查看 VG&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;vgextend vg1 /dev/sdc&lt;/code&gt;: 把 sdc 加入 vg1&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;vgdisplay&lt;/code&gt;: 查看 VG&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;LV 階段
+&lt;ul&gt;
+&lt;li&gt;用 lvcreate, lvdisplay 創建 LV&lt;/li&gt;
+&lt;li&gt;把 VG 分成多個 LV&lt;/li&gt;
+&lt;li&gt;也要幫 LV 創建文件系統&lt;/li&gt;
+&lt;li&gt;指令
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;lvs&lt;/code&gt;: 查看 LV&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;lvextend -L +1000G /dev/vg1/lv1&lt;/code&gt;: 把 lv1 增加 1000G
+&lt;ul&gt;
+&lt;li&gt;ex4 可以不用 umount&lt;/li&gt;
+&lt;li&gt;還要 &lt;code&gt;resize2fs /dev/vg1/lv1&lt;/code&gt; 來調整文件系統大小
+&lt;ul&gt;
+&lt;li&gt;可以用 &lt;code&gt;df -h&lt;/code&gt; 來檢查&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>Process Scheduling</title>
         <link>https://roykesydon.github.io/Blog/p/process-scheduling/</link>
         <pubDate>Mon, 20 Feb 2023 21:12:52 +0800</pubDate>

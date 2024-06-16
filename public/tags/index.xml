@@ -6,10 +6,66 @@
         <description>Recent content in Tags on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 31 Mar 2024 00:27:55 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 14 Jun 2024 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>container orchestration</title>
+        <link>https://roykesydon.github.io/Blog/tags/container-orchestration/</link>
+        <pubDate>Fri, 14 Jun 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/container-orchestration/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>networking</title>
+        <link>https://roykesydon.github.io/Blog/tags/networking/</link>
+        <pubDate>Sun, 02 Jun 2024 00:00:01 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/networking/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>packet classification</title>
+        <link>https://roykesydon.github.io/Blog/tags/packet-classification/</link>
+        <pubDate>Sun, 02 Jun 2024 00:00:01 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/packet-classification/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>framework</title>
+        <link>https://roykesydon.github.io/Blog/tags/framework/</link>
+        <pubDate>Fri, 24 May 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/framework/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>javascript</title>
+        <link>https://roykesydon.github.io/Blog/tags/javascript/</link>
+        <pubDate>Fri, 24 May 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/javascript/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>java</title>
+        <link>https://roykesydon.github.io/Blog/tags/java/</link>
+        <pubDate>Mon, 06 May 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/java/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>anomaly-detection</title>
+        <link>https://roykesydon.github.io/Blog/tags/anomaly-detection/</link>
+        <pubDate>Tue, 30 Apr 2024 00:00:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/anomaly-detection/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>attention</title>
         <link>https://roykesydon.github.io/Blog/tags/attention/</link>
-        <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
+        <pubDate>Tue, 30 Apr 2024 00:00:55 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/attention/</guid>
         <description></description>
@@ -17,7 +73,7 @@
         <item>
         <title>computer-vision</title>
         <link>https://roykesydon.github.io/Blog/tags/computer-vision/</link>
-        <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
+        <pubDate>Tue, 30 Apr 2024 00:00:55 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/computer-vision/</guid>
         <description></description>
@@ -25,7 +81,7 @@
         <item>
         <title>deep-learning</title>
         <link>https://roykesydon.github.io/Blog/tags/deep-learning/</link>
-        <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
+        <pubDate>Tue, 30 Apr 2024 00:00:55 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/deep-learning/</guid>
         <description></description>
@@ -33,7 +89,7 @@
         <item>
         <title>machine-learning</title>
         <link>https://roykesydon.github.io/Blog/tags/machine-learning/</link>
-        <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
+        <pubDate>Tue, 30 Apr 2024 00:00:55 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/machine-learning/</guid>
         <description></description>
@@ -41,15 +97,31 @@
         <item>
         <title>self-attention</title>
         <link>https://roykesydon.github.io/Blog/tags/self-attention/</link>
-        <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
+        <pubDate>Tue, 30 Apr 2024 00:00:55 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/self-attention/</guid>
         <description></description>
         </item>
         <item>
+        <title>linux</title>
+        <link>https://roykesydon.github.io/Blog/tags/linux/</link>
+        <pubDate>Wed, 24 Apr 2024 00:00:43 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/linux/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>llm</title>
+        <link>https://roykesydon.github.io/Blog/tags/llm/</link>
+        <pubDate>Thu, 18 Apr 2024 00:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/tags/llm/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>transformer</title>
         <link>https://roykesydon.github.io/Blog/tags/transformer/</link>
-        <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
+        <pubDate>Thu, 18 Apr 2024 00:08:46 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/transformer/</guid>
         <description></description>
@@ -276,14 +348,6 @@
         <pubDate>Tue, 21 Feb 2023 15:42:47 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/math/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>linux</title>
-        <link>https://roykesydon.github.io/Blog/tags/linux/</link>
-        <pubDate>Mon, 20 Feb 2023 21:12:52 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/linux/</guid>
         <description></description>
         </item>
         <item>

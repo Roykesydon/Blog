@@ -1,0 +1,955 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>java on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/java/</link>
+        <description>Recent content in java on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Mon, 06 May 2024 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/java/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Spring Boot 筆記</title>
+        <link>https://roykesydon.github.io/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/</link>
+        <pubDate>Mon, 06 May 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/</guid>
+        <description>&lt;h2 id=&#34;spring&#34;&gt;Spring&lt;/h2&gt;
+&lt;h3 id=&#34;ioc&#34;&gt;IoC&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Invocation of Constructor
+&lt;ul&gt;
+&lt;li&gt;把物件交給 Spring 管理&lt;/li&gt;
+&lt;li&gt;loose coupling&lt;/li&gt;
+&lt;li&gt;Dependency Injection&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Bean
+&lt;ul&gt;
+&lt;li&gt;給 Spring 管理的物件&lt;/li&gt;
+&lt;li&gt;創建方法
+&lt;ul&gt;
+&lt;li&gt;@Component
+&lt;ul&gt;
+&lt;li&gt;創建出的 Bean 名字是 class 的開頭轉小寫&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;注入方法
+&lt;ul&gt;
+&lt;li&gt;@Autowired
+&lt;ul&gt;
+&lt;li&gt;種類
+&lt;ul&gt;
+&lt;li&gt;field injection
+&lt;ul&gt;
+&lt;li&gt;spring boot 會先建立所有 component，在逐一注入，使元件可能短暫處於初始化不完整狀態&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;constructor injection
+&lt;ul&gt;
+&lt;li&gt;建立 bean 時就注入&lt;/li&gt;
+&lt;li&gt;確保 component 被使用時是處於完整的狀態&lt;/li&gt;
+&lt;li&gt;有利於 unit test，因為可以把設計好的 mock bean 從 constructor 傳入&lt;/li&gt;
+&lt;li&gt;spring 建議使用 constructor injection&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;限制
+&lt;ol&gt;
+&lt;li&gt;該 Class 也得是 Bean&lt;/li&gt;
+&lt;li&gt;會根據類型注入 bean
+&lt;ul&gt;
+&lt;li&gt;如果同時有多個同類型的 bean，會報錯，可以用 @Qualifier 指定要注入的 bean 名稱&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;@Qualifier
+&lt;ul&gt;
+&lt;li&gt;指定要注入的 bean 名稱&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Primary
+&lt;ul&gt;
+&lt;li&gt;如果有多個同類型的 bean，會優先注入這個 bean&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;初始化
+&lt;ul&gt;
+&lt;li&gt;@PostConstruct
+&lt;ul&gt;
+&lt;li&gt;創建 bean 後，就會執行這個方法&lt;/li&gt;
+&lt;li&gt;限制
+&lt;ul&gt;
+&lt;li&gt;必須是 public void&lt;/li&gt;
+&lt;li&gt;不能有參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;aop&#34;&gt;AOP&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Aspect Oriented Programming&lt;/li&gt;
+&lt;li&gt;透過 Aspect 統一處理不同方法的共同邏輯&lt;/li&gt;
+&lt;li&gt;要導入 aop 的 starter&lt;/li&gt;
+&lt;li&gt;只有 Bean 才能設置 @Aspect&lt;/li&gt;
+&lt;li&gt;Annotation
+&lt;ul&gt;
+&lt;li&gt;@Aspect
+&lt;ul&gt;
+&lt;li&gt;這個 class 是一個切面&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Before
+&lt;ul&gt;
+&lt;li&gt;加上切入點，就可以在切入點 (Pointcut) 的方法執行前執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@After
+&lt;ul&gt;
+&lt;li&gt;在方法之後執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Around
+&lt;ul&gt;
+&lt;li&gt;在方法之前和之後都執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;常用的功能都已經被封裝好了，開發較少用到 AOP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;特性&#34;&gt;特性&lt;/h2&gt;
+&lt;h3 id=&#34;starter&#34;&gt;Starter&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using.build-systems.starters&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Spring Boot Starters&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;官方的 starter 命名是 &lt;code&gt;spring-boot-starter-*&lt;/code&gt;
+第三方的 starter 命名是 &lt;code&gt;*-spring-boot-starter&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;外部化配置&#34;&gt;外部化配置&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;application.properties&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;重新啟動 jar 時會自動載入，不用改配置要重新 build jar&lt;/li&gt;
+&lt;li&gt;集中管理&lt;/li&gt;
+&lt;li&gt;@Value
+&lt;ul&gt;
+&lt;li&gt;可以注入到變數中&lt;/li&gt;
+&lt;li&gt;可以用 &lt;code&gt;:&lt;/code&gt; 來設定預設值&lt;/li&gt;
+&lt;li&gt;限制
+&lt;ul&gt;
+&lt;li&gt;只能在 Bean 和 Configuration 中使用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;YAML
+&lt;ul&gt;
+&lt;li&gt;application.properties 寫多後，沒有層級辨識度&lt;/li&gt;
+&lt;li&gt;application.yml&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;profiles
+&lt;ul&gt;
+&lt;li&gt;可以根據不同的環境來設定不同的配置 (dev, test, prod)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;application-{profile}.properties&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;application-{profile}.yml&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;spring.profiles.active&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定啟用的 profile&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;jar
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-Dspring.profiles.active=dev&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;指定配置文件
+&lt;ul&gt;
+&lt;li&gt;cli
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--spring.config.location&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Config 資料夾
+&lt;ul&gt;
+&lt;li&gt;可以在 jar 目錄下建立 config 資料夾，放配置文件，不用輸入額外的 args&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;dependency-management&#34;&gt;Dependency Management&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;parent 寫了版本號，故 dependency 可以不用寫版本號&lt;/li&gt;
+&lt;li&gt;真的要指定的話，可以利用 maven 的就近原則&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;auto-configuration&#34;&gt;Auto Configuration&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Component Scan
+&lt;ul&gt;
+&lt;li&gt;Spring Boot 會掃描主程式所在的 package 以及子 package&lt;/li&gt;
+&lt;li&gt;也可以在主程式上加以下註解來指定掃描的 package
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;@SpringBootApplication(scanBasePackages = &amp;quot;com.example&amp;quot;)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;所有 starter 都有 &lt;code&gt;spring-boot-starter&lt;/code&gt;，&lt;code&gt;spring-boot-starter&lt;/code&gt; 又有 &lt;code&gt;spring-boot-autoconfigure&lt;/code&gt;，這個就是自動配置的地方&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;spring boot 默認掃描不到 spring-boot-autoconfigure 的所有配置類 (因為預設只掃描 Main Application Class 的 package)，但是 @SpringBootApplication 的 @EnableAutoConfiguration 會預設掃描 spring-boot-autoconfigure 的所有配置類
+&lt;ul&gt;
+&lt;li&gt;它們再依據 conditional annotation 來決定是否要啟用這個配置類&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;common-annotations&#34;&gt;Common Annotations&lt;/h2&gt;
+&lt;p&gt;Spring Boot 放棄了 XML 配置，改用 Annotation 配置&lt;/p&gt;
+&lt;h3 id=&#34;component-registration&#34;&gt;Component registration&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;@Configuration, @SpringBootConfiguration
+&lt;ul&gt;
+&lt;li&gt;@Bean&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Controller, @Service, @Repository, @Component
+&lt;ul&gt;
+&lt;li&gt;三層式架構
+&lt;ul&gt;
+&lt;li&gt;@Controller
+&lt;ul&gt;
+&lt;li&gt;用來處理請求&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Service
+&lt;ul&gt;
+&lt;li&gt;用來處理業務邏輯&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Repository
+&lt;ul&gt;
+&lt;li&gt;用來處理資料庫操作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@SpringBootApplication
+&lt;ul&gt;
+&lt;li&gt;由以下組成
+&lt;ul&gt;
+&lt;li&gt;@SpringBootConfiguration&lt;/li&gt;
+&lt;li&gt;@EnableAutoConfiguration&lt;/li&gt;
+&lt;li&gt;@ComponentScan&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Web
+&lt;ul&gt;
+&lt;li&gt;@RestController
+&lt;ul&gt;
+&lt;li&gt;@Controller + @ResponseBody&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@RequestMapping
+&lt;ul&gt;
+&lt;li&gt;設置 route&lt;/li&gt;
+&lt;li&gt;Method
+&lt;ul&gt;
+&lt;li&gt;@GetMapping&lt;/li&gt;
+&lt;li&gt;@PostMapping&lt;/li&gt;
+&lt;li&gt;@PutMapping&lt;/li&gt;
+&lt;li&gt;@DeleteMapping&lt;/li&gt;
+&lt;li&gt;@PatchMapping&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;取得參數
+&lt;ul&gt;
+&lt;li&gt;@RequestParam
+&lt;ul&gt;
+&lt;li&gt;取得 url 中的參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@RequestBody
+&lt;ul&gt;
+&lt;li&gt;取得 request body&lt;/li&gt;
+&lt;li&gt;根據欄位名字調用對應的 setter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@RequestHeader
+&lt;ul&gt;
+&lt;li&gt;取得 header&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@PathVariable
+&lt;ul&gt;
+&lt;li&gt;取得 route 中的參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Scope
+&lt;ul&gt;
+&lt;li&gt;mode
+&lt;ul&gt;
+&lt;li&gt;singleton
+&lt;ul&gt;
+&lt;li&gt;預設，共用一個 instance&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;prototype
+&lt;ul&gt;
+&lt;li&gt;每次注入都創建新的 instance&lt;/li&gt;
+&lt;li&gt;可以用 proxy.mode = ScopedProxyMode.TARGET_CLASS，會變成每次調用 method 都創建新的 instance&lt;/li&gt;
+&lt;li&gt;prototype 的元件生出後，spring 不會再管理，要自己管理生命週期，相當於 new 出物件的替代作法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;request
+&lt;ul&gt;
+&lt;li&gt;每個 request 都有一個獨立的 instance&lt;/li&gt;
+&lt;li&gt;request 指的是 HTTP request，從進入 controller 到離開 controller&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;conditional-annotations&#34;&gt;Conditional Annotations&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;條件成立則觸發指定行為&lt;/li&gt;
+&lt;li&gt;ConditionalOn&lt;!-- raw HTML omitted --&gt;
+&lt;ul&gt;
+&lt;li&gt;example
+&lt;ul&gt;
+&lt;li&gt;ConditionalOnClass
+&lt;ul&gt;
+&lt;li&gt;如果 classpath 有指定的 class 才會觸發&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ConditionalOnMissingClass
+&lt;ul&gt;
+&lt;li&gt;如果 classpath 沒有指定的 class 才會觸發&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ConditionalOnBean
+&lt;ul&gt;
+&lt;li&gt;如果容器中有指定的 bean 才會觸發&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ConditionalOnMissingBean
+&lt;ul&gt;
+&lt;li&gt;如果容器中沒有指定的 bean 才會觸發&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Scenario
+&lt;ul&gt;
+&lt;li&gt;如果有某個 dependency，則創建某個 bean&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;property-binding&#34;&gt;Property Binding&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;把任意 Bean 的 property 與配置文件 (application.properties) 中的 property 綁定&lt;/li&gt;
+&lt;li&gt;annotations
+&lt;ul&gt;
+&lt;li&gt;@ConfigurationProperties
+&lt;ul&gt;
+&lt;li&gt;prefix&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@EnableConfigurationProperties
+&lt;ul&gt;
+&lt;li&gt;如果 class 只有 @ConfigurationProperties，沒有 @Component，需要加這個 annotation&lt;/li&gt;
+&lt;li&gt;用在第三方 package 上，因為默認掃不到第三方的 @component&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;logging&#34;&gt;Logging&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Logging 選擇&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Logging API
+&lt;ul&gt;
+&lt;li&gt;JCL&lt;/li&gt;
+&lt;li&gt;SLF4J (Simple Logging Facade for Java)&lt;/li&gt;
+&lt;li&gt;jboss-logging&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Logging implementation
+&lt;ul&gt;
+&lt;li&gt;Logback&lt;/li&gt;
+&lt;li&gt;Log4j2&lt;/li&gt;
+&lt;li&gt;JUL (java.util.logging)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Spring Boot 預設使用 Logback 和 SLF4J&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;spring-boot-starter 引用了 spring-boot-starter-logging&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;log-format&#34;&gt;Log Format&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Default example
+&lt;ul&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;2024-05-06T19:21:40.751+08:00  INFO 22932 --- [demo] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path &amp;#39;&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;時間, 日誌等級, pid, 分割符, thread, logger, message&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;log-level&#34;&gt;Log Level&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Type (由低到高)
+&lt;ul&gt;
+&lt;li&gt;ALL&lt;/li&gt;
+&lt;li&gt;TRACE
+&lt;ul&gt;
+&lt;li&gt;一般不用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;DEBUG&lt;/li&gt;
+&lt;li&gt;INFO&lt;/li&gt;
+&lt;li&gt;WARN&lt;/li&gt;
+&lt;li&gt;ERROR&lt;/li&gt;
+&lt;li&gt;FATAL&lt;/li&gt;
+&lt;li&gt;OFF&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;會 print 出比設定的等級高的 log&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;log-configuration&#34;&gt;Log Configuration&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;logging.level.*&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;設定不同 package 的 log 等級&lt;/li&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;logging.level.com.example=DEBUG
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;logging.group.&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;把多個 package 放在一組，可以統一設定&lt;/li&gt;
+&lt;li&gt;預設有 web, sql 組&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;logging.file&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;.name
+&lt;ul&gt;
+&lt;li&gt;檔名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;歸檔 and 切割&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;歸檔
+&lt;ul&gt;
+&lt;li&gt;每天單獨存&lt;/li&gt;
+&lt;li&gt;.logback.rolllingpolicy.file-name-pattern&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;切割
+&lt;ul&gt;
+&lt;li&gt;超過指定大小就切割&lt;/li&gt;
+&lt;li&gt;.logback.rolllingpolicy.max-file-size&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;filter&#34;&gt;Filter&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;實做 javax.servlet.Filter，就能註冊為 spring 的 filter&lt;/li&gt;
+&lt;li&gt;OncePerRequestFilter
+&lt;ul&gt;
+&lt;li&gt;保證一次 request 只會執行一次&lt;/li&gt;
+&lt;li&gt;doFilterInternal
+&lt;ul&gt;
+&lt;li&gt;chain.doFilter(request, response)
+&lt;ul&gt;
+&lt;li&gt;這行之後代表後面的 filter 都執行完了&lt;/li&gt;
+&lt;li&gt;如果只有一個 filter，就代表 controller 執行完了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;shouldNotFilter
+&lt;ul&gt;
+&lt;li&gt;可以設定不要執行的 url pattern&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;註冊-filter&#34;&gt;註冊 Filter&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;流程&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;設定 @Configuration&lt;/li&gt;
+&lt;li&gt;加到 Bean
+&lt;ul&gt;
+&lt;li&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果 filter 要取得 request 和 response 的內容，可以用 ContentCachingRequestWrapper 和 ContentCachingResponseWrapper 重新包裝&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;因為原本的作法是用 stream 讀取資料，只能讀一次&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;@WebFilter&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;屬於 Java servlet 而非 Spring
+&lt;ul&gt;
+&lt;li&gt;要在 application 補上 @ServletComponentScan&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可以直接註冊 filter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;spring-security&#34;&gt;Spring Security&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;名詞
+&lt;ul&gt;
+&lt;li&gt;Authentication
+&lt;ul&gt;
+&lt;li&gt;認證
+&lt;ul&gt;
+&lt;li&gt;檢查是不是系統的使用者，以及是哪個使用者&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Authorization
+&lt;ul&gt;
+&lt;li&gt;授權
+&lt;ul&gt;
+&lt;li&gt;檢查使用者有沒有權限做某件事&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;流程&#34;&gt;流程&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;filter chain&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;example
+&lt;ul&gt;
+&lt;li&gt;UsernamePasswordAuthenticationFilter
+&lt;ul&gt;
+&lt;li&gt;檢查使用者名稱和密碼&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ExceptionTranslationFilter
+&lt;ul&gt;
+&lt;li&gt;處理例外&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;FilterSecurityInterceptor
+&lt;ul&gt;
+&lt;li&gt;檢查授權&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;authorizeHttpRequests
+&lt;ul&gt;
+&lt;li&gt;設定哪些 request 需要什麼權限&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;example: JWT 驗證流程&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;先透過 filter chain 經過 JWT filter&lt;/li&gt;
+&lt;li&gt;透過 UserDetailsService 取得使用者資訊&lt;/li&gt;
+&lt;li&gt;驗證使用者資訊&lt;/li&gt;
+&lt;li&gt;更新 SecurityContextHolder
+&lt;ul&gt;
+&lt;li&gt;用來判斷使用者是否已經通過 authentication&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;configuration&#34;&gt;Configuration&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;@EnableWebSecurity
+&lt;ul&gt;
+&lt;li&gt;啟用 web security&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;example
+&lt;ul&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@Configuration&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@EnableWebSecurity&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;SecurityConfig&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nd&#34;&gt;@Bean&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SecurityFilterChain&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;securityFilterChain&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;HttpSecurity&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;throws&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Exception&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;authorizeHttpRequests&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;requests&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;            &lt;span class=&#34;o&#34;&gt;((&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;AuthorizeHttpRequestsConfigurer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;AuthorizedUrl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;requests&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;anyRequest&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()).&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;authenticated&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;o&#34;&gt;});&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;httpBasic&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Customizer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;withDefaults&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;SecurityFilterChain&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;build&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;把 Spring Boot 預設實作的 fitler chain 的 @Order 拿掉，這是決定誰的優先序高&lt;/li&gt;
+&lt;li&gt;也把 formLogin 拿掉，就不會有登入頁面&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;userdetails&#34;&gt;UserDetails&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;實現 UserDetailsService 的 Bean 可以被用來取得 UserDetails&lt;/li&gt;
+&lt;li&gt;implements UserDetails
+&lt;ul&gt;
+&lt;li&gt;getAuthorities&lt;/li&gt;
+&lt;li&gt;getUsername&lt;/li&gt;
+&lt;li&gt;getPassword&lt;/li&gt;
+&lt;li&gt;isAccountNonExpired&lt;/li&gt;
+&lt;li&gt;isAccountNonLocked&lt;/li&gt;
+&lt;li&gt;isCredentialsNonExpired&lt;/li&gt;
+&lt;li&gt;isEnabled&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;securitycontextholder&#34;&gt;SecurityContextHolder&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來存放 authentication&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;jpa&#34;&gt;JPA&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Java Persistence API&lt;/li&gt;
+&lt;li&gt;Annotation
+&lt;ul&gt;
+&lt;li&gt;@Entity, @Table
+&lt;ul&gt;
+&lt;li&gt;也要記得寫 getter, setter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Transient
+&lt;ul&gt;
+&lt;li&gt;不會被序列化，不會被存到資料庫&lt;/li&gt;
+&lt;li&gt;可用在可以單獨計算的欄位，比如用資料庫的生日可以算出年齡&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Transactional&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;語法範例
+&lt;ul&gt;
+&lt;li&gt;findByXxx
+&lt;ul&gt;
+&lt;li&gt;用 XXX 的欄位來查詢&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;findByXXXLike
+&lt;ul&gt;
+&lt;li&gt;用 XXX 的欄位來模糊查詢&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;repository&#34;&gt;Repository&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;@Repository
+&lt;ul&gt;
+&lt;li&gt;用來標記 DAO&lt;/li&gt;
+&lt;li&gt;extends JpaRepository&amp;lt;Entity, ID&amp;gt;
+&lt;ul&gt;
+&lt;li&gt;第一個參數是 entity&lt;/li&gt;
+&lt;li&gt;第二個參數是 entity 的 id 的型態&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可以自定義方法
+&lt;ul&gt;
+&lt;li&gt;遵循命名規則，他會自己轉 SQL&lt;/li&gt;
+&lt;li&gt;也可以用 @Query 來自定義 SQL
+&lt;ul&gt;
+&lt;li&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;validation&#34;&gt;Validation&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;field validation&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;@NotEmpty&lt;/li&gt;
+&lt;li&gt;@Min&lt;/li&gt;
+&lt;li&gt;@Max&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;@Valid&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;用在 controller 上，才會自動檢查參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;testing&#34;&gt;Testing&lt;/h2&gt;
+&lt;h3 id=&#34;integration-test&#34;&gt;Integration Test&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在 test class 前面的 annotation
+&lt;ul&gt;
+&lt;li&gt;@RunWith(SpringRunner.class)&lt;/li&gt;
+&lt;li&gt;@SpringBootTest&lt;/li&gt;
+&lt;li&gt;@AutoConfigureMockMvc
+&lt;ul&gt;
+&lt;li&gt;測試開始時會在容器中創建 MockMvc&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;在 test method 前面加的 annotation
+&lt;ul&gt;
+&lt;li&gt;@Test&lt;/li&gt;
+&lt;li&gt;@Before, @After
+&lt;ul&gt;
+&lt;li&gt;在每個測試前後執行，可以用來清空資料庫和設置 header&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;mockmvc&#34;&gt;MockMvc&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;用來模擬 HTTP request&lt;/li&gt;
+&lt;li&gt;example
+&lt;ul&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@Autowired&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;private&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MockMvc&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;mockMvc&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nd&#34;&gt;@Test&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;test&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;throws&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Exception&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;mockMvc&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;perform&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;get&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;/hello&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;andExpect&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;status&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;().&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;isOk&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;())&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;andExpect&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;content&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;().&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;string&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Hello World&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;));&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;其他&#34;&gt;其他&lt;/h2&gt;
+&lt;h3 id=&#34;lombok&#34;&gt;Lombok&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;@Getter, @Setter
+&lt;ul&gt;
+&lt;li&gt;生成 getter, setter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@ToString
+&lt;ul&gt;
+&lt;li&gt;印出所有變數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@EqualsAndHashCode
+&lt;ul&gt;
+&lt;li&gt;生成 equals, hashCode&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Args
+&lt;ul&gt;
+&lt;li&gt;@NoArgsConstructor
+&lt;ul&gt;
+&lt;li&gt;生成無參數建構子&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@AllArgsConstructor
+&lt;ul&gt;
+&lt;li&gt;生成所有參數建構子&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@RequiredArgsConstructor
+&lt;ul&gt;
+&lt;li&gt;只幫 final 變數生成建構子&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Data
+&lt;ul&gt;
+&lt;li&gt;同時用 @Getter, @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Value
+&lt;ul&gt;
+&lt;li&gt;把所有變數都設成 final&lt;/li&gt;
+&lt;li&gt;同時用 @Getter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor&lt;/li&gt;
+&lt;li&gt;和 Spring boot 的 @Value 撞名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Builder
+&lt;ul&gt;
+&lt;li&gt;生成 builder pattern&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Slf4j
+&lt;ul&gt;
+&lt;li&gt;生成 log 變數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;jackson&#34;&gt;Jackson&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;ObjectMapper
+&lt;ul&gt;
+&lt;li&gt;用來轉換物件和 JSON&lt;/li&gt;
+&lt;li&gt;readValue
+&lt;ul&gt;
+&lt;li&gt;把 JSON 轉成物件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;用 getter, setter 來判斷欄位&lt;/li&gt;
+&lt;li&gt;Annotation
+&lt;ul&gt;
+&lt;li&gt;@JsonIgnore
+&lt;ul&gt;
+&lt;li&gt;不轉換&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@JsonProperty
+&lt;ul&gt;
+&lt;li&gt;指定欄位名字&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@JsonUnwrapped
+&lt;ul&gt;
+&lt;li&gt;把物件的欄位展開，從巢狀變成平面&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@JsonInclude
+&lt;ul&gt;
+&lt;li&gt;設定要不要轉換 null&lt;/li&gt;
+&lt;li&gt;如果設定為 Include.NON_NULL，給 null 的話，就不會轉換&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@JsonFormat
+&lt;ul&gt;
+&lt;li&gt;設定日期格式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='基礎概念 Node Kubernetes 集群中的一台機器 過去叫做 Minion Cluster 由多個 Node 組成的集群 Node Type Master 控制整個集群的 Node Worker 其他非 Master 的 Node 叫做 Worker Node Master vs Worker Master 擁有的 Component API Server etcd Controller Scheduler Worker 擁有的 Component Container Runtime Kubelet Component 安裝 Kubernetes，實際上是安裝以下幾個 Component API Server front-end of the Kubernetes etcd distributed key-value store 會實現 lock mechanism，確保沒有 conflict kubelet 在每個 node 上運行的 agent 負責確保 container 在 node 上如期運行 Container Runtime 用來 run container 的 underlying software Controller 當 node、container、endpoint 掛掉的時候，他要負責監控和回應 type Replication Controller 確保指定數量的 Pod 在任何時間都在運行 load balancing &amp;amp; scaling 後來被 ReplicaSet 取代 Scheduler 負責處理 node 間的 distributing work 會尋找新創的 container，並分配到 node Pod Kubernetes 的最小單位 一個 Pod 封裝一個應用程式，可能包含一個或多個 container ReplicaSet 新版本的 Replication Controller yaml spec template 指定要創建的 Pod 的 template 把 pod 的 metadata 和 spec 都放在這裡 replicas 指定要創建的 Pod 的數量 selector 指定要選擇的 Pod 需要這個是因為 ReplicaSet 也可以管理那些不是他創建的 Pod matchLabels 指定要選擇的 Pod 的 label command kubectl scale --replicas=3 -f &amp;lt;file&amp;gt; scale up/down replicas 這樣不會修改檔案，所以檔案的如果原本是 2，檔案依然會寫 2，只是 replicas 會變成 3 kubectl scale --replicas=3 replicaset &amp;lt;name&amp;gt; scale up/down replicas kubectl edit replicaset &amp;lt;name&amp;gt; 想要 scale up/down replicas 也可以用這個，他會立刻生效 簡寫 rs Deployment 管理 ReplicaSet 和 Replica Controller yaml 和 ReplicaSet 很像，把 kind 從 ReplicaSet 改成 Deployment 就好 會自動創建 ReplicaSet 使用情境 Rolling update 想要更新每個 Pod，但不是同時更新，而是一個一個更新，確保不會有 downtime Rollback 如果更新失敗，可以回到之前的版本 Pause and Resume 當需要做 multiple changes，不想要一下指令就馬上做，可以先 pause，等所有指令下完再 resume rollout 創建 Deployment 的時候，會自動創建一個 rollout 創建一個 rollout 的時候，會自動創建一個 Deployment revision Deployment Strategy Recreate 先刪除所有舊的 Pod，再創建新的 Pod 中間會有 Application downtime Rolling Update 一個一個更新 Pod 這個是預設的 strategy command kubectl rollout status deployment &amp;lt;name&amp;gt; 查看 rollout 的狀態 kubectl rollout history deployment &amp;lt;name&amp;gt; 查看 rollout 的 history (revision) kubectl rollout undo deployment &amp;lt;name&amp;gt; 回到上一個 revision 簡寫 deploy Service 讓不同 group 的 Pod 互相通信 像一個 virtaul server，可以連接到一個或多個 Pod type NodePort 會在每個 node 上開一個 port，讓外部可以連進來 default valid port range: 30000-32767 yaml spec type ports port service 的 port targetPort pod 的 port 如果不設置，會用 port 的值 nodePort 如果不設置，會從 default port range 選一個 selector 指定要連接的 Pod 預設會用 load balancing，策略是 Random，像是一個內建的 load balancer 如果有在同個 cluster 跨 node 的情況，不需要其他設定，就可以創建一個跨 node 的 service，會幫他們都設同一個 nodePort ClusterIP 只有在 cluster 內部可以連進來 用來幫某一組的 pod 提供一個統一的界面並做轉發 不能依賴 internal IP，因為每個 pod 都有可能會 down 或 up yaml spec type ports port targetPort selector service 可以用 cluster IP 或是 service name 來連接 LoadBalancer 會在 cloud provider 上開一個 load balancer nodePort 的 load balancer 是在 node 內部的，現在是要幫多個 node 做 load balancing 這只有在 cloud provider 上才有 name 很重要，因為其他的 Pod 會用這個 name 來連接 (就像 domain name) 簡寫 svc YAML Kubernetes 的配置文件 root level properties apiVersion kind apiVersion Pod v1 Service v1 ReplicaSet apps/v1 Deployment apps/v1 kind Pod, Service, ReplicaSet, Deployment metadata name labels 可以加入任何 key-value pair spec specification section pod containers name image env: list of environment variables name value Cloud two type of cluster Self hosted / Turnkey solutions 用來在自己的 server 上建立 cluster Hosted solutions / Managed solutions 用來在 cloud 上建立 cluster Hosted solutions Google Kubernetes Engine (GKE) Amazon Elastic Kubernetes Service (EKS) Azure Kubernetes Service (AKS) Tool kubectl kubectl 用來 deploy、inspect、manage application on a Kubernetes cluster commands kubectl run &amp;lt;name&amp;gt; --image=&amp;lt;image&amp;gt; 創建一個 Pod kubectl get pods 查看所有 Podllll -o wide 顯示更多資訊 column READY / 也可以用 kubectl get all 來查看 Pod、Service、ReplicaSet、Deployment kubectl describe pod &amp;lt;name&amp;gt; 查看 Pod 的詳細資訊 欄位 Node Pod 在哪個 Node 上運行，包含了 Node 的 IP IP Pod 的 IP kubectl delete pod &amp;lt;name&amp;gt; 刪除 Pod kubectl create -f &amp;lt;file&amp;gt; 根據 YAML file 創建 resource 如果 resource 已經存在，會報錯 kubectl apply -f &amp;lt;file&amp;gt; 根據 YAML file 創建 resource 如果 resource 已經存在，會更新 resource kubectl replace -f &amp;lt;file&amp;gt; 根據 YAML file 創建 resource 如果 resource 已經存在，會刪除舊的 resource，並創建新的 resource kubectl edit replicaset &amp;lt;name&amp;gt; 可以直接編輯 Replica Set 的 yaml 檔，但他不是一開始創建用的檔案，而是 Kubernetes 在 memory 暫時生成的 kubectl set image deployment &amp;lt;name&amp;gt; &amp;lt;container-name&amp;gt;=&amp;lt;new-image&amp;gt; 更新 Deployment 的 image 注意這裡是 Container name，不是 Pod name --record=true 會記錄每次的操作 用在 rollout 的時候，可以看到每次的操作，不然會顯示 minikube 用來在 local machine 上建立一個 single-node cluster kubeadm 用來在多個 node 上建立 cluster 在多個 node 上安裝 Kubernetes 流程 安裝 container runtime 安裝 kubeadm 初始化 master node 建立 pod network 加入 worker node Networking Cluster Networking 每個 Pod 都有自己的 IP 兩個不同屬於同一個 cluster 的 Pod 可能會有相同的 IP Kubernetes 要求所有的 Pod 要可以在不用 NAT 的情況下互相通信 所有的 container 和 node 都要可以在沒有 NAT 的情況下互相通信 可以用 Calico 等方案實現 他會把每個 node network 都設成不同的，底下的 pod IP 自然就不會重複 '>
+<title>Kubernetes 筆記</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/kubernetes-%E7%AD%86%E8%A8%98/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.7aa5a9a7ebbbeb6218dff3101ef5f9aa6dd04fe28034a6f45b9552c4f2a11e94.css"><meta property='og:title' content='Kubernetes 筆記'>
+<meta property='og:description' content='基礎概念 Node Kubernetes 集群中的一台機器 過去叫做 Minion Cluster 由多個 Node 組成的集群 Node Type Master 控制整個集群的 Node Worker 其他非 Master 的 Node 叫做 Worker Node Master vs Worker Master 擁有的 Component API Server etcd Controller Scheduler Worker 擁有的 Component Container Runtime Kubelet Component 安裝 Kubernetes，實際上是安裝以下幾個 Component API Server front-end of the Kubernetes etcd distributed key-value store 會實現 lock mechanism，確保沒有 conflict kubelet 在每個 node 上運行的 agent 負責確保 container 在 node 上如期運行 Container Runtime 用來 run container 的 underlying software Controller 當 node、container、endpoint 掛掉的時候，他要負責監控和回應 type Replication Controller 確保指定數量的 Pod 在任何時間都在運行 load balancing &amp;amp; scaling 後來被 ReplicaSet 取代 Scheduler 負責處理 node 間的 distributing work 會尋找新創的 container，並分配到 node Pod Kubernetes 的最小單位 一個 Pod 封裝一個應用程式，可能包含一個或多個 container ReplicaSet 新版本的 Replication Controller yaml spec template 指定要創建的 Pod 的 template 把 pod 的 metadata 和 spec 都放在這裡 replicas 指定要創建的 Pod 的數量 selector 指定要選擇的 Pod 需要這個是因為 ReplicaSet 也可以管理那些不是他創建的 Pod matchLabels 指定要選擇的 Pod 的 label command kubectl scale --replicas=3 -f &amp;lt;file&amp;gt; scale up/down replicas 這樣不會修改檔案，所以檔案的如果原本是 2，檔案依然會寫 2，只是 replicas 會變成 3 kubectl scale --replicas=3 replicaset &amp;lt;name&amp;gt; scale up/down replicas kubectl edit replicaset &amp;lt;name&amp;gt; 想要 scale up/down replicas 也可以用這個，他會立刻生效 簡寫 rs Deployment 管理 ReplicaSet 和 Replica Controller yaml 和 ReplicaSet 很像，把 kind 從 ReplicaSet 改成 Deployment 就好 會自動創建 ReplicaSet 使用情境 Rolling update 想要更新每個 Pod，但不是同時更新，而是一個一個更新，確保不會有 downtime Rollback 如果更新失敗，可以回到之前的版本 Pause and Resume 當需要做 multiple changes，不想要一下指令就馬上做，可以先 pause，等所有指令下完再 resume rollout 創建 Deployment 的時候，會自動創建一個 rollout 創建一個 rollout 的時候，會自動創建一個 Deployment revision Deployment Strategy Recreate 先刪除所有舊的 Pod，再創建新的 Pod 中間會有 Application downtime Rolling Update 一個一個更新 Pod 這個是預設的 strategy command kubectl rollout status deployment &amp;lt;name&amp;gt; 查看 rollout 的狀態 kubectl rollout history deployment &amp;lt;name&amp;gt; 查看 rollout 的 history (revision) kubectl rollout undo deployment &amp;lt;name&amp;gt; 回到上一個 revision 簡寫 deploy Service 讓不同 group 的 Pod 互相通信 像一個 virtaul server，可以連接到一個或多個 Pod type NodePort 會在每個 node 上開一個 port，讓外部可以連進來 default valid port range: 30000-32767 yaml spec type ports port service 的 port targetPort pod 的 port 如果不設置，會用 port 的值 nodePort 如果不設置，會從 default port range 選一個 selector 指定要連接的 Pod 預設會用 load balancing，策略是 Random，像是一個內建的 load balancer 如果有在同個 cluster 跨 node 的情況，不需要其他設定，就可以創建一個跨 node 的 service，會幫他們都設同一個 nodePort ClusterIP 只有在 cluster 內部可以連進來 用來幫某一組的 pod 提供一個統一的界面並做轉發 不能依賴 internal IP，因為每個 pod 都有可能會 down 或 up yaml spec type ports port targetPort selector service 可以用 cluster IP 或是 service name 來連接 LoadBalancer 會在 cloud provider 上開一個 load balancer nodePort 的 load balancer 是在 node 內部的，現在是要幫多個 node 做 load balancing 這只有在 cloud provider 上才有 name 很重要，因為其他的 Pod 會用這個 name 來連接 (就像 domain name) 簡寫 svc YAML Kubernetes 的配置文件 root level properties apiVersion kind apiVersion Pod v1 Service v1 ReplicaSet apps/v1 Deployment apps/v1 kind Pod, Service, ReplicaSet, Deployment metadata name labels 可以加入任何 key-value pair spec specification section pod containers name image env: list of environment variables name value Cloud two type of cluster Self hosted / Turnkey solutions 用來在自己的 server 上建立 cluster Hosted solutions / Managed solutions 用來在 cloud 上建立 cluster Hosted solutions Google Kubernetes Engine (GKE) Amazon Elastic Kubernetes Service (EKS) Azure Kubernetes Service (AKS) Tool kubectl kubectl 用來 deploy、inspect、manage application on a Kubernetes cluster commands kubectl run &amp;lt;name&amp;gt; --image=&amp;lt;image&amp;gt; 創建一個 Pod kubectl get pods 查看所有 Podllll -o wide 顯示更多資訊 column READY / 也可以用 kubectl get all 來查看 Pod、Service、ReplicaSet、Deployment kubectl describe pod &amp;lt;name&amp;gt; 查看 Pod 的詳細資訊 欄位 Node Pod 在哪個 Node 上運行，包含了 Node 的 IP IP Pod 的 IP kubectl delete pod &amp;lt;name&amp;gt; 刪除 Pod kubectl create -f &amp;lt;file&amp;gt; 根據 YAML file 創建 resource 如果 resource 已經存在，會報錯 kubectl apply -f &amp;lt;file&amp;gt; 根據 YAML file 創建 resource 如果 resource 已經存在，會更新 resource kubectl replace -f &amp;lt;file&amp;gt; 根據 YAML file 創建 resource 如果 resource 已經存在，會刪除舊的 resource，並創建新的 resource kubectl edit replicaset &amp;lt;name&amp;gt; 可以直接編輯 Replica Set 的 yaml 檔，但他不是一開始創建用的檔案，而是 Kubernetes 在 memory 暫時生成的 kubectl set image deployment &amp;lt;name&amp;gt; &amp;lt;container-name&amp;gt;=&amp;lt;new-image&amp;gt; 更新 Deployment 的 image 注意這裡是 Container name，不是 Pod name --record=true 會記錄每次的操作 用在 rollout 的時候，可以看到每次的操作，不然會顯示 minikube 用來在 local machine 上建立一個 single-node cluster kubeadm 用來在多個 node 上建立 cluster 在多個 node 上安裝 Kubernetes 流程 安裝 container runtime 安裝 kubeadm 初始化 master node 建立 pod network 加入 worker node Networking Cluster Networking 每個 Pod 都有自己的 IP 兩個不同屬於同一個 cluster 的 Pod 可能會有相同的 IP Kubernetes 要求所有的 Pod 要可以在不用 NAT 的情況下互相通信 所有的 container 和 node 都要可以在沒有 NAT 的情況下互相通信 可以用 Calico 等方案實現 他會把每個 node network 都設成不同的，底下的 pod IP 自然就不會重複 '>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/kubernetes-%E7%AD%86%E8%A8%98/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='container orchestration' /><meta property='article:published_time' content='2024-06-14T00:00:17&#43;08:00'/><meta property='article:modified_time' content='2024-06-14T00:00:17&#43;08:00'/>
+<meta name="twitter:title" content="Kubernetes 筆記">
+<meta name="twitter:description" content="基礎概念 Node Kubernetes 集群中的一台機器 過去叫做 Minion Cluster 由多個 Node 組成的集群 Node Type Master 控制整個集群的 Node Worker 其他非 Master 的 Node 叫做 Worker Node Master vs Worker Master 擁有的 Component API Server etcd Controller Scheduler Worker 擁有的 Component Container Runtime Kubelet Component 安裝 Kubernetes，實際上是安裝以下幾個 Component API Server front-end of the Kubernetes etcd distributed key-value store 會實現 lock mechanism，確保沒有 conflict kubelet 在每個 node 上運行的 agent 負責確保 container 在 node 上如期運行 Container Runtime 用來 run container 的 underlying software Controller 當 node、container、endpoint 掛掉的時候，他要負責監控和回應 type Replication Controller 確保指定數量的 Pod 在任何時間都在運行 load balancing &amp;amp; scaling 後來被 ReplicaSet 取代 Scheduler 負責處理 node 間的 distributing work 會尋找新創的 container，並分配到 node Pod Kubernetes 的最小單位 一個 Pod 封裝一個應用程式，可能包含一個或多個 container ReplicaSet 新版本的 Replication Controller yaml spec template 指定要創建的 Pod 的 template 把 pod 的 metadata 和 spec 都放在這裡 replicas 指定要創建的 Pod 的數量 selector 指定要選擇的 Pod 需要這個是因為 ReplicaSet 也可以管理那些不是他創建的 Pod matchLabels 指定要選擇的 Pod 的 label command kubectl scale --replicas=3 -f &amp;lt;file&amp;gt; scale up/down replicas 這樣不會修改檔案，所以檔案的如果原本是 2，檔案依然會寫 2，只是 replicas 會變成 3 kubectl scale --replicas=3 replicaset &amp;lt;name&amp;gt; scale up/down replicas kubectl edit replicaset &amp;lt;name&amp;gt; 想要 scale up/down replicas 也可以用這個，他會立刻生效 簡寫 rs Deployment 管理 ReplicaSet 和 Replica Controller yaml 和 ReplicaSet 很像，把 kind 從 ReplicaSet 改成 Deployment 就好 會自動創建 ReplicaSet 使用情境 Rolling update 想要更新每個 Pod，但不是同時更新，而是一個一個更新，確保不會有 downtime Rollback 如果更新失敗，可以回到之前的版本 Pause and Resume 當需要做 multiple changes，不想要一下指令就馬上做，可以先 pause，等所有指令下完再 resume rollout 創建 Deployment 的時候，會自動創建一個 rollout 創建一個 rollout 的時候，會自動創建一個 Deployment revision Deployment Strategy Recreate 先刪除所有舊的 Pod，再創建新的 Pod 中間會有 Application downtime Rolling Update 一個一個更新 Pod 這個是預設的 strategy command kubectl rollout status deployment &amp;lt;name&amp;gt; 查看 rollout 的狀態 kubectl rollout history deployment &amp;lt;name&amp;gt; 查看 rollout 的 history (revision) kubectl rollout undo deployment &amp;lt;name&amp;gt; 回到上一個 revision 簡寫 deploy Service 讓不同 group 的 Pod 互相通信 像一個 virtaul server，可以連接到一個或多個 Pod type NodePort 會在每個 node 上開一個 port，讓外部可以連進來 default valid port range: 30000-32767 yaml spec type ports port service 的 port targetPort pod 的 port 如果不設置，會用 port 的值 nodePort 如果不設置，會從 default port range 選一個 selector 指定要連接的 Pod 預設會用 load balancing，策略是 Random，像是一個內建的 load balancer 如果有在同個 cluster 跨 node 的情況，不需要其他設定，就可以創建一個跨 node 的 service，會幫他們都設同一個 nodePort ClusterIP 只有在 cluster 內部可以連進來 用來幫某一組的 pod 提供一個統一的界面並做轉發 不能依賴 internal IP，因為每個 pod 都有可能會 down 或 up yaml spec type ports port targetPort selector service 可以用 cluster IP 或是 service name 來連接 LoadBalancer 會在 cloud provider 上開一個 load balancer nodePort 的 load balancer 是在 node 內部的，現在是要幫多個 node 做 load balancing 這只有在 cloud provider 上才有 name 很重要，因為其他的 Pod 會用這個 name 來連接 (就像 domain name) 簡寫 svc YAML Kubernetes 的配置文件 root level properties apiVersion kind apiVersion Pod v1 Service v1 ReplicaSet apps/v1 Deployment apps/v1 kind Pod, Service, ReplicaSet, Deployment metadata name labels 可以加入任何 key-value pair spec specification section pod containers name image env: list of environment variables name value Cloud two type of cluster Self hosted / Turnkey solutions 用來在自己的 server 上建立 cluster Hosted solutions / Managed solutions 用來在 cloud 上建立 cluster Hosted solutions Google Kubernetes Engine (GKE) Amazon Elastic Kubernetes Service (EKS) Azure Kubernetes Service (AKS) Tool kubectl kubectl 用來 deploy、inspect、manage application on a Kubernetes cluster commands kubectl run &amp;lt;name&amp;gt; --image=&amp;lt;image&amp;gt; 創建一個 Pod kubectl get pods 查看所有 Podllll -o wide 顯示更多資訊 column READY / 也可以用 kubectl get all 來查看 Pod、Service、ReplicaSet、Deployment kubectl describe pod &amp;lt;name&amp;gt; 查看 Pod 的詳細資訊 欄位 Node Pod 在哪個 Node 上運行，包含了 Node 的 IP IP Pod 的 IP kubectl delete pod &amp;lt;name&amp;gt; 刪除 Pod kubectl create -f &amp;lt;file&amp;gt; 根據 YAML file 創建 resource 如果 resource 已經存在，會報錯 kubectl apply -f &amp;lt;file&amp;gt; 根據 YAML file 創建 resource 如果 resource 已經存在，會更新 resource kubectl replace -f &amp;lt;file&amp;gt; 根據 YAML file 創建 resource 如果 resource 已經存在，會刪除舊的 resource，並創建新的 resource kubectl edit replicaset &amp;lt;name&amp;gt; 可以直接編輯 Replica Set 的 yaml 檔，但他不是一開始創建用的檔案，而是 Kubernetes 在 memory 暫時生成的 kubectl set image deployment &amp;lt;name&amp;gt; &amp;lt;container-name&amp;gt;=&amp;lt;new-image&amp;gt; 更新 Deployment 的 image 注意這裡是 Container name，不是 Pod name --record=true 會記錄每次的操作 用在 rollout 的時候，可以看到每次的操作，不然會顯示 minikube 用來在 local machine 上建立一個 single-node cluster kubeadm 用來在多個 node 上建立 cluster 在多個 node 上安裝 Kubernetes 流程 安裝 container runtime 安裝 kubeadm 初始化 master node 建立 pod network 加入 worker node Networking Cluster Networking 每個 Pod 都有自己的 IP 兩個不同屬於同一個 cluster 的 Pod 可能會有相同的 IP Kubernetes 要求所有的 Pod 要可以在不用 NAT 的情況下互相通信 所有的 container 和 node 都要可以在沒有 NAT 的情況下互相通信 可以用 Calico 等方案實現 他會把每個 node network 都設成不同的，底下的 pod IP 自然就不會重複 ">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">🍤<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/old avatar.png"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://www.pixiv.net/users/18855729'
+                        target="_blank"
+                        title="Pixiv"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" stroke="currentColor" vector-effect="non-scaling-stroke" fill="">
+  <path stroke-width="1" vector-effect="non-scaling-stroke"
+    d="M701.515 301.152c-44.44-46.092-100.245-64.919-163.08-65.107-29.552-0.089-58.595 4.617-87.095 12.455-28.961 7.965-56.673 18.839-81.996 35.306-3.347 2.176-4.69 4.686-4.695 8.694-0.034 29.713-0.333 59.424-0.426 89.137-0.085 27.263-0.018 54.527-0.021 81.79-0.004 56.836 0.053 113.674-0.097 170.51-0.015 5.326 1.57 8.393 6.639 10.576 17.881 7.7 36.245 13.85 55.161 18.37 30.808 7.36 62.082 10.876 93.715 12.36 33.75 1.583 66.83-1.28 98.832-12.378 61.328-21.265 105.46-61.217 129.447-121.99 15.492-39.25 17.417-80.058 10.877-121.393-7.146-45.173-25.384-85.268-57.26-118.33z"
+    fill="none" />
+  <path stroke-width="1" vector-effect="non-scaling-stroke"
+    d="M512 17.482C238.886 17.482 17.482 238.886 17.482 512S238.886 1006.518 512 1006.518 1006.518 785.114 1006.518 512 785.114 17.482 512 17.482z m327.127 530.516c-18.962 47.58-50.687 84.816-92.709 113.517-43.734 29.872-92.452 46.554-144.647 53.74-66.355 9.136-131.115 0.236-195.108-17.307-12.485-3.423-24.767-7.483-37.009-11.676-4.732-1.62-5.413-1.201-5.42 3.878-0.049 33.583 0.004 67.165-0.069 100.748-0.008 3.782 1.314 5.86 5.093 7.004 7.233 2.187 14.26 5.003 20.384 9.602 3.594 2.699 6.19 5.968 5.824 10.873-0.43 5.752-3.64 8.957-9.432 8.968-19.872 0.039-39.744 0.014-59.617 0.014-19.41 0.006-38.82-0.103-58.23 0.082-4.736 0.045-8.025-1.288-9.814-5.842-1.798-4.575-0.752-8.45 2.566-11.847 5.698-5.833 13.181-8.404 20.593-11 7.625-2.668 7.8-0.933 7.8-10.86-0.02-151.738-0.02-303.476-0.076-455.215-0.001-2.353 1.227-5.726-1.09-6.829-2.297-1.094-4.167 1.976-6 3.442-22.584 18.058-43.474 37.783-60.052 61.694-0.527 0.76-1.03 1.537-1.588 2.273-5.878 7.727-9.827 15.6-5.76 25.855 1.946 4.91 1.707 10.59 0.282 15.968-0.937 3.532-2.436 6.64-5.44 8.865-5.016 3.718-8.469 3.16-11.788-2.085-12.847-20.308-25.59-40.682-38.532-60.928-2.117-3.313-1.999-5.634 0.715-8.492 17.758-18.692 37.058-35.675 57.256-51.635 51.148-40.413 106.911-72.725 168.335-94.902 40.036-14.455 81.234-23.72 123.709-27.312 49.596-4.194 98.488-0.765 146.365 13.295 50.8 14.919 95.584 40.146 131.966 79.103 36.324 38.896 58.162 84.856 65.163 137.62 5.425 40.866 1.694 80.839-13.67 119.389z"
+    fill="none" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" 
+class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
+  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+  <path
+    d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#基礎概念">基礎概念</a>
+      <ol>
+        <li><a href="#node">Node</a>
+          <ol>
+            <li><a href="#cluster">Cluster</a></li>
+            <li><a href="#node-type">Node Type</a></li>
+          </ol>
+        </li>
+        <li><a href="#component">Component</a></li>
+      </ol>
+    </li>
+    <li><a href="#pod">Pod</a></li>
+    <li><a href="#replicaset">ReplicaSet</a></li>
+    <li><a href="#deployment">Deployment</a></li>
+    <li><a href="#service">Service</a></li>
+    <li><a href="#yaml">YAML</a></li>
+    <li><a href="#cloud">Cloud</a></li>
+    <li><a href="#tool">Tool</a>
+      <ol>
+        <li><a href="#kubectl">kubectl</a></li>
+        <li><a href="#minikube">minikube</a></li>
+        <li><a href="#kubeadm">kubeadm</a></li>
+      </ol>
+    </li>
+    <li><a href="#networking">Networking</a>
+      <ol>
+        <li><a href="#cluster-networking">Cluster Networking</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/full-stack/" style="background-color: #131313; color: #43c559;">
+                Full Stack
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/full-stack.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/kubernetes-%E7%AD%86%E8%A8%98/">Kubernetes 筆記</a>
+        </h2>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jun 14, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    4 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="基礎概念">基礎概念</h2>
+<h3 id="node">Node</h3>
+<ul>
+<li>Kubernetes 集群中的一台機器</li>
+<li>過去叫做 Minion</li>
+</ul>
+<h4 id="cluster">Cluster</h4>
+<ul>
+<li>由多個 Node 組成的集群</li>
+</ul>
+<h4 id="node-type">Node Type</h4>
+<h5 id="master">Master</h5>
+<ul>
+<li>控制整個集群的 Node</li>
+</ul>
+<h5 id="worker">Worker</h5>
+<ul>
+<li>其他非 Master 的 Node 叫做 Worker Node</li>
+</ul>
+<h5 id="master-vs-worker">Master vs Worker</h5>
+<ul>
+<li>Master
+<ul>
+<li>擁有的 Component
+<ul>
+<li>API Server</li>
+<li>etcd</li>
+<li>Controller</li>
+<li>Scheduler</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Worker
+<ul>
+<li>擁有的 Component
+<ul>
+<li>Container Runtime</li>
+<li>Kubelet</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="component">Component</h3>
+<ul>
+<li>安裝 Kubernetes，實際上是安裝以下幾個 Component
+<ul>
+<li>API Server
+<ul>
+<li>front-end of the Kubernetes</li>
+</ul>
+</li>
+<li>etcd
+<ul>
+<li>distributed key-value store</li>
+<li>會實現 lock mechanism，確保沒有 conflict</li>
+</ul>
+</li>
+<li>kubelet
+<ul>
+<li>在每個 node 上運行的 agent</li>
+<li>負責確保 container 在 node 上如期運行</li>
+</ul>
+</li>
+<li>Container Runtime
+<ul>
+<li>用來 run container 的 underlying software</li>
+</ul>
+</li>
+<li>Controller
+<ul>
+<li>當 node、container、endpoint 掛掉的時候，他要負責監控和回應</li>
+<li>type
+<ul>
+<li>Replication Controller
+<ul>
+<li>確保指定數量的 Pod 在任何時間都在運行</li>
+<li>load balancing &amp; scaling</li>
+<li>後來被 ReplicaSet 取代</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Scheduler
+<ul>
+<li>負責處理 node 間的 distributing work</li>
+<li>會尋找新創的 container，並分配到 node</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="pod">Pod</h2>
+<ul>
+<li>Kubernetes 的最小單位</li>
+<li>一個 Pod 封裝一個應用程式，可能包含一個或多個 container</li>
+</ul>
+<h2 id="replicaset">ReplicaSet</h2>
+<ul>
+<li>新版本的 Replication Controller</li>
+<li>yaml
+<ul>
+<li>spec
+<ul>
+<li><code>template</code>
+<ul>
+<li>指定要創建的 Pod 的 template</li>
+<li>把 pod 的 metadata 和 spec 都放在這裡</li>
+</ul>
+</li>
+<li><code>replicas</code>
+<ul>
+<li>指定要創建的 Pod 的數量</li>
+</ul>
+</li>
+<li><code>selector</code>
+<ul>
+<li>指定要選擇的 Pod</li>
+<li>需要這個是因為 ReplicaSet 也可以管理那些不是他創建的 Pod</li>
+<li><code>matchLabels</code>
+<ul>
+<li>指定要選擇的 Pod 的 label</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>command
+<ul>
+<li><code>kubectl scale --replicas=3 -f &lt;file&gt;</code>
+<ul>
+<li>scale up/down replicas</li>
+<li>這樣不會修改檔案，所以檔案的如果原本是 2，檔案依然會寫 2，只是 replicas 會變成 3</li>
+</ul>
+</li>
+<li><code>kubectl scale --replicas=3 replicaset &lt;name&gt;</code>
+<ul>
+<li>scale up/down replicas</li>
+</ul>
+</li>
+<li><code>kubectl edit replicaset &lt;name&gt;</code>
+<ul>
+<li>想要 scale up/down replicas 也可以用這個，他會立刻生效</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>簡寫
+<ul>
+<li>rs</li>
+</ul>
+</li>
+</ul>
+<h2 id="deployment">Deployment</h2>
+<ul>
+<li>管理 ReplicaSet 和 Replica Controller</li>
+<li>yaml 和 ReplicaSet 很像，把 kind 從 ReplicaSet 改成 Deployment 就好
+<ul>
+<li>會自動創建 ReplicaSet</li>
+</ul>
+</li>
+<li>使用情境
+<ol>
+<li>Rolling update</li>
+</ol>
+<ul>
+<li>想要更新每個 Pod，但不是同時更新，而是一個一個更新，確保不會有 downtime</li>
+</ul>
+<ol start="2">
+<li>Rollback</li>
+</ol>
+<ul>
+<li>如果更新失敗，可以回到之前的版本</li>
+</ul>
+<ol start="3">
+<li>Pause and Resume</li>
+</ol>
+<ul>
+<li>當需要做 multiple changes，不想要一下指令就馬上做，可以先 pause，等所有指令下完再 resume</li>
+</ul>
+</li>
+<li>rollout
+<ul>
+<li>創建 Deployment 的時候，會自動創建一個 rollout</li>
+<li>創建一個 rollout 的時候，會自動創建一個 Deployment revision</li>
+</ul>
+</li>
+<li>Deployment Strategy
+<ul>
+<li>Recreate
+<ul>
+<li>先刪除所有舊的 Pod，再創建新的 Pod</li>
+<li>中間會有 Application downtime</li>
+</ul>
+</li>
+<li>Rolling Update
+<ul>
+<li>一個一個更新 Pod</li>
+<li>這個是預設的 strategy</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>command
+<ul>
+<li><code>kubectl rollout status deployment &lt;name&gt;</code>
+<ul>
+<li>查看 rollout 的狀態</li>
+</ul>
+</li>
+<li><code>kubectl rollout history deployment &lt;name&gt;</code>
+<ul>
+<li>查看 rollout 的 history (revision)</li>
+</ul>
+</li>
+<li><code>kubectl rollout undo deployment &lt;name&gt;</code>
+<ul>
+<li>回到上一個 revision</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>簡寫
+<ul>
+<li>deploy</li>
+</ul>
+</li>
+</ul>
+<h2 id="service">Service</h2>
+<ul>
+<li>讓不同 group 的 Pod 互相通信</li>
+<li>像一個 virtaul server，可以連接到一個或多個 Pod</li>
+<li>type
+<ul>
+<li>NodePort
+<ul>
+<li>會在每個 node 上開一個 port，讓外部可以連進來</li>
+<li>default valid port range: 30000-32767</li>
+<li>yaml
+<ul>
+<li>spec
+<ul>
+<li><code>type</code></li>
+<li><code>ports</code>
+<ul>
+<li><code>port</code>
+<ul>
+<li>service 的 port</li>
+</ul>
+</li>
+<li><code>targetPort</code>
+<ul>
+<li>pod 的 port</li>
+<li>如果不設置，會用 <code>port</code> 的值</li>
+</ul>
+</li>
+<li><code>nodePort</code>
+<ul>
+<li>如果不設置，會從 default port range 選一個</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>selector</code>
+<ul>
+<li>指定要連接的 Pod</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>預設會用 load balancing，策略是 Random，像是一個內建的 load balancer</li>
+<li>如果有在同個 cluster 跨 node 的情況，不需要其他設定，就可以創建一個跨 node 的 service，會幫他們都設同一個 nodePort</li>
+</ul>
+</li>
+<li>ClusterIP
+<ul>
+<li>只有在 cluster 內部可以連進來</li>
+<li>用來幫某一組的 pod 提供一個統一的界面並做轉發</li>
+<li>不能依賴 internal IP，因為每個 pod 都有可能會 down 或 up</li>
+<li>yaml
+<ul>
+<li><code>spec</code>
+<ul>
+<li><code>type</code></li>
+<li><code>ports</code>
+<ul>
+<li><code>port</code></li>
+<li><code>targetPort</code></li>
+</ul>
+</li>
+<li><code>selector</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>service 可以用 cluster IP 或是 service name 來連接</li>
+</ul>
+</li>
+<li>LoadBalancer
+<ul>
+<li>會在 cloud provider 上開一個 load balancer</li>
+<li>nodePort 的 load balancer 是在 node 內部的，現在是要幫多個 node 做 load balancing</li>
+<li>這只有在 cloud provider 上才有</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>name 很重要，因為其他的 Pod 會用這個 name 來連接 (就像 domain name)</li>
+<li>簡寫
+<ul>
+<li>svc</li>
+</ul>
+</li>
+</ul>
+<h2 id="yaml">YAML</h2>
+<ul>
+<li>Kubernetes 的配置文件</li>
+<li>root level properties
+<ul>
+<li>apiVersion
+<ul>
+<li>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>kind</th>
+<th>apiVersion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pod</td>
+<td>v1</td>
+</tr>
+<tr>
+<td>Service</td>
+<td>v1</td>
+</tr>
+<tr>
+<td>ReplicaSet</td>
+<td>apps/v1</td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td>apps/v1</td>
+</tr>
+</tbody>
+</table></div>
+</li>
+</ul>
+</li>
+<li>kind
+<ul>
+<li>Pod, Service, ReplicaSet, Deployment</li>
+</ul>
+</li>
+<li>metadata
+<ul>
+<li><code>name</code></li>
+<li><code>labels</code>
+<ul>
+<li>可以加入任何 key-value pair</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>spec
+<ul>
+<li>specification section</li>
+<li>pod
+<ul>
+<li><code>containers</code>
+<ul>
+<li><code>name</code></li>
+<li><code>image</code></li>
+<li><code>env</code>: list of environment variables
+<ul>
+<li><code>name</code></li>
+<li><code>value</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="cloud">Cloud</h2>
+<ul>
+<li>two type of cluster
+<ul>
+<li>Self hosted / Turnkey solutions
+<ul>
+<li>用來在自己的 server 上建立 cluster</li>
+</ul>
+</li>
+<li>Hosted solutions / Managed solutions
+<ul>
+<li>用來在 cloud 上建立 cluster</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Hosted solutions
+<ul>
+<li>Google Kubernetes Engine (GKE)</li>
+<li>Amazon Elastic Kubernetes Service (EKS)</li>
+<li>Azure Kubernetes Service (AKS)</li>
+</ul>
+</li>
+</ul>
+<h2 id="tool">Tool</h2>
+<h3 id="kubectl">kubectl</h3>
+<ul>
+<li><code>kubectl</code>
+<ul>
+<li>用來 deploy、inspect、manage application on a Kubernetes cluster</li>
+</ul>
+</li>
+<li>commands
+<ul>
+<li><code>kubectl run &lt;name&gt; --image=&lt;image&gt;</code>
+<ul>
+<li>創建一個 Pod</li>
+</ul>
+</li>
+<li><code>kubectl get pods</code>
+<ul>
+<li>查看所有 Podllll</li>
+<li><code>-o wide</code>
+<ul>
+<li>顯示更多資訊</li>
+</ul>
+</li>
+<li>column
+<ul>
+<li>READY
+<ul>
+<li><!-- raw HTML omitted -->/<!-- raw HTML omitted --></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>也可以用 <code>kubectl get all</code> 來查看 Pod、Service、ReplicaSet、Deployment</li>
+</ul>
+</li>
+<li><code>kubectl describe pod &lt;name&gt;</code>
+<ul>
+<li>查看 Pod 的詳細資訊</li>
+<li>欄位
+<ul>
+<li>Node
+<ul>
+<li>Pod 在哪個 Node 上運行，包含了 Node 的 IP</li>
+</ul>
+</li>
+<li>IP
+<ul>
+<li>Pod 的 IP</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>kubectl delete pod &lt;name&gt;</code>
+<ul>
+<li>刪除 Pod</li>
+</ul>
+</li>
+<li><code>kubectl create -f &lt;file&gt;</code>
+<ul>
+<li>根據 YAML file 創建 resource</li>
+<li>如果 resource 已經存在，會報錯</li>
+</ul>
+</li>
+<li><code>kubectl apply -f &lt;file&gt;</code>
+<ul>
+<li>根據 YAML file 創建 resource</li>
+<li>如果 resource 已經存在，會更新 resource</li>
+</ul>
+</li>
+<li><code>kubectl replace -f &lt;file&gt;</code>
+<ul>
+<li>根據 YAML file 創建 resource</li>
+<li>如果 resource 已經存在，會刪除舊的 resource，並創建新的 resource</li>
+</ul>
+</li>
+<li><code>kubectl edit replicaset &lt;name&gt;</code>
+<ul>
+<li>可以直接編輯 Replica Set 的 yaml 檔，但他不是一開始創建用的檔案，而是 Kubernetes 在 memory 暫時生成的</li>
+</ul>
+</li>
+<li><code>kubectl set image deployment &lt;name&gt; &lt;container-name&gt;=&lt;new-image&gt;</code>
+<ul>
+<li>更新 Deployment 的 image</li>
+<li>注意這裡是 Container name，不是 Pod name</li>
+</ul>
+</li>
+<li><code>--record=true</code>
+<ul>
+<li>會記錄每次的操作</li>
+<li>用在 rollout 的時候，可以看到每次的操作，不然會顯示 <!-- raw HTML omitted --></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="minikube">minikube</h3>
+<ul>
+<li>用來在 local machine 上建立一個 single-node cluster</li>
+</ul>
+<h3 id="kubeadm">kubeadm</h3>
+<ul>
+<li>用來在多個 node 上建立 cluster</li>
+<li>在多個 node 上安裝 Kubernetes
+<ul>
+<li>流程
+<ol>
+<li>安裝 container runtime</li>
+<li>安裝 kubeadm</li>
+<li>初始化 master node</li>
+<li>建立 pod network</li>
+<li>加入 worker node</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="networking">Networking</h2>
+<h3 id="cluster-networking">Cluster Networking</h3>
+<ul>
+<li>每個 Pod 都有自己的 IP</li>
+<li>兩個不同屬於同一個 cluster 的 Pod 可能會有相同的 IP</li>
+<li>Kubernetes 要求所有的 Pod 要可以在不用 NAT 的情況下互相通信
+<ul>
+<li>所有的 container 和 node 都要可以在沒有 NAT 的情況下互相通信</li>
+</ul>
+</li>
+<li>可以用 Calico 等方案實現
+<ul>
+<li>他會把每個 node network 都設成不同的，底下的 pod IP 自然就不會重複</li>
+</ul>
+</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/container-orchestration/">container orchestration</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/angular-%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Angular 筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Spring Boot 筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/graphql-%E7%B0%A1%E4%BB%8B/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GraphQL 簡介</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/redis/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>

@@ -6,12 +6,408 @@
         <description>Recent content in transformer on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sun, 31 Mar 2024 00:27:55 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/transformer/index.xml" rel="self" type="application/rss+xml" /><item>
-        <title>🦑SQUID🦑 論文</title>
-        <link>https://roykesydon.github.io/Blog/p/squid-%E8%AB%96%E6%96%87/</link>
+        <lastBuildDate>Thu, 18 Apr 2024 00:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/transformer/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>ReALM 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/realm-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Thu, 18 Apr 2024 00:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/realm-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2403.20329&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;ReALM: Reference Resolution As Language Modeling&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;Reference resolution 是一個重要的問題，對於理解和充分處理不同類型的 context 很重要。&lt;/p&gt;
+&lt;p&gt;Context 包含 previous turns 和 non-conversational entities，比如使用者螢幕上的 entity，或是在背景執行的 entity。&lt;/p&gt;
+&lt;p&gt;LLM 雖然在各種任務都很強大，但對於 reference resolution 的使用，特別是 non-conversational entities 方面，依然沒有充分利用。&lt;/p&gt;
+&lt;p&gt;本文將展示如何引用 LLM 創建一個系統來處理不同類型的 reference，方法是展示如何把 reference resolution 轉換成 language modeling problem。
+盡管螢幕上的 entity 傳統上不利於簡化成 text-only modality。&lt;/p&gt;
+&lt;p&gt;對於 GPT-4，本文最小的模型實現了和 GPT-4 相當的性能，而更大的模型則大幅領先。&lt;/p&gt;
+&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;人類的語言很長包含 ambiguous reference，比如「這個」、「那個」等等，這些 reference 需要根據 context 來解決。&lt;/p&gt;
+&lt;p&gt;能夠能夠理解 context 對 conversational assistant 來說很重要。&lt;/p&gt;
+&lt;p&gt;讓使用者能夠對螢幕上看到的內容發出查詢是確保語音助理可以提供 hands-free 體驗的第一步。&lt;/p&gt;
+&lt;hr&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Speaker&lt;/th&gt;
+&lt;th&gt;Dialogue&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;User&lt;/td&gt;
+&lt;td&gt;Show me pharmacies near me&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Agent&lt;/td&gt;
+&lt;td&gt;Here is a list I found.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Agent&lt;/td&gt;
+&lt;td&gt;&amp;hellip; (list presented)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;User&lt;/td&gt;
+&lt;td&gt;Call the one on Rainbow Rd.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;User&lt;/td&gt;
+&lt;td&gt;Call the bottom one.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;User&lt;/td&gt;
+&lt;td&gt;Call this number (present onscreen)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Table 1:  Sample Interactions between a user and an
+agent.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;以 Table 1 為例，如果沒有理解 context 的能力，agent 不可能完成查詢。&lt;/p&gt;
+&lt;p&gt;照理來說，處理用戶的查詢需要多種類型的 context，Conversational context 和 on-screen context 就是兩個主要的例子。&lt;/p&gt;
+&lt;p&gt;最近的 LLM 通常可以實現 End-to-End 的體驗，甚至可能可以消除包含 reference resolution 的多階段 piepline。&lt;/p&gt;
+&lt;p&gt;但是在一些實際案例中，pipeline 有他的價值，考慮以下情境：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;在運算能力有限的設備上運作 (例如手機)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;由於功耗和延遲需求，單一大型 End-to-End 模型可能不適用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;需要與 API 整合的情境&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;雖然存在可以用 LLM 編寫呼叫 API 的方法，但依然需要超大的模型還有對現有 pipeline 的徹底處理。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用 focused model 可以允許現有的 reference resolution module 替換成更新的版本，而且由於系統是模組化的，可以改進能力和可解釋性。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;對於本文所考慮的任務，reference resolution 不只限定於 conversational context，還包含 on-screen entities，這些 entities 是使用者可以感知到的一部份，但是還未出現在對話歷史紀錄中。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;因此，盡管一些 LLM 可以 implicit 地處理 reference resolution，但是傳統的 NLP 任務 (比如 reference resolution) 仍然有價值。&lt;/p&gt;
+&lt;p&gt;因此本文提倡用較小的語言模型，但針對 reference resolution 進行了專門且明確的 fine-tuning。&lt;/p&gt;
+&lt;p&gt;然而這種語音助理會遇到最大的挑戰就是要怎麼讓 LM 「看」到螢幕。而且還要以有利於 LM 解析的方式對螢幕上的 entity 進行編碼，然後編碼還得足夠一致，讓 LM 可以成功執行 reference resolution。&lt;/p&gt;
+&lt;p&gt;本文建議使用使用 parsed entity 及其位置來重件螢幕，以產生螢幕的純文字表示。&lt;/p&gt;
+&lt;p&gt;然後螢幕上屬於 entity 的部分會被標記，以便 LM 能夠了解實體出現的位置及他們周圍的文字。&lt;/p&gt;
+&lt;p&gt;據作者所知，這是第一個目標是從螢幕 encode context 的 LLM 工作。&lt;/p&gt;
+&lt;h2 id=&#34;related-work-and-motivation&#34;&gt;Related Work and Motivation&lt;/h2&gt;
+&lt;p&gt;解析螢幕上的 reference 是一個目前探索比較不足的領域。&lt;/p&gt;
+&lt;p&gt;螢幕上的東西通常更加結構化和高度文字化，使的可以利用更輕的模型來轉換成文字。但雖然容易解析，分布和那種大型育訓練的基於圖像的系統不同，因為他們多半都用自然的現實圖片。&lt;/p&gt;
+&lt;p&gt;此外那些模型的訓練成本通常都非常高，而且在這種大量文字的情境也表現不佳。
+常用於文字理解的方法又常常依賴多個模組，比如 bounding box detection 和 OCR。&lt;/p&gt;
+&lt;p&gt;聯合視覺 + 文字的模型在計算成本也更加昂貴。&lt;/p&gt;
+&lt;p&gt;對於螢幕上的參考有一些相關工作，被用作本文的 baseline。&lt;/p&gt;
+&lt;p&gt;然後他們有些缺點，在本文解決了這些缺點。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;他們的方法依賴專用的 「Category Module」來處理 type-based reference，每次建立新類型，都需要手動加入 Entity&lt;/li&gt;
+&lt;li&gt;此類 Module 將每種類別視為不同的，忽略了他們的相似性&lt;/li&gt;
+&lt;li&gt;依賴手工製作的規則，往往需要大量特徵工程，而且不 robust&lt;/li&gt;
+&lt;li&gt;不考慮語意相似性，也沒法對現實的理解和常識進行推理&lt;/li&gt;
+&lt;li&gt;這些方法會獨立地判斷實體和 Query 的關聯性，而不考慮其他所有的實體，查詢既不考慮整個螢幕也不考慮其他實體&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;task&#34;&gt;Task&lt;/h2&gt;
+&lt;p&gt;作者提了三種和使用者相關的 Entity:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;On-screen Entities&lt;/li&gt;
+&lt;li&gt;Conversational Entities
+&lt;ul&gt;
+&lt;li&gt;可能是來自上一輪的對話，也可能是 virtual assistant 產生的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Background Entities
+&lt;ul&gt;
+&lt;li&gt;來自後台 process 的相關實體，使用者不一定在螢幕上看的到，比如背景的音樂&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;本文將 reference resolution 作為 LLM 的 multiple choice task，預期輸出是用戶螢幕上顯示的其中一個 Entity。&lt;/p&gt;
+&lt;p&gt;答案也可能是「None of these」。&lt;/p&gt;
+&lt;h2 id=&#34;datasets&#34;&gt;Datasets&lt;/h2&gt;
+&lt;p&gt;每筆資料包含使用者查詢和 Entity list，還有與對應使用者查詢相關的 ground truth entity。&lt;/p&gt;
+&lt;p&gt;每個實體又包含與其相關的訊息，比如與實體關聯的名稱和其他文字描述訊息。&lt;/p&gt;
+&lt;p&gt;對於存在 on-screen context 的資料，context 以 Entity 的邊界框，圍繞它的物件清單還有周圍物件的屬性 (比如類型、文字內容、位置) 來提供&lt;/p&gt;
+&lt;hr&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Dataset&lt;/th&gt;
+&lt;th&gt;Train Set&lt;/th&gt;
+&lt;th&gt;Test Set&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Conversational&lt;/td&gt;
+&lt;td&gt;2.3k&lt;/td&gt;
+&lt;td&gt;1.2k&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Synthetic&lt;/td&gt;
+&lt;td&gt;3.9k&lt;/td&gt;
+&lt;td&gt;1.1k&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;On-screen&lt;/td&gt;
+&lt;td&gt;10.1k&lt;/td&gt;
+&lt;td&gt;1.9k&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Table 2: Dataset Sizes (Train Set and Test Set)&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;conversational-data&#34;&gt;Conversational Data&lt;/h3&gt;
+&lt;p&gt;收集使用者和 agent 的相關資料。&lt;/p&gt;
+&lt;p&gt;評分者會看到帶有所提供 Entity 清單的截圖，並要求提供引用清單中任意挑選的 Entity 的 Query。&lt;/p&gt;
+&lt;p&gt;比如，可能會給使用者看企業清單，使用者可能會說「Call the one on Main Street」。&lt;/p&gt;
+&lt;h3 id=&#34;synthetic-data&#34;&gt;Synthetic Data&lt;/h3&gt;
+&lt;p&gt;透過 template 去合成資料。&lt;/p&gt;
+&lt;p&gt;有兩種 template:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Base Template
+&lt;ul&gt;
+&lt;li&gt;包含 mentions, entities, possible slots&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Language Template
+&lt;ul&gt;
+&lt;li&gt;除了 Base 還會新增不同變體的 query&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;on-screen-data&#34;&gt;On-screen Data&lt;/h3&gt;
+&lt;p&gt;從存在電話、電子郵件和實際地址的各種網頁蒐集的。&lt;/p&gt;
+&lt;p&gt;進行兩階段的 annotation：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;根據螢幕 extract query
+&lt;ul&gt;
+&lt;li&gt;評分者會收到一張帶有綠色方框和紅色方框的截圖，要把綠方框方類為電話、電子郵件或地址等等&lt;/li&gt;
+&lt;li&gt;然後要為綠框提供三個獨特的 query&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;根據 query 識別 entity 和 mention
+&lt;ul&gt;
+&lt;li&gt;前面蒐集的 query 會被一一展示給評分者，並帶有相應的截圖，但沒有 bounding box，還會提供所有 screen entity list&lt;/li&gt;
+&lt;li&gt;評分者要評估 query 是否包含給定的 visual entity，還有聽起來自不自然&lt;/li&gt;
+&lt;li&gt;此外，評分者還要從清單中選出 query 提及的 entity，還要標記它們在 query 的哪裡&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;models&#34;&gt;Models&lt;/h2&gt;
+&lt;h3 id=&#34;marrs&#34;&gt;MARRS&lt;/h3&gt;
+&lt;p&gt;這個是 baseline，非 LLM，和前人的方法去做比較。&lt;/p&gt;
+&lt;p&gt;前人的方法著重於螢幕上的 entity，MARRS 也傾向於 conversational 和 background entities。&lt;/p&gt;
+&lt;p&gt;要注意的是，和其他通用的 LLM 相比，作者的 baseline 是專門為了 reference resolution 而設計的。&lt;/p&gt;
+&lt;h3 id=&#34;chatgpt&#34;&gt;ChatGPT&lt;/h3&gt;
+&lt;p&gt;作者考慮 GPT-3.5 和 GPT-4 作為另外一個 baseline。&lt;/p&gt;
+&lt;p&gt;對於 GPT-3.5，輸入只包含 prompt。&lt;/p&gt;
+&lt;p&gt;對於 GPT-4，因為他可以接受圖片的 context，所以為系統提供了螢幕截圖，發現可以有效提高其效能。&lt;/p&gt;
+&lt;h3 id=&#34;our-approach&#34;&gt;Our Approach&lt;/h3&gt;
+&lt;p&gt;作者遵循以下 pipeline 來微調模型 (FLAN-T5)&lt;/p&gt;
+&lt;p&gt;向模型提供解析後的輸入，並用來微調。&lt;/p&gt;
+&lt;p&gt;和 Baseline 不同，作者沒有在 FLAN-T5 上進行大規模的超參數搜索，而是堅持使用預設的參數。&lt;/p&gt;
+&lt;h4 id=&#34;conversational-references&#34;&gt;Conversational References&lt;/h4&gt;
+&lt;p&gt;作者假設 conversational references 有兩種：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Type-based
+&lt;ul&gt;
+&lt;li&gt;這種非常依賴要將 query 和 entity type 結合，好進行識別&lt;/li&gt;
+&lt;li&gt;比如「打給他」，可以知道要的是電話號碼，而不是地址&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Descriptive
+&lt;ul&gt;
+&lt;li&gt;傾向於用唯一的實體屬性來標記他，比如「時代廣場的那個」&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;referenece 通常會同時依賴 type 和描述，比如「play the one from Abbey Road」和「directions to the one on Abbey Road」。&lt;/p&gt;
+&lt;h4 id=&#34;onscreen-references&#34;&gt;Onscreen References&lt;/h4&gt;
+&lt;p&gt;作者假設存在能夠解析螢幕文字以提取 Entity 的上游資料偵測器。&lt;/p&gt;
+&lt;p&gt;為了以僅涉及文字的方式將其編碼到 LM 中，使用 Algorithm 2。&lt;/p&gt;
+&lt;p&gt;直觀上，假設所有實體和周圍物件的位置都可以用它們各自的邊界框的中心來表示。&lt;/p&gt;
+&lt;p&gt;然後從上到下對這些中心進行排序，並用 stable sort 從左到右排序。&lt;/p&gt;
+&lt;p&gt;然後，所有在一個 margin 內的物件都會被視作在 same line，並用 tab 隔開。&lt;/p&gt;
+&lt;p&gt;在 margin 下方外面的會被放在下一行，然後不斷重複。&lt;/p&gt;
+&lt;h2 id=&#34;results&#34;&gt;Results&lt;/h2&gt;
+&lt;hr&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Model&lt;/th&gt;
+&lt;th&gt;Conv&lt;/th&gt;
+&lt;th&gt;Synth&lt;/th&gt;
+&lt;th&gt;Screen&lt;/th&gt;
+&lt;th&gt;Unseen&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;MARRS&lt;/td&gt;
+&lt;td&gt;92.1&lt;/td&gt;
+&lt;td&gt;99.4&lt;/td&gt;
+&lt;td&gt;83.5&lt;/td&gt;
+&lt;td&gt;84.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GPT-3.5&lt;/td&gt;
+&lt;td&gt;84.1&lt;/td&gt;
+&lt;td&gt;34.2&lt;/td&gt;
+&lt;td&gt;74.1&lt;/td&gt;
+&lt;td&gt;67.5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GPT-4&lt;/td&gt;
+&lt;td&gt;97.0&lt;/td&gt;
+&lt;td&gt;58.7&lt;/td&gt;
+&lt;td&gt;90.1&lt;/td&gt;
+&lt;td&gt;98.4&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ReALM-80M&lt;/td&gt;
+&lt;td&gt;96.7&lt;/td&gt;
+&lt;td&gt;99.5&lt;/td&gt;
+&lt;td&gt;88.9&lt;/td&gt;
+&lt;td&gt;99.3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ReALM-250M&lt;/td&gt;
+&lt;td&gt;97.8&lt;/td&gt;
+&lt;td&gt;99.8&lt;/td&gt;
+&lt;td&gt;90.6&lt;/td&gt;
+&lt;td&gt;97.2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ReALM-1B&lt;/td&gt;
+&lt;td&gt;97.9&lt;/td&gt;
+&lt;td&gt;99.7&lt;/td&gt;
+&lt;td&gt;91.4&lt;/td&gt;
+&lt;td&gt;94.8&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ReALM-3B&lt;/td&gt;
+&lt;td&gt;97.9&lt;/td&gt;
+&lt;td&gt;99.8&lt;/td&gt;
+&lt;td&gt;93.0&lt;/td&gt;
+&lt;td&gt;97.8&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Table 3:&lt;/p&gt;
+&lt;p&gt;預測正確的標準是要正確預測所有相關實體，不然就是錯的&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;作者發現它們的方法贏 MARRS 和 GPT-3.5。
+GPT-3.5 的餐數量還多出了幾個數量級。&lt;/p&gt;
+&lt;p&gt;盡管模型相較 GPT-4 輕的多，但是性能大致相同。&lt;/p&gt;
+&lt;p&gt;而且作者採用文字編碼的方法能夠讓模型和 GPT-4 幾乎同等效能，後者還提供了螢幕截圖。&lt;/p&gt;
+&lt;p&gt;隨著模型加大，提升也很明顯，特別是 Screen，暗示任務本質上更加複雜。&lt;/p&gt;
+&lt;h3 id=&#34;analysis&#34;&gt;Analysis&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;$GPT-4 \approx ReALM &amp;raquo; MARRS$ for new use-cases
+&lt;ul&gt;
+&lt;li&gt;測試了 zero-shot learning 的能力，Table 3 最後一個 column 就是在比較從未見過的資料集。&lt;/li&gt;
+&lt;li&gt;作者發現對於測試集，所有 LLM-based 的方法都贏過 Fine-tuned Model&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ReaLM &amp;gt; GPT-4 for domain-specific queries
+&lt;ul&gt;
+&lt;li&gt;作者發現 ReALM 因為有對 user requests 做 fine-tuning，所以更能理解 domain-specific questions，如下表 (Table 4)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;User Request: Can you make it brighter?
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Entities Shown to User:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;1. Type: Settings
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;2. Type: UserEntity | homeAutomationAccessoryName
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;---
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;GPT-4 Prediction: 1 Ground Truth: 1, 2
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Table 4&lt;/p&gt;
+&lt;hr&gt;
+</description>
+        </item>
+        <item>
+        <title>SimSID 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/simsid-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
+        <pubDate>Sat, 13 Apr 2024 00:27:55 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/simsid-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
+        <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2403.08689&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Exploiting Structural Consistency of Chest Anatomy for Unsupervised Anomaly Detection in Radiography Images&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;個人前言&#34;&gt;個人前言&lt;/h2&gt;
+&lt;p&gt;這篇文章提出了許多在 SQUID 論文有出現過的的內容，特別是有關於放射線成像的描述等等，建議先看過 SQUID，重複的論點不再提及。&lt;/p&gt;
+&lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;
+&lt;p&gt;提出一種簡單的 Space-aware Memory，用於修復放射線成像的異常。&lt;/p&gt;
+&lt;p&gt;將異常檢定制定為 image reconstruction task，用 space-aware memory matrix 和 in-painting block 組成。&lt;/p&gt;
+&lt;h2 id=&#34;related-work&#34;&gt;Related Work&lt;/h2&gt;
+&lt;h3 id=&#34;our-previous-work&#34;&gt;Our Previous Work&lt;/h3&gt;
+&lt;p&gt;相對於 SQUID，本文有以下四點改進：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;引入了新的符號、公式和圖表，以及詳細的方法說明及學習目標&lt;/li&gt;
+&lt;li&gt;刪除 Memory Queue 和 Masked shortcut，簡化框架，還提高了效能&lt;/li&gt;
+&lt;li&gt;在三種放射線成像任務勝過其他 21 種 SOTA 方法&lt;/li&gt;
+&lt;li&gt;研究了 SimSID 對於 desease-free (訓練集中對異常資料的容忍) 的穩健性&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;simsid&#34;&gt;SimSID&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/SimSID/fig2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;developing-space-aware-and-hierarchical-memory&#34;&gt;Developing Space-aware and Hierarchical Memory&lt;/h3&gt;
+&lt;h4 id=&#34;space-aware-memory&#34;&gt;Space-aware memory&lt;/h4&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;$\hat{z}_{i,j}$ (augmented feature)&lt;/p&gt;
+&lt;p&gt;$=\displaystyle\sum^N_{k=1}G(s^{k})M^k_{i,j}$&lt;/p&gt;
+&lt;p&gt;$s^k$ 是做內積算出來的相似度&lt;/p&gt;
+&lt;p&gt;$G(\cdot)$ 是 Gumbel-softmax (用 SQUID 的 Gumbel Shrinkage)&lt;/p&gt;
+&lt;p&gt;$Memory Matrix$ 被拆成多個 block，才有 $M_{i,j}$&lt;/p&gt;
+&lt;h4 id=&#34;hierarchical-memory&#34;&gt;Hierarchical memory&lt;/h4&gt;
+&lt;p&gt;在 encoder 最深處使用一個 memory matrix (in-painting block) 不足以重建具有細節的高品質圖像。&lt;/p&gt;
+&lt;p&gt;為了捕捉不同尺度的 anatomic patterns，提出在 generator 的多個 level 放置 space-aware memory。&lt;/p&gt;
+&lt;p&gt;研究發現，太多的 memory 會導致過度的 information filtering，還會 degrade 模型，導致他只會保留最具代表性的 normal pattern，而不是所有需要的 pattern。&lt;/p&gt;
+&lt;p&gt;這個問題可以透過添加 skip connection 來解決。&lt;/p&gt;
+&lt;p&gt;從經驗發現三個 memory matrix 就已足夠。&lt;/p&gt;
+&lt;h2 id=&#34;results&#34;&gt;Results&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/deep-learning/SimSID/fig7.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h3 id=&#34;benchmarking-simsid-on-three-public-datasets&#34;&gt;Benchmarking SimSID on Three Public Datasets&lt;/h3&gt;
+&lt;p&gt;對於正常的情況， SimSID 可以在 memory 中找到相似的匹配，然後順利重建。&lt;/p&gt;
+&lt;p&gt;對於異常，將偽造的正常特徵強加到異常特徵，就會產生矛盾。&lt;/p&gt;
+&lt;p&gt;圖 7 繪製 Discriminator 的 heatmap 來指示出重建效果不佳的部分。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>🦑SQUID🦑 論文閱讀</title>
+        <link>https://roykesydon.github.io/Blog/p/squid-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</link>
         <pubDate>Sun, 31 Mar 2024 00:27:55 +0800</pubDate>
         
-        <guid>https://roykesydon.github.io/Blog/p/squid-%E8%AB%96%E6%96%87/</guid>
+        <guid>https://roykesydon.github.io/Blog/p/squid-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/</guid>
         <description>&lt;p&gt;paper: &lt;a class=&#34;link&#34; href=&#34;https://arxiv.org/abs/2111.13495&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;SQUID: Deep Feature In-Painting for Unsupervised Anomaly Detection&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;abstract&#34;&gt;Abstract&lt;/h2&gt;

@@ -1,8 +1,9 @@
 ---
-title: "🦑SQUID🦑 論文"
+title: "🦑SQUID🦑 論文閱讀"
 date: 2024-03-31T00:27:55+08:00
 draft: false
 type: "post"
+description: "非監督胸腔放射線成像異常檢測方法"
 tags: ["computer-vision","deep-learning","machine-learning", "transformer", "attention", "self-attention"]
 categories : ["deep-learning"]
 ---
