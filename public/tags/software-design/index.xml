@@ -6,7 +6,957 @@
         <description>Recent content in software-design on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 10 Oct 2023 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/software-design/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 27 Jun 2024 02:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/software-design/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Software Development Model</title>
+        <link>https://roykesydon.github.io/Blog/p/software-development-model/</link>
+        <pubDate>Thu, 27 Jun 2024 02:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/software-development-model/</guid>
+        <description>&lt;h2 id=&#34;terms&#34;&gt;Terms&lt;/h2&gt;
+&lt;h3 id=&#34;incremental-vs-iterative&#34;&gt;Incremental vs Iterative&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Incremental
+&lt;ul&gt;
+&lt;li&gt;隨時間一步一步完成&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Iterative
+&lt;ul&gt;
+&lt;li&gt;建立 prototype，然後不斷改進&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;model-type&#34;&gt;Model type&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Linear/Predictive
+&lt;ul&gt;
+&lt;li&gt;有類似的專案經驗&lt;/li&gt;
+&lt;li&gt;有明確的流程&lt;/li&gt;
+&lt;li&gt;沒什麼可以改動的空間&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Flexible/Adaptive
+&lt;ul&gt;
+&lt;li&gt;專案屬於 new idea&lt;/li&gt;
+&lt;li&gt;專案很有可能隨時間改變&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;waterfall-model&#34;&gt;Waterfall Model&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;像瀑布一樣，一個階段完成後才能進行下一個階段&lt;/li&gt;
+&lt;li&gt;Requirement -&amp;gt; Design -&amp;gt; Implementation -&amp;gt; Testing -&amp;gt; Deployment -&amp;gt; Maintenance&lt;/li&gt;
+&lt;li&gt;非常 predictive，沒有彈性&lt;/li&gt;
+&lt;li&gt;如果在 Testing 發現重大問題，可能要從 Requirement 重新開始&lt;/li&gt;
+&lt;li&gt;隨著進度推進，fix 成本增長很快&lt;/li&gt;
+&lt;li&gt;每一步都得考慮周密&lt;/li&gt;
+&lt;li&gt;用戶很晚才能看到結果&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;v-model&#34;&gt;V-Model&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;基於 Waterfall Model 的改進&lt;/li&gt;
+&lt;li&gt;V 的左半邊
+&lt;ul&gt;
+&lt;li&gt;Requirement -&amp;gt; Design -&amp;gt; Architecture -&amp;gt; Module -&amp;gt; Implementation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;V 的右半邊
+&lt;ul&gt;
+&lt;li&gt;Unit Testing -&amp;gt; Integration Testing -&amp;gt; System Testing -&amp;gt; Acceptance Testing&lt;/li&gt;
+&lt;li&gt;四個 testing 和左半邊的四個階段一一對應&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;強調開發和測試並行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;sashimi-model&#34;&gt;Sashimi Model&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;在大公司，不同 phase 常常有專人負責&lt;/li&gt;
+&lt;li&gt;前面瀑布式開發，會讓後面 phase 的人閒置&lt;/li&gt;
+&lt;li&gt;讓不同 phase 的人在某些時間點同時工作&lt;/li&gt;
+&lt;li&gt;可能會導致錯誤還有 redesign&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;incremental-model&#34;&gt;Incremental Model&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;在整個開發過程中多次完成軟體開發過程&lt;/li&gt;
+&lt;li&gt;每個子開發過程都有明確的目標&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;unified-process-framework&#34;&gt;Unified Process Framework&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Phase
+&lt;ul&gt;
+&lt;li&gt;Inception
+&lt;ul&gt;
+&lt;li&gt;確定可行性&lt;/li&gt;
+&lt;li&gt;Deliverable
+&lt;ul&gt;
+&lt;li&gt;Lifecycle goals&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Elaboration
+&lt;ul&gt;
+&lt;li&gt;細化階段&lt;/li&gt;
+&lt;li&gt;Deliverable
+&lt;ul&gt;
+&lt;li&gt;Software architecture plans &amp;amp; prototypes&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Construction
+&lt;ul&gt;
+&lt;li&gt;基於 elaboration 階段的基礎改進&lt;/li&gt;
+&lt;li&gt;用多個 iteration 來完成&lt;/li&gt;
+&lt;li&gt;Deliverable
+&lt;ul&gt;
+&lt;li&gt;持續改進軟體&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Transition
+&lt;ul&gt;
+&lt;li&gt;交付系統&lt;/li&gt;
+&lt;li&gt;Deliverable
+&lt;ul&gt;
+&lt;li&gt;Final Product&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;優點
+&lt;ul&gt;
+&lt;li&gt;Adaptive&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;缺點
+&lt;ul&gt;
+&lt;li&gt;複雜&lt;/li&gt;
+&lt;li&gt;對小專案來說太過頭&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;spiral-model&#34;&gt;Spiral Model&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;4 個象限
+&lt;ul&gt;
+&lt;li&gt;Determine objectives&lt;/li&gt;
+&lt;li&gt;Identify and resolve risks&lt;/li&gt;
+&lt;li&gt;Developments and test&lt;/li&gt;
+&lt;li&gt;Plan the next iteration&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;在 4 個階段不斷輪替&lt;/li&gt;
+&lt;li&gt;優點
+&lt;ul&gt;
+&lt;li&gt;adaptive&lt;/li&gt;
+&lt;li&gt;risk-focused&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;缺點
+&lt;ul&gt;
+&lt;li&gt;複雜&lt;/li&gt;
+&lt;li&gt;需要 stackholder 持續參與&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;agile&#34;&gt;Agile&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;一種思維方法，不是模型&lt;/li&gt;
+&lt;li&gt;Manifesto
+&lt;ul&gt;
+&lt;li&gt;Individuals and interactions over processes and tools
+&lt;ul&gt;
+&lt;li&gt;如果一組人決定要用一組新的工具，那他們應該有更高的優先權&lt;/li&gt;
+&lt;li&gt;過往的做法可能偏向使用過的工具&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Working software over comprehensive documentation
+&lt;ul&gt;
+&lt;li&gt;document 很重要，但是只有大量的 document 沒辦法讓客戶給出反饋&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Customer collaboration over contract negotiation
+&lt;ul&gt;
+&lt;li&gt;強調和客戶的合作，而不是只在意合同上的項目&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Responding to change over following a plan&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;瀑布式開發的缺點
+&lt;ul&gt;
+&lt;li&gt;現在的技術環境變化太快，Agile 希望在開發過程中能夠快速適應
+&lt;ul&gt;
+&lt;li&gt;傳統的開發方法考量到金錢損失，不太可能辦到。但透過小的 increment，可以在每個 increment 中朝正確的方向前進&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;軟體系統不可能被 100% 預測&lt;/li&gt;
+&lt;li&gt;系統可能不符合用戶要求&lt;/li&gt;
+&lt;li&gt;市場變化很快，Agile 可以在短時間內推出最小可行產品，先行推向市場&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;kanban&#34;&gt;Kanban&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;會存在多張卡片&lt;/li&gt;
+&lt;li&gt;可以直觀看到某個欄位是否堆積大量工作&lt;/li&gt;
+&lt;li&gt;Properties
+&lt;ul&gt;
+&lt;li&gt;Visualize workflow&lt;/li&gt;
+&lt;li&gt;Limit work in progress&lt;/li&gt;
+&lt;li&gt;Manage flow&lt;/li&gt;
+&lt;li&gt;Make process policies explicit&lt;/li&gt;
+&lt;li&gt;Improve collaboratively&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Principles
+&lt;ul&gt;
+&lt;li&gt;Start with what you do now&lt;/li&gt;
+&lt;li&gt;Agree to pursue incremental, evolutionary change
+&lt;ul&gt;
+&lt;li&gt;並非試著立刻改變所有事情&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Respect the current process, roles, responsibilities &amp;amp; titles&lt;/li&gt;
+&lt;li&gt;Encourage acts of leadership at all levels
+&lt;ul&gt;
+&lt;li&gt;這裡的 leadership 不一定指領導他人，也可以是激勵他人&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;欄位
+&lt;ul&gt;
+&lt;li&gt;Backlog&lt;/li&gt;
+&lt;li&gt;Analyze&lt;/li&gt;
+&lt;li&gt;Develop&lt;/li&gt;
+&lt;li&gt;Test&lt;/li&gt;
+&lt;li&gt;Release&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;lean-startup&#34;&gt;Lean Startup&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;實驗性的生產方法&lt;/li&gt;
+&lt;li&gt;盡快生出產品，看看市場反應&lt;/li&gt;
+&lt;li&gt;loop step
+&lt;ul&gt;
+&lt;li&gt;learn
+&lt;ul&gt;
+&lt;li&gt;assumption&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;build
+&lt;ul&gt;
+&lt;li&gt;experiment&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;measure
+&lt;ul&gt;
+&lt;li&gt;metrics&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;example:
+&lt;ul&gt;
+&lt;li&gt;zappos
+&lt;ul&gt;
+&lt;li&gt;假設人們會上網買鞋&lt;/li&gt;
+&lt;li&gt;拍鞋子照片，建立網站丟上去&lt;/li&gt;
+&lt;li&gt;看有多少人會買&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;scrum&#34;&gt;Scrum&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;可以利用 back-to-back testing 來確認沒有弄壞之前 sprint 的功能&lt;/li&gt;
+&lt;li&gt;roles
+&lt;ul&gt;
+&lt;li&gt;Product Owner
+&lt;ul&gt;
+&lt;li&gt;決定要用什麼方式完成什麼事&lt;/li&gt;
+&lt;li&gt;與外部世界溝通的人，和利害關係人溝通&lt;/li&gt;
+&lt;li&gt;目標
+&lt;ul&gt;
+&lt;li&gt;最大化產品價值
+&lt;ul&gt;
+&lt;li&gt;價低成本、提高收益&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;職責
+&lt;ul&gt;
+&lt;li&gt;維護 open, healthy product backlog&lt;/li&gt;
+&lt;li&gt;回答產品相關問題&lt;/li&gt;
+&lt;li&gt;管理預算、release schedule&lt;/li&gt;
+&lt;li&gt;確保團隊價值，找出問題&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Scrum Master
+&lt;ul&gt;
+&lt;li&gt;確保團隊遵守 Scrum 的規則，促成會議、解決衝突&lt;/li&gt;
+&lt;li&gt;Servant Leader
+&lt;ul&gt;
+&lt;li&gt;有一點領導，但和大家平等。促成團隊工作而不是指揮別人&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;目標
+&lt;ul&gt;
+&lt;li&gt;促成 Daily Standup&lt;/li&gt;
+&lt;li&gt;移除障礙&lt;/li&gt;
+&lt;li&gt;確保大家的心情&lt;/li&gt;
+&lt;li&gt;確保 Scurm values&lt;/li&gt;
+&lt;li&gt;團隊的調解人&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Dev Team
+&lt;ul&gt;
+&lt;li&gt;包含工程師、設計師等等&lt;/li&gt;
+&lt;li&gt;目標
+&lt;ul&gt;
+&lt;li&gt;和 Product Owner 合作，create user stories&lt;/li&gt;
+&lt;li&gt;寫 code 和測試，確保符合預期&lt;/li&gt;
+&lt;li&gt;research, design, prototype&lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;流程
+&lt;ul&gt;
+&lt;li&gt;product backlog
+&lt;ul&gt;
+&lt;li&gt;待完成的事情&lt;/li&gt;
+&lt;li&gt;可能的欄位
+&lt;ul&gt;
+&lt;li&gt;優先度&lt;/li&gt;
+&lt;li&gt;預計花費時間&lt;/li&gt;
+&lt;li&gt;誰來執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;spring planning meeting
+&lt;ul&gt;
+&lt;li&gt;決定要在這個 sprint 完成的事情&lt;/li&gt;
+&lt;li&gt;時間點會是 sprint 的第一天&lt;/li&gt;
+&lt;li&gt;目標
+&lt;ul&gt;
+&lt;li&gt;把 product backlog 轉換成 sprint backlog&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;職責
+&lt;ul&gt;
+&lt;li&gt;Scrum Master
+&lt;ul&gt;
+&lt;li&gt;促成會議&lt;/li&gt;
+&lt;li&gt;確保和準備會議地點&lt;/li&gt;
+&lt;li&gt;確保會議有在持續推進，好達成 timebox
+&lt;ul&gt;
+&lt;li&gt;如果有講太久的部分，可能稍後再排單獨會議&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;確保一切都和 sprint goal 一致&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Product Owner
+&lt;ul&gt;
+&lt;li&gt;準備好 product backlog&lt;/li&gt;
+&lt;li&gt;澄清 product backlog 的細節&lt;/li&gt;
+&lt;li&gt;要準備好描述 acceptance criteria
+&lt;ul&gt;
+&lt;li&gt;比如搜索速度要多快？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Dev Team
+&lt;ul&gt;
+&lt;li&gt;協助判斷哪些任務可達成且符合 sprint goal&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;sprint backlog
+&lt;ul&gt;
+&lt;li&gt;這個 sprint 要完成的事情&lt;/li&gt;
+&lt;li&gt;開發人員去自己選擇要做的事情&lt;/li&gt;
+&lt;li&gt;然後就會花 1-4 週完成一個 sprint&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Daily Scrum (Daily standup)
+&lt;ul&gt;
+&lt;li&gt;不該花太久，比如最多 15 分鐘&lt;/li&gt;
+&lt;li&gt;職責
+&lt;ul&gt;
+&lt;li&gt;Scrum Master
+&lt;ul&gt;
+&lt;li&gt;確保會議的進行，確保 timebox&lt;/li&gt;
+&lt;li&gt;紀錄關於目前障礙的筆記，規劃時間移除&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Dev Team
+&lt;ul&gt;
+&lt;li&gt;回答問題
+&lt;ul&gt;
+&lt;li&gt;做了什麼&lt;/li&gt;
+&lt;li&gt;計畫做什麼&lt;/li&gt;
+&lt;li&gt;遇到什麼問題&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;sprint review
+&lt;ul&gt;
+&lt;li&gt;找 stakeholders 來看看這個 sprint 的成果&lt;/li&gt;
+&lt;li&gt;秀出 product increment
+&lt;ul&gt;
+&lt;li&gt;product increment 意味著他本身就是一個完成的產品，經過測試且準備 release&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;任務
+&lt;ul&gt;
+&lt;li&gt;review sprint result
+&lt;ul&gt;
+&lt;li&gt;回顧那些任務做得好和不好
+&lt;ul&gt;
+&lt;li&gt;如果有事情沒完成，要解釋為什麼推遲&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;這個 sprint 有沒有達到目標&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Discuss and demonstrate work
+&lt;ul&gt;
+&lt;li&gt;product owner 全程記錄筆記&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Update status of the project&lt;/li&gt;
+&lt;li&gt;Collaborate on the plan ahead&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;sprint retrospective
+&lt;ul&gt;
+&lt;li&gt;團隊討論這個 sprint 的問題，並且改進&lt;/li&gt;
+&lt;li&gt;常見方法
+&lt;ul&gt;
+&lt;li&gt;start-stop-continue
+&lt;ul&gt;
+&lt;li&gt;每個人說出一個想開始做的事情，一個想停止做的事情，一個想繼續做的事情&lt;/li&gt;
+&lt;li&gt;可以保持匿名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;3-5-3-structure&#34;&gt;3-5-3 Structure&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;3 artifacts
+&lt;ul&gt;
+&lt;li&gt;Sprint Backlog&lt;/li&gt;
+&lt;li&gt;Product Backlog&lt;/li&gt;
+&lt;li&gt;Product Increment&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;5 events
+&lt;ul&gt;
+&lt;li&gt;Sprint Planning&lt;/li&gt;
+&lt;li&gt;Daily Scrum&lt;/li&gt;
+&lt;li&gt;The Sprint&lt;/li&gt;
+&lt;li&gt;Sprint Review&lt;/li&gt;
+&lt;li&gt;Sprint Retrospective&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;3 roles
+&lt;ul&gt;
+&lt;li&gt;Product Owner&lt;/li&gt;
+&lt;li&gt;Scrum Master&lt;/li&gt;
+&lt;li&gt;Dev Team&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可以再加上
+&lt;ul&gt;
+&lt;li&gt;5 values
+&lt;ul&gt;
+&lt;li&gt;Focus&lt;/li&gt;
+&lt;li&gt;Respect&lt;/li&gt;
+&lt;li&gt;Commitment&lt;/li&gt;
+&lt;li&gt;Courage&lt;/li&gt;
+&lt;li&gt;Openness&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;3 pillars
+&lt;ul&gt;
+&lt;li&gt;Transparency&lt;/li&gt;
+&lt;li&gt;Inspection&lt;/li&gt;
+&lt;li&gt;Adaptation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Testing</title>
+        <link>https://roykesydon.github.io/Blog/p/testing/</link>
+        <pubDate>Thu, 27 Jun 2024 00:01:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/testing/</guid>
+        <description>&lt;h2 id=&#34;通用術語&#34;&gt;通用術語&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Test data
+&lt;ul&gt;
+&lt;li&gt;用來測試系統的輸入&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Test case&lt;/li&gt;
+&lt;li&gt;Oracle
+&lt;ul&gt;
+&lt;li&gt;理想的結果&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Bug
+&lt;ul&gt;
+&lt;li&gt;error 或是偏離預期的行為&lt;/li&gt;
+&lt;li&gt;用詞
+&lt;ul&gt;
+&lt;li&gt;failure
+&lt;ul&gt;
+&lt;li&gt;偏離預期的 event&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;error
+&lt;ul&gt;
+&lt;li&gt;導致 failure 的 code part&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;fault
+&lt;ul&gt;
+&lt;li&gt;outcome&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;verification-and-validation&#34;&gt;Verification and Validation&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Verification
+&lt;ul&gt;
+&lt;li&gt;確認系統是否符合 specifcation&lt;/li&gt;
+&lt;li&gt;build the system right&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Validation
+&lt;ul&gt;
+&lt;li&gt;確認系統是否符合使用者需求&lt;/li&gt;
+&lt;li&gt;build the right system&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;unit-testing&#34;&gt;Unit Testing&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;專注在測試 smallest unit of software&lt;/li&gt;
+&lt;li&gt;要 isolate unit，避免其他 unit 影響測試結果
+&lt;ul&gt;
+&lt;li&gt;用 dummy value&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;integration-testing&#34;&gt;Integration Testing&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;專注在測試 communication 和 architecture&lt;/li&gt;
+&lt;li&gt;type
+&lt;ul&gt;
+&lt;li&gt;non-incremental
+&lt;ul&gt;
+&lt;li&gt;一次測試所有 component，測試整個應用程式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;incremental
+&lt;ul&gt;
+&lt;li&gt;每次新增一個 module，做一些測試，反覆執行&lt;/li&gt;
+&lt;li&gt;Top-Down Testing
+&lt;ul&gt;
+&lt;li&gt;用詞
+&lt;ul&gt;
+&lt;li&gt;Stub
+&lt;ul&gt;
+&lt;li&gt;將要實現的 model 的 template，通常是 hard-coded value&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;從最上層開始，下面調用的部分用 stub 代替&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Bottom-Up Testing
+&lt;ul&gt;
+&lt;li&gt;用詞
+&lt;ul&gt;
+&lt;li&gt;Driver
+&lt;ul&gt;
+&lt;li&gt;用來執行 commands 還有初始化變數的 template&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;從最底層開始，上面呼叫的部分用 driver 代替&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Back-to-Back Testing
+&lt;ul&gt;
+&lt;li&gt;把已知良好的版本和新版本比較&lt;/li&gt;
+&lt;li&gt;如果 output 一樣，就代表新版本舊的功能是正確的&lt;/li&gt;
+&lt;li&gt;可以是 incremental testing 的一部分&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;black-box-vs-white-box-testing&#34;&gt;Black Box vs White Box Testing&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Black Box Testing
+&lt;ul&gt;
+&lt;li&gt;不需要知道內部結構&lt;/li&gt;
+&lt;li&gt;用 input 和 output 來測試&lt;/li&gt;
+&lt;li&gt;Boundary Value
+&lt;ul&gt;
+&lt;li&gt;測試高低邊界值，過了就假設中間都過了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Cause-Effect Graph
+&lt;ul&gt;
+&lt;li&gt;不同的 cause 會導致不同的 effect&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Pair-wise Testing
+&lt;ul&gt;
+&lt;li&gt;多個參數一起測試好確認所有條件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;State-based Testing
+&lt;ul&gt;
+&lt;li&gt;測試輸入，確認 state 改變的情形&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;White Box Testing
+&lt;ul&gt;
+&lt;li&gt;知道內部原理，嘗試測試程式碼本身&lt;/li&gt;
+&lt;li&gt;Control Flow Testing
+&lt;ul&gt;
+&lt;li&gt;寫涵蓋所有 branch condition 的 test case&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Data Flow Testing
+&lt;ul&gt;
+&lt;li&gt;test case 要涵蓋所有的變數，包含 declaration 和 use&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Design</title>
+        <link>https://roykesydon.github.io/Blog/p/design/</link>
+        <pubDate>Thu, 27 Jun 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/design/</guid>
+        <description>&lt;h2 id=&#34;modularity&#34;&gt;Modularity&lt;/h2&gt;
+&lt;h3 id=&#34;coupling&#34;&gt;Coupling&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;type
+&lt;ul&gt;
+&lt;li&gt;Tight coupling
+&lt;ul&gt;
+&lt;li&gt;Content coupling
+&lt;ul&gt;
+&lt;li&gt;一個模組依賴另一個模組的內部運作&lt;/li&gt;
+&lt;li&gt;ex: 一個模組直接存取另一個模組的變數，假設回傳的數值是公尺，如果另一個模組要修改成公分，就會影響到這個模組
+&lt;ul&gt;
+&lt;li&gt;可以用 getter 抽象出 getMeter()，這樣就不會直接存取變數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Common coupling
+&lt;ul&gt;
+&lt;li&gt;多個模組共同存取和修改同個 global data&lt;/li&gt;
+&lt;li&gt;ex: 一個模組錯誤修改會導致其他人都壞掉&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;External coupling
+&lt;ul&gt;
+&lt;li&gt;多個模組直接存取同個 external I/O&lt;/li&gt;
+&lt;li&gt;ex: API 要改就會全部都影響到&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Medium coupling
+&lt;ul&gt;
+&lt;li&gt;Control coupling
+&lt;ul&gt;
+&lt;li&gt;一個模組影響另一個模組的內部邏輯（比如說透過參數）&lt;/li&gt;
+&lt;li&gt;ex: 參數要改個寫法就會影響一堆模組&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Data-Sructure coupling
+&lt;ul&gt;
+&lt;li&gt;多個模組共同存取同個 data structure&lt;/li&gt;
+&lt;li&gt;ex: Data structure 要改就會影響到其他模組&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Loose coupling
+&lt;ul&gt;
+&lt;li&gt;Data Coupling
+&lt;ul&gt;
+&lt;li&gt;兩個模組 share/pass 同樣的資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Message Coupling
+&lt;ul&gt;
+&lt;li&gt;多個模組間透過 message 或是 command 來溝通&lt;/li&gt;
+&lt;li&gt;和 control coupling 的差別在於，並沒有去控制某個模組，只是叫他做某件事情&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;No Coupling
+&lt;ul&gt;
+&lt;li&gt;不是好的設計&lt;/li&gt;
+&lt;li&gt;模組間沒有關聯，或是有個超巨大的模組&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;cohesion&#34;&gt;Cohesion&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;type
+&lt;ul&gt;
+&lt;li&gt;Weak cohesion
+&lt;ul&gt;
+&lt;li&gt;Coincidental cohesion
+&lt;ul&gt;
+&lt;li&gt;唯一的關聯是他們在同個檔案&lt;/li&gt;
+&lt;li&gt;ex: single file program&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Temporal cohesion
+&lt;ul&gt;
+&lt;li&gt;關聯的地方是他們在同個時間點被執行&lt;/li&gt;
+&lt;li&gt;ex: 「執行 shutdown  相關的活動」&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Logical cohesion
+&lt;ul&gt;
+&lt;li&gt;活動間可以被歸類在同個 general category&lt;/li&gt;
+&lt;li&gt;ex: Backup Controller，可能有很多地方需要 Backup&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Medium cohesion
+&lt;ul&gt;
+&lt;li&gt;Procedureal cohesion
+&lt;ul&gt;
+&lt;li&gt;command 間存在執行順序&lt;/li&gt;
+&lt;li&gt;ex: Clean car module 可能包含噴水、填表格、擦乾等等
+&lt;ul&gt;
+&lt;li&gt;但是 Clean car module 此處包含了操控財務資料的狀況&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Communicational cohesion
+&lt;ul&gt;
+&lt;li&gt;所有的 activities 都支援相同的 input/output&lt;/li&gt;
+&lt;li&gt;ex: 提取文章的作者、提取文章的標題、提取文章的內容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Sequential cohesion
+&lt;ul&gt;
+&lt;li&gt;某個 activities 的輸出是另一個 activities 的輸入，且具有順序性&lt;/li&gt;
+&lt;li&gt;Procedureal cohesion 和 Communicational cohesion 的結合&lt;/li&gt;
+&lt;li&gt;這個沒那麼糟糕&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Strong cohesion
+&lt;ul&gt;
+&lt;li&gt;Functional cohesion
+&lt;ul&gt;
+&lt;li&gt;Module 只支援只和一個問題相關的 activities&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Object cohesion
+&lt;ul&gt;
+&lt;li&gt;所有的 activities 都只會修改一個 object&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Requirements &amp; Specifications</title>
+        <link>https://roykesydon.github.io/Blog/p/requirements-specifications/</link>
+        <pubDate>Wed, 26 Jun 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/requirements-specifications/</guid>
+        <description>&lt;h2 id=&#34;definition&#34;&gt;definition&lt;/h2&gt;
+&lt;h3 id=&#34;requirement&#34;&gt;Requirement&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;找出系統目標的過程&lt;/li&gt;
+&lt;li&gt;系統需求的 non-technical definition&lt;/li&gt;
+&lt;li&gt;應該要可以被任何人理解&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;specification&#34;&gt;Specification&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;系統需求的 technical definition&lt;/li&gt;
+&lt;li&gt;盡量保持簡單，不是要 design&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;functional--non-functional-requirement&#34;&gt;Functional / Non-Functional Requirement&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Functional Requirement
+&lt;ul&gt;
+&lt;li&gt;系統應該要做什麼 (What)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Non-Functional Requirement
+&lt;ul&gt;
+&lt;li&gt;系統應該要怎麼做 (How)&lt;/li&gt;
+&lt;li&gt;專注在 user experience&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;wrspm&#34;&gt;WRSPM&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;用來理解 requirements, specifications 和 real world 之間的關聯的 reference model&lt;/li&gt;
+&lt;li&gt;part
+&lt;ul&gt;
+&lt;li&gt;World
+&lt;ul&gt;
+&lt;li&gt;現實世界的假設&lt;/li&gt;
+&lt;li&gt;ex: 有沒有網路？網速多快？使用者會自備 1 吋照片？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Requirements&lt;/li&gt;
+&lt;li&gt;Specifications&lt;/li&gt;
+&lt;li&gt;Program
+&lt;ul&gt;
+&lt;li&gt;code 本身&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Machine
+&lt;ul&gt;
+&lt;li&gt;硬體&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;WRSPM Variables
+&lt;ul&gt;
+&lt;li&gt;Eh (Environment hidden)
+&lt;ul&gt;
+&lt;li&gt;Environment 中的元素，對 system 是不可見（隱藏）的&lt;/li&gt;
+&lt;li&gt;ex: ATM 卡本身&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Ev (Environment visible)
+&lt;ul&gt;
+&lt;li&gt;Environment 中的元素，對 system 是可見的&lt;/li&gt;
+&lt;li&gt;ex: ATM 卡的晶片&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Sv (System visible)
+&lt;ul&gt;
+&lt;li&gt;System 中的元素，對 environment 是可見的&lt;/li&gt;
+&lt;li&gt;ex: ATM 機的螢幕（UI）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Sh (System hidden)
+&lt;ul&gt;
+&lt;li&gt;System 中的元素，對 environment 是不可見的&lt;/li&gt;
+&lt;li&gt;ex: ATM 機連接的後端系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;WRSPM visual model
+&lt;ul&gt;
+&lt;li&gt;分成 Environment 和 System，中間交界是 Interface
+&lt;ul&gt;
+&lt;li&gt;Environment
+&lt;ul&gt;
+&lt;li&gt;World&lt;/li&gt;
+&lt;li&gt;Requirements&lt;/li&gt;
+&lt;li&gt;Eh&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Interface
+&lt;ul&gt;
+&lt;li&gt;Specifications&lt;/li&gt;
+&lt;li&gt;Ev&lt;/li&gt;
+&lt;li&gt;Sv&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;System
+&lt;ul&gt;
+&lt;li&gt;Program&lt;/li&gt;
+&lt;li&gt;Machine&lt;/li&gt;
+&lt;li&gt;Sh&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>設計模式 Desing Pattern</title>
         <link>https://roykesydon.github.io/Blog/p/%E8%A8%AD%E8%A8%88%E6%A8%A1%E5%BC%8F-desing-pattern/</link>
         <pubDate>Tue, 10 Oct 2023 00:00:17 +0800</pubDate>

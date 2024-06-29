@@ -1,5 +1,5 @@
 ---
-title: "Crack simple ELF"
+title: "跳過密碼字串比對"
 date: 2023-03-07T14:26:17+08:00
 draft: true
 description: ""

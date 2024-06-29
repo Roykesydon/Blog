@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Terms Incremental vs Iterative Incremental 隨時間一步一步完成 Iterative 建立 prototype，然後不斷改進 Model type Linear/Predictive 有類似的專案經驗 有明確的流程 沒什麼可以改動的空間 Flexible/Adaptive 專案屬於 new idea 專案很有可能隨時間改變 Waterfall Model 像瀑布一樣，一個階段完成後才能進行下一個階段 Requirement -&amp;gt; Design -&amp;gt; Implementation -&amp;gt; Testing -&amp;gt; Deployment -&amp;gt; Maintenance 非常 predictive，沒有彈性 如果在 Testing 發現重大問題，可能要從 Requirement 重新開始 隨著進度推進，fix 成本增長很快 每一步都得考慮周密 用戶很晚才能看到結果 V-Model 基於 Waterfall Model 的改進 V 的左半邊 Requirement -&amp;gt; Design -&amp;gt; Architecture -&amp;gt; Module -&amp;gt; Implementation V 的右半邊 Unit Testing -&amp;gt; Integration Testing -&amp;gt; System Testing -&amp;gt; Acceptance Testing 四個 testing 和左半邊的四個階段一一對應 強調開發和測試並行 Sashimi Model 在大公司，不同 phase 常常有專人負責 前面瀑布式開發，會讓後面 phase 的人閒置 讓不同 phase 的人在某些時間點同時工作 可能會導致錯誤還有 redesign Incremental Model 在整個開發過程中多次完成軟體開發過程 每個子開發過程都有明確的目標 Unified Process Framework Phase Inception 確定可行性 Deliverable Lifecycle goals Elaboration 細化階段 Deliverable Software architecture plans &amp;amp; prototypes Construction 基於 elaboration 階段的基礎改進 用多個 iteration 來完成 Deliverable 持續改進軟體 Transition 交付系統 Deliverable Final Product 優點 Adaptive 缺點 複雜 對小專案來說太過頭 Spiral Model 4 個象限 Determine objectives Identify and resolve risks Developments and test Plan the next iteration 在 4 個階段不斷輪替 優點 adaptive risk-focused 缺點 複雜 需要 stackholder 持續參與 Agile 一種思維方法，不是模型 Manifesto Individuals and interactions over processes and tools 如果一組人決定要用一組新的工具，那他們應該有更高的優先權 過往的做法可能偏向使用過的工具 Working software over comprehensive documentation document 很重要，但是只有大量的 document 沒辦法讓客戶給出反饋 Customer collaboration over contract negotiation 強調和客戶的合作，而不是只在意合同上的項目 Responding to change over following a plan 瀑布式開發的缺點 現在的技術環境變化太快，Agile 希望在開發過程中能夠快速適應 傳統的開發方法考量到金錢損失，不太可能辦到。但透過小的 increment，可以在每個 increment 中朝正確的方向前進 軟體系統不可能被 100% 預測 系統可能不符合用戶要求 市場變化很快，Agile 可以在短時間內推出最小可行產品，先行推向市場 Kanban 會存在多張卡片 可以直觀看到某個欄位是否堆積大量工作 Properties Visualize workflow Limit work in progress Manage flow Make process policies explicit Improve collaboratively Principles Start with what you do now Agree to pursue incremental, evolutionary change 並非試著立刻改變所有事情 Respect the current process, roles, responsibilities &amp;amp; titles Encourage acts of leadership at all levels 這裡的 leadership 不一定指領導他人，也可以是激勵他人 欄位 Backlog Analyze Develop Test Release Lean Startup 實驗性的生產方法 盡快生出產品，看看市場反應 loop step learn assumption build experiment measure metrics example: zappos 假設人們會上網買鞋 拍鞋子照片，建立網站丟上去 看有多少人會買 Scrum 可以利用 back-to-back testing 來確認沒有弄壞之前 sprint 的功能 roles Product Owner 決定要用什麼方式完成什麼事 與外部世界溝通的人，和利害關係人溝通 目標 最大化產品價值 價低成本、提高收益 職責 維護 open, healthy product backlog 回答產品相關問題 管理預算、release schedule 確保團隊價值，找出問題 Scrum Master 確保團隊遵守 Scrum 的規則，促成會議、解決衝突 Servant Leader 有一點領導，但和大家平等。促成團隊工作而不是指揮別人 目標 促成 Daily Standup 移除障礙 確保大家的心情 確保 Scurm values 團隊的調解人 Dev Team 包含工程師、設計師等等 目標 和 Product Owner 合作，create user stories 寫 code 和測試，確保符合預期 research, design, prototype 流程 product backlog 待完成的事情 可能的欄位 優先度 預計花費時間 誰來執行 spring planning meeting 決定要在這個 sprint 完成的事情 時間點會是 sprint 的第一天 目標 把 product backlog 轉換成 sprint backlog 職責 Scrum Master 促成會議 確保和準備會議地點 確保會議有在持續推進，好達成 timebox 如果有講太久的部分，可能稍後再排單獨會議 確保一切都和 sprint goal 一致 Product Owner 準備好 product backlog 澄清 product backlog 的細節 要準備好描述 acceptance criteria 比如搜索速度要多快？ Dev Team 協助判斷哪些任務可達成且符合 sprint goal sprint backlog 這個 sprint 要完成的事情 開發人員去自己選擇要做的事情 然後就會花 1-4 週完成一個 sprint Daily Scrum (Daily standup) 不該花太久，比如最多 15 分鐘 職責 Scrum Master 確保會議的進行，確保 timebox 紀錄關於目前障礙的筆記，規劃時間移除 Dev Team 回答問題 做了什麼 計畫做什麼 遇到什麼問題 sprint review 找 stakeholders 來看看這個 sprint 的成果 秀出 product increment product increment 意味著他本身就是一個完成的產品，經過測試且準備 release 任務 review sprint result 回顧那些任務做得好和不好 如果有事情沒完成，要解釋為什麼推遲 這個 sprint 有沒有達到目標 Discuss and demonstrate work product owner 全程記錄筆記 Update status of the project Collaborate on the plan ahead sprint retrospective 團隊討論這個 sprint 的問題，並且改進 常見方法 start-stop-continue 每個人說出一個想開始做的事情，一個想停止做的事情，一個想繼續做的事情 可以保持匿名 3-5-3 Structure 3 artifacts Sprint Backlog Product Backlog Product Increment 5 events Sprint Planning Daily Scrum The Sprint Sprint Review Sprint Retrospective 3 roles Product Owner Scrum Master Dev Team 可以再加上 5 values Focus Respect Commitment Courage Openness 3 pillars Transparency Inspection Adaptation '>
+<title>Software Development Model</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/software-development-model/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.7104c229f68d2bdefecd049e318ddf7f4d8f8670fcfcf1a5f42b8d2cebcf821d.css"><meta property='og:title' content='Software Development Model'>
+<meta property='og:description' content='Terms Incremental vs Iterative Incremental 隨時間一步一步完成 Iterative 建立 prototype，然後不斷改進 Model type Linear/Predictive 有類似的專案經驗 有明確的流程 沒什麼可以改動的空間 Flexible/Adaptive 專案屬於 new idea 專案很有可能隨時間改變 Waterfall Model 像瀑布一樣，一個階段完成後才能進行下一個階段 Requirement -&amp;gt; Design -&amp;gt; Implementation -&amp;gt; Testing -&amp;gt; Deployment -&amp;gt; Maintenance 非常 predictive，沒有彈性 如果在 Testing 發現重大問題，可能要從 Requirement 重新開始 隨著進度推進，fix 成本增長很快 每一步都得考慮周密 用戶很晚才能看到結果 V-Model 基於 Waterfall Model 的改進 V 的左半邊 Requirement -&amp;gt; Design -&amp;gt; Architecture -&amp;gt; Module -&amp;gt; Implementation V 的右半邊 Unit Testing -&amp;gt; Integration Testing -&amp;gt; System Testing -&amp;gt; Acceptance Testing 四個 testing 和左半邊的四個階段一一對應 強調開發和測試並行 Sashimi Model 在大公司，不同 phase 常常有專人負責 前面瀑布式開發，會讓後面 phase 的人閒置 讓不同 phase 的人在某些時間點同時工作 可能會導致錯誤還有 redesign Incremental Model 在整個開發過程中多次完成軟體開發過程 每個子開發過程都有明確的目標 Unified Process Framework Phase Inception 確定可行性 Deliverable Lifecycle goals Elaboration 細化階段 Deliverable Software architecture plans &amp;amp; prototypes Construction 基於 elaboration 階段的基礎改進 用多個 iteration 來完成 Deliverable 持續改進軟體 Transition 交付系統 Deliverable Final Product 優點 Adaptive 缺點 複雜 對小專案來說太過頭 Spiral Model 4 個象限 Determine objectives Identify and resolve risks Developments and test Plan the next iteration 在 4 個階段不斷輪替 優點 adaptive risk-focused 缺點 複雜 需要 stackholder 持續參與 Agile 一種思維方法，不是模型 Manifesto Individuals and interactions over processes and tools 如果一組人決定要用一組新的工具，那他們應該有更高的優先權 過往的做法可能偏向使用過的工具 Working software over comprehensive documentation document 很重要，但是只有大量的 document 沒辦法讓客戶給出反饋 Customer collaboration over contract negotiation 強調和客戶的合作，而不是只在意合同上的項目 Responding to change over following a plan 瀑布式開發的缺點 現在的技術環境變化太快，Agile 希望在開發過程中能夠快速適應 傳統的開發方法考量到金錢損失，不太可能辦到。但透過小的 increment，可以在每個 increment 中朝正確的方向前進 軟體系統不可能被 100% 預測 系統可能不符合用戶要求 市場變化很快，Agile 可以在短時間內推出最小可行產品，先行推向市場 Kanban 會存在多張卡片 可以直觀看到某個欄位是否堆積大量工作 Properties Visualize workflow Limit work in progress Manage flow Make process policies explicit Improve collaboratively Principles Start with what you do now Agree to pursue incremental, evolutionary change 並非試著立刻改變所有事情 Respect the current process, roles, responsibilities &amp;amp; titles Encourage acts of leadership at all levels 這裡的 leadership 不一定指領導他人，也可以是激勵他人 欄位 Backlog Analyze Develop Test Release Lean Startup 實驗性的生產方法 盡快生出產品，看看市場反應 loop step learn assumption build experiment measure metrics example: zappos 假設人們會上網買鞋 拍鞋子照片，建立網站丟上去 看有多少人會買 Scrum 可以利用 back-to-back testing 來確認沒有弄壞之前 sprint 的功能 roles Product Owner 決定要用什麼方式完成什麼事 與外部世界溝通的人，和利害關係人溝通 目標 最大化產品價值 價低成本、提高收益 職責 維護 open, healthy product backlog 回答產品相關問題 管理預算、release schedule 確保團隊價值，找出問題 Scrum Master 確保團隊遵守 Scrum 的規則，促成會議、解決衝突 Servant Leader 有一點領導，但和大家平等。促成團隊工作而不是指揮別人 目標 促成 Daily Standup 移除障礙 確保大家的心情 確保 Scurm values 團隊的調解人 Dev Team 包含工程師、設計師等等 目標 和 Product Owner 合作，create user stories 寫 code 和測試，確保符合預期 research, design, prototype 流程 product backlog 待完成的事情 可能的欄位 優先度 預計花費時間 誰來執行 spring planning meeting 決定要在這個 sprint 完成的事情 時間點會是 sprint 的第一天 目標 把 product backlog 轉換成 sprint backlog 職責 Scrum Master 促成會議 確保和準備會議地點 確保會議有在持續推進，好達成 timebox 如果有講太久的部分，可能稍後再排單獨會議 確保一切都和 sprint goal 一致 Product Owner 準備好 product backlog 澄清 product backlog 的細節 要準備好描述 acceptance criteria 比如搜索速度要多快？ Dev Team 協助判斷哪些任務可達成且符合 sprint goal sprint backlog 這個 sprint 要完成的事情 開發人員去自己選擇要做的事情 然後就會花 1-4 週完成一個 sprint Daily Scrum (Daily standup) 不該花太久，比如最多 15 分鐘 職責 Scrum Master 確保會議的進行，確保 timebox 紀錄關於目前障礙的筆記，規劃時間移除 Dev Team 回答問題 做了什麼 計畫做什麼 遇到什麼問題 sprint review 找 stakeholders 來看看這個 sprint 的成果 秀出 product increment product increment 意味著他本身就是一個完成的產品，經過測試且準備 release 任務 review sprint result 回顧那些任務做得好和不好 如果有事情沒完成，要解釋為什麼推遲 這個 sprint 有沒有達到目標 Discuss and demonstrate work product owner 全程記錄筆記 Update status of the project Collaborate on the plan ahead sprint retrospective 團隊討論這個 sprint 的問題，並且改進 常見方法 start-stop-continue 每個人說出一個想開始做的事情，一個想停止做的事情，一個想繼續做的事情 可以保持匿名 3-5-3 Structure 3 artifacts Sprint Backlog Product Backlog Product Increment 5 events Sprint Planning Daily Scrum The Sprint Sprint Review Sprint Retrospective 3 roles Product Owner Scrum Master Dev Team 可以再加上 5 values Focus Respect Commitment Courage Openness 3 pillars Transparency Inspection Adaptation '>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/software-development-model/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='software-engineering' /><meta property='article:tag' content='software-design' /><meta property='article:published_time' content='2024-06-27T02:00:17&#43;08:00'/><meta property='article:modified_time' content='2024-06-27T02:00:17&#43;08:00'/>
+<meta name="twitter:title" content="Software Development Model">
+<meta name="twitter:description" content="Terms Incremental vs Iterative Incremental 隨時間一步一步完成 Iterative 建立 prototype，然後不斷改進 Model type Linear/Predictive 有類似的專案經驗 有明確的流程 沒什麼可以改動的空間 Flexible/Adaptive 專案屬於 new idea 專案很有可能隨時間改變 Waterfall Model 像瀑布一樣，一個階段完成後才能進行下一個階段 Requirement -&amp;gt; Design -&amp;gt; Implementation -&amp;gt; Testing -&amp;gt; Deployment -&amp;gt; Maintenance 非常 predictive，沒有彈性 如果在 Testing 發現重大問題，可能要從 Requirement 重新開始 隨著進度推進，fix 成本增長很快 每一步都得考慮周密 用戶很晚才能看到結果 V-Model 基於 Waterfall Model 的改進 V 的左半邊 Requirement -&amp;gt; Design -&amp;gt; Architecture -&amp;gt; Module -&amp;gt; Implementation V 的右半邊 Unit Testing -&amp;gt; Integration Testing -&amp;gt; System Testing -&amp;gt; Acceptance Testing 四個 testing 和左半邊的四個階段一一對應 強調開發和測試並行 Sashimi Model 在大公司，不同 phase 常常有專人負責 前面瀑布式開發，會讓後面 phase 的人閒置 讓不同 phase 的人在某些時間點同時工作 可能會導致錯誤還有 redesign Incremental Model 在整個開發過程中多次完成軟體開發過程 每個子開發過程都有明確的目標 Unified Process Framework Phase Inception 確定可行性 Deliverable Lifecycle goals Elaboration 細化階段 Deliverable Software architecture plans &amp;amp; prototypes Construction 基於 elaboration 階段的基礎改進 用多個 iteration 來完成 Deliverable 持續改進軟體 Transition 交付系統 Deliverable Final Product 優點 Adaptive 缺點 複雜 對小專案來說太過頭 Spiral Model 4 個象限 Determine objectives Identify and resolve risks Developments and test Plan the next iteration 在 4 個階段不斷輪替 優點 adaptive risk-focused 缺點 複雜 需要 stackholder 持續參與 Agile 一種思維方法，不是模型 Manifesto Individuals and interactions over processes and tools 如果一組人決定要用一組新的工具，那他們應該有更高的優先權 過往的做法可能偏向使用過的工具 Working software over comprehensive documentation document 很重要，但是只有大量的 document 沒辦法讓客戶給出反饋 Customer collaboration over contract negotiation 強調和客戶的合作，而不是只在意合同上的項目 Responding to change over following a plan 瀑布式開發的缺點 現在的技術環境變化太快，Agile 希望在開發過程中能夠快速適應 傳統的開發方法考量到金錢損失，不太可能辦到。但透過小的 increment，可以在每個 increment 中朝正確的方向前進 軟體系統不可能被 100% 預測 系統可能不符合用戶要求 市場變化很快，Agile 可以在短時間內推出最小可行產品，先行推向市場 Kanban 會存在多張卡片 可以直觀看到某個欄位是否堆積大量工作 Properties Visualize workflow Limit work in progress Manage flow Make process policies explicit Improve collaboratively Principles Start with what you do now Agree to pursue incremental, evolutionary change 並非試著立刻改變所有事情 Respect the current process, roles, responsibilities &amp;amp; titles Encourage acts of leadership at all levels 這裡的 leadership 不一定指領導他人，也可以是激勵他人 欄位 Backlog Analyze Develop Test Release Lean Startup 實驗性的生產方法 盡快生出產品，看看市場反應 loop step learn assumption build experiment measure metrics example: zappos 假設人們會上網買鞋 拍鞋子照片，建立網站丟上去 看有多少人會買 Scrum 可以利用 back-to-back testing 來確認沒有弄壞之前 sprint 的功能 roles Product Owner 決定要用什麼方式完成什麼事 與外部世界溝通的人，和利害關係人溝通 目標 最大化產品價值 價低成本、提高收益 職責 維護 open, healthy product backlog 回答產品相關問題 管理預算、release schedule 確保團隊價值，找出問題 Scrum Master 確保團隊遵守 Scrum 的規則，促成會議、解決衝突 Servant Leader 有一點領導，但和大家平等。促成團隊工作而不是指揮別人 目標 促成 Daily Standup 移除障礙 確保大家的心情 確保 Scurm values 團隊的調解人 Dev Team 包含工程師、設計師等等 目標 和 Product Owner 合作，create user stories 寫 code 和測試，確保符合預期 research, design, prototype 流程 product backlog 待完成的事情 可能的欄位 優先度 預計花費時間 誰來執行 spring planning meeting 決定要在這個 sprint 完成的事情 時間點會是 sprint 的第一天 目標 把 product backlog 轉換成 sprint backlog 職責 Scrum Master 促成會議 確保和準備會議地點 確保會議有在持續推進，好達成 timebox 如果有講太久的部分，可能稍後再排單獨會議 確保一切都和 sprint goal 一致 Product Owner 準備好 product backlog 澄清 product backlog 的細節 要準備好描述 acceptance criteria 比如搜索速度要多快？ Dev Team 協助判斷哪些任務可達成且符合 sprint goal sprint backlog 這個 sprint 要完成的事情 開發人員去自己選擇要做的事情 然後就會花 1-4 週完成一個 sprint Daily Scrum (Daily standup) 不該花太久，比如最多 15 分鐘 職責 Scrum Master 確保會議的進行，確保 timebox 紀錄關於目前障礙的筆記，規劃時間移除 Dev Team 回答問題 做了什麼 計畫做什麼 遇到什麼問題 sprint review 找 stakeholders 來看看這個 sprint 的成果 秀出 product increment product increment 意味著他本身就是一個完成的產品，經過測試且準備 release 任務 review sprint result 回顧那些任務做得好和不好 如果有事情沒完成，要解釋為什麼推遲 這個 sprint 有沒有達到目標 Discuss and demonstrate work product owner 全程記錄筆記 Update status of the project Collaborate on the plan ahead sprint retrospective 團隊討論這個 sprint 的問題，並且改進 常見方法 start-stop-continue 每個人說出一個想開始做的事情，一個想停止做的事情，一個想繼續做的事情 可以保持匿名 3-5-3 Structure 3 artifacts Sprint Backlog Product Backlog Product Increment 5 events Sprint Planning Daily Scrum The Sprint Sprint Review Sprint Retrospective 3 roles Product Owner Scrum Master Dev Team 可以再加上 5 values Focus Respect Commitment Courage Openness 3 pillars Transparency Inspection Adaptation ">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">🍤<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/old avatar.png"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://www.pixiv.net/users/18855729'
+                        target="_blank"
+                        title="Pixiv"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" stroke="currentColor" vector-effect="non-scaling-stroke" fill="">
+  <path stroke-width="1" vector-effect="non-scaling-stroke"
+    d="M701.515 301.152c-44.44-46.092-100.245-64.919-163.08-65.107-29.552-0.089-58.595 4.617-87.095 12.455-28.961 7.965-56.673 18.839-81.996 35.306-3.347 2.176-4.69 4.686-4.695 8.694-0.034 29.713-0.333 59.424-0.426 89.137-0.085 27.263-0.018 54.527-0.021 81.79-0.004 56.836 0.053 113.674-0.097 170.51-0.015 5.326 1.57 8.393 6.639 10.576 17.881 7.7 36.245 13.85 55.161 18.37 30.808 7.36 62.082 10.876 93.715 12.36 33.75 1.583 66.83-1.28 98.832-12.378 61.328-21.265 105.46-61.217 129.447-121.99 15.492-39.25 17.417-80.058 10.877-121.393-7.146-45.173-25.384-85.268-57.26-118.33z"
+    fill="none" />
+  <path stroke-width="1" vector-effect="non-scaling-stroke"
+    d="M512 17.482C238.886 17.482 17.482 238.886 17.482 512S238.886 1006.518 512 1006.518 1006.518 785.114 1006.518 512 785.114 17.482 512 17.482z m327.127 530.516c-18.962 47.58-50.687 84.816-92.709 113.517-43.734 29.872-92.452 46.554-144.647 53.74-66.355 9.136-131.115 0.236-195.108-17.307-12.485-3.423-24.767-7.483-37.009-11.676-4.732-1.62-5.413-1.201-5.42 3.878-0.049 33.583 0.004 67.165-0.069 100.748-0.008 3.782 1.314 5.86 5.093 7.004 7.233 2.187 14.26 5.003 20.384 9.602 3.594 2.699 6.19 5.968 5.824 10.873-0.43 5.752-3.64 8.957-9.432 8.968-19.872 0.039-39.744 0.014-59.617 0.014-19.41 0.006-38.82-0.103-58.23 0.082-4.736 0.045-8.025-1.288-9.814-5.842-1.798-4.575-0.752-8.45 2.566-11.847 5.698-5.833 13.181-8.404 20.593-11 7.625-2.668 7.8-0.933 7.8-10.86-0.02-151.738-0.02-303.476-0.076-455.215-0.001-2.353 1.227-5.726-1.09-6.829-2.297-1.094-4.167 1.976-6 3.442-22.584 18.058-43.474 37.783-60.052 61.694-0.527 0.76-1.03 1.537-1.588 2.273-5.878 7.727-9.827 15.6-5.76 25.855 1.946 4.91 1.707 10.59 0.282 15.968-0.937 3.532-2.436 6.64-5.44 8.865-5.016 3.718-8.469 3.16-11.788-2.085-12.847-20.308-25.59-40.682-38.532-60.928-2.117-3.313-1.999-5.634 0.715-8.492 17.758-18.692 37.058-35.675 57.256-51.635 51.148-40.413 106.911-72.725 168.335-94.902 40.036-14.455 81.234-23.72 123.709-27.312 49.596-4.194 98.488-0.765 146.365 13.295 50.8 14.919 95.584 40.146 131.966 79.103 36.324 38.896 58.162 84.856 65.163 137.62 5.425 40.866 1.694 80.839-13.67 119.389z"
+    fill="none" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" 
+class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
+  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+  <path
+    d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#terms">Terms</a>
+      <ol>
+        <li><a href="#incremental-vs-iterative">Incremental vs Iterative</a></li>
+      </ol>
+    </li>
+    <li><a href="#model-type">Model type</a></li>
+    <li><a href="#waterfall-model">Waterfall Model</a></li>
+    <li><a href="#v-model">V-Model</a></li>
+    <li><a href="#sashimi-model">Sashimi Model</a></li>
+    <li><a href="#incremental-model">Incremental Model</a></li>
+    <li><a href="#unified-process-framework">Unified Process Framework</a></li>
+    <li><a href="#spiral-model">Spiral Model</a></li>
+    <li><a href="#agile">Agile</a></li>
+    <li><a href="#kanban">Kanban</a></li>
+    <li><a href="#lean-startup">Lean Startup</a></li>
+    <li><a href="#scrum">Scrum</a>
+      <ol>
+        <li><a href="#3-5-3-structure">3-5-3 Structure</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/software-engineering/" style="background-color: #8a1337; color: #fff;">
+                Software Engineering
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/software-engineering.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/software-development-model/">Software Development Model</a>
+        </h2>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jun 27, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    3 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="terms">Terms</h2>
+<h3 id="incremental-vs-iterative">Incremental vs Iterative</h3>
+<ul>
+<li>Incremental
+<ul>
+<li>隨時間一步一步完成</li>
+</ul>
+</li>
+<li>Iterative
+<ul>
+<li>建立 prototype，然後不斷改進</li>
+</ul>
+</li>
+</ul>
+<h2 id="model-type">Model type</h2>
+<ul>
+<li>Linear/Predictive
+<ul>
+<li>有類似的專案經驗</li>
+<li>有明確的流程</li>
+<li>沒什麼可以改動的空間</li>
+</ul>
+</li>
+<li>Flexible/Adaptive
+<ul>
+<li>專案屬於 new idea</li>
+<li>專案很有可能隨時間改變</li>
+</ul>
+</li>
+</ul>
+<h2 id="waterfall-model">Waterfall Model</h2>
+<ul>
+<li>像瀑布一樣，一個階段完成後才能進行下一個階段</li>
+<li>Requirement -&gt; Design -&gt; Implementation -&gt; Testing -&gt; Deployment -&gt; Maintenance</li>
+<li>非常 predictive，沒有彈性</li>
+<li>如果在 Testing 發現重大問題，可能要從 Requirement 重新開始</li>
+<li>隨著進度推進，fix 成本增長很快</li>
+<li>每一步都得考慮周密</li>
+<li>用戶很晚才能看到結果</li>
+</ul>
+<h2 id="v-model">V-Model</h2>
+<ul>
+<li>基於 Waterfall Model 的改進</li>
+<li>V 的左半邊
+<ul>
+<li>Requirement -&gt; Design -&gt; Architecture -&gt; Module -&gt; Implementation</li>
+</ul>
+</li>
+<li>V 的右半邊
+<ul>
+<li>Unit Testing -&gt; Integration Testing -&gt; System Testing -&gt; Acceptance Testing</li>
+<li>四個 testing 和左半邊的四個階段一一對應</li>
+</ul>
+</li>
+<li>強調開發和測試並行</li>
+</ul>
+<h2 id="sashimi-model">Sashimi Model</h2>
+<ul>
+<li>在大公司，不同 phase 常常有專人負責</li>
+<li>前面瀑布式開發，會讓後面 phase 的人閒置</li>
+<li>讓不同 phase 的人在某些時間點同時工作</li>
+<li>可能會導致錯誤還有 redesign</li>
+</ul>
+<h2 id="incremental-model">Incremental Model</h2>
+<ul>
+<li>在整個開發過程中多次完成軟體開發過程</li>
+<li>每個子開發過程都有明確的目標</li>
+</ul>
+<h2 id="unified-process-framework">Unified Process Framework</h2>
+<ul>
+<li>Phase
+<ul>
+<li>Inception
+<ul>
+<li>確定可行性</li>
+<li>Deliverable
+<ul>
+<li>Lifecycle goals</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Elaboration
+<ul>
+<li>細化階段</li>
+<li>Deliverable
+<ul>
+<li>Software architecture plans &amp; prototypes</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Construction
+<ul>
+<li>基於 elaboration 階段的基礎改進</li>
+<li>用多個 iteration 來完成</li>
+<li>Deliverable
+<ul>
+<li>持續改進軟體</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Transition
+<ul>
+<li>交付系統</li>
+<li>Deliverable
+<ul>
+<li>Final Product</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>優點
+<ul>
+<li>Adaptive</li>
+</ul>
+</li>
+<li>缺點
+<ul>
+<li>複雜</li>
+<li>對小專案來說太過頭</li>
+</ul>
+</li>
+</ul>
+<h2 id="spiral-model">Spiral Model</h2>
+<ul>
+<li>4 個象限
+<ul>
+<li>Determine objectives</li>
+<li>Identify and resolve risks</li>
+<li>Developments and test</li>
+<li>Plan the next iteration</li>
+</ul>
+</li>
+<li>在 4 個階段不斷輪替</li>
+<li>優點
+<ul>
+<li>adaptive</li>
+<li>risk-focused</li>
+</ul>
+</li>
+<li>缺點
+<ul>
+<li>複雜</li>
+<li>需要 stackholder 持續參與</li>
+</ul>
+</li>
+</ul>
+<h2 id="agile">Agile</h2>
+<ul>
+<li>一種思維方法，不是模型</li>
+<li>Manifesto
+<ul>
+<li>Individuals and interactions over processes and tools
+<ul>
+<li>如果一組人決定要用一組新的工具，那他們應該有更高的優先權</li>
+<li>過往的做法可能偏向使用過的工具</li>
+</ul>
+</li>
+<li>Working software over comprehensive documentation
+<ul>
+<li>document 很重要，但是只有大量的 document 沒辦法讓客戶給出反饋</li>
+</ul>
+</li>
+<li>Customer collaboration over contract negotiation
+<ul>
+<li>強調和客戶的合作，而不是只在意合同上的項目</li>
+</ul>
+</li>
+<li>Responding to change over following a plan</li>
+</ul>
+</li>
+<li>瀑布式開發的缺點
+<ul>
+<li>現在的技術環境變化太快，Agile 希望在開發過程中能夠快速適應
+<ul>
+<li>傳統的開發方法考量到金錢損失，不太可能辦到。但透過小的 increment，可以在每個 increment 中朝正確的方向前進</li>
+</ul>
+</li>
+<li>軟體系統不可能被 100% 預測</li>
+<li>系統可能不符合用戶要求</li>
+<li>市場變化很快，Agile 可以在短時間內推出最小可行產品，先行推向市場</li>
+</ul>
+</li>
+</ul>
+<h2 id="kanban">Kanban</h2>
+<ul>
+<li>會存在多張卡片</li>
+<li>可以直觀看到某個欄位是否堆積大量工作</li>
+<li>Properties
+<ul>
+<li>Visualize workflow</li>
+<li>Limit work in progress</li>
+<li>Manage flow</li>
+<li>Make process policies explicit</li>
+<li>Improve collaboratively</li>
+</ul>
+</li>
+<li>Principles
+<ul>
+<li>Start with what you do now</li>
+<li>Agree to pursue incremental, evolutionary change
+<ul>
+<li>並非試著立刻改變所有事情</li>
+</ul>
+</li>
+<li>Respect the current process, roles, responsibilities &amp; titles</li>
+<li>Encourage acts of leadership at all levels
+<ul>
+<li>這裡的 leadership 不一定指領導他人，也可以是激勵他人</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>欄位
+<ul>
+<li>Backlog</li>
+<li>Analyze</li>
+<li>Develop</li>
+<li>Test</li>
+<li>Release</li>
+</ul>
+</li>
+</ul>
+<h2 id="lean-startup">Lean Startup</h2>
+<ul>
+<li>實驗性的生產方法</li>
+<li>盡快生出產品，看看市場反應</li>
+<li>loop step
+<ul>
+<li>learn
+<ul>
+<li>assumption</li>
+</ul>
+</li>
+<li>build
+<ul>
+<li>experiment</li>
+</ul>
+</li>
+<li>measure
+<ul>
+<li>metrics</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>example:
+<ul>
+<li>zappos
+<ul>
+<li>假設人們會上網買鞋</li>
+<li>拍鞋子照片，建立網站丟上去</li>
+<li>看有多少人會買</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="scrum">Scrum</h2>
+<ul>
+<li>可以利用 back-to-back testing 來確認沒有弄壞之前 sprint 的功能</li>
+<li>roles
+<ul>
+<li>Product Owner
+<ul>
+<li>決定要用什麼方式完成什麼事</li>
+<li>與外部世界溝通的人，和利害關係人溝通</li>
+<li>目標
+<ul>
+<li>最大化產品價值
+<ul>
+<li>價低成本、提高收益</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>職責
+<ul>
+<li>維護 open, healthy product backlog</li>
+<li>回答產品相關問題</li>
+<li>管理預算、release schedule</li>
+<li>確保團隊價值，找出問題</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Scrum Master
+<ul>
+<li>確保團隊遵守 Scrum 的規則，促成會議、解決衝突</li>
+<li>Servant Leader
+<ul>
+<li>有一點領導，但和大家平等。促成團隊工作而不是指揮別人</li>
+</ul>
+</li>
+<li>目標
+<ul>
+<li>促成 Daily Standup</li>
+<li>移除障礙</li>
+<li>確保大家的心情</li>
+<li>確保 Scurm values</li>
+<li>團隊的調解人</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Dev Team
+<ul>
+<li>包含工程師、設計師等等</li>
+<li>目標
+<ul>
+<li>和 Product Owner 合作，create user stories</li>
+<li>寫 code 和測試，確保符合預期</li>
+<li>research, design, prototype</li>
+<li></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>流程
+<ul>
+<li>product backlog
+<ul>
+<li>待完成的事情</li>
+<li>可能的欄位
+<ul>
+<li>優先度</li>
+<li>預計花費時間</li>
+<li>誰來執行</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>spring planning meeting
+<ul>
+<li>決定要在這個 sprint 完成的事情</li>
+<li>時間點會是 sprint 的第一天</li>
+<li>目標
+<ul>
+<li>把 product backlog 轉換成 sprint backlog</li>
+</ul>
+</li>
+<li>職責
+<ul>
+<li>Scrum Master
+<ul>
+<li>促成會議</li>
+<li>確保和準備會議地點</li>
+<li>確保會議有在持續推進，好達成 timebox
+<ul>
+<li>如果有講太久的部分，可能稍後再排單獨會議</li>
+</ul>
+</li>
+<li>確保一切都和 sprint goal 一致</li>
+</ul>
+</li>
+<li>Product Owner
+<ul>
+<li>準備好 product backlog</li>
+<li>澄清 product backlog 的細節</li>
+<li>要準備好描述 acceptance criteria
+<ul>
+<li>比如搜索速度要多快？</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Dev Team
+<ul>
+<li>協助判斷哪些任務可達成且符合 sprint goal</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>sprint backlog
+<ul>
+<li>這個 sprint 要完成的事情</li>
+<li>開發人員去自己選擇要做的事情</li>
+<li>然後就會花 1-4 週完成一個 sprint</li>
+</ul>
+</li>
+<li>Daily Scrum (Daily standup)
+<ul>
+<li>不該花太久，比如最多 15 分鐘</li>
+<li>職責
+<ul>
+<li>Scrum Master
+<ul>
+<li>確保會議的進行，確保 timebox</li>
+<li>紀錄關於目前障礙的筆記，規劃時間移除</li>
+</ul>
+</li>
+<li>Dev Team
+<ul>
+<li>回答問題
+<ul>
+<li>做了什麼</li>
+<li>計畫做什麼</li>
+<li>遇到什麼問題</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>sprint review
+<ul>
+<li>找 stakeholders 來看看這個 sprint 的成果</li>
+<li>秀出 product increment
+<ul>
+<li>product increment 意味著他本身就是一個完成的產品，經過測試且準備 release</li>
+</ul>
+</li>
+<li>任務
+<ul>
+<li>review sprint result
+<ul>
+<li>回顧那些任務做得好和不好
+<ul>
+<li>如果有事情沒完成，要解釋為什麼推遲</li>
+</ul>
+</li>
+<li>這個 sprint 有沒有達到目標</li>
+</ul>
+</li>
+<li>Discuss and demonstrate work
+<ul>
+<li>product owner 全程記錄筆記</li>
+</ul>
+</li>
+<li>Update status of the project</li>
+<li>Collaborate on the plan ahead</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>sprint retrospective
+<ul>
+<li>團隊討論這個 sprint 的問題，並且改進</li>
+<li>常見方法
+<ul>
+<li>start-stop-continue
+<ul>
+<li>每個人說出一個想開始做的事情，一個想停止做的事情，一個想繼續做的事情</li>
+<li>可以保持匿名</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-5-3-structure">3-5-3 Structure</h3>
+<ul>
+<li>3 artifacts
+<ul>
+<li>Sprint Backlog</li>
+<li>Product Backlog</li>
+<li>Product Increment</li>
+</ul>
+</li>
+<li>5 events
+<ul>
+<li>Sprint Planning</li>
+<li>Daily Scrum</li>
+<li>The Sprint</li>
+<li>Sprint Review</li>
+<li>Sprint Retrospective</li>
+</ul>
+</li>
+<li>3 roles
+<ul>
+<li>Product Owner</li>
+<li>Scrum Master</li>
+<li>Dev Team</li>
+</ul>
+</li>
+<li>可以再加上
+<ul>
+<li>5 values
+<ul>
+<li>Focus</li>
+<li>Respect</li>
+<li>Commitment</li>
+<li>Courage</li>
+<li>Openness</li>
+</ul>
+</li>
+<li>3 pillars
+<ul>
+<li>Transparency</li>
+<li>Inspection</li>
+<li>Adaptation</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/software-engineering/">software-engineering</a>
+        
+            <a href="/Blog/tags/software-design/">software-design</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/testing/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Testing</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/design/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Design</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/requirements-specifications/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Requirements &amp; Specifications</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E8%A8%AD%E8%A8%88%E6%A8%A1%E5%BC%8F-desing-pattern/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">設計模式 Desing Pattern</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88-domain-driven-design/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">領域驅動設計 Domain-Driven Design</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>
