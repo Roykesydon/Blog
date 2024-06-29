@@ -7,7 +7,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.7aa5a9a7ebbbeb6218dff3101ef5f9aa6dd04fe28034a6f45b9552c4f2a11e94.css"><meta property='og:title' content='Spring Boot 筆記'>
+<link rel="stylesheet" href="/Blog/scss/style.min.7104c229f68d2bdefecd049e318ddf7f4d8f8670fcfcf1a5f42b8d2cebcf821d.css"><meta property='og:title' content='Spring Boot 筆記'>
 <meta property='og:description' content='Spring IoC Invocation of Constructor 把物件交給 Spring 管理 loose coupling Dependency Injection Bean 給 Spring 管理的物件 創建方法 @Component 創建出的 Bean 名字是 class 的開頭轉小寫 注入方法 @Autowired 種類 field injection spring boot 會先建立所有 component，在逐一注入，使元件可能短暫處於初始化不完整狀態 constructor injection 建立 bean 時就注入 確保 component 被使用時是處於完整的狀態 有利於 unit test，因為可以把設計好的 mock bean 從 constructor 傳入 spring 建議使用 constructor injection 限制 該 Class 也得是 Bean 會根據類型注入 bean 如果同時有多個同類型的 bean，會報錯，可以用 @Qualifier 指定要注入的 bean 名稱 @Qualifier 指定要注入的 bean 名稱 @Primary 如果有多個同類型的 bean，會優先注入這個 bean 初始化 @PostConstruct 創建 bean 後，就會執行這個方法 限制 必須是 public void 不能有參數 AOP Aspect Oriented Programming 透過 Aspect 統一處理不同方法的共同邏輯 要導入 aop 的 starter 只有 Bean 才能設置 @Aspect Annotation @Aspect 這個 class 是一個切面 @Before 加上切入點，就可以在切入點 (Pointcut) 的方法執行前執行 @After 在方法之後執行 @Around 在方法之前和之後都執行 常用的功能都已經被封裝好了，開發較少用到 AOP 特性 Starter Spring Boot Starters 官方的 starter 命名是 spring-boot-starter-* 第三方的 starter 命名是 *-spring-boot-starter'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -381,7 +381,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     
     <header class="article-category">
         
-            <a href="/Blog/categories/full-stack/" style="background-color: #131313; color: #43c559;">
+            <a href="/Blog/categories/full-stack/" style="background-color: #f79e39; color: #ffffff;">
                 Full Stack
             </a>
         
