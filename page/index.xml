@@ -6,10 +6,10 @@
         <description>Recent content in Pages on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 09 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/page/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 21 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/page/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>About</title>
         <link>https://roykesydon.github.io/Blog/about/</link>
-        <pubDate>Tue, 09 May 2023 00:00:00 +0000</pubDate>
+        <pubDate>Sun, 21 Jul 2024 00:00:00 +0000</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/about/</guid>
         <description>&lt;!-- raw HTML omitted --&gt;
@@ -24,22 +24,22 @@
 &lt;h2 id=&#34;awards-and-examination&#34;&gt;Awards and Examination&lt;/h2&gt;
 &lt;dl&gt;
 &lt;dt&gt;2020 / 11&lt;/dt&gt;
-&lt;dd&gt;Silver Medal (Rank: 13/101), The 2020 ICPC Asia Taipei-Hsinchu Site Programming Contest&lt;/dd&gt;
-&lt;dt&gt;2021 / 12&lt;/dt&gt;
-&lt;dd&gt;solved: 7/7 problems (Rank: 2/2459), 大學程式能力檢定 (Collegiate Programming Examination, CPE)&lt;/dd&gt;
-&lt;dt&gt;2021 / 10&lt;/dt&gt;
-&lt;dd&gt;$4^{th}$ place, 2021 National Collegiate Programming Contest (NCPC)&lt;/dd&gt;
-&lt;dt&gt;2020 / 12&lt;/dt&gt;
-&lt;dd&gt;$3^{rd}$ place, 2020 中區程式設計競賽 (Central Collegiate Programming Contest, CCPC)&lt;/dd&gt;
-&lt;dt&gt;2021 / 12&lt;/dt&gt;
-&lt;dd&gt;$2^{nd}$ place, 2021 東華杯程式設計競賽大專組 ( National Dong Hwa University Programming Contest)&lt;/dd&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;Silver Medal (Rank: 13/101)&lt;/strong&gt;&lt;/strong&gt;, The 2020 ICPC Asia Taipei-Hsinchu Site Programming Contest&lt;/dd&gt;
 &lt;dt&gt;2024 / 01&lt;/dt&gt;
-&lt;dd&gt;$1^{st}$ place, 2024 TSMC IT CareerHack (廠務知識機器人)&lt;/dd&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;$\mathbf{1^{st}}$ place&lt;/strong&gt;&lt;/strong&gt;, 2024 TSMC IT CareerHack (廠務知識機器人)&lt;/dd&gt;
+&lt;dt&gt;2021 / 12&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;solved: 7/7 problems (Rank: 2/2459)&lt;/strong&gt;&lt;/strong&gt;, 大學程式能力檢定 (Collegiate Programming Examination, CPE)&lt;/dd&gt;
+&lt;dt&gt;2021 / 10&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;$\mathbf{4^{th}}$ place&lt;/strong&gt;&lt;/strong&gt;, 2021 National Collegiate Programming Contest (NCPC)&lt;/dd&gt;
+&lt;dt&gt;2020 / 12&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;$\mathbf{3^{rd}}$ place&lt;/strong&gt;&lt;/strong&gt;, 2020 中區程式設計競賽 (Central Collegiate Programming Contest, CCPC)&lt;/dd&gt;
+&lt;dt&gt;2021 / 12&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;$\mathbf{2^{nd}}$ place&lt;/strong&gt;&lt;/strong&gt;, 2021 東華杯程式設計競賽大專組 ( National Dong Hwa University Programming Contest)&lt;/dd&gt;
 &lt;/dl&gt;
 &lt;h2 id=&#34;skills&#34;&gt;Skills&lt;/h2&gt;
 &lt;dl&gt;
 &lt;dt&gt;Language&lt;/dt&gt;
-&lt;dd&gt;C、C++、Python、Javascript、Java、Swift、SCSS&lt;/dd&gt;
+&lt;dd&gt;C、C++、Python、Javascript、Java、Swift&lt;/dd&gt;
 &lt;dt&gt;Framework&lt;/dt&gt;
 &lt;dd&gt;Vue、Pytorch、Flask、FastAPI、Express.js&lt;/dd&gt;
 &lt;dt&gt;Database&lt;/dt&gt;
@@ -50,20 +50,20 @@
 &lt;h2 id=&#34;experience&#34;&gt;Experience&lt;/h2&gt;
 &lt;dl&gt;
 &lt;dt&gt;2020-2023&lt;/dt&gt;
-&lt;dd&gt;*&lt;strong&gt;*Adjunct research assistants**&lt;/strong&gt;; Advanced Computation Laboratory&lt;/dd&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;Adjunct research assistants&lt;/strong&gt;&lt;/strong&gt;; Advanced Computation Laboratory&lt;/dd&gt;
 &lt;/dl&gt;
 &lt;h2 id=&#34;working-experience&#34;&gt;Working Experience&lt;/h2&gt;
 &lt;dl&gt;
-&lt;dt&gt;Real-time Fishing Vessel Detection at the Fishing Port&lt;/dt&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;Real-time Fishing Vessel Detection at the Fishing Port&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
 &lt;dd&gt;Multiple cameras are installed at the fishing port to obtain the camera images through RTSP and achieve the automated counting of fishing vessels at the port. The backend integrates YOLOv4, FastAPI, and some image processing techniques to recognize the received camera images. The frontend uses Vue as framework to provide detection results and harbor data for the past 48 hours.&lt;/dd&gt;
-&lt;dt&gt;Fisherman Detection on Fishing Boats&lt;/dt&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;Fisherman Detection on Fishing Boats&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
 &lt;dd&gt;The goal is to automatically identify the times when fishermen appear in the ts video files from the cameras on the fishing boats. This makes it easier for other researchers to obtain clips of fishing operations. Due to the clothing worn by fishermen is different from what is commonly worn by the general public, and the difficulty of obtaining training data, a pre-trained LightweightOpenPose model is used in combination with various filtering methods and OCR to complete the task.&lt;/dd&gt;
-&lt;dt&gt;Geospatial Data Visualization&lt;/dt&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;Geospatial Data Visualization&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
 &lt;dd&gt;The original map production process is streamlined by using PyQGIS to write custom scripts, which results in a significant reduction of repetitive work in map production.&lt;/dd&gt;
 &lt;/dl&gt;
 &lt;h2 id=&#34;side-projects&#34;&gt;Side Projects&lt;/h2&gt;
 &lt;dl&gt;
-&lt;dt&gt;RoyKesyShop&lt;/dt&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;RoyKesyShop&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
 &lt;dd&gt;This is an online clothing store that uses JWT to verify user permissions. Nginx is responsible for reverse proxying and web serving, while MariaDB is used for replication in a master-slave architecture. Finally, Docker is used to package the above components, along with the frontend and backend, into separate containers.
 &lt;p&gt;&lt;img src=&#34;https://github.com/Roykesydon/RoyKesyShop/blob/main/demo_pictures/home_dark.png?raw=true&#34;
 	
@@ -82,7 +82,7 @@
 	
 &gt;&lt;/p&gt;
 &lt;/dd&gt;
-&lt;dt&gt;Roykestereo&lt;/dt&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;Roykestereo&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
 &lt;dd&gt;This is a cloud-based music player that offers the ability to upload local music, as well as download and listen to music from the cloud. The backend uses Fourier transform and other processing techniques to compute the spectrum of music at each moment. In addition to basic features, there is also a chat room function supported by socket.io, and MongoDB is used for data access.
 &lt;p&gt;&lt;img src=&#34;https://github.com/Roykesydon/Roykestereo/blob/main/demo/home.png?raw=true&#34;
 	
@@ -101,7 +101,7 @@
 	
 &gt;&lt;/p&gt;
 &lt;/dd&gt;
-&lt;dt&gt;StellarTrack&lt;/dt&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;StellarTrack&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
 &lt;dd&gt;This is a web frontend project without a backend, made using Three.js and Bootstrap, displaying the changing paths of the sun&amp;rsquo;s rotation in different latitudes and regions
 &lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/about/StellarTrack-1.jpg&#34;
 	
@@ -120,7 +120,7 @@
 	
 &gt;&lt;/p&gt;
 &lt;/dd&gt;
-&lt;dt&gt;WeAreFamily&lt;/dt&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;WeAreFamily&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
 &lt;dd&gt;This is a platform that allows people to find others to crowdfund with. The frontend is mainly composed of JavaFX, while the backend uses Flask as the framework. Users can post to find others to crowdfund with, or join other people&amp;rsquo;s posts. Users can also send and receive chat messages in real time, with notifications appearing on their operating system.
 &lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/about/WAF-1.jpg&#34;
 	
@@ -163,6 +163,11 @@ width: auto !important;
 }
 &lt;/style&gt;
 
+&lt;p&gt;2024 / 05 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/118980095&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Silver Wolf&lt;/a&gt;&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/GOQKXHsaUAE7fXK?format=jpg&amp;name=4096x4096&#34; alt=&#34;&#34;&gt;
 
 &lt;p&gt;2024 / 02 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/116081526&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;楓丹的預言&lt;/a&gt;&lt;/p&gt;

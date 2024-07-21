@@ -217,8 +217,7 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;
-&lt;h2 id=&#34;ex-windowsshellreverse_http&#34;&gt;ex: windows/shell/reverse_http&lt;/h2&gt;
+&lt;li&gt;ex: windows/shell/reverse_http
 &lt;ul&gt;
 &lt;li&gt;透過 http 連接&lt;/li&gt;
 &lt;/ul&gt;
@@ -262,6 +261,32 @@
 &lt;li&gt;在 sandbox 中執行，看他的行為&lt;/li&gt;
 &lt;li&gt;要幫程式增加安全的操作&lt;/li&gt;
 &lt;li&gt;延遲 Payload 執行的時間&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;insecure-session-management&#34;&gt;Insecure session management&lt;/h2&gt;
+&lt;h3 id=&#34;csrf-cross-site-request-forgery&#34;&gt;CSRF (Cross Site Request Forgery)&lt;/h3&gt;
+&lt;h3 id=&#34;防禦方法-4&#34;&gt;防禦方法&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Anti CSRF token
+&lt;ul&gt;
+&lt;li&gt;生表單的時候也生一個 token，並記住，request 要帶上這個 token&lt;/li&gt;
+&lt;li&gt;unpredictable&lt;/li&gt;
+&lt;li&gt;can&amp;rsquo;t be reused&lt;/li&gt;
+&lt;li&gt;前後端分離
+&lt;ul&gt;
+&lt;li&gt;後端生
+&lt;ul&gt;
+&lt;li&gt;CORS 不要接受所有來源，讓前端取得 token&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;前端生
+&lt;ul&gt;
+&lt;li&gt;要發 request 的時候把 cookie 改成和 token 一樣的值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
