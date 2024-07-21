@@ -7,7 +7,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/web-security/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.7104c229f68d2bdefecd049e318ddf7f4d8f8670fcfcf1a5f42b8d2cebcf821d.css"><meta property='og:title' content='Web Security'>
+<link rel="stylesheet" href="/Blog/scss/style.min.0807c95cb221959004f1db9ae50211f7da843178159ad169302c2faec8fba7bd.css"><meta property='og:title' content='Web Security'>
 <meta property='og:description' content='Information Gathering Whois Lookup get owner information of a domain Netcraft site report get technology stack of a website Robtex DNS Lookup get information of a domain Exploit database search for exploits knockpy subdomain enumeration dirb web content scanner 搜索隱藏的檔案 maltego data mining tool 有大量套件，可以用來搜集各類資訊，而且有視覺化 File Uploaded Vulnerability weevely web shell 可以遠端控制 有些情況下就算上傳的檔案是 filename.php.jpg 依然可以執行 Burp proxy intercept request change request 防禦方法 不要允許使用者上傳任何可執行的檔案 檢查 file type 和 file extension file type 指的是 header 的 Content-Type 用某些套件分析檔案，並重新創建和重新命名檔案 Code Execution Vulnerability 允許攻擊者執行 OS command 防禦方法 不要使用危險的 function 透過 filter 檢查輸入 比如利用 regex File Inclusion Vulnerability LFI (Local File Inclusion) Vulnerability 攻擊者可以讀取伺服器上的任何檔案（包含 /var/www 外的檔案） 透過輸入讀其他檔案的時候沒有檢查檔案路徑 可以用來讀 /proc/self/environ，可能會存在一些可以透過 request 修改的變數。植入PHP 程式碼便有可能被執行 RFI (Remote File Inclusion) Vulnerability 和 LFI 類似，但是檔案來自外部 可以在當前 server 執行其他 server 的 php 程式碼 可以在其他 server 以 .'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/web-security/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -60,7 +60,7 @@
                             
                             
                                 
-                                <img src="/Blog/avatar_hucf7329276f6da91af484672e99c97ec6_973602_300x0_resize_q75_box.jpg" width="300"
+                                <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
                                     height="300" class="site-logo" loading="lazy" alt="Avatar">
                             
                         
@@ -323,10 +323,15 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
         <li><a href="#防禦方法-3">防禦方法</a></li>
       </ol>
     </li>
-    <li><a href="#backdoor">Backdoor</a></li>
-    <li><a href="#ex-windowsshellreverse_http">ex: windows/shell/reverse_http</a>
+    <li><a href="#backdoor">Backdoor</a>
       <ol>
         <li><a href="#anti-virus">Anti-Virus</a></li>
+      </ol>
+    </li>
+    <li><a href="#insecure-session-management">Insecure session management</a>
+      <ol>
+        <li><a href="#csrf-cross-site-request-forgery">CSRF (Cross Site Request Forgery)</a></li>
+        <li><a href="#防禦方法-4">防禦方法</a></li>
       </ol>
     </li>
   </ol>
@@ -622,8 +627,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </li>
 </ul>
 </li>
-<li>
-<h2 id="ex-windowsshellreverse_http">ex: windows/shell/reverse_http</h2>
+<li>ex: windows/shell/reverse_http
 <ul>
 <li>透過 http 連接</li>
 </ul>
@@ -667,6 +671,32 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>在 sandbox 中執行，看他的行為</li>
 <li>要幫程式增加安全的操作</li>
 <li>延遲 Payload 執行的時間</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="insecure-session-management">Insecure session management</h2>
+<h3 id="csrf-cross-site-request-forgery">CSRF (Cross Site Request Forgery)</h3>
+<h3 id="防禦方法-4">防禦方法</h3>
+<ul>
+<li>Anti CSRF token
+<ul>
+<li>生表單的時候也生一個 token，並記住，request 要帶上這個 token</li>
+<li>unpredictable</li>
+<li>can&rsquo;t be reused</li>
+<li>前後端分離
+<ul>
+<li>後端生
+<ul>
+<li>CORS 不要接受所有來源，讓前端取得 token</li>
+</ul>
+</li>
+<li>前端生
+<ul>
+<li>要發 request 的時候把 cookie 改成和 token 一樣的值</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

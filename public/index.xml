@@ -6,7 +6,320 @@
         <description>Recent content on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Fri, 28 Jun 2024 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 21 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>About</title>
+        <link>https://roykesydon.github.io/Blog/about/</link>
+        <pubDate>Sun, 21 Jul 2024 00:00:00 +0000</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/about/</guid>
+        <description>&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;education&#34;&gt;Education&lt;/h2&gt;
+&lt;dl&gt;
+&lt;dt&gt;2023-2025 (expected)&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;MSc, Computer Science and Information Engineering&lt;/strong&gt;&lt;/strong&gt;; National Cheng Kung University&lt;/dd&gt;
+&lt;dt&gt;2019-2023&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;BSc, Computer Science and Engineering&lt;/strong&gt;&lt;/strong&gt;; National Taiwan Ocean University&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;h2 id=&#34;awards-and-examination&#34;&gt;Awards and Examination&lt;/h2&gt;
+&lt;dl&gt;
+&lt;dt&gt;2020 / 11&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;Silver Medal (Rank: 13/101)&lt;/strong&gt;&lt;/strong&gt;, The 2020 ICPC Asia Taipei-Hsinchu Site Programming Contest&lt;/dd&gt;
+&lt;dt&gt;2024 / 01&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;$\mathbf{1^{st}}$ place&lt;/strong&gt;&lt;/strong&gt;, 2024 TSMC IT CareerHack (廠務知識機器人)&lt;/dd&gt;
+&lt;dt&gt;2021 / 12&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;solved: 7/7 problems (Rank: 2/2459)&lt;/strong&gt;&lt;/strong&gt;, 大學程式能力檢定 (Collegiate Programming Examination, CPE)&lt;/dd&gt;
+&lt;dt&gt;2021 / 10&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;$\mathbf{4^{th}}$ place&lt;/strong&gt;&lt;/strong&gt;, 2021 National Collegiate Programming Contest (NCPC)&lt;/dd&gt;
+&lt;dt&gt;2020 / 12&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;$\mathbf{3^{rd}}$ place&lt;/strong&gt;&lt;/strong&gt;, 2020 中區程式設計競賽 (Central Collegiate Programming Contest, CCPC)&lt;/dd&gt;
+&lt;dt&gt;2021 / 12&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;$\mathbf{2^{nd}}$ place&lt;/strong&gt;&lt;/strong&gt;, 2021 東華杯程式設計競賽大專組 ( National Dong Hwa University Programming Contest)&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;h2 id=&#34;skills&#34;&gt;Skills&lt;/h2&gt;
+&lt;dl&gt;
+&lt;dt&gt;Language&lt;/dt&gt;
+&lt;dd&gt;C、C++、Python、Javascript、Java、Swift&lt;/dd&gt;
+&lt;dt&gt;Framework&lt;/dt&gt;
+&lt;dd&gt;Vue、Pytorch、Flask、FastAPI、Express.js&lt;/dd&gt;
+&lt;dt&gt;Database&lt;/dt&gt;
+&lt;dd&gt;MariaDB、MongoDB、Redis&lt;/dd&gt;
+&lt;dt&gt;Others&lt;/dt&gt;
+&lt;dd&gt;Git、Docker、Node.js&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;h2 id=&#34;experience&#34;&gt;Experience&lt;/h2&gt;
+&lt;dl&gt;
+&lt;dt&gt;2020-2023&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;Adjunct research assistants&lt;/strong&gt;&lt;/strong&gt;; Advanced Computation Laboratory&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;h2 id=&#34;working-experience&#34;&gt;Working Experience&lt;/h2&gt;
+&lt;dl&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;Real-time Fishing Vessel Detection at the Fishing Port&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
+&lt;dd&gt;Multiple cameras are installed at the fishing port to obtain the camera images through RTSP and achieve the automated counting of fishing vessels at the port. The backend integrates YOLOv4, FastAPI, and some image processing techniques to recognize the received camera images. The frontend uses Vue as framework to provide detection results and harbor data for the past 48 hours.&lt;/dd&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;Fisherman Detection on Fishing Boats&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
+&lt;dd&gt;The goal is to automatically identify the times when fishermen appear in the ts video files from the cameras on the fishing boats. This makes it easier for other researchers to obtain clips of fishing operations. Due to the clothing worn by fishermen is different from what is commonly worn by the general public, and the difficulty of obtaining training data, a pre-trained LightweightOpenPose model is used in combination with various filtering methods and OCR to complete the task.&lt;/dd&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;Geospatial Data Visualization&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
+&lt;dd&gt;The original map production process is streamlined by using PyQGIS to write custom scripts, which results in a significant reduction of repetitive work in map production.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;h2 id=&#34;side-projects&#34;&gt;Side Projects&lt;/h2&gt;
+&lt;dl&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;RoyKesyShop&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
+&lt;dd&gt;This is an online clothing store that uses JWT to verify user permissions. Nginx is responsible for reverse proxying and web serving, while MariaDB is used for replication in a master-slave architecture. Finally, Docker is used to package the above components, along with the frontend and backend, into separate containers.
+&lt;p&gt;&lt;img src=&#34;https://github.com/Roykesydon/RoyKesyShop/blob/main/demo_pictures/home_dark.png?raw=true&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://github.com/Roykesydon/RoyKesyShop/blob/main/demo_pictures/shop_1.png?raw=true&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/dd&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;Roykestereo&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
+&lt;dd&gt;This is a cloud-based music player that offers the ability to upload local music, as well as download and listen to music from the cloud. The backend uses Fourier transform and other processing techniques to compute the spectrum of music at each moment. In addition to basic features, there is also a chat room function supported by socket.io, and MongoDB is used for data access.
+&lt;p&gt;&lt;img src=&#34;https://github.com/Roykesydon/Roykestereo/blob/main/demo/home.png?raw=true&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://github.com/Roykesydon/Roykestereo/blob/main/demo/current_playing.png?raw=true&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/dd&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;StellarTrack&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
+&lt;dd&gt;This is a web frontend project without a backend, made using Three.js and Bootstrap, displaying the changing paths of the sun&amp;rsquo;s rotation in different latitudes and regions
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/about/StellarTrack-1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/about/StellarTrack-2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/dd&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;WeAreFamily&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
+&lt;dd&gt;This is a platform that allows people to find others to crowdfund with. The frontend is mainly composed of JavaFX, while the backend uses Flask as the framework. Users can post to find others to crowdfund with, or join other people&amp;rsquo;s posts. Users can also send and receive chat messages in real time, with notifications appearing on their operating system.
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/about/WAF-1.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/about/WAF-2.jpg&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;h2 id=&#34;painting&#34;&gt;Painting&lt;/h2&gt;
+&lt;p&gt;I enjoy drawing ACG themed artwork.&lt;/p&gt;
+&lt;p&gt;My work is primarily published on Pixiv or Twitter, with occasional posts on Reddit and Bahamut as well.&lt;/p&gt;
+
+
+
+&lt;style&gt;
+.painting {
+display: block;
+margin-left: auto;
+margin-right: auto;
+height:70vh !important;
+width: auto !important;
+}
+
+@media (max-aspect-ratio: 3/4) {
+  .painting {
+    height: auto !important;
+    width: 100% !important;
+  }
+}
+&lt;/style&gt;
+
+&lt;p&gt;2024 / 05 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/118980095&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Silver Wolf&lt;/a&gt;&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/GOQKXHsaUAE7fXK?format=jpg&amp;name=4096x4096&#34; alt=&#34;&#34;&gt;
+
+&lt;p&gt;2024 / 02 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/116081526&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;楓丹的預言&lt;/a&gt;&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/GGYFRLdb0AAq0ns?format=jpg&amp;name=4096x4096&#34; alt=&#34;&#34;&gt;
+
+
+&lt;p&gt;2022 / 07 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/99421866&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Gura&lt;/a&gt;&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/FWgt23xUYAA_N2C?format=jpg&amp;name=medium&#34; alt=&#34;&#34; &gt;
+
+&lt;p&gt;2022 / 03 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/96944204&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;アスカ&lt;/a&gt;&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/FN57PJFUYAMiqpZ?format=jpg&amp;name=large&#34;
+ alt=&#34;&#34;&gt;
+
+&lt;p&gt;2021 / 08 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/92120747&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Sundae&lt;/a&gt;&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/E9NWJmpVkAQJ2Cv?format=jpg&amp;name=medium&#34;
+ alt=&#34;&#34;&gt;
+
+&lt;p&gt;2021 / 07 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/91301201&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Gawr Gura&lt;/a&gt;&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/E6eg5-vVkAA1l-X?format=jpg&amp;name=4096x4096&#34;
+ alt=&#34;&#34;&gt;
+
+&lt;p&gt;2021 / 05 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/89784207&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;CatShark&lt;/a&gt;&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/E1KCtZdVUAAxQp7?format=jpg&amp;name=4096x4096&#34;
+ alt=&#34;&#34;&gt;
+
+&lt;p&gt;2020 / 02 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/79616737&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;牧瀨紅莉栖 メイドさん&lt;/a&gt;&lt;/p&gt;
+
+
+&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/EuMTVM4VEAM9HJY?format=jpg&amp;name=4096x4096&#34;
+ alt=&#34;&#34;&gt;
+
+</description>
+        </item>
+        <item>
+        <title>Azure Devops 筆記</title>
+        <link>https://roykesydon.github.io/Blog/p/azure-devops-%E7%AD%86%E8%A8%98/</link>
+        <pubDate>Sat, 20 Jul 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/azure-devops-%E7%AD%86%E8%A8%98/</guid>
+        <description>&lt;h2 id=&#34;pipeline&#34;&gt;Pipeline&lt;/h2&gt;
+&lt;h3 id=&#34;名詞&#34;&gt;名詞&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Artifact
+&lt;ul&gt;
+&lt;li&gt;你需要用到的檔案，可能是 build 出來的檔案，或是跑測試用的專案&lt;/li&gt;
+&lt;li&gt;ex: .jar, .war&lt;/li&gt;
+&lt;li&gt;把 build 出來的檔案放到某個的資料夾，再 publish
+&lt;ul&gt;
+&lt;li&gt;可以用 copy task &amp;amp; publish task 來達成，他有提供變數 &lt;code&gt;$(Build.ArtifactStagingDirectory)&lt;/code&gt;，作為一個暫存 artifact 的地方&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;type&#34;&gt;Type&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Build pipeline&lt;/li&gt;
+&lt;li&gt;Release pipeline&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;azure-pipelinesyml&#34;&gt;azure-pipelines.yml&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;可以 create pipeline，在專案中加入該檔案，Azure DevOps 會自動偵測並執行&lt;/li&gt;
+&lt;li&gt;用於 build pipeline&lt;/li&gt;
+&lt;li&gt;trigger
+&lt;ul&gt;
+&lt;li&gt;指定哪些 branch 有 push 時，要執行 pipeline&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;variables&#34;&gt;Variables&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;可以設定變數，用在 yaml 中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;task&#34;&gt;Task&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;可以搜尋各種 task 來完成任務
+&lt;ul&gt;
+&lt;li&gt;copy files&lt;/li&gt;
+&lt;li&gt;publish build artifacts&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;release-pipeline&#34;&gt;Release pipeline&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;把 build 出來的 artifact，部署到指定的環境&lt;/li&gt;
+&lt;li&gt;artifact 上方的閃電，可以設置當有新的 artifact 時，自動觸發 release&lt;/li&gt;
+&lt;li&gt;create release
+&lt;ul&gt;
+&lt;li&gt;執行 CI/CD&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;agent-pool&#34;&gt;Agent pool&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;可以加入自己的 agent，也就是自己的 server&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;board&#34;&gt;Board&lt;/h2&gt;
+&lt;h3 id=&#34;work-item&#34;&gt;Work item&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Epic
+&lt;ul&gt;
+&lt;li&gt;一個非常 high level 的需求&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Issue
+&lt;ul&gt;
+&lt;li&gt;把 Epic 拆成小的需求&lt;/li&gt;
+&lt;li&gt;在敏捷也可以稱為 User Story&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Task
+&lt;ul&gt;
+&lt;li&gt;再把 Issue 拆成更小的需求&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;backlog&#34;&gt;Backlog&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;PO 創建的 Issue，會在 Backlog 中&lt;/li&gt;
+&lt;li&gt;可以把 Issue 拖拉到 sprint 中&lt;/li&gt;
+&lt;li&gt;可以結合 git repo，把 commit 或 branch 關聯到 Issue&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;sprint&#34;&gt;Sprint&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在這可以新增 sprint&lt;/li&gt;
+&lt;li&gt;也有 task board，列出所有 task
+&lt;ul&gt;
+&lt;li&gt;可以設置 task 的狀態以及指派人員&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>Web Security</title>
         <link>https://roykesydon.github.io/Blog/p/web-security/</link>
         <pubDate>Fri, 28 Jun 2024 00:00:17 +0800</pubDate>
@@ -217,8 +530,7 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;
-&lt;h2 id=&#34;ex-windowsshellreverse_http&#34;&gt;ex: windows/shell/reverse_http&lt;/h2&gt;
+&lt;li&gt;ex: windows/shell/reverse_http
 &lt;ul&gt;
 &lt;li&gt;透過 http 連接&lt;/li&gt;
 &lt;/ul&gt;
@@ -262,6 +574,32 @@
 &lt;li&gt;在 sandbox 中執行，看他的行為&lt;/li&gt;
 &lt;li&gt;要幫程式增加安全的操作&lt;/li&gt;
 &lt;li&gt;延遲 Payload 執行的時間&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;insecure-session-management&#34;&gt;Insecure session management&lt;/h2&gt;
+&lt;h3 id=&#34;csrf-cross-site-request-forgery&#34;&gt;CSRF (Cross Site Request Forgery)&lt;/h3&gt;
+&lt;h3 id=&#34;防禦方法-4&#34;&gt;防禦方法&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Anti CSRF token
+&lt;ul&gt;
+&lt;li&gt;生表單的時候也生一個 token，並記住，request 要帶上這個 token&lt;/li&gt;
+&lt;li&gt;unpredictable&lt;/li&gt;
+&lt;li&gt;can&amp;rsquo;t be reused&lt;/li&gt;
+&lt;li&gt;前後端分離
+&lt;ul&gt;
+&lt;li&gt;後端生
+&lt;ul&gt;
+&lt;li&gt;CORS 不要接受所有來源，讓前端取得 token&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;前端生
+&lt;ul&gt;
+&lt;li&gt;要發 request 的時候把 cookie 改成和 token 一樣的值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1226,6 +1564,52 @@
         
         <guid>https://roykesydon.github.io/Blog/p/kubernetes-%E7%AD%86%E8%A8%98/</guid>
         <description>&lt;h2 id=&#34;基礎概念&#34;&gt;基礎概念&lt;/h2&gt;
+&lt;h3 id=&#34;container-runtime&#34;&gt;Container runtime&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;CRI (Container Runtime Interface)
+&lt;ul&gt;
+&lt;li&gt;Kubernetes 用來和 container runtime 互動的 interface&lt;/li&gt;
+&lt;li&gt;任何可以實現 CRI 的 container runtime 都可以用在 Kubernetes，比如 containerd&lt;/li&gt;
+&lt;li&gt;以前有幫 Docker 特別實現一個 CRI，叫做 Docker shim&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;OCI (Open Container Initiative)
+&lt;ul&gt;
+&lt;li&gt;一個開放的 container image 和 runtime 的標準&lt;/li&gt;
+&lt;li&gt;他定義了 container image 和 container runtime 的格式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;containerd
+&lt;ul&gt;
+&lt;li&gt;一個 container runtime，docker 底下所使用的 container runtime，現在已經與 docker 單獨出來開發維護&lt;/li&gt;
+&lt;li&gt;他實現了 CRI，所以可以用在 Kubernetes&lt;/li&gt;
+&lt;li&gt;CLI
+&lt;ul&gt;
+&lt;li&gt;ctr
+&lt;ul&gt;
+&lt;li&gt;如果你只裝 containerd，沒有裝 docker，就可以用這個來操作 containerd&lt;/li&gt;
+&lt;li&gt;能用的指令比較少&lt;/li&gt;
+&lt;li&gt;For Debugging&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;nerdctl
+&lt;ul&gt;
+&lt;li&gt;docker-like 的 CLI&lt;/li&gt;
+&lt;li&gt;很多指令可以把 docker 的指令換成 nerdctl 的指令&lt;/li&gt;
+&lt;li&gt;For general purpose&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;crictl
+&lt;ul&gt;
+&lt;li&gt;用來操作符合 CRI 的 container runtime 的 CLI&lt;/li&gt;
+&lt;li&gt;For Debugging&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h3 id=&#34;node&#34;&gt;Node&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Kubernetes 集群中的一台機器&lt;/li&gt;
@@ -1276,12 +1660,19 @@
 &lt;li&gt;API Server
 &lt;ul&gt;
 &lt;li&gt;front-end of the Kubernetes&lt;/li&gt;
+&lt;li&gt;kubectl 是在和這裡溝通&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;etcd
 &lt;ul&gt;
 &lt;li&gt;distributed key-value store&lt;/li&gt;
 &lt;li&gt;會實現 lock mechanism，確保沒有 conflict&lt;/li&gt;
+&lt;li&gt;預設聽 2379 port&lt;/li&gt;
+&lt;li&gt;command line client
+&lt;ul&gt;
+&lt;li&gt;etcdctl&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;kubelet
@@ -1295,9 +1686,10 @@
 &lt;li&gt;用來 run container 的 underlying software&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Controller
+&lt;li&gt;Controller Manager
 &lt;ul&gt;
 &lt;li&gt;當 node、container、endpoint 掛掉的時候，他要負責監控和回應&lt;/li&gt;
+&lt;li&gt;底下有許多種的 Controller，負責監控還有作出應對處理&lt;/li&gt;
 &lt;li&gt;type
 &lt;ul&gt;
 &lt;li&gt;Replication Controller
@@ -1305,6 +1697,12 @@
 &lt;li&gt;確保指定數量的 Pod 在任何時間都在運行&lt;/li&gt;
 &lt;li&gt;load balancing &amp;amp; scaling&lt;/li&gt;
 &lt;li&gt;後來被 ReplicaSet 取代&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Node Controller
+&lt;ul&gt;
+&lt;li&gt;確保 node 在運行&lt;/li&gt;
+&lt;li&gt;設定固定間隔監測 node 的健康狀態&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1315,6 +1713,21 @@
 &lt;ul&gt;
 &lt;li&gt;負責處理 node 間的 distributing work&lt;/li&gt;
 &lt;li&gt;會尋找新創的 container，並分配到 node&lt;/li&gt;
+&lt;li&gt;嘗試幫每個 pod 挑選最適合的 node&lt;/li&gt;
+&lt;li&gt;two phase
+&lt;ul&gt;
+&lt;li&gt;Filter
+&lt;ul&gt;
+&lt;li&gt;檢查 node 是否符合 pod 的需求&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Rank
+&lt;ul&gt;
+&lt;li&gt;給 node 一個分數，選擇最高分的 node&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1463,6 +1876,7 @@
 &lt;ul&gt;
 &lt;li&gt;讓不同 group 的 Pod 互相通信&lt;/li&gt;
 &lt;li&gt;像一個 virtaul server，可以連接到一個或多個 Pod&lt;/li&gt;
+&lt;li&gt;每個 Node 都有一個 kube-proxy，他會檢查有沒有新的 service，並維護 iptables&lt;/li&gt;
 &lt;li&gt;type
 &lt;ul&gt;
 &lt;li&gt;NodePort
@@ -2209,7 +2623,34 @@
         <pubDate>Mon, 06 May 2024 00:00:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/</guid>
-        <description>&lt;h2 id=&#34;spring&#34;&gt;Spring&lt;/h2&gt;
+        <description>&lt;h2 id=&#34;maven&#34;&gt;Maven&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;專案管理工具&lt;/li&gt;
+&lt;li&gt;會先檢查 maven local repository 有沒有需要的 dependency，沒有的話就會去 maven central repository (remote repository) 下載&lt;/li&gt;
+&lt;li&gt;pom.xml
+&lt;ul&gt;
+&lt;li&gt;project cooridnate
+&lt;ul&gt;
+&lt;li&gt;groupId&lt;/li&gt;
+&lt;li&gt;artifactId&lt;/li&gt;
+&lt;li&gt;version&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;plugin
+&lt;ul&gt;
+&lt;li&gt;和 dependency 的差別是，是用來執行某種 task 的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;mvnw
+&lt;ul&gt;
+&lt;li&gt;maven wrapper&lt;/li&gt;
+&lt;li&gt;在沒有安裝 maven 的環境下，會下載正確的 maven 版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;spring&#34;&gt;Spring&lt;/h2&gt;
 &lt;h3 id=&#34;ioc&#34;&gt;IoC&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Invocation of Constructor
@@ -2239,15 +2680,23 @@
 &lt;ul&gt;
 &lt;li&gt;field injection
 &lt;ul&gt;
+&lt;li&gt;不太推薦，不利於 unit test&lt;/li&gt;
 &lt;li&gt;spring boot 會先建立所有 component，在逐一注入，使元件可能短暫處於初始化不完整狀態&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;constructor injection
 &lt;ul&gt;
+&lt;li&gt;最推薦&lt;/li&gt;
 &lt;li&gt;建立 bean 時就注入&lt;/li&gt;
 &lt;li&gt;確保 component 被使用時是處於完整的狀態&lt;/li&gt;
 &lt;li&gt;有利於 unit test，因為可以把設計好的 mock bean 從 constructor 傳入&lt;/li&gt;
 &lt;li&gt;spring 建議使用 constructor injection&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;setter injection
+&lt;ul&gt;
+&lt;li&gt;用 setter 來注入&lt;/li&gt;
+&lt;li&gt;創好 component 後，再注入&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -2276,7 +2725,7 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;初始化
+&lt;li&gt;Cycle life
 &lt;ul&gt;
 &lt;li&gt;@PostConstruct
 &lt;ul&gt;
@@ -2289,6 +2738,29 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;@PreDestroy
+&lt;ul&gt;
+&lt;li&gt;bean 被銷毀前執行&lt;/li&gt;
+&lt;li&gt;限制
+&lt;ul&gt;
+&lt;li&gt;必須是 public void&lt;/li&gt;
+&lt;li&gt;不能有參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Lazy Initialization
+&lt;ul&gt;
+&lt;li&gt;本來 beans 不管有沒有用都會被創建&lt;/li&gt;
+&lt;li&gt;@Lazy
+&lt;ul&gt;
+&lt;li&gt;只有在要使用時才會初始化&lt;/li&gt;
+&lt;li&gt;缺點是用 @RestController 的話，第一次 request 才會創建&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可以在 application.properties 裡設定 spring.main.lazy-initialization=true，讓所有 beans 都變成 lazy initialization&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -2325,6 +2797,20 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;常用的功能都已經被封裝好了，開發較少用到 AOP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;run-app&#34;&gt;Run app&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;use &lt;code&gt;java -jar&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mvn clean package&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;java -jar target/xxx.jar&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;use &lt;code&gt;mvn spring-boot:run&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mvn spring-boot:run&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;特性&#34;&gt;特性&lt;/h2&gt;
 &lt;h3 id=&#34;starter&#34;&gt;Starter&lt;/h3&gt;
@@ -2390,6 +2876,22 @@
 &lt;li&gt;可以在 jar 目錄下建立 config 資料夾，放配置文件，不用輸入額外的 args&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;大致分類
+&lt;ul&gt;
+&lt;li&gt;core
+&lt;ul&gt;
+&lt;li&gt;logging&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;web&lt;/li&gt;
+&lt;li&gt;security&lt;/li&gt;
+&lt;li&gt;data&lt;/li&gt;
+&lt;li&gt;actuator&lt;/li&gt;
+&lt;li&gt;integration&lt;/li&gt;
+&lt;li&gt;devtools&lt;/li&gt;
+&lt;li&gt;test&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;dependency-management&#34;&gt;Dependency Management&lt;/h3&gt;
 &lt;ul&gt;
@@ -2421,7 +2923,11 @@
 &lt;ul&gt;
 &lt;li&gt;@Configuration, @SpringBootConfiguration
 &lt;ul&gt;
-&lt;li&gt;@Bean&lt;/li&gt;
+&lt;li&gt;@Bean
+&lt;ul&gt;
+&lt;li&gt;有時候可能會想用第三方套件，此時可能不能修改套件的 code，這時候就可以用 @Configuration 來註冊 bean&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;@Controller, @Service, @Repository, @Component
@@ -2520,12 +3026,19 @@
 &lt;li&gt;每次注入都創建新的 instance&lt;/li&gt;
 &lt;li&gt;可以用 proxy.mode = ScopedProxyMode.TARGET_CLASS，會變成每次調用 method 都創建新的 instance&lt;/li&gt;
 &lt;li&gt;prototype 的元件生出後，spring 不會再管理，要自己管理生命週期，相當於 new 出物件的替代作法&lt;/li&gt;
+&lt;li&gt;預設是 lazy initialization&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;request
 &lt;ul&gt;
 &lt;li&gt;每個 request 都有一個獨立的 instance&lt;/li&gt;
 &lt;li&gt;request 指的是 HTTP request，從進入 controller 到離開 controller&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;session
+&lt;ul&gt;
+&lt;li&gt;每個 session 都有一個獨立的 instance&lt;/li&gt;
+&lt;li&gt;session 指的是 HTTP session，從進入 controller 到離開 controller&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -2584,6 +3097,55 @@
 &lt;ul&gt;
 &lt;li&gt;如果 class 只有 @ConfigurationProperties，沒有 @Component，需要加這個 annotation&lt;/li&gt;
 &lt;li&gt;用在第三方 package 上，因為默認掃不到第三方的 @component&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;java-json-data-binding&#34;&gt;Java JSON Data Binding&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;在 Java POJO 和 JSON 之間轉換&lt;/li&gt;
+&lt;li&gt;Spring 用 Jackson 來做轉換
+&lt;ul&gt;
+&lt;li&gt;Jackson 會 call getter, setter 來轉換&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;alias
+&lt;ul&gt;
+&lt;li&gt;mapping&lt;/li&gt;
+&lt;li&gt;marshalling&lt;/li&gt;
+&lt;li&gt;serialization&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;輔助工具&#34;&gt;輔助工具&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Spring boot devtools
+&lt;ul&gt;
+&lt;li&gt;Hot reload&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Spring Boot Actuator
+&lt;ul&gt;
+&lt;li&gt;公開用來 monitor 的 endpoint&lt;/li&gt;
+&lt;li&gt;endpoints
+&lt;ul&gt;
+&lt;li&gt;都有固定前綴 /actuator&lt;/li&gt;
+&lt;li&gt;/health
+&lt;ul&gt;
+&lt;li&gt;查看應用程式的 status&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;/info
+&lt;ul&gt;
+&lt;li&gt;查看應用程式的 info&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;/beans
+&lt;ul&gt;
+&lt;li&gt;查看所有 bean&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -2905,14 +3467,93 @@
 &lt;ul&gt;
 &lt;li&gt;用來存放 authentication&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h2 id=&#34;commandlinerunner&#34;&gt;CommandLineRunner&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;用來在 Spring Boot 啟動後執行一些任務&lt;/li&gt;
+&lt;li&gt;會在所有 bean 創建完後執行&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;jpa&#34;&gt;JPA&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Java Persistence API&lt;/li&gt;
+&lt;li&gt;Jakarta Persistence API&lt;/li&gt;
+&lt;li&gt;以前叫 Java Persistence API&lt;/li&gt;
+&lt;li&gt;只是一個 specifcation，提供一組 interface，需要實作&lt;/li&gt;
+&lt;li&gt;DataSource
+&lt;ul&gt;
+&lt;li&gt;用來連接資料庫&lt;/li&gt;
+&lt;li&gt;定義了連接資料庫的 info&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;EntityManager
+&lt;ul&gt;
+&lt;li&gt;用來創建 query 的主要 component&lt;/li&gt;
+&lt;li&gt;需要 DataSource&lt;/li&gt;
+&lt;li&gt;EntityManager vs JpaRepositroy
+&lt;ul&gt;
+&lt;li&gt;EntityManager
+&lt;ul&gt;
+&lt;li&gt;low-level control and flexibility&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;JpaRepository
+&lt;ul&gt;
+&lt;li&gt;high-level abstraction&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;JPQL
+&lt;ul&gt;
+&lt;li&gt;基於 Entity name 和 fields 的 query language&lt;/li&gt;
+&lt;li&gt;不是基於資料庫的 column 或 table name，是基於 Entity 的名字，要注意區別&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Data access object (DAO)
+&lt;ul&gt;
+&lt;li&gt;common pattern&lt;/li&gt;
+&lt;li&gt;需要 JPA Entity Manager&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Config
+&lt;ul&gt;
+&lt;li&gt;spring.jpa.hibernate.ddl-auto
+&lt;ul&gt;
+&lt;li&gt;create
+&lt;ul&gt;
+&lt;li&gt;每次都會重新創建新的 table&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;update
+&lt;ul&gt;
+&lt;li&gt;只會更新 table，不會刪除&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;create-drop
+&lt;ul&gt;
+&lt;li&gt;創建 table，然後刪除&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;validate
+&lt;ul&gt;
+&lt;li&gt;只會檢查 table 是否存在，不會創建&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;Annotation
 &lt;ul&gt;
 &lt;li&gt;@Entity, @Table
 &lt;ul&gt;
 &lt;li&gt;也要記得寫 getter, setter&lt;/li&gt;
+&lt;li&gt;@Entity 需要 public 或 protected 的無參數建構子&lt;/li&gt;
+&lt;li&gt;@Table
+&lt;ul&gt;
+&lt;li&gt;可選，可以設定 table 名稱&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;@Transient
@@ -2921,10 +3562,67 @@
 &lt;li&gt;可用在可以單獨計算的欄位，比如用資料庫的生日可以算出年齡&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;@Transactional&lt;/li&gt;
+&lt;li&gt;@Transactional
+&lt;ul&gt;
+&lt;li&gt;用在 method 上，代表這個 method 是一個 transaction&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;語法範例
+&lt;li&gt;@Column
+&lt;ul&gt;
+&lt;li&gt;可以設定欄位名稱&lt;/li&gt;
+&lt;li&gt;這是可選的，沒有的話就是用變數名稱&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Id
+&lt;ul&gt;
+&lt;li&gt;Primary key&lt;/li&gt;
+&lt;li&gt;@GeneratedValue
+&lt;ul&gt;
+&lt;li&gt;strategy
+&lt;ul&gt;
+&lt;li&gt;AUTO
+&lt;ul&gt;
+&lt;li&gt;根據資料庫自動選擇&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;IDENTITY
+&lt;ul&gt;
+&lt;li&gt;用資料庫的 identity column&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;SEQUENCE
+&lt;ul&gt;
+&lt;li&gt;用資料庫的 sequence&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Table
+&lt;ul&gt;
+&lt;li&gt;用 underlying table 來確保唯一性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;UUID
+&lt;ul&gt;
+&lt;li&gt;用 UUID 來確保唯一性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Spring Data JPA
+&lt;ul&gt;
+&lt;li&gt;用特定語法，只需要定好 interface，不用 implement&lt;/li&gt;
+&lt;li&gt;extends JpaRepository&amp;lt;Entity, ID&amp;gt;
+&lt;ul&gt;
+&lt;li&gt;第一個參數是 entity&lt;/li&gt;
+&lt;li&gt;第二個參數是 primary key 的型態&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;示範
 &lt;ul&gt;
 &lt;li&gt;findByXxx
 &lt;ul&gt;
@@ -2939,7 +3637,9 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;repository&#34;&gt;Repository&lt;/h3&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;jparepository&#34;&gt;JpaRepository&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;@Repository
 &lt;ul&gt;
@@ -2965,6 +3665,19 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;h3 id=&#34;hibernate&#34;&gt;Hibernate&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來儲存 java object 到資料庫的框架&lt;/li&gt;
+&lt;li&gt;ORM
+&lt;ul&gt;
+&lt;li&gt;Object Relational Mapping&lt;/li&gt;
+&lt;li&gt;用物件來操作資料庫&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;一種 JPA 的實作&lt;/li&gt;
+&lt;li&gt;背後用 JDBC 來操作資料庫&lt;/li&gt;
+&lt;li&gt;Spring Boot 預設用 Hibernate 來實作 JPA&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;validation&#34;&gt;Validation&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -2979,6 +3692,26 @@
 &lt;p&gt;@Valid&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;用在 controller 上，才會自動檢查參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;exception&#34;&gt;Exception&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;RuntimeException
+&lt;ul&gt;
+&lt;li&gt;繼承這個，可以設置 status, message, timestamp&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@ExceptionHandler
+&lt;ul&gt;
+&lt;li&gt;放在 Controller 中的 exception handler method 上，可以處理底下 method 丟出的 exception&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@ControllerAdvice
+&lt;ul&gt;
+&lt;li&gt;類似 interceptor/filter&lt;/li&gt;
+&lt;li&gt;可以 pre-process request, post-process response&lt;/li&gt;
+&lt;li&gt;可以用在 global exception handler&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -8011,214 +8744,6 @@ I3D 在 25 fps 的影片中用 64 frames 做訓練，使它能捕捉動作的 fi
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-</description>
-        </item>
-        <item>
-        <title>About</title>
-        <link>https://roykesydon.github.io/Blog/about/</link>
-        <pubDate>Tue, 09 May 2023 00:00:00 +0000</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/about/</guid>
-        <description>&lt;!-- raw HTML omitted --&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;education&#34;&gt;Education&lt;/h2&gt;
-&lt;dl&gt;
-&lt;dt&gt;2023-2025 (expected)&lt;/dt&gt;
-&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;MSc, Computer Science and Information Engineering&lt;/strong&gt;&lt;/strong&gt;; National Cheng Kung University&lt;/dd&gt;
-&lt;dt&gt;2019-2023&lt;/dt&gt;
-&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;BSc, Computer Science and Engineering&lt;/strong&gt;&lt;/strong&gt;; National Taiwan Ocean University&lt;/dd&gt;
-&lt;/dl&gt;
-&lt;h2 id=&#34;awards-and-examination&#34;&gt;Awards and Examination&lt;/h2&gt;
-&lt;dl&gt;
-&lt;dt&gt;2020 / 11&lt;/dt&gt;
-&lt;dd&gt;Silver Medal (Rank: 13/101), The 2020 ICPC Asia Taipei-Hsinchu Site Programming Contest&lt;/dd&gt;
-&lt;dt&gt;2021 / 12&lt;/dt&gt;
-&lt;dd&gt;solved: 7/7 problems (Rank: 2/2459), 大學程式能力檢定 (Collegiate Programming Examination, CPE)&lt;/dd&gt;
-&lt;dt&gt;2021 / 10&lt;/dt&gt;
-&lt;dd&gt;$4^{th}$ place, 2021 National Collegiate Programming Contest (NCPC)&lt;/dd&gt;
-&lt;dt&gt;2020 / 12&lt;/dt&gt;
-&lt;dd&gt;$3^{rd}$ place, 2020 中區程式設計競賽 (Central Collegiate Programming Contest, CCPC)&lt;/dd&gt;
-&lt;dt&gt;2021 / 12&lt;/dt&gt;
-&lt;dd&gt;$2^{nd}$ place, 2021 東華杯程式設計競賽大專組 ( National Dong Hwa University Programming Contest)&lt;/dd&gt;
-&lt;dt&gt;2024 / 01&lt;/dt&gt;
-&lt;dd&gt;$1^{st}$ place, 2024 TSMC IT CareerHack (廠務知識機器人)&lt;/dd&gt;
-&lt;/dl&gt;
-&lt;h2 id=&#34;skills&#34;&gt;Skills&lt;/h2&gt;
-&lt;dl&gt;
-&lt;dt&gt;Language&lt;/dt&gt;
-&lt;dd&gt;C、C++、Python、Javascript、Java、Swift、SCSS&lt;/dd&gt;
-&lt;dt&gt;Framework&lt;/dt&gt;
-&lt;dd&gt;Vue、Pytorch、Flask、FastAPI、Express.js&lt;/dd&gt;
-&lt;dt&gt;Database&lt;/dt&gt;
-&lt;dd&gt;MariaDB、MongoDB、Redis&lt;/dd&gt;
-&lt;dt&gt;Others&lt;/dt&gt;
-&lt;dd&gt;Git、Docker、Node.js&lt;/dd&gt;
-&lt;/dl&gt;
-&lt;h2 id=&#34;experience&#34;&gt;Experience&lt;/h2&gt;
-&lt;dl&gt;
-&lt;dt&gt;2020-2023&lt;/dt&gt;
-&lt;dd&gt;*&lt;strong&gt;*Adjunct research assistants**&lt;/strong&gt;; Advanced Computation Laboratory&lt;/dd&gt;
-&lt;/dl&gt;
-&lt;h2 id=&#34;working-experience&#34;&gt;Working Experience&lt;/h2&gt;
-&lt;dl&gt;
-&lt;dt&gt;Real-time Fishing Vessel Detection at the Fishing Port&lt;/dt&gt;
-&lt;dd&gt;Multiple cameras are installed at the fishing port to obtain the camera images through RTSP and achieve the automated counting of fishing vessels at the port. The backend integrates YOLOv4, FastAPI, and some image processing techniques to recognize the received camera images. The frontend uses Vue as framework to provide detection results and harbor data for the past 48 hours.&lt;/dd&gt;
-&lt;dt&gt;Fisherman Detection on Fishing Boats&lt;/dt&gt;
-&lt;dd&gt;The goal is to automatically identify the times when fishermen appear in the ts video files from the cameras on the fishing boats. This makes it easier for other researchers to obtain clips of fishing operations. Due to the clothing worn by fishermen is different from what is commonly worn by the general public, and the difficulty of obtaining training data, a pre-trained LightweightOpenPose model is used in combination with various filtering methods and OCR to complete the task.&lt;/dd&gt;
-&lt;dt&gt;Geospatial Data Visualization&lt;/dt&gt;
-&lt;dd&gt;The original map production process is streamlined by using PyQGIS to write custom scripts, which results in a significant reduction of repetitive work in map production.&lt;/dd&gt;
-&lt;/dl&gt;
-&lt;h2 id=&#34;side-projects&#34;&gt;Side Projects&lt;/h2&gt;
-&lt;dl&gt;
-&lt;dt&gt;RoyKesyShop&lt;/dt&gt;
-&lt;dd&gt;This is an online clothing store that uses JWT to verify user permissions. Nginx is responsible for reverse proxying and web serving, while MariaDB is used for replication in a master-slave architecture. Finally, Docker is used to package the above components, along with the frontend and backend, into separate containers.
-&lt;p&gt;&lt;img src=&#34;https://github.com/Roykesydon/RoyKesyShop/blob/main/demo_pictures/home_dark.png?raw=true&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://github.com/Roykesydon/RoyKesyShop/blob/main/demo_pictures/shop_1.png?raw=true&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;/dd&gt;
-&lt;dt&gt;Roykestereo&lt;/dt&gt;
-&lt;dd&gt;This is a cloud-based music player that offers the ability to upload local music, as well as download and listen to music from the cloud. The backend uses Fourier transform and other processing techniques to compute the spectrum of music at each moment. In addition to basic features, there is also a chat room function supported by socket.io, and MongoDB is used for data access.
-&lt;p&gt;&lt;img src=&#34;https://github.com/Roykesydon/Roykestereo/blob/main/demo/home.png?raw=true&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://github.com/Roykesydon/Roykestereo/blob/main/demo/current_playing.png?raw=true&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;/dd&gt;
-&lt;dt&gt;StellarTrack&lt;/dt&gt;
-&lt;dd&gt;This is a web frontend project without a backend, made using Three.js and Bootstrap, displaying the changing paths of the sun&amp;rsquo;s rotation in different latitudes and regions
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/about/StellarTrack-1.jpg&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/about/StellarTrack-2.jpg&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;/dd&gt;
-&lt;dt&gt;WeAreFamily&lt;/dt&gt;
-&lt;dd&gt;This is a platform that allows people to find others to crowdfund with. The frontend is mainly composed of JavaFX, while the backend uses Flask as the framework. Users can post to find others to crowdfund with, or join other people&amp;rsquo;s posts. Users can also send and receive chat messages in real time, with notifications appearing on their operating system.
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/about/WAF-1.jpg&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/about/WAF-2.jpg&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;/dd&gt;
-&lt;/dl&gt;
-&lt;h2 id=&#34;painting&#34;&gt;Painting&lt;/h2&gt;
-&lt;p&gt;I enjoy drawing ACG themed artwork.&lt;/p&gt;
-&lt;p&gt;My work is primarily published on Pixiv or Twitter, with occasional posts on Reddit and Bahamut as well.&lt;/p&gt;
-
-
-
-&lt;style&gt;
-.painting {
-display: block;
-margin-left: auto;
-margin-right: auto;
-height:70vh !important;
-width: auto !important;
-}
-
-@media (max-aspect-ratio: 3/4) {
-  .painting {
-    height: auto !important;
-    width: 100% !important;
-  }
-}
-&lt;/style&gt;
-
-
-&lt;p&gt;2024 / 02 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/116081526&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;楓丹的預言&lt;/a&gt;&lt;/p&gt;
-
-
-&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/GGYFRLdb0AAq0ns?format=jpg&amp;name=4096x4096&#34; alt=&#34;&#34;&gt;
-
-
-&lt;p&gt;2022 / 07 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/99421866&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Gura&lt;/a&gt;&lt;/p&gt;
-
-
-&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/FWgt23xUYAA_N2C?format=jpg&amp;name=medium&#34; alt=&#34;&#34; &gt;
-
-&lt;p&gt;2022 / 03 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/96944204&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;アスカ&lt;/a&gt;&lt;/p&gt;
-
-
-&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/FN57PJFUYAMiqpZ?format=jpg&amp;name=large&#34;
- alt=&#34;&#34;&gt;
-
-&lt;p&gt;2021 / 08 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/92120747&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Sundae&lt;/a&gt;&lt;/p&gt;
-
-
-&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/E9NWJmpVkAQJ2Cv?format=jpg&amp;name=medium&#34;
- alt=&#34;&#34;&gt;
-
-&lt;p&gt;2021 / 07 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/91301201&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;Gawr Gura&lt;/a&gt;&lt;/p&gt;
-
-
-&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/E6eg5-vVkAA1l-X?format=jpg&amp;name=4096x4096&#34;
- alt=&#34;&#34;&gt;
-
-&lt;p&gt;2021 / 05 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/89784207&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;CatShark&lt;/a&gt;&lt;/p&gt;
-
-
-&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/E1KCtZdVUAAxQp7?format=jpg&amp;name=4096x4096&#34;
- alt=&#34;&#34;&gt;
-
-&lt;p&gt;2020 / 02 - &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/79616737&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
-    &gt;牧瀨紅莉栖 メイドさん&lt;/a&gt;&lt;/p&gt;
-
-
-&lt;img class=&#34;painting&#34; src=&#34;https://pbs.twimg.com/media/EuMTVM4VEAM9HJY?format=jpg&amp;name=4096x4096&#34;
- alt=&#34;&#34;&gt;
-
 </description>
         </item>
         <item>

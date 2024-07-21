@@ -113,7 +113,6 @@ categories : ["ctf"]
               - 開 port 等待連接
           - protocol
     - ex: windows/shell/reverse_http
-      - 
         - 透過 http 連接
 
 - msfconsole
@@ -132,3 +131,16 @@ categories : ["ctf"]
     - 在 sandbox 中執行，看他的行為
     - 要幫程式增加安全的操作
     - 延遲 Payload 執行的時間
+
+## Insecure session management
+### CSRF (Cross Site Request Forgery)
+### 防禦方法
+- Anti CSRF token
+  - 生表單的時候也生一個 token，並記住，request 要帶上這個 token
+  - unpredictable
+  - can't be reused
+  - 前後端分離
+    - 後端生
+      - CORS 不要接受所有來源，讓前端取得 token
+    - 前端生
+      - 要發 request 的時候把 cookie 改成和 token 一樣的值

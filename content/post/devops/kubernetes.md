@@ -5,10 +5,33 @@ draft: false
 description: ""
 type: "post"
 tags: ["container orchestration"]
-categories : ["full-stack"]
+categories : ["devops"]
 ---
 
 ## 基礎概念
+### Container runtime
+- CRI (Container Runtime Interface)
+  - Kubernetes 用來和 container runtime 互動的 interface
+  - 任何可以實現 CRI 的 container runtime 都可以用在 Kubernetes，比如 containerd
+  - 以前有幫 Docker 特別實現一個 CRI，叫做 Docker shim
+- OCI (Open Container Initiative)
+  - 一個開放的 container image 和 runtime 的標準
+  - 他定義了 container image 和 container runtime 的格式
+- containerd
+  - 一個 container runtime，docker 底下所使用的 container runtime，現在已經與 docker 單獨出來開發維護
+  - 他實現了 CRI，所以可以用在 Kubernetes
+  - CLI
+    - ctr
+      - 如果你只裝 containerd，沒有裝 docker，就可以用這個來操作 containerd
+      - 能用的指令比較少
+      - For Debugging
+    - nerdctl
+      - docker-like 的 CLI
+      - 很多指令可以把 docker 的指令換成 nerdctl 的指令
+      - For general purpose
+- crictl
+  - 用來操作符合 CRI 的 container runtime 的 CLI
+  - For Debugging
 ### Node
 - Kubernetes 集群中的一台機器
 - 過去叫做 Minion
@@ -38,24 +61,38 @@ categories : ["full-stack"]
 - 安裝 Kubernetes，實際上是安裝以下幾個 Component
   - API Server
     - front-end of the Kubernetes
+    - kubectl 是在和這裡溝通
   - etcd
     - distributed key-value store
     - 會實現 lock mechanism，確保沒有 conflict
+    - 預設聽 2379 port
+    - command line client
+      - etcdctl
   - kubelet
     - 在每個 node 上運行的 agent
     - 負責確保 container 在 node 上如期運行
   - Container Runtime
     - 用來 run container 的 underlying software
-  - Controller
+  - Controller Manager
     - 當 node、container、endpoint 掛掉的時候，他要負責監控和回應
+    - 底下有許多種的 Controller，負責監控還有作出應對處理
     - type
       - Replication Controller
         - 確保指定數量的 Pod 在任何時間都在運行
         - load balancing & scaling
         - 後來被 ReplicaSet 取代
+      - Node Controller
+        - 確保 node 在運行
+        - 設定固定間隔監測 node 的健康狀態
   - Scheduler
     - 負責處理 node 間的 distributing work
     - 會尋找新創的 container，並分配到 node 
+    - 嘗試幫每個 pod 挑選最適合的 node
+    - two phase
+      - Filter
+        - 檢查 node 是否符合 pod 的需求
+      - Rank
+        - 給 node 一個分數，選擇最高分的 node
 
 ## Pod
 - Kubernetes 的最小單位
@@ -120,6 +157,7 @@ categories : ["full-stack"]
 ## Service
 - 讓不同 group 的 Pod 互相通信
 - 像一個 virtaul server，可以連接到一個或多個 Pod
+- 每個 Node 都有一個 kube-proxy，他會檢查有沒有新的 service，並維護 iptables
 - type
   - NodePort
     - 會在每個 node 上開一個 port，讓外部可以連進來

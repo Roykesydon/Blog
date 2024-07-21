@@ -4,7 +4,7 @@ description: "What do you call a developer who's good at both front end and back
 image: "/Blog/images/categories/full-stack.jpg"
 slug: "full-stack"
 style:
-    background: "#f79e39" 
+    background: "#d979cf" 
     color: "#ffffff"
 ---
 

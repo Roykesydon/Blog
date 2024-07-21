@@ -8,6 +8,20 @@ tags: ["framework", "java"]
 categories : ["full-stack"]
 ---
 
+## Maven
+- 專案管理工具
+- 會先檢查 maven local repository 有沒有需要的 dependency，沒有的話就會去 maven central repository (remote repository) 下載
+- pom.xml
+  - project cooridnate
+    - groupId
+    - artifactId
+    - version
+  - plugin
+    - 和 dependency 的差別是，是用來執行某種 task 的
+- mvnw
+  - maven wrapper
+  - 在沒有安裝 maven 的環境下，會下載正確的 maven 版本
+
 ## Spring
 ### IoC
 - Invocation of Constructor
@@ -23,12 +37,17 @@ categories : ["full-stack"]
     - @Autowired
       - 種類
         - field injection
+          - 不太推薦，不利於 unit test
           - spring boot 會先建立所有 component，在逐一注入，使元件可能短暫處於初始化不完整狀態
         - constructor injection
+          - 最推薦
           - 建立 bean 時就注入
           - 確保 component 被使用時是處於完整的狀態
           - 有利於 unit test，因為可以把設計好的 mock bean 從 constructor 傳入
           - spring 建議使用 constructor injection
+        - setter injection
+          - 用 setter 來注入
+          - 創好 component 後，再注入
       - 限制
         1. 該 Class 也得是 Bean
         2. 會根據類型注入 bean
@@ -37,12 +56,23 @@ categories : ["full-stack"]
         - 指定要注入的 bean 名稱 
       - @Primary
         - 如果有多個同類型的 bean，會優先注入這個 bean  
-  - 初始化
+  - Cycle life
     - @PostConstruct
       - 創建 bean 後，就會執行這個方法
       - 限制
         - 必須是 public void
         - 不能有參數
+    - @PreDestroy
+      - bean 被銷毀前執行
+      - 限制
+        - 必須是 public void
+        - 不能有參數
+  - Lazy Initialization
+    - 本來 beans 不管有沒有用都會被創建
+    - @Lazy
+      - 只有在要使用時才會初始化
+      - 缺點是用 @RestController 的話，第一次 request 才會創建
+    - 可以在 application.properties 裡設定 spring.main.lazy-initialization=true，讓所有 beans 都變成 lazy initialization
 
 ### AOP
 - Aspect Oriented Programming
@@ -59,6 +89,13 @@ categories : ["full-stack"]
   - @Around
     - 在方法之前和之後都執行
 - 常用的功能都已經被封裝好了，開發較少用到 AOP
+
+## Run app
+- use `java -jar`
+  - `mvn clean package`
+  - `java -jar target/xxx.jar`
+- use `mvn spring-boot:run`
+  - `mvn spring-boot:run`
 
 ## 特性
 ### Starter
@@ -92,6 +129,16 @@ categories : ["full-stack"]
     - `--spring.config.location`
 - Config 資料夾
   - 可以在 jar 目錄下建立 config 資料夾，放配置文件，不用輸入額外的 args
+- 大致分類
+  - core
+    - logging
+  - web
+  - security
+  - data
+  - actuator
+  - integration
+  - devtools
+  - test
     
 
 ### Dependency Management
@@ -113,6 +160,7 @@ Spring Boot 放棄了 XML 配置，改用 Annotation 配置
 ### Component registration
 - @Configuration, @SpringBootConfiguration
   - @Bean
+    - 有時候可能會想用第三方套件，此時可能不能修改套件的 code，這時候就可以用 @Configuration 來註冊 bean
 - @Controller, @Service, @Repository, @Component
   - 三層式架構
     - @Controller
@@ -155,9 +203,13 @@ Spring Boot 放棄了 XML 配置，改用 Annotation 配置
       - 每次注入都創建新的 instance
       - 可以用 proxy.mode = ScopedProxyMode.TARGET_CLASS，會變成每次調用 method 都創建新的 instance
       - prototype 的元件生出後，spring 不會再管理，要自己管理生命週期，相當於 new 出物件的替代作法
+      - 預設是 lazy initialization
     - request
       - 每個 request 都有一個獨立的 instance
       - request 指的是 HTTP request，從進入 controller 到離開 controller
+    - session
+      - 每個 session 都有一個獨立的 instance
+      - session 指的是 HTTP session，從進入 controller 到離開 controller
 ### Conditional Annotations
 - 條件成立則觸發指定行為
 - ConditionalOn<Condition>
@@ -182,6 +234,28 @@ Spring Boot 放棄了 XML 配置，改用 Annotation 配置
     - 如果 class 只有 @ConfigurationProperties，沒有 @Component，需要加這個 annotation
     - 用在第三方 package 上，因為默認掃不到第三方的 @component
 
+## Java JSON Data Binding
+- 在 Java POJO 和 JSON 之間轉換
+- Spring 用 Jackson 來做轉換
+  - Jackson 會 call getter, setter 來轉換
+- alias
+  - mapping
+  - marshalling
+  - serialization
+
+## 輔助工具
+- Spring boot devtools
+  - Hot reload
+- Spring Boot Actuator
+  - 公開用來 monitor 的 endpoint
+  - endpoints
+    - 都有固定前綴 /actuator
+    - /health
+      - 查看應用程式的 status
+    - /info
+      - 查看應用程式的 info
+    - /beans
+      - 查看所有 bean
 ## Logging
 - Logging 選擇
   - Logging API
@@ -328,22 +402,81 @@ Spring Boot 放棄了 XML 配置，改用 Annotation 配置
 ### SecurityContextHolder
 - 用來存放 authentication
 
+## CommandLineRunner
+- 用來在 Spring Boot 啟動後執行一些任務
+- 會在所有 bean 創建完後執行
+
 ## JPA
-- Java Persistence API
+- Jakarta Persistence API
+- 以前叫 Java Persistence API
+- 只是一個 specifcation，提供一組 interface，需要實作
+- DataSource
+  - 用來連接資料庫
+  - 定義了連接資料庫的 info
+- EntityManager
+  - 用來創建 query 的主要 component
+  - 需要 DataSource
+  - EntityManager vs JpaRepositroy
+    - EntityManager
+      - low-level control and flexibility
+    - JpaRepository
+      - high-level abstraction
+  - JPQL
+    - 基於 Entity name 和 fields 的 query language
+    - 不是基於資料庫的 column 或 table name，是基於 Entity 的名字，要注意區別
+- Data access object (DAO)
+  - common pattern
+  - 需要 JPA Entity Manager
+- Config
+  - spring.jpa.hibernate.ddl-auto
+    - create
+      - 每次都會重新創建新的 table
+    - update
+      - 只會更新 table，不會刪除
+    - create-drop
+      - 創建 table，然後刪除
+    - validate
+      - 只會檢查 table 是否存在，不會創建
 - Annotation
   - @Entity, @Table
     - 也要記得寫 getter, setter
+    - @Entity 需要 public 或 protected 的無參數建構子
+    - @Table
+      - 可選，可以設定 table 名稱
   - @Transient
     - 不會被序列化，不會被存到資料庫
     - 可用在可以單獨計算的欄位，比如用資料庫的生日可以算出年齡
   - @Transactional
-- 語法範例
-  - findByXxx
-    - 用 XXX 的欄位來查詢
-  - findByXXXLike
-    - 用 XXX 的欄位來模糊查詢
+    - 用在 method 上，代表這個 method 是一個 transaction
+  - @Column
+    - 可以設定欄位名稱
+    - 這是可選的，沒有的話就是用變數名稱
+  - @Id
+    - Primary key
+    - @GeneratedValue
+      - strategy
+        - AUTO
+          - 根據資料庫自動選擇
+        - IDENTITY
+          - 用資料庫的 identity column
+        - SEQUENCE
+          - 用資料庫的 sequence
+        - Table
+          - 用 underlying table 來確保唯一性
+        - UUID
+          - 用 UUID 來確保唯一性
+- Spring Data JPA
+  - 用特定語法，只需要定好 interface，不用 implement
+  - extends JpaRepository<Entity, ID>
+    - 第一個參數是 entity
+    - 第二個參數是 primary key 的型態
+  - 示範
+    - findByXxx
+      - 用 XXX 的欄位來查詢
+    - findByXXXLike
+      - 用 XXX 的欄位來模糊查詢
 
-### Repository
+### JpaRepository
 - @Repository
   - 用來標記 DAO
   - extends JpaRepository<Entity, ID>
@@ -354,6 +487,15 @@ Spring Boot 放棄了 XML 配置，改用 Annotation 配置
     - 也可以用 @Query 來自定義 SQL
       - <?0> 代表第一個參數，以此類推
 
+### Hibernate
+- 用來儲存 java object 到資料庫的框架
+- ORM
+  - Object Relational Mapping
+  - 用物件來操作資料庫
+- 一種 JPA 的實作
+- 背後用 JDBC 來操作資料庫
+- Spring Boot 預設用 Hibernate 來實作 JPA
+
 ## Validation
 - field validation
   - @NotEmpty
@@ -363,6 +505,15 @@ Spring Boot 放棄了 XML 配置，改用 Annotation 配置
 - @Valid
   - 用在 controller 上，才會自動檢查參數
 
+## Exception
+- RuntimeException
+  - 繼承這個，可以設置 status, message, timestamp
+- @ExceptionHandler
+  - 放在 Controller 中的 exception handler method 上，可以處理底下 method 丟出的 exception
+- @ControllerAdvice
+  - 類似 interceptor/filter
+  - 可以 pre-process request, post-process response
+  - 可以用在 global exception handler
 ## Testing
 ### Integration Test
 - 在 test class 前面的 annotation

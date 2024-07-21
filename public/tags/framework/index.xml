@@ -251,7 +251,34 @@
         <pubDate>Mon, 06 May 2024 00:00:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/</guid>
-        <description>&lt;h2 id=&#34;spring&#34;&gt;Spring&lt;/h2&gt;
+        <description>&lt;h2 id=&#34;maven&#34;&gt;Maven&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;專案管理工具&lt;/li&gt;
+&lt;li&gt;會先檢查 maven local repository 有沒有需要的 dependency，沒有的話就會去 maven central repository (remote repository) 下載&lt;/li&gt;
+&lt;li&gt;pom.xml
+&lt;ul&gt;
+&lt;li&gt;project cooridnate
+&lt;ul&gt;
+&lt;li&gt;groupId&lt;/li&gt;
+&lt;li&gt;artifactId&lt;/li&gt;
+&lt;li&gt;version&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;plugin
+&lt;ul&gt;
+&lt;li&gt;和 dependency 的差別是，是用來執行某種 task 的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;mvnw
+&lt;ul&gt;
+&lt;li&gt;maven wrapper&lt;/li&gt;
+&lt;li&gt;在沒有安裝 maven 的環境下，會下載正確的 maven 版本&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;spring&#34;&gt;Spring&lt;/h2&gt;
 &lt;h3 id=&#34;ioc&#34;&gt;IoC&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Invocation of Constructor
@@ -281,15 +308,23 @@
 &lt;ul&gt;
 &lt;li&gt;field injection
 &lt;ul&gt;
+&lt;li&gt;不太推薦，不利於 unit test&lt;/li&gt;
 &lt;li&gt;spring boot 會先建立所有 component，在逐一注入，使元件可能短暫處於初始化不完整狀態&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;constructor injection
 &lt;ul&gt;
+&lt;li&gt;最推薦&lt;/li&gt;
 &lt;li&gt;建立 bean 時就注入&lt;/li&gt;
 &lt;li&gt;確保 component 被使用時是處於完整的狀態&lt;/li&gt;
 &lt;li&gt;有利於 unit test，因為可以把設計好的 mock bean 從 constructor 傳入&lt;/li&gt;
 &lt;li&gt;spring 建議使用 constructor injection&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;setter injection
+&lt;ul&gt;
+&lt;li&gt;用 setter 來注入&lt;/li&gt;
+&lt;li&gt;創好 component 後，再注入&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -318,7 +353,7 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;初始化
+&lt;li&gt;Cycle life
 &lt;ul&gt;
 &lt;li&gt;@PostConstruct
 &lt;ul&gt;
@@ -331,6 +366,29 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;@PreDestroy
+&lt;ul&gt;
+&lt;li&gt;bean 被銷毀前執行&lt;/li&gt;
+&lt;li&gt;限制
+&lt;ul&gt;
+&lt;li&gt;必須是 public void&lt;/li&gt;
+&lt;li&gt;不能有參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Lazy Initialization
+&lt;ul&gt;
+&lt;li&gt;本來 beans 不管有沒有用都會被創建&lt;/li&gt;
+&lt;li&gt;@Lazy
+&lt;ul&gt;
+&lt;li&gt;只有在要使用時才會初始化&lt;/li&gt;
+&lt;li&gt;缺點是用 @RestController 的話，第一次 request 才會創建&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可以在 application.properties 裡設定 spring.main.lazy-initialization=true，讓所有 beans 都變成 lazy initialization&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -367,6 +425,20 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;常用的功能都已經被封裝好了，開發較少用到 AOP&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;run-app&#34;&gt;Run app&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;use &lt;code&gt;java -jar&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mvn clean package&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;java -jar target/xxx.jar&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;use &lt;code&gt;mvn spring-boot:run&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mvn spring-boot:run&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;特性&#34;&gt;特性&lt;/h2&gt;
 &lt;h3 id=&#34;starter&#34;&gt;Starter&lt;/h3&gt;
@@ -432,6 +504,22 @@
 &lt;li&gt;可以在 jar 目錄下建立 config 資料夾，放配置文件，不用輸入額外的 args&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;大致分類
+&lt;ul&gt;
+&lt;li&gt;core
+&lt;ul&gt;
+&lt;li&gt;logging&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;web&lt;/li&gt;
+&lt;li&gt;security&lt;/li&gt;
+&lt;li&gt;data&lt;/li&gt;
+&lt;li&gt;actuator&lt;/li&gt;
+&lt;li&gt;integration&lt;/li&gt;
+&lt;li&gt;devtools&lt;/li&gt;
+&lt;li&gt;test&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;dependency-management&#34;&gt;Dependency Management&lt;/h3&gt;
 &lt;ul&gt;
@@ -463,7 +551,11 @@
 &lt;ul&gt;
 &lt;li&gt;@Configuration, @SpringBootConfiguration
 &lt;ul&gt;
-&lt;li&gt;@Bean&lt;/li&gt;
+&lt;li&gt;@Bean
+&lt;ul&gt;
+&lt;li&gt;有時候可能會想用第三方套件，此時可能不能修改套件的 code，這時候就可以用 @Configuration 來註冊 bean&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;@Controller, @Service, @Repository, @Component
@@ -562,12 +654,19 @@
 &lt;li&gt;每次注入都創建新的 instance&lt;/li&gt;
 &lt;li&gt;可以用 proxy.mode = ScopedProxyMode.TARGET_CLASS，會變成每次調用 method 都創建新的 instance&lt;/li&gt;
 &lt;li&gt;prototype 的元件生出後，spring 不會再管理，要自己管理生命週期，相當於 new 出物件的替代作法&lt;/li&gt;
+&lt;li&gt;預設是 lazy initialization&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;request
 &lt;ul&gt;
 &lt;li&gt;每個 request 都有一個獨立的 instance&lt;/li&gt;
 &lt;li&gt;request 指的是 HTTP request，從進入 controller 到離開 controller&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;session
+&lt;ul&gt;
+&lt;li&gt;每個 session 都有一個獨立的 instance&lt;/li&gt;
+&lt;li&gt;session 指的是 HTTP session，從進入 controller 到離開 controller&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -626,6 +725,55 @@
 &lt;ul&gt;
 &lt;li&gt;如果 class 只有 @ConfigurationProperties，沒有 @Component，需要加這個 annotation&lt;/li&gt;
 &lt;li&gt;用在第三方 package 上，因為默認掃不到第三方的 @component&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;java-json-data-binding&#34;&gt;Java JSON Data Binding&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;在 Java POJO 和 JSON 之間轉換&lt;/li&gt;
+&lt;li&gt;Spring 用 Jackson 來做轉換
+&lt;ul&gt;
+&lt;li&gt;Jackson 會 call getter, setter 來轉換&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;alias
+&lt;ul&gt;
+&lt;li&gt;mapping&lt;/li&gt;
+&lt;li&gt;marshalling&lt;/li&gt;
+&lt;li&gt;serialization&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;輔助工具&#34;&gt;輔助工具&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Spring boot devtools
+&lt;ul&gt;
+&lt;li&gt;Hot reload&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Spring Boot Actuator
+&lt;ul&gt;
+&lt;li&gt;公開用來 monitor 的 endpoint&lt;/li&gt;
+&lt;li&gt;endpoints
+&lt;ul&gt;
+&lt;li&gt;都有固定前綴 /actuator&lt;/li&gt;
+&lt;li&gt;/health
+&lt;ul&gt;
+&lt;li&gt;查看應用程式的 status&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;/info
+&lt;ul&gt;
+&lt;li&gt;查看應用程式的 info&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;/beans
+&lt;ul&gt;
+&lt;li&gt;查看所有 bean&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -947,14 +1095,93 @@
 &lt;ul&gt;
 &lt;li&gt;用來存放 authentication&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h2 id=&#34;commandlinerunner&#34;&gt;CommandLineRunner&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;用來在 Spring Boot 啟動後執行一些任務&lt;/li&gt;
+&lt;li&gt;會在所有 bean 創建完後執行&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;jpa&#34;&gt;JPA&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Java Persistence API&lt;/li&gt;
+&lt;li&gt;Jakarta Persistence API&lt;/li&gt;
+&lt;li&gt;以前叫 Java Persistence API&lt;/li&gt;
+&lt;li&gt;只是一個 specifcation，提供一組 interface，需要實作&lt;/li&gt;
+&lt;li&gt;DataSource
+&lt;ul&gt;
+&lt;li&gt;用來連接資料庫&lt;/li&gt;
+&lt;li&gt;定義了連接資料庫的 info&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;EntityManager
+&lt;ul&gt;
+&lt;li&gt;用來創建 query 的主要 component&lt;/li&gt;
+&lt;li&gt;需要 DataSource&lt;/li&gt;
+&lt;li&gt;EntityManager vs JpaRepositroy
+&lt;ul&gt;
+&lt;li&gt;EntityManager
+&lt;ul&gt;
+&lt;li&gt;low-level control and flexibility&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;JpaRepository
+&lt;ul&gt;
+&lt;li&gt;high-level abstraction&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;JPQL
+&lt;ul&gt;
+&lt;li&gt;基於 Entity name 和 fields 的 query language&lt;/li&gt;
+&lt;li&gt;不是基於資料庫的 column 或 table name，是基於 Entity 的名字，要注意區別&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Data access object (DAO)
+&lt;ul&gt;
+&lt;li&gt;common pattern&lt;/li&gt;
+&lt;li&gt;需要 JPA Entity Manager&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Config
+&lt;ul&gt;
+&lt;li&gt;spring.jpa.hibernate.ddl-auto
+&lt;ul&gt;
+&lt;li&gt;create
+&lt;ul&gt;
+&lt;li&gt;每次都會重新創建新的 table&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;update
+&lt;ul&gt;
+&lt;li&gt;只會更新 table，不會刪除&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;create-drop
+&lt;ul&gt;
+&lt;li&gt;創建 table，然後刪除&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;validate
+&lt;ul&gt;
+&lt;li&gt;只會檢查 table 是否存在，不會創建&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;Annotation
 &lt;ul&gt;
 &lt;li&gt;@Entity, @Table
 &lt;ul&gt;
 &lt;li&gt;也要記得寫 getter, setter&lt;/li&gt;
+&lt;li&gt;@Entity 需要 public 或 protected 的無參數建構子&lt;/li&gt;
+&lt;li&gt;@Table
+&lt;ul&gt;
+&lt;li&gt;可選，可以設定 table 名稱&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;@Transient
@@ -963,10 +1190,67 @@
 &lt;li&gt;可用在可以單獨計算的欄位，比如用資料庫的生日可以算出年齡&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;@Transactional&lt;/li&gt;
+&lt;li&gt;@Transactional
+&lt;ul&gt;
+&lt;li&gt;用在 method 上，代表這個 method 是一個 transaction&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;語法範例
+&lt;li&gt;@Column
+&lt;ul&gt;
+&lt;li&gt;可以設定欄位名稱&lt;/li&gt;
+&lt;li&gt;這是可選的，沒有的話就是用變數名稱&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@Id
+&lt;ul&gt;
+&lt;li&gt;Primary key&lt;/li&gt;
+&lt;li&gt;@GeneratedValue
+&lt;ul&gt;
+&lt;li&gt;strategy
+&lt;ul&gt;
+&lt;li&gt;AUTO
+&lt;ul&gt;
+&lt;li&gt;根據資料庫自動選擇&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;IDENTITY
+&lt;ul&gt;
+&lt;li&gt;用資料庫的 identity column&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;SEQUENCE
+&lt;ul&gt;
+&lt;li&gt;用資料庫的 sequence&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Table
+&lt;ul&gt;
+&lt;li&gt;用 underlying table 來確保唯一性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;UUID
+&lt;ul&gt;
+&lt;li&gt;用 UUID 來確保唯一性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Spring Data JPA
+&lt;ul&gt;
+&lt;li&gt;用特定語法，只需要定好 interface，不用 implement&lt;/li&gt;
+&lt;li&gt;extends JpaRepository&amp;lt;Entity, ID&amp;gt;
+&lt;ul&gt;
+&lt;li&gt;第一個參數是 entity&lt;/li&gt;
+&lt;li&gt;第二個參數是 primary key 的型態&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;示範
 &lt;ul&gt;
 &lt;li&gt;findByXxx
 &lt;ul&gt;
@@ -981,7 +1265,9 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;repository&#34;&gt;Repository&lt;/h3&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;jparepository&#34;&gt;JpaRepository&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;@Repository
 &lt;ul&gt;
@@ -1007,6 +1293,19 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;h3 id=&#34;hibernate&#34;&gt;Hibernate&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來儲存 java object 到資料庫的框架&lt;/li&gt;
+&lt;li&gt;ORM
+&lt;ul&gt;
+&lt;li&gt;Object Relational Mapping&lt;/li&gt;
+&lt;li&gt;用物件來操作資料庫&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;一種 JPA 的實作&lt;/li&gt;
+&lt;li&gt;背後用 JDBC 來操作資料庫&lt;/li&gt;
+&lt;li&gt;Spring Boot 預設用 Hibernate 來實作 JPA&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;validation&#34;&gt;Validation&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -1021,6 +1320,26 @@
 &lt;p&gt;@Valid&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;用在 controller 上，才會自動檢查參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;exception&#34;&gt;Exception&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;RuntimeException
+&lt;ul&gt;
+&lt;li&gt;繼承這個，可以設置 status, message, timestamp&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@ExceptionHandler
+&lt;ul&gt;
+&lt;li&gt;放在 Controller 中的 exception handler method 上，可以處理底下 method 丟出的 exception&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@ControllerAdvice
+&lt;ul&gt;
+&lt;li&gt;類似 interceptor/filter&lt;/li&gt;
+&lt;li&gt;可以 pre-process request, post-process response&lt;/li&gt;
+&lt;li&gt;可以用在 global exception handler&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
