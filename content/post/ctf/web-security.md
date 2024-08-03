@@ -2,7 +2,7 @@
 title: "Web Security"
 date: 2024-06-28T00:00:17+08:00
 draft: false
-description: ""
+description: "常見的 Web attack 和防禦方法"
 type: "post"
 tags: ["ctf", "security"]
 categories : ["ctf"]
