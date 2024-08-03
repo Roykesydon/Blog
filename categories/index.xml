@@ -6,7 +6,15 @@
         <description>Recent content in Categories on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sat, 20 Jul 2024 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 21 Jul 2024 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Full Stack</title>
+        <link>https://roykesydon.github.io/Blog/categories/full-stack/</link>
+        <pubDate>Sun, 21 Jul 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/categories/full-stack/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/full-stack.jpg" alt="Featured image of post Full Stack" /&gt;</description>
+        </item>
+        <item>
         <title>DevOps</title>
         <link>https://roykesydon.github.io/Blog/categories/devops/</link>
         <pubDate>Sat, 20 Jul 2024 00:00:17 +0800</pubDate>
@@ -37,14 +45,6 @@
         
         <guid>https://roykesydon.github.io/Blog/categories/unclassified/</guid>
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/unclassified.jpg" alt="Featured image of post Unclassified" /&gt;</description>
-        </item>
-        <item>
-        <title>Full Stack</title>
-        <link>https://roykesydon.github.io/Blog/categories/full-stack/</link>
-        <pubDate>Fri, 24 May 2024 00:00:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/categories/full-stack/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/full-stack.jpg" alt="Featured image of post Full Stack" /&gt;</description>
         </item>
         <item>
         <title>Deep Learning</title>

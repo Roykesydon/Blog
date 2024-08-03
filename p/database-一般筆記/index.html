@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='沒有另外被獨立出去一篇且有關 Database 的內容'>
+<title>Database 一般筆記</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.4664b128dc266f801644ba2120a41c10539bda53b06172f5474c54373ffb4d18.css"><meta property='og:title' content='Database 一般筆記'>
+<meta property='og:description' content='沒有另外被獨立出去一篇且有關 Database 的內容'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='database' /><meta property='article:tag' content='nosql' /><meta property='article:tag' content='cache' /><meta property='article:published_time' content='2024-07-21T00:00:17&#43;08:00'/><meta property='article:modified_time' content='2024-07-21T00:00:17&#43;08:00'/>
+<meta name="twitter:title" content="Database 一般筆記">
+<meta name="twitter:description" content="沒有另外被獨立出去一篇且有關 Database 的內容">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">🍤<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/old avatar.png"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://www.pixiv.net/users/18855729'
+                        target="_blank"
+                        title="Pixiv"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" stroke="currentColor" vector-effect="non-scaling-stroke" fill="">
+  <path stroke-width="1" vector-effect="non-scaling-stroke"
+    d="M701.515 301.152c-44.44-46.092-100.245-64.919-163.08-65.107-29.552-0.089-58.595 4.617-87.095 12.455-28.961 7.965-56.673 18.839-81.996 35.306-3.347 2.176-4.69 4.686-4.695 8.694-0.034 29.713-0.333 59.424-0.426 89.137-0.085 27.263-0.018 54.527-0.021 81.79-0.004 56.836 0.053 113.674-0.097 170.51-0.015 5.326 1.57 8.393 6.639 10.576 17.881 7.7 36.245 13.85 55.161 18.37 30.808 7.36 62.082 10.876 93.715 12.36 33.75 1.583 66.83-1.28 98.832-12.378 61.328-21.265 105.46-61.217 129.447-121.99 15.492-39.25 17.417-80.058 10.877-121.393-7.146-45.173-25.384-85.268-57.26-118.33z"
+    fill="none" />
+  <path stroke-width="1" vector-effect="non-scaling-stroke"
+    d="M512 17.482C238.886 17.482 17.482 238.886 17.482 512S238.886 1006.518 512 1006.518 1006.518 785.114 1006.518 512 785.114 17.482 512 17.482z m327.127 530.516c-18.962 47.58-50.687 84.816-92.709 113.517-43.734 29.872-92.452 46.554-144.647 53.74-66.355 9.136-131.115 0.236-195.108-17.307-12.485-3.423-24.767-7.483-37.009-11.676-4.732-1.62-5.413-1.201-5.42 3.878-0.049 33.583 0.004 67.165-0.069 100.748-0.008 3.782 1.314 5.86 5.093 7.004 7.233 2.187 14.26 5.003 20.384 9.602 3.594 2.699 6.19 5.968 5.824 10.873-0.43 5.752-3.64 8.957-9.432 8.968-19.872 0.039-39.744 0.014-59.617 0.014-19.41 0.006-38.82-0.103-58.23 0.082-4.736 0.045-8.025-1.288-9.814-5.842-1.798-4.575-0.752-8.45 2.566-11.847 5.698-5.833 13.181-8.404 20.593-11 7.625-2.668 7.8-0.933 7.8-10.86-0.02-151.738-0.02-303.476-0.076-455.215-0.001-2.353 1.227-5.726-1.09-6.829-2.297-1.094-4.167 1.976-6 3.442-22.584 18.058-43.474 37.783-60.052 61.694-0.527 0.76-1.03 1.537-1.588 2.273-5.878 7.727-9.827 15.6-5.76 25.855 1.946 4.91 1.707 10.59 0.282 15.968-0.937 3.532-2.436 6.64-5.44 8.865-5.016 3.718-8.469 3.16-11.788-2.085-12.847-20.308-25.59-40.682-38.532-60.928-2.117-3.313-1.999-5.634 0.715-8.492 17.758-18.692 37.058-35.675 57.256-51.635 51.148-40.413 106.911-72.725 168.335-94.902 40.036-14.455 81.234-23.72 123.709-27.312 49.596-4.194 98.488-0.765 146.365 13.295 50.8 14.919 95.584 40.146 131.966 79.103 36.324 38.896 58.162 84.856 65.163 137.62 5.425 40.866 1.694 80.839-13.67 119.389z"
+    fill="none" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" 
+class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
+  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+  <path
+    d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#acid">ACID</a></li>
+    <li><a href="#database-internal">Database internal</a>
+      <ol>
+        <li><a href="#storage-concept">Storage concept</a></li>
+        <li><a href="#row-oriented-vs-column-oriented">Row-oriented vs Column-oriented</a></li>
+        <li><a href="#primary-key-vs-secondary-key">Primary key vs Secondary key</a></li>
+      </ol>
+    </li>
+    <li><a href="#database-indexing">Database indexing</a></li>
+    <li><a href="#b-tree-and-btree">B-Tree and B+Tree</a></li>
+    <li><a href="#index-fragmentation">Index fragmentation</a></li>
+    <li><a href="#partitioning">Partitioning</a></li>
+    <li><a href="#database-sharding">Database sharding</a></li>
+    <li><a href="#concurrency-control">Concurrency control</a></li>
+    <li><a href="#database-replication">Database replication</a></li>
+    <li><a href="#database-engine">Database Engine</a></li>
+    <li><a href="#database-cursor">Database cursor</a></li>
+    <li><a href="#nosql">NoSQL</a>
+      <ol>
+        <li><a href="#mongodb">MongoDB</a></li>
+      </ol>
+    </li>
+    <li><a href="#tips">Tips</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/full-stack/" style="background-color: #d979cf; color: #ffffff;">
+                Full Stack
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/full-stack.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/">Database 一般筆記</a>
+        </h2>
+        
+        <h3 class="article-subtitle">
+            沒有另外被獨立出去一篇且有關 Database 的內容
+        </h3>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Jul 21, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    8 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="acid">ACID</h2>
+<ul>
+<li>Transaction
+<ul>
+<li>一個或多個操作的集合</li>
+<li>一個 transaction 要不全部執行，要不全部不執行</li>
+<li>就算在程式中沒顯式的寫 transaction，資料庫也會自動幫你包 transaction</li>
+<li>lifespan
+<ul>
+<li>begin</li>
+<li>commit</li>
+<li>rollback</li>
+</ul>
+</li>
+<li>只有一堆 read  queries 的 transaction 是有意義的，他可以得到 consistent snapshot</li>
+</ul>
+</li>
+<li>Atomicity
+<ul>
+<li>一個 transaction 要不全部執行，要不全部不執行</li>
+<li>如果中間有一個 query 出錯，前面的 query 都得 rollback</li>
+<li>如果 commit 前，database crash，則所有的 query 都得 rollback</li>
+</ul>
+</li>
+<li>Consistency
+<ul>
+<li>In data
+<ul>
+<li>符合當初制定的規則 (ex: foreign key 指向的資料一定要存在)
+<ul>
+<li>一般 ACID 的 C 指的是這個</li>
+<li>Define by user</li>
+<li>referential integrity</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>In read
+<ul>
+<li>描述另外一種 unconsistent 的情況</li>
+<li>讀取的不是最新的資料</li>
+<li>一個 transaction 在別的 transaction commit 之後，要不要立刻可以看到那筆資料？</li>
+<li>如果只有一個 database，那一個 transaction 可以讀到另外一個 transaction 寫入的資料，非常簡單</li>
+<li>如果是在 master-slave 的情況下，讀 replication 可能沒辦法立刻得到寫在 master 的資料</li>
+</ul>
+</li>
+<li>Eventual consistency
+<ul>
+<li>最後一定會 consistent</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Isolation
+<ul>
+<li>一個 transaction 的執行不應該影響其他 transaction</li>
+<li>read phenomena
+<ul>
+<li>dirty read
+<ul>
+<li>一個 transaction 讀到了另一個 transaction 已經寫了但還沒 commit 的資料。這個資料有可能被 commit 也有可能被 rollback</li>
+</ul>
+</li>
+<li>non-repeatable read
+<ul>
+<li>一個 transaction 兩次讀取同個資料時，得到的資料不一樣因是因為有其他 transaction 更新了這個資料（並且 commit 了）</li>
+<li>和 dirty read 不同的是，這個資料是已經 commit 的</li>
+</ul>
+</li>
+<li>phantom read
+<ul>
+<li>也是第一次和第二次讀取的資料不一樣，第二次發現多了額外的資料，這次是因為有其他 transaction 寫入了新的資料（並且 commit 了）</li>
+<li>之所以要和 non-repeatable read 分開，是因為他這裡沒辦法簡單的靠鎖起來已經讀過的資料，因為你沒辦法鎖你本來看不到的資料</li>
+</ul>
+</li>
+<li>lost update
+<ul>
+<li>我更新了某筆資料，但是在 commit 之前，有其他 transaction 也更新了這筆資料，並且 commit。我再去讀取這筆資料時，發現我更新的資料就被覆蓋了</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Isoaltion level
+<ul>
+<li>為了解決 read phenomena，資料庫提供了不同的隔離等級</li>
+<li>不會影響自身 transaction 前面所 write 的資料</li>
+<li>read uncommitted
+<ul>
+<li>No isolation</li>
+<li>可以看到其他 transaction 還沒 commit 的資料</li>
+</ul>
+</li>
+<li>read committed
+<ul>
+<li>只能看到其他 transaction commit 的資料</li>
+<li>許多資料庫的預設隔離等級</li>
+<li>除了 dirty read 之外，其他 read phenomena 都有可能發生</li>
+</ul>
+</li>
+<li>repeatable read
+<ul>
+<li>確保同一筆資料在同一個 transaction 中讀取時，結果是一樣的</li>
+<li>phantom read 有可能發生</li>
+</ul>
+</li>
+<li>snapshot
+<ul>
+<li>保證 transaction 得到的資料是一致的</li>
+<li>只會看到 transaction 開始時的 snapshot</li>
+<li>read phenomena 都不會發生</li>
+<li>好像不是所有資料庫都有這個隔離等級，也有些 repeatable read 就是用 snapshot 來實現的
+<ul>
+<li>比如 PostgreSQL 就是用 snapshot 來實現 repeatable read</li>
+</ul>
+</li>
+<li>但這不代表不會遇到問題，請參考 double booking problem</li>
+</ul>
+</li>
+<li>serializable
+<ul>
+<li>最高隔離等級</li>
+<li>保證所有 transaction 都是依序執行的</li>
+<li>read phenomena 都不會發生</li>
+<li>和要求 exclusive lock 相比，有可能實現方法是遇到衝突會 fail</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>解法
+<ul>
+<li>pessimistic
+<ul>
+<li>用各種 lock 來保證 isolation</li>
+<li>row level lock, table lock, page lock</li>
+</ul>
+</li>
+<li>optimistic
+<ul>
+<li>不用 lock，真的有 transaction 衝突時就 fail</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Durability
+<ul>
+<li>一旦 transaction 完成，其結果應該是永久的</li>
+<li>也就是要做 persistent storage</li>
+<li>durability technique
+<ul>
+<li>Write ahead log (WAL)
+<ul>
+<li>先寫 log (寫你做了什麼操作，但不去真的改 disk 上的資料)，有空再寫到 disk
+<ul>
+<li>這樣一些修改就可以改在 memory，如果 crash 了，可以用 log 來 recover</li>
+<li>而且考量硬碟限制，如果你想修改的資料遠小於硬碟可寫的最小單位，會很浪費</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Asynchronous snapshot
+<ul>
+<li>在後台把 snapshot 寫到 disk</li>
+</ul>
+</li>
+<li>AOF
+<ul>
+<li>把修改資料的指令寫到 log</li>
+<li>好像和 WAL 的差別是不會立刻寫到 disk</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>可能的問題
+<ul>
+<li>OS Cache
+<ul>
+<li>假設想把 WAL 寫到 disk，OS 可能會先把資料寫到 OS cache，但是卻先回覆已寫入</li>
+<li>但是有指令 (fsync )可以 force OS 寫到 disk
+<ul>
+<li>但是會有 trade off，因為 fsync 會讓寫入變慢</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="database-internal">Database internal</h2>
+<h3 id="storage-concept">Storage concept</h3>
+<ul>
+<li>Table</li>
+<li>Row_id
+<ul>
+<li>多數 database 會維護自己的 row_id</li>
+<li>也叫做 tuple id</li>
+</ul>
+</li>
+<li>Page
+<ul>
+<li>多個 row 會被存在一個 page</li>
+<li>讀取不會只讀一個 row，而是一個或多個 page</li>
+<li>根據 database，每個 page 會有個固定的 size</li>
+</ul>
+</li>
+<li>IO
+<ul>
+<li>IO operation 指的是存取 disk 的操作</li>
+<li>想盡量 minimize IO 次數</li>
+<li>一個 IO 可能會獲得多個 page</li>
+<li>IO 也可能只是進入 cache</li>
+</ul>
+</li>
+<li>Heap data structure
+<ul>
+<li>儲存整個 table 的資料</li>
+<li>traverse 整個 table 的成本很大</li>
+<li>可以用 index 來知道要查詢的資料在哪裡</li>
+</ul>
+</li>
+<li>Index data structure (b-tree)
+<ul>
+<li>一個有 pointer 來指向 heap 的資料結構
+<ul>
+<li>較流行的是 b-tree</li>
+</ul>
+</li>
+<li>可以對一個或多個 column 做 index</li>
+<li>index 可以告訴你要查詢的資料在哪個 page</li>
+<li>index 也會被儲存在 page</li>
+<li>clustered index
+<ul>
+<li>也叫做 Index-Organized Table</li>
+<li>heap table 的資料和 index 放在一起
+<ul>
+<li>這也是為什麼 clustered index 只能有一個</li>
+</ul>
+</li>
+<li>沒特別指定的話，primary key 一般是 clustered index</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="row-oriented-vs-column-oriented">Row-oriented vs Column-oriented</h3>
+<ul>
+<li>Row-oriented database (row store)
+<ul>
+<li>每個 row 接著下個 row 來儲存</li>
+<li>每次 IO 會獲得多個 row，每個都有所有的 column</li>
+<li>如果沒特別設置 index，會需要一列一列的 scan</li>
+</ul>
+</li>
+<li>Col-oriented database (column store)
+<ul>
+<li>每個 column 接著下個 column 來儲存</li>
+<li>會儲存 row_id 和 column 的數值</li>
+<li>對於只要特定的 column 的 query (SELECT 那邊)，需要的 IO 比較少
+<ul>
+<li>但是如果要查詢多個 column，則需要更多的 IO
+<ul>
+<li>因為雖然可以從 where 快速找到需要的 row ID，但是需要去每個 SELECT 要的 col 的 block 取資料</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Pros and cons
+<ul>
+<li>Row-oriented
+<ul>
+<li>Pros
+<ul>
+<li>OLTP (Online Transaction Processing)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Column-oriented
+<ul>
+<li>Pros
+<ul>
+<li>比較好壓縮，因為性質相近的資料會在一起</li>
+<li>aggregation 很有效率</li>
+<li>OLAP (Online Analytical Processing)</li>
+</ul>
+</li>
+<li>Cons
+<ul>
+<li>write 比較慢</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="primary-key-vs-secondary-key">Primary key vs Secondary key</h3>
+<ul>
+<li>primary key
+<ul>
+<li>clusering
+<ul>
+<li>把 table 圍繞 primary key 來組織</li>
+</ul>
+</li>
+<li>需要維持 order，所以如果在有 1 和 8 的情況下，需要插入 2，那 2 不能直接排在 8 後面</li>
+<li>但是如果我要根據 PK 取得小範圍內的資料，就可能不用多次 IO</li>
+</ul>
+</li>
+<li>Secondary key
+<ul>
+<li>不在乎你原本 table 的 order</li>
+<li>但是會有另外一個結構去放 index，可以找到 row_id</li>
+</ul>
+</li>
+</ul>
+<h2 id="database-indexing">Database indexing</h2>
+<ul>
+<li>如果需要搜索的欄位沒做 index，那麼就會需要 scan 整個 table，直到找到
+<ul>
+<li>如果要求欄位做 <code>like</code> 之類的，那麼依然需要 scan 整個 table</li>
+</ul>
+</li>
+<li>搜索方法
+<ul>
+<li>table scan
+<ul>
+<li>如果掃描的範圍過大，Database 可能就會選擇該方法</li>
+<li>通常會用 parallel 的方式搜尋</li>
+</ul>
+</li>
+<li>index scan</li>
+<li>bitmap index scan
+<ul>
+<li>postgresql 有這個功能</li>
+<li>流程
+<ul>
+<li>建立長度是 page 的 bitmap</li>
+<li>index scan 的同時更新 bitmap，紀錄哪些 page 有我們要的資料</li>
+<li>最後一次性讀取 bitmap 為 1 的 page</li>
+<li>最後用 filter 去過濾掉不需要的資料</li>
+</ul>
+</li>
+<li>和 index scan 的差別在於，他找到後不會急著去取資料，而是先記錄下來</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>non-key column
+<ul>
+<li>可以用 include 把一些常常需要一起帶入的資訊放到 index 裡面
+<ul>
+<li>Index-only scan
+<ul>
+<li>這樣在特定情況不用去 heap 取，可以加速很多</li>
+<li>但也要小心使 index 變得過大。如果 memory 不夠，又會用到 disk，拖垮效率</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>composite index
+<ul>
+<li>把多個 col 作為 key 做 index</li>
+<li>在 postgresql 裡面，如果有一個 index 是 (a, b)，用靠左的 index 可以做 index scan，但是用靠右的就不行</li>
+</ul>
+</li>
+<li>index comment
+<ul>
+<li>可以用 comment 來告訴 optimizer 要用的策略</li>
+<li>但是不是所有 database 都支援</li>
+</ul>
+</li>
+<li>bloom filter
+<ul>
+<li>透過 hash 和 bit array 來判斷某個元素是否有可能存在</li>
+</ul>
+</li>
+<li>index 指向 primary key vs row
+<ul>
+<li>postgresql 的 index 都是指向 row</li>
+<li>mysql 的 secondary index 指向 primary key，primary key 指向 row</li>
+<li>當更新刪除 row 的時候，mysql 只需要更新 primary，但是 postgresql 可能需要更新所有 index</li>
+<li>但是從 index 取資料時，mysql 需要多一次查詢，而 postgresql 可以直接取</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-tree-and-btree">B-Tree and B+Tree</h2>
+<ul>
+<li>B-tree
+<ul>
+<li>Balanced data structure for fast search</li>
+<li>有一堆 Node
+<ul>
+<li>在資料庫中，node 通常是 disk page</li>
+</ul>
+</li>
+<li>有 m degree
+<ul>
+<li>每個 node 最多有 m 個 child</li>
+<li>每個 node 最多有 m-1 個 element</li>
+</ul>
+</li>
+<li>element
+<ul>
+<li>有 key 和 value
+<ul>
+<li>value 通常是 row 的 pointer
+<ul>
+<li>可能是 row_id 的相關資訊</li>
+<li>pointer 可以指向 primary key 或是 tuple</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Node type
+<ul>
+<li>Root</li>
+<li>Internal</li>
+<li>Leaf</li>
+</ul>
+</li>
+<li>限制
+<ul>
+<li>node 中的 element 同時存了 key 和 value</li>
+<li>range query 效率很差，因為要各別 random access</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>B+Tree
+<ul>
+<li>B-tree 的變形，和 B-tree 很像，不過 internal node 只存放 key，只有 leaf node 會存放 value
+<ul>
+<li>internal node 因為現在只需要儲存 key，element size 比較小，所以可以存放更多 element</li>
+</ul>
+</li>
+<li>leaf node 會用 linked list 串起來
+<ul>
+<li>適合 range query</li>
+</ul>
+</li>
+<li>通常一個 node 是一個 DBMS page</li>
+</ul>
+</li>
+</ul>
+<h2 id="index-fragmentation">Index fragmentation</h2>
+<ul>
+<li>Internal fragmentation
+<ul>
+<li>一個 page 中有很多空間是空的</li>
+</ul>
+</li>
+<li>External fragmentation
+<ul>
+<li>多個 Page 存放不是連續的</li>
+</ul>
+</li>
+</ul>
+<h2 id="partitioning">Partitioning</h2>
+<ul>
+<li>把大 table 分成多個小 table</li>
+<li>Vertical vs Horizontal
+<ul>
+<li>Vertical
+<ul>
+<li>根據 columns 拆成多個 partition</li>
+<li>可以把不太常用又大的 column (比如 blob) 放到另外一個 partition，然後放在較慢的 disk，保留其他常存取的 column 在 SSD</li>
+</ul>
+</li>
+<li>Horizontal
+<ul>
+<li>把 rows 拆成多個 partition</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Types
+<ul>
+<li>By range
+<ul>
+<li>比如日期或是 id</li>
+<li>也可以把一些較舊較不常存取的 partition 移到較慢的設備</li>
+</ul>
+</li>
+<li>By list
+<ul>
+<li>根據一些離散的數值去區分</li>
+</ul>
+</li>
+<li>By hash
+<ul>
+<li>用 hash function 去決定要放在哪個 partition</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>優點
+<ul>
+<li>用 single query 存取單一 partition 的速度更快</li>
+<li>對某些 sequential scan 有幫助</li>
+<li>可以把舊資料放在比較便宜的設備</li>
+</ul>
+</li>
+<li>缺點
+<ul>
+<li>如果要從一個 partition 移動資料到另一個 partition，效率很慢</li>
+<li>對於效率很差的 query，可能會需要 scan 所有 partition，此時比掃描整個沒做 partition 的 table 還要慢</li>
+</ul>
+</li>
+</ul>
+<h2 id="database-sharding">Database sharding</h2>
+<ul>
+<li>把 table 拆成多個 table，分散在不同的 database</li>
+<li>consisitent hashing
+<ul>
+<li>用 hash function 來決定要放在哪個 database，每次都要得到一致的結果</li>
+</ul>
+</li>
+<li>Horizontal partitioning vs sharding
+<ul>
+<li>Horizontal partitioning
+<ul>
+<li>一個 table 拆成多個 table，但是還是在同一個 database</li>
+</ul>
+</li>
+<li>和 Horizontal partitioning 的差別
+<ul>
+<li>table 現在會分到不同的 database server</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>優點
+<ul>
+<li>scalability</li>
+<li>Optimal
+<ul>
+<li>smaller index size</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>缺點
+<ul>
+<li>complex client
+<ul>
+<li>做 partition，client 不用管資料具體在哪個 partition，交給 DBMS 去處理。但是 sharding 就要 client 自己去處理</li>
+<li>很多東西變得很複雜
+<ul>
+<li>跨 shard 做 transaction</li>
+<li>rollback</li>
+<li>join</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="concurrency-control">Concurrency control</h2>
+<ul>
+<li>Lock
+<ul>
+<li>shared vs exclusive
+<ul>
+<li>shared lock 可以被多個 transaction 同時持有
+<ul>
+<li>用在讀取，所以可以多個 transaction 同時讀取</li>
+<li>在有 shared lock  的條件下，其他 transaction 也可以設置 shared lock</li>
+</ul>
+</li>
+<li>exclusive lock 只能被一個 transaction 持有
+<ul>
+<li>他人不能讀取或寫入</li>
+</ul>
+</li>
+<li>當涉及的資料持有其中一種 lock 時，其他 transaction 都不能設置另外一種 lock</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Deadlock
+<ul>
+<li>多個 transaction 互相等待對方釋放 lock</li>
+<li>多數 DBMS 會檢查 deadlock，並讓最後一個造成 deadlock 的 transaction rollback</li>
+</ul>
+</li>
+<li>Two-phase locking (2PL)
+<ul>
+<li>Double booking problem
+<ul>
+<li>當兩個 transaction 同時搶更新同個資源就有可能遇到該問題</li>
+<li>example
+<ul>
+<li>兩個 transaction 都先 select 再 update</li>
+<li>他們兩個 select 都先看到有空位，然後一前一後更新，就會造成 double booking</li>
+</ul>
+</li>
+<li>PostgreSQL 可以加上 <code>SELECT ... FOR UPDATE</code> 來解決
+<ul>
+<li>他會取得 exclusive lock</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>two-phase
+<ul>
+<li>growing phase
+<ul>
+<li>取得 lock</li>
+</ul>
+</li>
+<li>shrinking phase
+<ul>
+<li>釋放 lock</li>
+</ul>
+</li>
+<li>強調一個 transaction 不能交叉取得和釋放 lock
+<ul>
+<li>不然其他 transaction 有可能在這空隙修改資料</li>
+</ul>
+</li>
+<li>有可能造成 deadlock</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="database-replication">Database replication</h2>
+<ul>
+<li>透過 redundancy 來提高 reliability, tolerance, accessibility</li>
+<li>Master / Backup replication
+<ul>
+<li>只有一個 master / leader，有一或多個 backup / standby</li>
+<li>master
+<ul>
+<li>接受 write / ddl</li>
+</ul>
+</li>
+<li>backup
+<ul>
+<li>接受 read</li>
+<li>備份寫到 master 的資料</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Multi-master replication
+<ul>
+<li>多個 master，可以同時寫入</li>
+<li>需要處理 conflict</li>
+</ul>
+</li>
+<li>Sychronous vs Asynchronous replication
+<ul>
+<li>Synchronous
+<ul>
+<li>transaction 會被 blocked，直到所有的 backup 都寫入</li>
+<li>有些 database 可以設定 First N 或是 any 完成就好</li>
+</ul>
+</li>
+<li>Asynchronous
+<ul>
+<li>transaction 被寫入 master 後就算完成</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>優點
+<ul>
+<li>horizontal scaling</li>
+</ul>
+</li>
+<li>缺點
+<ul>
+<li>eventual consistency</li>
+<li>寫入可能很慢 (synchronous)</li>
+<li>實作複雜 (multi-master)</li>
+</ul>
+</li>
+</ul>
+<h2 id="database-engine">Database Engine</h2>
+<ul>
+<li>也叫 storage engine 或 embedded database</li>
+<li>負責處理 CRUD 的 library</li>
+<li>DBMS 基於 engine 來提供更多功能</li>
+<li>例子
+<ul>
+<li>MyISAM
+<ul>
+<li>indexed sequential access method</li>
+<li>B-tree 的 index 直接指向 row</li>
+<li>不支援 transaction</li>
+<li>insert 很快，但是 update 和 delete 很慢
+<ul>
+<li>因為改變資料大小會造成一堆 pointer 需要更新</li>
+</ul>
+</li>
+<li>database crash 後，可能會有 corrupted table，要手動修復</li>
+<li>table-level lock</li>
+</ul>
+</li>
+<li>InnoDB
+<ul>
+<li>B+Tree 的 index 指向 primary key，primary key 指向 row</li>
+<li>MySQL 和 MariaDB 的預設 engine</li>
+<li>支援 ACID transaction</li>
+<li>foreign key</li>
+<li>row-level lock</li>
+</ul>
+</li>
+<li>XtraDB
+<ul>
+<li>InnoDB 的 fork</li>
+</ul>
+</li>
+<li>SQLite
+<ul>
+<li>對於 local data 很流行的 embedded database</li>
+<li>Full ACID</li>
+<li>table-level lock</li>
+<li>concurrent read and write</li>
+<li>同時也是 DBMS
+<ul>
+<li>支援解析 SQL</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Aria
+<ul>
+<li>和 MyISAM 很像</li>
+<li>crash-safe</li>
+</ul>
+</li>
+<li>Berkeley DB
+<ul>
+<li>key-value store</li>
+<li>支援 ACID transaction</li>
+<li>支援 replication</li>
+</ul>
+</li>
+<li>LevelDB
+<ul>
+<li>LSM-tree (Log-Structured Merge-Tree)
+<ul>
+<li>有利於 insert</li>
+<li>有利於 SSD
+<ul>
+<li>原本的 b-tree 為了平衡會頻繁修改，對同一個 block 的多次寫入在 SSD 易使 block 壞掉</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>沒有 transaction</li>
+</ul>
+</li>
+<li>RocksDB
+<ul>
+<li>Facebook fork 的 LevelDB</li>
+<li>支援 transaction</li>
+<li>因為 insert 很快，又支援 transaction，也比較適合 SSD，所以很受歡迎</li>
+<li>加了一堆 feature</li>
+<li>multi-threaded</li>
+<li>MyRocks
+<ul>
+<li>給 MySQL 和 MariaDB 用的 RocksDB</li>
+</ul>
+</li>
+<li>MongoRocks
+<ul>
+<li>給 MongoDB 用的 RocksDB</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="database-cursor">Database cursor</h2>
+<ul>
+<li>當資料庫有很大的結果集時，不可能一次把所有資料用網路傳給 client，用戶也沒有 memory 來存放所有資料</li>
+<li>Server side / client side cursor
+<ul>
+<li>Server side
+<ul>
+<li>一次只傳一部分資料給 client</li>
+<li>但是要多次往返可能最後總時間會比較久</li>
+</ul>
+</li>
+<li>Client side
+<ul>
+<li>一次把所有資料傳給 client</li>
+<li>client 自己分批處理</li>
+<li>對 network bandwidth 要求較大</li>
+<li>可能沒有足夠的 memory</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="nosql">NoSQL</h2>
+<h3 id="mongodb">MongoDB</h3>
+<ul>
+<li>以 BSON (Binary JSON) 儲存資料</li>
+<li>composite index
+<ul>
+<li>prefix
+<ul>
+<li>如果有一個 index 是 (a, b)，那麼 (a) 也是有效的 index</li>
+</ul>
+</li>
+<li>explain
+<ul>
+<li>用來看 query 的 execution plan</li>
+<li>cursor
+<ul>
+<li>BasicCursor
+<ul>
+<li>會 scan 整個 collection，是個警訊</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>掃描的文件數量
+<ul>
+<li>nscanned
+<ul>
+<li>掃描的 index 數量</li>
+</ul>
+</li>
+<li>nscannedObjects
+<ul>
+<li>掃描的 document 數量</li>
+</ul>
+</li>
+<li>n
+<ul>
+<li>回傳的 document 數量</li>
+</ul>
+</li>
+<li>nscanned &gt;= nscannedObjects &gt;= n</li>
+</ul>
+</li>
+<li>scanAndOrder
+<ul>
+<li>是否需要把文件都放在 memory 並排序</li>
+<li>還會一次性回傳資料</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>hint
+<ul>
+<li>強制使用某個 index</li>
+</ul>
+</li>
+<li>optimizer 挑選索引
+<ul>
+<li>第一階段 - 挑選最佳索引
+<ul>
+<li>最佳索引
+<ul>
+<li>包含所有的 filter 和 sort 的欄位</li>
+<li>range filter 和 sort 的欄位必須在 equality filter 的後面
+<ul>
+<li>sort 的欄位必須在 range filter 的後面</li>
+</ul>
+</li>
+<li>如果有多個最佳索引就會隨便選一個</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>第二階段 - 透過實驗挑選索引
+<ul>
+<li>沒有最佳索引就會實驗判斷要選哪個，看看誰先找到指定數量的文件</li>
+<li>換句話說，如果有多個索引，optimizer 會選 nscanned 最小的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>MMAPv1
+<ul>
+<li>Mongo 一開始用的 storage engine</li>
+<li>_id 直接對應到 diskloc，也就是 disk 的偏移量
+<ul>
+<li>查找速度驚人，但是更新就要維護偏移量很費時</li>
+</ul>
+</li>
+<li>採用 database-level lock，Mongo 後來也只更新成 collection-level lock</li>
+</ul>
+</li>
+<li>WiredTiger
+<ul>
+<li>MongoDB 收購的 storage engine</li>
+<li>Document-level locking</li>
+<li>可以做到 compression</li>
+<li>5.2 之前
+<ul>
+<li>_id 會先被用來尋找 recordid，再用 recordid 去獲取 document</li>
+<li>recordid 是 clustered index</li>
+</ul>
+</li>
+<li>5.3
+<ul>
+<li>_id 變成 clustered index</li>
+<li>之前 recordid 只有 64 位，但現在 _id 作為 primary key 有 12 bytes
+<ul>
+<li>對 secondary index 造成更大的負擔</li>
+<li>Mongo 想達成跨機器和 shard 的唯一性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="tips">Tips</h2>
+<ul>
+<li>盡量不要使用 offset
+<ul>
+<li>offset 代表讀取並丟掉前面幾筆資料</li>
+<li>常有 offset 和 limit 搭配好達到 paging 的效果</li>
+<li>可以讓用戶那邊保存 id，where 設置 id 要大於多少來規避 offset</li>
+</ul>
+</li>
+<li>Connection pool
+<ul>
+<li>維護一定數量的連接，避免每次都要建立連接</li>
+</ul>
+</li>
+<li>Idempotency key
+<ul>
+<li>用來確保一個 request 只會被執行一次</li>
+<li>會生成一個唯一的 key，並且在 request 中帶上這個 key。執行操作後會把這個 key 存起來，下次再收到這個 key 時就不會再執行操作</li>
+<li>可以用 ULID 而不用 UUID，因為 ULID 前面的 bit 有時間戳，可以用來排序
+<ul>
+<li>輸入的資料集中在相近的 page，還都加在尾端，可以減少 IO (相較隨機的 UUID)
+<ul>
+<li>不用被迫頻繁存取 disk。而且 UUID 的隨機性拉一堆 page 會導致 buffer 更容易被塞滿，而得強制寫入 disk</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>consistent hashing
+<ul>
+<li>把 hash function 的結果分散在一個 hash ring 上
+<ul>
+<li>根據 hash function 的結果，看自己落在哪段範圍，配給指定的 server</li>
+<li>這樣的好處是追加或是移除 server 時，只會影響一台 server 的資料</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>write amplification
+<ul>
+<li>寫入資料時，發現 disk 寫入的資料比你預期寫入的資料多很多</li>
+<li>level
+<ul>
+<li>application
+<ul>
+<li>應用程式背後下了很多 query 來達成某個單一任務</li>
+</ul>
+</li>
+<li>database
+<ul>
+<li>ex: 更新資料時，可能是直接生一個新的 row</li>
+</ul>
+</li>
+<li>SSD
+<ul>
+<li>通常說的是這種</li>
+<li>想更新的時候，更新的 page 會被標記為不能使用。會有另外一隻非同步程式定期處理這種
+<ul>
+<li>但是他會把整個 block 寫到新的地方，再把原地方設為 free，就為了那些不能再被使用的空間搬整個 block</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/database/">database</a>
+        
+            <a href="/Blog/tags/nosql/">nosql</a>
+        
+            <a href="/Blog/tags/cache/">cache</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/redis/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Redis</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/angular-%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Angular 筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Spring Boot 筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/graphql-%E7%B0%A1%E4%BB%8B/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">GraphQL 簡介</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>
