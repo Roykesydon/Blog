@@ -47,14 +47,6 @@
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/software-engineering.jpg" alt="Featured image of post Software Engineering" /&gt;</description>
         </item>
         <item>
-        <title>Unclassified</title>
-        <link>https://roykesydon.github.io/Blog/categories/unclassified/</link>
-        <pubDate>Sun, 02 Jun 2024 00:00:01 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/categories/unclassified/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/unclassified.jpg" alt="Featured image of post Unclassified" /&gt;</description>
-        </item>
-        <item>
         <title>Deep Learning</title>
         <link>https://roykesydon.github.io/Blog/categories/deep-learning/</link>
         <pubDate>Tue, 30 Apr 2024 00:00:55 +0800</pubDate>
@@ -71,9 +63,17 @@
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/linux.jpg" alt="Featured image of post Linux" /&gt;</description>
         </item>
         <item>
+        <title>Unclassified</title>
+        <link>https://roykesydon.github.io/Blog/categories/unclassified/</link>
+        <pubDate>Sat, 30 Mar 2024 00:00:01 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/categories/unclassified/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/unclassified.jpg" alt="Featured image of post Unclassified" /&gt;</description>
+        </item>
+        <item>
         <title>Embedded System</title>
         <link>https://roykesydon.github.io/Blog/categories/embedded-system/</link>
-        <pubDate>Mon, 08 May 2023 00:00:54 +0800</pubDate>
+        <pubDate>Thu, 04 May 2023 01:32:54 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/categories/embedded-system/</guid>
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/embedded-system.jpg" alt="Featured image of post Embedded System" /&gt;</description>
@@ -81,7 +81,7 @@
         <item>
         <title>Math</title>
         <link>https://roykesydon.github.io/Blog/categories/math/</link>
-        <pubDate>Tue, 21 Feb 2023 15:42:47 +0800</pubDate>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/categories/math/</guid>
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/math.jpg" alt="Featured image of post Math" /&gt;</description>
