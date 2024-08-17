@@ -9,7 +9,7 @@ Images 相鄰 pixel 建無向邊 Text 詞和下一個詞建單向邊 Molecules �
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/gnn-%E4%BB%8B%E7%B4%B9/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.10ee444b6b9f9d9767a1b6ea467724b45a58d888dae40d7d11c371ae868d7ae4.css"><meta property='og:title' content='GNN 介紹'>
+<link rel="stylesheet" href="/Blog/scss/style.min.524dfa9b9ded8cde5e6ac78e81ecae35d03b990b723aeb79e762f921e7948d58.css"><meta property='og:title' content='GNN 介紹'>
 <meta property='og:description' content='圖簡介 Graph
 表示 Entity (nodes) 間的 relations (edges) 組成 Vertex attributes (V) Edge attributes and directions (E) Global attributes (U) 下文簡稱 U, V, E 可以表示成圖的範例
 Images 相鄰 pixel 建無向邊 Text 詞和下一個詞建單向邊 Molecules 分子的連接處建無向邊 Social networks 人和人之間建無向邊 定義問題 種類 Graph-level Node-level Edge-level 個別講的是基於什麼東西做分類，比如對每個人（node）分類一個陣營，就算 Node-level 挑戰 儲存邊的關係 鄰接矩陣 在節點多的情況下佔用空間大，而且可能非常稀疏 同一張圖，換個點的順序後鄰接矩陣看起來就會不同 難以保證這些東西餵入神經網路後輸出相同 可以用兩個 list，一個儲存邊的向量，另一個是 Adjacency list，依序紀錄邊的關係 稀疏矩陣 難以用 GPU 運算 Graph Neural Network GNN 是對圖上所有屬性的 optimizable transformation，而且可以保持 graph symmetries (permutation invariances，把 node 排序後結果不變)'>
