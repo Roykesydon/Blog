@@ -51,6 +51,8 @@
 &lt;dl&gt;
 &lt;dt&gt;2024-2024&lt;/dt&gt;
 &lt;dd&gt;&lt;strong&gt;&lt;strong&gt;DevOps Engineer Intern&lt;/strong&gt;&lt;/strong&gt;; Taiwan Semiconductor Manufacturing Company&lt;/dd&gt;
+&lt;dt&gt;2023-2025&lt;/dt&gt;
+&lt;dd&gt;&lt;strong&gt;&lt;strong&gt;Linux Server Administrator&lt;/strong&gt;&lt;/strong&gt;; National Cheng Kung University - Ubiquitous Sensing and Cloud Computing Lab&lt;/dd&gt;
 &lt;dt&gt;2020-2023&lt;/dt&gt;
 &lt;dd&gt;&lt;strong&gt;&lt;strong&gt;Adjunct research assistants&lt;/strong&gt;&lt;/strong&gt;; Advanced Computation Laboratory&lt;/dd&gt;
 &lt;/dl&gt;
@@ -59,6 +61,10 @@
 &lt;dt&gt;&lt;strong&gt;&lt;strong&gt;Web File Browser System&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
 &lt;dd&gt;
 &lt;p&gt;Developed a tool for browsing files within specified containers in Kubernetes. The system allows users to navigate directories within a container, view text file contents, and download files. File downloads are implemented using streaming, eliminating the need to first download the entire file on the backend before transmitting it to the frontend. The frontend was built using React, while the backend was developed with Spring Boot, employing Mockito for creating mocks and stubs. The entire project was developed using Scrum methodology, with Azure DevOps used for project management and support.&lt;/p&gt;
+&lt;/dd&gt;
+&lt;dt&gt;&lt;strong&gt;&lt;strong&gt;Linux Server Administrator&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
+&lt;dd&gt;
+&lt;p&gt;Responsible for managing Linux servers equipped with public GPUs for the laboratory. Duties included creating and managing user accounts, addressing each user&amp;rsquo;s specific environment requirements, and utilizing Docker to set up containers. Ensured users could access their dedicated containers using their existing SSH private keys and install necessary libraries. Additionally, used LVM to dynamically expand disk space to accommodate the increasing storage demands as the number of laboratory members grew.&lt;/p&gt;
 &lt;/dd&gt;
 &lt;dt&gt;&lt;strong&gt;&lt;strong&gt;Real-time Fishing Vessel Detection at the Fishing Port&lt;/strong&gt;&lt;/strong&gt;&lt;/dt&gt;
 &lt;dd&gt;Multiple cameras are installed at the fishing port to obtain the camera images through RTSP and achieve the automated counting of fishing vessels at the port. The backend integrates YOLOv4, FastAPI, and some image processing techniques to recognize the received camera images. The frontend uses Vue as framework to provide detection results and harbor data for the past 48 hours.&lt;/dd&gt;
