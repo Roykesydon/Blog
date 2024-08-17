@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='紀錄系統設計時可以考慮的事項'>
+<title>System Design</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/system-design/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.9ba16087f643030152a15ea8e8d54858a0b82d51f4d55e96bda0da835386dfda.css"><meta property='og:title' content='System Design'>
+<meta property='og:description' content='紀錄系統設計時可以考慮的事項'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/system-design/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='system-design' /><meta property='article:published_time' content='2024-08-03T00:08:46&#43;08:00'/><meta property='article:modified_time' content='2024-08-03T00:08:46&#43;08:00'/>
+<meta name="twitter:title" content="System Design">
+<meta name="twitter:description" content="紀錄系統設計時可以考慮的事項">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">🍤<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/old avatar.png"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://www.pixiv.net/users/18855729'
+                        target="_blank"
+                        title="Pixiv"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" stroke="currentColor" vector-effect="non-scaling-stroke" fill="">
+  <path stroke-width="1" vector-effect="non-scaling-stroke"
+    d="M701.515 301.152c-44.44-46.092-100.245-64.919-163.08-65.107-29.552-0.089-58.595 4.617-87.095 12.455-28.961 7.965-56.673 18.839-81.996 35.306-3.347 2.176-4.69 4.686-4.695 8.694-0.034 29.713-0.333 59.424-0.426 89.137-0.085 27.263-0.018 54.527-0.021 81.79-0.004 56.836 0.053 113.674-0.097 170.51-0.015 5.326 1.57 8.393 6.639 10.576 17.881 7.7 36.245 13.85 55.161 18.37 30.808 7.36 62.082 10.876 93.715 12.36 33.75 1.583 66.83-1.28 98.832-12.378 61.328-21.265 105.46-61.217 129.447-121.99 15.492-39.25 17.417-80.058 10.877-121.393-7.146-45.173-25.384-85.268-57.26-118.33z"
+    fill="none" />
+  <path stroke-width="1" vector-effect="non-scaling-stroke"
+    d="M512 17.482C238.886 17.482 17.482 238.886 17.482 512S238.886 1006.518 512 1006.518 1006.518 785.114 1006.518 512 785.114 17.482 512 17.482z m327.127 530.516c-18.962 47.58-50.687 84.816-92.709 113.517-43.734 29.872-92.452 46.554-144.647 53.74-66.355 9.136-131.115 0.236-195.108-17.307-12.485-3.423-24.767-7.483-37.009-11.676-4.732-1.62-5.413-1.201-5.42 3.878-0.049 33.583 0.004 67.165-0.069 100.748-0.008 3.782 1.314 5.86 5.093 7.004 7.233 2.187 14.26 5.003 20.384 9.602 3.594 2.699 6.19 5.968 5.824 10.873-0.43 5.752-3.64 8.957-9.432 8.968-19.872 0.039-39.744 0.014-59.617 0.014-19.41 0.006-38.82-0.103-58.23 0.082-4.736 0.045-8.025-1.288-9.814-5.842-1.798-4.575-0.752-8.45 2.566-11.847 5.698-5.833 13.181-8.404 20.593-11 7.625-2.668 7.8-0.933 7.8-10.86-0.02-151.738-0.02-303.476-0.076-455.215-0.001-2.353 1.227-5.726-1.09-6.829-2.297-1.094-4.167 1.976-6 3.442-22.584 18.058-43.474 37.783-60.052 61.694-0.527 0.76-1.03 1.537-1.588 2.273-5.878 7.727-9.827 15.6-5.76 25.855 1.946 4.91 1.707 10.59 0.282 15.968-0.937 3.532-2.436 6.64-5.44 8.865-5.016 3.718-8.469 3.16-11.788-2.085-12.847-20.308-25.59-40.682-38.532-60.928-2.117-3.313-1.999-5.634 0.715-8.492 17.758-18.692 37.058-35.675 57.256-51.635 51.148-40.413 106.911-72.725 168.335-94.902 40.036-14.455 81.234-23.72 123.709-27.312 49.596-4.194 98.488-0.765 146.365 13.295 50.8 14.919 95.584 40.146 131.966 79.103 36.324 38.896 58.162 84.856 65.163 137.62 5.425 40.866 1.694 80.839-13.67 119.389z"
+    fill="none" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" 
+class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
+  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+  <path
+    d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#architecture">Architecture</a>
+      <ol>
+        <li><a href="#monolithic-vs-microservices">monolithic vs microservices</a></li>
+      </ol>
+    </li>
+    <li><a href="#diagram-tips">Diagram tips</a></li>
+    <li><a href="#estimation">Estimation</a></li>
+    <li><a href="#network">Network</a>
+      <ol>
+        <li><a href="#load-balancer">Load Balancer</a></li>
+      </ol>
+    </li>
+    <li><a href="#cdn-content-delivery-network">CDN (Content Delivery Network)</a></li>
+    <li><a href="#caching">Caching</a></li>
+    <li><a href="#maintain-consistency">Maintain consistency</a></li>
+    <li><a href="#queue--messaging">Queue / Messaging</a></li>
+    <li><a href="#protocol--sendreceive-data">Protocol &amp; Send/Receive data</a></li>
+    <li><a href="#store-client-data">Store client data</a></li>
+    <li><a href="#architecture-pattern">Architecture pattern</a></li>
+    <li><a href="#流程">流程</a></li>
+    <li><a href="#scene">Scene</a></li>
+    <li><a href="#tips">Tips</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/interview/" style="background-color: #424ec6; color: #ffffff;">
+                Interview
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/Interview.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/system-design/">System Design</a>
+        </h2>
+        
+        <h3 class="article-subtitle">
+            紀錄系統設計時可以考慮的事項
+        </h3>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Aug 03, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    6 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="architecture">Architecture</h2>
+<h3 id="monolithic-vs-microservices">monolithic vs microservices</h3>
+<ul>
+<li>monolithic:
+<ul>
+<li>優點:
+<ul>
+<li>簡單</li>
+<li>single codebase</li>
+</ul>
+</li>
+<li>缺點
+<ul>
+<li>難以實施 modularity</li>
+<li>不好做 scale
+<ul>
+<li>auto-scaling 要整個 app scale，但有時候可能只是特定功能的需求比較大</li>
+</ul>
+</li>
+<li>all or nothing deployment</li>
+<li>long release cycle
+<ul>
+<li>要 build, test 整個 app</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>microservices:
+<ul>
+<li>優點:
+<ul>
+<li>polyglot
+<ul>
+<li>可以用不同語言來實作不同的服務</li>
+</ul>
+</li>
+<li>independent</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="diagram-tips">Diagram tips</h2>
+<ul>
+<li>User
+<ul>
+<li>可以畫小人，和 service 有所區隔</li>
+<li>和 service 間可以用 dotted line 來畫出 protocol，區隔開來</li>
+</ul>
+</li>
+<li>service
+<ul>
+<li>可以作為 box 來呈現</li>
+<li>不見得要畫 load balancer，可以把 service 疊幾個 box 來表達</li>
+</ul>
+</li>
+<li>database
+<ul>
+<li>可以畫成 barrel</li>
+</ul>
+</li>
+<li>asynchronous message
+<ul>
+<li>可以畫倒著的 barrel 代表 queue，也可以考慮用虛線箭頭表示</li>
+</ul>
+</li>
+<li>箭頭
+<ul>
+<li>盡量朝單向移動，往下或往右，不要同時往左又往右
+<ul>
+<li>ex: a service 調用 b, c service，不要把 b, c service 畫在左右兩邊</li>
+</ul>
+</li>
+<li>盡量不要有 intersection</li>
+</ul>
+</li>
+<li>Alignment
+<ul>
+<li>盡量垂直和水平對齊</li>
+</ul>
+</li>
+</ul>
+<h2 id="estimation">Estimation</h2>
+<ul>
+<li>要評估的指標
+<ul>
+<li>latency</li>
+<li>throughput</li>
+<li>capacity</li>
+</ul>
+</li>
+<li>Database 估計
+<ul>
+<li>沒特別指定的話，可以預估 single relational database 可以處理 read &amp; write 10K per second</li>
+<li>single relational database 的容量可以抓 3 TB</li>
+<li>redis 可以抓 100K，但是受限於 memory，可能抓 30GB</li>
+</ul>
+</li>
+</ul>
+<h2 id="network">Network</h2>
+<h3 id="load-balancer">Load Balancer</h3>
+<ul>
+<li>type
+<ul>
+<li>application load balancer (ALB)
+<ul>
+<li>OSI layer 7 (Application layer)</li>
+<li>可以根據 request header, URL, query string 來做 routing</li>
+<li>可以 validate / terminate SSL</li>
+</ul>
+</li>
+<li>network load balancer (NLB)
+<ul>
+<li>OSI layer 4 (Transport layer)</li>
+<li>可以根據 protocol (TCP, UDP, IP..), destination port etc 來做 routing</li>
+<li>一般來說預設會 pass through SSL</li>
+<li>比較適合應付高流量</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>strategy
+<ul>
+<li>round robin
+<ul>
+<li>輪流</li>
+</ul>
+</li>
+<li>least connection</li>
+<li>resource-based
+<ul>
+<li>考慮每個 instance 的資源使用情況</li>
+</ul>
+</li>
+<li>weighted variants of the above
+<ul>
+<li>可以把上面說的各種情況多加入 weight 的考量</li>
+</ul>
+</li>
+<li>random</li>
+</ul>
+</li>
+<li>優點
+<ul>
+<li>resilience
+<ul>
+<li>可以關注到某個 instance down 了，自動把 request 轉到其他 instance</li>
+</ul>
+</li>
+<li>scalability
+<ul>
+<li>後面的 instance 可以 horizontal scale</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>和 API Gateway 的差異
+<ul>
+<li>API Gateway 除了 load balancing 會有更多的功能，例如 rate limiting, authentication, authorization, request validation, caching, logging etc</li>
+</ul>
+</li>
+</ul>
+<h2 id="cdn-content-delivery-network">CDN (Content Delivery Network)</h2>
+<ul>
+<li>把靜態資源放到離使用者地理上比較近的地方，加速存取速度
+<ul>
+<li>html, css, js, image&hellip;</li>
+<li>這些資料不該頻繁改變</li>
+</ul>
+</li>
+<li>本質上是靜態資源的 cache</li>
+<li>types
+<ul>
+<li>push
+<ul>
+<li>把新的資料推到 CDN</li>
+<li>如果靜態資源很多，開銷會很大</li>
+</ul>
+</li>
+<li>pull
+<ul>
+<li>lazy</li>
+<li>當有 request 進來時，且 CDN 沒有該資源，才會去 origin server 拉資源</li>
+<li>比較適合在有大量靜態資源的情況下使用</li>
+<li>第一個 user 會比較慢</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="caching">Caching</h2>
+<ul>
+<li>優點
+<ul>
+<li>提高 read performance (減少 latency)</li>
+<li>reduce load(減少 throughput)</li>
+</ul>
+</li>
+<li>strategies
+<ul>
+<li>cache aside
+<ul>
+<li>先問 cache，沒有的話再問 db，並把 db 回傳的資料放到 cache</li>
+<li>缺點
+<ul>
+<li>cache miss 的開銷大</li>
+<li>data staleness
+<ul>
+<li>可能 cache 裡的資料無法反應 db 裡的最新資料</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>read through
+<ul>
+<li>client 只能存取到 cache，如果沒資料，cache 會去 db 拿資料</li>
+<li>可能出現在 ORM，資料存在 memory</li>
+<li>缺點
+<ul>
+<li>cache miss 的開銷大</li>
+<li>data staleness</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>write through
+<ul>
+<li>client 寫資料時，cache 會留一份資料，並把資料寫到 db</li>
+<li>解決 data staleness 問題</li>
+<li>缺點
+<ul>
+<li>write 成本很高</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>write behind
+<ul>
+<li>和 write through 很像，但是不會立即寫到 db</li>
+<li>會等到有更多的資料時，才一次寫到 db</li>
+<li>優點
+<ul>
+<li>沒有 write penalty</li>
+</ul>
+</li>
+<li>缺點
+<ul>
+<li>如果不夠常 flush，可能會有 inconsistency 的問題</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>eviction policy
+<ul>
+<li>LRU (Least Recently Used)
+<ul>
+<li>把最久沒用到的資料刪掉</li>
+<li>可能會把 popular 的資料刪掉</li>
+</ul>
+</li>
+<li>LFU (Least Frequently Used)
+<ul>
+<li>每個資料有一個 counter，每次被存取時，counter + 1</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="maintain-consistency">Maintain consistency</h2>
+<ul>
+<li>確保 unique
+<ul>
+<li>bloom filter
+<ul>
+<li>因為存在 service 的 memory，有最高的 throughput，但是可能會有 false positive</li>
+<li>不好讓多個 service 共用</li>
+</ul>
+</li>
+<li>redis
+<ul>
+<li>中規中矩的存取速度，但存取的量也受限制</li>
+<li>可以透過 sharded 減輕負擔</li>
+</ul>
+</li>
+<li>relational database
+<ul>
+<li>速度比較慢，但是可以存很多</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="queue--messaging">Queue / Messaging</h2>
+<ul>
+<li>
+<p>如果系統是 synchronous，可能會有 scalability 的問題</p>
+<ul>
+<li>會被最慢的 component 所限制 (ex: payment service)</li>
+</ul>
+</li>
+<li>
+<p>role</p>
+<ul>
+<li>producer
+<ul>
+<li>產生 message</li>
+</ul>
+</li>
+<li>consumer
+<ul>
+<li>處理 message</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>優點</p>
+<ul>
+<li>buffer</li>
+<li>應對 request spike</li>
+<li>message durability
+<ul>
+<li>就算 consumer down 了，message 還是會在 queue 裡</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>缺點</p>
+<ul>
+<li>現在無法知道 message 被處理的情況，sychronous 可以直接得知成功與否</li>
+<li>增加 latency</li>
+</ul>
+</li>
+<li>
+<p>model</p>
+<ul>
+<li>message queue
+<ul>
+<li>讓 queue 分配 message 給某個 consumer</li>
+</ul>
+</li>
+<li>publisher / subscriber (pub/sub)
+<ul>
+<li>可能會有某個 event 想被 publish 給多個 consumer (subscribers)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>RabbitMQ</p>
+<ul>
+<li>AMPQ (Advanced Message Queuing Protocol)</li>
+<li>預設 Message 會被儲存，直到有 consumer 提取</li>
+<li>被用來分配 heavy task</li>
+<li>key concept
+<ul>
+<li>routing key
+<ul>
+<li>所有的 message 都會有一個 routing key</li>
+<li>表示 message 要被送到哪個 queue</li>
+</ul>
+</li>
+<li>exchange
+<ul>
+<li>用來接收 message，並且把 message 轉發到 queue</li>
+<li>mode
+<ul>
+<li>direct
+<ul>
+<li>根據 routing key 精確匹配來決定 message 要被送到哪個 queue</li>
+</ul>
+</li>
+<li>fan-out
+<ul>
+<li>所有的 consumer 都會收到 message</li>
+<li>這個模式會執行 pub/sub</li>
+</ul>
+</li>
+<li>topic
+<ul>
+<li>根據 routing key 的 pattern 來決定 message 要被送到哪個 queue</li>
+<li>ex: 某個服務基於不同國家有不同的 queue</li>
+</ul>
+</li>
+<li>header
+<ul>
+<li>和 topic 類似，但是是根據 header 來決定 message 要被送到哪個 queue</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>channel
+<ul>
+<li>consumer 會用 tcp 和 queue 建立連線
+<ul>
+<li>可以用 threads 建立更多連線來更快消耗 message</li>
+</ul>
+</li>
+<li>RabbitMQ 可以在一個 tcp connection 上建立多個 channel，讓不同 thread 可以用同一個 connection 來消耗 message
+<ul>
+<li>這樣可以減少建立 tcp connection 的 overhead</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>acknowledgement
+<ul>
+<li>consumer 可以告訴 RabbitMQ 已經處理完 message，再讓 RabbitMQ 刪除 message
+<ul>
+<li>如果一送出去就刪除，consumer 如果 down 了，message 就會消失</li>
+</ul>
+</li>
+<li>要自行在消耗速度以及 reliability 之間取得平衡</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Kafka</p>
+<ul>
+<li>event streaming platform</li>
+<li>專注在 publish / subscribe</li>
+<li>message 會在一段時間後被刪除，而不是等待 consumer 處理</li>
+<li>key concept
+<ul>
+<li>topic
+<ul>
+<li>queue 被叫做 topic</li>
+</ul>
+</li>
+<li>event
+<ul>
+<li>message 被叫做 event
+<ul>
+<li>有 key, value, timestamp</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>partition
+<ul>
+<li>topic 通常會有多個 partition</li>
+<li>通常 partition 的數量至少為 consumer 數量</li>
+<li>優點
+<ul>
+<li>提高 throughput</li>
+</ul>
+</li>
+<li>缺點
+<ul>
+<li>過多的 paratition 會提高 latency</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>consumer group
+<ul>
+<li>一個 consumer group 可以有多個 consumer</li>
+<li>只會收到 message 一次，並派給底下的某個 consumer</li>
+</ul>
+</li>
+<li>consumer offset
+<ul>
+<li>consumer 會記錄自己消耗到哪裡了，消耗完了就增加自己的 offset，移動到下一個</li>
+<li>這樣即使 consumer down 了，下次啟動時，也可以從上次消耗的地方繼續</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="protocol--sendreceive-data">Protocol &amp; Send/Receive data</h2>
+<ul>
+<li>TCP</li>
+<li>UDP</li>
+<li>http</li>
+<li>websocket
+<ul>
+<li>duplex (two-way) communication</li>
+<li>只會建立一次 TCP connection</li>
+<li>load balancer 可以會遇到問題</li>
+</ul>
+</li>
+<li>long polling
+<ul>
+<li>client 送 request 給 server，server 不會立刻 close connection，而是等待有新資料或 timeout 才回應</li>
+<li>某些不能用 websocket 的情況下，可以用 long polling 來模擬</li>
+<li>但是在一些框架或語言可能不好實作</li>
+</ul>
+</li>
+<li>gRPC
+<ul>
+<li>RPC
+<ul>
+<li>remote procedure call</li>
+<li>把一些 service 包裝成像 local function 一樣，就可以像調用本地函式一樣使用 remote 的服務</li>
+</ul>
+</li>
+<li>google 開發的 RPC 框架</li>
+<li>用 protobuf 作為 IDL (Interface Definition Language)
+<ul>
+<li>binary protocol
+<ul>
+<li>非 readable，需要 encode / decode</li>
+<li>但比 json 小</li>
+</ul>
+</li>
+<li>.proto file
+<ul>
+<li>定義 message 的格式</li>
+<li>描述了 interface 長怎樣</li>
+</ul>
+</li>
+<li>protoc
+<ul>
+<li>用來 compile .proto file，根據指定的程式語言，產生 client / server code
+<ul>
+<li>server 再實作 interface</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>用 http/2 來傳輸</li>
+<li>不能用在 browser</li>
+<li>適合用在內部服務之間的溝通</li>
+</ul>
+</li>
+<li>GraphQL
+<ul>
+<li>query language for APIs</li>
+<li>解決 REST 的 over-fetching, under-fetching 問題
+<ul>
+<li>over-fetching
+<ul>
+<li>取得的資料比需要的多</li>
+</ul>
+</li>
+<li>under-fetching
+<ul>
+<li>需要的資料要從多個 endpoint 取得</li>
+<li>ex: 取得 user 資料，會回傳 posts 的 id，但要再去另一個 endpoint 取得 posts 的資料</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>優點
+<ul>
+<li>client 可以自己決定要取得哪些資料</li>
+</ul>
+</li>
+<li>缺點
+<ul>
+<li>cache 難以實作
+<ul>
+<li>GraphQL 用的是 POST，瀏覽器 cache 只能用 GET</li>
+<li>而且每個 user 可能會用不同的 field，cache 難以共用</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="store-client-data">Store client data</h2>
+<ul>
+<li>cookie
+<ul>
+<li>limitied size</li>
+<li>not secure</li>
+</ul>
+</li>
+<li>sticky session
+<ul>
+<li>需要 ALB</li>
+<li>無法應對 instance down 的情況</li>
+</ul>
+</li>
+<li>key-value store
+<ul>
+<li>增加複雜度
+<ul>
+<li>如果 redis 倒了？</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="architecture-pattern">Architecture pattern</h2>
+<ul>
+<li>CQRS
+<ul>
+<li>Command Query Responsibility Segregation</li>
+<li>把 read (query) 和 write (command) 分開</li>
+<li>一個 storage 針對 read 做 optimize，另一個 storage 針對 write 做 optimize
+<ul>
+<li>準備一個 schedule job 來把 write 的資料同步到 read 的 storage</li>
+</ul>
+</li>
+<li>如果 read storage 為了讀取效能需要加很多 index，要在裡面更新就可能會花的時間變很長，就可以用這種 pattern</li>
+</ul>
+</li>
+</ul>
+<h2 id="流程">流程</h2>
+<ul>
+<li>User perspective
+<ul>
+<li>描述身為 user 期待看到什麼東西</li>
+<li>這裡可以先簡單介紹這個 app 的大概邏輯，之後 marketplace 再針對不同 role 探討資料和使用情境</li>
+<li>也可以詢問使用的平台</li>
+</ul>
+</li>
+<li>Marketplace
+<ul>
+<li>詢問要支援的用戶數量，以及活躍用戶數量</li>
+<li>如果有多種用戶，也要分開討論
+<ul>
+<li>ex: 叫車服務會有司機和乘客</li>
+<li>有更多角色後，可以開始根據角色討論他們的 perspective</li>
+</ul>
+</li>
+<li>取得一些數字
+<ul>
+<li>考慮 sotrage 以及 throughput</li>
+<li>叫車服務範例
+<ul>
+<li>乘客總數量、活躍乘客數、每月乘客需求趟數</li>
+<li>司機總數量、活躍司機數、單趟平均時間</li>
+</ul>
+</li>
+<li>throuput
+<ul>
+<li>活躍用戶</li>
+<li>refresh rate</li>
+<li>每個 user 平均打開 app 的次數</li>
+<li>平均打開 app 會用多久</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Rough design
+<ul>
+<li>探討資料的傳遞
+<ul>
+<li>根據不同 role 去講他們應該傳送什麼資料，用什麼協定，request 的頻率 (request per second)
+<ul>
+<li>討論的時候可以用 average，但是會有 peak time，可以考慮 X2, X4, X10</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>探討資料的儲存
+<ul>
+<li>要準備一些前提，比如假設單一資料庫每秒可以 insert 5K 筆資料</li>
+<li>可以討論不同的 sharding
+<ul>
+<li>考慮怎樣存可以讓大小減少
+<ul>
+<li>評估這樣分是否可能導致 sharding uneven</li>
+<li>涉及地理類型的資料 (ex: 乘客和司機的位置)
+<ul>
+<li>可以考慮用自訂幾何形來區分不同地區</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>怎樣的切法可以讓 query 盡量不要跨 shard</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>每個階段也可以探討 throughput</li>
+<li>開始根據情境設計不同的 service 來表達他們的交互</li>
+</ul>
+</li>
+</ul>
+<h2 id="scene">Scene</h2>
+<ul>
+<li>叫車服務
+<ul>
+<li>可以導入 geo index 來加快查找速度</li>
+<li>可以用地理劃區塊的方式來 hash 決定</li>
+</ul>
+</li>
+<li>聊天軟體
+<ul>
+<li>可以考慮把寫入資料庫和傳給 user 兩件事情用非同步的方式做</li>
+</ul>
+</li>
+<li>網頁爬蟲
+<ul>
+<li>從一個 URL 獲取內容，並且從內容中提取更多 URL，反覆執行</li>
+<li>可以考慮架設的離 DNS 越近越好，如果要爬取的網頁很多，Domain name 的轉換可能影響很大</li>
+<li>如果單純抓網頁，現在因為很多網頁都靠 JS 來 render，只會得到空的 html，可以考慮用 headless browser 來 render
+<ul>
+<li>headless browser
+<ul>
+<li>沒有 user interface 的 browser</li>
+<li>但是依然有 rendering engine 和 js interpreter。可以用來得到最終的 html</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>拍賣
+<ul>
+<li>可能要考慮把 bid 做 serialization
+<ul>
+<li>把 bid 透過 queue 給 serializer，會無法回傳成功或失敗</li>
+<li>可以用 second queue，再讓 serializer 把結果放進去，傳回給 service</li>
+<li>如果有用 websocket，就可以考慮用這種做法
+<ul>
+<li>用 polling 的話，就得去資料庫撈，除非 service 可以儲存住這些資料</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>短 URL 生成
+<ul>
+<li>UUID 是 random 且 human-readable（不會有相近的 char，比如 0 和 O）
+<ul>
+<li>但是太長</li>
+</ul>
+</li>
+<li>可以用不同的 encoding 壓縮長度
+<ul>
+<li>因為 UUID 用的 charactor 是 0-9, a-f，所以可以用有更多種 charactor 的 encoding 來壓縮</li>
+<li>BASE62
+<ul>
+<li>包含 0-9, a-z, A-Z</li>
+</ul>
+</li>
+<li>BASE58
+<ul>
+<li>BASE62 但不包含容易混淆的 0, O, I, l</li>
+</ul>
+</li>
+<li>BASE64
+<ul>
+<li>BASE62 但多了 +, /</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>根據可以有多少種字元取長度的次方，即可判斷長度取到多長可以涵蓋我們想要儲存的 URL 數量
+<ul>
+<li>如果我們想要可以儲存 30B 個 URL，那長度就要取 58 的 6 次方才會超過</li>
+<li>可以直接裁斷編碼後的結果</li>
+<li>或是不管 UUID，每個字元從 BASE58 的 char set 做 random</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>搶折價券系統
+<ul>
+<li>有一定數量的折價券可以給一定數量的 user 搶，先搶先贏</li>
+<li>會有極大量的 user 在極短的時間湧入</li>
+<li>我們可以事先在資料庫建好指定數量的 coupon，就可以修改的時候只 lock 某個 row，不用 lock 整個 table
+<ul>
+<li>pre-populate</li>
+<li>如果是 insert，可能就得面臨要 lock 整個 table，避免多發 coupon</li>
+</ul>
+</li>
+<li>可以在 server 做 cache 好處理 read，直接回傳沒有更多 coupon 的訊息</li>
+<li>考量到資料庫處理上限，我們勢必得做 sharding，導致我們可能會某個 database 的 coupon 空了，但另外一個還有
+<ul>
+<li>不過系統不一定要公平，我們只需要發指定數量的 coupon 出去就好</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>社群平台
+<ul>
+<li>可以在 cache 存放 timeline 減少 cache request 的次數
+<ul>
+<li>但要考慮 influencer 可能要特別設計
+<ul>
+<li>改成另外儲存，到 client 再合併</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>售票系統
+<ul>
+<li>可以考慮把票設計 status，並用 aggregate function 來計算</li>
+</ul>
+</li>
+<li>雲端硬碟
+<ul>
+<li>要思考現在的單一硬碟可以儲存多少，以及每台機器可以 mount 多少硬碟</li>
+<li>每個 User 可以使用的容量期望值？</li>
+<li>考慮在 client 端做壓縮減少負擔</li>
+<li>Cyclic redundancy check (CRC)
+<ul>
+<li>一般用在檢查封包是否有錯誤，但是我們也可以用來檢查某個檔案是否有被修改，好做 sync</li>
+</ul>
+</li>
+<li>Delta copying
+<ul>
+<li>把檔案切小，只傳送修改過的部分</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="tips">Tips</h2>
+<ul>
+<li>每個 Phase 可以多和 interviewer 討論，確認走在正確的方向上</li>
+<li>面對面試官給的數字可以嘗試為了好算向上抓一些</li>
+<li>延遲任務
+<ul>
+<li>如果遇到因為某些原因需要晚點才能做某個任務，可以用 queue 來處理</li>
+</ul>
+</li>
+<li>Cache 除了用 cache 做，Server 自身也可以用 memory 來 cache</li>
+<li>對於先搶先贏的系統不一定要追求公平，只要達成目標即可</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/system-design/">system-design</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">資料結構筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E6%9C%AA%E5%88%86%E9%A1%9E%E6%BC%94%E7%AE%97%E6%B3%95-%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">未分類演算法 &amp; 資料結構筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E5%9C%96%E8%AB%96%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">圖論筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2024 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>

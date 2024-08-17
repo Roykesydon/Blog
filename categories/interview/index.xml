@@ -6,7 +6,852 @@
         <description>Recent content in Interview on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Tue, 29 Aug 2023 00:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/interview/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 03 Aug 2024 00:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/interview/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>System Design</title>
+        <link>https://roykesydon.github.io/Blog/p/system-design/</link>
+        <pubDate>Sat, 03 Aug 2024 00:08:46 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/system-design/</guid>
+        <description>&lt;h2 id=&#34;architecture&#34;&gt;Architecture&lt;/h2&gt;
+&lt;h3 id=&#34;monolithic-vs-microservices&#34;&gt;monolithic vs microservices&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;monolithic:
+&lt;ul&gt;
+&lt;li&gt;優點:
+&lt;ul&gt;
+&lt;li&gt;簡單&lt;/li&gt;
+&lt;li&gt;single codebase&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;缺點
+&lt;ul&gt;
+&lt;li&gt;難以實施 modularity&lt;/li&gt;
+&lt;li&gt;不好做 scale
+&lt;ul&gt;
+&lt;li&gt;auto-scaling 要整個 app scale，但有時候可能只是特定功能的需求比較大&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;all or nothing deployment&lt;/li&gt;
+&lt;li&gt;long release cycle
+&lt;ul&gt;
+&lt;li&gt;要 build, test 整個 app&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;microservices:
+&lt;ul&gt;
+&lt;li&gt;優點:
+&lt;ul&gt;
+&lt;li&gt;polyglot
+&lt;ul&gt;
+&lt;li&gt;可以用不同語言來實作不同的服務&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;independent&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;diagram-tips&#34;&gt;Diagram tips&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;User
+&lt;ul&gt;
+&lt;li&gt;可以畫小人，和 service 有所區隔&lt;/li&gt;
+&lt;li&gt;和 service 間可以用 dotted line 來畫出 protocol，區隔開來&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;service
+&lt;ul&gt;
+&lt;li&gt;可以作為 box 來呈現&lt;/li&gt;
+&lt;li&gt;不見得要畫 load balancer，可以把 service 疊幾個 box 來表達&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;database
+&lt;ul&gt;
+&lt;li&gt;可以畫成 barrel&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;asynchronous message
+&lt;ul&gt;
+&lt;li&gt;可以畫倒著的 barrel 代表 queue，也可以考慮用虛線箭頭表示&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;箭頭
+&lt;ul&gt;
+&lt;li&gt;盡量朝單向移動，往下或往右，不要同時往左又往右
+&lt;ul&gt;
+&lt;li&gt;ex: a service 調用 b, c service，不要把 b, c service 畫在左右兩邊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;盡量不要有 intersection&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Alignment
+&lt;ul&gt;
+&lt;li&gt;盡量垂直和水平對齊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;estimation&#34;&gt;Estimation&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;要評估的指標
+&lt;ul&gt;
+&lt;li&gt;latency&lt;/li&gt;
+&lt;li&gt;throughput&lt;/li&gt;
+&lt;li&gt;capacity&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Database 估計
+&lt;ul&gt;
+&lt;li&gt;沒特別指定的話，可以預估 single relational database 可以處理 read &amp;amp; write 10K per second&lt;/li&gt;
+&lt;li&gt;single relational database 的容量可以抓 3 TB&lt;/li&gt;
+&lt;li&gt;redis 可以抓 100K，但是受限於 memory，可能抓 30GB&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;network&#34;&gt;Network&lt;/h2&gt;
+&lt;h3 id=&#34;load-balancer&#34;&gt;Load Balancer&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;type
+&lt;ul&gt;
+&lt;li&gt;application load balancer (ALB)
+&lt;ul&gt;
+&lt;li&gt;OSI layer 7 (Application layer)&lt;/li&gt;
+&lt;li&gt;可以根據 request header, URL, query string 來做 routing&lt;/li&gt;
+&lt;li&gt;可以 validate / terminate SSL&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;network load balancer (NLB)
+&lt;ul&gt;
+&lt;li&gt;OSI layer 4 (Transport layer)&lt;/li&gt;
+&lt;li&gt;可以根據 protocol (TCP, UDP, IP..), destination port etc 來做 routing&lt;/li&gt;
+&lt;li&gt;一般來說預設會 pass through SSL&lt;/li&gt;
+&lt;li&gt;比較適合應付高流量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;strategy
+&lt;ul&gt;
+&lt;li&gt;round robin
+&lt;ul&gt;
+&lt;li&gt;輪流&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;least connection&lt;/li&gt;
+&lt;li&gt;resource-based
+&lt;ul&gt;
+&lt;li&gt;考慮每個 instance 的資源使用情況&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;weighted variants of the above
+&lt;ul&gt;
+&lt;li&gt;可以把上面說的各種情況多加入 weight 的考量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;random&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;優點
+&lt;ul&gt;
+&lt;li&gt;resilience
+&lt;ul&gt;
+&lt;li&gt;可以關注到某個 instance down 了，自動把 request 轉到其他 instance&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;scalability
+&lt;ul&gt;
+&lt;li&gt;後面的 instance 可以 horizontal scale&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;和 API Gateway 的差異
+&lt;ul&gt;
+&lt;li&gt;API Gateway 除了 load balancing 會有更多的功能，例如 rate limiting, authentication, authorization, request validation, caching, logging etc&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;cdn-content-delivery-network&#34;&gt;CDN (Content Delivery Network)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;把靜態資源放到離使用者地理上比較近的地方，加速存取速度
+&lt;ul&gt;
+&lt;li&gt;html, css, js, image&amp;hellip;&lt;/li&gt;
+&lt;li&gt;這些資料不該頻繁改變&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;本質上是靜態資源的 cache&lt;/li&gt;
+&lt;li&gt;types
+&lt;ul&gt;
+&lt;li&gt;push
+&lt;ul&gt;
+&lt;li&gt;把新的資料推到 CDN&lt;/li&gt;
+&lt;li&gt;如果靜態資源很多，開銷會很大&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;pull
+&lt;ul&gt;
+&lt;li&gt;lazy&lt;/li&gt;
+&lt;li&gt;當有 request 進來時，且 CDN 沒有該資源，才會去 origin server 拉資源&lt;/li&gt;
+&lt;li&gt;比較適合在有大量靜態資源的情況下使用&lt;/li&gt;
+&lt;li&gt;第一個 user 會比較慢&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;caching&#34;&gt;Caching&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;優點
+&lt;ul&gt;
+&lt;li&gt;提高 read performance (減少 latency)&lt;/li&gt;
+&lt;li&gt;reduce load(減少 throughput)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;strategies
+&lt;ul&gt;
+&lt;li&gt;cache aside
+&lt;ul&gt;
+&lt;li&gt;先問 cache，沒有的話再問 db，並把 db 回傳的資料放到 cache&lt;/li&gt;
+&lt;li&gt;缺點
+&lt;ul&gt;
+&lt;li&gt;cache miss 的開銷大&lt;/li&gt;
+&lt;li&gt;data staleness
+&lt;ul&gt;
+&lt;li&gt;可能 cache 裡的資料無法反應 db 裡的最新資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;read through
+&lt;ul&gt;
+&lt;li&gt;client 只能存取到 cache，如果沒資料，cache 會去 db 拿資料&lt;/li&gt;
+&lt;li&gt;可能出現在 ORM，資料存在 memory&lt;/li&gt;
+&lt;li&gt;缺點
+&lt;ul&gt;
+&lt;li&gt;cache miss 的開銷大&lt;/li&gt;
+&lt;li&gt;data staleness&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;write through
+&lt;ul&gt;
+&lt;li&gt;client 寫資料時，cache 會留一份資料，並把資料寫到 db&lt;/li&gt;
+&lt;li&gt;解決 data staleness 問題&lt;/li&gt;
+&lt;li&gt;缺點
+&lt;ul&gt;
+&lt;li&gt;write 成本很高&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;write behind
+&lt;ul&gt;
+&lt;li&gt;和 write through 很像，但是不會立即寫到 db&lt;/li&gt;
+&lt;li&gt;會等到有更多的資料時，才一次寫到 db&lt;/li&gt;
+&lt;li&gt;優點
+&lt;ul&gt;
+&lt;li&gt;沒有 write penalty&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;缺點
+&lt;ul&gt;
+&lt;li&gt;如果不夠常 flush，可能會有 inconsistency 的問題&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;eviction policy
+&lt;ul&gt;
+&lt;li&gt;LRU (Least Recently Used)
+&lt;ul&gt;
+&lt;li&gt;把最久沒用到的資料刪掉&lt;/li&gt;
+&lt;li&gt;可能會把 popular 的資料刪掉&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;LFU (Least Frequently Used)
+&lt;ul&gt;
+&lt;li&gt;每個資料有一個 counter，每次被存取時，counter + 1&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;maintain-consistency&#34;&gt;Maintain consistency&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;確保 unique
+&lt;ul&gt;
+&lt;li&gt;bloom filter
+&lt;ul&gt;
+&lt;li&gt;因為存在 service 的 memory，有最高的 throughput，但是可能會有 false positive&lt;/li&gt;
+&lt;li&gt;不好讓多個 service 共用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;redis
+&lt;ul&gt;
+&lt;li&gt;中規中矩的存取速度，但存取的量也受限制&lt;/li&gt;
+&lt;li&gt;可以透過 sharded 減輕負擔&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;relational database
+&lt;ul&gt;
+&lt;li&gt;速度比較慢，但是可以存很多&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;queue--messaging&#34;&gt;Queue / Messaging&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;如果系統是 synchronous，可能會有 scalability 的問題&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;會被最慢的 component 所限制 (ex: payment service)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;role&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;producer
+&lt;ul&gt;
+&lt;li&gt;產生 message&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;consumer
+&lt;ul&gt;
+&lt;li&gt;處理 message&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;優點&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;buffer&lt;/li&gt;
+&lt;li&gt;應對 request spike&lt;/li&gt;
+&lt;li&gt;message durability
+&lt;ul&gt;
+&lt;li&gt;就算 consumer down 了，message 還是會在 queue 裡&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;缺點&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;現在無法知道 message 被處理的情況，sychronous 可以直接得知成功與否&lt;/li&gt;
+&lt;li&gt;增加 latency&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;model&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;message queue
+&lt;ul&gt;
+&lt;li&gt;讓 queue 分配 message 給某個 consumer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;publisher / subscriber (pub/sub)
+&lt;ul&gt;
+&lt;li&gt;可能會有某個 event 想被 publish 給多個 consumer (subscribers)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;RabbitMQ&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;AMPQ (Advanced Message Queuing Protocol)&lt;/li&gt;
+&lt;li&gt;預設 Message 會被儲存，直到有 consumer 提取&lt;/li&gt;
+&lt;li&gt;被用來分配 heavy task&lt;/li&gt;
+&lt;li&gt;key concept
+&lt;ul&gt;
+&lt;li&gt;routing key
+&lt;ul&gt;
+&lt;li&gt;所有的 message 都會有一個 routing key&lt;/li&gt;
+&lt;li&gt;表示 message 要被送到哪個 queue&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;exchange
+&lt;ul&gt;
+&lt;li&gt;用來接收 message，並且把 message 轉發到 queue&lt;/li&gt;
+&lt;li&gt;mode
+&lt;ul&gt;
+&lt;li&gt;direct
+&lt;ul&gt;
+&lt;li&gt;根據 routing key 精確匹配來決定 message 要被送到哪個 queue&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;fan-out
+&lt;ul&gt;
+&lt;li&gt;所有的 consumer 都會收到 message&lt;/li&gt;
+&lt;li&gt;這個模式會執行 pub/sub&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;topic
+&lt;ul&gt;
+&lt;li&gt;根據 routing key 的 pattern 來決定 message 要被送到哪個 queue&lt;/li&gt;
+&lt;li&gt;ex: 某個服務基於不同國家有不同的 queue&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;header
+&lt;ul&gt;
+&lt;li&gt;和 topic 類似，但是是根據 header 來決定 message 要被送到哪個 queue&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;channel
+&lt;ul&gt;
+&lt;li&gt;consumer 會用 tcp 和 queue 建立連線
+&lt;ul&gt;
+&lt;li&gt;可以用 threads 建立更多連線來更快消耗 message&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;RabbitMQ 可以在一個 tcp connection 上建立多個 channel，讓不同 thread 可以用同一個 connection 來消耗 message
+&lt;ul&gt;
+&lt;li&gt;這樣可以減少建立 tcp connection 的 overhead&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;acknowledgement
+&lt;ul&gt;
+&lt;li&gt;consumer 可以告訴 RabbitMQ 已經處理完 message，再讓 RabbitMQ 刪除 message
+&lt;ul&gt;
+&lt;li&gt;如果一送出去就刪除，consumer 如果 down 了，message 就會消失&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;要自行在消耗速度以及 reliability 之間取得平衡&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Kafka&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;event streaming platform&lt;/li&gt;
+&lt;li&gt;專注在 publish / subscribe&lt;/li&gt;
+&lt;li&gt;message 會在一段時間後被刪除，而不是等待 consumer 處理&lt;/li&gt;
+&lt;li&gt;key concept
+&lt;ul&gt;
+&lt;li&gt;topic
+&lt;ul&gt;
+&lt;li&gt;queue 被叫做 topic&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;event
+&lt;ul&gt;
+&lt;li&gt;message 被叫做 event
+&lt;ul&gt;
+&lt;li&gt;有 key, value, timestamp&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;partition
+&lt;ul&gt;
+&lt;li&gt;topic 通常會有多個 partition&lt;/li&gt;
+&lt;li&gt;通常 partition 的數量至少為 consumer 數量&lt;/li&gt;
+&lt;li&gt;優點
+&lt;ul&gt;
+&lt;li&gt;提高 throughput&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;缺點
+&lt;ul&gt;
+&lt;li&gt;過多的 paratition 會提高 latency&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;consumer group
+&lt;ul&gt;
+&lt;li&gt;一個 consumer group 可以有多個 consumer&lt;/li&gt;
+&lt;li&gt;只會收到 message 一次，並派給底下的某個 consumer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;consumer offset
+&lt;ul&gt;
+&lt;li&gt;consumer 會記錄自己消耗到哪裡了，消耗完了就增加自己的 offset，移動到下一個&lt;/li&gt;
+&lt;li&gt;這樣即使 consumer down 了，下次啟動時，也可以從上次消耗的地方繼續&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;protocol--sendreceive-data&#34;&gt;Protocol &amp;amp; Send/Receive data&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;TCP&lt;/li&gt;
+&lt;li&gt;UDP&lt;/li&gt;
+&lt;li&gt;http&lt;/li&gt;
+&lt;li&gt;websocket
+&lt;ul&gt;
+&lt;li&gt;duplex (two-way) communication&lt;/li&gt;
+&lt;li&gt;只會建立一次 TCP connection&lt;/li&gt;
+&lt;li&gt;load balancer 可以會遇到問題&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;long polling
+&lt;ul&gt;
+&lt;li&gt;client 送 request 給 server，server 不會立刻 close connection，而是等待有新資料或 timeout 才回應&lt;/li&gt;
+&lt;li&gt;某些不能用 websocket 的情況下，可以用 long polling 來模擬&lt;/li&gt;
+&lt;li&gt;但是在一些框架或語言可能不好實作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;gRPC
+&lt;ul&gt;
+&lt;li&gt;RPC
+&lt;ul&gt;
+&lt;li&gt;remote procedure call&lt;/li&gt;
+&lt;li&gt;把一些 service 包裝成像 local function 一樣，就可以像調用本地函式一樣使用 remote 的服務&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;google 開發的 RPC 框架&lt;/li&gt;
+&lt;li&gt;用 protobuf 作為 IDL (Interface Definition Language)
+&lt;ul&gt;
+&lt;li&gt;binary protocol
+&lt;ul&gt;
+&lt;li&gt;非 readable，需要 encode / decode&lt;/li&gt;
+&lt;li&gt;但比 json 小&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;.proto file
+&lt;ul&gt;
+&lt;li&gt;定義 message 的格式&lt;/li&gt;
+&lt;li&gt;描述了 interface 長怎樣&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;protoc
+&lt;ul&gt;
+&lt;li&gt;用來 compile .proto file，根據指定的程式語言，產生 client / server code
+&lt;ul&gt;
+&lt;li&gt;server 再實作 interface&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;用 http/2 來傳輸&lt;/li&gt;
+&lt;li&gt;不能用在 browser&lt;/li&gt;
+&lt;li&gt;適合用在內部服務之間的溝通&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;GraphQL
+&lt;ul&gt;
+&lt;li&gt;query language for APIs&lt;/li&gt;
+&lt;li&gt;解決 REST 的 over-fetching, under-fetching 問題
+&lt;ul&gt;
+&lt;li&gt;over-fetching
+&lt;ul&gt;
+&lt;li&gt;取得的資料比需要的多&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;under-fetching
+&lt;ul&gt;
+&lt;li&gt;需要的資料要從多個 endpoint 取得&lt;/li&gt;
+&lt;li&gt;ex: 取得 user 資料，會回傳 posts 的 id，但要再去另一個 endpoint 取得 posts 的資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;優點
+&lt;ul&gt;
+&lt;li&gt;client 可以自己決定要取得哪些資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;缺點
+&lt;ul&gt;
+&lt;li&gt;cache 難以實作
+&lt;ul&gt;
+&lt;li&gt;GraphQL 用的是 POST，瀏覽器 cache 只能用 GET&lt;/li&gt;
+&lt;li&gt;而且每個 user 可能會用不同的 field，cache 難以共用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;store-client-data&#34;&gt;Store client data&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;cookie
+&lt;ul&gt;
+&lt;li&gt;limitied size&lt;/li&gt;
+&lt;li&gt;not secure&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;sticky session
+&lt;ul&gt;
+&lt;li&gt;需要 ALB&lt;/li&gt;
+&lt;li&gt;無法應對 instance down 的情況&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;key-value store
+&lt;ul&gt;
+&lt;li&gt;增加複雜度
+&lt;ul&gt;
+&lt;li&gt;如果 redis 倒了？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;architecture-pattern&#34;&gt;Architecture pattern&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;CQRS
+&lt;ul&gt;
+&lt;li&gt;Command Query Responsibility Segregation&lt;/li&gt;
+&lt;li&gt;把 read (query) 和 write (command) 分開&lt;/li&gt;
+&lt;li&gt;一個 storage 針對 read 做 optimize，另一個 storage 針對 write 做 optimize
+&lt;ul&gt;
+&lt;li&gt;準備一個 schedule job 來把 write 的資料同步到 read 的 storage&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;如果 read storage 為了讀取效能需要加很多 index，要在裡面更新就可能會花的時間變很長，就可以用這種 pattern&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;流程&#34;&gt;流程&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;User perspective
+&lt;ul&gt;
+&lt;li&gt;描述身為 user 期待看到什麼東西&lt;/li&gt;
+&lt;li&gt;這裡可以先簡單介紹這個 app 的大概邏輯，之後 marketplace 再針對不同 role 探討資料和使用情境&lt;/li&gt;
+&lt;li&gt;也可以詢問使用的平台&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Marketplace
+&lt;ul&gt;
+&lt;li&gt;詢問要支援的用戶數量，以及活躍用戶數量&lt;/li&gt;
+&lt;li&gt;如果有多種用戶，也要分開討論
+&lt;ul&gt;
+&lt;li&gt;ex: 叫車服務會有司機和乘客&lt;/li&gt;
+&lt;li&gt;有更多角色後，可以開始根據角色討論他們的 perspective&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;取得一些數字
+&lt;ul&gt;
+&lt;li&gt;考慮 sotrage 以及 throughput&lt;/li&gt;
+&lt;li&gt;叫車服務範例
+&lt;ul&gt;
+&lt;li&gt;乘客總數量、活躍乘客數、每月乘客需求趟數&lt;/li&gt;
+&lt;li&gt;司機總數量、活躍司機數、單趟平均時間&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;throuput
+&lt;ul&gt;
+&lt;li&gt;活躍用戶&lt;/li&gt;
+&lt;li&gt;refresh rate&lt;/li&gt;
+&lt;li&gt;每個 user 平均打開 app 的次數&lt;/li&gt;
+&lt;li&gt;平均打開 app 會用多久&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Rough design
+&lt;ul&gt;
+&lt;li&gt;探討資料的傳遞
+&lt;ul&gt;
+&lt;li&gt;根據不同 role 去講他們應該傳送什麼資料，用什麼協定，request 的頻率 (request per second)
+&lt;ul&gt;
+&lt;li&gt;討論的時候可以用 average，但是會有 peak time，可以考慮 X2, X4, X10&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;探討資料的儲存
+&lt;ul&gt;
+&lt;li&gt;要準備一些前提，比如假設單一資料庫每秒可以 insert 5K 筆資料&lt;/li&gt;
+&lt;li&gt;可以討論不同的 sharding
+&lt;ul&gt;
+&lt;li&gt;考慮怎樣存可以讓大小減少
+&lt;ul&gt;
+&lt;li&gt;評估這樣分是否可能導致 sharding uneven&lt;/li&gt;
+&lt;li&gt;涉及地理類型的資料 (ex: 乘客和司機的位置)
+&lt;ul&gt;
+&lt;li&gt;可以考慮用自訂幾何形來區分不同地區&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;怎樣的切法可以讓 query 盡量不要跨 shard&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;每個階段也可以探討 throughput&lt;/li&gt;
+&lt;li&gt;開始根據情境設計不同的 service 來表達他們的交互&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;scene&#34;&gt;Scene&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;叫車服務
+&lt;ul&gt;
+&lt;li&gt;可以導入 geo index 來加快查找速度&lt;/li&gt;
+&lt;li&gt;可以用地理劃區塊的方式來 hash 決定&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;聊天軟體
+&lt;ul&gt;
+&lt;li&gt;可以考慮把寫入資料庫和傳給 user 兩件事情用非同步的方式做&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;網頁爬蟲
+&lt;ul&gt;
+&lt;li&gt;從一個 URL 獲取內容，並且從內容中提取更多 URL，反覆執行&lt;/li&gt;
+&lt;li&gt;可以考慮架設的離 DNS 越近越好，如果要爬取的網頁很多，Domain name 的轉換可能影響很大&lt;/li&gt;
+&lt;li&gt;如果單純抓網頁，現在因為很多網頁都靠 JS 來 render，只會得到空的 html，可以考慮用 headless browser 來 render
+&lt;ul&gt;
+&lt;li&gt;headless browser
+&lt;ul&gt;
+&lt;li&gt;沒有 user interface 的 browser&lt;/li&gt;
+&lt;li&gt;但是依然有 rendering engine 和 js interpreter。可以用來得到最終的 html&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;拍賣
+&lt;ul&gt;
+&lt;li&gt;可能要考慮把 bid 做 serialization
+&lt;ul&gt;
+&lt;li&gt;把 bid 透過 queue 給 serializer，會無法回傳成功或失敗&lt;/li&gt;
+&lt;li&gt;可以用 second queue，再讓 serializer 把結果放進去，傳回給 service&lt;/li&gt;
+&lt;li&gt;如果有用 websocket，就可以考慮用這種做法
+&lt;ul&gt;
+&lt;li&gt;用 polling 的話，就得去資料庫撈，除非 service 可以儲存住這些資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;短 URL 生成
+&lt;ul&gt;
+&lt;li&gt;UUID 是 random 且 human-readable（不會有相近的 char，比如 0 和 O）
+&lt;ul&gt;
+&lt;li&gt;但是太長&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可以用不同的 encoding 壓縮長度
+&lt;ul&gt;
+&lt;li&gt;因為 UUID 用的 charactor 是 0-9, a-f，所以可以用有更多種 charactor 的 encoding 來壓縮&lt;/li&gt;
+&lt;li&gt;BASE62
+&lt;ul&gt;
+&lt;li&gt;包含 0-9, a-z, A-Z&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;BASE58
+&lt;ul&gt;
+&lt;li&gt;BASE62 但不包含容易混淆的 0, O, I, l&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;BASE64
+&lt;ul&gt;
+&lt;li&gt;BASE62 但多了 +, /&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;根據可以有多少種字元取長度的次方，即可判斷長度取到多長可以涵蓋我們想要儲存的 URL 數量
+&lt;ul&gt;
+&lt;li&gt;如果我們想要可以儲存 30B 個 URL，那長度就要取 58 的 6 次方才會超過&lt;/li&gt;
+&lt;li&gt;可以直接裁斷編碼後的結果&lt;/li&gt;
+&lt;li&gt;或是不管 UUID，每個字元從 BASE58 的 char set 做 random&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;搶折價券系統
+&lt;ul&gt;
+&lt;li&gt;有一定數量的折價券可以給一定數量的 user 搶，先搶先贏&lt;/li&gt;
+&lt;li&gt;會有極大量的 user 在極短的時間湧入&lt;/li&gt;
+&lt;li&gt;我們可以事先在資料庫建好指定數量的 coupon，就可以修改的時候只 lock 某個 row，不用 lock 整個 table
+&lt;ul&gt;
+&lt;li&gt;pre-populate&lt;/li&gt;
+&lt;li&gt;如果是 insert，可能就得面臨要 lock 整個 table，避免多發 coupon&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可以在 server 做 cache 好處理 read，直接回傳沒有更多 coupon 的訊息&lt;/li&gt;
+&lt;li&gt;考量到資料庫處理上限，我們勢必得做 sharding，導致我們可能會某個 database 的 coupon 空了，但另外一個還有
+&lt;ul&gt;
+&lt;li&gt;不過系統不一定要公平，我們只需要發指定數量的 coupon 出去就好&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;社群平台
+&lt;ul&gt;
+&lt;li&gt;可以在 cache 存放 timeline 減少 cache request 的次數
+&lt;ul&gt;
+&lt;li&gt;但要考慮 influencer 可能要特別設計
+&lt;ul&gt;
+&lt;li&gt;改成另外儲存，到 client 再合併&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;售票系統
+&lt;ul&gt;
+&lt;li&gt;可以考慮把票設計 status，並用 aggregate function 來計算&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;雲端硬碟
+&lt;ul&gt;
+&lt;li&gt;要思考現在的單一硬碟可以儲存多少，以及每台機器可以 mount 多少硬碟&lt;/li&gt;
+&lt;li&gt;每個 User 可以使用的容量期望值？&lt;/li&gt;
+&lt;li&gt;考慮在 client 端做壓縮減少負擔&lt;/li&gt;
+&lt;li&gt;Cyclic redundancy check (CRC)
+&lt;ul&gt;
+&lt;li&gt;一般用在檢查封包是否有錯誤，但是我們也可以用來檢查某個檔案是否有被修改，好做 sync&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Delta copying
+&lt;ul&gt;
+&lt;li&gt;把檔案切小，只傳送修改過的部分&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;tips&#34;&gt;Tips&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;每個 Phase 可以多和 interviewer 討論，確認走在正確的方向上&lt;/li&gt;
+&lt;li&gt;面對面試官給的數字可以嘗試為了好算向上抓一些&lt;/li&gt;
+&lt;li&gt;延遲任務
+&lt;ul&gt;
+&lt;li&gt;如果遇到因為某些原因需要晚點才能做某個任務，可以用 queue 來處理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Cache 除了用 cache 做，Server 自身也可以用 memory 來 cache&lt;/li&gt;
+&lt;li&gt;對於先搶先贏的系統不一定要追求公平，只要達成目標即可&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>資料結構筆記</title>
         <link>https://roykesydon.github.io/Blog/p/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B%E7%AD%86%E8%A8%98/</link>
         <pubDate>Tue, 29 Aug 2023 00:08:46 +0800</pubDate>
