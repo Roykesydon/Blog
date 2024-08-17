@@ -941,6 +941,31 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;h2 id=&#34;orm&#34;&gt;ORM&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Eager vs Lazy loading
+&lt;ul&gt;
+&lt;li&gt;Eager
+&lt;ul&gt;
+&lt;li&gt;一次把所有資料都讀取&lt;/li&gt;
+&lt;li&gt;如果 Teacher 有很多 Student，可能會一次把所有 Student 都讀取出來&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Lazy
+&lt;ul&gt;
+&lt;li&gt;只有在需要的時候才讀取&lt;/li&gt;
+&lt;li&gt;但是可能會有很多次 IO&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Open session in view (OSIV)
+&lt;ul&gt;
+&lt;li&gt;一個 request 一個 database session&lt;/li&gt;
+&lt;li&gt;可以配合 lazy loading 來用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;tips&#34;&gt;Tips&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;盡量不要使用 offset

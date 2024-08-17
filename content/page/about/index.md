@@ -43,16 +43,16 @@ menu:
 ## Skills
 
 Language
-: C、C++、Python、Javascript、Java、Swift
+: C++、Python、Javascript、Java、SQL
 
 Framework
-: Vue、Pytorch、Flask、FastAPI、Express.js
+: Vue、Pytorch、Flask、FastAPI、Express.js、Spring Boot
 
 Database
 : MariaDB、MongoDB、Redis
 
 Others
-: Git、Docker、Node.js
+: Git、Docker、Node.js、Kubernetes
 
 ## Experience
 

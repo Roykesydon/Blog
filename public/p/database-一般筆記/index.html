@@ -7,7 +7,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.4664b128dc266f801644ba2120a41c10539bda53b06172f5474c54373ffb4d18.css"><meta property='og:title' content='Database 一般筆記'>
+<link rel="stylesheet" href="/Blog/scss/style.min.9ba16087f643030152a15ea8e8d54858a0b82d51f4d55e96bda0da835386dfda.css"><meta property='og:title' content='Database 一般筆記'>
 <meta property='og:description' content='沒有另外被獨立出去一篇且有關 Database 的內容'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -320,6 +320,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
         <li><a href="#mongodb">MongoDB</a></li>
       </ol>
     </li>
+    <li><a href="#orm">ORM</a></li>
     <li><a href="#tips">Tips</a></li>
   </ol>
 </nav>
@@ -1339,6 +1340,31 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </li>
 </ul>
 </li>
+</ul>
+</li>
+</ul>
+<h2 id="orm">ORM</h2>
+<ul>
+<li>Eager vs Lazy loading
+<ul>
+<li>Eager
+<ul>
+<li>一次把所有資料都讀取</li>
+<li>如果 Teacher 有很多 Student，可能會一次把所有 Student 都讀取出來</li>
+</ul>
+</li>
+<li>Lazy
+<ul>
+<li>只有在需要的時候才讀取</li>
+<li>但是可能會有很多次 IO</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Open session in view (OSIV)
+<ul>
+<li>一個 request 一個 database session</li>
+<li>可以配合 lazy loading 來用</li>
 </ul>
 </li>
 </ul>

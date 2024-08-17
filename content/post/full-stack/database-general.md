@@ -444,6 +444,17 @@ categories : ["full-stack"]
       - 對 secondary index 造成更大的負擔
       - Mongo 想達成跨機器和 shard 的唯一性
 
+## ORM
+- Eager vs Lazy loading
+  - Eager
+    - 一次把所有資料都讀取
+    - 如果 Teacher 有很多 Student，可能會一次把所有 Student 都讀取出來
+  - Lazy
+    - 只有在需要的時候才讀取
+    - 但是可能會有很多次 IO
+- Open session in view (OSIV)
+  - 一個 request 一個 database session
+  - 可以配合 lazy loading 來用
 
 ## Tips
 - 盡量不要使用 offset

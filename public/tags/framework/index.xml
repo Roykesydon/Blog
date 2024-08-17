@@ -1193,6 +1193,27 @@
 &lt;li&gt;@Transactional
 &lt;ul&gt;
 &lt;li&gt;用在 method 上，代表這個 method 是一個 transaction&lt;/li&gt;
+&lt;li&gt;propagation
+&lt;ul&gt;
+&lt;li&gt;用在 method 上，被別的 transaction 調用應該怎麼處理，講 transaction 的傳播&lt;/li&gt;
+&lt;li&gt;REQUIRED
+&lt;ul&gt;
+&lt;li&gt;如果有外層 transaction 就用，沒有就創建一個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;REQUIRES_NEW
+&lt;ul&gt;
+&lt;li&gt;無論有沒有外層 transaction，都創建一個新的，不受影響&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;NESTED
+&lt;ul&gt;
+&lt;li&gt;嵌套 transaction，如果外層 transaction rollback，內層也會 rollback&lt;/li&gt;
+&lt;li&gt;如果自己 rollback，外層不受影響&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;@Column
@@ -1231,6 +1252,29 @@
 &lt;li&gt;UUID
 &lt;ul&gt;
 &lt;li&gt;用 UUID 來確保唯一性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;@OneToMany, @ManyToOne
+&lt;ul&gt;
+&lt;li&gt;用來設定關聯&lt;/li&gt;
+&lt;li&gt;cascade
+&lt;ul&gt;
+&lt;li&gt;設定當 parent 被刪除時，child 要怎麼處理
+&lt;ul&gt;
+&lt;li&gt;CascadeType.ALL
+&lt;ul&gt;
+&lt;li&gt;parent 被刪除時，child 也會被刪除&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;CascadeType.PERSIST
+&lt;ul&gt;
+&lt;li&gt;parent 被刪除時，child 不會被刪除&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1283,9 +1327,7 @@
 &lt;li&gt;遵循命名規則，他會自己轉 SQL&lt;/li&gt;
 &lt;li&gt;也可以用 @Query 來自定義 SQL
 &lt;ul&gt;
-&lt;li&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;?0&amp;gt;&lt;/code&gt; 代表第一個參數，以此類推&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;

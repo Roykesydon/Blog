@@ -448,6 +448,15 @@ Spring Boot 放棄了 XML 配置，改用 Annotation 配置
     - 可用在可以單獨計算的欄位，比如用資料庫的生日可以算出年齡
   - @Transactional
     - 用在 method 上，代表這個 method 是一個 transaction
+    - propagation
+      - 用在 method 上，被別的 transaction 調用應該怎麼處理，講 transaction 的傳播
+      - REQUIRED
+        - 如果有外層 transaction 就用，沒有就創建一個
+      - REQUIRES_NEW
+        - 無論有沒有外層 transaction，都創建一個新的，不受影響
+      - NESTED
+        - 嵌套 transaction，如果外層 transaction rollback，內層也會 rollback
+        - 如果自己 rollback，外層不受影響
   - @Column
     - 可以設定欄位名稱
     - 這是可選的，沒有的話就是用變數名稱
@@ -465,6 +474,14 @@ Spring Boot 放棄了 XML 配置，改用 Annotation 配置
           - 用 underlying table 來確保唯一性
         - UUID
           - 用 UUID 來確保唯一性
+  - @OneToMany, @ManyToOne
+    - 用來設定關聯
+    - cascade
+      - 設定當 parent 被刪除時，child 要怎麼處理
+        - CascadeType.ALL
+          - parent 被刪除時，child 也會被刪除
+        - CascadeType.PERSIST
+          - parent 被刪除時，child 不會被刪除
 - Spring Data JPA
   - 用特定語法，只需要定好 interface，不用 implement
   - extends JpaRepository<Entity, ID>
@@ -485,7 +502,7 @@ Spring Boot 放棄了 XML 配置，改用 Annotation 配置
   - 可以自定義方法
     - 遵循命名規則，他會自己轉 SQL
     - 也可以用 @Query 來自定義 SQL
-      - <?0> 代表第一個參數，以此類推
+      - `<?0>` 代表第一個參數，以此類推
 
 ### Hibernate
 - 用來儲存 java object 到資料庫的框架
