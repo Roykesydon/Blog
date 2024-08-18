@@ -486,30 +486,6 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;cloud&#34;&gt;Cloud&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;two type of cluster
-&lt;ul&gt;
-&lt;li&gt;Self hosted / Turnkey solutions
-&lt;ul&gt;
-&lt;li&gt;用來在自己的 server 上建立 cluster&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Hosted solutions / Managed solutions
-&lt;ul&gt;
-&lt;li&gt;用來在 cloud 上建立 cluster&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Hosted solutions
-&lt;ul&gt;
-&lt;li&gt;Google Kubernetes Engine (GKE)&lt;/li&gt;
-&lt;li&gt;Amazon Elastic Kubernetes Service (EKS)&lt;/li&gt;
-&lt;li&gt;Azure Kubernetes Service (AKS)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
 &lt;h2 id=&#34;tool&#34;&gt;Tool&lt;/h2&gt;
 &lt;h3 id=&#34;kubectl&#34;&gt;kubectl&lt;/h3&gt;
 &lt;ul&gt;

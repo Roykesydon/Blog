@@ -7,7 +7,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/system-design/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.470bcd2ecfa95764c963f1851df6bfb094cb63af31763195fefeddbe50f11de2.css"><meta property='og:title' content='System Design'>
+<link rel="stylesheet" href="/Blog/scss/style.min.042974887bb3db8b0f3797238c0087805caf10a20d031e17867135982fedeea0.css"><meta property='og:title' content='System Design'>
 <meta property='og:description' content='紀錄系統設計時可以考慮的事項'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/system-design/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -310,28 +310,25 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#architecture">Architecture</a>
-      <ol>
-        <li><a href="#monolithic-vs-microservices">monolithic vs microservices</a></li>
-      </ol>
-    </li>
-    <li><a href="#diagram-tips">Diagram tips</a></li>
     <li><a href="#estimation">Estimation</a></li>
     <li><a href="#network">Network</a>
       <ol>
         <li><a href="#load-balancer">Load Balancer</a></li>
+        <li><a href="#cdn-content-delivery-network">CDN (Content Delivery Network)</a></li>
       </ol>
     </li>
-    <li><a href="#cdn-content-delivery-network">CDN (Content Delivery Network)</a></li>
-    <li><a href="#caching">Caching</a></li>
     <li><a href="#maintain-consistency">Maintain consistency</a></li>
     <li><a href="#queue--messaging">Queue / Messaging</a></li>
     <li><a href="#protocol--sendreceive-data">Protocol &amp; Send/Receive data</a></li>
-    <li><a href="#store-client-data">Store client data</a></li>
-    <li><a href="#architecture-pattern">Architecture pattern</a></li>
     <li><a href="#流程">流程</a></li>
-    <li><a href="#scene">Scene</a></li>
-    <li><a href="#tips">Tips</a></li>
+    <li><a href="#tips">Tips</a>
+      <ol>
+        <li><a href="#查找">查找</a></li>
+        <li><a href="#工具--技術">工具 &amp; 技術</a></li>
+        <li><a href="#unique-id">Unique ID</a></li>
+        <li><a href="#other">Other</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -409,7 +406,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 
 
                 <time class="article-time--reading">
-                    5 minute read
+                    3 minute read
                 </time>
             </div>
         
@@ -424,91 +421,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     <section class="article-content">
     
     
-    <h2 id="architecture">Architecture</h2>
-<h3 id="monolithic-vs-microservices">monolithic vs microservices</h3>
-<ul>
-<li>monolithic:
-<ul>
-<li>優點:
-<ul>
-<li>簡單</li>
-<li>single codebase</li>
-</ul>
-</li>
-<li>缺點
-<ul>
-<li>難以實施 modularity</li>
-<li>不好做 scale
-<ul>
-<li>auto-scaling 要整個 app scale，但有時候可能只是特定功能的需求比較大</li>
-</ul>
-</li>
-<li>all or nothing deployment</li>
-<li>long release cycle
-<ul>
-<li>要 build, test 整個 app</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>microservices:
-<ul>
-<li>優點:
-<ul>
-<li>polyglot
-<ul>
-<li>可以用不同語言來實作不同的服務</li>
-</ul>
-</li>
-<li>independent</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="diagram-tips">Diagram tips</h2>
-<ul>
-<li>User
-<ul>
-<li>可以畫小人，和 service 有所區隔</li>
-<li>和 service 間可以用 dotted line 來畫出 protocol，區隔開來</li>
-</ul>
-</li>
-<li>service
-<ul>
-<li>可以作為 box 來呈現</li>
-<li>不見得要畫 load balancer，可以把 service 疊幾個 box 來表達</li>
-</ul>
-</li>
-<li>database
-<ul>
-<li>可以畫成 barrel</li>
-</ul>
-</li>
-<li>asynchronous message
-<ul>
-<li>可以畫倒著的 barrel 代表 queue，也可以考慮用虛線箭頭表示</li>
-</ul>
-</li>
-<li>箭頭
-<ul>
-<li>盡量朝單向移動，往下或往右，不要同時往左又往右
-<ul>
-<li>ex: a service 調用 b, c service，不要把 b, c service 畫在左右兩邊</li>
-</ul>
-</li>
-<li>盡量不要有 intersection</li>
-</ul>
-</li>
-<li>Alignment
-<ul>
-<li>盡量垂直和水平對齊</li>
-</ul>
-</li>
-</ul>
-<h2 id="estimation">Estimation</h2>
+    <h2 id="estimation">Estimation</h2>
 <ul>
 <li>要評估的指標
 <ul>
@@ -522,6 +435,13 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>沒特別指定的話，可以預估 single relational database 可以處理 read &amp; write 10K per second</li>
 <li>single relational database 的容量可以抓 3 TB</li>
 <li>redis 可以抓 100K，但是受限於 memory，可能抓 30GB</li>
+</ul>
+</li>
+<li>可以問的問題類型
+<ul>
+<li>總共有多少用戶？</li>
+<li>有多少活躍用戶？</li>
+<li>每個用戶平均每天使用多久？</li>
 </ul>
 </li>
 </ul>
@@ -588,7 +508,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </ul>
 </li>
 </ul>
-<h2 id="cdn-content-delivery-network">CDN (Content Delivery Network)</h2>
+<h3 id="cdn-content-delivery-network">CDN (Content Delivery Network)</h3>
 <ul>
 <li>把靜態資源放到離使用者地理上比較近的地方，加速存取速度
 <ul>
@@ -609,90 +529,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <ul>
 <li>lazy</li>
 <li>當有 request 進來時，且 CDN 沒有該資源，才會去 origin server 拉資源</li>
-<li>比較適合在有大量靜態資源的情況下使用</li>
 <li>第一個 user 會比較慢</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="caching">Caching</h2>
-<ul>
-<li>優點
-<ul>
-<li>提高 read performance (減少 latency)</li>
-<li>reduce load(減少 throughput)</li>
-</ul>
-</li>
-<li>strategies
-<ul>
-<li>cache aside
-<ul>
-<li>先問 cache，沒有的話再問 db，並把 db 回傳的資料放到 cache</li>
-<li>缺點
-<ul>
-<li>cache miss 的開銷大</li>
-<li>data staleness
-<ul>
-<li>可能 cache 裡的資料無法反應 db 裡的最新資料</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>read through
-<ul>
-<li>client 只能存取到 cache，如果沒資料，cache 會去 db 拿資料</li>
-<li>可能出現在 ORM，資料存在 memory</li>
-<li>缺點
-<ul>
-<li>cache miss 的開銷大</li>
-<li>data staleness</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>write through
-<ul>
-<li>client 寫資料時，cache 會留一份資料，並把資料寫到 db</li>
-<li>解決 data staleness 問題</li>
-<li>缺點
-<ul>
-<li>write 成本很高</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>write behind
-<ul>
-<li>和 write through 很像，但是不會立即寫到 db</li>
-<li>會等到有更多的資料時，才一次寫到 db</li>
-<li>優點
-<ul>
-<li>沒有 write penalty</li>
-</ul>
-</li>
-<li>缺點
-<ul>
-<li>如果不夠常 flush，可能會有 inconsistency 的問題</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>eviction policy
-<ul>
-<li>LRU (Least Recently Used)
-<ul>
-<li>把最久沒用到的資料刪掉</li>
-<li>可能會把 popular 的資料刪掉</li>
-</ul>
-</li>
-<li>LFU (Least Frequently Used)
-<ul>
-<li>每個資料有一個 counter，每次被存取時，counter + 1</li>
 </ul>
 </li>
 </ul>
@@ -708,30 +545,17 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>不好讓多個 service 共用</li>
 </ul>
 </li>
-<li>redis
-<ul>
-<li>中規中矩的存取速度，但存取的量也受限制</li>
-<li>可以透過 sharded 減輕負擔</li>
-</ul>
-</li>
-<li>relational database
-<ul>
-<li>速度比較慢，但是可以存很多</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
 <h2 id="queue--messaging">Queue / Messaging</h2>
 <ul>
-<li>
-<p>如果系統是 synchronous，可能會有 scalability 的問題</p>
+<li>如果系統是 synchronous，可能會有 scalability 的問題
 <ul>
 <li>會被最慢的 component 所限制 (ex: payment service)</li>
 </ul>
 </li>
-<li>
-<p>role</p>
+<li>role
 <ul>
 <li>producer
 <ul>
@@ -745,27 +569,19 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </li>
 </ul>
 </li>
-<li>
-<p>優點</p>
+<li>優點
 <ul>
 <li>buffer</li>
 <li>應對 request spike</li>
-<li>message durability
-<ul>
-<li>就算 consumer down 了，message 還是會在 queue 裡</li>
 </ul>
 </li>
-</ul>
-</li>
-<li>
-<p>缺點</p>
+<li>缺點
 <ul>
 <li>現在無法知道 message 被處理的情況，sychronous 可以直接得知成功與否</li>
 <li>增加 latency</li>
 </ul>
 </li>
-<li>
-<p>model</p>
+<li>model
 <ul>
 <li>message queue
 <ul>
@@ -775,79 +591,6 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>publisher / subscriber (pub/sub)
 <ul>
 <li>可能會有某個 event 想被 publish 給多個 consumer (subscribers)</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>RabbitMQ</p>
-<ul>
-<li>AMPQ (Advanced Message Queuing Protocol)</li>
-<li>預設 Message 會被儲存，直到有 consumer 提取</li>
-<li>被用來分配 heavy task</li>
-<li>key concept
-<ul>
-<li>routing key
-<ul>
-<li>所有的 message 都會有一個 routing key</li>
-<li>表示 message 要被送到哪個 queue</li>
-</ul>
-</li>
-<li>exchange
-<ul>
-<li>用來接收 message，並且把 message 轉發到 queue</li>
-<li>mode
-<ul>
-<li>direct
-<ul>
-<li>根據 routing key 精確匹配來決定 message 要被送到哪個 queue</li>
-</ul>
-</li>
-<li>fan-out
-<ul>
-<li>所有的 consumer 都會收到 message</li>
-<li>這個模式會執行 pub/sub</li>
-</ul>
-</li>
-<li>topic
-<ul>
-<li>根據 routing key 的 pattern 來決定 message 要被送到哪個 queue</li>
-<li>ex: 某個服務基於不同國家有不同的 queue</li>
-</ul>
-</li>
-<li>header
-<ul>
-<li>和 topic 類似，但是是根據 header 來決定 message 要被送到哪個 queue</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>channel
-<ul>
-<li>consumer 會用 tcp 和 queue 建立連線
-<ul>
-<li>可以用 threads 建立更多連線來更快消耗 message</li>
-</ul>
-</li>
-<li>RabbitMQ 可以在一個 tcp connection 上建立多個 channel，讓不同 thread 可以用同一個 connection 來消耗 message
-<ul>
-<li>這樣可以減少建立 tcp connection 的 overhead</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>acknowledgement
-<ul>
-<li>consumer 可以告訴 RabbitMQ 已經處理完 message，再讓 RabbitMQ 刪除 message
-<ul>
-<li>如果一送出去就刪除，consumer 如果 down 了，message 就會消失</li>
-</ul>
-</li>
-<li>要自行在消耗速度以及 reliability 之間取得平衡</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -911,80 +654,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>適合用在內部服務之間的溝通</li>
 </ul>
 </li>
-<li>GraphQL
-<ul>
-<li>query language for APIs</li>
-<li>解決 REST 的 over-fetching, under-fetching 問題
-<ul>
-<li>over-fetching
-<ul>
-<li>取得的資料比需要的多</li>
-</ul>
-</li>
-<li>under-fetching
-<ul>
-<li>需要的資料要從多個 endpoint 取得</li>
-<li>ex: 取得 user 資料，會回傳 posts 的 id，但要再去另一個 endpoint 取得 posts 的資料</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>優點
-<ul>
-<li>client 可以自己決定要取得哪些資料</li>
-</ul>
-</li>
-<li>缺點
-<ul>
-<li>cache 難以實作
-<ul>
-<li>GraphQL 用的是 POST，瀏覽器 cache 只能用 GET</li>
-<li>而且每個 user 可能會用不同的 field，cache 難以共用</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="store-client-data">Store client data</h2>
-<ul>
-<li>cookie
-<ul>
-<li>limitied size</li>
-<li>not secure</li>
-</ul>
-</li>
-<li>sticky session
-<ul>
-<li>需要 ALB</li>
-<li>無法應對 instance down 的情況</li>
-</ul>
-</li>
-<li>key-value store
-<ul>
-<li>增加複雜度
-<ul>
-<li>如果 redis 倒了？</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="architecture-pattern">Architecture pattern</h2>
-<ul>
-<li>CQRS
-<ul>
-<li>Command Query Responsibility Segregation</li>
-<li>把 read (query) 和 write (command) 分開</li>
-<li>一個 storage 針對 read 做 optimize，另一個 storage 針對 write 做 optimize
-<ul>
-<li>準備一個 schedule job 來把 write 的資料同步到 read 的 storage</li>
-</ul>
-</li>
-<li>如果 read storage 為了讀取效能需要加很多 index，要在裡面更新就可能會花的時間變很長，就可以用這種 pattern</li>
-</ul>
-</li>
+<li>GraphQL</li>
 </ul>
 <h2 id="流程">流程</h2>
 <ul>
@@ -1041,16 +711,8 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>要準備一些前提，比如假設單一資料庫每秒可以 insert 5K 筆資料</li>
 <li>可以討論不同的 sharding
 <ul>
-<li>考慮怎樣存可以讓大小減少
-<ul>
+<li>考慮怎樣存可以讓大小減少</li>
 <li>評估這樣分是否可能導致 sharding uneven</li>
-<li>涉及地理類型的資料 (ex: 乘客和司機的位置)
-<ul>
-<li>可以考慮用自訂幾何形來區分不同地區</li>
-</ul>
-</li>
-</ul>
-</li>
 <li>怎樣的切法可以讓 query 盡量不要跨 shard</li>
 </ul>
 </li>
@@ -1061,24 +723,13 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </ul>
 </li>
 </ul>
-<h2 id="scene">Scene</h2>
+<h2 id="tips">Tips</h2>
+<h3 id="查找">查找</h3>
 <ul>
-<li>叫車服務
-<ul>
-<li>可以導入 geo index 來加快查找速度</li>
-<li>可以用地理劃區塊的方式來 hash 決定</li>
+<li>能不能用地理資訊來做 hashing</li>
+<li>能不能用 geo index</li>
 </ul>
-</li>
-<li>聊天軟體
-<ul>
-<li>可以考慮把寫入資料庫和傳給 user 兩件事情用非同步的方式做</li>
-</ul>
-</li>
-<li>網頁爬蟲
-<ul>
-<li>從一個 URL 獲取內容，並且從內容中提取更多 URL，反覆執行</li>
-<li>可以考慮架設的離 DNS 越近越好，如果要爬取的網頁很多，Domain name 的轉換可能影響很大</li>
-<li>如果單純抓網頁，現在因為很多網頁都靠 JS 來 render，只會得到空的 html，可以考慮用 headless browser 來 render
+<h3 id="工具--技術">工具 &amp; 技術</h3>
 <ul>
 <li>headless browser
 <ul>
@@ -1086,32 +737,23 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>但是依然有 rendering engine 和 js interpreter。可以用來得到最終的 html</li>
 </ul>
 </li>
-</ul>
-</li>
-</ul>
-</li>
-<li>拍賣
+<li>Cyclic redundancy check (CRC)
 <ul>
-<li>可能要考慮把 bid 做 serialization
+<li>一般用在檢查封包是否有錯誤，但是我們也可以用來檢查某個檔案是否有被修改，好做 sync</li>
+</ul>
+</li>
+<li>CQRS (Command Query Responsibility Segregation)
 <ul>
-<li>把 bid 透過 queue 給 serializer，會無法回傳成功或失敗</li>
-<li>可以用 second queue，再讓 serializer 把結果放進去，傳回給 service</li>
-<li>如果有用 websocket，就可以考慮用這種做法
-<ul>
-<li>用 polling 的話，就得去資料庫撈，除非 service 可以儲存住這些資料</li>
+<li>把 read 和 write 分開</li>
+<li>一個 storage 針對 read 做 optimize，另一個 storage 針對 write 做 optimize</li>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-</li>
-<li>短 URL 生成
+<h3 id="unique-id">Unique ID</h3>
 <ul>
 <li>UUID 是 random 且 human-readable（不會有相近的 char，比如 0 和 O）
 <ul>
 <li>但是太長</li>
-</ul>
-</li>
 <li>可以用不同的 encoding 壓縮長度
 <ul>
 <li>因為 UUID 用的 charactor 是 0-9, a-f，所以可以用有更多種 charactor 的 encoding 來壓縮</li>
@@ -1132,70 +774,10 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </li>
 </ul>
 </li>
-<li>根據可以有多少種字元取長度的次方，即可判斷長度取到多長可以涵蓋我們想要儲存的 URL 數量
-<ul>
-<li>如果我們想要可以儲存 30B 個 URL，那長度就要取 58 的 6 次方才會超過</li>
-<li>可以直接裁斷編碼後的結果</li>
-<li>或是不管 UUID，每個字元從 BASE58 的 char set 做 random</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>搶折價券系統
-<ul>
-<li>有一定數量的折價券可以給一定數量的 user 搶，先搶先贏</li>
-<li>會有極大量的 user 在極短的時間湧入</li>
-<li>我們可以事先在資料庫建好指定數量的 coupon，就可以修改的時候只 lock 某個 row，不用 lock 整個 table
-<ul>
-<li>pre-populate</li>
-<li>如果是 insert，可能就得面臨要 lock 整個 table，避免多發 coupon</li>
-</ul>
-</li>
-<li>可以在 server 做 cache 好處理 read，直接回傳沒有更多 coupon 的訊息</li>
-<li>考量到資料庫處理上限，我們勢必得做 sharding，導致我們可能會某個 database 的 coupon 空了，但另外一個還有
-<ul>
-<li>不過系統不一定要公平，我們只需要發指定數量的 coupon 出去就好</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>社群平台
-<ul>
-<li>可以在 cache 存放 timeline 減少 cache request 的次數
-<ul>
-<li>但要考慮 influencer 可能要特別設計
-<ul>
-<li>改成另外儲存，到 client 再合併</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>售票系統
-<ul>
-<li>可以考慮把票設計 status，並用 aggregate function 來計算</li>
-</ul>
-</li>
-<li>雲端硬碟
-<ul>
-<li>要思考現在的單一硬碟可以儲存多少，以及每台機器可以 mount 多少硬碟</li>
-<li>每個 User 可以使用的容量期望值？</li>
-<li>考慮在 client 端做壓縮減少負擔</li>
-<li>Cyclic redundancy check (CRC)
-<ul>
-<li>一般用在檢查封包是否有錯誤，但是我們也可以用來檢查某個檔案是否有被修改，好做 sync</li>
-</ul>
-</li>
-<li>Delta copying
-<ul>
-<li>把檔案切小，只傳送修改過的部分</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="tips">Tips</h2>
+<h3 id="other">Other</h3>
 <ul>
 <li>每個 Phase 可以多和 interviewer 討論，確認走在正確的方向上</li>
 <li>面對面試官給的數字可以嘗試為了好算向上抓一些</li>
@@ -1204,8 +786,9 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>如果遇到因為某些原因需要晚點才能做某個任務，可以用 queue 來處理</li>
 </ul>
 </li>
-<li>Cache 除了用 cache 做，Server 自身也可以用 memory 來 cache</li>
+<li>Cache 除了用專門的 cache database 做，Server 自身也可以用 memory 來 cache</li>
 <li>對於先搶先贏的系統不一定要追求公平，只要達成目標即可</li>
+<li>對於搶票機制可以做 pre-populate，事先在 database 生好指定數量的票，這樣就可以只 lock 某個 row，不用 lock 整個 table</li>
 </ul>
 
 </section>

@@ -328,9 +328,9 @@ Spring Boot 放棄了 XML 配置，改用 Annotation 配置
 - 流程
   - 設定 @Configuration
   - 加到 Bean
-    - <option> setUrlPatterns
+    - `<option>` setUrlPatterns
       - 只有符合 url pattern 的 request 才會經過這個 filter
-    - <option> setOrder
+    - `<option>` setOrder
       - 決定 filter 的順序
 - 如果 filter 要取得 request 和 response 的內容，可以用 ContentCachingRequestWrapper 和 ContentCachingResponseWrapper 重新包裝
   - 因為原本的作法是用 stream 讀取資料，只能讀一次
@@ -410,6 +410,7 @@ Spring Boot 放棄了 XML 配置，改用 Annotation 配置
 - Jakarta Persistence API
 - 以前叫 Java Persistence API
 - 只是一個 specifcation，提供一組 interface，需要實作
+  - 包含了 Entity, EntityManager, Query, Transaction..
 - DataSource
   - 用來連接資料庫
   - 定義了連接資料庫的 info

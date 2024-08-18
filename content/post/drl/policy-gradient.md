@@ -1,7 +1,7 @@
 ---
 title: "Policy Gradient"
 date: 2023-02-19T17:16:14+08:00
-draft: false
+draft: true
 type: "post"
 tags: ["deep-learning","machine-learning","reinforcement-learning"]
 categories : ["deep-learning"]

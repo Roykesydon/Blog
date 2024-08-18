@@ -223,17 +223,6 @@ categories : ["devops"]
           - `name`
           - `value`
 
-## Cloud
-- two type of cluster
-  - Self hosted / Turnkey solutions
-    - 用來在自己的 server 上建立 cluster
-  - Hosted solutions / Managed solutions
-    - 用來在 cloud 上建立 cluster
-- Hosted solutions
-  - Google Kubernetes Engine (GKE)
-  - Amazon Elastic Kubernetes Service (EKS)
-  - Azure Kubernetes Service (AKS)
-
 ## Tool
 ### kubectl
 - `kubectl`

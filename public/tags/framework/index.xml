@@ -930,11 +930,15 @@
 &lt;li&gt;設定 @Configuration&lt;/li&gt;
 &lt;li&gt;加到 Bean
 &lt;ul&gt;
-&lt;li&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;option&amp;gt;&lt;/code&gt; setUrlPatterns
+&lt;ul&gt;
+&lt;li&gt;只有符合 url pattern 的 request 才會經過這個 filter&lt;/li&gt;
+&lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;option&amp;gt;&lt;/code&gt; setOrder
+&lt;ul&gt;
+&lt;li&gt;決定 filter 的順序&lt;/li&gt;
+&lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
@@ -1104,7 +1108,11 @@
 &lt;ul&gt;
 &lt;li&gt;Jakarta Persistence API&lt;/li&gt;
 &lt;li&gt;以前叫 Java Persistence API&lt;/li&gt;
-&lt;li&gt;只是一個 specifcation，提供一組 interface，需要實作&lt;/li&gt;
+&lt;li&gt;只是一個 specifcation，提供一組 interface，需要實作
+&lt;ul&gt;
+&lt;li&gt;包含了 Entity, EntityManager, Query, Transaction..&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;DataSource
 &lt;ul&gt;
 &lt;li&gt;用來連接資料庫&lt;/li&gt;

@@ -47,7 +47,9 @@ categories : ["full-stack"]
   - 構成
     - required
       - key, value, compression type, partition, offset, timestamp
+        - key, value 可以是 null
         - timestamp 可以由系統設置
+        - message 發給 kafka 後，會加上 partition, offset, timestamp
     - optional
       - header
   - 有保留的時間限制
@@ -126,7 +128,7 @@ categories : ["full-stack"]
 - `--bootstrap-server`
   - 指定 kafka server
   - 不推薦使用 `--zookeeper`
-- `command-config`
+- `--command-config`
   - 指定 config file
   - 裡面會寫包含帳號密碼以及加密方式等安全設定
 - `kaft-topics.sh`
@@ -144,3 +146,38 @@ categories : ["full-stack"]
         - 顯示哪些 broker 有複本 (id)
       - `ISR`
         - 顯示哪些 broker 和 leader 同步
+  - `--list`
+    - 列出所有 topic
+- `kaft-console-producer.sh`
+  - `--topic`
+    - 指定 topic
+  - `--producer.config`
+    - 指定 config file
+  - `--producer-property`
+    - 指定 producer property
+    - `acks`
+      - 指定 acks 模式
+  - `--property`
+    - 可以打許多次，每次指定一個 property
+- `kaft-console-consumer.sh`
+  - `--topic`
+    - 指定 topic
+  - `--from-beginning`
+    - 不只是自打開 consumer 後的 message，而是從一開始的 message 開始
+    - 如果同一個 group 有多個 consumer，這個選項只會對第一個 consumer 有用，offset 是看 group 的
+  - `--consumer.config`
+    - 指定 config file
+  - `--property`
+  - `--group`
+    - 指定 consumer group
+- `kafka-consumer-groups.sh`
+  - `--list`
+    - 列出所有 consumer group
+  - `--describe`
+    - 描述 consumer group
+      - `CURRENT-OFFSET`
+        - 目前 offset
+      - `LOG-END-OFFSET`
+        - 最後一個 offset
+      - `LAG`
+        - 落後的 offset

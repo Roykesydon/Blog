@@ -13,8 +13,6 @@ categories : ["devops"]
 - Artifact
   - 你需要用到的檔案，可能是 build 出來的檔案，或是跑測試用的專案
   - ex: .jar, .war
-  - 把 build 出來的檔案放到某個的資料夾，再 publish
-    - 可以用 copy task & publish task 來達成，他有提供變數 `$(Build.ArtifactStagingDirectory)`，作為一個暫存 artifact 的地方
 ### Type
 - Build pipeline
 - Release pipeline

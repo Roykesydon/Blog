@@ -1,7 +1,7 @@
 ---
 title: "Q-learning"
 date: 2023-02-20T16:21:23+08:00
-draft: false
+draft: true
 type: "post"
 tags: ["deep-learning","machine-learning","reinforcement-learning"]
 categories : ["deep-learning"]

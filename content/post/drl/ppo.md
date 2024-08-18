@@ -1,7 +1,7 @@
 ---
 title: "Proximal Policy Optimization(PPO)"
 date: 2023-02-20T12:35:56+08:00
-draft: false
+draft: true
 type: "post"
 tags: ["deep-learning","machine-learning","reinforcement-learning"]
 categories : ["deep-learning"]

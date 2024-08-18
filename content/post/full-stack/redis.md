@@ -20,6 +20,16 @@ categories : ["full-stack"]
 1. Rate Limiter
     - 用 increment 和 expiration 實現
 
+## 快取常見策略
+- cache aside
+  - 先問 cache，沒有的話再問 db，並把 db 回傳的資料放到 cache
+- read through
+  - client 只能存取到 cache，如果沒資料，cache 會去 db 拿資料
+- write through
+  - client 寫資料時，cache 會留一份資料，並把資料寫到 db
+- write behind
+  - 和 write through 很像，但是不會立即寫到 db，會等到有更多的資料時，才一次寫到 db
+
 ## Feature
 - NoSQL
 - In-memory

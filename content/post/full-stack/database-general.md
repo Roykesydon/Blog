@@ -4,100 +4,9 @@ date: 2024-07-21T00:00:17+08:00
 draft: false
 description: "沒有另外被獨立出去一篇且有關 Database 的內容"
 type: "post"
-tags: ["database", "nosql", "cache"]
+tags: ["database", "cache", "sql"]
 categories : ["full-stack"]
 ---
-
-## ACID
-- Transaction
-  - 一個或多個操作的集合
-  - 一個 transaction 要不全部執行，要不全部不執行
-  - 就算在程式中沒顯式的寫 transaction，資料庫也會自動幫你包 transaction
-  - lifespan
-    - begin
-    - commit
-    - rollback
-  - 只有一堆 read  queries 的 transaction 是有意義的，他可以得到 consistent snapshot
-- Atomicity
-  - 一個 transaction 要不全部執行，要不全部不執行
-  - 如果中間有一個 query 出錯，前面的 query 都得 rollback
-  - 如果 commit 前，database crash，則所有的 query 都得 rollback
-- Consistency
-  - In data
-    - 符合當初制定的規則 (ex: foreign key 指向的資料一定要存在)
-      - 一般 ACID 的 C 指的是這個
-      - Define by user
-      - referential integrity
-  - In read
-    - 描述另外一種 unconsistent 的情況
-    - 讀取的不是最新的資料
-    - 一個 transaction 在別的 transaction commit 之後，要不要立刻可以看到那筆資料？
-    - 如果只有一個 database，那一個 transaction 可以讀到另外一個 transaction 寫入的資料，非常簡單
-    - 如果是在 master-slave 的情況下，讀 replication 可能沒辦法立刻得到寫在 master 的資料
-  - Eventual consistency
-    - 最後一定會 consistent
-- Isolation
-  - 一個 transaction 的執行不應該影響其他 transaction
-  - read phenomena
-    - dirty read
-      - 一個 transaction 讀到了另一個 transaction 已經寫了但還沒 commit 的資料。這個資料有可能被 commit 也有可能被 rollback
-    - non-repeatable read
-      - 一個 transaction 兩次讀取同個資料時，得到的資料不一樣因是因為有其他 transaction 更新了這個資料（並且 commit 了）
-      - 和 dirty read 不同的是，這個資料是已經 commit 的
-    - phantom read
-      - 也是第一次和第二次讀取的資料不一樣，第二次發現多了額外的資料，這次是因為有其他 transaction 寫入了新的資料（並且 commit 了）
-      - 之所以要和 non-repeatable read 分開，是因為他這裡沒辦法簡單的靠鎖起來已經讀過的資料，因為你沒辦法鎖你本來看不到的資料
-    - lost update
-      - 我更新了某筆資料，但是在 commit 之前，有其他 transaction 也更新了這筆資料，並且 commit。我再去讀取這筆資料時，發現我更新的資料就被覆蓋了
-  - Isoaltion level
-    - 為了解決 read phenomena，資料庫提供了不同的隔離等級
-    - 不會影響自身 transaction 前面所 write 的資料
-    - read uncommitted
-      - No isolation
-      - 可以看到其他 transaction 還沒 commit 的資料
-    - read committed
-      - 只能看到其他 transaction commit 的資料
-      - 許多資料庫的預設隔離等級
-      - 除了 dirty read 之外，其他 read phenomena 都有可能發生
-    - repeatable read
-      - 確保同一筆資料在同一個 transaction 中讀取時，結果是一樣的
-      - phantom read 有可能發生
-    - snapshot
-      - 保證 transaction 得到的資料是一致的
-      - 只會看到 transaction 開始時的 snapshot
-      - read phenomena 都不會發生
-      - 好像不是所有資料庫都有這個隔離等級，也有些 repeatable read 就是用 snapshot 來實現的
-        - 比如 PostgreSQL 就是用 snapshot 來實現 repeatable read
-      - 但這不代表不會遇到問題，請參考 double booking problem
-    - serializable
-      - 最高隔離等級
-      - 保證所有 transaction 都是依序執行的
-      - read phenomena 都不會發生
-      - 和要求 exclusive lock 相比，有可能實現方法是遇到衝突會 fail
-  - 解法
-    - pessimistic
-      - 用各種 lock 來保證 isolation
-      - row level lock, table lock, page lock
-    - optimistic
-      - 不用 lock，真的有 transaction 衝突時就 fail
-- Durability
-  - 一旦 transaction 完成，其結果應該是永久的
-  - 也就是要做 persistent storage
-  - durability technique
-    - Write ahead log (WAL)
-      - 先寫 log (寫你做了什麼操作，但不去真的改 disk 上的資料)，有空再寫到 disk
-        - 這樣一些修改就可以改在 memory，如果 crash 了，可以用 log 來 recover
-        - 而且考量硬碟限制，如果你想修改的資料遠小於硬碟可寫的最小單位，會很浪費
-    - Asynchronous snapshot
-      - 在後台把 snapshot 寫到 disk
-    - AOF
-      - 把修改資料的指令寫到 log
-      - 好像和 WAL 的差別是不會立刻寫到 disk
-  - 可能的問題
-    - OS Cache
-      - 假設想把 WAL 寫到 disk，OS 可能會先把資料寫到 OS cache，但是卻先回覆已寫入
-      - 但是有指令 (fsync )可以 force OS 寫到 disk
-        - 但是會有 trade off，因為 fsync 會讓寫入變慢
 
 ## Database internal
 ### Storage concept
@@ -108,111 +17,31 @@ categories : ["full-stack"]
 - Page
   - 多個 row 會被存在一個 page
   - 讀取不會只讀一個 row，而是一個或多個 page
-  - 根據 database，每個 page 會有個固定的 size
 - IO
   - IO operation 指的是存取 disk 的操作
-  - 想盡量 minimize IO 次數
-  - 一個 IO 可能會獲得多個 page
-  - IO 也可能只是進入 cache
+  - 一個 IO 可能會獲得多個 page，也可能只是用 cache 的資料
+  - Database 常常會利用 cache 來減少 IO
+    - 因此有些 query 很快，可能是因為有快取資料可用
 - Heap data structure
   - 儲存整個 table 的資料
-  - traverse 整個 table 的成本很大
-  - 可以用 index 來知道要查詢的資料在哪裡
+  - 有些 database 會用 clustered index 來儲存，就不會有 heap
 - Index data structure (b-tree)
   - 一個有 pointer 來指向 heap 的資料結構
     - 較流行的是 b-tree
   - 可以對一個或多個 column 做 index
   - index 可以告訴你要查詢的資料在哪個 page
   - index 也會被儲存在 page
-  - clustered index
-    - 也叫做 Index-Organized Table
-    - heap table 的資料和 index 放在一起
-      - 這也是為什麼 clustered index 只能有一個
-    - 沒特別指定的話，primary key 一般是 clustered index
 ### Row-oriented vs Column-oriented
 - Row-oriented database (row store)
   - 每個 row 接著下個 row 來儲存
   - 每次 IO 會獲得多個 row，每個都有所有的 column
-  - 如果沒特別設置 index，會需要一列一列的 scan
 - Col-oriented database (column store)
   - 每個 column 接著下個 column 來儲存
-  - 會儲存 row_id 和 column 的數值
-  - 對於只要特定的 column 的 query (SELECT 那邊)，需要的 IO 比較少
-    - 但是如果要查詢多個 column，則需要更多的 IO
-      - 因為雖然可以從 where 快速找到需要的 row ID，但是需要去每個 SELECT 要的 col 的 block 取資料
-- Pros and cons
-  - Row-oriented
-    - Pros
-      - OLTP (Online Transaction Processing) 
-  - Column-oriented
-    - Pros
-      - 比較好壓縮，因為性質相近的資料會在一起
-      - aggregation 很有效率
-      - OLAP (Online Analytical Processing)
-    - Cons
-      - write 比較慢
-### Primary key vs Secondary key
-- primary key
-  - clusering
-    - 把 table 圍繞 primary key 來組織 
-  - 需要維持 order，所以如果在有 1 和 8 的情況下，需要插入 2，那 2 不能直接排在 8 後面
-  - 但是如果我要根據 PK 取得小範圍內的資料，就可能不用多次 IO
-- Secondary key
-  - 不在乎你原本 table 的 order
-  - 但是會有另外一個結構去放 index，可以找到 row_id
+  - 比較好壓縮，也比較好做 aggregation，所以在一些分析資料的軟體會用到
 
-## Database indexing
-- 如果需要搜索的欄位沒做 index，那麼就會需要 scan 整個 table，直到找到
-  - 如果要求欄位做 `like` 之類的，那麼依然需要 scan 整個 table
-- 搜索方法
-  - table scan
-    - 如果掃描的範圍過大，Database 可能就會選擇該方法
-    - 通常會用 parallel 的方式搜尋
-  - index scan
-  - bitmap index scan
-    - postgresql 有這個功能
-    - 流程
-      - 建立長度是 page 的 bitmap
-      - index scan 的同時更新 bitmap，紀錄哪些 page 有我們要的資料
-      - 最後一次性讀取 bitmap 為 1 的 page
-      - 最後用 filter 去過濾掉不需要的資料
-    - 和 index scan 的差別在於，他找到後不會急著去取資料，而是先記錄下來
-- non-key column
-  - 可以用 include 把一些常常需要一起帶入的資訊放到 index 裡面
-    - Index-only scan
-      - 這樣在特定情況不用去 heap 取，可以加速很多
-      - 但也要小心使 index 變得過大。如果 memory 不夠，又會用到 disk，拖垮效率
-- composite index
-  - 把多個 col 作為 key 做 index
-  - 在 postgresql 裡面，如果有一個 index 是 (a, b)，用靠左的 index 可以做 index scan，但是用靠右的就不行
-- index comment
-  - 可以用 comment 來告訴 optimizer 要用的策略
-  - 但是不是所有 database 都支援
-- bloom filter
-  - 透過 hash 和 bit array 來判斷某個元素是否有可能存在
-- index 指向 primary key vs row
-  - postgresql 的 index 都是指向 row
-  - mysql 的 secondary index 指向 primary key，primary key 指向 row
-  - 當更新刪除 row 的時候，mysql 只需要更新 primary，但是 postgresql 可能需要更新所有 index
-  - 但是從 index 取資料時，mysql 需要多一次查詢，而 postgresql 可以直接取
-
-## B-Tree and B+Tree
+### Data structure
 - B-tree
   - Balanced data structure for fast search
-  - 有一堆 Node
-    - 在資料庫中，node 通常是 disk page
-  - 有 m degree
-    - 每個 node 最多有 m 個 child
-    - 每個 node 最多有 m-1 個 element
-  - element
-    - 有 key 和 value
-      - value 通常是 row 的 pointer
-        - 可能是 row_id 的相關資訊
-        - pointer 可以指向 primary key 或是 tuple
-  - Node type
-    - Root
-    - Internal
-    - Leaf
   - 限制
     - node 中的 element 同時存了 key 和 value
     - range query 效率很差，因為要各別 random access
@@ -222,165 +51,20 @@ categories : ["full-stack"]
   - leaf node 會用 linked list 串起來
     - 適合 range query
   - 通常一個 node 是一個 DBMS page
+- LSM-tree
+  - Log-Structured Merge-Tree
+  - 都加在尾端，不會覆蓋原本的資料，對 SSD 有利
+  - B-Tree 為了平衡會頻繁修改
+  - 有利於 insert
 
-## Index fragmentation
+### Fragmentation
+- 這裡是以 database 為出發點去看 fragmentation
 - Internal fragmentation
-  - 一個 page 中有很多空間是空的
+  - 一個 Page 中有很多空間是空的
 - External fragmentation
-  - 多個 Page 存放不是連續的
+  - 多個 Page 存放不是連續的。剩下的空間夠儲存新的資料，但是因為不連續，所以不能用
 
-## Partitioning
-- 把大 table 分成多個小 table
-- Vertical vs Horizontal
-  - Vertical
-    - 根據 columns 拆成多個 partition
-    - 可以把不太常用又大的 column (比如 blob) 放到另外一個 partition，然後放在較慢的 disk，保留其他常存取的 column 在 SSD
-  - Horizontal
-    - 把 rows 拆成多個 partition
-- Types
-  - By range
-    - 比如日期或是 id
-    - 也可以把一些較舊較不常存取的 partition 移到較慢的設備
-  - By list
-    - 根據一些離散的數值去區分
-  - By hash
-    - 用 hash function 去決定要放在哪個 partition
-- 優點
-  - 用 single query 存取單一 partition 的速度更快
-  - 對某些 sequential scan 有幫助
-  - 可以把舊資料放在比較便宜的設備
-- 缺點
-  - 如果要從一個 partition 移動資料到另一個 partition，效率很慢
-  - 對於效率很差的 query，可能會需要 scan 所有 partition，此時比掃描整個沒做 partition 的 table 還要慢
-
-## Database sharding
-- 把 table 拆成多個 table，分散在不同的 database
-- consisitent hashing
-  - 用 hash function 來決定要放在哪個 database，每次都要得到一致的結果
-- Horizontal partitioning vs sharding
-  - Horizontal partitioning
-    - 一個 table 拆成多個 table，但是還是在同一個 database
-  - 和 Horizontal partitioning 的差別
-    - table 現在會分到不同的 database server
-- 優點
-  - scalability
-  - Optimal
-    - smaller index size
-- 缺點
-  - complex client
-    - 做 partition，client 不用管資料具體在哪個 partition，交給 DBMS 去處理。但是 sharding 就要 client 自己去處理
-    - 很多東西變得很複雜
-      - 跨 shard 做 transaction
-      - rollback
-      - join 
-
-## Concurrency control
-- Lock
-  - shared vs exclusive
-    - shared lock 可以被多個 transaction 同時持有
-      - 用在讀取，所以可以多個 transaction 同時讀取
-      - 在有 shared lock  的條件下，其他 transaction 也可以設置 shared lock
-    - exclusive lock 只能被一個 transaction 持有
-      - 他人不能讀取或寫入
-    - 當涉及的資料持有其中一種 lock 時，其他 transaction 都不能設置另外一種 lock
-- Deadlock
-  - 多個 transaction 互相等待對方釋放 lock
-  - 多數 DBMS 會檢查 deadlock，並讓最後一個造成 deadlock 的 transaction rollback
-- Two-phase locking (2PL)
-  - Double booking problem
-    - 當兩個 transaction 同時搶更新同個資源就有可能遇到該問題
-    - example
-      - 兩個 transaction 都先 select 再 update
-      - 他們兩個 select 都先看到有空位，然後一前一後更新，就會造成 double booking
-    - PostgreSQL 可以加上 `SELECT ... FOR UPDATE` 來解決
-      - 他會取得 exclusive lock
-  - two-phase
-    - growing phase
-      - 取得 lock
-    - shrinking phase
-      - 釋放 lock
-    - 強調一個 transaction 不能交叉取得和釋放 lock
-      - 不然其他 transaction 有可能在這空隙修改資料
-    - 有可能造成 deadlock
-
-## Database replication
-- 透過 redundancy 來提高 reliability, tolerance, accessibility
-- Master / Backup replication
-  - 只有一個 master / leader，有一或多個 backup / standby
-  - master 
-    - 接受 write / ddl
-  - backup
-    - 接受 read
-    - 備份寫到 master 的資料
-- Multi-master replication
-  - 多個 master，可以同時寫入
-  - 需要處理 conflict
-- Sychronous vs Asynchronous replication
-  - Synchronous
-    - transaction 會被 blocked，直到所有的 backup 都寫入
-    - 有些 database 可以設定 First N 或是 any 完成就好
-  - Asynchronous
-    - transaction 被寫入 master 後就算完成
-- 優點
-  - horizontal scaling
-- 缺點
-  - eventual consistency
-  - 寫入可能很慢 (synchronous)
-  - 實作複雜 (multi-master)
-
-## Database Engine
-- 也叫 storage engine 或 embedded database
-- 負責處理 CRUD 的 library
-- DBMS 基於 engine 來提供更多功能
-- 例子
-  - MyISAM
-    - indexed sequential access method
-    - B-tree 的 index 直接指向 row
-    - 不支援 transaction
-    - insert 很快，但是 update 和 delete 很慢
-      - 因為改變資料大小會造成一堆 pointer 需要更新
-    - database crash 後，可能會有 corrupted table，要手動修復
-    - table-level lock
-  - InnoDB
-    - B+Tree 的 index 指向 primary key，primary key 指向 row
-    - MySQL 和 MariaDB 的預設 engine
-    - 支援 ACID transaction
-    - foreign key
-    - row-level lock
-  - XtraDB
-    - InnoDB 的 fork
-  - SQLite
-    - 對於 local data 很流行的 embedded database
-    - Full ACID
-    - table-level lock
-    - concurrent read and write
-    - 同時也是 DBMS
-      - 支援解析 SQL
-  - Aria
-    - 和 MyISAM 很像
-    - crash-safe
-  - Berkeley DB
-    - key-value store
-    - 支援 ACID transaction
-    - 支援 replication
-  - LevelDB
-    - LSM-tree (Log-Structured Merge-Tree)
-      - 有利於 insert
-      - 有利於 SSD
-        - 原本的 b-tree 為了平衡會頻繁修改，對同一個 block 的多次寫入在 SSD 易使 block 壞掉
-    - 沒有 transaction
-  - RocksDB
-    - Facebook fork 的 LevelDB
-    - 支援 transaction
-    - 因為 insert 很快，又支援 transaction，也比較適合 SSD，所以很受歡迎
-    - 加了一堆 feature
-    - multi-threaded
-    - MyRocks
-      - 給 MySQL 和 MariaDB 用的 RocksDB
-    - MongoRocks
-      - 給 MongoDB 用的 RocksDB
-
-## Database cursor
+### Database cursor
 - 當資料庫有很大的結果集時，不可能一次把所有資料用網路傳給 client，用戶也沒有 memory 來存放所有資料
 - Server side / client side cursor
   - Server side
@@ -392,62 +76,127 @@ categories : ["full-stack"]
     - 對 network bandwidth 要求較大
     - 可能沒有足夠的 memory
 
-## NoSQL
-### MongoDB
-- 以 BSON (Binary JSON) 儲存資料
+### Partitioning
+- 把大 table 分成多個小 table
+- Vertical vs Horizontal
+  - Vertical
+    - 根據 columns 拆成多個 partition
+    - 可以把不太常用又大的 column (比如 blob) 放到另外一個 partition
+      - 可以把他放在較慢的 disk，保留其他常存取的 column 在 SSD
+      - 也可以讓比較不常用的資料比較不容易進入 cache
+  - Horizontal
+    - 把 rows 拆成多個 partition
+- 優點
+  - 用 single query 存取單一 partition 的速度更快
+  - 對某些 sequential scan 有幫助
+  - 可以把舊資料放在比較便宜的設備
+- 缺點
+  - 如果要從一個 partition 移動資料到另一個 partition，效率很慢
+  - 對於效率很差的 query，可能會需要 scan 所有 partition，此時比掃描整個沒做 partition 的 table 還要慢
+  - partition 可能會 unbalance
+
+## Database indexing
+- 如果需要搜索的欄位沒做 index，那麼就會需要 scan 整個 table，直到找到
+  - 如果要求欄位做 `like` 之類的，那麼依然需要 scan 整個 table
+- 搜索方法
+  - table scan
+    - 如果掃描的範圍過大，Database 可能就會選擇該方法
+    - 通常會用 parallel 的方式搜尋，所以還是會快一些
+  - index scan
+  - Index-only scan
+    - 也叫 covering index
+    - 需要的欄位在 index 裡面就有了，在這種情況不用去 heap 取，可以加速很多
+    - 但也要小心使 index 變得過大。如果 memory 不夠，又會用到 disk，拖垮效率
+- non-key column
+  - 可以用 include 把一些常常需要一起帶入的資訊放到 index 裡面
+  - 可以促成 index-only scan
 - composite index
-  - prefix
-    - 如果有一個 index 是 (a, b)，那麼 (a) 也是有效的 index
-  - explain
-    - 用來看 query 的 execution plan
-    - cursor
-      - BasicCursor
-        - 會 scan 整個 collection，是個警訊
-    - 掃描的文件數量
-      - nscanned
-        - 掃描的 index 數量
-      - nscannedObjects
-        - 掃描的 document 數量
-      - n
-        - 回傳的 document 數量
-      - nscanned >= nscannedObjects >= n
-    - scanAndOrder
-      - 是否需要把文件都放在 memory 並排序
-      - 還會一次性回傳資料
-  - hint
-    - 強制使用某個 index
-  - optimizer 挑選索引
-    - 第一階段 - 挑選最佳索引
-      - 最佳索引
-        - 包含所有的 filter 和 sort 的欄位
-        - range filter 和 sort 的欄位必須在 equality filter 的後面
-          - sort 的欄位必須在 range filter 的後面
-        - 如果有多個最佳索引就會隨便選一個
-    - 第二階段 - 透過實驗挑選索引
-      - 沒有最佳索引就會實驗判斷要選哪個，看看誰先找到指定數量的文件
-      - 換句話說，如果有多個索引，optimizer 會選 nscanned 最小的
-- MMAPv1
-  - Mongo 一開始用的 storage engine
-  - _id 直接對應到 diskloc，也就是 disk 的偏移量
-    - 查找速度驚人，但是更新就要維護偏移量很費時
-  - 採用 database-level lock，Mongo 後來也只更新成 collection-level lock
-- WiredTiger
-  - MongoDB 收購的 storage engine
-  - Document-level locking
-  - 可以做到 compression
-  - 5.2 之前
-    - _id 會先被用來尋找 recordid，再用 recordid 去獲取 document
-    - recordid 是 clustered index
-  - 5.3
-    - _id 變成 clustered index
-    - 之前 recordid 只有 64 位，但現在 _id 作為 primary key 有 12 bytes
-      - 對 secondary index 造成更大的負擔
-      - Mongo 想達成跨機器和 shard 的唯一性
+  - 把多個 col 作為 key 做 index
+  - 在 PostgreSQL ，如果有一個 index 是 (a, b)，用靠左的 index 可以做 index scan，但是用靠右的就不行
+### Clustered index
+- 也叫做 Index-Organized Table
+  - 資料圍繞 index 來組織
+  - 這也是為什麼 clustered index 只能有一個
+- 沒特別指定的話，primary key 一般是 clustered index
+### Primary key vs Secondary key
+- primary key
+  - clusering
+    - 把 table 圍繞 primary key 來組織，但也有些 Database 不是這樣設計，比如 PostgreSQL
+  - 需要維持 order，但是如果我要根據 PK 取得小範圍內的資料，和不顧排序相比，就可能不用多次 IO
+- Secondary key
+  - 不在乎原本 table 的 order，而是根據自訂的 key 來排序
+  - 但是會有另外一個結構去放 index，可以找到 row_id
+- 設計差異
+  - PostgreSQL 的 index 都指向 row，不管是 primary 還是 secondary
+    - 這樣 secondary index 就可以直接取資料，不用再跳一層 primary key
+    - 但是如果更新 row，會更新 row id，連帶影響要更新所有 secondary index，不管修改的欄位有沒有在這 index
+  - MySQL 的 secondary index 指向 primary key，primary key 指向 row
+    - 這樣 secondary index 就要先找到 primary key，再找到 row
+
+## Distributed database
+### Sharding
+- 把 table 拆成多個 table，分散在不同的 database
+- 分散式會帶來很多問題，比如要怎麼做 transaction 和 join?
+- Horizontal partitioning vs sharding
+  - Horizontal partitioning
+    - 一個 table 拆成多個 table，但是還是在同一個 database
+  - 和 Horizontal partitioning 的差別
+    - table 現在會分到不同的 database server
+    - 做 partition，client 不用管資料具體在哪個 partition，交給 DBMS 去處理。但是 sharding 就要 client 自己去處理
+### Database replication
+- 透過 redundancy 來提高 reliability, tolerance, accessibility
+- Master / Backup replication
+  - 也叫 master-slave replication
+  - 只有一個 master / leader，有一或多個 backup / standby
+  - 一寫多讀
+- Multi-master replication
+  - 多個 master，可以同時寫入
+  - 需要處理 conflict
+- Sychronous vs Asynchronous replication
+  - Synchronous
+    - transaction 會被 blocked，直到所有的 backup 都寫入
+    - 有些 database 可以設定 First N 或是 any 完成就好
+  - Asynchronous
+    - transaction 被寫入 master 後就算完成
+
+
+## Concurrency control
+- strategy
+  - pessimistic
+    - 用各種 lock 來保證 isolation
+  - optimistic
+    - 不用 lock，真的有 transaction 衝突時就 fail
+- Lock
+  - shared vs exclusive
+    - shared lock 可以被多個 transaction 同時持有
+      - 用在讀取，所以可以多個 transaction 同時讀取
+      - 在有 shared lock  的條件下，其他 transaction 也可以設置 shared lock
+    - exclusive lock 只能被一個 transaction 持有
+      - 他人不能讀取或寫入
+      - PostgreSQL 有一個 `SELECT ... FOR UPDATE` 來取得 exclusive lock
+    - 當涉及的資料持有其中一種 lock 時，其他 transaction 都不能設置另外一種 lock
+- Deadlock
+  - 多個 transaction 互相等待對方釋放 lock
+  - 多數 DBMS 會檢查 deadlock，並讓最後一個造成 deadlock 的 transaction rollback
+- Two-phase locking (2PL)
+  - DBMS 為了實現 isolation 需要保證 conflict serializability (CSR)，2PL 可以保證這一點
+  - two-phase
+    - growing phase
+      - 取得 lock
+    - shrinking phase
+      - 釋放 lock
+    - 強調一個 transaction 不能釋放 lock 後就再也無法取得
+    - 有可能造成 deadlock
+
+## Database Engine
+- 也叫 storage engine 或 embedded database
+- 負責處理 CRUD 的 library
+- DBMS 基於 engine 來提供更多功能
 
 ## ORM
 - Eager vs Lazy loading
   - Eager
-    - 一次把所有資料都讀取
+    - 一次把所有相關的資料都讀取出來
     - 如果 Teacher 有很多 Student，可能會一次把所有 Student 都讀取出來
   - Lazy
     - 只有在需要的時候才讀取
@@ -455,11 +204,15 @@ categories : ["full-stack"]
 - Open session in view (OSIV)
   - 一個 request 一個 database session
   - 可以配合 lazy loading 來用
+- N+1 problem
+  - 一個 query 取得所有資料，然後再用每個資料的 id 來取得相關資料
+  - 這樣就會有 N+1 次 IO
+    - 第一次是從主表拿清單
+    - 接下來 N 次是從子表拿資料
 
 ## Tips
 - 盡量不要使用 offset
-  - offset 代表讀取並丟掉前面幾筆資料
-  - 常有 offset 和 limit 搭配好達到 paging 的效果
+  - 最 naive 的實現 pagination 的做法就是用 offset + limit。但是 offset 代表讀取並丟掉前面幾筆資料，所以他會多讀一堆沒用的資料
   - 可以讓用戶那邊保存 id，where 設置 id 要大於多少來規避 offset
 - Connection pool
   - 維護一定數量的連接，避免每次都要建立連接
@@ -473,14 +226,9 @@ categories : ["full-stack"]
   - 把 hash function 的結果分散在一個 hash ring 上
     - 根據 hash function 的結果，看自己落在哪段範圍，配給指定的 server
     - 這樣的好處是追加或是移除 server 時，只會影響一台 server 的資料
+    - 也可以追加到負載比較高的 server 附近
 - write amplification
   - 寫入資料時，發現 disk 寫入的資料比你預期寫入的資料多很多
-  - level
-    - application
-      - 應用程式背後下了很多 query 來達成某個單一任務
-    - database
-      - ex: 更新資料時，可能是直接生一個新的 row
-    - SSD
-      - 通常說的是這種
-      - 想更新的時候，更新的 page 會被標記為不能使用。會有另外一隻非同步程式定期處理這種
-        - 但是他會把整個 block 寫到新的地方，再把原地方設為 free，就為了那些不能再被使用的空間搬整個 block
+  - 分很多不同 level，通常是在說 SSD 造成的
+  - 想更新的時候，更新的 page 會被標記為不能使用。會有另外一隻非同步程式定期處理這種
+    - 但是他會把整個 block 寫到新的地方，再把原地方設為 free，就為了那些不能再被使用的空間搬整個 block
