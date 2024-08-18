@@ -7,7 +7,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/web-security/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.470bcd2ecfa95764c963f1851df6bfb094cb63af31763195fefeddbe50f11de2.css"><meta property='og:title' content='Web Security'>
+<link rel="stylesheet" href="/Blog/scss/style.min.042974887bb3db8b0f3797238c0087805caf10a20d031e17867135982fedeea0.css"><meta property='og:title' content='Web Security'>
 <meta property='og:description' content='常見的 Web attack 和防禦方法'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/web-security/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -310,7 +310,6 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#information-gathering">Information Gathering</a></li>
     <li><a href="#file-uploaded-vulnerability">File Uploaded Vulnerability</a>
       <ol>
         <li><a href="#防禦方法">防禦方法</a></li>
@@ -328,24 +327,24 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
         <li><a href="#防禦方法-2">防禦方法</a></li>
       </ol>
     </li>
-    <li><a href="#sql-injection">SQL Injection</a></li>
-    <li><a href="#xss-cross-site-scripting">XSS (Cross Site Scripting)</a>
+    <li><a href="#sql-injection">SQL Injection</a>
       <ol>
-        <li><a href="#exploitation">Exploitation</a></li>
         <li><a href="#防禦方法-3">防禦方法</a></li>
       </ol>
     </li>
-    <li><a href="#backdoor">Backdoor</a>
+    <li><a href="#xss-cross-site-scripting">XSS (Cross Site Scripting)</a>
       <ol>
-        <li><a href="#anti-virus">Anti-Virus</a></li>
-      </ol>
-    </li>
-    <li><a href="#insecure-session-management">Insecure session management</a>
-      <ol>
-        <li><a href="#csrf-cross-site-request-forgery">CSRF (Cross Site Request Forgery)</a></li>
+        <li><a href="#exploitation">Exploitation</a></li>
         <li><a href="#防禦方法-4">防禦方法</a></li>
       </ol>
     </li>
+    <li><a href="#csrf-cross-site-request-forgery">CSRF (Cross Site Request Forgery)</a>
+      <ol>
+        <li><a href="#防禦方法-5">防禦方法</a></li>
+      </ol>
+    </li>
+    <li><a href="#backdoor">Backdoor</a></li>
+    <li><a href="#anti-virus">Anti-Virus</a></li>
   </ol>
 </nav>
         </div>
@@ -438,63 +437,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     <section class="article-content">
     
     
-    <h2 id="information-gathering">Information Gathering</h2>
-<ul>
-<li>Whois Lookup
-<ul>
-<li>get owner information of a domain</li>
-</ul>
-</li>
-<li>Netcraft site report
-<ul>
-<li>get technology stack of a website</li>
-</ul>
-</li>
-<li>Robtex DNS Lookup
-<ul>
-<li>get information of a domain</li>
-</ul>
-</li>
-<li>Exploit database
-<ul>
-<li>search for exploits</li>
-</ul>
-</li>
-<li>knockpy
-<ul>
-<li>subdomain enumeration</li>
-</ul>
-</li>
-<li>dirb
-<ul>
-<li>web content scanner</li>
-<li>搜索隱藏的檔案</li>
-</ul>
-</li>
-<li>maltego
-<ul>
-<li>data mining tool</li>
-<li>有大量套件，可以用來搜集各類資訊，而且有視覺化</li>
-</ul>
-</li>
-</ul>
-<h2 id="file-uploaded-vulnerability">File Uploaded Vulnerability</h2>
-<ul>
-<li>weevely
-<ul>
-<li>web shell</li>
-<li>可以遠端控制</li>
-<li>有些情況下就算上傳的檔案是 filename.php.jpg 依然可以執行</li>
-</ul>
-</li>
-<li>Burp
-<ul>
-<li>proxy</li>
-<li>intercept request</li>
-<li>change request</li>
-</ul>
-</li>
-</ul>
+    <h2 id="file-uploaded-vulnerability">File Uploaded Vulnerability</h2>
 <h3 id="防禦方法">防禦方法</h3>
 <ul>
 <li>不要允許使用者上傳任何可執行的檔案</li>
@@ -545,6 +488,10 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </li>
 </ul>
 <h2 id="sql-injection">SQL Injection</h2>
+<h3 id="防禦方法-3">防禦方法</h3>
+<ul>
+<li>使用 prepared statement</li>
+</ul>
 <h2 id="xss-cross-site-scripting">XSS (Cross Site Scripting)</h2>
 <ul>
 <li>允許攻擊者在網頁上執行 javascript code</li>
@@ -553,13 +500,12 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <ul>
 <li>Reflected XSS
 <ul>
-<li>特別設計過的 URL</li>
+<li>用 URL 攻擊</li>
 </ul>
 </li>
 <li>Persistent/Stored XSS
 <ul>
-<li>存在 database 或是某個 page</li>
-<li>有些網站會替換掉引號，但也有其他方法不用引號，比如 fromCharCode</li>
+<li>攻擊的程式碼存在 database 或是某個 page</li>
 </ul>
 </li>
 <li>DOM-based XSS
@@ -580,7 +526,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </ul>
 </li>
 </ul>
-<h3 id="防禦方法-3">防禦方法</h3>
+<h3 id="防禦方法-4">防禦方法</h3>
 <ul>
 <li>盡量避免讓 user 的輸入直接顯示在網頁上</li>
 <li>在 insert 到網頁前，escape 所有不信任的輸入
@@ -593,108 +539,8 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </ul>
 </li>
 </ul>
-<h2 id="backdoor">Backdoor</h2>
-<ul>
-<li>
-<p>msfvenom</p>
-<ul>
-<li>產生 payload
-<ul>
-<li>payload 是指 backdoor 中用來執行各種操作的程式碼</li>
-</ul>
-</li>
-<li>可生成的 payload 命名格式
-<ul>
-<li>platform/type/communication_channel
-<ul>
-<li>type
-<ul>
-<li>meterpreter
-<ul>
-<li>Metasploit 設計的</li>
-<li>會加密通訊</li>
-<li>提供豐富的功能</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>communication_channel
-<ul>
-<li>通常是 direction_protocol
-<ul>
-<li>direction
-<ul>
-<li>reverse
-<ul>
-<li>連到攻擊者的機器開的 port</li>
-</ul>
-</li>
-<li>bind
-<ul>
-<li>開 port 等待連接</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>protocol</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>ex: windows/shell/reverse_http
-<ul>
-<li>透過 http 連接</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>msfconsole</p>
-<ul>
-<li>Metasploit Framework</li>
-<li>搭配 msfvenom 開 port 監聽
-<ul>
-<li><code>use exploit/multi/handler</code>
-<ul>
-<li>set payload
-<ul>
-<li><code>set payload windows/metepreter/reverse_https</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="anti-virus">Anti-Virus</h3>
-<ul>
-<li>Principle
-<ul>
-<li>Static Analysis
-<ul>
-<li>和已知的 malware 比對</li>
-<li>可以利用 packers, encoders, abfuscators 來讓程式更加獨特</li>
-</ul>
-</li>
-<li>Dynamic(Heuristic) Analysis
-<ul>
-<li>在 sandbox 中執行，看他的行為</li>
-<li>要幫程式增加安全的操作</li>
-<li>延遲 Payload 執行的時間</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="insecure-session-management">Insecure session management</h2>
-<h3 id="csrf-cross-site-request-forgery">CSRF (Cross Site Request Forgery)</h3>
-<h3 id="防禦方法-4">防禦方法</h3>
+<h2 id="csrf-cross-site-request-forgery">CSRF (Cross Site Request Forgery)</h2>
+<h3 id="防禦方法-5">防禦方法</h3>
 <ul>
 <li>Anti CSRF token
 <ul>
@@ -713,6 +559,31 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>要發 request 的時候把 cookie 改成和 token 一樣的值</li>
 </ul>
 </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="backdoor">Backdoor</h2>
+<ul>
+<li>msfvenom</li>
+<li>msfconsole</li>
+</ul>
+<h2 id="anti-virus">Anti-Virus</h2>
+<ul>
+<li>Principle
+<ul>
+<li>Static Analysis
+<ul>
+<li>和已知的 malware 比對</li>
+<li>可以利用 packers, encoders, abfuscators 來讓程式更加獨特</li>
+</ul>
+</li>
+<li>Dynamic(Heuristic) Analysis
+<ul>
+<li>在 sandbox 中執行，看他的行為</li>
+<li>要幫程式增加安全的操作</li>
+<li>延遲 Payload 執行的時間</li>
 </ul>
 </li>
 </ul>

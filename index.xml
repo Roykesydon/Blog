@@ -6,97 +6,139 @@
         <description>Recent content on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Sat, 03 Aug 2024 00:08:46 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 16 Aug 2024 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>MongoDB 筆記</title>
+        <link>https://roykesydon.github.io/Blog/p/mongodb-%E7%AD%86%E8%A8%98/</link>
+        <pubDate>Fri, 16 Aug 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/mongodb-%E7%AD%86%E8%A8%98/</guid>
+        <description>&lt;h2 id=&#34;mongodb&#34;&gt;MongoDB&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;以 BSON (Binary JSON) 儲存資料&lt;/li&gt;
+&lt;li&gt;composite index
+&lt;ul&gt;
+&lt;li&gt;prefix
+&lt;ul&gt;
+&lt;li&gt;如果有一個 index 是 (a, b)，那麼 (a) 也是有效的 index&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;explain
+&lt;ul&gt;
+&lt;li&gt;用來看 query 的 execution plan&lt;/li&gt;
+&lt;li&gt;cursor
+&lt;ul&gt;
+&lt;li&gt;BasicCursor
+&lt;ul&gt;
+&lt;li&gt;會 scan 整個 collection，是個警訊&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;掃描的文件數量
+&lt;ul&gt;
+&lt;li&gt;nscanned
+&lt;ul&gt;
+&lt;li&gt;掃描的 index 數量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;nscannedObjects
+&lt;ul&gt;
+&lt;li&gt;掃描的 document 數量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;n
+&lt;ul&gt;
+&lt;li&gt;回傳的 document 數量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;nscanned &amp;gt;= nscannedObjects &amp;gt;= n&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;scanAndOrder
+&lt;ul&gt;
+&lt;li&gt;是否需要把文件都放在 memory 並排序&lt;/li&gt;
+&lt;li&gt;還會一次性回傳資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;hint
+&lt;ul&gt;
+&lt;li&gt;強制使用某個 index&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;optimizer 挑選索引
+&lt;ul&gt;
+&lt;li&gt;第一階段 - 挑選最佳索引
+&lt;ul&gt;
+&lt;li&gt;最佳索引
+&lt;ul&gt;
+&lt;li&gt;包含所有的 filter 和 sort 的欄位&lt;/li&gt;
+&lt;li&gt;range filter 和 sort 的欄位必須在 equality filter 的後面
+&lt;ul&gt;
+&lt;li&gt;sort 的欄位必須在 range filter 的後面&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;如果有多個最佳索引就會隨便選一個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;第二階段 - 透過實驗挑選索引
+&lt;ul&gt;
+&lt;li&gt;沒有最佳索引就會實驗判斷要選哪個，看看誰先找到指定數量的文件&lt;/li&gt;
+&lt;li&gt;換句話說，如果有多個索引，optimizer 會選 nscanned 最小的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;MMAPv1
+&lt;ul&gt;
+&lt;li&gt;Mongo 一開始用的 storage engine&lt;/li&gt;
+&lt;li&gt;_id 直接對應到 diskloc，也就是 disk 的偏移量
+&lt;ul&gt;
+&lt;li&gt;查找速度驚人，但是更新就要維護偏移量很費時&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;採用 database-level lock，Mongo 後來也只更新成 collection-level lock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;WiredTiger
+&lt;ul&gt;
+&lt;li&gt;MongoDB 收購的 storage engine&lt;/li&gt;
+&lt;li&gt;Document-level locking&lt;/li&gt;
+&lt;li&gt;可以做到 compression&lt;/li&gt;
+&lt;li&gt;5.2 之前
+&lt;ul&gt;
+&lt;li&gt;_id 會先被用來尋找 recordid，再用 recordid 去獲取 document&lt;/li&gt;
+&lt;li&gt;recordid 是 clustered index&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;5.3
+&lt;ul&gt;
+&lt;li&gt;_id 變成 clustered index&lt;/li&gt;
+&lt;li&gt;之前 recordid 只有 64 位，但現在 _id 作為 primary key 有 12 bytes
+&lt;ul&gt;
+&lt;li&gt;對 secondary index 造成更大的負擔&lt;/li&gt;
+&lt;li&gt;Mongo 想達成跨機器和 shard 的唯一性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>System Design</title>
         <link>https://roykesydon.github.io/Blog/p/system-design/</link>
         <pubDate>Sat, 03 Aug 2024 00:08:46 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/p/system-design/</guid>
-        <description>&lt;h2 id=&#34;architecture&#34;&gt;Architecture&lt;/h2&gt;
-&lt;h3 id=&#34;monolithic-vs-microservices&#34;&gt;monolithic vs microservices&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;monolithic:
-&lt;ul&gt;
-&lt;li&gt;優點:
-&lt;ul&gt;
-&lt;li&gt;簡單&lt;/li&gt;
-&lt;li&gt;single codebase&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;缺點
-&lt;ul&gt;
-&lt;li&gt;難以實施 modularity&lt;/li&gt;
-&lt;li&gt;不好做 scale
-&lt;ul&gt;
-&lt;li&gt;auto-scaling 要整個 app scale，但有時候可能只是特定功能的需求比較大&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;all or nothing deployment&lt;/li&gt;
-&lt;li&gt;long release cycle
-&lt;ul&gt;
-&lt;li&gt;要 build, test 整個 app&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;microservices:
-&lt;ul&gt;
-&lt;li&gt;優點:
-&lt;ul&gt;
-&lt;li&gt;polyglot
-&lt;ul&gt;
-&lt;li&gt;可以用不同語言來實作不同的服務&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;independent&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;diagram-tips&#34;&gt;Diagram tips&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;User
-&lt;ul&gt;
-&lt;li&gt;可以畫小人，和 service 有所區隔&lt;/li&gt;
-&lt;li&gt;和 service 間可以用 dotted line 來畫出 protocol，區隔開來&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;service
-&lt;ul&gt;
-&lt;li&gt;可以作為 box 來呈現&lt;/li&gt;
-&lt;li&gt;不見得要畫 load balancer，可以把 service 疊幾個 box 來表達&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;database
-&lt;ul&gt;
-&lt;li&gt;可以畫成 barrel&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;asynchronous message
-&lt;ul&gt;
-&lt;li&gt;可以畫倒著的 barrel 代表 queue，也可以考慮用虛線箭頭表示&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;箭頭
-&lt;ul&gt;
-&lt;li&gt;盡量朝單向移動，往下或往右，不要同時往左又往右
-&lt;ul&gt;
-&lt;li&gt;ex: a service 調用 b, c service，不要把 b, c service 畫在左右兩邊&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;盡量不要有 intersection&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Alignment
-&lt;ul&gt;
-&lt;li&gt;盡量垂直和水平對齊&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;estimation&#34;&gt;Estimation&lt;/h2&gt;
+        <description>&lt;h2 id=&#34;estimation&#34;&gt;Estimation&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;要評估的指標
 &lt;ul&gt;
@@ -110,6 +152,13 @@
 &lt;li&gt;沒特別指定的話，可以預估 single relational database 可以處理 read &amp;amp; write 10K per second&lt;/li&gt;
 &lt;li&gt;single relational database 的容量可以抓 3 TB&lt;/li&gt;
 &lt;li&gt;redis 可以抓 100K，但是受限於 memory，可能抓 30GB&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可以問的問題類型
+&lt;ul&gt;
+&lt;li&gt;總共有多少用戶？&lt;/li&gt;
+&lt;li&gt;有多少活躍用戶？&lt;/li&gt;
+&lt;li&gt;每個用戶平均每天使用多久？&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -176,7 +225,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;cdn-content-delivery-network&#34;&gt;CDN (Content Delivery Network)&lt;/h2&gt;
+&lt;h3 id=&#34;cdn-content-delivery-network&#34;&gt;CDN (Content Delivery Network)&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;把靜態資源放到離使用者地理上比較近的地方，加速存取速度
 &lt;ul&gt;
@@ -197,90 +246,7 @@
 &lt;ul&gt;
 &lt;li&gt;lazy&lt;/li&gt;
 &lt;li&gt;當有 request 進來時，且 CDN 沒有該資源，才會去 origin server 拉資源&lt;/li&gt;
-&lt;li&gt;比較適合在有大量靜態資源的情況下使用&lt;/li&gt;
 &lt;li&gt;第一個 user 會比較慢&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;caching&#34;&gt;Caching&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;優點
-&lt;ul&gt;
-&lt;li&gt;提高 read performance (減少 latency)&lt;/li&gt;
-&lt;li&gt;reduce load(減少 throughput)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;strategies
-&lt;ul&gt;
-&lt;li&gt;cache aside
-&lt;ul&gt;
-&lt;li&gt;先問 cache，沒有的話再問 db，並把 db 回傳的資料放到 cache&lt;/li&gt;
-&lt;li&gt;缺點
-&lt;ul&gt;
-&lt;li&gt;cache miss 的開銷大&lt;/li&gt;
-&lt;li&gt;data staleness
-&lt;ul&gt;
-&lt;li&gt;可能 cache 裡的資料無法反應 db 裡的最新資料&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;read through
-&lt;ul&gt;
-&lt;li&gt;client 只能存取到 cache，如果沒資料，cache 會去 db 拿資料&lt;/li&gt;
-&lt;li&gt;可能出現在 ORM，資料存在 memory&lt;/li&gt;
-&lt;li&gt;缺點
-&lt;ul&gt;
-&lt;li&gt;cache miss 的開銷大&lt;/li&gt;
-&lt;li&gt;data staleness&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;write through
-&lt;ul&gt;
-&lt;li&gt;client 寫資料時，cache 會留一份資料，並把資料寫到 db&lt;/li&gt;
-&lt;li&gt;解決 data staleness 問題&lt;/li&gt;
-&lt;li&gt;缺點
-&lt;ul&gt;
-&lt;li&gt;write 成本很高&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;write behind
-&lt;ul&gt;
-&lt;li&gt;和 write through 很像，但是不會立即寫到 db&lt;/li&gt;
-&lt;li&gt;會等到有更多的資料時，才一次寫到 db&lt;/li&gt;
-&lt;li&gt;優點
-&lt;ul&gt;
-&lt;li&gt;沒有 write penalty&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;缺點
-&lt;ul&gt;
-&lt;li&gt;如果不夠常 flush，可能會有 inconsistency 的問題&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;eviction policy
-&lt;ul&gt;
-&lt;li&gt;LRU (Least Recently Used)
-&lt;ul&gt;
-&lt;li&gt;把最久沒用到的資料刪掉&lt;/li&gt;
-&lt;li&gt;可能會把 popular 的資料刪掉&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;LFU (Least Frequently Used)
-&lt;ul&gt;
-&lt;li&gt;每個資料有一個 counter，每次被存取時，counter + 1&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -296,30 +262,17 @@
 &lt;li&gt;不好讓多個 service 共用&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;redis
-&lt;ul&gt;
-&lt;li&gt;中規中矩的存取速度，但存取的量也受限制&lt;/li&gt;
-&lt;li&gt;可以透過 sharded 減輕負擔&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;relational database
-&lt;ul&gt;
-&lt;li&gt;速度比較慢，但是可以存很多&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;queue--messaging&#34;&gt;Queue / Messaging&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;如果系統是 synchronous，可能會有 scalability 的問題&lt;/p&gt;
+&lt;li&gt;如果系統是 synchronous，可能會有 scalability 的問題
 &lt;ul&gt;
 &lt;li&gt;會被最慢的 component 所限制 (ex: payment service)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;role&lt;/p&gt;
+&lt;li&gt;role
 &lt;ul&gt;
 &lt;li&gt;producer
 &lt;ul&gt;
@@ -333,27 +286,19 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;優點&lt;/p&gt;
+&lt;li&gt;優點
 &lt;ul&gt;
 &lt;li&gt;buffer&lt;/li&gt;
 &lt;li&gt;應對 request spike&lt;/li&gt;
-&lt;li&gt;message durability
-&lt;ul&gt;
-&lt;li&gt;就算 consumer down 了，message 還是會在 queue 裡&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;缺點&lt;/p&gt;
+&lt;li&gt;缺點
 &lt;ul&gt;
 &lt;li&gt;現在無法知道 message 被處理的情況，sychronous 可以直接得知成功與否&lt;/li&gt;
 &lt;li&gt;增加 latency&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;model&lt;/p&gt;
+&lt;li&gt;model
 &lt;ul&gt;
 &lt;li&gt;message queue
 &lt;ul&gt;
@@ -363,79 +308,6 @@
 &lt;li&gt;publisher / subscriber (pub/sub)
 &lt;ul&gt;
 &lt;li&gt;可能會有某個 event 想被 publish 給多個 consumer (subscribers)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;RabbitMQ&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;AMPQ (Advanced Message Queuing Protocol)&lt;/li&gt;
-&lt;li&gt;預設 Message 會被儲存，直到有 consumer 提取&lt;/li&gt;
-&lt;li&gt;被用來分配 heavy task&lt;/li&gt;
-&lt;li&gt;key concept
-&lt;ul&gt;
-&lt;li&gt;routing key
-&lt;ul&gt;
-&lt;li&gt;所有的 message 都會有一個 routing key&lt;/li&gt;
-&lt;li&gt;表示 message 要被送到哪個 queue&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;exchange
-&lt;ul&gt;
-&lt;li&gt;用來接收 message，並且把 message 轉發到 queue&lt;/li&gt;
-&lt;li&gt;mode
-&lt;ul&gt;
-&lt;li&gt;direct
-&lt;ul&gt;
-&lt;li&gt;根據 routing key 精確匹配來決定 message 要被送到哪個 queue&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;fan-out
-&lt;ul&gt;
-&lt;li&gt;所有的 consumer 都會收到 message&lt;/li&gt;
-&lt;li&gt;這個模式會執行 pub/sub&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;topic
-&lt;ul&gt;
-&lt;li&gt;根據 routing key 的 pattern 來決定 message 要被送到哪個 queue&lt;/li&gt;
-&lt;li&gt;ex: 某個服務基於不同國家有不同的 queue&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;header
-&lt;ul&gt;
-&lt;li&gt;和 topic 類似，但是是根據 header 來決定 message 要被送到哪個 queue&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;channel
-&lt;ul&gt;
-&lt;li&gt;consumer 會用 tcp 和 queue 建立連線
-&lt;ul&gt;
-&lt;li&gt;可以用 threads 建立更多連線來更快消耗 message&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;RabbitMQ 可以在一個 tcp connection 上建立多個 channel，讓不同 thread 可以用同一個 connection 來消耗 message
-&lt;ul&gt;
-&lt;li&gt;這樣可以減少建立 tcp connection 的 overhead&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;acknowledgement
-&lt;ul&gt;
-&lt;li&gt;consumer 可以告訴 RabbitMQ 已經處理完 message，再讓 RabbitMQ 刪除 message
-&lt;ul&gt;
-&lt;li&gt;如果一送出去就刪除，consumer 如果 down 了，message 就會消失&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;要自行在消耗速度以及 reliability 之間取得平衡&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -499,80 +371,7 @@
 &lt;li&gt;適合用在內部服務之間的溝通&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;GraphQL
-&lt;ul&gt;
-&lt;li&gt;query language for APIs&lt;/li&gt;
-&lt;li&gt;解決 REST 的 over-fetching, under-fetching 問題
-&lt;ul&gt;
-&lt;li&gt;over-fetching
-&lt;ul&gt;
-&lt;li&gt;取得的資料比需要的多&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;under-fetching
-&lt;ul&gt;
-&lt;li&gt;需要的資料要從多個 endpoint 取得&lt;/li&gt;
-&lt;li&gt;ex: 取得 user 資料，會回傳 posts 的 id，但要再去另一個 endpoint 取得 posts 的資料&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;優點
-&lt;ul&gt;
-&lt;li&gt;client 可以自己決定要取得哪些資料&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;缺點
-&lt;ul&gt;
-&lt;li&gt;cache 難以實作
-&lt;ul&gt;
-&lt;li&gt;GraphQL 用的是 POST，瀏覽器 cache 只能用 GET&lt;/li&gt;
-&lt;li&gt;而且每個 user 可能會用不同的 field，cache 難以共用&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;store-client-data&#34;&gt;Store client data&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;cookie
-&lt;ul&gt;
-&lt;li&gt;limitied size&lt;/li&gt;
-&lt;li&gt;not secure&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;sticky session
-&lt;ul&gt;
-&lt;li&gt;需要 ALB&lt;/li&gt;
-&lt;li&gt;無法應對 instance down 的情況&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;key-value store
-&lt;ul&gt;
-&lt;li&gt;增加複雜度
-&lt;ul&gt;
-&lt;li&gt;如果 redis 倒了？&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;architecture-pattern&#34;&gt;Architecture pattern&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;CQRS
-&lt;ul&gt;
-&lt;li&gt;Command Query Responsibility Segregation&lt;/li&gt;
-&lt;li&gt;把 read (query) 和 write (command) 分開&lt;/li&gt;
-&lt;li&gt;一個 storage 針對 read 做 optimize，另一個 storage 針對 write 做 optimize
-&lt;ul&gt;
-&lt;li&gt;準備一個 schedule job 來把 write 的資料同步到 read 的 storage&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;如果 read storage 為了讀取效能需要加很多 index，要在裡面更新就可能會花的時間變很長，就可以用這種 pattern&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
+&lt;li&gt;GraphQL&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;流程&#34;&gt;流程&lt;/h2&gt;
 &lt;ul&gt;
@@ -629,16 +428,8 @@
 &lt;li&gt;要準備一些前提，比如假設單一資料庫每秒可以 insert 5K 筆資料&lt;/li&gt;
 &lt;li&gt;可以討論不同的 sharding
 &lt;ul&gt;
-&lt;li&gt;考慮怎樣存可以讓大小減少
-&lt;ul&gt;
+&lt;li&gt;考慮怎樣存可以讓大小減少&lt;/li&gt;
 &lt;li&gt;評估這樣分是否可能導致 sharding uneven&lt;/li&gt;
-&lt;li&gt;涉及地理類型的資料 (ex: 乘客和司機的位置)
-&lt;ul&gt;
-&lt;li&gt;可以考慮用自訂幾何形來區分不同地區&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;li&gt;怎樣的切法可以讓 query 盡量不要跨 shard&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
@@ -649,24 +440,13 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;scene&#34;&gt;Scene&lt;/h2&gt;
+&lt;h2 id=&#34;tips&#34;&gt;Tips&lt;/h2&gt;
+&lt;h3 id=&#34;查找&#34;&gt;查找&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;叫車服務
-&lt;ul&gt;
-&lt;li&gt;可以導入 geo index 來加快查找速度&lt;/li&gt;
-&lt;li&gt;可以用地理劃區塊的方式來 hash 決定&lt;/li&gt;
+&lt;li&gt;能不能用地理資訊來做 hashing&lt;/li&gt;
+&lt;li&gt;能不能用 geo index&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;聊天軟體
-&lt;ul&gt;
-&lt;li&gt;可以考慮把寫入資料庫和傳給 user 兩件事情用非同步的方式做&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;網頁爬蟲
-&lt;ul&gt;
-&lt;li&gt;從一個 URL 獲取內容，並且從內容中提取更多 URL，反覆執行&lt;/li&gt;
-&lt;li&gt;可以考慮架設的離 DNS 越近越好，如果要爬取的網頁很多，Domain name 的轉換可能影響很大&lt;/li&gt;
-&lt;li&gt;如果單純抓網頁，現在因為很多網頁都靠 JS 來 render，只會得到空的 html，可以考慮用 headless browser 來 render
+&lt;h3 id=&#34;工具--技術&#34;&gt;工具 &amp;amp; 技術&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;headless browser
 &lt;ul&gt;
@@ -674,32 +454,23 @@
 &lt;li&gt;但是依然有 rendering engine 和 js interpreter。可以用來得到最終的 html&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;拍賣
+&lt;li&gt;Cyclic redundancy check (CRC)
 &lt;ul&gt;
-&lt;li&gt;可能要考慮把 bid 做 serialization
+&lt;li&gt;一般用在檢查封包是否有錯誤，但是我們也可以用來檢查某個檔案是否有被修改，好做 sync&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;CQRS (Command Query Responsibility Segregation)
 &lt;ul&gt;
-&lt;li&gt;把 bid 透過 queue 給 serializer，會無法回傳成功或失敗&lt;/li&gt;
-&lt;li&gt;可以用 second queue，再讓 serializer 把結果放進去，傳回給 service&lt;/li&gt;
-&lt;li&gt;如果有用 websocket，就可以考慮用這種做法
-&lt;ul&gt;
-&lt;li&gt;用 polling 的話，就得去資料庫撈，除非 service 可以儲存住這些資料&lt;/li&gt;
+&lt;li&gt;把 read 和 write 分開&lt;/li&gt;
+&lt;li&gt;一個 storage 針對 read 做 optimize，另一個 storage 針對 write 做 optimize&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;短 URL 生成
+&lt;h3 id=&#34;unique-id&#34;&gt;Unique ID&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;UUID 是 random 且 human-readable（不會有相近的 char，比如 0 和 O）
 &lt;ul&gt;
 &lt;li&gt;但是太長&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;li&gt;可以用不同的 encoding 壓縮長度
 &lt;ul&gt;
 &lt;li&gt;因為 UUID 用的 charactor 是 0-9, a-f，所以可以用有更多種 charactor 的 encoding 來壓縮&lt;/li&gt;
@@ -720,70 +491,10 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;根據可以有多少種字元取長度的次方，即可判斷長度取到多長可以涵蓋我們想要儲存的 URL 數量
-&lt;ul&gt;
-&lt;li&gt;如果我們想要可以儲存 30B 個 URL，那長度就要取 58 的 6 次方才會超過&lt;/li&gt;
-&lt;li&gt;可以直接裁斷編碼後的結果&lt;/li&gt;
-&lt;li&gt;或是不管 UUID，每個字元從 BASE58 的 char set 做 random&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;搶折價券系統
-&lt;ul&gt;
-&lt;li&gt;有一定數量的折價券可以給一定數量的 user 搶，先搶先贏&lt;/li&gt;
-&lt;li&gt;會有極大量的 user 在極短的時間湧入&lt;/li&gt;
-&lt;li&gt;我們可以事先在資料庫建好指定數量的 coupon，就可以修改的時候只 lock 某個 row，不用 lock 整個 table
-&lt;ul&gt;
-&lt;li&gt;pre-populate&lt;/li&gt;
-&lt;li&gt;如果是 insert，可能就得面臨要 lock 整個 table，避免多發 coupon&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;可以在 server 做 cache 好處理 read，直接回傳沒有更多 coupon 的訊息&lt;/li&gt;
-&lt;li&gt;考量到資料庫處理上限，我們勢必得做 sharding，導致我們可能會某個 database 的 coupon 空了，但另外一個還有
-&lt;ul&gt;
-&lt;li&gt;不過系統不一定要公平，我們只需要發指定數量的 coupon 出去就好&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;社群平台
-&lt;ul&gt;
-&lt;li&gt;可以在 cache 存放 timeline 減少 cache request 的次數
-&lt;ul&gt;
-&lt;li&gt;但要考慮 influencer 可能要特別設計
-&lt;ul&gt;
-&lt;li&gt;改成另外儲存，到 client 再合併&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;售票系統
-&lt;ul&gt;
-&lt;li&gt;可以考慮把票設計 status，並用 aggregate function 來計算&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;雲端硬碟
-&lt;ul&gt;
-&lt;li&gt;要思考現在的單一硬碟可以儲存多少，以及每台機器可以 mount 多少硬碟&lt;/li&gt;
-&lt;li&gt;每個 User 可以使用的容量期望值？&lt;/li&gt;
-&lt;li&gt;考慮在 client 端做壓縮減少負擔&lt;/li&gt;
-&lt;li&gt;Cyclic redundancy check (CRC)
-&lt;ul&gt;
-&lt;li&gt;一般用在檢查封包是否有錯誤，但是我們也可以用來檢查某個檔案是否有被修改，好做 sync&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Delta copying
-&lt;ul&gt;
-&lt;li&gt;把檔案切小，只傳送修改過的部分&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;tips&#34;&gt;Tips&lt;/h2&gt;
+&lt;h3 id=&#34;other&#34;&gt;Other&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;每個 Phase 可以多和 interviewer 討論，確認走在正確的方向上&lt;/li&gt;
 &lt;li&gt;面對面試官給的數字可以嘗試為了好算向上抓一些&lt;/li&gt;
@@ -792,8 +503,9 @@
 &lt;li&gt;如果遇到因為某些原因需要晚點才能做某個任務，可以用 queue 來處理&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Cache 除了用 cache 做，Server 自身也可以用 memory 來 cache&lt;/li&gt;
+&lt;li&gt;Cache 除了用專門的 cache database 做，Server 自身也可以用 memory 來 cache&lt;/li&gt;
 &lt;li&gt;對於先搶先贏的系統不一定要追求公平，只要達成目標即可&lt;/li&gt;
+&lt;li&gt;對於搶票機制可以做 pre-populate，事先在 database 生好指定數量的票，這樣就可以只 lock 某個 row，不用 lock 整個 table&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         </item>
@@ -1021,14 +733,12 @@ width: auto !important;
 </description>
         </item>
         <item>
-        <title>Database 一般筆記</title>
-        <link>https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/</link>
+        <title>Database ACID</title>
+        <link>https://roykesydon.github.io/Blog/p/database-acid/</link>
         <pubDate>Sun, 21 Jul 2024 00:00:17 +0800</pubDate>
         
-        <guid>https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/</guid>
-        <description>&lt;h2 id=&#34;acid&#34;&gt;ACID&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Transaction
+        <guid>https://roykesydon.github.io/Blog/p/database-acid/</guid>
+        <description>&lt;h2 id=&#34;transaction&#34;&gt;Transaction&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;一個或多個操作的集合&lt;/li&gt;
 &lt;li&gt;一個 transaction 要不全部執行，要不全部不執行&lt;/li&gt;
@@ -1040,36 +750,21 @@ width: auto !important;
 &lt;li&gt;rollback&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;只有一堆 read  queries 的 transaction 是有意義的，他可以得到 consistent snapshot&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Atomicity
+&lt;h2 id=&#34;atomicity&#34;&gt;Atomicity&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;一個 transaction 要不全部執行，要不全部不執行&lt;/li&gt;
-&lt;li&gt;如果中間有一個 query 出錯，前面的 query 都得 rollback&lt;/li&gt;
-&lt;li&gt;如果 commit 前，database crash，則所有的 query 都得 rollback&lt;/li&gt;
+&lt;li&gt;在 commit 前不管因為任何理由失敗，都該 rollback&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;consistency&#34;&gt;Consistency&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;符合當初制定的規則 (ex: 設置的 foreign key 指向的資料一定要存在)
+&lt;ul&gt;
+&lt;li&gt;referential integrity
+&lt;ul&gt;
+&lt;li&gt;保證 primary key 和 foreign key 之間的關係&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Consistency
-&lt;ul&gt;
-&lt;li&gt;In data
-&lt;ul&gt;
-&lt;li&gt;符合當初制定的規則 (ex: foreign key 指向的資料一定要存在)
-&lt;ul&gt;
-&lt;li&gt;一般 ACID 的 C 指的是這個&lt;/li&gt;
-&lt;li&gt;Define by user&lt;/li&gt;
-&lt;li&gt;referential integrity&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;In read
-&lt;ul&gt;
-&lt;li&gt;描述另外一種 unconsistent 的情況&lt;/li&gt;
-&lt;li&gt;讀取的不是最新的資料&lt;/li&gt;
-&lt;li&gt;一個 transaction 在別的 transaction commit 之後，要不要立刻可以看到那筆資料？&lt;/li&gt;
-&lt;li&gt;如果只有一個 database，那一個 transaction 可以讀到另外一個 transaction 寫入的資料，非常簡單&lt;/li&gt;
-&lt;li&gt;如果是在 master-slave 的情況下，讀 replication 可能沒辦法立刻得到寫在 master 的資料&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Eventual consistency
@@ -1078,8 +773,7 @@ width: auto !important;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Isolation
+&lt;h2 id=&#34;isolation&#34;&gt;Isolation&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;一個 transaction 的執行不應該影響其他 transaction&lt;/li&gt;
 &lt;li&gt;read phenomena
@@ -1091,7 +785,7 @@ width: auto !important;
 &lt;/li&gt;
 &lt;li&gt;non-repeatable read
 &lt;ul&gt;
-&lt;li&gt;一個 transaction 兩次讀取同個資料時，得到的資料不一樣因是因為有其他 transaction 更新了這個資料（並且 commit 了）&lt;/li&gt;
+&lt;li&gt;一個 transaction 兩次讀取同個資料時，得到的資料不一樣因是因為有其他 transaction 更新了這個資料（已經 commit 了）&lt;/li&gt;
 &lt;li&gt;和 dirty read 不同的是，這個資料是已經 commit 的&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
@@ -1099,11 +793,23 @@ width: auto !important;
 &lt;ul&gt;
 &lt;li&gt;也是第一次和第二次讀取的資料不一樣，第二次發現多了額外的資料，這次是因為有其他 transaction 寫入了新的資料（並且 commit 了）&lt;/li&gt;
 &lt;li&gt;之所以要和 non-repeatable read 分開，是因為他這裡沒辦法簡單的靠鎖起來已經讀過的資料，因為你沒辦法鎖你本來看不到的資料&lt;/li&gt;
+&lt;li&gt;系統設計遇到這問題可以考慮用 pre-populate 的方式，把所有可能的資料都先創好，就可以個別鎖住&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;lost update
 &lt;ul&gt;
 &lt;li&gt;我更新了某筆資料，但是在 commit 之前，有其他 transaction 也更新了這筆資料，並且 commit。我再去讀取這筆資料時，發現我更新的資料就被覆蓋了&lt;/li&gt;
+&lt;li&gt;double booking problem
+&lt;ul&gt;
+&lt;li&gt;當兩個 transaction 同時搶更新同個資源就有可能遇到該問題&lt;/li&gt;
+&lt;li&gt;example
+&lt;ul&gt;
+&lt;li&gt;兩個 transaction 都先 select 再 update&lt;/li&gt;
+&lt;li&gt;他們兩個 select 都先看到有空位，然後一前一後更新，就會造成 double booking&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1116,6 +822,7 @@ width: auto !important;
 &lt;ul&gt;
 &lt;li&gt;No isolation&lt;/li&gt;
 &lt;li&gt;可以看到其他 transaction 還沒 commit 的資料&lt;/li&gt;
+&lt;li&gt;所有的 read phenomena 都有可能發生&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;read committed
@@ -1128,7 +835,7 @@ width: auto !important;
 &lt;li&gt;repeatable read
 &lt;ul&gt;
 &lt;li&gt;確保同一筆資料在同一個 transaction 中讀取時，結果是一樣的&lt;/li&gt;
-&lt;li&gt;phantom read 有可能發生&lt;/li&gt;
+&lt;li&gt;phantom read 還是有可能發生&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;snapshot
@@ -1147,39 +854,30 @@ width: auto !important;
 &lt;li&gt;serializable
 &lt;ul&gt;
 &lt;li&gt;最高隔離等級&lt;/li&gt;
-&lt;li&gt;保證所有 transaction 都是依序執行的&lt;/li&gt;
+&lt;li&gt;保證所有 concurrent transaction 執行起來會和依序執行的效果一樣
+&lt;ul&gt;
+&lt;li&gt;如果 transaction 不會彼此影響，還是有可能會讓 transaction 並行執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;read phenomena 都不會發生&lt;/li&gt;
 &lt;li&gt;和要求 exclusive lock 相比，有可能實現方法是遇到衝突會 fail&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;解法
+&lt;/ul&gt;
+&lt;h2 id=&#34;durability&#34;&gt;Durability&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;pessimistic
+&lt;li&gt;一旦 transaction 完成，資料應該要 persistent
 &lt;ul&gt;
-&lt;li&gt;用各種 lock 來保證 isolation&lt;/li&gt;
-&lt;li&gt;row level lock, table lock, page lock&lt;/li&gt;
+&lt;li&gt;完成的 transaction 會被記在 non-volatile storage&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;optimistic
-&lt;ul&gt;
-&lt;li&gt;不用 lock，真的有 transaction 衝突時就 fail&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Durability
-&lt;ul&gt;
-&lt;li&gt;一旦 transaction 完成，其結果應該是永久的&lt;/li&gt;
-&lt;li&gt;也就是要做 persistent storage&lt;/li&gt;
 &lt;li&gt;durability technique
 &lt;ul&gt;
 &lt;li&gt;Write ahead log (WAL)
 &lt;ul&gt;
-&lt;li&gt;先寫 log (寫你做了什麼操作，但不去真的改 disk 上的資料)，有空再寫到 disk
+&lt;li&gt;先寫 log (寫你做了什麼操作，但不去真的改 disk 上對應的資料)，有空再修改
 &lt;ul&gt;
 &lt;li&gt;這樣一些修改就可以改在 memory，如果 crash 了，可以用 log 來 recover&lt;/li&gt;
 &lt;li&gt;而且考量硬碟限制，如果你想修改的資料遠小於硬碟可寫的最小單位，會很浪費&lt;/li&gt;
@@ -1192,32 +890,18 @@ width: auto !important;
 &lt;li&gt;在後台把 snapshot 寫到 disk&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;AOF
-&lt;ul&gt;
-&lt;li&gt;把修改資料的指令寫到 log&lt;/li&gt;
-&lt;li&gt;好像和 WAL 的差別是不會立刻寫到 disk&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;可能的問題
-&lt;ul&gt;
-&lt;li&gt;OS Cache
-&lt;ul&gt;
-&lt;li&gt;假設想把 WAL 寫到 disk，OS 可能會先把資料寫到 OS cache，但是卻先回覆已寫入&lt;/li&gt;
-&lt;li&gt;但是有指令 (fsync )可以 force OS 寫到 disk
-&lt;ul&gt;
-&lt;li&gt;但是會有 trade off，因為 fsync 會讓寫入變慢&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;database-internal&#34;&gt;Database internal&lt;/h2&gt;
+</description>
+        </item>
+        <item>
+        <title>Database 一般筆記</title>
+        <link>https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/</link>
+        <pubDate>Sun, 21 Jul 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/</guid>
+        <description>&lt;h2 id=&#34;database-internal&#34;&gt;Database internal&lt;/h2&gt;
 &lt;h3 id=&#34;storage-concept&#34;&gt;Storage concept&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Table&lt;/li&gt;
@@ -1231,22 +915,23 @@ width: auto !important;
 &lt;ul&gt;
 &lt;li&gt;多個 row 會被存在一個 page&lt;/li&gt;
 &lt;li&gt;讀取不會只讀一個 row，而是一個或多個 page&lt;/li&gt;
-&lt;li&gt;根據 database，每個 page 會有個固定的 size&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;IO
 &lt;ul&gt;
 &lt;li&gt;IO operation 指的是存取 disk 的操作&lt;/li&gt;
-&lt;li&gt;想盡量 minimize IO 次數&lt;/li&gt;
-&lt;li&gt;一個 IO 可能會獲得多個 page&lt;/li&gt;
-&lt;li&gt;IO 也可能只是進入 cache&lt;/li&gt;
+&lt;li&gt;一個 IO 可能會獲得多個 page，也可能只是用 cache 的資料&lt;/li&gt;
+&lt;li&gt;Database 常常會利用 cache 來減少 IO
+&lt;ul&gt;
+&lt;li&gt;因此有些 query 很快，可能是因為有快取資料可用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Heap data structure
 &lt;ul&gt;
 &lt;li&gt;儲存整個 table 的資料&lt;/li&gt;
-&lt;li&gt;traverse 整個 table 的成本很大&lt;/li&gt;
-&lt;li&gt;可以用 index 來知道要查詢的資料在哪裡&lt;/li&gt;
+&lt;li&gt;有些 database 會用 clustered index 來儲存，就不會有 heap&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Index data structure (b-tree)
@@ -1259,17 +944,6 @@ width: auto !important;
 &lt;li&gt;可以對一個或多個 column 做 index&lt;/li&gt;
 &lt;li&gt;index 可以告訴你要查詢的資料在哪個 page&lt;/li&gt;
 &lt;li&gt;index 也會被儲存在 page&lt;/li&gt;
-&lt;li&gt;clustered index
-&lt;ul&gt;
-&lt;li&gt;也叫做 Index-Organized Table&lt;/li&gt;
-&lt;li&gt;heap table 的資料和 index 放在一起
-&lt;ul&gt;
-&lt;li&gt;這也是為什麼 clustered index 只能有一個&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;沒特別指定的話，primary key 一般是 clustered index&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1279,183 +953,20 @@ width: auto !important;
 &lt;ul&gt;
 &lt;li&gt;每個 row 接著下個 row 來儲存&lt;/li&gt;
 &lt;li&gt;每次 IO 會獲得多個 row，每個都有所有的 column&lt;/li&gt;
-&lt;li&gt;如果沒特別設置 index，會需要一列一列的 scan&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Col-oriented database (column store)
 &lt;ul&gt;
 &lt;li&gt;每個 column 接著下個 column 來儲存&lt;/li&gt;
-&lt;li&gt;會儲存 row_id 和 column 的數值&lt;/li&gt;
-&lt;li&gt;對於只要特定的 column 的 query (SELECT 那邊)，需要的 IO 比較少
-&lt;ul&gt;
-&lt;li&gt;但是如果要查詢多個 column，則需要更多的 IO
-&lt;ul&gt;
-&lt;li&gt;因為雖然可以從 where 快速找到需要的 row ID，但是需要去每個 SELECT 要的 col 的 block 取資料&lt;/li&gt;
+&lt;li&gt;比較好壓縮，也比較好做 aggregation，所以在一些分析資料的軟體會用到&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Pros and cons
-&lt;ul&gt;
-&lt;li&gt;Row-oriented
-&lt;ul&gt;
-&lt;li&gt;Pros
-&lt;ul&gt;
-&lt;li&gt;OLTP (Online Transaction Processing)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Column-oriented
-&lt;ul&gt;
-&lt;li&gt;Pros
-&lt;ul&gt;
-&lt;li&gt;比較好壓縮，因為性質相近的資料會在一起&lt;/li&gt;
-&lt;li&gt;aggregation 很有效率&lt;/li&gt;
-&lt;li&gt;OLAP (Online Analytical Processing)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Cons
-&lt;ul&gt;
-&lt;li&gt;write 比較慢&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;primary-key-vs-secondary-key&#34;&gt;Primary key vs Secondary key&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;primary key
-&lt;ul&gt;
-&lt;li&gt;clusering
-&lt;ul&gt;
-&lt;li&gt;把 table 圍繞 primary key 來組織&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;需要維持 order，所以如果在有 1 和 8 的情況下，需要插入 2，那 2 不能直接排在 8 後面&lt;/li&gt;
-&lt;li&gt;但是如果我要根據 PK 取得小範圍內的資料，就可能不用多次 IO&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Secondary key
-&lt;ul&gt;
-&lt;li&gt;不在乎你原本 table 的 order&lt;/li&gt;
-&lt;li&gt;但是會有另外一個結構去放 index，可以找到 row_id&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;database-indexing&#34;&gt;Database indexing&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;如果需要搜索的欄位沒做 index，那麼就會需要 scan 整個 table，直到找到
-&lt;ul&gt;
-&lt;li&gt;如果要求欄位做 &lt;code&gt;like&lt;/code&gt; 之類的，那麼依然需要 scan 整個 table&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;搜索方法
-&lt;ul&gt;
-&lt;li&gt;table scan
-&lt;ul&gt;
-&lt;li&gt;如果掃描的範圍過大，Database 可能就會選擇該方法&lt;/li&gt;
-&lt;li&gt;通常會用 parallel 的方式搜尋&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;index scan&lt;/li&gt;
-&lt;li&gt;bitmap index scan
-&lt;ul&gt;
-&lt;li&gt;postgresql 有這個功能&lt;/li&gt;
-&lt;li&gt;流程
-&lt;ul&gt;
-&lt;li&gt;建立長度是 page 的 bitmap&lt;/li&gt;
-&lt;li&gt;index scan 的同時更新 bitmap，紀錄哪些 page 有我們要的資料&lt;/li&gt;
-&lt;li&gt;最後一次性讀取 bitmap 為 1 的 page&lt;/li&gt;
-&lt;li&gt;最後用 filter 去過濾掉不需要的資料&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;和 index scan 的差別在於，他找到後不會急著去取資料，而是先記錄下來&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;non-key column
-&lt;ul&gt;
-&lt;li&gt;可以用 include 把一些常常需要一起帶入的資訊放到 index 裡面
-&lt;ul&gt;
-&lt;li&gt;Index-only scan
-&lt;ul&gt;
-&lt;li&gt;這樣在特定情況不用去 heap 取，可以加速很多&lt;/li&gt;
-&lt;li&gt;但也要小心使 index 變得過大。如果 memory 不夠，又會用到 disk，拖垮效率&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;composite index
-&lt;ul&gt;
-&lt;li&gt;把多個 col 作為 key 做 index&lt;/li&gt;
-&lt;li&gt;在 postgresql 裡面，如果有一個 index 是 (a, b)，用靠左的 index 可以做 index scan，但是用靠右的就不行&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;index comment
-&lt;ul&gt;
-&lt;li&gt;可以用 comment 來告訴 optimizer 要用的策略&lt;/li&gt;
-&lt;li&gt;但是不是所有 database 都支援&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;bloom filter
-&lt;ul&gt;
-&lt;li&gt;透過 hash 和 bit array 來判斷某個元素是否有可能存在&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;index 指向 primary key vs row
-&lt;ul&gt;
-&lt;li&gt;postgresql 的 index 都是指向 row&lt;/li&gt;
-&lt;li&gt;mysql 的 secondary index 指向 primary key，primary key 指向 row&lt;/li&gt;
-&lt;li&gt;當更新刪除 row 的時候，mysql 只需要更新 primary，但是 postgresql 可能需要更新所有 index&lt;/li&gt;
-&lt;li&gt;但是從 index 取資料時，mysql 需要多一次查詢，而 postgresql 可以直接取&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;b-tree-and-btree&#34;&gt;B-Tree and B+Tree&lt;/h2&gt;
+&lt;h3 id=&#34;data-structure&#34;&gt;Data structure&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;B-tree
 &lt;ul&gt;
 &lt;li&gt;Balanced data structure for fast search&lt;/li&gt;
-&lt;li&gt;有一堆 Node
-&lt;ul&gt;
-&lt;li&gt;在資料庫中，node 通常是 disk page&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;有 m degree
-&lt;ul&gt;
-&lt;li&gt;每個 node 最多有 m 個 child&lt;/li&gt;
-&lt;li&gt;每個 node 最多有 m-1 個 element&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;element
-&lt;ul&gt;
-&lt;li&gt;有 key 和 value
-&lt;ul&gt;
-&lt;li&gt;value 通常是 row 的 pointer
-&lt;ul&gt;
-&lt;li&gt;可能是 row_id 的相關資訊&lt;/li&gt;
-&lt;li&gt;pointer 可以指向 primary key 或是 tuple&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Node type
-&lt;ul&gt;
-&lt;li&gt;Root&lt;/li&gt;
-&lt;li&gt;Internal&lt;/li&gt;
-&lt;li&gt;Leaf&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;li&gt;限制
 &lt;ul&gt;
 &lt;li&gt;node 中的 element 同時存了 key 和 value&lt;/li&gt;
@@ -1479,21 +990,52 @@ width: auto !important;
 &lt;li&gt;通常一個 node 是一個 DBMS page&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;index-fragmentation&#34;&gt;Index fragmentation&lt;/h2&gt;
+&lt;li&gt;LSM-tree
 &lt;ul&gt;
+&lt;li&gt;Log-Structured Merge-Tree&lt;/li&gt;
+&lt;li&gt;都加在尾端，不會覆蓋原本的資料，對 SSD 有利&lt;/li&gt;
+&lt;li&gt;B-Tree 為了平衡會頻繁修改&lt;/li&gt;
+&lt;li&gt;有利於 insert&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;fragmentation&#34;&gt;Fragmentation&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;這裡是以 database 為出發點去看 fragmentation&lt;/li&gt;
 &lt;li&gt;Internal fragmentation
 &lt;ul&gt;
-&lt;li&gt;一個 page 中有很多空間是空的&lt;/li&gt;
+&lt;li&gt;一個 Page 中有很多空間是空的&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;External fragmentation
 &lt;ul&gt;
-&lt;li&gt;多個 Page 存放不是連續的&lt;/li&gt;
+&lt;li&gt;多個 Page 存放不是連續的。剩下的空間夠儲存新的資料，但是因為不連續，所以不能用&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;partitioning&#34;&gt;Partitioning&lt;/h2&gt;
+&lt;h3 id=&#34;database-cursor&#34;&gt;Database cursor&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;當資料庫有很大的結果集時，不可能一次把所有資料用網路傳給 client，用戶也沒有 memory 來存放所有資料&lt;/li&gt;
+&lt;li&gt;Server side / client side cursor
+&lt;ul&gt;
+&lt;li&gt;Server side
+&lt;ul&gt;
+&lt;li&gt;一次只傳一部分資料給 client&lt;/li&gt;
+&lt;li&gt;但是要多次往返可能最後總時間會比較久&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Client side
+&lt;ul&gt;
+&lt;li&gt;一次把所有資料傳給 client&lt;/li&gt;
+&lt;li&gt;client 自己分批處理&lt;/li&gt;
+&lt;li&gt;對 network bandwidth 要求較大&lt;/li&gt;
+&lt;li&gt;可能沒有足夠的 memory&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;partitioning&#34;&gt;Partitioning&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;把大 table 分成多個小 table&lt;/li&gt;
 &lt;li&gt;Vertical vs Horizontal
@@ -1501,32 +1043,17 @@ width: auto !important;
 &lt;li&gt;Vertical
 &lt;ul&gt;
 &lt;li&gt;根據 columns 拆成多個 partition&lt;/li&gt;
-&lt;li&gt;可以把不太常用又大的 column (比如 blob) 放到另外一個 partition，然後放在較慢的 disk，保留其他常存取的 column 在 SSD&lt;/li&gt;
+&lt;li&gt;可以把不太常用又大的 column (比如 blob) 放到另外一個 partition
+&lt;ul&gt;
+&lt;li&gt;可以把他放在較慢的 disk，保留其他常存取的 column 在 SSD&lt;/li&gt;
+&lt;li&gt;也可以讓比較不常用的資料比較不容易進入 cache&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Horizontal
 &lt;ul&gt;
 &lt;li&gt;把 rows 拆成多個 partition&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Types
-&lt;ul&gt;
-&lt;li&gt;By range
-&lt;ul&gt;
-&lt;li&gt;比如日期或是 id&lt;/li&gt;
-&lt;li&gt;也可以把一些較舊較不常存取的 partition 移到較慢的設備&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;By list
-&lt;ul&gt;
-&lt;li&gt;根據一些離散的數值去區分&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;By hash
-&lt;ul&gt;
-&lt;li&gt;用 hash function 去決定要放在哪個 partition&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1542,17 +1069,97 @@ width: auto !important;
 &lt;ul&gt;
 &lt;li&gt;如果要從一個 partition 移動資料到另一個 partition，效率很慢&lt;/li&gt;
 &lt;li&gt;對於效率很差的 query，可能會需要 scan 所有 partition，此時比掃描整個沒做 partition 的 table 還要慢&lt;/li&gt;
+&lt;li&gt;partition 可能會 unbalance&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;database-sharding&#34;&gt;Database sharding&lt;/h2&gt;
+&lt;h2 id=&#34;database-indexing&#34;&gt;Database indexing&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;如果需要搜索的欄位沒做 index，那麼就會需要 scan 整個 table，直到找到
+&lt;ul&gt;
+&lt;li&gt;如果要求欄位做 &lt;code&gt;like&lt;/code&gt; 之類的，那麼依然需要 scan 整個 table&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;搜索方法
+&lt;ul&gt;
+&lt;li&gt;table scan
+&lt;ul&gt;
+&lt;li&gt;如果掃描的範圍過大，Database 可能就會選擇該方法&lt;/li&gt;
+&lt;li&gt;通常會用 parallel 的方式搜尋，所以還是會快一些&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;index scan&lt;/li&gt;
+&lt;li&gt;Index-only scan
+&lt;ul&gt;
+&lt;li&gt;也叫 covering index&lt;/li&gt;
+&lt;li&gt;需要的欄位在 index 裡面就有了，在這種情況不用去 heap 取，可以加速很多&lt;/li&gt;
+&lt;li&gt;但也要小心使 index 變得過大。如果 memory 不夠，又會用到 disk，拖垮效率&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;non-key column
+&lt;ul&gt;
+&lt;li&gt;可以用 include 把一些常常需要一起帶入的資訊放到 index 裡面&lt;/li&gt;
+&lt;li&gt;可以促成 index-only scan&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;composite index
+&lt;ul&gt;
+&lt;li&gt;把多個 col 作為 key 做 index&lt;/li&gt;
+&lt;li&gt;在 PostgreSQL ，如果有一個 index 是 (a, b)，用靠左的 index 可以做 index scan，但是用靠右的就不行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;clustered-index&#34;&gt;Clustered index&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;也叫做 Index-Organized Table
+&lt;ul&gt;
+&lt;li&gt;資料圍繞 index 來組織&lt;/li&gt;
+&lt;li&gt;這也是為什麼 clustered index 只能有一個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;沒特別指定的話，primary key 一般是 clustered index&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;primary-key-vs-secondary-key&#34;&gt;Primary key vs Secondary key&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;primary key
+&lt;ul&gt;
+&lt;li&gt;clusering
+&lt;ul&gt;
+&lt;li&gt;把 table 圍繞 primary key 來組織，但也有些 Database 不是這樣設計，比如 PostgreSQL&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;需要維持 order，但是如果我要根據 PK 取得小範圍內的資料，和不顧排序相比，就可能不用多次 IO&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Secondary key
+&lt;ul&gt;
+&lt;li&gt;不在乎原本 table 的 order，而是根據自訂的 key 來排序&lt;/li&gt;
+&lt;li&gt;但是會有另外一個結構去放 index，可以找到 row_id&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;設計差異
+&lt;ul&gt;
+&lt;li&gt;PostgreSQL 的 index 都指向 row，不管是 primary 還是 secondary
+&lt;ul&gt;
+&lt;li&gt;這樣 secondary index 就可以直接取資料，不用再跳一層 primary key&lt;/li&gt;
+&lt;li&gt;但是如果更新 row，會更新 row id，連帶影響要更新所有 secondary index，不管修改的欄位有沒有在這 index&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;MySQL 的 secondary index 指向 primary key，primary key 指向 row
+&lt;ul&gt;
+&lt;li&gt;這樣 secondary index 就要先找到 primary key，再找到 row&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;distributed-database&#34;&gt;Distributed database&lt;/h2&gt;
+&lt;h3 id=&#34;sharding&#34;&gt;Sharding&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;把 table 拆成多個 table，分散在不同的 database&lt;/li&gt;
-&lt;li&gt;consisitent hashing
-&lt;ul&gt;
-&lt;li&gt;用 hash function 來決定要放在哪個 database，每次都要得到一致的結果&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
+&lt;li&gt;分散式會帶來很多問題，比如要怎麼做 transaction 和 join?&lt;/li&gt;
 &lt;li&gt;Horizontal partitioning vs sharding
 &lt;ul&gt;
 &lt;li&gt;Horizontal partitioning
@@ -1563,123 +1170,20 @@ width: auto !important;
 &lt;li&gt;和 Horizontal partitioning 的差別
 &lt;ul&gt;
 &lt;li&gt;table 現在會分到不同的 database server&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;優點
-&lt;ul&gt;
-&lt;li&gt;scalability&lt;/li&gt;
-&lt;li&gt;Optimal
-&lt;ul&gt;
-&lt;li&gt;smaller index size&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;缺點
-&lt;ul&gt;
-&lt;li&gt;complex client
-&lt;ul&gt;
 &lt;li&gt;做 partition，client 不用管資料具體在哪個 partition，交給 DBMS 去處理。但是 sharding 就要 client 自己去處理&lt;/li&gt;
-&lt;li&gt;很多東西變得很複雜
-&lt;ul&gt;
-&lt;li&gt;跨 shard 做 transaction&lt;/li&gt;
-&lt;li&gt;rollback&lt;/li&gt;
-&lt;li&gt;join&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;concurrency-control&#34;&gt;Concurrency control&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Lock
-&lt;ul&gt;
-&lt;li&gt;shared vs exclusive
-&lt;ul&gt;
-&lt;li&gt;shared lock 可以被多個 transaction 同時持有
-&lt;ul&gt;
-&lt;li&gt;用在讀取，所以可以多個 transaction 同時讀取&lt;/li&gt;
-&lt;li&gt;在有 shared lock  的條件下，其他 transaction 也可以設置 shared lock&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;exclusive lock 只能被一個 transaction 持有
-&lt;ul&gt;
-&lt;li&gt;他人不能讀取或寫入&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;當涉及的資料持有其中一種 lock 時，其他 transaction 都不能設置另外一種 lock&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Deadlock
-&lt;ul&gt;
-&lt;li&gt;多個 transaction 互相等待對方釋放 lock&lt;/li&gt;
-&lt;li&gt;多數 DBMS 會檢查 deadlock，並讓最後一個造成 deadlock 的 transaction rollback&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Two-phase locking (2PL)
-&lt;ul&gt;
-&lt;li&gt;Double booking problem
-&lt;ul&gt;
-&lt;li&gt;當兩個 transaction 同時搶更新同個資源就有可能遇到該問題&lt;/li&gt;
-&lt;li&gt;example
-&lt;ul&gt;
-&lt;li&gt;兩個 transaction 都先 select 再 update&lt;/li&gt;
-&lt;li&gt;他們兩個 select 都先看到有空位，然後一前一後更新，就會造成 double booking&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;PostgreSQL 可以加上 &lt;code&gt;SELECT ... FOR UPDATE&lt;/code&gt; 來解決
-&lt;ul&gt;
-&lt;li&gt;他會取得 exclusive lock&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;two-phase
-&lt;ul&gt;
-&lt;li&gt;growing phase
-&lt;ul&gt;
-&lt;li&gt;取得 lock&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;shrinking phase
-&lt;ul&gt;
-&lt;li&gt;釋放 lock&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;強調一個 transaction 不能交叉取得和釋放 lock
-&lt;ul&gt;
-&lt;li&gt;不然其他 transaction 有可能在這空隙修改資料&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;有可能造成 deadlock&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;database-replication&#34;&gt;Database replication&lt;/h2&gt;
+&lt;h3 id=&#34;database-replication&#34;&gt;Database replication&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;透過 redundancy 來提高 reliability, tolerance, accessibility&lt;/li&gt;
 &lt;li&gt;Master / Backup replication
 &lt;ul&gt;
+&lt;li&gt;也叫 master-slave replication&lt;/li&gt;
 &lt;li&gt;只有一個 master / leader，有一或多個 backup / standby&lt;/li&gt;
-&lt;li&gt;master
-&lt;ul&gt;
-&lt;li&gt;接受 write / ddl&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;backup
-&lt;ul&gt;
-&lt;li&gt;接受 read&lt;/li&gt;
-&lt;li&gt;備份寫到 master 的資料&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
+&lt;li&gt;一寫多讀&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Multi-master replication
@@ -1703,16 +1207,69 @@ width: auto !important;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;優點
+&lt;/ul&gt;
+&lt;h2 id=&#34;concurrency-control&#34;&gt;Concurrency control&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;horizontal scaling&lt;/li&gt;
+&lt;li&gt;strategy
+&lt;ul&gt;
+&lt;li&gt;pessimistic
+&lt;ul&gt;
+&lt;li&gt;用各種 lock 來保證 isolation&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;缺點
+&lt;li&gt;optimistic
 &lt;ul&gt;
-&lt;li&gt;eventual consistency&lt;/li&gt;
-&lt;li&gt;寫入可能很慢 (synchronous)&lt;/li&gt;
-&lt;li&gt;實作複雜 (multi-master)&lt;/li&gt;
+&lt;li&gt;不用 lock，真的有 transaction 衝突時就 fail&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Lock
+&lt;ul&gt;
+&lt;li&gt;shared vs exclusive
+&lt;ul&gt;
+&lt;li&gt;shared lock 可以被多個 transaction 同時持有
+&lt;ul&gt;
+&lt;li&gt;用在讀取，所以可以多個 transaction 同時讀取&lt;/li&gt;
+&lt;li&gt;在有 shared lock  的條件下，其他 transaction 也可以設置 shared lock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;exclusive lock 只能被一個 transaction 持有
+&lt;ul&gt;
+&lt;li&gt;他人不能讀取或寫入&lt;/li&gt;
+&lt;li&gt;PostgreSQL 有一個 &lt;code&gt;SELECT ... FOR UPDATE&lt;/code&gt; 來取得 exclusive lock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;當涉及的資料持有其中一種 lock 時，其他 transaction 都不能設置另外一種 lock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Deadlock
+&lt;ul&gt;
+&lt;li&gt;多個 transaction 互相等待對方釋放 lock&lt;/li&gt;
+&lt;li&gt;多數 DBMS 會檢查 deadlock，並讓最後一個造成 deadlock 的 transaction rollback&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Two-phase locking (2PL)
+&lt;ul&gt;
+&lt;li&gt;DBMS 為了實現 isolation 需要保證 conflict serializability (CSR)，2PL 可以保證這一點&lt;/li&gt;
+&lt;li&gt;two-phase
+&lt;ul&gt;
+&lt;li&gt;growing phase
+&lt;ul&gt;
+&lt;li&gt;取得 lock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;shrinking phase
+&lt;ul&gt;
+&lt;li&gt;釋放 lock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;強調一個 transaction 不能釋放 lock 後就再也無法取得&lt;/li&gt;
+&lt;li&gt;有可能造成 deadlock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1721,239 +1278,6 @@ width: auto !important;
 &lt;li&gt;也叫 storage engine 或 embedded database&lt;/li&gt;
 &lt;li&gt;負責處理 CRUD 的 library&lt;/li&gt;
 &lt;li&gt;DBMS 基於 engine 來提供更多功能&lt;/li&gt;
-&lt;li&gt;例子
-&lt;ul&gt;
-&lt;li&gt;MyISAM
-&lt;ul&gt;
-&lt;li&gt;indexed sequential access method&lt;/li&gt;
-&lt;li&gt;B-tree 的 index 直接指向 row&lt;/li&gt;
-&lt;li&gt;不支援 transaction&lt;/li&gt;
-&lt;li&gt;insert 很快，但是 update 和 delete 很慢
-&lt;ul&gt;
-&lt;li&gt;因為改變資料大小會造成一堆 pointer 需要更新&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;database crash 後，可能會有 corrupted table，要手動修復&lt;/li&gt;
-&lt;li&gt;table-level lock&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;InnoDB
-&lt;ul&gt;
-&lt;li&gt;B+Tree 的 index 指向 primary key，primary key 指向 row&lt;/li&gt;
-&lt;li&gt;MySQL 和 MariaDB 的預設 engine&lt;/li&gt;
-&lt;li&gt;支援 ACID transaction&lt;/li&gt;
-&lt;li&gt;foreign key&lt;/li&gt;
-&lt;li&gt;row-level lock&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;XtraDB
-&lt;ul&gt;
-&lt;li&gt;InnoDB 的 fork&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;SQLite
-&lt;ul&gt;
-&lt;li&gt;對於 local data 很流行的 embedded database&lt;/li&gt;
-&lt;li&gt;Full ACID&lt;/li&gt;
-&lt;li&gt;table-level lock&lt;/li&gt;
-&lt;li&gt;concurrent read and write&lt;/li&gt;
-&lt;li&gt;同時也是 DBMS
-&lt;ul&gt;
-&lt;li&gt;支援解析 SQL&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Aria
-&lt;ul&gt;
-&lt;li&gt;和 MyISAM 很像&lt;/li&gt;
-&lt;li&gt;crash-safe&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Berkeley DB
-&lt;ul&gt;
-&lt;li&gt;key-value store&lt;/li&gt;
-&lt;li&gt;支援 ACID transaction&lt;/li&gt;
-&lt;li&gt;支援 replication&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;LevelDB
-&lt;ul&gt;
-&lt;li&gt;LSM-tree (Log-Structured Merge-Tree)
-&lt;ul&gt;
-&lt;li&gt;有利於 insert&lt;/li&gt;
-&lt;li&gt;有利於 SSD
-&lt;ul&gt;
-&lt;li&gt;原本的 b-tree 為了平衡會頻繁修改，對同一個 block 的多次寫入在 SSD 易使 block 壞掉&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;沒有 transaction&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;RocksDB
-&lt;ul&gt;
-&lt;li&gt;Facebook fork 的 LevelDB&lt;/li&gt;
-&lt;li&gt;支援 transaction&lt;/li&gt;
-&lt;li&gt;因為 insert 很快，又支援 transaction，也比較適合 SSD，所以很受歡迎&lt;/li&gt;
-&lt;li&gt;加了一堆 feature&lt;/li&gt;
-&lt;li&gt;multi-threaded&lt;/li&gt;
-&lt;li&gt;MyRocks
-&lt;ul&gt;
-&lt;li&gt;給 MySQL 和 MariaDB 用的 RocksDB&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;MongoRocks
-&lt;ul&gt;
-&lt;li&gt;給 MongoDB 用的 RocksDB&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;database-cursor&#34;&gt;Database cursor&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;當資料庫有很大的結果集時，不可能一次把所有資料用網路傳給 client，用戶也沒有 memory 來存放所有資料&lt;/li&gt;
-&lt;li&gt;Server side / client side cursor
-&lt;ul&gt;
-&lt;li&gt;Server side
-&lt;ul&gt;
-&lt;li&gt;一次只傳一部分資料給 client&lt;/li&gt;
-&lt;li&gt;但是要多次往返可能最後總時間會比較久&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Client side
-&lt;ul&gt;
-&lt;li&gt;一次把所有資料傳給 client&lt;/li&gt;
-&lt;li&gt;client 自己分批處理&lt;/li&gt;
-&lt;li&gt;對 network bandwidth 要求較大&lt;/li&gt;
-&lt;li&gt;可能沒有足夠的 memory&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;nosql&#34;&gt;NoSQL&lt;/h2&gt;
-&lt;h3 id=&#34;mongodb&#34;&gt;MongoDB&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;以 BSON (Binary JSON) 儲存資料&lt;/li&gt;
-&lt;li&gt;composite index
-&lt;ul&gt;
-&lt;li&gt;prefix
-&lt;ul&gt;
-&lt;li&gt;如果有一個 index 是 (a, b)，那麼 (a) 也是有效的 index&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;explain
-&lt;ul&gt;
-&lt;li&gt;用來看 query 的 execution plan&lt;/li&gt;
-&lt;li&gt;cursor
-&lt;ul&gt;
-&lt;li&gt;BasicCursor
-&lt;ul&gt;
-&lt;li&gt;會 scan 整個 collection，是個警訊&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;掃描的文件數量
-&lt;ul&gt;
-&lt;li&gt;nscanned
-&lt;ul&gt;
-&lt;li&gt;掃描的 index 數量&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;nscannedObjects
-&lt;ul&gt;
-&lt;li&gt;掃描的 document 數量&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;n
-&lt;ul&gt;
-&lt;li&gt;回傳的 document 數量&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;nscanned &amp;gt;= nscannedObjects &amp;gt;= n&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;scanAndOrder
-&lt;ul&gt;
-&lt;li&gt;是否需要把文件都放在 memory 並排序&lt;/li&gt;
-&lt;li&gt;還會一次性回傳資料&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;hint
-&lt;ul&gt;
-&lt;li&gt;強制使用某個 index&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;optimizer 挑選索引
-&lt;ul&gt;
-&lt;li&gt;第一階段 - 挑選最佳索引
-&lt;ul&gt;
-&lt;li&gt;最佳索引
-&lt;ul&gt;
-&lt;li&gt;包含所有的 filter 和 sort 的欄位&lt;/li&gt;
-&lt;li&gt;range filter 和 sort 的欄位必須在 equality filter 的後面
-&lt;ul&gt;
-&lt;li&gt;sort 的欄位必須在 range filter 的後面&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;如果有多個最佳索引就會隨便選一個&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;第二階段 - 透過實驗挑選索引
-&lt;ul&gt;
-&lt;li&gt;沒有最佳索引就會實驗判斷要選哪個，看看誰先找到指定數量的文件&lt;/li&gt;
-&lt;li&gt;換句話說，如果有多個索引，optimizer 會選 nscanned 最小的&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;MMAPv1
-&lt;ul&gt;
-&lt;li&gt;Mongo 一開始用的 storage engine&lt;/li&gt;
-&lt;li&gt;_id 直接對應到 diskloc，也就是 disk 的偏移量
-&lt;ul&gt;
-&lt;li&gt;查找速度驚人，但是更新就要維護偏移量很費時&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;採用 database-level lock，Mongo 後來也只更新成 collection-level lock&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;WiredTiger
-&lt;ul&gt;
-&lt;li&gt;MongoDB 收購的 storage engine&lt;/li&gt;
-&lt;li&gt;Document-level locking&lt;/li&gt;
-&lt;li&gt;可以做到 compression&lt;/li&gt;
-&lt;li&gt;5.2 之前
-&lt;ul&gt;
-&lt;li&gt;_id 會先被用來尋找 recordid，再用 recordid 去獲取 document&lt;/li&gt;
-&lt;li&gt;recordid 是 clustered index&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;5.3
-&lt;ul&gt;
-&lt;li&gt;_id 變成 clustered index&lt;/li&gt;
-&lt;li&gt;之前 recordid 只有 64 位，但現在 _id 作為 primary key 有 12 bytes
-&lt;ul&gt;
-&lt;li&gt;對 secondary index 造成更大的負擔&lt;/li&gt;
-&lt;li&gt;Mongo 想達成跨機器和 shard 的唯一性&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;orm&#34;&gt;ORM&lt;/h2&gt;
 &lt;ul&gt;
@@ -1961,7 +1285,7 @@ width: auto !important;
 &lt;ul&gt;
 &lt;li&gt;Eager
 &lt;ul&gt;
-&lt;li&gt;一次把所有資料都讀取&lt;/li&gt;
+&lt;li&gt;一次把所有相關的資料都讀取出來&lt;/li&gt;
 &lt;li&gt;如果 Teacher 有很多 Student，可能會一次把所有 Student 都讀取出來&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
@@ -1979,13 +1303,23 @@ width: auto !important;
 &lt;li&gt;可以配合 lazy loading 來用&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;N+1 problem
+&lt;ul&gt;
+&lt;li&gt;一個 query 取得所有資料，然後再用每個資料的 id 來取得相關資料&lt;/li&gt;
+&lt;li&gt;這樣就會有 N+1 次 IO
+&lt;ul&gt;
+&lt;li&gt;第一次是從主表拿清單&lt;/li&gt;
+&lt;li&gt;接下來 N 次是從子表拿資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;tips&#34;&gt;Tips&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;盡量不要使用 offset
 &lt;ul&gt;
-&lt;li&gt;offset 代表讀取並丟掉前面幾筆資料&lt;/li&gt;
-&lt;li&gt;常有 offset 和 limit 搭配好達到 paging 的效果&lt;/li&gt;
+&lt;li&gt;最 naive 的實現 pagination 的做法就是用 offset + limit。但是 offset 代表讀取並丟掉前面幾筆資料，所以他會多讀一堆沒用的資料&lt;/li&gt;
 &lt;li&gt;可以讓用戶那邊保存 id，where 設置 id 要大於多少來規避 offset&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
@@ -2015,6 +1349,7 @@ width: auto !important;
 &lt;ul&gt;
 &lt;li&gt;根據 hash function 的結果，看自己落在哪段範圍，配給指定的 server&lt;/li&gt;
 &lt;li&gt;這樣的好處是追加或是移除 server 時，只會影響一台 server 的資料&lt;/li&gt;
+&lt;li&gt;也可以追加到負載比較高的 server 附近&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -2022,28 +1357,10 @@ width: auto !important;
 &lt;li&gt;write amplification
 &lt;ul&gt;
 &lt;li&gt;寫入資料時，發現 disk 寫入的資料比你預期寫入的資料多很多&lt;/li&gt;
-&lt;li&gt;level
-&lt;ul&gt;
-&lt;li&gt;application
-&lt;ul&gt;
-&lt;li&gt;應用程式背後下了很多 query 來達成某個單一任務&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;database
-&lt;ul&gt;
-&lt;li&gt;ex: 更新資料時，可能是直接生一個新的 row&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;SSD
-&lt;ul&gt;
-&lt;li&gt;通常說的是這種&lt;/li&gt;
+&lt;li&gt;分很多不同 level，通常是在說 SSD 造成的&lt;/li&gt;
 &lt;li&gt;想更新的時候，更新的 page 會被標記為不能使用。會有另外一隻非同步程式定期處理這種
 &lt;ul&gt;
 &lt;li&gt;但是他會把整個 block 寫到新的地方，再把原地方設為 free，就為了那些不能再被使用的空間搬整個 block&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -2064,11 +1381,6 @@ width: auto !important;
 &lt;ul&gt;
 &lt;li&gt;你需要用到的檔案，可能是 build 出來的檔案，或是跑測試用的專案&lt;/li&gt;
 &lt;li&gt;ex: .jar, .war&lt;/li&gt;
-&lt;li&gt;把 build 出來的檔案放到某個的資料夾，再 publish
-&lt;ul&gt;
-&lt;li&gt;可以用 copy task &amp;amp; publish task 來達成，他有提供變數 &lt;code&gt;$(Build.ArtifactStagingDirectory)&lt;/code&gt;，作為一個暫存 artifact 的地方&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -2157,63 +1469,7 @@ width: auto !important;
         <pubDate>Fri, 28 Jun 2024 00:00:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/p/web-security/</guid>
-        <description>&lt;h2 id=&#34;information-gathering&#34;&gt;Information Gathering&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Whois Lookup
-&lt;ul&gt;
-&lt;li&gt;get owner information of a domain&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Netcraft site report
-&lt;ul&gt;
-&lt;li&gt;get technology stack of a website&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Robtex DNS Lookup
-&lt;ul&gt;
-&lt;li&gt;get information of a domain&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Exploit database
-&lt;ul&gt;
-&lt;li&gt;search for exploits&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;knockpy
-&lt;ul&gt;
-&lt;li&gt;subdomain enumeration&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;dirb
-&lt;ul&gt;
-&lt;li&gt;web content scanner&lt;/li&gt;
-&lt;li&gt;搜索隱藏的檔案&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;maltego
-&lt;ul&gt;
-&lt;li&gt;data mining tool&lt;/li&gt;
-&lt;li&gt;有大量套件，可以用來搜集各類資訊，而且有視覺化&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;file-uploaded-vulnerability&#34;&gt;File Uploaded Vulnerability&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;weevely
-&lt;ul&gt;
-&lt;li&gt;web shell&lt;/li&gt;
-&lt;li&gt;可以遠端控制&lt;/li&gt;
-&lt;li&gt;有些情況下就算上傳的檔案是 filename.php.jpg 依然可以執行&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Burp
-&lt;ul&gt;
-&lt;li&gt;proxy&lt;/li&gt;
-&lt;li&gt;intercept request&lt;/li&gt;
-&lt;li&gt;change request&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
+        <description>&lt;h2 id=&#34;file-uploaded-vulnerability&#34;&gt;File Uploaded Vulnerability&lt;/h2&gt;
 &lt;h3 id=&#34;防禦方法&#34;&gt;防禦方法&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;不要允許使用者上傳任何可執行的檔案&lt;/li&gt;
@@ -2264,6 +1520,10 @@ width: auto !important;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;sql-injection&#34;&gt;SQL Injection&lt;/h2&gt;
+&lt;h3 id=&#34;防禦方法-3&#34;&gt;防禦方法&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 prepared statement&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;xss-cross-site-scripting&#34;&gt;XSS (Cross Site Scripting)&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;允許攻擊者在網頁上執行 javascript code&lt;/li&gt;
@@ -2272,13 +1532,12 @@ width: auto !important;
 &lt;ul&gt;
 &lt;li&gt;Reflected XSS
 &lt;ul&gt;
-&lt;li&gt;特別設計過的 URL&lt;/li&gt;
+&lt;li&gt;用 URL 攻擊&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Persistent/Stored XSS
 &lt;ul&gt;
-&lt;li&gt;存在 database 或是某個 page&lt;/li&gt;
-&lt;li&gt;有些網站會替換掉引號，但也有其他方法不用引號，比如 fromCharCode&lt;/li&gt;
+&lt;li&gt;攻擊的程式碼存在 database 或是某個 page&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;DOM-based XSS
@@ -2299,7 +1558,7 @@ width: auto !important;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;防禦方法-3&#34;&gt;防禦方法&lt;/h3&gt;
+&lt;h3 id=&#34;防禦方法-4&#34;&gt;防禦方法&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;盡量避免讓 user 的輸入直接顯示在網頁上&lt;/li&gt;
 &lt;li&gt;在 insert 到網頁前，escape 所有不信任的輸入
@@ -2312,108 +1571,8 @@ width: auto !important;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;backdoor&#34;&gt;Backdoor&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;msfvenom&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;產生 payload
-&lt;ul&gt;
-&lt;li&gt;payload 是指 backdoor 中用來執行各種操作的程式碼&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;可生成的 payload 命名格式
-&lt;ul&gt;
-&lt;li&gt;platform/type/communication_channel
-&lt;ul&gt;
-&lt;li&gt;type
-&lt;ul&gt;
-&lt;li&gt;meterpreter
-&lt;ul&gt;
-&lt;li&gt;Metasploit 設計的&lt;/li&gt;
-&lt;li&gt;會加密通訊&lt;/li&gt;
-&lt;li&gt;提供豐富的功能&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;communication_channel
-&lt;ul&gt;
-&lt;li&gt;通常是 direction_protocol
-&lt;ul&gt;
-&lt;li&gt;direction
-&lt;ul&gt;
-&lt;li&gt;reverse
-&lt;ul&gt;
-&lt;li&gt;連到攻擊者的機器開的 port&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;bind
-&lt;ul&gt;
-&lt;li&gt;開 port 等待連接&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;protocol&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;ex: windows/shell/reverse_http
-&lt;ul&gt;
-&lt;li&gt;透過 http 連接&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;msfconsole&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Metasploit Framework&lt;/li&gt;
-&lt;li&gt;搭配 msfvenom 開 port 監聽
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;use exploit/multi/handler&lt;/code&gt;
-&lt;ul&gt;
-&lt;li&gt;set payload
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;set payload windows/metepreter/reverse_https&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;anti-virus&#34;&gt;Anti-Virus&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Principle
-&lt;ul&gt;
-&lt;li&gt;Static Analysis
-&lt;ul&gt;
-&lt;li&gt;和已知的 malware 比對&lt;/li&gt;
-&lt;li&gt;可以利用 packers, encoders, abfuscators 來讓程式更加獨特&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Dynamic(Heuristic) Analysis
-&lt;ul&gt;
-&lt;li&gt;在 sandbox 中執行，看他的行為&lt;/li&gt;
-&lt;li&gt;要幫程式增加安全的操作&lt;/li&gt;
-&lt;li&gt;延遲 Payload 執行的時間&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;insecure-session-management&#34;&gt;Insecure session management&lt;/h2&gt;
-&lt;h3 id=&#34;csrf-cross-site-request-forgery&#34;&gt;CSRF (Cross Site Request Forgery)&lt;/h3&gt;
-&lt;h3 id=&#34;防禦方法-4&#34;&gt;防禦方法&lt;/h3&gt;
+&lt;h2 id=&#34;csrf-cross-site-request-forgery&#34;&gt;CSRF (Cross Site Request Forgery)&lt;/h2&gt;
+&lt;h3 id=&#34;防禦方法-5&#34;&gt;防禦方法&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Anti CSRF token
 &lt;ul&gt;
@@ -2432,6 +1591,31 @@ width: auto !important;
 &lt;li&gt;要發 request 的時候把 cookie 改成和 token 一樣的值&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;backdoor&#34;&gt;Backdoor&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;msfvenom&lt;/li&gt;
+&lt;li&gt;msfconsole&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;anti-virus&#34;&gt;Anti-Virus&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Principle
+&lt;ul&gt;
+&lt;li&gt;Static Analysis
+&lt;ul&gt;
+&lt;li&gt;和已知的 malware 比對&lt;/li&gt;
+&lt;li&gt;可以利用 packers, encoders, abfuscators 來讓程式更加獨特&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Dynamic(Heuristic) Analysis
+&lt;ul&gt;
+&lt;li&gt;在 sandbox 中執行，看他的行為&lt;/li&gt;
+&lt;li&gt;要幫程式增加安全的操作&lt;/li&gt;
+&lt;li&gt;延遲 Payload 執行的時間&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -2485,116 +1669,10 @@ width: auto !important;
 &lt;li&gt;每一步都得考慮周密&lt;/li&gt;
 &lt;li&gt;用戶很晚才能看到結果&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;v-model&#34;&gt;V-Model&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;基於 Waterfall Model 的改進&lt;/li&gt;
-&lt;li&gt;V 的左半邊
-&lt;ul&gt;
-&lt;li&gt;Requirement -&amp;gt; Design -&amp;gt; Architecture -&amp;gt; Module -&amp;gt; Implementation&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;V 的右半邊
-&lt;ul&gt;
-&lt;li&gt;Unit Testing -&amp;gt; Integration Testing -&amp;gt; System Testing -&amp;gt; Acceptance Testing&lt;/li&gt;
-&lt;li&gt;四個 testing 和左半邊的四個階段一一對應&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;強調開發和測試並行&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;sashimi-model&#34;&gt;Sashimi Model&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;在大公司，不同 phase 常常有專人負責&lt;/li&gt;
-&lt;li&gt;前面瀑布式開發，會讓後面 phase 的人閒置&lt;/li&gt;
-&lt;li&gt;讓不同 phase 的人在某些時間點同時工作&lt;/li&gt;
-&lt;li&gt;可能會導致錯誤還有 redesign&lt;/li&gt;
-&lt;/ul&gt;
 &lt;h2 id=&#34;incremental-model&#34;&gt;Incremental Model&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;在整個開發過程中多次完成軟體開發過程&lt;/li&gt;
 &lt;li&gt;每個子開發過程都有明確的目標&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;unified-process-framework&#34;&gt;Unified Process Framework&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Phase
-&lt;ul&gt;
-&lt;li&gt;Inception
-&lt;ul&gt;
-&lt;li&gt;確定可行性&lt;/li&gt;
-&lt;li&gt;Deliverable
-&lt;ul&gt;
-&lt;li&gt;Lifecycle goals&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Elaboration
-&lt;ul&gt;
-&lt;li&gt;細化階段&lt;/li&gt;
-&lt;li&gt;Deliverable
-&lt;ul&gt;
-&lt;li&gt;Software architecture plans &amp;amp; prototypes&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Construction
-&lt;ul&gt;
-&lt;li&gt;基於 elaboration 階段的基礎改進&lt;/li&gt;
-&lt;li&gt;用多個 iteration 來完成&lt;/li&gt;
-&lt;li&gt;Deliverable
-&lt;ul&gt;
-&lt;li&gt;持續改進軟體&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Transition
-&lt;ul&gt;
-&lt;li&gt;交付系統&lt;/li&gt;
-&lt;li&gt;Deliverable
-&lt;ul&gt;
-&lt;li&gt;Final Product&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;優點
-&lt;ul&gt;
-&lt;li&gt;Adaptive&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;缺點
-&lt;ul&gt;
-&lt;li&gt;複雜&lt;/li&gt;
-&lt;li&gt;對小專案來說太過頭&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;spiral-model&#34;&gt;Spiral Model&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;4 個象限
-&lt;ul&gt;
-&lt;li&gt;Determine objectives&lt;/li&gt;
-&lt;li&gt;Identify and resolve risks&lt;/li&gt;
-&lt;li&gt;Developments and test&lt;/li&gt;
-&lt;li&gt;Plan the next iteration&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;在 4 個階段不斷輪替&lt;/li&gt;
-&lt;li&gt;優點
-&lt;ul&gt;
-&lt;li&gt;adaptive&lt;/li&gt;
-&lt;li&gt;risk-focused&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;缺點
-&lt;ul&gt;
-&lt;li&gt;複雜&lt;/li&gt;
-&lt;li&gt;需要 stackholder 持續參與&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;agile&#34;&gt;Agile&lt;/h2&gt;
 &lt;ul&gt;
@@ -2669,41 +1747,6 @@ width: auto !important;
 &lt;li&gt;Develop&lt;/li&gt;
 &lt;li&gt;Test&lt;/li&gt;
 &lt;li&gt;Release&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;lean-startup&#34;&gt;Lean Startup&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;實驗性的生產方法&lt;/li&gt;
-&lt;li&gt;盡快生出產品，看看市場反應&lt;/li&gt;
-&lt;li&gt;loop step
-&lt;ul&gt;
-&lt;li&gt;learn
-&lt;ul&gt;
-&lt;li&gt;assumption&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;build
-&lt;ul&gt;
-&lt;li&gt;experiment&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;measure
-&lt;ul&gt;
-&lt;li&gt;metrics&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;example:
-&lt;ul&gt;
-&lt;li&gt;zappos
-&lt;ul&gt;
-&lt;li&gt;假設人們會上網買鞋&lt;/li&gt;
-&lt;li&gt;拍鞋子照片，建立網站丟上去&lt;/li&gt;
-&lt;li&gt;看有多少人會買&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -2969,7 +2012,11 @@ width: auto !important;
 &lt;li&gt;用來測試系統的輸入&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Test case&lt;/li&gt;
+&lt;li&gt;Test case
+&lt;ul&gt;
+&lt;li&gt;包含測試步驟, 預期結果, 測試資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;Oracle
 &lt;ul&gt;
 &lt;li&gt;理想的結果&lt;/li&gt;
@@ -2999,23 +2046,53 @@ width: auto !important;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;verification-and-validation&#34;&gt;Verification and Validation&lt;/h2&gt;
-&lt;ul&gt;
 &lt;li&gt;Verification
 &lt;ul&gt;
 &lt;li&gt;確認系統是否符合 specifcation&lt;/li&gt;
-&lt;li&gt;build the system right&lt;/li&gt;
+&lt;li&gt;這裡出問題是工程師的錯&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Validation
 &lt;ul&gt;
 &lt;li&gt;確認系統是否符合使用者需求&lt;/li&gt;
-&lt;li&gt;build the right system&lt;/li&gt;
+&lt;li&gt;這裡出問題代表產品目標有錯&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Stub
+&lt;ul&gt;
+&lt;li&gt;用來代替其他 component 的 template，會回傳 hard-coded value&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Mock
+&lt;ul&gt;
+&lt;li&gt;用來代替其他 component 的 template，會回傳預先設定的值，而且會檢查調用的次數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Driver
+&lt;ul&gt;
+&lt;li&gt;用來執行 commands 還有初始化變數的 template&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;unit-testing&#34;&gt;Unit Testing&lt;/h2&gt;
+&lt;h2 id=&#34;test-coverage&#34;&gt;Test coverage&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;line coverage
+&lt;ul&gt;
+&lt;li&gt;根據程式碼實際執行的程式碼行數來計算&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;branch coverage
+&lt;ul&gt;
+&lt;li&gt;檢查程式碼是不是不同的可能都跑過
+&lt;ul&gt;
+&lt;li&gt;考慮 if, switch&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;testing-types&#34;&gt;Testing Types&lt;/h2&gt;
+&lt;h3 id=&#34;unit-testing&#34;&gt;Unit Testing&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;專注在測試 smallest unit of software&lt;/li&gt;
 &lt;li&gt;要 isolate unit，避免其他 unit 影響測試結果
@@ -3024,7 +2101,7 @@ width: auto !important;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;integration-testing&#34;&gt;Integration Testing&lt;/h2&gt;
+&lt;h3 id=&#34;integration-testing&#34;&gt;Integration Testing&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;專注在測試 communication 和 architecture&lt;/li&gt;
 &lt;li&gt;type
@@ -3032,6 +2109,7 @@ width: auto !important;
 &lt;li&gt;non-incremental
 &lt;ul&gt;
 &lt;li&gt;一次測試所有 component，測試整個應用程式&lt;/li&gt;
+&lt;li&gt;Big Bang Testing&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;incremental
@@ -3039,29 +2117,11 @@ width: auto !important;
 &lt;li&gt;每次新增一個 module，做一些測試，反覆執行&lt;/li&gt;
 &lt;li&gt;Top-Down Testing
 &lt;ul&gt;
-&lt;li&gt;用詞
-&lt;ul&gt;
-&lt;li&gt;Stub
-&lt;ul&gt;
-&lt;li&gt;將要實現的 model 的 template，通常是 hard-coded value&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;li&gt;從最上層開始，下面調用的部分用 stub 代替&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Bottom-Up Testing
 &lt;ul&gt;
-&lt;li&gt;用詞
-&lt;ul&gt;
-&lt;li&gt;Driver
-&lt;ul&gt;
-&lt;li&gt;用來執行 commands 還有初始化變數的 template&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;li&gt;從最底層開始，上面呼叫的部分用 driver 代替&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
@@ -3090,17 +2150,20 @@ width: auto !important;
 &lt;/li&gt;
 &lt;li&gt;Cause-Effect Graph
 &lt;ul&gt;
+&lt;li&gt;一種設計 Test Case 的方法&lt;/li&gt;
+&lt;li&gt;又稱為 fishbone diagram&lt;/li&gt;
 &lt;li&gt;不同的 cause 會導致不同的 effect&lt;/li&gt;
+&lt;li&gt;最後會有一個 table 來表示所有可能輸入的組合會對應到什麼結果&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Pair-wise Testing
 &lt;ul&gt;
-&lt;li&gt;多個參數一起測試好確認所有條件&lt;/li&gt;
+&lt;li&gt;測試多個參數的可能組合&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;State-based Testing
 &lt;ul&gt;
-&lt;li&gt;測試輸入，確認 state 改變的情形&lt;/li&gt;
+&lt;li&gt;測試不同狀態下的輸入，確認 state 改變的情形&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -3116,272 +2179,6 @@ width: auto !important;
 &lt;li&gt;Data Flow Testing
 &lt;ul&gt;
 &lt;li&gt;test case 要涵蓋所有的變數，包含 declaration 和 use&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        </item>
-        <item>
-        <title>Design</title>
-        <link>https://roykesydon.github.io/Blog/p/design/</link>
-        <pubDate>Thu, 27 Jun 2024 00:00:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/p/design/</guid>
-        <description>&lt;h2 id=&#34;modularity&#34;&gt;Modularity&lt;/h2&gt;
-&lt;h3 id=&#34;coupling&#34;&gt;Coupling&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;type
-&lt;ul&gt;
-&lt;li&gt;Tight coupling
-&lt;ul&gt;
-&lt;li&gt;Content coupling
-&lt;ul&gt;
-&lt;li&gt;一個模組依賴另一個模組的內部運作&lt;/li&gt;
-&lt;li&gt;ex: 一個模組直接存取另一個模組的變數，假設回傳的數值是公尺，如果另一個模組要修改成公分，就會影響到這個模組
-&lt;ul&gt;
-&lt;li&gt;可以用 getter 抽象出 getMeter()，這樣就不會直接存取變數&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Common coupling
-&lt;ul&gt;
-&lt;li&gt;多個模組共同存取和修改同個 global data&lt;/li&gt;
-&lt;li&gt;ex: 一個模組錯誤修改會導致其他人都壞掉&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;External coupling
-&lt;ul&gt;
-&lt;li&gt;多個模組直接存取同個 external I/O&lt;/li&gt;
-&lt;li&gt;ex: API 要改就會全部都影響到&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Medium coupling
-&lt;ul&gt;
-&lt;li&gt;Control coupling
-&lt;ul&gt;
-&lt;li&gt;一個模組影響另一個模組的內部邏輯（比如說透過參數）&lt;/li&gt;
-&lt;li&gt;ex: 參數要改個寫法就會影響一堆模組&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Data-Sructure coupling
-&lt;ul&gt;
-&lt;li&gt;多個模組共同存取同個 data structure&lt;/li&gt;
-&lt;li&gt;ex: Data structure 要改就會影響到其他模組&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Loose coupling
-&lt;ul&gt;
-&lt;li&gt;Data Coupling
-&lt;ul&gt;
-&lt;li&gt;兩個模組 share/pass 同樣的資料&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Message Coupling
-&lt;ul&gt;
-&lt;li&gt;多個模組間透過 message 或是 command 來溝通&lt;/li&gt;
-&lt;li&gt;和 control coupling 的差別在於，並沒有去控制某個模組，只是叫他做某件事情&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;No Coupling
-&lt;ul&gt;
-&lt;li&gt;不是好的設計&lt;/li&gt;
-&lt;li&gt;模組間沒有關聯，或是有個超巨大的模組&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;cohesion&#34;&gt;Cohesion&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;type
-&lt;ul&gt;
-&lt;li&gt;Weak cohesion
-&lt;ul&gt;
-&lt;li&gt;Coincidental cohesion
-&lt;ul&gt;
-&lt;li&gt;唯一的關聯是他們在同個檔案&lt;/li&gt;
-&lt;li&gt;ex: single file program&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Temporal cohesion
-&lt;ul&gt;
-&lt;li&gt;關聯的地方是他們在同個時間點被執行&lt;/li&gt;
-&lt;li&gt;ex: 「執行 shutdown  相關的活動」&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Logical cohesion
-&lt;ul&gt;
-&lt;li&gt;活動間可以被歸類在同個 general category&lt;/li&gt;
-&lt;li&gt;ex: Backup Controller，可能有很多地方需要 Backup&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Medium cohesion
-&lt;ul&gt;
-&lt;li&gt;Procedureal cohesion
-&lt;ul&gt;
-&lt;li&gt;command 間存在執行順序&lt;/li&gt;
-&lt;li&gt;ex: Clean car module 可能包含噴水、填表格、擦乾等等
-&lt;ul&gt;
-&lt;li&gt;但是 Clean car module 此處包含了操控財務資料的狀況&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Communicational cohesion
-&lt;ul&gt;
-&lt;li&gt;所有的 activities 都支援相同的 input/output&lt;/li&gt;
-&lt;li&gt;ex: 提取文章的作者、提取文章的標題、提取文章的內容&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Sequential cohesion
-&lt;ul&gt;
-&lt;li&gt;某個 activities 的輸出是另一個 activities 的輸入，且具有順序性&lt;/li&gt;
-&lt;li&gt;Procedureal cohesion 和 Communicational cohesion 的結合&lt;/li&gt;
-&lt;li&gt;這個沒那麼糟糕&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Strong cohesion
-&lt;ul&gt;
-&lt;li&gt;Functional cohesion
-&lt;ul&gt;
-&lt;li&gt;Module 只支援只和一個問題相關的 activities&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Object cohesion
-&lt;ul&gt;
-&lt;li&gt;所有的 activities 都只會修改一個 object&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        </item>
-        <item>
-        <title>Requirements &amp; Specifications</title>
-        <link>https://roykesydon.github.io/Blog/p/requirements-specifications/</link>
-        <pubDate>Wed, 26 Jun 2024 00:00:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/p/requirements-specifications/</guid>
-        <description>&lt;h2 id=&#34;definition&#34;&gt;definition&lt;/h2&gt;
-&lt;h3 id=&#34;requirement&#34;&gt;Requirement&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;找出系統目標的過程&lt;/li&gt;
-&lt;li&gt;系統需求的 non-technical definition&lt;/li&gt;
-&lt;li&gt;應該要可以被任何人理解&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;specification&#34;&gt;Specification&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;系統需求的 technical definition&lt;/li&gt;
-&lt;li&gt;盡量保持簡單，不是要 design&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;functional--non-functional-requirement&#34;&gt;Functional / Non-Functional Requirement&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Functional Requirement
-&lt;ul&gt;
-&lt;li&gt;系統應該要做什麼 (What)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Non-Functional Requirement
-&lt;ul&gt;
-&lt;li&gt;系統應該要怎麼做 (How)&lt;/li&gt;
-&lt;li&gt;專注在 user experience&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;wrspm&#34;&gt;WRSPM&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;用來理解 requirements, specifications 和 real world 之間的關聯的 reference model&lt;/li&gt;
-&lt;li&gt;part
-&lt;ul&gt;
-&lt;li&gt;World
-&lt;ul&gt;
-&lt;li&gt;現實世界的假設&lt;/li&gt;
-&lt;li&gt;ex: 有沒有網路？網速多快？使用者會自備 1 吋照片？&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Requirements&lt;/li&gt;
-&lt;li&gt;Specifications&lt;/li&gt;
-&lt;li&gt;Program
-&lt;ul&gt;
-&lt;li&gt;code 本身&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Machine
-&lt;ul&gt;
-&lt;li&gt;硬體&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;WRSPM Variables
-&lt;ul&gt;
-&lt;li&gt;Eh (Environment hidden)
-&lt;ul&gt;
-&lt;li&gt;Environment 中的元素，對 system 是不可見（隱藏）的&lt;/li&gt;
-&lt;li&gt;ex: ATM 卡本身&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Ev (Environment visible)
-&lt;ul&gt;
-&lt;li&gt;Environment 中的元素，對 system 是可見的&lt;/li&gt;
-&lt;li&gt;ex: ATM 卡的晶片&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Sv (System visible)
-&lt;ul&gt;
-&lt;li&gt;System 中的元素，對 environment 是可見的&lt;/li&gt;
-&lt;li&gt;ex: ATM 機的螢幕（UI）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Sh (System hidden)
-&lt;ul&gt;
-&lt;li&gt;System 中的元素，對 environment 是不可見的&lt;/li&gt;
-&lt;li&gt;ex: ATM 機連接的後端系統&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;WRSPM visual model
-&lt;ul&gt;
-&lt;li&gt;分成 Environment 和 System，中間交界是 Interface
-&lt;ul&gt;
-&lt;li&gt;Environment
-&lt;ul&gt;
-&lt;li&gt;World&lt;/li&gt;
-&lt;li&gt;Requirements&lt;/li&gt;
-&lt;li&gt;Eh&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Interface
-&lt;ul&gt;
-&lt;li&gt;Specifications&lt;/li&gt;
-&lt;li&gt;Ev&lt;/li&gt;
-&lt;li&gt;Sv&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;System
-&lt;ul&gt;
-&lt;li&gt;Program&lt;/li&gt;
-&lt;li&gt;Machine&lt;/li&gt;
-&lt;li&gt;Sh&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -3866,30 +2663,6 @@ width: auto !important;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;cloud&#34;&gt;Cloud&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;two type of cluster
-&lt;ul&gt;
-&lt;li&gt;Self hosted / Turnkey solutions
-&lt;ul&gt;
-&lt;li&gt;用來在自己的 server 上建立 cluster&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Hosted solutions / Managed solutions
-&lt;ul&gt;
-&lt;li&gt;用來在 cloud 上建立 cluster&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Hosted solutions
-&lt;ul&gt;
-&lt;li&gt;Google Kubernetes Engine (GKE)&lt;/li&gt;
-&lt;li&gt;Amazon Elastic Kubernetes Service (EKS)&lt;/li&gt;
-&lt;li&gt;Azure Kubernetes Service (AKS)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -4953,11 +3726,15 @@ width: auto !important;
 &lt;li&gt;設定 @Configuration&lt;/li&gt;
 &lt;li&gt;加到 Bean
 &lt;ul&gt;
-&lt;li&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;option&amp;gt;&lt;/code&gt; setUrlPatterns
+&lt;ul&gt;
+&lt;li&gt;只有符合 url pattern 的 request 才會經過這個 filter&lt;/li&gt;
+&lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;
-&lt;!-- raw HTML omitted --&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;option&amp;gt;&lt;/code&gt; setOrder
+&lt;ul&gt;
+&lt;li&gt;決定 filter 的順序&lt;/li&gt;
+&lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
@@ -5127,7 +3904,11 @@ width: auto !important;
 &lt;ul&gt;
 &lt;li&gt;Jakarta Persistence API&lt;/li&gt;
 &lt;li&gt;以前叫 Java Persistence API&lt;/li&gt;
-&lt;li&gt;只是一個 specifcation，提供一組 interface，需要實作&lt;/li&gt;
+&lt;li&gt;只是一個 specifcation，提供一組 interface，需要實作
+&lt;ul&gt;
+&lt;li&gt;包含了 Entity, EntityManager, Query, Transaction..&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;DataSource
 &lt;ul&gt;
 &lt;li&gt;用來連接資料庫&lt;/li&gt;
@@ -9881,6 +8662,29 @@ I3D 在 25 fps 的影片中用 64 frames 做訓練，使它能捕捉動作的 fi
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
+&lt;h2 id=&#34;快取常見策略&#34;&gt;快取常見策略&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;cache aside
+&lt;ul&gt;
+&lt;li&gt;先問 cache，沒有的話再問 db，並把 db 回傳的資料放到 cache&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;read through
+&lt;ul&gt;
+&lt;li&gt;client 只能存取到 cache，如果沒資料，cache 會去 db 拿資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;write through
+&lt;ul&gt;
+&lt;li&gt;client 寫資料時，cache 會留一份資料，並把資料寫到 db&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;write behind
+&lt;ul&gt;
+&lt;li&gt;和 write through 很像，但是不會立即寫到 db，會等到有更多的資料時，才一次寫到 db&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;feature&#34;&gt;Feature&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;NoSQL&lt;/li&gt;
@@ -13309,132 +12113,6 @@ I3D 在 25 fps 的影片中用 64 frames 做訓練，使它能捕捉動作的 fi
 </description>
         </item>
         <item>
-        <title>Actor-Critic</title>
-        <link>https://roykesydon.github.io/Blog/p/actor-critic/</link>
-        <pubDate>Tue, 14 Mar 2023 16:21:23 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/p/actor-critic/</guid>
-        <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
-&lt;p&gt;結合 policy-based 和 value-based&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;A3C
-&lt;ul&gt;
-&lt;li&gt;Actor-Critic 最知名的方法&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Advantage Actor-Critic 是 A2C&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;advantage-actor-critic&#34;&gt;Advantage Actor-Critic&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Review: Policy gradient&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;$\triangledown \overline{R_{\theta}}\approx \frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}(\displaystyle\sum_{t^{&amp;rsquo;}=t}^{T_n}\gamma^{t^{&amp;rsquo;}-t}r_{t^{&amp;rsquo;}}^n-b)\triangledown log p_{\theta}(a_t^n|s_t^n)$
-&lt;ul&gt;
-&lt;li&gt;$G_t^n=\displaystyle\sum_{t^{&amp;rsquo;}=t}^{T_n}\gamma^{t^{&amp;rsquo;}-t}r_{t^{&amp;rsquo;}}^n-b$
-&lt;ul&gt;
-&lt;li&gt;G very unstable，因為給同樣的 state 作同樣的 action 不一定會得到同樣的結果，G 是個 random variable&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;想要改獲得期望值，取代掉 sample 的值(G 的部分)，可以用 Q-Learning&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;$E[G_t^n]=Q^{\pi_\theta}(s_t^n,a_t^n)$
-&lt;ul&gt;
-&lt;li&gt;Q function 這樣定義&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;所以我們可以把 G 的部分改用 Q 替換掉，就可以把 Actor 和 Critic 結合起來&lt;/li&gt;
-&lt;li&gt;baseline 的部分也可以用 value function 替換掉&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;但用 $Q^{\pi}(s_t^n,a_t^n)-V^{\pi}(s_t^n)$ 要一次 estimate 兩個 network&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;可以把 Q 以 V 來表示，那只需要估測 V
-&lt;ul&gt;
-&lt;li&gt;$Q^{\pi}(s_t^n,a_t^n)=E[r_t^n+V^{\pi}(s_{t+1}^n)]$&lt;/li&gt;
-&lt;li&gt;雖然有隨機性(獲得的 reward 和跳到什麼 state 不一定)，但先不管期望值 $Q^{\pi}(s_t^n,a_t^n)=r_t^n+V^{\pi}(s_{t+1}^n)$&lt;/li&gt;
-&lt;li&gt;現在雖然多個一個 r，有一些 variance，但也比 G 好&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;$\triangledown \overline{R_{\theta}}\approx \frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}(r_t^n+V^{\pi}(s_{t+1}^n)-V^{\pi}(s_t^n))\triangledown log p_{\theta}(a_t^n|s_t^n)$&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/actor-critic/A2C.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;h3 id=&#34;tips&#34;&gt;Tips&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;actor $\pi(s)$ 和 critic $V^{\pi}(s)$ 的權重可以共享&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;前面幾個 layer 可以 share&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;對 $\pi$ 的 output 下 constrain，讓他的 entropy 不要太小，達到 exploration 的效果&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;asynchronous-advantage-actor-critic&#34;&gt;Asynchronous Advantage Actor-Critic&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;一開始有個 global network，開一堆 worker，每次工作前，把 global network 的參數 copy 過去&lt;/li&gt;
-&lt;li&gt;個別去和環境作互動，更新的梯度施加在 global network 上&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;pathwise-derivative-policy-gradient&#34;&gt;Pathwise Derivative Policy Gradient&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;可以當作是 Q-Learning 解 continuous action 的一種方法&lt;/li&gt;
-&lt;li&gt;訓練一個 actor，目標是生出的 a 餵給 Q 後，可以讓 Q function 的輸出越大越好
-&lt;ul&gt;
-&lt;li&gt;只會調 actor 的參數，會 fix Q 的&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;就是個 GAN&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/actor-critic/pathwise.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;在每個 episode&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;對於每個 time step t
-&lt;ul&gt;
-&lt;li&gt;⚠️給 state $s_t$，根據 $\pi$ 執行 action $a_t$ (epsilon greedy)⚠️&lt;/li&gt;
-&lt;li&gt;獲得 reward $r_t$，到達 $s_{t+1}$&lt;/li&gt;
-&lt;li&gt;把 {$s_t,a_t,r_t,s_{t+1}$} 存到 buffer&lt;/li&gt;
-&lt;li&gt;從 buffer sample {$s_t,a_t,r_t,s_{t+1}$}(通常是一個 batch)&lt;/li&gt;
-&lt;li&gt;⚠️Target $y=r_i+\hat{Q}(s_{i+1},\hat{\pi}(s_{i+1}))$⚠️&lt;/li&gt;
-&lt;li&gt;Update Q 的參數，好讓 $Q(s_i,a_i)$ 更接近 y(regression)&lt;/li&gt;
-&lt;li&gt;⚠️Update $\pi$ 的參數，讓 $Q(s_i,\pi(s_i))$ 最大化⚠️&lt;/li&gt;
-&lt;li&gt;每 C 步 reset $\hat{Q}=Q$&lt;/li&gt;
-&lt;li&gt;⚠️每 C 步 reset $\hat{\pi}=\pi$⚠️&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;⚠️ 是和 Q-Learning 不一樣的地方&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        </item>
-        <item>
         <title>Database Normalization</title>
         <link>https://roykesydon.github.io/Blog/p/database-normalization/</link>
         <pubDate>Tue, 14 Mar 2023 10:26:17 +0800</pubDate>
@@ -13660,11 +12338,11 @@ I3D 在 25 fps 的影片中用 64 frames 做訓練，使它能捕捉動作的 fi
 </description>
         </item>
         <item>
-        <title>軟體設計原則</title>
-        <link>https://roykesydon.github.io/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88%E5%8E%9F%E5%89%87/</link>
+        <title>軟體設計 - Low Level</title>
+        <link>https://roykesydon.github.io/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88-low-level/</link>
         <pubDate>Wed, 08 Mar 2023 14:26:17 +0800</pubDate>
         
-        <guid>https://roykesydon.github.io/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88%E5%8E%9F%E5%89%87/</guid>
+        <guid>https://roykesydon.github.io/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88-low-level/</guid>
         <description>&lt;h2 id=&#34;uml-類別圖&#34;&gt;UML 類別圖&lt;/h2&gt;
 &lt;h3 id=&#34;relationship&#34;&gt;Relationship&lt;/h3&gt;
 &lt;ul&gt;
@@ -13765,6 +12443,147 @@ I3D 在 25 fps 的影片中用 64 frames 做訓練，使它能捕捉動作的 fi
 &lt;ul&gt;
 &lt;li&gt;反向依賴原則&lt;/li&gt;
 &lt;li&gt;高階模組不應該依賴低階模組，兩者都應依賴抽象層&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;modularity&#34;&gt;Modularity&lt;/h2&gt;
+&lt;h3 id=&#34;coupling&#34;&gt;Coupling&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;type
+&lt;ul&gt;
+&lt;li&gt;Tight coupling
+&lt;ul&gt;
+&lt;li&gt;Content coupling
+&lt;ul&gt;
+&lt;li&gt;一個模組依賴另一個模組的內部運作&lt;/li&gt;
+&lt;li&gt;ex: 一個模組直接存取另一個模組的變數，假設回傳的數值是公尺，如果另一個模組要修改成公分，就會影響到這個模組
+&lt;ul&gt;
+&lt;li&gt;可以用 getter 抽象出 getMeter()，這樣就不會直接存取變數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Common coupling
+&lt;ul&gt;
+&lt;li&gt;多個模組共同存取和修改同個 global data&lt;/li&gt;
+&lt;li&gt;ex: 一個模組錯誤修改會導致其他人都壞掉&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;External coupling
+&lt;ul&gt;
+&lt;li&gt;多個模組直接存取同個 external I/O&lt;/li&gt;
+&lt;li&gt;ex: API 要改就會全部都影響到&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Medium coupling
+&lt;ul&gt;
+&lt;li&gt;Control coupling
+&lt;ul&gt;
+&lt;li&gt;一個模組影響另一個模組的內部邏輯（比如說透過參數）&lt;/li&gt;
+&lt;li&gt;ex: 參數要改個寫法就會影響一堆模組&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Data-Sructure coupling
+&lt;ul&gt;
+&lt;li&gt;多個模組共同存取同個 data structure&lt;/li&gt;
+&lt;li&gt;ex: Data structure 要改就會影響到其他模組&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Loose coupling
+&lt;ul&gt;
+&lt;li&gt;Data Coupling
+&lt;ul&gt;
+&lt;li&gt;兩個模組 share/pass 同樣的資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Message Coupling
+&lt;ul&gt;
+&lt;li&gt;多個模組間透過 message 或是 command 來溝通&lt;/li&gt;
+&lt;li&gt;和 control coupling 的差別在於，並沒有去控制某個模組，只是叫他做某件事情&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;No Coupling
+&lt;ul&gt;
+&lt;li&gt;不是好的設計&lt;/li&gt;
+&lt;li&gt;模組間沒有關聯，或是有個超巨大的模組&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;cohesion&#34;&gt;Cohesion&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;type
+&lt;ul&gt;
+&lt;li&gt;Weak cohesion
+&lt;ul&gt;
+&lt;li&gt;Coincidental cohesion
+&lt;ul&gt;
+&lt;li&gt;唯一的關聯是他們在同個檔案&lt;/li&gt;
+&lt;li&gt;ex: single file program&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Temporal cohesion
+&lt;ul&gt;
+&lt;li&gt;關聯的地方是他們在同個時間點被執行&lt;/li&gt;
+&lt;li&gt;ex: 「執行 shutdown  相關的活動」&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Logical cohesion
+&lt;ul&gt;
+&lt;li&gt;活動間可以被歸類在同個 general category&lt;/li&gt;
+&lt;li&gt;ex: Backup Controller，可能有很多地方需要 Backup&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Medium cohesion
+&lt;ul&gt;
+&lt;li&gt;Procedureal cohesion
+&lt;ul&gt;
+&lt;li&gt;command 間存在執行順序&lt;/li&gt;
+&lt;li&gt;ex: Clean car module 可能包含噴水、填表格、擦乾等等
+&lt;ul&gt;
+&lt;li&gt;但是 Clean car module 此處包含了操控財務資料的狀況&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Communicational cohesion
+&lt;ul&gt;
+&lt;li&gt;所有的 activities 都支援相同的 input/output&lt;/li&gt;
+&lt;li&gt;ex: 提取文章的作者、提取文章的標題、提取文章的內容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Sequential cohesion
+&lt;ul&gt;
+&lt;li&gt;某個 activities 的輸出是另一個 activities 的輸入，且具有順序性&lt;/li&gt;
+&lt;li&gt;Procedureal cohesion 和 Communicational cohesion 的結合&lt;/li&gt;
+&lt;li&gt;這個沒那麼糟糕&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Strong cohesion
+&lt;ul&gt;
+&lt;li&gt;Functional cohesion
+&lt;ul&gt;
+&lt;li&gt;Module 只支援只和一個問題相關的 activities&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Object cohesion
+&lt;ul&gt;
+&lt;li&gt;所有的 activities 都只會修改一個 object&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         </item>
@@ -14010,667 +12829,6 @@ I3D 在 25 fps 的影片中用 64 frames 做訓練，使它能捕捉動作的 fi
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        </item>
-        <item>
-        <title>Q-learning</title>
-        <link>https://roykesydon.github.io/Blog/p/q-learning/</link>
-        <pubDate>Mon, 20 Feb 2023 16:21:23 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/p/q-learning/</guid>
-        <description>&lt;h2 id=&#34;rl-方法&#34;&gt;RL 方法&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Policy-based
-&lt;ul&gt;
-&lt;li&gt;learn 做事的 actor&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Value-based
-&lt;ul&gt;
-&lt;li&gt;不直接 learn policy，而是 Learn critic，負責批評&lt;/li&gt;
-&lt;li&gt;Q-learning 屬於這種&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;critic&#34;&gt;Critic&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;不直接決定 action&lt;/li&gt;
-&lt;li&gt;給予 actor $\pi$，評估 actor $\pi$ 有多好&lt;/li&gt;
-&lt;li&gt;critic 的 output 依賴於 actor 的表現&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;state-value-function&#34;&gt;State Value Function&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;State value function $V^{\pi}(s)$
-&lt;ul&gt;
-&lt;li&gt;用 actor $\pi$，看到 s 後玩到結束，cumulated reward expectation 是多少&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;評估方法&#34;&gt;評估方法&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Monte-Carlo(MC) based approach&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;critic 看 $\pi$ 玩遊戲&lt;/li&gt;
-&lt;li&gt;訓練一個 network，看到不同的 state ，輸出 cumulated reward(直到遊戲結束，以下稱為 $G_a$)，解 regression 問題&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Temporal-difference(TD) approach&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;MC 的方法至少要玩到遊戲結束才可以 update network，但有些遊戲超長
-&lt;ul&gt;
-&lt;li&gt;TD 只需要 {$s_t,a_t,r_t,s_{t+1}$}&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;$V^{\pi}(s_t)=V^{\pi}(s_{t+1})+r_t$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;MS v.s. TD&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;MC
-&lt;ul&gt;
-&lt;li&gt;Larger variance
-&lt;ul&gt;
-&lt;li&gt;每次的輸出差異很大&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;TD
-&lt;ul&gt;
-&lt;li&gt;smaller variance
-&lt;ul&gt;
-&lt;li&gt;相較 $G_a$ 較小，因為這邊的 random variable 是 r，但 $G_a$ 是由很多 r 組合而成&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;V 可能估得不準確
-&lt;ul&gt;
-&lt;li&gt;那 learn 出來的結果自然也不准&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;較常見&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;another-critic&#34;&gt;Another Critic&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;State-action value function $Q^\pi(s,a)$&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;又叫 Q function&lt;/li&gt;
-&lt;li&gt;當用 actor $\pi$ 時，在 state s 採取 a 這個 action 後的 cumulated reward expectation
-&lt;ul&gt;
-&lt;li&gt;有一個要注意的地方是，actor 看到 s 不一定會採取 a&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/q-learning/q-function.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/q-learning/how-to-use-q.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;只要有 Q function，就可以找到&amp;quot;更好的&amp;quot; policy，再替換掉原本的 policy
-&lt;ul&gt;
-&lt;li&gt;&amp;ldquo;更好的&amp;quot;定義
-&lt;ul&gt;
-&lt;li&gt;$V^{\pi^{&amp;rsquo;}} \ge V^{\pi}(s), \text{for all state s}$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;$\pi^{&amp;rsquo;}(s)=arg \underset{a}{max}Q^{\pi}(s,a)$
-&lt;ul&gt;
-&lt;li&gt;$\pi^{&amp;rsquo;}$ 沒有多餘的參數，就單純靠 Q function 推出來&lt;/li&gt;
-&lt;li&gt;這邊如果 a 是 continuous 的會有問題，等等解決&lt;/li&gt;
-&lt;li&gt;這樣就可以達到&amp;quot;更好的&amp;quot;policy，不過就不列證明了&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;basic-tip&#34;&gt;Basic Tip&lt;/h2&gt;
-&lt;h3 id=&#34;target-network&#34;&gt;Target network&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;在 training 的時候，把其中一個 Q 固定住，不然要學的 target 是不固定的，會不好 train&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/q-learning/target-network.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;h3 id=&#34;exploration&#34;&gt;Exploration&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;policy 完全 depend on Q function&lt;/li&gt;
-&lt;li&gt;如果 action 總是固定，這不是好的 data collection 方法，要在 s 採取 a 過，才比較好估計 Q(s, a)，如果 Q function 是 table 就根本不可能估出來，network 也會有一樣的問題，只是沒那麼嚴重。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;解法&#34;&gt;解法&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;Epsilon Greedy
-&lt;ul&gt;
-&lt;li&gt;$a=\begin{cases}
-arg \underset{a}{max}Q(s,a), &amp;amp; \text{with probability } 1-\varepsilon \\
-random, &amp;amp; otherwise
-\end{cases}$&lt;/li&gt;
-&lt;li&gt;通常 $\varepsilon$ 會隨時間遞減，因為你一開始 train 的時候不知道怎麼比較好&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Boltzmann Exploration
-&lt;ul&gt;
-&lt;li&gt;$P(a|s)=\frac{exp(Q(s,a))}{\sum_a exp(Q(s,a))}$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;replay-buffer&#34;&gt;Replay Buffer&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;把一堆的 {$s_t,a_t,r_t,s_{t+1}$} 存放在一個 buffer&lt;/li&gt;
-&lt;li&gt;{$s_t,a_t,r_t,s_{t+1}$} 簡稱為 exp&lt;/li&gt;
-&lt;li&gt;裡面的 exp 可能來自於不同的 policy&lt;/li&gt;
-&lt;li&gt;在 buffer 裝滿的時候才把舊的資料丟掉&lt;/li&gt;
-&lt;li&gt;每次從 buffer 隨機挑一個 batch 出來，update Q function&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;好處&#34;&gt;好處&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;跟環境作互動很花時間，這樣可以減少跟環境作互動的次數&lt;/li&gt;
-&lt;li&gt;本來就希望 batch 裡的 data 越 diverse 越好，不會希望 batch 裡的 data 都是同性質的&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;issue&#34;&gt;issue&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;我們要觀察 $\pi$ 的 value，混雜了一些不是 $\pi$ 的 exp 到底有沒有關係?
-&lt;ul&gt;
-&lt;li&gt;理論上沒問題，但李老師沒解釋&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;typical-q-learning-演算法&#34;&gt;Typical Q-learning 演算法&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;初始化 Q-fucntion Q，target Q-function $\hat{Q}=Q$&lt;/li&gt;
-&lt;li&gt;在每個 episode
-&lt;ul&gt;
-&lt;li&gt;對於每個 time step t
-&lt;ul&gt;
-&lt;li&gt;給 state $s_t$，根據 Q 執行 action $a_t$ (epsilon greedy)&lt;/li&gt;
-&lt;li&gt;獲得 reward $r_t$，到達 $s_{t+1}$&lt;/li&gt;
-&lt;li&gt;把 {$s_t,a_t,r_t,s_{t+1}$} 存到 buffer&lt;/li&gt;
-&lt;li&gt;從 buffer sample {$s_t,a_t,r_t,s_{t+1}$}(通常是一個 batch)&lt;/li&gt;
-&lt;li&gt;Target $y=r_i+\underset{a}{max}\hat{Q}(s_{i+1},a)$&lt;/li&gt;
-&lt;li&gt;Update Q 的參數，好讓 $Q(s_i,a_i)$ 更接近 y(regression)&lt;/li&gt;
-&lt;li&gt;每 C 步 reset $\hat{Q}=Q$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;adveanced-tip&#34;&gt;Adveanced Tip&lt;/h2&gt;
-&lt;h3 id=&#34;double-dqn&#34;&gt;Double DQN&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Q Value 往往被高估
-&lt;ul&gt;
-&lt;li&gt;我們的目的是要讓 $Q(s_t, a_t)$ 和 $r_t+\underset{a}{max}Q(s_{t+1},a)$ 越接近越好(後者就是 target)&lt;/li&gt;
-&lt;li&gt;target 常常不小心設太高，因為如果有 action 被高估了，就會選那個當 target&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Double DQN: 兩個函式 $Q$ 和 $Q^{&amp;rsquo;}$
-&lt;ul&gt;
-&lt;li&gt;把 target 換成  $r_t+Q^{&amp;rsquo;}(s_{t+1},arg \underset{a}{max}Q(s_{t+1},a))$&lt;/li&gt;
-&lt;li&gt;選 action 交給 $Q$，實際算交給 $Q^{&amp;rsquo;}$
-&lt;ul&gt;
-&lt;li&gt;如果 $Q$ 選了高估的 action，$Q^{&amp;rsquo;}$ 有可能修正回來&lt;/li&gt;
-&lt;li&gt;如果 $Q^{&amp;rsquo;}$ 高估，$Q$ 不一定會選到&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;$Q^{&amp;rsquo;}$ 是 target network(固定不動)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;dueling-dqn&#34;&gt;Dueling DQN&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;改變 network 架構&lt;/li&gt;
-&lt;li&gt;分成兩條 path
-&lt;ul&gt;
-&lt;li&gt;第一條算 scalar&lt;/li&gt;
-&lt;li&gt;第二條算 vector，每個 action 都有個 value&lt;/li&gt;
-&lt;li&gt;把 scalar 加到每一個維度&lt;/li&gt;
-&lt;li&gt;只更改到 V(s) 的時候，會全部的 action 都改到，可能會是一個比較有效率的方式，不用 sample 所有的 action
-&lt;ul&gt;
-&lt;li&gt;但有可能模型不管 V(s)，直接設 0，只改 A&lt;/li&gt;
-&lt;li&gt;所以會對 A 下 constrain，讓 network 傾向於改 V
-&lt;ul&gt;
-&lt;li&gt;比如同個 state 下的所有 action 要生出 A(s,a) 總和為 0
-&lt;ul&gt;
-&lt;li&gt;在 A 的輸出加個 normalization 即可辦到，這個 normalization 就是把每個維度都減掉平均&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/q-learning/dueling-dqn.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;h3 id=&#34;prioritized-replay&#34;&gt;Prioritized Replay&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;原本是 uniform 的從 buffer sample data&lt;/li&gt;
-&lt;li&gt;改讓 「有更大的 TD error」的 data 有更高的機率被 sample
-&lt;ul&gt;
-&lt;li&gt;TD error 就是 $Q(s_t, a_t)$ 和 target 的差距&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;實際在做的時候有額外的細節，不會只改 sampling 的 process，還要改 update 參數的方法&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;multi-step&#34;&gt;Multi-step&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Balance between MC 和 TD&lt;/li&gt;
-&lt;li&gt;TD 只需要存 {$s_t,a_t,r_t,s_{t+1}$}&lt;/li&gt;
-&lt;li&gt;改存 {$s_t,a_t,r_t,&amp;hellip;,s_{t+N},a_{t+N},r_{t+N}, s_{t+N+1}$}&lt;/li&gt;
-&lt;li&gt;我們的目的是要讓 $Q(s_t, a_t)$ 和 $\displaystyle\sum_{t^{&amp;rsquo;}=t}^{t+N} r_{t^{&amp;rsquo;}}+\hat{Q}(s_{t+N+1},a_{t+N+1})$ 越接近越好(後者就是 target)
-&lt;ul&gt;
-&lt;li&gt;$a_{t+N+1}=arg\underset{a}{max}\hat{Q}(s_{t+N+1},a)$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;同時有 MC 和 TD 的好處和壞處
-&lt;ul&gt;
-&lt;li&gt;估測的影響比較輕微&lt;/li&gt;
-&lt;li&gt;r 比較多項，variance 比較大&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;noisy-net&#34;&gt;Noisy Net&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;improve exploration&lt;/li&gt;
-&lt;li&gt;Noise on Action
-&lt;ul&gt;
-&lt;li&gt;Epsilon Greedy(之前的回顧)
-&lt;ul&gt;
-&lt;li&gt;$f_X(x) = \begin{cases}
-arg \underset{a}{max}Q(s,a), &amp;amp; \text{with probability }1-\varepsilon \\
-random, &amp;amp; ,otherwise
-\end{cases}$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;給同樣的 state，採取的 action 不一定一樣&lt;/li&gt;
-&lt;li&gt;沒有真實的 policy 會這樣運作&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Noise on Parameters
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;$a = arg \underset{a}{max}\tilde{Q}(s,a)$&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;在每個 episode 剛開始的時候，在 Q-function 的參數上面加上 gaussian noise&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;給同樣的 state，採取同樣的 action&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;叫做 state-dependent exploration&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;explore in a consistent way&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;distributional-q-function&#34;&gt;Distributional Q-function&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Q-function 生出的東西是 cumulated reward 的期望值
-&lt;ul&gt;
-&lt;li&gt;所以我們是在對 distribution 取 mean，但不同的 distribution 也可能有同樣的 mean&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;想做的事情是 model distribution&lt;/li&gt;
-&lt;li&gt;如果有做這個，就比較不會有 over estimate reward 的結果，反而容易 under estimate，使 double 比較沒用
-&lt;ul&gt;
-&lt;li&gt;output 的 range 不可能無限寬，超過邊界的 reward 會被丟掉&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;rainbow&#34;&gt;Rainbow&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;綜合一堆方法&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;continuous-actions&#34;&gt;Continuous actions&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Q learning 不容易處理 continuous action&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;solution&#34;&gt;Solution&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;sample n 個可能的 a，都丟 Q function 看誰最大&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;gradient descent&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;把 a 當作 parameter，要找一組 a 去 maximize Q function
-&lt;ul&gt;
-&lt;li&gt;運算量大，要 iterative 的 update a&lt;/li&gt;
-&lt;li&gt;不一定可以找到 global 的最佳解&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;特別設計 Q network，讓解 optimization 的問題變容易&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;範例
-&lt;ul&gt;
-&lt;li&gt;Q network 輸出 $\mu(s)$、$\Sigma(s)$、$V(s)$，個別是 vector、matrix、scalar&lt;/li&gt;
-&lt;li&gt;a 是 continuous 的 Action，是一個 vector，每個維度都是實數&lt;/li&gt;
-&lt;li&gt;$\Sigma(s)$ 是 positive definite 的，實作的時候會把 $\Sigma$ 和它的 transpose 相乘&lt;/li&gt;
-&lt;li&gt;$Q(s,a)=-(a-\mu(s))^T\Sigma(s)(a-\mu(s))+V(s)$&lt;/li&gt;
-&lt;li&gt;$(a-\mu(s))^T\Sigma(s)(a-\mu(s))$ 這項必為正，所以 $a=\mu(s)$ 的時候就是最佳解&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;不要用 Q-learning&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-</description>
-        </item>
-        <item>
-        <title>Proximal Policy Optimization(PPO)</title>
-        <link>https://roykesydon.github.io/Blog/p/proximal-policy-optimizationppo/</link>
-        <pubDate>Mon, 20 Feb 2023 12:35:56 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/p/proximal-policy-optimizationppo/</guid>
-        <description>&lt;h1 id=&#34;onoff-policy&#34;&gt;On/Off-policy&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;On-policy
-&lt;ul&gt;
-&lt;li&gt;學習的 agent 和與環境互動的 agent 是同一個&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Off-policy
-&lt;ul&gt;
-&lt;li&gt;學習的 agent 和與環境互動的 agent 是不同個&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;想從-on-policy-轉-off-policy&#34;&gt;想從 On-policy 轉 Off-policy&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;On-policy 每次都要重新蒐集資料，很花時間&lt;/li&gt;
-&lt;li&gt;由另一個 $\pi_{\theta^{&amp;rsquo;}}$ 去 train $\theta$，$\theta^{&amp;rsquo;}$是固定的，所以我們可以 re-use sample data&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;importance-sampling&#34;&gt;Importance Sampling&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;是一個 general 的想法，不限於 RL&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;$E_{x \text{\textasciitilde} p}[f(x)]\approx \frac{1}{N}\displaystyle\sum_{i=1}^N f(x^i)$&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;$x^i$ is sampled from p(x)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;我們遇到的問題是沒辦法從 p 來 sample data，只能透過 q(x) 去 sample $x^i$&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;可以把上式改寫成 $E_{x \text{\textasciitilde} p}[f(x)]=E_{x \text{\textasciitilde} q}[f(x)\frac{p(x)}{q(x)}]$&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;issue&#34;&gt;Issue&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;雖然理論上 q 可以任意選，只要不要 q(x) 是 0 的時候 p(x) 不是 0，實作上 p 和 q 不能差太多，不然會有問題&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;這兩項的 Variance 不一樣，如果 p 除以 q 差距很大，右邊的 Variance 會很大，如果 sample 不夠多次就會有問題&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/ppo/importance-sample-issue.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;轉換&#34;&gt;轉換&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;原本&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;$\triangledown \overline{R_{\theta}}=E_{\tau \text{\textasciitilde}p_{\theta}(\tau)}[R(\tau)\triangledown log p_{\theta} (\tau)]$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;改為&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;$\triangledown \overline{R_{\theta}}=E_{\tau \text{\textasciitilde}p_{\theta^{&amp;rsquo;}}(\tau)}[\frac{p_{\theta}(\tau)}{p_{\theta^{&amp;rsquo;}}(\tau)}R(\tau)\triangledown log p_{\theta} (\tau)]$&lt;/li&gt;
-&lt;li&gt;從 $\theta^{&amp;rsquo;}$ sample 資料&lt;/li&gt;
-&lt;li&gt;更新 $\theta$ 多次&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;advantage-function&#34;&gt;Advantage function&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;原本&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;$E_{(s_t,a_t)\text{\textasciitilde}\pi_{\theta}}[A^{\theta}(s_t,a_t)\triangledown log p_\theta(a_t^n|s_t^n)]$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;改為&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;$E_{(s_t,a_t)\text{\textasciitilde}\pi_{\theta^{&amp;rsquo;}}}[\frac{P_\theta(s_t,a_t)}{P_{\theta^{&amp;rsquo;}}(s_t,a_t)}A^{\theta^{&amp;rsquo;}}(s_t,a_t)\triangledown log p_\theta(a_t^n|s_t^n)]$&lt;/li&gt;
-&lt;li&gt;要注意 Advantage 的結果要由 $\theta^{&amp;rsquo;}$ 得出，是 $\theta^{&amp;rsquo;}$在和環境互動&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;新的 objective function&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;$J^{\theta^{&amp;rsquo;}}(\theta)=E_{(s_t,a_t)\text{\textasciitilde}\pi_{\theta^{&amp;rsquo;}}}[\frac{p_\theta(a_t|s_t)}{p_{\theta^{&amp;rsquo;}}(a_t|s_t)}A^{\theta^{&amp;rsquo;}}(s_t,a_t)]$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;ppo&#34;&gt;PPO&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;確保 $\theta$ 和 $\theta^{&amp;rsquo;}$ 不會差太多&lt;/li&gt;
-&lt;li&gt;$J_{PPO}^{\theta^{&amp;rsquo;}}(\theta)=J^{\theta^{&amp;rsquo;}}(\theta)-\beta KL(\theta, \theta^{&amp;rsquo;})$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;前身-trpo&#34;&gt;前身 TRPO&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Trust Region Policy Optimization&lt;/li&gt;
-&lt;li&gt;$J_{TRPO}^{\theta^{&amp;rsquo;}}(\theta)=E_{(s_t,a_t)\text{\textasciitilde}\pi_{\theta^{&amp;rsquo;}}}[\frac{p_\theta(a_t|s_t)}{p_{\theta^{&amp;rsquo;}}(a_t|s_t)}A^{\theta^{&amp;rsquo;}}(s_t,a_t)], KL(\theta, \theta^{&amp;rsquo;})&amp;lt;\delta$&lt;/li&gt;
-&lt;li&gt;constrain 很難處理&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;kl-divergence&#34;&gt;KL divergence&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;這邊不是 $\theta$ 和 $\theta^{&amp;rsquo;}$ 參數上的距離，而是 behavior 的距離
-&lt;ul&gt;
-&lt;li&gt;參數上的距離是指這兩個參數有多像&lt;/li&gt;
-&lt;li&gt;是給同樣的 state 生出 action 的 distribution 要像&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;algorithm&#34;&gt;algorithm&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;初始參數 $\theta^0$&lt;/li&gt;
-&lt;li&gt;每個 iteration
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;用 $\theta^k$ 和環境互動，蒐集{$s_t,a_t$}，並計算 advantage $A^{\theta^k}(s_t,a_t)$&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;找出 theta 最佳化 $J_{PPO}(\theta)$&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;$J_{PPO}^{\theta^{k}}(\theta)=J^{\theta^{k}}(\theta)-\beta KL(\theta, \theta^{k})$&lt;/li&gt;
-&lt;li&gt;可以更新很多次&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;動態調整 $\beta$&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Adaptive KL Penalty&lt;/li&gt;
-&lt;li&gt;設可接受的 KL 數值範圍&lt;/li&gt;
-&lt;li&gt;if $KL(\theta,\theta^k)&amp;gt;KL_{max},\text{increase} \beta$&lt;/li&gt;
-&lt;li&gt;if $KL(\theta,\theta^k)&amp;lt;KL_{min},\text{decrease} \beta$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;ppo2&#34;&gt;PPO2&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;PPO&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;$J_{PPO}^{\theta^{k}}(\theta)=J^{\theta^{k}}(\theta)-\beta KL(\theta, \theta^{k})$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;PPO2&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;$J_{PPO2}^{\theta^{k}}(\theta)\approx \displaystyle\sum_{(s_t,a_t)}min(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}A^{\theta^k}(s_t,a_t), \\
-clip(\frac{p_{\theta}(a_t|s_t)}{p_{\theta^k}(a_t|s_t)}, 1-\varepsilon, 1+\varepsilon)A^{\theta^k}(s_t,a_t))$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/ppo/ppo2.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        </item>
-        <item>
-        <title>Policy Gradient</title>
-        <link>https://roykesydon.github.io/Blog/p/policy-gradient/</link>
-        <pubDate>Sun, 19 Feb 2023 17:16:14 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/p/policy-gradient/</guid>
-        <description>&lt;h1 id=&#34;basic-components&#34;&gt;Basic Components&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;Actor
-&lt;ul&gt;
-&lt;li&gt;Policy $\pi$ is a network with parameter $\theta$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Env&lt;/li&gt;
-&lt;li&gt;Reward Function&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;trajectory&#34;&gt;Trajectory&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://roykesydon.github.io/Blog/Blog/images/drl/policy-gradient/aer.png&#34;
-	
-	
-	
-	loading=&#34;lazy&#34;
-	
-	
-&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;在一場遊戲，把 env 輸出的 s 和 actor 輸出的 a 串起來，是一個 Trajectory&lt;/li&gt;
-&lt;li&gt;Trajectory $\tau$ = {$s_1,a_1,s_2,a_2,&amp;hellip;,s_T,a_T$}&lt;/li&gt;
-&lt;li&gt;$p_{\theta}(\tau)=p(s_1)\displaystyle\prod_{t=1}^Tp_{\theta}(a_t|s_t)p(s_{t+1}|s_t,a_t)$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;update&#34;&gt;Update&lt;/h1&gt;
-&lt;p&gt;$\theta \leftarrow \theta + \eta \triangledown \overline{R}_{\theta}$&lt;/p&gt;
-&lt;p&gt;$\triangledown \overline{R_{\theta}} = \displaystyle\sum_{\tau} R(\tau) \triangledown p_{\theta} (\tau) \\
-=\frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}R(\tau^n)\triangledown log p_{\theta} (a_t^n|s_t^n)$&lt;/p&gt;
-&lt;h1 id=&#34;實作&#34;&gt;實作&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;常見公式
-&lt;ul&gt;
-&lt;li&gt;$\triangledown f(x)=f(x)\triangledown logf(x)$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;ol&gt;
-&lt;li&gt;用當前模型蒐集一堆 Trajectory&lt;/li&gt;
-&lt;li&gt;更新模型&lt;/li&gt;
-&lt;li&gt;回到第一步&lt;/li&gt;
-&lt;/ol&gt;
-&lt;ul&gt;
-&lt;li&gt;細節
-&lt;ul&gt;
-&lt;li&gt;做一個分類問題，把 state 當作分類器的 Input，把 action 當作分類器的 ground truth 作訓練&lt;/li&gt;
-&lt;li&gt;在實作分類問題的時候，objective function 都會寫成 minimize cross entropy，就是 maximize log likelihood&lt;/li&gt;
-&lt;li&gt;RL 和一般分類的區別是，要記得在 loss 前面乘上 $R(\tau^n)$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;tip&#34;&gt;Tip&lt;/h1&gt;
-&lt;ol&gt;
-&lt;li&gt;Add a Baseline
-&lt;ul&gt;
-&lt;li&gt;$R(\tau^n)$ 有可能永遠都為正
-&lt;ul&gt;
-&lt;li&gt;此時等於告訴 Model 說，今天不管是什麼 action，都要提高它的機率。不一定會有問題，因為雖然都是正的，但正的量有大有小，可能某些 action 上升的幅度會更大。因為我們是在做 sampling，不一定會 sample 到某些 action，本來想的情況是所有的 trajectory 都會出現才沒問題。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;解法: 希望 reward 不要總是正的
-&lt;ul&gt;
-&lt;li&gt;$\triangledown \overline{R_{\theta}}\approx \frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}(R(\tau^n)-b)\triangledown log p_{\theta}(a_t^n|s_t^n)$&lt;/li&gt;
-&lt;li&gt;$b \approx E[R(\tau)]$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Assign Suitable Credit
-&lt;ul&gt;
-&lt;li&gt;原本整場遊戲的所有 action 都會乘上 $R(\tau)$，但這不太公平，因為就算結果是好的，不代表所有 action 都是對的，反之亦然。在理想的情況下，如果 sample 夠多，就可以解決這問題。&lt;/li&gt;
-&lt;li&gt;解法
-&lt;ol&gt;
-&lt;li&gt;只計算從這個 action 後的 reward 總和
-&lt;ul&gt;
-&lt;li&gt;因為前面的 reward 和你做了什麼沒關係&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;接續解法 1，把比較未來的 reward 做 discount
-&lt;ul&gt;
-&lt;li&gt;乘某個小於 1 的 $\gamma^{t^{&amp;rsquo;}-t}$&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h1 id=&#34;advantage-function&#34;&gt;Advantage function&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;base 可以是 state-dependent，可以根據 network 得出，以後再說&lt;/li&gt;
-&lt;li&gt;$(Reward-b)$ 可以合起來看做 Advantage function $A^{\theta}(s_t,a_t)$
-&lt;ul&gt;
-&lt;li&gt;這邊 Reward 不管你是什麼形式，有沒有 discount。&lt;/li&gt;
-&lt;li&gt;它的意義是，這個 action 相較於其他的 action 有多好，而不是絕對好&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;這個 A 通常可以由某個類神經網路估計，那個類神經網路叫做 critic，以後講 Actor-Critic 的時候再說&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         </item>

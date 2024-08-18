@@ -52,116 +52,10 @@
 &lt;li&gt;每一步都得考慮周密&lt;/li&gt;
 &lt;li&gt;用戶很晚才能看到結果&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;v-model&#34;&gt;V-Model&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;基於 Waterfall Model 的改進&lt;/li&gt;
-&lt;li&gt;V 的左半邊
-&lt;ul&gt;
-&lt;li&gt;Requirement -&amp;gt; Design -&amp;gt; Architecture -&amp;gt; Module -&amp;gt; Implementation&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;V 的右半邊
-&lt;ul&gt;
-&lt;li&gt;Unit Testing -&amp;gt; Integration Testing -&amp;gt; System Testing -&amp;gt; Acceptance Testing&lt;/li&gt;
-&lt;li&gt;四個 testing 和左半邊的四個階段一一對應&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;強調開發和測試並行&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;sashimi-model&#34;&gt;Sashimi Model&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;在大公司，不同 phase 常常有專人負責&lt;/li&gt;
-&lt;li&gt;前面瀑布式開發，會讓後面 phase 的人閒置&lt;/li&gt;
-&lt;li&gt;讓不同 phase 的人在某些時間點同時工作&lt;/li&gt;
-&lt;li&gt;可能會導致錯誤還有 redesign&lt;/li&gt;
-&lt;/ul&gt;
 &lt;h2 id=&#34;incremental-model&#34;&gt;Incremental Model&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;在整個開發過程中多次完成軟體開發過程&lt;/li&gt;
 &lt;li&gt;每個子開發過程都有明確的目標&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;unified-process-framework&#34;&gt;Unified Process Framework&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Phase
-&lt;ul&gt;
-&lt;li&gt;Inception
-&lt;ul&gt;
-&lt;li&gt;確定可行性&lt;/li&gt;
-&lt;li&gt;Deliverable
-&lt;ul&gt;
-&lt;li&gt;Lifecycle goals&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Elaboration
-&lt;ul&gt;
-&lt;li&gt;細化階段&lt;/li&gt;
-&lt;li&gt;Deliverable
-&lt;ul&gt;
-&lt;li&gt;Software architecture plans &amp;amp; prototypes&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Construction
-&lt;ul&gt;
-&lt;li&gt;基於 elaboration 階段的基礎改進&lt;/li&gt;
-&lt;li&gt;用多個 iteration 來完成&lt;/li&gt;
-&lt;li&gt;Deliverable
-&lt;ul&gt;
-&lt;li&gt;持續改進軟體&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Transition
-&lt;ul&gt;
-&lt;li&gt;交付系統&lt;/li&gt;
-&lt;li&gt;Deliverable
-&lt;ul&gt;
-&lt;li&gt;Final Product&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;優點
-&lt;ul&gt;
-&lt;li&gt;Adaptive&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;缺點
-&lt;ul&gt;
-&lt;li&gt;複雜&lt;/li&gt;
-&lt;li&gt;對小專案來說太過頭&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;spiral-model&#34;&gt;Spiral Model&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;4 個象限
-&lt;ul&gt;
-&lt;li&gt;Determine objectives&lt;/li&gt;
-&lt;li&gt;Identify and resolve risks&lt;/li&gt;
-&lt;li&gt;Developments and test&lt;/li&gt;
-&lt;li&gt;Plan the next iteration&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;在 4 個階段不斷輪替&lt;/li&gt;
-&lt;li&gt;優點
-&lt;ul&gt;
-&lt;li&gt;adaptive&lt;/li&gt;
-&lt;li&gt;risk-focused&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;缺點
-&lt;ul&gt;
-&lt;li&gt;複雜&lt;/li&gt;
-&lt;li&gt;需要 stackholder 持續參與&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;agile&#34;&gt;Agile&lt;/h2&gt;
 &lt;ul&gt;
@@ -236,41 +130,6 @@
 &lt;li&gt;Develop&lt;/li&gt;
 &lt;li&gt;Test&lt;/li&gt;
 &lt;li&gt;Release&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;lean-startup&#34;&gt;Lean Startup&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;實驗性的生產方法&lt;/li&gt;
-&lt;li&gt;盡快生出產品，看看市場反應&lt;/li&gt;
-&lt;li&gt;loop step
-&lt;ul&gt;
-&lt;li&gt;learn
-&lt;ul&gt;
-&lt;li&gt;assumption&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;build
-&lt;ul&gt;
-&lt;li&gt;experiment&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;measure
-&lt;ul&gt;
-&lt;li&gt;metrics&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;example:
-&lt;ul&gt;
-&lt;li&gt;zappos
-&lt;ul&gt;
-&lt;li&gt;假設人們會上網買鞋&lt;/li&gt;
-&lt;li&gt;拍鞋子照片，建立網站丟上去&lt;/li&gt;
-&lt;li&gt;看有多少人會買&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -536,7 +395,11 @@
 &lt;li&gt;用來測試系統的輸入&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Test case&lt;/li&gt;
+&lt;li&gt;Test case
+&lt;ul&gt;
+&lt;li&gt;包含測試步驟, 預期結果, 測試資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;Oracle
 &lt;ul&gt;
 &lt;li&gt;理想的結果&lt;/li&gt;
@@ -566,23 +429,53 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;verification-and-validation&#34;&gt;Verification and Validation&lt;/h2&gt;
-&lt;ul&gt;
 &lt;li&gt;Verification
 &lt;ul&gt;
 &lt;li&gt;確認系統是否符合 specifcation&lt;/li&gt;
-&lt;li&gt;build the system right&lt;/li&gt;
+&lt;li&gt;這裡出問題是工程師的錯&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Validation
 &lt;ul&gt;
 &lt;li&gt;確認系統是否符合使用者需求&lt;/li&gt;
-&lt;li&gt;build the right system&lt;/li&gt;
+&lt;li&gt;這裡出問題代表產品目標有錯&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Stub
+&lt;ul&gt;
+&lt;li&gt;用來代替其他 component 的 template，會回傳 hard-coded value&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Mock
+&lt;ul&gt;
+&lt;li&gt;用來代替其他 component 的 template，會回傳預先設定的值，而且會檢查調用的次數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Driver
+&lt;ul&gt;
+&lt;li&gt;用來執行 commands 還有初始化變數的 template&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;unit-testing&#34;&gt;Unit Testing&lt;/h2&gt;
+&lt;h2 id=&#34;test-coverage&#34;&gt;Test coverage&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;line coverage
+&lt;ul&gt;
+&lt;li&gt;根據程式碼實際執行的程式碼行數來計算&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;branch coverage
+&lt;ul&gt;
+&lt;li&gt;檢查程式碼是不是不同的可能都跑過
+&lt;ul&gt;
+&lt;li&gt;考慮 if, switch&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;testing-types&#34;&gt;Testing Types&lt;/h2&gt;
+&lt;h3 id=&#34;unit-testing&#34;&gt;Unit Testing&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;專注在測試 smallest unit of software&lt;/li&gt;
 &lt;li&gt;要 isolate unit，避免其他 unit 影響測試結果
@@ -591,7 +484,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;integration-testing&#34;&gt;Integration Testing&lt;/h2&gt;
+&lt;h3 id=&#34;integration-testing&#34;&gt;Integration Testing&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;專注在測試 communication 和 architecture&lt;/li&gt;
 &lt;li&gt;type
@@ -599,6 +492,7 @@
 &lt;li&gt;non-incremental
 &lt;ul&gt;
 &lt;li&gt;一次測試所有 component，測試整個應用程式&lt;/li&gt;
+&lt;li&gt;Big Bang Testing&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;incremental
@@ -606,29 +500,11 @@
 &lt;li&gt;每次新增一個 module，做一些測試，反覆執行&lt;/li&gt;
 &lt;li&gt;Top-Down Testing
 &lt;ul&gt;
-&lt;li&gt;用詞
-&lt;ul&gt;
-&lt;li&gt;Stub
-&lt;ul&gt;
-&lt;li&gt;將要實現的 model 的 template，通常是 hard-coded value&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;li&gt;從最上層開始，下面調用的部分用 stub 代替&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Bottom-Up Testing
 &lt;ul&gt;
-&lt;li&gt;用詞
-&lt;ul&gt;
-&lt;li&gt;Driver
-&lt;ul&gt;
-&lt;li&gt;用來執行 commands 還有初始化變數的 template&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;li&gt;從最底層開始，上面呼叫的部分用 driver 代替&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
@@ -657,17 +533,20 @@
 &lt;/li&gt;
 &lt;li&gt;Cause-Effect Graph
 &lt;ul&gt;
+&lt;li&gt;一種設計 Test Case 的方法&lt;/li&gt;
+&lt;li&gt;又稱為 fishbone diagram&lt;/li&gt;
 &lt;li&gt;不同的 cause 會導致不同的 effect&lt;/li&gt;
+&lt;li&gt;最後會有一個 table 來表示所有可能輸入的組合會對應到什麼結果&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Pair-wise Testing
 &lt;ul&gt;
-&lt;li&gt;多個參數一起測試好確認所有條件&lt;/li&gt;
+&lt;li&gt;測試多個參數的可能組合&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;State-based Testing
 &lt;ul&gt;
-&lt;li&gt;測試輸入，確認 state 改變的情形&lt;/li&gt;
+&lt;li&gt;測試不同狀態下的輸入，確認 state 改變的情形&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -683,272 +562,6 @@
 &lt;li&gt;Data Flow Testing
 &lt;ul&gt;
 &lt;li&gt;test case 要涵蓋所有的變數，包含 declaration 和 use&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        </item>
-        <item>
-        <title>Design</title>
-        <link>https://roykesydon.github.io/Blog/p/design/</link>
-        <pubDate>Thu, 27 Jun 2024 00:00:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/p/design/</guid>
-        <description>&lt;h2 id=&#34;modularity&#34;&gt;Modularity&lt;/h2&gt;
-&lt;h3 id=&#34;coupling&#34;&gt;Coupling&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;type
-&lt;ul&gt;
-&lt;li&gt;Tight coupling
-&lt;ul&gt;
-&lt;li&gt;Content coupling
-&lt;ul&gt;
-&lt;li&gt;一個模組依賴另一個模組的內部運作&lt;/li&gt;
-&lt;li&gt;ex: 一個模組直接存取另一個模組的變數，假設回傳的數值是公尺，如果另一個模組要修改成公分，就會影響到這個模組
-&lt;ul&gt;
-&lt;li&gt;可以用 getter 抽象出 getMeter()，這樣就不會直接存取變數&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Common coupling
-&lt;ul&gt;
-&lt;li&gt;多個模組共同存取和修改同個 global data&lt;/li&gt;
-&lt;li&gt;ex: 一個模組錯誤修改會導致其他人都壞掉&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;External coupling
-&lt;ul&gt;
-&lt;li&gt;多個模組直接存取同個 external I/O&lt;/li&gt;
-&lt;li&gt;ex: API 要改就會全部都影響到&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Medium coupling
-&lt;ul&gt;
-&lt;li&gt;Control coupling
-&lt;ul&gt;
-&lt;li&gt;一個模組影響另一個模組的內部邏輯（比如說透過參數）&lt;/li&gt;
-&lt;li&gt;ex: 參數要改個寫法就會影響一堆模組&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Data-Sructure coupling
-&lt;ul&gt;
-&lt;li&gt;多個模組共同存取同個 data structure&lt;/li&gt;
-&lt;li&gt;ex: Data structure 要改就會影響到其他模組&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Loose coupling
-&lt;ul&gt;
-&lt;li&gt;Data Coupling
-&lt;ul&gt;
-&lt;li&gt;兩個模組 share/pass 同樣的資料&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Message Coupling
-&lt;ul&gt;
-&lt;li&gt;多個模組間透過 message 或是 command 來溝通&lt;/li&gt;
-&lt;li&gt;和 control coupling 的差別在於，並沒有去控制某個模組，只是叫他做某件事情&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;No Coupling
-&lt;ul&gt;
-&lt;li&gt;不是好的設計&lt;/li&gt;
-&lt;li&gt;模組間沒有關聯，或是有個超巨大的模組&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;cohesion&#34;&gt;Cohesion&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;type
-&lt;ul&gt;
-&lt;li&gt;Weak cohesion
-&lt;ul&gt;
-&lt;li&gt;Coincidental cohesion
-&lt;ul&gt;
-&lt;li&gt;唯一的關聯是他們在同個檔案&lt;/li&gt;
-&lt;li&gt;ex: single file program&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Temporal cohesion
-&lt;ul&gt;
-&lt;li&gt;關聯的地方是他們在同個時間點被執行&lt;/li&gt;
-&lt;li&gt;ex: 「執行 shutdown  相關的活動」&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Logical cohesion
-&lt;ul&gt;
-&lt;li&gt;活動間可以被歸類在同個 general category&lt;/li&gt;
-&lt;li&gt;ex: Backup Controller，可能有很多地方需要 Backup&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Medium cohesion
-&lt;ul&gt;
-&lt;li&gt;Procedureal cohesion
-&lt;ul&gt;
-&lt;li&gt;command 間存在執行順序&lt;/li&gt;
-&lt;li&gt;ex: Clean car module 可能包含噴水、填表格、擦乾等等
-&lt;ul&gt;
-&lt;li&gt;但是 Clean car module 此處包含了操控財務資料的狀況&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Communicational cohesion
-&lt;ul&gt;
-&lt;li&gt;所有的 activities 都支援相同的 input/output&lt;/li&gt;
-&lt;li&gt;ex: 提取文章的作者、提取文章的標題、提取文章的內容&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Sequential cohesion
-&lt;ul&gt;
-&lt;li&gt;某個 activities 的輸出是另一個 activities 的輸入，且具有順序性&lt;/li&gt;
-&lt;li&gt;Procedureal cohesion 和 Communicational cohesion 的結合&lt;/li&gt;
-&lt;li&gt;這個沒那麼糟糕&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Strong cohesion
-&lt;ul&gt;
-&lt;li&gt;Functional cohesion
-&lt;ul&gt;
-&lt;li&gt;Module 只支援只和一個問題相關的 activities&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Object cohesion
-&lt;ul&gt;
-&lt;li&gt;所有的 activities 都只會修改一個 object&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        </item>
-        <item>
-        <title>Requirements &amp; Specifications</title>
-        <link>https://roykesydon.github.io/Blog/p/requirements-specifications/</link>
-        <pubDate>Wed, 26 Jun 2024 00:00:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/p/requirements-specifications/</guid>
-        <description>&lt;h2 id=&#34;definition&#34;&gt;definition&lt;/h2&gt;
-&lt;h3 id=&#34;requirement&#34;&gt;Requirement&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;找出系統目標的過程&lt;/li&gt;
-&lt;li&gt;系統需求的 non-technical definition&lt;/li&gt;
-&lt;li&gt;應該要可以被任何人理解&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;specification&#34;&gt;Specification&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;系統需求的 technical definition&lt;/li&gt;
-&lt;li&gt;盡量保持簡單，不是要 design&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;functional--non-functional-requirement&#34;&gt;Functional / Non-Functional Requirement&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Functional Requirement
-&lt;ul&gt;
-&lt;li&gt;系統應該要做什麼 (What)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Non-Functional Requirement
-&lt;ul&gt;
-&lt;li&gt;系統應該要怎麼做 (How)&lt;/li&gt;
-&lt;li&gt;專注在 user experience&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;wrspm&#34;&gt;WRSPM&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;用來理解 requirements, specifications 和 real world 之間的關聯的 reference model&lt;/li&gt;
-&lt;li&gt;part
-&lt;ul&gt;
-&lt;li&gt;World
-&lt;ul&gt;
-&lt;li&gt;現實世界的假設&lt;/li&gt;
-&lt;li&gt;ex: 有沒有網路？網速多快？使用者會自備 1 吋照片？&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Requirements&lt;/li&gt;
-&lt;li&gt;Specifications&lt;/li&gt;
-&lt;li&gt;Program
-&lt;ul&gt;
-&lt;li&gt;code 本身&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Machine
-&lt;ul&gt;
-&lt;li&gt;硬體&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;WRSPM Variables
-&lt;ul&gt;
-&lt;li&gt;Eh (Environment hidden)
-&lt;ul&gt;
-&lt;li&gt;Environment 中的元素，對 system 是不可見（隱藏）的&lt;/li&gt;
-&lt;li&gt;ex: ATM 卡本身&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Ev (Environment visible)
-&lt;ul&gt;
-&lt;li&gt;Environment 中的元素，對 system 是可見的&lt;/li&gt;
-&lt;li&gt;ex: ATM 卡的晶片&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Sv (System visible)
-&lt;ul&gt;
-&lt;li&gt;System 中的元素，對 environment 是可見的&lt;/li&gt;
-&lt;li&gt;ex: ATM 機的螢幕（UI）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Sh (System hidden)
-&lt;ul&gt;
-&lt;li&gt;System 中的元素，對 environment 是不可見的&lt;/li&gt;
-&lt;li&gt;ex: ATM 機連接的後端系統&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;WRSPM visual model
-&lt;ul&gt;
-&lt;li&gt;分成 Environment 和 System，中間交界是 Interface
-&lt;ul&gt;
-&lt;li&gt;Environment
-&lt;ul&gt;
-&lt;li&gt;World&lt;/li&gt;
-&lt;li&gt;Requirements&lt;/li&gt;
-&lt;li&gt;Eh&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Interface
-&lt;ul&gt;
-&lt;li&gt;Specifications&lt;/li&gt;
-&lt;li&gt;Ev&lt;/li&gt;
-&lt;li&gt;Sv&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;System
-&lt;ul&gt;
-&lt;li&gt;Program&lt;/li&gt;
-&lt;li&gt;Machine&lt;/li&gt;
-&lt;li&gt;Sh&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1379,11 +992,11 @@ Decorator 和 Component 都繼承同一個 interface。
 </description>
         </item>
         <item>
-        <title>軟體設計原則</title>
-        <link>https://roykesydon.github.io/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88%E5%8E%9F%E5%89%87/</link>
+        <title>軟體設計 - Low Level</title>
+        <link>https://roykesydon.github.io/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88-low-level/</link>
         <pubDate>Wed, 08 Mar 2023 14:26:17 +0800</pubDate>
         
-        <guid>https://roykesydon.github.io/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88%E5%8E%9F%E5%89%87/</guid>
+        <guid>https://roykesydon.github.io/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88-low-level/</guid>
         <description>&lt;h2 id=&#34;uml-類別圖&#34;&gt;UML 類別圖&lt;/h2&gt;
 &lt;h3 id=&#34;relationship&#34;&gt;Relationship&lt;/h3&gt;
 &lt;ul&gt;
@@ -1484,6 +1097,147 @@ Decorator 和 Component 都繼承同一個 interface。
 &lt;ul&gt;
 &lt;li&gt;反向依賴原則&lt;/li&gt;
 &lt;li&gt;高階模組不應該依賴低階模組，兩者都應依賴抽象層&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;modularity&#34;&gt;Modularity&lt;/h2&gt;
+&lt;h3 id=&#34;coupling&#34;&gt;Coupling&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;type
+&lt;ul&gt;
+&lt;li&gt;Tight coupling
+&lt;ul&gt;
+&lt;li&gt;Content coupling
+&lt;ul&gt;
+&lt;li&gt;一個模組依賴另一個模組的內部運作&lt;/li&gt;
+&lt;li&gt;ex: 一個模組直接存取另一個模組的變數，假設回傳的數值是公尺，如果另一個模組要修改成公分，就會影響到這個模組
+&lt;ul&gt;
+&lt;li&gt;可以用 getter 抽象出 getMeter()，這樣就不會直接存取變數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Common coupling
+&lt;ul&gt;
+&lt;li&gt;多個模組共同存取和修改同個 global data&lt;/li&gt;
+&lt;li&gt;ex: 一個模組錯誤修改會導致其他人都壞掉&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;External coupling
+&lt;ul&gt;
+&lt;li&gt;多個模組直接存取同個 external I/O&lt;/li&gt;
+&lt;li&gt;ex: API 要改就會全部都影響到&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Medium coupling
+&lt;ul&gt;
+&lt;li&gt;Control coupling
+&lt;ul&gt;
+&lt;li&gt;一個模組影響另一個模組的內部邏輯（比如說透過參數）&lt;/li&gt;
+&lt;li&gt;ex: 參數要改個寫法就會影響一堆模組&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Data-Sructure coupling
+&lt;ul&gt;
+&lt;li&gt;多個模組共同存取同個 data structure&lt;/li&gt;
+&lt;li&gt;ex: Data structure 要改就會影響到其他模組&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Loose coupling
+&lt;ul&gt;
+&lt;li&gt;Data Coupling
+&lt;ul&gt;
+&lt;li&gt;兩個模組 share/pass 同樣的資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Message Coupling
+&lt;ul&gt;
+&lt;li&gt;多個模組間透過 message 或是 command 來溝通&lt;/li&gt;
+&lt;li&gt;和 control coupling 的差別在於，並沒有去控制某個模組，只是叫他做某件事情&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;No Coupling
+&lt;ul&gt;
+&lt;li&gt;不是好的設計&lt;/li&gt;
+&lt;li&gt;模組間沒有關聯，或是有個超巨大的模組&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;cohesion&#34;&gt;Cohesion&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;type
+&lt;ul&gt;
+&lt;li&gt;Weak cohesion
+&lt;ul&gt;
+&lt;li&gt;Coincidental cohesion
+&lt;ul&gt;
+&lt;li&gt;唯一的關聯是他們在同個檔案&lt;/li&gt;
+&lt;li&gt;ex: single file program&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Temporal cohesion
+&lt;ul&gt;
+&lt;li&gt;關聯的地方是他們在同個時間點被執行&lt;/li&gt;
+&lt;li&gt;ex: 「執行 shutdown  相關的活動」&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Logical cohesion
+&lt;ul&gt;
+&lt;li&gt;活動間可以被歸類在同個 general category&lt;/li&gt;
+&lt;li&gt;ex: Backup Controller，可能有很多地方需要 Backup&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Medium cohesion
+&lt;ul&gt;
+&lt;li&gt;Procedureal cohesion
+&lt;ul&gt;
+&lt;li&gt;command 間存在執行順序&lt;/li&gt;
+&lt;li&gt;ex: Clean car module 可能包含噴水、填表格、擦乾等等
+&lt;ul&gt;
+&lt;li&gt;但是 Clean car module 此處包含了操控財務資料的狀況&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Communicational cohesion
+&lt;ul&gt;
+&lt;li&gt;所有的 activities 都支援相同的 input/output&lt;/li&gt;
+&lt;li&gt;ex: 提取文章的作者、提取文章的標題、提取文章的內容&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Sequential cohesion
+&lt;ul&gt;
+&lt;li&gt;某個 activities 的輸出是另一個 activities 的輸入，且具有順序性&lt;/li&gt;
+&lt;li&gt;Procedureal cohesion 和 Communicational cohesion 的結合&lt;/li&gt;
+&lt;li&gt;這個沒那麼糟糕&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Strong cohesion
+&lt;ul&gt;
+&lt;li&gt;Functional cohesion
+&lt;ul&gt;
+&lt;li&gt;Module 只支援只和一個問題相關的 activities&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Object cohesion
+&lt;ul&gt;
+&lt;li&gt;所有的 activities 都只會修改一個 object&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         </item>

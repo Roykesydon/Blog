@@ -7,7 +7,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/testing/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.470bcd2ecfa95764c963f1851df6bfb094cb63af31763195fefeddbe50f11de2.css"><meta property='og:title' content='Testing'>
+<link rel="stylesheet" href="/Blog/scss/style.min.042974887bb3db8b0f3797238c0087805caf10a20d031e17867135982fedeea0.css"><meta property='og:title' content='Testing'>
 <meta property='og:description' content='關於測試的基本概念'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/testing/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -311,9 +311,13 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
             <nav id="TableOfContents">
   <ol>
     <li><a href="#通用術語">通用術語</a></li>
-    <li><a href="#verification-and-validation">Verification and Validation</a></li>
-    <li><a href="#unit-testing">Unit Testing</a></li>
-    <li><a href="#integration-testing">Integration Testing</a></li>
+    <li><a href="#test-coverage">Test coverage</a></li>
+    <li><a href="#testing-types">Testing Types</a>
+      <ol>
+        <li><a href="#unit-testing">Unit Testing</a></li>
+        <li><a href="#integration-testing">Integration Testing</a></li>
+      </ol>
+    </li>
     <li><a href="#black-box-vs-white-box-testing">Black Box vs White Box Testing</a></li>
   </ol>
 </nav>
@@ -414,7 +418,11 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>用來測試系統的輸入</li>
 </ul>
 </li>
-<li>Test case</li>
+<li>Test case
+<ul>
+<li>包含測試步驟, 預期結果, 測試資料</li>
+</ul>
+</li>
 <li>Oracle
 <ul>
 <li>理想的結果</li>
@@ -444,23 +452,53 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </li>
 </ul>
 </li>
-</ul>
-<h2 id="verification-and-validation">Verification and Validation</h2>
-<ul>
 <li>Verification
 <ul>
 <li>確認系統是否符合 specifcation</li>
-<li>build the system right</li>
+<li>這裡出問題是工程師的錯</li>
 </ul>
 </li>
 <li>Validation
 <ul>
 <li>確認系統是否符合使用者需求</li>
-<li>build the right system</li>
+<li>這裡出問題代表產品目標有錯</li>
+</ul>
+</li>
+<li>Stub
+<ul>
+<li>用來代替其他 component 的 template，會回傳 hard-coded value</li>
+</ul>
+</li>
+<li>Mock
+<ul>
+<li>用來代替其他 component 的 template，會回傳預先設定的值，而且會檢查調用的次數</li>
+</ul>
+</li>
+<li>Driver
+<ul>
+<li>用來執行 commands 還有初始化變數的 template</li>
 </ul>
 </li>
 </ul>
-<h2 id="unit-testing">Unit Testing</h2>
+<h2 id="test-coverage">Test coverage</h2>
+<ul>
+<li>line coverage
+<ul>
+<li>根據程式碼實際執行的程式碼行數來計算</li>
+</ul>
+</li>
+<li>branch coverage
+<ul>
+<li>檢查程式碼是不是不同的可能都跑過
+<ul>
+<li>考慮 if, switch&hellip;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="testing-types">Testing Types</h2>
+<h3 id="unit-testing">Unit Testing</h3>
 <ul>
 <li>專注在測試 smallest unit of software</li>
 <li>要 isolate unit，避免其他 unit 影響測試結果
@@ -469,7 +507,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </ul>
 </li>
 </ul>
-<h2 id="integration-testing">Integration Testing</h2>
+<h3 id="integration-testing">Integration Testing</h3>
 <ul>
 <li>專注在測試 communication 和 architecture</li>
 <li>type
@@ -477,6 +515,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>non-incremental
 <ul>
 <li>一次測試所有 component，測試整個應用程式</li>
+<li>Big Bang Testing</li>
 </ul>
 </li>
 <li>incremental
@@ -484,29 +523,11 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>每次新增一個 module，做一些測試，反覆執行</li>
 <li>Top-Down Testing
 <ul>
-<li>用詞
-<ul>
-<li>Stub
-<ul>
-<li>將要實現的 model 的 template，通常是 hard-coded value</li>
-</ul>
-</li>
-</ul>
-</li>
 <li>從最上層開始，下面調用的部分用 stub 代替</li>
 </ul>
 </li>
 <li>Bottom-Up Testing
 <ul>
-<li>用詞
-<ul>
-<li>Driver
-<ul>
-<li>用來執行 commands 還有初始化變數的 template</li>
-</ul>
-</li>
-</ul>
-</li>
 <li>從最底層開始，上面呼叫的部分用 driver 代替</li>
 </ul>
 </li>
@@ -535,17 +556,20 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </li>
 <li>Cause-Effect Graph
 <ul>
+<li>一種設計 Test Case 的方法</li>
+<li>又稱為 fishbone diagram</li>
 <li>不同的 cause 會導致不同的 effect</li>
+<li>最後會有一個 table 來表示所有可能輸入的組合會對應到什麼結果</li>
 </ul>
 </li>
 <li>Pair-wise Testing
 <ul>
-<li>多個參數一起測試好確認所有條件</li>
+<li>測試多個參數的可能組合</li>
 </ul>
 </li>
 <li>State-based Testing
 <ul>
-<li>測試輸入，確認 state 改變的情形</li>
+<li>測試不同狀態下的輸入，確認 state 改變的情形</li>
 </ul>
 </li>
 </ul>
@@ -635,32 +659,6 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
             
                 
 <article class="">
-    <a href="/Blog/p/design/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Design</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/requirements-specifications/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Requirements &amp; Specifications</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
     <a href="/Blog/p/%E8%A8%AD%E8%A8%88%E6%A8%A1%E5%BC%8F-desing-pattern/">
         
         
@@ -680,6 +678,32 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 
         <div class="article-details">
             <h2 class="article-title">領域驅動設計 Domain-Driven Design</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E9%87%8D%E6%A7%8B-refactoring/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">重構 Refactoring</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88-low-level/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">軟體設計 - Low Level</h2>
         </div>
     </a>
 </article>

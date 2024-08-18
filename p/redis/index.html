@@ -2,30 +2,18 @@
 <html lang="en-us" dir="ltr">
 
 <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Use Cases Cache 把常用的資料回傳，省略長時間的 IO 操作 Shared Session 在 stateless server 間共享 session Distributed lock 用在程式間想共用某種資源的時候 用 setnx (set if not exists) atomic Rate Limiter 用 increment 和 expiration 實現 Feature NoSQL In-memory Key-Value Basic Command redis-server default port: 6379 redis-cli Access data set &amp;lt;key&amp;gt; &amp;lt;value&amp;gt;
-Pretty much everything stored in Redis is going to be a type of string by default get &amp;lt;key&amp;gt;
-del &amp;lt;key&amp;gt;
-exists &amp;lt;key&amp;gt;
-keys &amp;lt;pattern&amp;gt;'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Use Cases Cache 把常用的資料回傳，省略長時間的 IO 操作 Shared Session 在 stateless server 間共享 session Distributed lock 用在程式間想共用某種資源的時候 用 setnx (set if not exists) atomic Rate Limiter 用 increment 和 expiration 實現 快取常見策略 cache aside 先問 cache，沒有的話再問 db，並把 db 回傳的資料放到 cache read through client 只能存取到 cache，如果沒資料，cache 會去 db 拿資料 write through client 寫資料時，cache 會留一份資料，並把資料寫到 db write behind 和 write through 很像，但是不會立即寫到 db，會等到有更多的資料時，才一次寫到 db Feature NoSQL In-memory Key-Value Basic Command redis-server default port: 6379 redis-cli Access data set &amp;lt;key&amp;gt; &amp;lt;value&amp;gt;'>
 <title>Redis</title>
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/redis/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.470bcd2ecfa95764c963f1851df6bfb094cb63af31763195fefeddbe50f11de2.css"><meta property='og:title' content='Redis'>
-<meta property='og:description' content='Use Cases Cache 把常用的資料回傳，省略長時間的 IO 操作 Shared Session 在 stateless server 間共享 session Distributed lock 用在程式間想共用某種資源的時候 用 setnx (set if not exists) atomic Rate Limiter 用 increment 和 expiration 實現 Feature NoSQL In-memory Key-Value Basic Command redis-server default port: 6379 redis-cli Access data set &amp;lt;key&amp;gt; &amp;lt;value&amp;gt;
-Pretty much everything stored in Redis is going to be a type of string by default get &amp;lt;key&amp;gt;
-del &amp;lt;key&amp;gt;
-exists &amp;lt;key&amp;gt;
-keys &amp;lt;pattern&amp;gt;'>
+<link rel="stylesheet" href="/Blog/scss/style.min.042974887bb3db8b0f3797238c0087805caf10a20d031e17867135982fedeea0.css"><meta property='og:title' content='Redis'>
+<meta property='og:description' content='Use Cases Cache 把常用的資料回傳，省略長時間的 IO 操作 Shared Session 在 stateless server 間共享 session Distributed lock 用在程式間想共用某種資源的時候 用 setnx (set if not exists) atomic Rate Limiter 用 increment 和 expiration 實現 快取常見策略 cache aside 先問 cache，沒有的話再問 db，並把 db 回傳的資料放到 cache read through client 只能存取到 cache，如果沒資料，cache 會去 db 拿資料 write through client 寫資料時，cache 會留一份資料，並把資料寫到 db write behind 和 write through 很像，但是不會立即寫到 db，會等到有更多的資料時，才一次寫到 db Feature NoSQL In-memory Key-Value Basic Command redis-server default port: 6379 redis-cli Access data set &amp;lt;key&amp;gt; &amp;lt;value&amp;gt;'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/redis/'>
 <meta property='og:site_name' content='Roykesydon'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='database' /><meta property='article:tag' content='nosql' /><meta property='article:tag' content='cache' /><meta property='article:published_time' content='2023-06-05T00:00:17&#43;08:00'/><meta property='article:modified_time' content='2023-06-05T00:00:17&#43;08:00'/>
 <meta name="twitter:title" content="Redis">
-<meta name="twitter:description" content="Use Cases Cache 把常用的資料回傳，省略長時間的 IO 操作 Shared Session 在 stateless server 間共享 session Distributed lock 用在程式間想共用某種資源的時候 用 setnx (set if not exists) atomic Rate Limiter 用 increment 和 expiration 實現 Feature NoSQL In-memory Key-Value Basic Command redis-server default port: 6379 redis-cli Access data set &amp;lt;key&amp;gt; &amp;lt;value&amp;gt;
-Pretty much everything stored in Redis is going to be a type of string by default get &amp;lt;key&amp;gt;
-del &amp;lt;key&amp;gt;
-exists &amp;lt;key&amp;gt;
-keys &amp;lt;pattern&amp;gt;">
+<meta name="twitter:description" content="Use Cases Cache 把常用的資料回傳，省略長時間的 IO 操作 Shared Session 在 stateless server 間共享 session Distributed lock 用在程式間想共用某種資源的時候 用 setnx (set if not exists) atomic Rate Limiter 用 increment 和 expiration 實現 快取常見策略 cache aside 先問 cache，沒有的話再問 db，並把 db 回傳的資料放到 cache read through client 只能存取到 cache，如果沒資料，cache 會去 db 拿資料 write through client 寫資料時，cache 會留一份資料，並把資料寫到 db write behind 和 write through 很像，但是不會立即寫到 db，會等到有更多的資料時，才一次寫到 db Feature NoSQL In-memory Key-Value Basic Command redis-server default port: 6379 redis-cli Access data set &amp;lt;key&amp;gt; &amp;lt;value&amp;gt;">
     <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
 
 </head>
@@ -323,6 +311,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
             <nav id="TableOfContents">
   <ol>
     <li><a href="#use-cases">Use Cases</a></li>
+    <li><a href="#快取常見策略">快取常見策略</a></li>
     <li><a href="#feature">Feature</a></li>
     <li><a href="#basic-command">Basic Command</a>
       <ol>
@@ -485,6 +474,29 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </ul>
 </li>
 </ol>
+<h2 id="快取常見策略">快取常見策略</h2>
+<ul>
+<li>cache aside
+<ul>
+<li>先問 cache，沒有的話再問 db，並把 db 回傳的資料放到 cache</li>
+</ul>
+</li>
+<li>read through
+<ul>
+<li>client 只能存取到 cache，如果沒資料，cache 會去 db 拿資料</li>
+</ul>
+</li>
+<li>write through
+<ul>
+<li>client 寫資料時，cache 會留一份資料，並把資料寫到 db</li>
+</ul>
+</li>
+<li>write behind
+<ul>
+<li>和 write through 很像，但是不會立即寫到 db，會等到有更多的資料時，才一次寫到 db</li>
+</ul>
+</li>
+</ul>
 <h2 id="feature">Feature</h2>
 <ul>
 <li>NoSQL</li>
@@ -723,6 +735,19 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     <h2 class="section-title">Related content</h2>
     <div class="related-content">
         <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/mongodb-%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">MongoDB 筆記</h2>
+        </div>
+    </a>
+</article>
+
             
                 
 <article class="">

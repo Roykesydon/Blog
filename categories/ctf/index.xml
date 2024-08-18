@@ -12,63 +12,7 @@
         <pubDate>Fri, 28 Jun 2024 00:00:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/p/web-security/</guid>
-        <description>&lt;h2 id=&#34;information-gathering&#34;&gt;Information Gathering&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Whois Lookup
-&lt;ul&gt;
-&lt;li&gt;get owner information of a domain&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Netcraft site report
-&lt;ul&gt;
-&lt;li&gt;get technology stack of a website&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Robtex DNS Lookup
-&lt;ul&gt;
-&lt;li&gt;get information of a domain&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Exploit database
-&lt;ul&gt;
-&lt;li&gt;search for exploits&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;knockpy
-&lt;ul&gt;
-&lt;li&gt;subdomain enumeration&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;dirb
-&lt;ul&gt;
-&lt;li&gt;web content scanner&lt;/li&gt;
-&lt;li&gt;搜索隱藏的檔案&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;maltego
-&lt;ul&gt;
-&lt;li&gt;data mining tool&lt;/li&gt;
-&lt;li&gt;有大量套件，可以用來搜集各類資訊，而且有視覺化&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;file-uploaded-vulnerability&#34;&gt;File Uploaded Vulnerability&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;weevely
-&lt;ul&gt;
-&lt;li&gt;web shell&lt;/li&gt;
-&lt;li&gt;可以遠端控制&lt;/li&gt;
-&lt;li&gt;有些情況下就算上傳的檔案是 filename.php.jpg 依然可以執行&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Burp
-&lt;ul&gt;
-&lt;li&gt;proxy&lt;/li&gt;
-&lt;li&gt;intercept request&lt;/li&gt;
-&lt;li&gt;change request&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
+        <description>&lt;h2 id=&#34;file-uploaded-vulnerability&#34;&gt;File Uploaded Vulnerability&lt;/h2&gt;
 &lt;h3 id=&#34;防禦方法&#34;&gt;防禦方法&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;不要允許使用者上傳任何可執行的檔案&lt;/li&gt;
@@ -119,6 +63,10 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;sql-injection&#34;&gt;SQL Injection&lt;/h2&gt;
+&lt;h3 id=&#34;防禦方法-3&#34;&gt;防禦方法&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 prepared statement&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;xss-cross-site-scripting&#34;&gt;XSS (Cross Site Scripting)&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;允許攻擊者在網頁上執行 javascript code&lt;/li&gt;
@@ -127,13 +75,12 @@
 &lt;ul&gt;
 &lt;li&gt;Reflected XSS
 &lt;ul&gt;
-&lt;li&gt;特別設計過的 URL&lt;/li&gt;
+&lt;li&gt;用 URL 攻擊&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Persistent/Stored XSS
 &lt;ul&gt;
-&lt;li&gt;存在 database 或是某個 page&lt;/li&gt;
-&lt;li&gt;有些網站會替換掉引號，但也有其他方法不用引號，比如 fromCharCode&lt;/li&gt;
+&lt;li&gt;攻擊的程式碼存在 database 或是某個 page&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;DOM-based XSS
@@ -154,7 +101,7 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;防禦方法-3&#34;&gt;防禦方法&lt;/h3&gt;
+&lt;h3 id=&#34;防禦方法-4&#34;&gt;防禦方法&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;盡量避免讓 user 的輸入直接顯示在網頁上&lt;/li&gt;
 &lt;li&gt;在 insert 到網頁前，escape 所有不信任的輸入
@@ -167,108 +114,8 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;backdoor&#34;&gt;Backdoor&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;msfvenom&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;產生 payload
-&lt;ul&gt;
-&lt;li&gt;payload 是指 backdoor 中用來執行各種操作的程式碼&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;可生成的 payload 命名格式
-&lt;ul&gt;
-&lt;li&gt;platform/type/communication_channel
-&lt;ul&gt;
-&lt;li&gt;type
-&lt;ul&gt;
-&lt;li&gt;meterpreter
-&lt;ul&gt;
-&lt;li&gt;Metasploit 設計的&lt;/li&gt;
-&lt;li&gt;會加密通訊&lt;/li&gt;
-&lt;li&gt;提供豐富的功能&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;communication_channel
-&lt;ul&gt;
-&lt;li&gt;通常是 direction_protocol
-&lt;ul&gt;
-&lt;li&gt;direction
-&lt;ul&gt;
-&lt;li&gt;reverse
-&lt;ul&gt;
-&lt;li&gt;連到攻擊者的機器開的 port&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;bind
-&lt;ul&gt;
-&lt;li&gt;開 port 等待連接&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;protocol&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;ex: windows/shell/reverse_http
-&lt;ul&gt;
-&lt;li&gt;透過 http 連接&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;msfconsole&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Metasploit Framework&lt;/li&gt;
-&lt;li&gt;搭配 msfvenom 開 port 監聽
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;use exploit/multi/handler&lt;/code&gt;
-&lt;ul&gt;
-&lt;li&gt;set payload
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;set payload windows/metepreter/reverse_https&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;anti-virus&#34;&gt;Anti-Virus&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Principle
-&lt;ul&gt;
-&lt;li&gt;Static Analysis
-&lt;ul&gt;
-&lt;li&gt;和已知的 malware 比對&lt;/li&gt;
-&lt;li&gt;可以利用 packers, encoders, abfuscators 來讓程式更加獨特&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Dynamic(Heuristic) Analysis
-&lt;ul&gt;
-&lt;li&gt;在 sandbox 中執行，看他的行為&lt;/li&gt;
-&lt;li&gt;要幫程式增加安全的操作&lt;/li&gt;
-&lt;li&gt;延遲 Payload 執行的時間&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;insecure-session-management&#34;&gt;Insecure session management&lt;/h2&gt;
-&lt;h3 id=&#34;csrf-cross-site-request-forgery&#34;&gt;CSRF (Cross Site Request Forgery)&lt;/h3&gt;
-&lt;h3 id=&#34;防禦方法-4&#34;&gt;防禦方法&lt;/h3&gt;
+&lt;h2 id=&#34;csrf-cross-site-request-forgery&#34;&gt;CSRF (Cross Site Request Forgery)&lt;/h2&gt;
+&lt;h3 id=&#34;防禦方法-5&#34;&gt;防禦方法&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Anti CSRF token
 &lt;ul&gt;
@@ -287,6 +134,31 @@
 &lt;li&gt;要發 request 的時候把 cookie 改成和 token 一樣的值&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;backdoor&#34;&gt;Backdoor&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;msfvenom&lt;/li&gt;
+&lt;li&gt;msfconsole&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;anti-virus&#34;&gt;Anti-Virus&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Principle
+&lt;ul&gt;
+&lt;li&gt;Static Analysis
+&lt;ul&gt;
+&lt;li&gt;和已知的 malware 比對&lt;/li&gt;
+&lt;li&gt;可以利用 packers, encoders, abfuscators 來讓程式更加獨特&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Dynamic(Heuristic) Analysis
+&lt;ul&gt;
+&lt;li&gt;在 sandbox 中執行，看他的行為&lt;/li&gt;
+&lt;li&gt;要幫程式增加安全的操作&lt;/li&gt;
+&lt;li&gt;延遲 Payload 執行的時間&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
