@@ -8,7 +8,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/database-normalization/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.524dfa9b9ded8cde5e6ac78e81ecae35d03b990b723aeb79e762f921e7948d58.css"><meta property='og:title' content='Database Normalization'>
+<link rel="stylesheet" href="/Blog/scss/style.min.470bcd2ecfa95764c963f1851df6bfb094cb63af31763195fefeddbe50f11de2.css"><meta property='og:title' content='Database Normalization'>
 <meta property='og:description' content='Normalization 目的 避免 redundent information 更容易 understand、enhance、extend 避免 anomalies 隨著 1NF ~ 5NF，有更多的 safety guarantee
 1NF 違反條件 用 row order 傳達資訊 mixing data types in single column 但 relational database 不會讓你這樣做 存在沒有 primary key 的 table repeating groups 同一個 column 有多個數值，或是在同一個 row 存多個同類型的數值。 ex : player item roy 1 item_1, 4 item_2 star 4 item_4 player item_type1 quantity1 item_type2 quantity2 roy item1 1 item2 4 star item_4 4 2NF 所有的 non-key attribute 都要 depend on 整個 PK 非正式定義，有點細微差異 functional dependency ex: {player_id, item_type} -&amp;gt; {item_Quantity} 3NF transitive dependency {A} -&amp;gt; {B} -&amp;gt; {C} 所有 non-key attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute Boyce-Codd Normal Form 所有 attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute 4NF multivalued dependency 不像 functional dependency，箭頭後方的那項可以有多個 value {Model} $\twoheadrightarrow$ {Color} 一個 table 中的所有 multivalued dependency 必須依賴於 key 5NF 沒有 Join Dependency table 不能表示成其他 table join 起來的結果 '>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/database-normalization/'>
@@ -56,6 +56,10 @@
             
             <figure class="site-avatar">
                 <div class="avatar-container-custom">
+                    <div class="ring ring1"></div>
+                    <div class="ring ring2"></div>
+                    <div class="ring ring3"></div>
+                    <div class="ring ring4"></div>
                     <div class="front-card">
                         <a href="/Blog">
                         
@@ -64,7 +68,11 @@
                             
                                 
                                 <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo-before" loading="lazy" alt="Avatar">
+                                <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
                                     height="300" class="site-logo" loading="lazy" alt="Avatar">
+                                <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo-after" loading="lazy" alt="Avatar">
                             
                         
                         </a>
@@ -77,6 +85,10 @@
                             
                             <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
                                 height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo-before" loading="lazy" alt="Avatar">
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo-after" loading="lazy" alt="Avatar">
                         
                         </a>
                     </div>

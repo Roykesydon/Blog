@@ -7,7 +7,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/system-design/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.524dfa9b9ded8cde5e6ac78e81ecae35d03b990b723aeb79e762f921e7948d58.css"><meta property='og:title' content='System Design'>
+<link rel="stylesheet" href="/Blog/scss/style.min.470bcd2ecfa95764c963f1851df6bfb094cb63af31763195fefeddbe50f11de2.css"><meta property='og:title' content='System Design'>
 <meta property='og:description' content='紀錄系統設計時可以考慮的事項'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/system-design/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -53,6 +53,10 @@
             
             <figure class="site-avatar">
                 <div class="avatar-container-custom">
+                    <div class="ring ring1"></div>
+                    <div class="ring ring2"></div>
+                    <div class="ring ring3"></div>
+                    <div class="ring ring4"></div>
                     <div class="front-card">
                         <a href="/Blog">
                         
@@ -61,7 +65,11 @@
                             
                                 
                                 <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo-before" loading="lazy" alt="Avatar">
+                                <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
                                     height="300" class="site-logo" loading="lazy" alt="Avatar">
+                                <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo-after" loading="lazy" alt="Avatar">
                             
                         
                         </a>
@@ -74,6 +82,10 @@
                             
                             <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
                                 height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo-before" loading="lazy" alt="Avatar">
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo-after" loading="lazy" alt="Avatar">
                         
                         </a>
                     </div>
@@ -397,7 +409,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 
 
                 <time class="article-time--reading">
-                    6 minute read
+                    5 minute read
                 </time>
             </div>
         
@@ -834,60 +846,6 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </ul>
 </li>
 <li>要自行在消耗速度以及 reliability 之間取得平衡</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>Kafka</p>
-<ul>
-<li>event streaming platform</li>
-<li>專注在 publish / subscribe</li>
-<li>message 會在一段時間後被刪除，而不是等待 consumer 處理</li>
-<li>key concept
-<ul>
-<li>topic
-<ul>
-<li>queue 被叫做 topic</li>
-</ul>
-</li>
-<li>event
-<ul>
-<li>message 被叫做 event
-<ul>
-<li>有 key, value, timestamp</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>partition
-<ul>
-<li>topic 通常會有多個 partition</li>
-<li>通常 partition 的數量至少為 consumer 數量</li>
-<li>優點
-<ul>
-<li>提高 throughput</li>
-</ul>
-</li>
-<li>缺點
-<ul>
-<li>過多的 paratition 會提高 latency</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>consumer group
-<ul>
-<li>一個 consumer group 可以有多個 consumer</li>
-<li>只會收到 message 一次，並派給底下的某個 consumer</li>
-</ul>
-</li>
-<li>consumer offset
-<ul>
-<li>consumer 會記錄自己消耗到哪裡了，消耗完了就增加自己的 offset，移動到下一個</li>
-<li>這樣即使 consumer down 了，下次啟動時，也可以從上次消耗的地方繼續</li>
 </ul>
 </li>
 </ul>

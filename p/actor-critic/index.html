@@ -11,7 +11,7 @@ $E[G_t^n]=Q^{\pi_\theta}(s_t^n,a_t^n)$ Q function 這樣定義 所以我們可�
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/actor-critic/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.524dfa9b9ded8cde5e6ac78e81ecae35d03b990b723aeb79e762f921e7948d58.css"><meta property='og:title' content='Actor-Critic'>
+<link rel="stylesheet" href="/Blog/scss/style.min.470bcd2ecfa95764c963f1851df6bfb094cb63af31763195fefeddbe50f11de2.css"><meta property='og:title' content='Actor-Critic'>
 <meta property='og:description' content='Introduction 結合 policy-based 和 value-based
 A3C Actor-Critic 最知名的方法 Advantage Actor-Critic 是 A2C Advantage Actor-Critic Review: Policy gradient
 $\triangledown \overline{R_{\theta}}\approx \frac{1}{N}\displaystyle\sum_{n=1}^{N}\displaystyle\sum_{t=1}^{T_n}(\displaystyle\sum_{t^{&amp;rsquo;}=t}^{T_n}\gamma^{t^{&amp;rsquo;}-t}r_{t^{&amp;rsquo;}}^n-b)\triangledown log p_{\theta}(a_t^n|s_t^n)$ $G_t^n=\displaystyle\sum_{t^{&amp;rsquo;}=t}^{T_n}\gamma^{t^{&amp;rsquo;}-t}r_{t^{&amp;rsquo;}}^n-b$ G very unstable，因為給同樣的 state 作同樣的 action 不一定會得到同樣的結果，G 是個 random variable 想要改獲得期望值，取代掉 sample 的值(G 的部分)，可以用 Q-Learning
@@ -65,6 +65,10 @@ $E[G_t^n]=Q^{\pi_\theta}(s_t^n,a_t^n)$ Q function 這樣定義 所以我們可�
             
             <figure class="site-avatar">
                 <div class="avatar-container-custom">
+                    <div class="ring ring1"></div>
+                    <div class="ring ring2"></div>
+                    <div class="ring ring3"></div>
+                    <div class="ring ring4"></div>
                     <div class="front-card">
                         <a href="/Blog">
                         
@@ -73,7 +77,11 @@ $E[G_t^n]=Q^{\pi_\theta}(s_t^n,a_t^n)$ Q function 這樣定義 所以我們可�
                             
                                 
                                 <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo-before" loading="lazy" alt="Avatar">
+                                <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
                                     height="300" class="site-logo" loading="lazy" alt="Avatar">
+                                <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo-after" loading="lazy" alt="Avatar">
                             
                         
                         </a>
@@ -86,6 +94,10 @@ $E[G_t^n]=Q^{\pi_\theta}(s_t^n,a_t^n)$ Q function 這樣定義 所以我們可�
                             
                             <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
                                 height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo-before" loading="lazy" alt="Avatar">
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo-after" loading="lazy" alt="Avatar">
                         
                         </a>
                     </div>
