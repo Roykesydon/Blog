@@ -7,11 +7,11 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/realm-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.524dfa9b9ded8cde5e6ac78e81ecae35d03b990b723aeb79e762f921e7948d58.css"><meta property='og:title' content='ReALM 論文閱讀'>
+<link rel="stylesheet" href="/Blog/scss/style.min.470bcd2ecfa95764c963f1851df6bfb094cb63af31763195fefeddbe50f11de2.css"><meta property='og:title' content='ReALM 論文閱讀'>
 <meta property='og:description' content='用少量參數解決 reference resolution 問題'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/realm-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/'>
 <meta property='og:site_name' content='Roykesydon'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='nlp' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:published_time' content='2024-01-05T00:00:13&#43;08:00'/><meta property='article:modified_time' content='2024-01-05T00:00:13&#43;08:00'/>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='deep-learning' /><meta property='article:tag' content='machine-learning' /><meta property='article:tag' content='transformer' /><meta property='article:tag' content='attention' /><meta property='article:tag' content='self-attention' /><meta property='article:tag' content='llm' /><meta property='article:published_time' content='2024-04-18T00:08:46&#43;08:00'/><meta property='article:modified_time' content='2024-04-18T00:08:46&#43;08:00'/>
 <meta name="twitter:title" content="ReALM 論文閱讀">
 <meta name="twitter:description" content="用少量參數解決 reference resolution 問題">
     <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
@@ -53,6 +53,10 @@
             
             <figure class="site-avatar">
                 <div class="avatar-container-custom">
+                    <div class="ring ring1"></div>
+                    <div class="ring ring2"></div>
+                    <div class="ring ring3"></div>
+                    <div class="ring ring4"></div>
                     <div class="front-card">
                         <a href="/Blog">
                         
@@ -61,7 +65,11 @@
                             
                                 
                                 <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo-before" loading="lazy" alt="Avatar">
+                                <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
                                     height="300" class="site-logo" loading="lazy" alt="Avatar">
+                                <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo-after" loading="lazy" alt="Avatar">
                             
                         
                         </a>
@@ -74,6 +82,10 @@
                             
                             <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
                                 height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo-before" loading="lazy" alt="Avatar">
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo-after" loading="lazy" alt="Avatar">
                         
                         </a>
                     </div>
@@ -300,71 +312,32 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
   <ol>
     <li><a href="#abstract">Abstract</a></li>
     <li><a href="#introduction">Introduction</a></li>
-    <li><a href="#background">Background</a>
+    <li><a href="#related-work-and-motivation">Related Work and Motivation</a></li>
+    <li><a href="#task">Task</a></li>
+    <li><a href="#datasets">Datasets</a>
       <ol>
-        <li><a href="#open-domain-question-answering-open-qa">Open-domain question answering (Open-QA)</a></li>
+        <li><a href="#conversational-data">Conversational Data</a></li>
+        <li><a href="#synthetic-data">Synthetic Data</a></li>
+        <li><a href="#on-screen-data">On-screen Data</a></li>
       </ol>
     </li>
-    <li><a href="#approach">Approach</a>
+    <li><a href="#models">Models</a>
       <ol>
-        <li><a href="#realms-generative-process">REALM’s generative process</a></li>
-        <li><a href="#model-architecture">Model architecture</a>
+        <li><a href="#marrs">MARRS</a></li>
+        <li><a href="#chatgpt">ChatGPT</a></li>
+        <li><a href="#our-approach">Our Approach</a>
           <ol>
-            <li><a href="#knowledge-retriever">Knowledge Retriever</a></li>
-            <li><a href="#knowledge-augmented-encoder">Knowledge-Augmented Encoder</a></li>
-          </ol>
-        </li>
-        <li><a href="#training">Training</a>
-          <ol>
-            <li><a href="#what-does-the-retriever-learn">What does the retriever learn?</a></li>
-          </ol>
-        </li>
-        <li><a href="#injecting-inductive-biases-into-pre-training">Injecting inductive biases into pre-training</a>
-          <ol>
-            <li><a href="#salient-span-masking">Salient span masking</a></li>
-            <li><a href="#null-document">Null document</a></li>
-            <li><a href="#prohibiting-trivial-retrievals">Prohibiting trivial retrievals</a></li>
-            <li><a href="#initialization">Initialization</a></li>
+            <li><a href="#conversational-references">Conversational References</a></li>
+            <li><a href="#onscreen-references">Onscreen References</a></li>
           </ol>
         </li>
       </ol>
     </li>
-    <li><a href="#experiments">Experiments</a>
+    <li><a href="#results">Results</a>
       <ol>
-        <li><a href="#open-qa-benchmarks">Open-QA Benchmarks</a>
-          <ol>
-            <li><a href="#naturalquestions-open">NaturalQuestions-Open</a></li>
-            <li><a href="#webquestions">WebQuestions</a></li>
-            <li><a href="#curatedtrec">CuratedTrec</a></li>
-          </ol>
-        </li>
-        <li><a href="#approaches-compared">Approaches compared</a>
-          <ol>
-            <li><a href="#retrieval-based-open-qa">Retrieval-based Open-QA</a></li>
-            <li><a href="#generation-based-open-qa">Generation-based Open-QA</a></li>
-          </ol>
-        </li>
-        <li><a href="#implementation-details">Implementation Details</a>
-          <ol>
-            <li><a href="#fine-tuning">Fine-tuning</a></li>
-            <li><a href="#pre-training">Pre-training</a></li>
-          </ol>
-        </li>
-        <li><a href="#main-results">Main results</a></li>
-        <li><a href="#analysis">Analysis</a>
-          <ol>
-            <li><a href="#masking-scheme">Masking scheme</a></li>
-            <li><a href="#mips-index-refresh-rate">MIPS index refresh rate</a></li>
-          </ol>
-        </li>
+        <li><a href="#analysis">Analysis</a></li>
       </ol>
     </li>
-    <li><a href="#discussion-and-related-work">Discussion and Related Work</a>
-      <ol>
-        <li><a href="#scalable-grounded-neural-memory">Scalable grounded neural memory</a></li>
-      </ol>
-    </li>
-    <li><a href="#future-work">Future Work</a></li>
   </ol>
 </nav>
         </div>
@@ -401,11 +374,11 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     
     <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/deep-learning.jpg');">
         <h2 class="article-title-custom">
-            <a href="/Blog/p/realm-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">ReALM 論文閱讀</a>
+            <a href="/Blog/p/realm-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">REALM 論文閱讀</a>
         </h2>
         
         <h3 class="article-subtitle">
-            用少量參數解決 reference resolution 問題
+            改進預訓練方法的 ORQA
         </h3>
         
     </div>
@@ -427,7 +400,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published">Apr 18, 2024</time>
+                <time class="article-time--published">Jan 05, 2024</time>
             </div>
         
 
@@ -457,167 +430,334 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     <section class="article-content">
     
     
-    <p>paper: <a class="link" href="https://arxiv.org/abs/2002.08909"  target="_blank" rel="noopener"
-    >REALM: Retrieval-Augmented Language Model Pre-Training</a></p>
+    <p>paper: <a class="link" href="https://arxiv.org/abs/2403.20329"  target="_blank" rel="noopener"
+    >ReALM: Reference Resolution As Language Modeling</a></p>
 <h2 id="abstract">Abstract</h2>
-<p>為了用更加模組化和可解釋的方式獲取知識，作者用 latent knowledge retriever 來加強語言模型的預訓練，latent knowledge retriever 允許模型檢索 large corpus 的 document，並在預訓練、微調和推理時使用。</p>
+<p>Reference resolution 是一個重要的問題，對於理解和充分處理不同類型的 context 很重要。</p>
+<p>Context 包含 previous turns 和 non-conversational entities，比如使用者螢幕上的 entity，或是在背景執行的 entity。</p>
+<p>LLM 雖然在各種任務都很強大，但對於 reference resolution 的使用，特別是 non-conversational entities 方面，依然沒有充分利用。</p>
+<p>本文將展示如何引用 LLM 創建一個系統來處理不同類型的 reference，方法是展示如何把 reference resolution 轉換成 language modeling problem。
+盡管螢幕上的 entity 傳統上不利於簡化成 text-only modality。</p>
+<p>對於 GPT-4，本文最小的模型實現了和 GPT-4 相當的性能，而更大的模型則大幅領先。</p>
 <h2 id="introduction">Introduction</h2>
-<p><img src="/Blog/images/deep-learning/REALM/fig1.jpg"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p>在諸如 BERT 的語言模型中，學到的 world knowledge 隱式地儲存在神經網路的參數中，使其很難確定儲存了哪些知識以及儲存在何處。而且儲存空間受網路大小限制，但訓練更大的網路可能非常昂貴</p>
-<p>本文為了以更加可解釋和模組化的方式獲取知識，提出了一個新穎的框架，Retrieval-Augmented Language Model (REALM) 預訓練，透過 learned textual knowledge retriever 來加強預訓練</p>
-<p>和把知識儲存在參數中的模型相比，該方法顯示地揭示 world knowledge 扮演的角色，做法是要求模型在推理過程中決定哪些知識來 retrieve，並用在推理階段</p>
-<p>在每次預測前，語言模型使用 retriever 在 large corpus 搜索文件，並用這些文件幫助預測</p>
-<p>End to End 的學習需要考慮整個檢索步驟，好進行反向傳播</p>
-<p>REALM 有個關鍵直覺，就是訓練 retriever 的時候用的是 unsupervised text 的 performance-based signal：</p>
+<p>人類的語言很長包含 ambiguous reference，比如「這個」、「那個」等等，這些 reference 需要根據 context 來解決。</p>
+<p>能夠能夠理解 context 對 conversational assistant 來說很重要。</p>
+<p>讓使用者能夠對螢幕上看到的內容發出查詢是確保語音助理可以提供 hands-free 體驗的第一步。</p>
+<hr>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Speaker</th>
+<th>Dialogue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User</td>
+<td>Show me pharmacies near me</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>Here is a list I found.</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>&hellip; (list presented)</td>
+</tr>
+<tr>
+<td>User</td>
+<td>Call the one on Rainbow Rd.</td>
+</tr>
+<tr>
+<td>User</td>
+<td>Call the bottom one.</td>
+</tr>
+<tr>
+<td>User</td>
+<td>Call this number (present onscreen)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Table 1:  Sample Interactions between a user and an
+agent.</p>
+<hr>
+<p>以 Table 1 為例，如果沒有理解 context 的能力，agent 不可能完成查詢。</p>
+<p>照理來說，處理用戶的查詢需要多種類型的 context，Conversational context 和 on-screen context 就是兩個主要的例子。</p>
+<p>最近的 LLM 通常可以實現 End-to-End 的體驗，甚至可能可以消除包含 reference resolution 的多階段 piepline。</p>
+<p>但是在一些實際案例中，pipeline 有他的價值，考慮以下情境：</p>
+<ol>
+<li>
+<p>在運算能力有限的設備上運作 (例如手機)</p>
 <ul>
-<li>一個可以提高語言模型複雜性的檢索是有幫助，且該被獎勵的</li>
-<li>資訊不足的檢索應該受到懲罰</li>
+<li>由於功耗和延遲需求，單一大型 End-to-End 模型可能不適用。</li>
 </ul>
-<p>比如圖 Fig.1 找到的文件就該獲得獎勵</p>
-<p>作者將 retrieve-then-predict 的方法建模並視作 latent variable language model 並優化 marginal likelihood</p>
-<p>但在預訓練期間要訓練大規模的 retrieval module 成為問題，因為 Retriever 得為每個預訓練步驟考慮數百萬個候選文檔，而且必須根據決策反向傳播。為了解決這問題，作者建構了 retriever，以便快取和非同步更新每個文件的計算，並將最佳文件的選擇表示為 Maximum Inner Product Search (MIPS)</p>
-<p>透過在 Open-QA 任務上使用 REALM 預訓練的 model 來 finetune 進行評估，OpenQA 是最 knowledge-intensive 的任務之一</p>
-<p>作者挑了三個流行的 Open-QA benchmark，比如 NaturalQuestions-Open、WebQuestions、CuratedTrec，並和 SOTA Open-QA model 比較</p>
-<p>在三個基準都取得了 SOTA 的結果，absolute accuracy 明顯高於先前系統 4-16%</p>
-<p>也展示了 REALM 的 qualitative benefit，比如可解釋性和模組化</p>
-<h2 id="background">Background</h2>
-<h3 id="open-domain-question-answering-open-qa">Open-domain question answering (Open-QA)</h3>
-<p>OpenQA 的 open 是指模型不會接收到包含答案的預提供文件，和傳統的閱讀理解不同</p>
-<h2 id="approach">Approach</h2>
-<p><img src="/Blog/images/deep-learning/REALM/fig2.jpg"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<h3 id="realms-generative-process">REALM’s generative process</h3>
-<p>預訓練做 masked language modeling，微調的任務是 Open-QA</p>
-<h3 id="model-architecture">Model architecture</h3>
-<p>neural knowledge retriever 是 $p(z|x)$</p>
-<p>knowledge-augmented encoder 是 $p(y|z,x)$</p>
-<h4 id="knowledge-retriever">Knowledge Retriever</h4>
-<p>$p(z|x)=\frac{\text{exp }f(x,z)}{\sum_{z&rsquo;}\text{exp }f(x,z&rsquo;)}$</p>
-<p>$f(x,z) = Embed_{input}(x)^T Embed_{doc}(z)$</p>
-<p>$join_{BERT}(x)=[CLS]x[SEP]$</p>
-<p>$join_{BERT}(x_1, x_2)=[CLS]x_1[SEP]x_2[SEP]$</p>
-<p>$Embed_{input}(x)=W_{input}BERT_{CLS}(join_{BERT}(x))$</p>
-<p>$Embed_{doc}(z)=W_{doc}BERT_{CLS}(join_{BERT}(z_{title}, z_{body}))$</p>
-<h4 id="knowledge-augmented-encoder">Knowledge-Augmented Encoder</h4>
-<p>Finetune:</p>
-<p>$p(y|z,x) \propto \displaystyle\sum_{s\in S(z,y)}exp(MLP([h_{START(s)};h_{END(s)}]))$</p>
-<p>$h_{START(s)}=BERT_{START(s)}(join_{BERT}(x,z_{body}))$</p>
-<p>$h_{END(s)}=BERT_{END(s)}(join_{BERT}(x,z_{body}))$</p>
-<h3 id="training">Training</h3>
-<p>關鍵的計算挑戰是 $p(y|x)=\sum_{z\in Z}p(y|x,z)p(z,x)$，涉及到 Z knowledge corpus 中的 所有 document z，因此只取機率 $p(z|x)$ 最高的 top k 文件來求和，考量到多數文件的機率應該為 0，這是合理的</p>
-<p>但是依然需要一個有效的方法來尋找前 k 個文件</p>
-<p>前面的 $f(x,z)$ 是一個內積，可以用  Maximum Inner Product Search (MIPS) 演算法來尋找近似前 k 個文檔</p>
-<p>為了用 MIPS，要先用一種 embedding 函式來幫 z encode，但是如果更新了這個函式，資料結構和 $p(z|x)$ 又會不一致</p>
-<p>因此，每次對 embedding 函式更新後，search index 都會變 &ldquo;stale&rdquo; (陳舊)</p>
-<p>每隔數百個訓練步驟非同步重新 embed 和 index 所有 document 來刷新 index</p>
-<p>MIPS 的 index 在刷新之前會有點 stale，但它只用於挑選前 k 個文件</p>
-<p>結果證明，只要在恰當的刷新率下，還是可以穩定 optimize</p>
-<h4 id="what-does-the-retriever-learn">What does the retriever learn?</h4>
-<p>這裡展示了它如何獎勵提高預測準確性的檢索</p>
-<p>$\triangledown \text{log }p(y|x)=\displaystyle\sum_{z\in Z}r(z)\triangledown f(x,z)$</p>
-<p>$r(z)=[\frac{p(y|z,x)}{p(y|x)}-1]p(z|x)$</p>
-<p>如果 $r(z)$ 是正的，會讓 f(x,z) 提高，否則減低</p>
-<p>$r(z)$ 只有在 $p(y|z,x)&gt;p(y|x)$ 的情況下才會是正的</p>
-<p>$p(y|x)$ 是 $p(y|x,z)$ 在隨機取樣的情況下的期望值</p>
-<p>只要文檔 z 好過預期，就會持續正面更新</p>
-<h3 id="injecting-inductive-biases-into-pre-training">Injecting inductive biases into pre-training</h3>
-<p>在發展 REALM 的過程中，作者發現幾個額外策略，可以進一步引導模型進行有意義的檢索</p>
-<h4 id="salient-span-masking">Salient span masking</h4>
-<p>有一些 MLM span 只需要 local context，但作者想專注於 world knowledge</p>
-<p>所以作者會 mask 一些 salient span，比如「英國」、「1969 年 7 月」</p>
-<p>作者用在 CoNLL-2003 上訓練的 BERT-based tagger，來找出 named entities，並用正規表達式來找出日期</p>
-<p>結果表明這顯著優於其他 mask 策略</p>
-<h4 id="null-document">Null document</h4>
-<p>雖然 Salient span masking 表現很好，但不是所有 mask 都需要 world knowledge</p>
-<p>透過向前 top k 文檔中多加一個空的文檔，允許在不需要檢索有空白選項</p>
-<h4 id="prohibiting-trivial-retrievals">Prohibiting trivial retrievals</h4>
-<p>如果 mask 的句子來自文件 z，可以透過查看 z 中 x 的 unmasked 版本來輕鬆預測 y，使 p(z|x) 出現較大的梯度，如果這種情況太頻繁，會使 retriever 最終學會的東西偏向 exact match，而不會捕獲其他形式的相關性</p>
-<p>因此，在預訓練期間排除了 trivial candidate</p>
-<h4 id="initialization">Initialization</h4>
-<p>在訓練開始時，如果 input 和 document 各自的 Embedding function 沒有良好的效能，會使檢索到的 z 和 x 無關</p>
-<p>會導致模型學習忽略檢索到的文件，檢索器就不會收到有意義的梯度，也無法改進</p>
-<p>為了避免 cold-start problem，作者採用 warm-start 方案，先以  Inverse Cloze Task (ICT) 這種簡單的目標來處理兩個 embedding function，給定一個句子，訓練模型檢索句子來自的文檔</p>
-<h2 id="experiments">Experiments</h2>
-<p><img src="/Blog/images/deep-learning/REALM/table1.jpg"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<p><img src="/Blog/images/deep-learning/REALM/table2.jpg"
-	
-	
-	
-	loading="lazy"
-	
-	
-></p>
-<h3 id="open-qa-benchmarks">Open-QA Benchmarks</h3>
-<p>本文將重點放在問題作者不知道答案的資料集，比較能反映現實中的問題</p>
-<h4 id="naturalquestions-open">NaturalQuestions-Open</h4>
-<p>由自然發生的 google 查詢和答案組成，每個答案還帶有 answer type</p>
-<p>本文只用屬於 &ldquo;short answer type&rdquo; 的問題，最多有 5 個 token</p>
-<h4 id="webquestions">WebQuestions</h4>
-<p>從 Google Suggest API 收集的</p>
-<h4 id="curatedtrec">CuratedTrec</h4>
-<p>從 MSNSearch 和 AskJeeves 等網站上真實使用者查詢中提取的問答</p>
-<h3 id="approaches-compared">Approaches compared</h3>
-<h4 id="retrieval-based-open-qa">Retrieval-based Open-QA</h4>
-<p>最近的一些方法提出用 MIPS index 來實現可訓練的檢索</p>
-<p>ORQA 與 REALM 類似</p>
-<p>但 REALM 提出了更新穎的模型預訓練步驟，並反向傳播到 MIPS index 中，而不用固定的 index</p>
-<p>上面指的應該是有關於非同步更新 index 的部分，還可以梯度更新</p>
-<p>值得注意的是，REALM 和 OrQA 的預訓練都是用 ICT 初始化的</p>
-<h4 id="generation-based-open-qa">Generation-based Open-QA</h4>
-<p>Open-QA 的新興替代方案是將其建模為序列預測任務，只需對問題進行編碼，然後根據編碼逐個標記編碼答案</p>
-<p>GPT2 可以透過 sequence to sequence 直接產生答案，而不需要給指定的上下文，但可能由於缺乏 finetune 而沒有競爭力</p>
-<p>同時，T5 表明，直接生成答案而不從給定上下文中明確提取是可行的方法，但他們只在提供上下文文檔的閱讀理解任務上進行實驗</p>
-<p>為了和最具競爭力的 baseline 比較，本文與針對 Open-QA finetune 的 T5 進行比較</p>
-<h3 id="implementation-details">Implementation Details</h3>
-<h4 id="fine-tuning">Fine-tuning</h4>
-<p>文件被貪婪地分割成多達 288 個 BERT wordpieces 的 chunk，產生超過 1300 萬個 retrieval candidates</p>
-<p>在微調推理過程中，考慮前五個候選者</p>
-<h4 id="pre-training">Pre-training</h4>
-<p>使用 BERT 的預設優化器在 64 個 Google Cloud TPU 上預訓練 20 萬步</p>
-<p>MIPS 在 16 個 TPU 上並行</p>
-<h3 id="main-results">Main results</h3>
-<p>REALM 在 table.1 明顯優於之前的所有方法</p>
-<p>REALM 最直接的比較是 ORQA，微調設定、超參數和訓練資料都相通</p>
-<p>REALM 對比 ORQA 的改進純粹是更好的預訓練方法</p>
-<p>而且本文表明他們的預訓練方法可以用在 single-corpus setting 或 seperate corpus setting</p>
-<p>兩者的差別在 X 和 Z 來源一不一樣</p>
+</li>
+<li>
+<p>需要與 API 整合的情境</p>
+<ul>
+<li>雖然存在可以用 LLM 編寫呼叫 API 的方法，但依然需要超大的模型還有對現有 pipeline 的徹底處理。</li>
+</ul>
+</li>
+<li>
+<p>使用 focused model 可以允許現有的 reference resolution module 替換成更新的版本，而且由於系統是模組化的，可以改進能力和可解釋性。</p>
+</li>
+<li>
+<p>對於本文所考慮的任務，reference resolution 不只限定於 conversational context，還包含 on-screen entities，這些 entities 是使用者可以感知到的一部份，但是還未出現在對話歷史紀錄中。</p>
+</li>
+</ol>
+<p>因此，盡管一些 LLM 可以 implicit 地處理 reference resolution，但是傳統的 NLP 任務 (比如 reference resolution) 仍然有價值。</p>
+<p>因此本文提倡用較小的語言模型，但針對 reference resolution 進行了專門且明確的 fine-tuning。</p>
+<p>然而這種語音助理會遇到最大的挑戰就是要怎麼讓 LM 「看」到螢幕。而且還要以有利於 LM 解析的方式對螢幕上的 entity 進行編碼，然後編碼還得足夠一致，讓 LM 可以成功執行 reference resolution。</p>
+<p>本文建議使用使用 parsed entity 及其位置來重件螢幕，以產生螢幕的純文字表示。</p>
+<p>然後螢幕上屬於 entity 的部分會被標記，以便 LM 能夠了解實體出現的位置及他們周圍的文字。</p>
+<p>據作者所知，這是第一個目標是從螢幕 encode context 的 LLM 工作。</p>
+<h2 id="related-work-and-motivation">Related Work and Motivation</h2>
+<p>解析螢幕上的 reference 是一個目前探索比較不足的領域。</p>
+<p>螢幕上的東西通常更加結構化和高度文字化，使的可以利用更輕的模型來轉換成文字。但雖然容易解析，分布和那種大型育訓練的基於圖像的系統不同，因為他們多半都用自然的現實圖片。</p>
+<p>此外那些模型的訓練成本通常都非常高，而且在這種大量文字的情境也表現不佳。
+常用於文字理解的方法又常常依賴多個模組，比如 bounding box detection 和 OCR。</p>
+<p>聯合視覺 + 文字的模型在計算成本也更加昂貴。</p>
+<p>對於螢幕上的參考有一些相關工作，被用作本文的 baseline。</p>
+<p>然後他們有些缺點，在本文解決了這些缺點。</p>
+<ol>
+<li>他們的方法依賴專用的 「Category Module」來處理 type-based reference，每次建立新類型，都需要手動加入 Entity</li>
+<li>此類 Module 將每種類別視為不同的，忽略了他們的相似性</li>
+<li>依賴手工製作的規則，往往需要大量特徵工程，而且不 robust</li>
+<li>不考慮語意相似性，也沒法對現實的理解和常識進行推理</li>
+<li>這些方法會獨立地判斷實體和 Query 的關聯性，而不考慮其他所有的實體，查詢既不考慮整個螢幕也不考慮其他實體</li>
+</ol>
+<h2 id="task">Task</h2>
+<p>作者提了三種和使用者相關的 Entity:</p>
+<ol>
+<li>On-screen Entities</li>
+<li>Conversational Entities
+<ul>
+<li>可能是來自上一輪的對話，也可能是 virtual assistant 產生的</li>
+</ul>
+</li>
+<li>Background Entities
+<ul>
+<li>來自後台 process 的相關實體，使用者不一定在螢幕上看的到，比如背景的音樂</li>
+</ul>
+</li>
+</ol>
+<p>本文將 reference resolution 作為 LLM 的 multiple choice task，預期輸出是用戶螢幕上顯示的其中一個 Entity。</p>
+<p>答案也可能是「None of these」。</p>
+<h2 id="datasets">Datasets</h2>
+<p>每筆資料包含使用者查詢和 Entity list，還有與對應使用者查詢相關的 ground truth entity。</p>
+<p>每個實體又包含與其相關的訊息，比如與實體關聯的名稱和其他文字描述訊息。</p>
+<p>對於存在 on-screen context 的資料，context 以 Entity 的邊界框，圍繞它的物件清單還有周圍物件的屬性 (比如類型、文字內容、位置) 來提供</p>
+<hr>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Dataset</th>
+<th>Train Set</th>
+<th>Test Set</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Conversational</td>
+<td>2.3k</td>
+<td>1.2k</td>
+</tr>
+<tr>
+<td>Synthetic</td>
+<td>3.9k</td>
+<td>1.1k</td>
+</tr>
+<tr>
+<td>On-screen</td>
+<td>10.1k</td>
+<td>1.9k</td>
+</tr>
+</tbody>
+</table></div>
+<p>Table 2: Dataset Sizes (Train Set and Test Set)</p>
+<hr>
+<h3 id="conversational-data">Conversational Data</h3>
+<p>收集使用者和 agent 的相關資料。</p>
+<p>評分者會看到帶有所提供 Entity 清單的截圖，並要求提供引用清單中任意挑選的 Entity 的 Query。</p>
+<p>比如，可能會給使用者看企業清單，使用者可能會說「Call the one on Main Street」。</p>
+<h3 id="synthetic-data">Synthetic Data</h3>
+<p>透過 template 去合成資料。</p>
+<p>有兩種 template:</p>
+<ol>
+<li>Base Template
+<ul>
+<li>包含 mentions, entities, possible slots</li>
+</ul>
+</li>
+<li>Language Template
+<ul>
+<li>除了 Base 還會新增不同變體的 query</li>
+</ul>
+</li>
+</ol>
+<h3 id="on-screen-data">On-screen Data</h3>
+<p>從存在電話、電子郵件和實際地址的各種網頁蒐集的。</p>
+<p>進行兩階段的 annotation：</p>
+<ol>
+<li>根據螢幕 extract query
+<ul>
+<li>評分者會收到一張帶有綠色方框和紅色方框的截圖，要把綠方框方類為電話、電子郵件或地址等等</li>
+<li>然後要為綠框提供三個獨特的 query</li>
+</ul>
+</li>
+<li>根據 query 識別 entity 和 mention
+<ul>
+<li>前面蒐集的 query 會被一一展示給評分者，並帶有相應的截圖，但沒有 bounding box，還會提供所有 screen entity list</li>
+<li>評分者要評估 query 是否包含給定的 visual entity，還有聽起來自不自然</li>
+<li>此外，評分者還要從清單中選出 query 提及的 entity，還要標記它們在 query 的哪裡</li>
+</ul>
+</li>
+</ol>
+<h2 id="models">Models</h2>
+<h3 id="marrs">MARRS</h3>
+<p>這個是 baseline，非 LLM，和前人的方法去做比較。</p>
+<p>前人的方法著重於螢幕上的 entity，MARRS 也傾向於 conversational 和 background entities。</p>
+<p>要注意的是，和其他通用的 LLM 相比，作者的 baseline 是專門為了 reference resolution 而設計的。</p>
+<h3 id="chatgpt">ChatGPT</h3>
+<p>作者考慮 GPT-3.5 和 GPT-4 作為另外一個 baseline。</p>
+<p>對於 GPT-3.5，輸入只包含 prompt。</p>
+<p>對於 GPT-4，因為他可以接受圖片的 context，所以為系統提供了螢幕截圖，發現可以有效提高其效能。</p>
+<h3 id="our-approach">Our Approach</h3>
+<p>作者遵循以下 pipeline 來微調模型 (FLAN-T5)</p>
+<p>向模型提供解析後的輸入，並用來微調。</p>
+<p>和 Baseline 不同，作者沒有在 FLAN-T5 上進行大規模的超參數搜索，而是堅持使用預設的參數。</p>
+<h4 id="conversational-references">Conversational References</h4>
+<p>作者假設 conversational references 有兩種：</p>
+<ol>
+<li>Type-based
+<ul>
+<li>這種非常依賴要將 query 和 entity type 結合，好進行識別</li>
+<li>比如「打給他」，可以知道要的是電話號碼，而不是地址</li>
+</ul>
+</li>
+<li>Descriptive
+<ul>
+<li>傾向於用唯一的實體屬性來標記他，比如「時代廣場的那個」</li>
+</ul>
+</li>
+</ol>
+<p>referenece 通常會同時依賴 type 和描述，比如「play the one from Abbey Road」和「directions to the one on Abbey Road」。</p>
+<h4 id="onscreen-references">Onscreen References</h4>
+<p>作者假設存在能夠解析螢幕文字以提取 Entity 的上游資料偵測器。</p>
+<p>為了以僅涉及文字的方式將其編碼到 LM 中，使用 Algorithm 2。</p>
+<p>直觀上，假設所有實體和周圍物件的位置都可以用它們各自的邊界框的中心來表示。</p>
+<p>然後從上到下對這些中心進行排序，並用 stable sort 從左到右排序。</p>
+<p>然後，所有在一個 margin 內的物件都會被視作在 same line，並用 tab 隔開。</p>
+<p>在 margin 下方外面的會被放在下一行，然後不斷重複。</p>
+<h2 id="results">Results</h2>
+<hr>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Conv</th>
+<th>Synth</th>
+<th>Screen</th>
+<th>Unseen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MARRS</td>
+<td>92.1</td>
+<td>99.4</td>
+<td>83.5</td>
+<td>84.5</td>
+</tr>
+<tr>
+<td>GPT-3.5</td>
+<td>84.1</td>
+<td>34.2</td>
+<td>74.1</td>
+<td>67.5</td>
+</tr>
+<tr>
+<td>GPT-4</td>
+<td>97.0</td>
+<td>58.7</td>
+<td>90.1</td>
+<td>98.4</td>
+</tr>
+<tr>
+<td>ReALM-80M</td>
+<td>96.7</td>
+<td>99.5</td>
+<td>88.9</td>
+<td>99.3</td>
+</tr>
+<tr>
+<td>ReALM-250M</td>
+<td>97.8</td>
+<td>99.8</td>
+<td>90.6</td>
+<td>97.2</td>
+</tr>
+<tr>
+<td>ReALM-1B</td>
+<td>97.9</td>
+<td>99.7</td>
+<td>91.4</td>
+<td>94.8</td>
+</tr>
+<tr>
+<td>ReALM-3B</td>
+<td>97.9</td>
+<td>99.8</td>
+<td>93.0</td>
+<td>97.8</td>
+</tr>
+</tbody>
+</table></div>
+<p>Table 3:</p>
+<p>預測正確的標準是要正確預測所有相關實體，不然就是錯的</p>
+<hr>
+<p>作者發現它們的方法贏 MARRS 和 GPT-3.5。
+GPT-3.5 的餐數量還多出了幾個數量級。</p>
+<p>盡管模型相較 GPT-4 輕的多，但是性能大致相同。</p>
+<p>而且作者採用文字編碼的方法能夠讓模型和 GPT-4 幾乎同等效能，後者還提供了螢幕截圖。</p>
+<p>隨著模型加大，提升也很明顯，特別是 Screen，暗示任務本質上更加複雜。</p>
 <h3 id="analysis">Analysis</h3>
-<p>table.2 展現了去除 REALM 關鍵組件後的結果</p>
-<p>還展現了 finetune 前 gold answer 出現在前五個檢索中的頻率</p>
-<h4 id="masking-scheme">Masking scheme</h4>
-<p>salient span masking 在先前標準的 BERT 訓練中尚未被證明具有影響力，但對於 REALM 至關重要</p>
-<h4 id="mips-index-refresh-rate">MIPS index refresh rate</h4>
-<p>在預訓練期間，運行並行過程來重新 embed document 和重建 MIPS index</p>
-<p>導致每大約 500 個訓練步驟刷新一次 index</p>
-<p>為了證明頻繁刷新的重要性，也和較慢刷新率比較</p>
-<p>table.2 顯示，stale index 可能會傷害模型，進一步減少這種過時性可以提供更好的最佳化</p>
-<h2 id="discussion-and-related-work">Discussion and Related Work</h2>
-<h3 id="scalable-grounded-neural-memory">Scalable grounded neural memory</h3>
-<p>document index 可以被視為一種 memory，key 是 document embedding</p>
-<p>從這角度來看，本文的工作和 product key memory 有共同的動機，它能夠在記憶體網路中實現低於線性的存取</p>
-<p>一個主要的區別是本文的記憶體是有根據的，每個 memory 都和一個文檔相關聯，而不是和 unnamed value vector 相關聯</p>
-<p>這種程度的可解釋性對 Open-QA 至關重要，在這些應用程式中，用戶需要出處才能使預測答案值得信賴</p>
-<h2 id="future-work">Future Work</h2>
+<ul>
+<li>$GPT-4 \approx ReALM &raquo; MARRS$ for new use-cases
+<ul>
+<li>測試了 zero-shot learning 的能力，Table 3 最後一個 column 就是在比較從未見過的資料集。</li>
+<li>作者發現對於測試集，所有 LLM-based 的方法都贏過 Fine-tuned Model</li>
+</ul>
+</li>
+<li>ReaLM &gt; GPT-4 for domain-specific queries
+<ul>
+<li>作者發現 ReALM 因為有對 user requests 做 fine-tuning，所以更能理解 domain-specific questions，如下表 (Table 4)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">User Request: Can you make it brighter?
+</span></span><span class="line"><span class="cl">---
+</span></span><span class="line"><span class="cl">Entities Shown to User:
+</span></span><span class="line"><span class="cl">1. Type: Settings
+</span></span><span class="line"><span class="cl">2. Type: UserEntity | homeAutomationAccessoryName
+</span></span><span class="line"><span class="cl">---
+</span></span><span class="line"><span class="cl">GPT-4 Prediction: 1 Ground Truth: 1, 2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Table 4</p>
+<hr>
 
 </section>
 
@@ -626,11 +766,17 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     
     <section class="article-tags">
         
-            <a href="/Blog/tags/nlp/">nlp</a>
-        
             <a href="/Blog/tags/deep-learning/">deep-learning</a>
         
             <a href="/Blog/tags/machine-learning/">machine-learning</a>
+        
+            <a href="/Blog/tags/transformer/">transformer</a>
+        
+            <a href="/Blog/tags/attention/">attention</a>
+        
+            <a href="/Blog/tags/self-attention/">self-attention</a>
+        
+            <a href="/Blog/tags/llm/">llm</a>
         
     </section>
 
@@ -676,12 +822,12 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
             
                 
 <article class="">
-    <a href="/Blog/p/dpr-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/simsid-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">DPR 論文閱讀</h2>
+            <h2 class="article-title">SimSID 論文閱讀</h2>
         </div>
     </a>
 </article>
@@ -689,12 +835,12 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
             
                 
 <article class="">
-    <a href="/Blog/p/orqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/squid-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">ORQA 論文閱讀</h2>
+            <h2 class="article-title">🦑SQUID🦑 論文閱讀</h2>
         </div>
     </a>
 </article>
@@ -702,12 +848,25 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
             
                 
 <article class="">
-    <a href="/Blog/p/drqa-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+    <a href="/Blog/p/detr-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">DrQA 論文閱讀</h2>
+            <h2 class="article-title">DETR 論文閱讀</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/bert-%E8%AB%96%E6%96%87%E9%96%B1%E8%AE%80/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">BERT 論文閱讀</h2>
         </div>
     </a>
 </article>
@@ -721,19 +880,6 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 
         <div class="article-details">
             <h2 class="article-title">Self-Instruct 論文閱讀</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/instructgpt/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">InstructGPT</h2>
         </div>
     </a>
 </article>

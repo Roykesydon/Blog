@@ -5,6 +5,7 @@
     gap: var(--section-separation);
 
     article {
+        position: relative;
         display: flex;
         flex-direction: column;
         background-color: var(--card-background);
@@ -12,7 +13,11 @@
         border-radius: var(--card-border-radius);
         overflow: hidden;
 
-        transition: box-shadow 0.3s ease;
+        transition: box-shadow 0.8s ease,
+            transform 0.4s ease-in-out,
+            text-shadow 0.2s ease-in-out;
+        // transition: border 0.3s ease;
+        
 
         &:hover {
             box-shadow: var(--shadow-l2);
@@ -43,6 +48,40 @@
             }
         }
     }
+
+    article::before, article::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        background: #23a6d5;
+        transition: all 0.4s ease-in-out;
+      }
+      
+      article::before {
+        top: 0;
+        left: 0;
+      }
+      
+      article::after {
+        // position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+      
+      article:hover {
+        transform: scale(1.03);
+        text-shadow: 0 0 5px #23a6d5;
+        // box-shadow: 0 0 10px #23a6d5;
+      }
+      
+      article:hover::before {
+        width: 100%;
+      }
+      
+      article:hover::after {
+        width: 100%;
+      }      
 }
 
 .article-details {

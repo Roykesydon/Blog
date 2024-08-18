@@ -10,6 +10,10 @@
             {{ if (default true .enabled) }}
             <figure class="site-avatar">
                 <div class="avatar-container-custom">
+                    <div class="ring ring1"></div>
+                    <div class="ring ring2"></div>
+                    <div class="ring ring3"></div>
+                    <div class="ring ring4"></div>
                     <div class="front-card">
                         <a href="{{ .Site.BaseURL | relLangURL }}">
                         {{ if not .local }}
@@ -20,7 +24,11 @@
                             {{ if $avatar }}
                                 {{ $avatarResized := $avatar.Resize "300x" }}
                                 <img src="{{ $avatarResized.RelPermalink }}" width="{{ $avatarResized.Width }}"
+                                    height="{{ $avatarResized.Height }}" class="site-logo-before" loading="lazy" alt="Avatar">
+                                <img src="{{ $avatarResized.RelPermalink }}" width="{{ $avatarResized.Width }}"
                                     height="{{ $avatarResized.Height }}" class="site-logo" loading="lazy" alt="Avatar">
+                                <img src="{{ $avatarResized.RelPermalink }}" width="{{ $avatarResized.Width }}"
+                                    height="{{ $avatarResized.Height }}" class="site-logo-after" loading="lazy" alt="Avatar">
                             {{ else }}
                                 {{ errorf "Failed loading avatar from %q" . }}
                             {{ end }}
@@ -35,6 +43,10 @@
                             {{ $avatarResized := $avatar.Resize "300x" }}
                             <img src="{{ $avatarResized.RelPermalink }}" width="{{ $avatarResized.Width }}"
                                 height="{{ $avatarResized.Height }}" class="site-logo" loading="lazy" alt="Avatar">
+                            <img src="{{ $avatarResized.RelPermalink }}" width="{{ $avatarResized.Width }}"
+                                height="{{ $avatarResized.Height }}" class="site-logo-before" loading="lazy" alt="Avatar">
+                            <img src="{{ $avatarResized.RelPermalink }}" width="{{ $avatarResized.Width }}"
+                                height="{{ $avatarResized.Height }}" class="site-logo-after" loading="lazy" alt="Avatar">
                         {{ else }}
                             {{ errorf "Failed loading avatar from %q" . }}
                         {{ end }}

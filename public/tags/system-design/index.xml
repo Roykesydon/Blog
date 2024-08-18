@@ -440,60 +440,6 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Kafka&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;event streaming platform&lt;/li&gt;
-&lt;li&gt;專注在 publish / subscribe&lt;/li&gt;
-&lt;li&gt;message 會在一段時間後被刪除，而不是等待 consumer 處理&lt;/li&gt;
-&lt;li&gt;key concept
-&lt;ul&gt;
-&lt;li&gt;topic
-&lt;ul&gt;
-&lt;li&gt;queue 被叫做 topic&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;event
-&lt;ul&gt;
-&lt;li&gt;message 被叫做 event
-&lt;ul&gt;
-&lt;li&gt;有 key, value, timestamp&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;partition
-&lt;ul&gt;
-&lt;li&gt;topic 通常會有多個 partition&lt;/li&gt;
-&lt;li&gt;通常 partition 的數量至少為 consumer 數量&lt;/li&gt;
-&lt;li&gt;優點
-&lt;ul&gt;
-&lt;li&gt;提高 throughput&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;缺點
-&lt;ul&gt;
-&lt;li&gt;過多的 paratition 會提高 latency&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;consumer group
-&lt;ul&gt;
-&lt;li&gt;一個 consumer group 可以有多個 consumer&lt;/li&gt;
-&lt;li&gt;只會收到 message 一次，並派給底下的某個 consumer&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;consumer offset
-&lt;ul&gt;
-&lt;li&gt;consumer 會記錄自己消耗到哪裡了，消耗完了就增加自己的 offset，移動到下一個&lt;/li&gt;
-&lt;li&gt;這樣即使 consumer down 了，下次啟動時，也可以從上次消耗的地方繼續&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;protocol--sendreceive-data&#34;&gt;Protocol &amp;amp; Send/Receive data&lt;/h2&gt;
 &lt;ul&gt;
