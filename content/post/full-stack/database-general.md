@@ -95,6 +95,34 @@ categories : ["full-stack"]
   - 對於效率很差的 query，可能會需要 scan 所有 partition，此時比掃描整個沒做 partition 的 table 還要慢
   - partition 可能會 unbalance
 
+## Data types
+- 這裡以 PostgreSQL 為例，列一小部分
+- 設計 column 前可以先看有沒有合適的 data type
+- Numeric
+  - 整數
+  - 浮點數
+  - Serial
+    - 一種特殊的整數，會 auto increment
+- Character
+  - char
+  - varchar
+    - 可變長度的字串，如果沒有設定長度，就是 text
+  - text
+  - bpchar
+    - 好像就是 varchar，但是 document 有寫 blank trimmed
+- Date / Time
+- Boolean
+- Binary
+- Geometric
+  - 特地寫這個是因為如果要用二維平面點，一般來說可能會用兩個 float，但是如果用 geometric 類有 point 可用
+  - 其他形狀也可存
+- UUID
+- Enum
+  - 一個有限的字串集合
+  - 有序
+    - 按照建立時的順序
+
+
 ## Database indexing
 - 如果需要搜索的欄位沒做 index，那麼就會需要 scan 整個 table，直到找到
   - 如果要求欄位做 `like` 之類的，那麼依然需要 scan 整個 table
@@ -232,3 +260,9 @@ categories : ["full-stack"]
   - 分很多不同 level，通常是在說 SSD 造成的
   - 想更新的時候，更新的 page 會被標記為不能使用。會有另外一隻非同步程式定期處理這種
     - 但是他會把整個 block 寫到新的地方，再把原地方設為 free，就為了那些不能再被使用的空間搬整個 block
+- polymorphic association
+  - 一個 table 有多個關聯，但是這些關聯是不同的 table
+    - 某個 id column 會根據不同情況代表不同 table 的 id
+  - 可能可以節省空間
+  - 也可能因為這樣而沒辦法使用 foreign key
+  - 可以考慮拆成多個 column 或是多個 table

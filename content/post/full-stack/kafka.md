@@ -23,6 +23,7 @@ categories : ["full-stack"]
 - 如果有一個 broker down 了，會有另一個 broker 繼續提供複本
 - topic replication factor
   - 這個 factor 要大於 1
+  - 常見的設定值是 3
   - 這個數值代表有幾個複本
     - 複本會被放在其他的 broker 上
   - 設為 n，可以承受 n-1 個 broker down
@@ -39,9 +40,11 @@ categories : ["full-stack"]
   - message 會獲得 id，他是 incremental 的
   - 這個 id 被稱為 offset
     - 只在特定的 partition 中有意義，不同的 partition 的 offset 是獨立的
+  - 但不同 partition 的 message 是沒有順序的，只有在同一個 partition 中才有順序
 - immutable
   - 一旦 message 被寫入，就不能被修改
 - 通常 partition 的數量至少為 consumer 數量
+  - 如果 partition 數量少於 consumer 數量，有些 consumer 會閒置
 ## Message
   - message 也被叫做 event
   - 構成
@@ -52,9 +55,17 @@ categories : ["full-stack"]
         - message 發給 kafka 後，會加上 partition, offset, timestamp
     - optional
       - header
-  - 有保留的時間限制
+  - retention
+    - message 會在一段時間後被刪除
     - 預設 7 天，可以設定
-
+### Message serialization / deserialization
+- Kafka 會將 message 轉換成 bytes 才傳輸
+- 用在 key 和 value
+- 不支援的格式也可以用自訂的 serializer / deserializer
+  - ex: JSON
+- 優點
+  - 可以用不同的語言來寫 producer 和 consumer
+  - 減少資料大小
 ## Producer
 - producer 會將 message 寫入到 topic
 - producer 會知道要寫入哪個 partition
@@ -64,10 +75,6 @@ categories : ["full-stack"]
     - 如果不是，同個 key 會被分配到同個 partition，因為有 hash function 來決定
       - kafka partitioner 會負責做 key hashing
       - 預設 hash function 是 murmur2
-
-### Kafka message serializer
-- Kafka 會將 message 轉換成 bytes
-- 用在 key 和 value
 
 ### Producer acknoledgement (ack)
 - 有三種 ack
@@ -84,13 +91,25 @@ categories : ["full-stack"]
 ## Consumer
 - consumer 會從 topic 中讀取 message
   - 是 pull 的方式
-### Kafka message deserializer
-- Kafka 會將 bytes 轉換成 message
-- 一樣用在 key 和 value
+- 和 producer 解耦
+
+### Push vs Pull
+- push
+  - 沒辦法知道 consumer 能不能 handle message
+  - 如果 push 出去但 consumer 來不及消化會造成問題
+- pull
+  - 如果 consumer 速度比 producer 慢，可以之後慢慢補上
+
 ### Consumer group
-- 一個 application 可以有多個 consumer，他們組成一個 consumer group
+- 一個 application 可以有多個 consumer，共同組成一個 consumer group
+- 同個 consumer group 中的 consumer 會共同設置一個 group id
 - consumer group 中的所有 consumer 會以 exclusive 的方式從 partition 中讀取 message
+  - 不會有同一個 partition 被配給多個 consumer
   - 如果 consumer 比 partition 多，有些 consumer 會閒置
+- group coordinator
+  - 會負責管理 group 中的 consumer
+  - 會負責分配 partition 給 consumer
+  - 利用 __consumer_offsets 來記錄 consumer group 中的 consumer 的 offset
 ### Consumer offset
 - kafka 會紀錄 consumer group 中的每個 consumer 消耗到哪裡了
 - 會放在 topic 的 __consumer_offsets
@@ -100,18 +119,27 @@ categories : ["full-stack"]
   - at least once
     - 會在處理完 message 後才 commit
     - 要確保處理方式是 idempotent
+      - 可以幫 message 加上 primary key
   - at most once
     - 會在取得 message 後就 commit
   - exactly once
 
 ## Kafka broker
 - kafka cluster 中的每個 server 都是 broker
+- 多個連接在一起的 broker 組成一個 cluster
+  - 會有一個 broker 是 controller
+    - 負責管理 cluster 中的 broker
+    - 也管 topic 和 partition
 - 用 id 來識別，id 是整數
 - broker 會包含某些 partition
 - 也被叫做 bootstrap server
-- 一但連到某個 broker，就可以連到整個 cluster
-  - kafka client 會處理
-### Zookeeper
+  - 一但連到某個 broker，就可以連到整個 cluster
+    - kafka client 會處理
+- broker 數量考量
+  - 儲存空間
+  - 容錯
+  - throughput
+## Zookeeper
 - 被用來管理 kafka broker
 - 可以拿來幫 partition 做 leader election
 - Zookeeper 分成 leader 和 follower

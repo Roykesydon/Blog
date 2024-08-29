@@ -310,6 +310,58 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;h2 id=&#34;data-types&#34;&gt;Data types&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;這裡以 PostgreSQL 為例，列一小部分&lt;/li&gt;
+&lt;li&gt;設計 column 前可以先看有沒有合適的 data type&lt;/li&gt;
+&lt;li&gt;Numeric
+&lt;ul&gt;
+&lt;li&gt;整數&lt;/li&gt;
+&lt;li&gt;浮點數&lt;/li&gt;
+&lt;li&gt;Serial
+&lt;ul&gt;
+&lt;li&gt;一種特殊的整數，會 auto increment&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Character
+&lt;ul&gt;
+&lt;li&gt;char&lt;/li&gt;
+&lt;li&gt;varchar
+&lt;ul&gt;
+&lt;li&gt;可變長度的字串，如果沒有設定長度，就是 text&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;text&lt;/li&gt;
+&lt;li&gt;bpchar
+&lt;ul&gt;
+&lt;li&gt;好像就是 varchar，但是 document 有寫 blank trimmed&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Date / Time&lt;/li&gt;
+&lt;li&gt;Boolean&lt;/li&gt;
+&lt;li&gt;Binary&lt;/li&gt;
+&lt;li&gt;Geometric
+&lt;ul&gt;
+&lt;li&gt;特地寫這個是因為如果要用二維平面點，一般來說可能會用兩個 float，但是如果用 geometric 類有 point 可用&lt;/li&gt;
+&lt;li&gt;其他形狀也可存&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;UUID&lt;/li&gt;
+&lt;li&gt;Enum
+&lt;ul&gt;
+&lt;li&gt;一個有限的字串集合&lt;/li&gt;
+&lt;li&gt;有序
+&lt;ul&gt;
+&lt;li&gt;按照建立時的順序&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;database-indexing&#34;&gt;Database indexing&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;如果需要搜索的欄位沒做 index，那麼就會需要 scan 整個 table，直到找到
@@ -600,6 +652,18 @@
 &lt;li&gt;但是他會把整個 block 寫到新的地方，再把原地方設為 free，就為了那些不能再被使用的空間搬整個 block&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;polymorphic association
+&lt;ul&gt;
+&lt;li&gt;一個 table 有多個關聯，但是這些關聯是不同的 table
+&lt;ul&gt;
+&lt;li&gt;某個 id column 會根據不同情況代表不同 table 的 id&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;可能可以節省空間&lt;/li&gt;
+&lt;li&gt;也可能因為這樣而沒辦法使用 foreign key&lt;/li&gt;
+&lt;li&gt;可以考慮拆成多個 column 或是多個 table&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;

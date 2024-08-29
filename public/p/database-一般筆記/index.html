@@ -7,7 +7,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.042974887bb3db8b0f3797238c0087805caf10a20d031e17867135982fedeea0.css"><meta property='og:title' content='Database 一般筆記'>
+<link rel="stylesheet" href="/Blog/scss/style.min.5163a15f4e386e181ec7b98f1f4c8be67b494b4f5f50b7ccc90c92303ffeeb50.css"><meta property='og:title' content='Database 一般筆記'>
 <meta property='og:description' content='沒有另外被獨立出去一篇且有關 Database 的內容'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -320,6 +320,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
         <li><a href="#partitioning">Partitioning</a></li>
       </ol>
     </li>
+    <li><a href="#data-types">Data types</a></li>
     <li><a href="#database-indexing">Database indexing</a>
       <ol>
         <li><a href="#clustered-index">Clustered index</a></li>
@@ -597,6 +598,58 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>如果要從一個 partition 移動資料到另一個 partition，效率很慢</li>
 <li>對於效率很差的 query，可能會需要 scan 所有 partition，此時比掃描整個沒做 partition 的 table 還要慢</li>
 <li>partition 可能會 unbalance</li>
+</ul>
+</li>
+</ul>
+<h2 id="data-types">Data types</h2>
+<ul>
+<li>這裡以 PostgreSQL 為例，列一小部分</li>
+<li>設計 column 前可以先看有沒有合適的 data type</li>
+<li>Numeric
+<ul>
+<li>整數</li>
+<li>浮點數</li>
+<li>Serial
+<ul>
+<li>一種特殊的整數，會 auto increment</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Character
+<ul>
+<li>char</li>
+<li>varchar
+<ul>
+<li>可變長度的字串，如果沒有設定長度，就是 text</li>
+</ul>
+</li>
+<li>text</li>
+<li>bpchar
+<ul>
+<li>好像就是 varchar，但是 document 有寫 blank trimmed</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Date / Time</li>
+<li>Boolean</li>
+<li>Binary</li>
+<li>Geometric
+<ul>
+<li>特地寫這個是因為如果要用二維平面點，一般來說可能會用兩個 float，但是如果用 geometric 類有 point 可用</li>
+<li>其他形狀也可存</li>
+</ul>
+</li>
+<li>UUID</li>
+<li>Enum
+<ul>
+<li>一個有限的字串集合</li>
+<li>有序
+<ul>
+<li>按照建立時的順序</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -890,6 +943,18 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>但是他會把整個 block 寫到新的地方，再把原地方設為 free，就為了那些不能再被使用的空間搬整個 block</li>
 </ul>
 </li>
+</ul>
+</li>
+<li>polymorphic association
+<ul>
+<li>一個 table 有多個關聯，但是這些關聯是不同的 table
+<ul>
+<li>某個 id column 會根據不同情況代表不同 table 的 id</li>
+</ul>
+</li>
+<li>可能可以節省空間</li>
+<li>也可能因為這樣而沒辦法使用 foreign key</li>
+<li>可以考慮拆成多個 column 或是多個 table</li>
 </ul>
 </li>
 </ul>
