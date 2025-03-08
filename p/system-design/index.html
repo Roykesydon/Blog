@@ -7,7 +7,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/system-design/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.5163a15f4e386e181ec7b98f1f4c8be67b494b4f5f50b7ccc90c92303ffeeb50.css"><meta property='og:title' content='System Design'>
+<link rel="stylesheet" href="/Blog/scss/style.min.a1e2d8f7d8200181ca470ddb7bf38c4e0112dd2a1dd58f8e7fe7a7eb3efbaab2.css"><meta property='og:title' content='System Design'>
 <meta property='og:description' content='紀錄系統設計時可以考慮的事項'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/system-design/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -314,11 +314,8 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     <li><a href="#network">Network</a>
       <ol>
         <li><a href="#load-balancer">Load Balancer</a></li>
-        <li><a href="#cdn-content-delivery-network">CDN (Content Delivery Network)</a></li>
       </ol>
     </li>
-    <li><a href="#maintain-consistency">Maintain consistency</a></li>
-    <li><a href="#queue--messaging">Queue / Messaging</a></li>
     <li><a href="#protocol--sendreceive-data">Protocol &amp; Send/Receive data</a></li>
     <li><a href="#流程">流程</a></li>
     <li><a href="#tips">Tips</a>
@@ -505,94 +502,6 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>和 API Gateway 的差異
 <ul>
 <li>API Gateway 除了 load balancing 會有更多的功能，例如 rate limiting, authentication, authorization, request validation, caching, logging etc</li>
-</ul>
-</li>
-</ul>
-<h3 id="cdn-content-delivery-network">CDN (Content Delivery Network)</h3>
-<ul>
-<li>把靜態資源放到離使用者地理上比較近的地方，加速存取速度
-<ul>
-<li>html, css, js, image&hellip;</li>
-<li>這些資料不該頻繁改變</li>
-</ul>
-</li>
-<li>本質上是靜態資源的 cache</li>
-<li>types
-<ul>
-<li>push
-<ul>
-<li>把新的資料推到 CDN</li>
-<li>如果靜態資源很多，開銷會很大</li>
-</ul>
-</li>
-<li>pull
-<ul>
-<li>lazy</li>
-<li>當有 request 進來時，且 CDN 沒有該資源，才會去 origin server 拉資源</li>
-<li>第一個 user 會比較慢</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="maintain-consistency">Maintain consistency</h2>
-<ul>
-<li>確保 unique
-<ul>
-<li>bloom filter
-<ul>
-<li>因為存在 service 的 memory，有最高的 throughput，但是可能會有 false positive</li>
-<li>不好讓多個 service 共用</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="queue--messaging">Queue / Messaging</h2>
-<ul>
-<li>如果系統是 synchronous，可能會有 scalability 的問題
-<ul>
-<li>會被最慢的 component 所限制 (ex: payment service)</li>
-</ul>
-</li>
-<li>role
-<ul>
-<li>producer
-<ul>
-<li>產生 message</li>
-</ul>
-</li>
-<li>consumer
-<ul>
-<li>處理 message</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>優點
-<ul>
-<li>buffer</li>
-<li>應對 request spike</li>
-</ul>
-</li>
-<li>缺點
-<ul>
-<li>現在無法知道 message 被處理的情況，sychronous 可以直接得知成功與否</li>
-<li>增加 latency</li>
-</ul>
-</li>
-<li>model
-<ul>
-<li>message queue
-<ul>
-<li>讓 queue 分配 message 給某個 consumer</li>
-</ul>
-</li>
-<li>publisher / subscriber (pub/sub)
-<ul>
-<li>可能會有某個 event 想被 publish 給多個 consumer (subscribers)</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -896,7 +805,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
         
             2023 - 
         
-        2024 Roykesydon
+        2025 Roykesydon
     </section>
     
     <section class="powerby">

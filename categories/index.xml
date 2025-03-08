@@ -6,10 +6,10 @@
         <description>Recent content in Categories on Roykesydon</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
-        <lastBuildDate>Fri, 16 Aug 2024 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 25 Aug 2024 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/categories/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Full Stack</title>
         <link>https://roykesydon.github.io/Blog/categories/full-stack/</link>
-        <pubDate>Fri, 16 Aug 2024 00:00:17 +0800</pubDate>
+        <pubDate>Sun, 25 Aug 2024 00:00:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/categories/full-stack/</guid>
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/full-stack.jpg" alt="Featured image of post Full Stack" /&gt;</description>
@@ -47,28 +47,12 @@
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/ctf.jpg" alt="Featured image of post CTF" /&gt;</description>
         </item>
         <item>
-        <title>Deep Learning</title>
-        <link>https://roykesydon.github.io/Blog/categories/deep-learning/</link>
-        <pubDate>Tue, 30 Apr 2024 00:00:55 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/categories/deep-learning/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/deep-learning.jpg" alt="Featured image of post Deep Learning" /&gt;</description>
-        </item>
-        <item>
         <title>Linux</title>
         <link>https://roykesydon.github.io/Blog/categories/linux/</link>
         <pubDate>Wed, 24 Apr 2024 00:00:43 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/categories/linux/</guid>
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/linux.jpg" alt="Featured image of post Linux" /&gt;</description>
-        </item>
-        <item>
-        <title>Unclassified</title>
-        <link>https://roykesydon.github.io/Blog/categories/unclassified/</link>
-        <pubDate>Sat, 30 Mar 2024 00:00:01 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/categories/unclassified/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/unclassified.jpg" alt="Featured image of post Unclassified" /&gt;</description>
         </item>
         <item>
         <title>Embedded System</title>
@@ -79,12 +63,28 @@
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/embedded-system.jpg" alt="Featured image of post Embedded System" /&gt;</description>
         </item>
         <item>
+        <title>Deep Learning</title>
+        <link>https://roykesydon.github.io/Blog/categories/deep-learning/</link>
+        <pubDate>Thu, 26 Jan 2023 01:36:53 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/categories/deep-learning/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/deep-learning.jpg" alt="Featured image of post Deep Learning" /&gt;</description>
+        </item>
+        <item>
         <title>Math</title>
         <link>https://roykesydon.github.io/Blog/categories/math/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/categories/math/</guid>
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/math.jpg" alt="Featured image of post Math" /&gt;</description>
+        </item>
+        <item>
+        <title>Unclassified</title>
+        <link>https://roykesydon.github.io/Blog/categories/unclassified/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/categories/unclassified/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/unclassified.jpg" alt="Featured image of post Unclassified" /&gt;</description>
         </item>
         
     </channel>

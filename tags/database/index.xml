@@ -133,16 +133,16 @@
 </description>
         </item>
         <item>
-        <title>Database ACID</title>
-        <link>https://roykesydon.github.io/Blog/p/database-acid/</link>
+        <title>Database Transactions and ACID Properties</title>
+        <link>https://roykesydon.github.io/Blog/p/database-transactions-and-acid-properties/</link>
         <pubDate>Sun, 21 Jul 2024 00:00:17 +0800</pubDate>
         
-        <guid>https://roykesydon.github.io/Blog/p/database-acid/</guid>
+        <guid>https://roykesydon.github.io/Blog/p/database-transactions-and-acid-properties/</guid>
         <description>&lt;h2 id=&#34;transaction&#34;&gt;Transaction&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;一個或多個操作的集合&lt;/li&gt;
 &lt;li&gt;一個 transaction 要不全部執行，要不全部不執行&lt;/li&gt;
-&lt;li&gt;就算在程式中沒顯式的寫 transaction，資料庫也會自動幫你包 transaction&lt;/li&gt;
+&lt;li&gt;即使程式中未顯式使用 transaction，資料庫也會自動為操作包裹一個隱式的 transaction&lt;/li&gt;
 &lt;li&gt;lifespan
 &lt;ul&gt;
 &lt;li&gt;begin&lt;/li&gt;
@@ -169,7 +169,7 @@
 &lt;/li&gt;
 &lt;li&gt;Eventual consistency
 &lt;ul&gt;
-&lt;li&gt;最後一定會 consistent&lt;/li&gt;
+&lt;li&gt;最後一定會 consistent，儘管過程中可能會出現短暫的不一致&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -214,9 +214,10 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Isoaltion level
+&lt;li&gt;Isolation level
 &lt;ul&gt;
 &lt;li&gt;為了解決 read phenomena，資料庫提供了不同的隔離等級&lt;/li&gt;
+&lt;li&gt;不同的隔離等級會影響到 transaction 之間讀取資料的方式，以達到不同的資料一致性要求&lt;/li&gt;
 &lt;li&gt;不會影響自身 transaction 前面所 write 的資料&lt;/li&gt;
 &lt;li&gt;read uncommitted
 &lt;ul&gt;
@@ -623,6 +624,40 @@
 &lt;ul&gt;
 &lt;li&gt;table 現在會分到不同的 database server&lt;/li&gt;
 &lt;li&gt;做 partition，client 不用管資料具體在哪個 partition，交給 DBMS 去處理。但是 sharding 就要 client 自己去處理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;sharding-key&#34;&gt;Sharding key&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Hash
+&lt;ul&gt;
+&lt;li&gt;用 hash function 來決定資料要放在哪個 shard&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Range
+&lt;ul&gt;
+&lt;li&gt;用某個 column 所處的範圍來決定資料要放在哪個 shard&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Dictionary
+&lt;ul&gt;
+&lt;li&gt;用離散的值來決定資料要放在哪個 shard&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;考慮事項
+&lt;ul&gt;
+&lt;li&gt;cardinality
+&lt;ul&gt;
+&lt;li&gt;cardinality 是 set 中的元素數量&lt;/li&gt;
+&lt;li&gt;key 種類太少，就會限制水平擴展&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;frequency&lt;/li&gt;
+&lt;li&gt;monotonicity
+&lt;ul&gt;
+&lt;li&gt;如果 key 是遞增或遞減的，可能會導致某個 shard 過度使用&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1082,15 +1117,56 @@
         <guid>https://roykesydon.github.io/Blog/p/database-normalization/</guid>
         <description>&lt;h2 id=&#34;normalization-目的&#34;&gt;Normalization 目的&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;避免 redundent information&lt;/li&gt;
-&lt;li&gt;更容易 understand、enhance、extend&lt;/li&gt;
-&lt;li&gt;避免 anomalies&lt;/li&gt;
+&lt;li&gt;避免 redundant information
+&lt;ul&gt;
+&lt;li&gt;資料重複容易導致資料不一致&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;避免 anomalies
+&lt;ul&gt;
+&lt;li&gt;避免資料不一致&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;隨著 1NF ~ 5NF，有更多的 safety guarantee&lt;/p&gt;
+&lt;h2 id=&#34;functional-dependency&#34;&gt;Functional Dependency&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;{X} -&amp;gt; {Y}&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;X 是 determinant，Y 是 dependent&lt;/li&gt;
+&lt;li&gt;Y is functionally dependent on X (Y depends on X)&lt;/li&gt;
+&lt;li&gt;X functionally determines Y&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;一個 attribute 的 value 可以決定另一個 attribute 的 value&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ex: {playerID} -&amp;gt; {playerName}&lt;/li&gt;
+&lt;li&gt;這代表 playerID 決定了 playerName&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;用箭頭表示，左邊是 determinant，右邊是 dependent&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;一個 attribute 可以有多個 dependent&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ex: {playerID} -&amp;gt; {playerName, playerAge}&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;一個 attribute 也可以是多個 attribute 的 dependent&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ex: {playerID, itemID} -&amp;gt; {itemName}&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;1nf&#34;&gt;1NF&lt;/h2&gt;
 &lt;ul&gt;
+&lt;li&gt;去除重複性&lt;/li&gt;
 &lt;li&gt;違反條件
-&lt;ul&gt;
+&lt;ol&gt;
 &lt;li&gt;用 row order 傳達資訊&lt;/li&gt;
 &lt;li&gt;mixing data types in single column
 &lt;ul&gt;
@@ -1100,7 +1176,11 @@
 &lt;li&gt;存在沒有 primary key 的 table&lt;/li&gt;
 &lt;li&gt;repeating groups
 &lt;ul&gt;
-&lt;li&gt;同一個 column 有多個數值，或是在同一個 row 存多個同類型的數值。&lt;/li&gt;
+&lt;li&gt;同一個 column 有多個數值，或是在同一個 row 存多個同類型的數值
+&lt;ul&gt;
+&lt;li&gt;每個 column 的 value 都應該是 atomic&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;ex :
 &lt;table&gt;
 &lt;thead&gt;
@@ -1150,17 +1230,54 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
+&lt;/ol&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;2nf&#34;&gt;2NF&lt;/h2&gt;
 &lt;ul&gt;
+&lt;li&gt;去除 partial dependency&lt;/li&gt;
 &lt;li&gt;所有的 non-key attribute 都要 depend on 整個 PK
 &lt;ul&gt;
 &lt;li&gt;非正式定義，有點細微差異&lt;/li&gt;
+&lt;li&gt;如果是 composite key，不能 depend on PK 的其中一部分&lt;/li&gt;
 &lt;li&gt;functional dependency
 &lt;ul&gt;
-&lt;li&gt;ex: {player_id, item_type} -&amp;gt; {item_Quantity}&lt;/li&gt;
+&lt;li&gt;ex: {playerID, itemID} -&amp;gt; {itemName}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;違反的例子
+&lt;ul&gt;
+&lt;li&gt;ex:
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;playerID&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;itemID&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;itemName&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;item_1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;2&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;item_2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;2&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;item_1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;這裡的 PK 是 {playerID, itemID}，但 itemName 只 depend on itemID&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1168,34 +1285,154 @@
 &lt;/ul&gt;
 &lt;h2 id=&#34;3nf&#34;&gt;3NF&lt;/h2&gt;
 &lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;去除 transitive dependency&lt;/p&gt;
+&lt;ul&gt;
 &lt;li&gt;transitive dependency
 &lt;ul&gt;
 &lt;li&gt;{A} -&amp;gt; {B} -&amp;gt; {C}&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;所有 non-key attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;boyce-codd-normal-form&#34;&gt;Boyce-Codd Normal Form&lt;/h3&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;考慮到 functional dependency 有遞移性(Transitivity)&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;所有 attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute&lt;/li&gt;
+&lt;li&gt;Transitivity
+&lt;ul&gt;
+&lt;li&gt;{A} -&amp;gt; {B}，{B} -&amp;gt; {C}，則 {A} -&amp;gt; {C}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;所有 non-key attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;違反的例子&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ex:
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;playerID&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;itemID&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;itemName&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;itemCategory&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;item_1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;weapon&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;2&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;item_2&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;weapon&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;2&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;item_1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;weapon&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;這裡的 PK 是 {playerID, itemID}，但 itemCategory 只 depend on itemName&lt;/li&gt;
+&lt;li&gt;這裡的 itemCategory 是 transitive dependency&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;boyce-codd-normal-form-bcnf&#34;&gt;Boyce-Codd Normal Form (BCNF)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;3NF 的強化版，又稱 3.5NF&lt;/li&gt;
+&lt;li&gt;實務中大多做到 3NF&lt;/li&gt;
+&lt;li&gt;對於每個 functional dependency，左邊的 attribute 都是 super key&lt;/li&gt;
+&lt;li&gt;違反例子
+&lt;ul&gt;
+&lt;li&gt;ex:
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;playerID&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;itemID&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;itemName&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;PlayerName&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;item_1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;roy&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;2&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;item_2&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;roy&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;2&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;item_1&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;test&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;存在至少兩個 functional dependency
+&lt;ul&gt;
+&lt;li&gt;{itemID} -&amp;gt; {itemName}&lt;/li&gt;
+&lt;li&gt;{playerID} -&amp;gt; {playerName}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;但是 {playerID} 和 {itemID} 都不是 super key
+&lt;ul&gt;
+&lt;li&gt;拆成三個表就可以解決&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;4nf&#34;&gt;4NF&lt;/h2&gt;
 &lt;ul&gt;
+&lt;li&gt;要先符合 BCNF&lt;/li&gt;
+&lt;li&gt;去除多值依賴(Multivalued Dependency)
+&lt;ul&gt;
 &lt;li&gt;multivalued dependency
 &lt;ul&gt;
-&lt;li&gt;不像 functional dependency，箭頭後方的那項可以有多個 value&lt;/li&gt;
-&lt;li&gt;{Model} $\twoheadrightarrow$ {Color}&lt;/li&gt;
+&lt;li&gt;一個表格至少要有 3 個 column 才有可能有 multivalued dependency&lt;/li&gt;
+&lt;li&gt;對於 {A} -&amp;gt; {B}，如果一個 A 可以對應到多個 B，也可以對應到多個 C，然後 B 和 C 獨立，則有 multivalued dependency&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;一個 table 中的所有 multivalued dependency 必須依賴於 key&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;5nf&#34;&gt;5NF&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;沒有 Join Dependency
+&lt;li&gt;又稱 Project-Join Normal Form (PJNF)&lt;/li&gt;
+&lt;li&gt;去除 join dependency
 &lt;ul&gt;
-&lt;li&gt;table 不能表示成其他 table join 起來的結果&lt;/li&gt;
+&lt;li&gt;join dependency
+&lt;ul&gt;
+&lt;li&gt;一個 table 可以表示成其他 table join 起來的結果&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;如果 JOIN dependency 存在，就拆分多個 table&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         </item>

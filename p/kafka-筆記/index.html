@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+
+<head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Kafka event streaming platform 專注在 publish / subscribe message 會在一段時間後被刪除，而不是等待 consumer 處理 Topic 一個特定的 data stream 一系列的 message 沒有限制 topic 的數量 由 name 來識別 Topic replication 如果有一個 broker down 了，會有另一個 broker 繼續提供複本 topic replication factor 這個 factor 要大於 1 常見的設定值是 3 這個數值代表有幾個複本 複本會被放在其他的 broker 上 設為 n，可以承受 n-1 個 broker down 一個 partition 只會有一個 broker 作為他的 leader 其他的有複本的 broker 被稱為 ISR (in-sync replica) producer 寫入的時候，只能寫到 leader consumer 預設也只會從 leader 讀取 2.'>
+<title>Kafka 筆記</title>
+
+<link rel='canonical' href='https://roykesydon.github.io/Blog/p/kafka-%E7%AD%86%E8%A8%98/'>
+
+<link rel="stylesheet" href="/Blog/scss/style.min.a1e2d8f7d8200181ca470ddb7bf38c4e0112dd2a1dd58f8e7fe7a7eb3efbaab2.css"><meta property='og:title' content='Kafka 筆記'>
+<meta property='og:description' content='Kafka event streaming platform 專注在 publish / subscribe message 會在一段時間後被刪除，而不是等待 consumer 處理 Topic 一個特定的 data stream 一系列的 message 沒有限制 topic 的數量 由 name 來識別 Topic replication 如果有一個 broker down 了，會有另一個 broker 繼續提供複本 topic replication factor 這個 factor 要大於 1 常見的設定值是 3 這個數值代表有幾個複本 複本會被放在其他的 broker 上 設為 n，可以承受 n-1 個 broker down 一個 partition 只會有一個 broker 作為他的 leader 其他的有複本的 broker 被稱為 ISR (in-sync replica) producer 寫入的時候，只能寫到 leader consumer 預設也只會從 leader 讀取 2.'>
+<meta property='og:url' content='https://roykesydon.github.io/Blog/p/kafka-%E7%AD%86%E8%A8%98/'>
+<meta property='og:site_name' content='Roykesydon'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='queue' /><meta property='article:published_time' content='2024-08-17T00:00:17&#43;08:00'/><meta property='article:modified_time' content='2024-08-17T00:00:17&#43;08:00'/>
+<meta name="twitter:title" content="Kafka 筆記">
+<meta name="twitter:description" content="Kafka event streaming platform 專注在 publish / subscribe message 會在一段時間後被刪除，而不是等待 consumer 處理 Topic 一個特定的 data stream 一系列的 message 沒有限制 topic 的數量 由 name 來識別 Topic replication 如果有一個 broker down 了，會有另一個 broker 繼續提供複本 topic replication factor 這個 factor 要大於 1 常見的設定值是 3 這個數值代表有幾個複本 複本會被放在其他的 broker 上 設為 n，可以承受 n-1 個 broker down 一個 partition 只會有一個 broker 作為他的 leader 其他的有複本的 broker 被稱為 ISR (in-sync replica) producer 寫入的時候，只能寫到 leader consumer 預設也只會從 leader 讀取 2.">
+    <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
+
+</head>
+
+<body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "dark");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <div class="avatar-container-custom">
+                    <div class="ring ring1"></div>
+                    <div class="ring ring2"></div>
+                    <div class="ring ring3"></div>
+                    <div class="ring ring4"></div>
+                    <div class="front-card">
+                        <a href="/Blog">
+                        
+                            
+                            
+                            
+                                
+                                <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo-before" loading="lazy" alt="Avatar">
+                                <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo" loading="lazy" alt="Avatar">
+                                <img src="/Blog/avatar_hu9a20191e40e109c090979e06fb0ac0fe_178148_300x0_resize_q75_box.jpg" width="300"
+                                    height="300" class="site-logo-after" loading="lazy" alt="Avatar">
+                            
+                        
+                        </a>
+                    </div>
+                    <div class="back-card">
+                        <a href="/Blog">
+                        
+                            
+                        
+                            
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo" loading="lazy" alt="Avatar">
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo-before" loading="lazy" alt="Avatar">
+                            <img src="/Blog/avatar2_huacea5d2323c926714fd8ae1ac932701a_458315_300x0_resize_box_3.png" width="300"
+                                height="300" class="site-logo-after" loading="lazy" alt="Avatar">
+                        
+                        </a>
+                    </div>
+                </div>
+                
+                    
+                    <span class="emoji">🍤<span class="emoji-image-container"><span class="emoji-image-bg"></span><img class="emoji-image" src="/Blog/images/avatar/old avatar.png"></img></span></span>
+                    
+                
+            </figure>
+            
+        
+        
+        <h1 class="glitch" data-text="Roykesydon" style=""><a href="/Blog">Roykesydon</a></h1>
+        <div class="cybr-text-light">
+            <div class="site-meta cybr-text">
+                
+                <div class="terminal-effect" data-text="&gt; I write notes here during my free time.">
+                    &gt; I write notes here during my free time.<span class="terminal-cursor"></span>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </header><ol class="social-menu">
+            
+                <li>
+                    <a 
+                        href='https://github.com/Roykesydon'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://www.pixiv.net/users/18855729'
+                        target="_blank"
+                        title="Pixiv"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" stroke="currentColor" vector-effect="non-scaling-stroke" fill="">
+  <path stroke-width="1" vector-effect="non-scaling-stroke"
+    d="M701.515 301.152c-44.44-46.092-100.245-64.919-163.08-65.107-29.552-0.089-58.595 4.617-87.095 12.455-28.961 7.965-56.673 18.839-81.996 35.306-3.347 2.176-4.69 4.686-4.695 8.694-0.034 29.713-0.333 59.424-0.426 89.137-0.085 27.263-0.018 54.527-0.021 81.79-0.004 56.836 0.053 113.674-0.097 170.51-0.015 5.326 1.57 8.393 6.639 10.576 17.881 7.7 36.245 13.85 55.161 18.37 30.808 7.36 62.082 10.876 93.715 12.36 33.75 1.583 66.83-1.28 98.832-12.378 61.328-21.265 105.46-61.217 129.447-121.99 15.492-39.25 17.417-80.058 10.877-121.393-7.146-45.173-25.384-85.268-57.26-118.33z"
+    fill="none" />
+  <path stroke-width="1" vector-effect="non-scaling-stroke"
+    d="M512 17.482C238.886 17.482 17.482 238.886 17.482 512S238.886 1006.518 512 1006.518 1006.518 785.114 1006.518 512 785.114 17.482 512 17.482z m327.127 530.516c-18.962 47.58-50.687 84.816-92.709 113.517-43.734 29.872-92.452 46.554-144.647 53.74-66.355 9.136-131.115 0.236-195.108-17.307-12.485-3.423-24.767-7.483-37.009-11.676-4.732-1.62-5.413-1.201-5.42 3.878-0.049 33.583 0.004 67.165-0.069 100.748-0.008 3.782 1.314 5.86 5.093 7.004 7.233 2.187 14.26 5.003 20.384 9.602 3.594 2.699 6.19 5.968 5.824 10.873-0.43 5.752-3.64 8.957-9.432 8.968-19.872 0.039-39.744 0.014-59.617 0.014-19.41 0.006-38.82-0.103-58.23 0.082-4.736 0.045-8.025-1.288-9.814-5.842-1.798-4.575-0.752-8.45 2.566-11.847 5.698-5.833 13.181-8.404 20.593-11 7.625-2.668 7.8-0.933 7.8-10.86-0.02-151.738-0.02-303.476-0.076-455.215-0.001-2.353 1.227-5.726-1.09-6.829-2.297-1.094-4.167 1.976-6 3.442-22.584 18.058-43.474 37.783-60.052 61.694-0.527 0.76-1.03 1.537-1.588 2.273-5.878 7.727-9.827 15.6-5.76 25.855 1.946 4.91 1.707 10.59 0.282 15.968-0.937 3.532-2.436 6.64-5.44 8.865-5.016 3.718-8.469 3.16-11.788-2.085-12.847-20.308-25.59-40.682-38.532-60.928-2.117-3.313-1.999-5.634 0.715-8.492 17.758-18.692 37.058-35.675 57.256-51.635 51.148-40.413 106.911-72.725 168.335-94.902 40.036-14.455 81.234-23.72 123.709-27.312 49.596-4.194 98.488-0.765 146.365 13.295 50.8 14.919 95.584 40.146 131.966 79.103 36.324 38.896 58.162 84.856 65.163 137.62 5.425 40.866 1.694 80.839-13.67 119.389z"
+    fill="none" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://twitter.com/Roykesydon'
+                        target="_blank"
+                        title="Twitter"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" 
+class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
+  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+  <path
+    d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        
+        <li >
+            <a href='/Blog/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Home'
+                style="--color: rgba(204, 245, 255, 0.932)">Home</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='About'
+                style="--color: rgba(204, 245, 255, 0.932)">About</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Archives'
+                style="--color: rgba(204, 245, 255, 0.932)">Archives</span>
+            </a>
+        </li>
+        
+        
+        
+        <li >
+            <a href='/Blog/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                
+                <span 
+                
+                class="menu-custom"
+                data-text='Search'
+                style="--color: rgba(204, 245, 255, 0.932)">Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+        </div>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#kafka">Kafka</a></li>
+    <li><a href="#topic">Topic</a>
+      <ol>
+        <li><a href="#topic-replication">Topic replication</a></li>
+      </ol>
+    </li>
+    <li><a href="#partition">Partition</a></li>
+    <li><a href="#message">Message</a>
+      <ol>
+        <li><a href="#message-serialization--deserialization">Message serialization / deserialization</a></li>
+      </ol>
+    </li>
+    <li><a href="#producer">Producer</a>
+      <ol>
+        <li><a href="#producer-acknoledgement-ack">Producer acknoledgement (ack)</a></li>
+      </ol>
+    </li>
+    <li><a href="#consumer">Consumer</a>
+      <ol>
+        <li><a href="#push-vs-pull">Push vs Pull</a></li>
+        <li><a href="#consumer-group">Consumer group</a></li>
+        <li><a href="#consumer-offset">Consumer offset</a></li>
+      </ol>
+    </li>
+    <li><a href="#kafka-broker">Kafka broker</a></li>
+    <li><a href="#zookeeper">Zookeeper</a></li>
+    <li><a href="#cli">CLI</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        
+        
+        
+        <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/Blog/categories/full-stack/" style="background-color: #d979cf; color: #ffffff;">
+                Full Stack
+            </a>
+        
+    </header>
+    
+
+    
+    
+    
+    
+    
+    
+    <div class="article-title-wrapper article-float-image"  style="--bg-image: url('/Blog/images/categories/full-stack.jpg');">
+        <h2 class="article-title-custom">
+            <a href="/Blog/p/kafka-%E7%AD%86%E8%A8%98/">Kafka 筆記</a>
+        </h2>
+        
+    </div>
+    
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Aug 17, 2024</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    3 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="kafka">Kafka</h2>
+<ul>
+<li>event streaming platform</li>
+<li>專注在 publish / subscribe</li>
+<li>message 會在一段時間後被刪除，而不是等待 consumer 處理</li>
+</ul>
+<h2 id="topic">Topic</h2>
+<ul>
+<li>一個特定的 data stream
+<ul>
+<li>一系列的 message</li>
+</ul>
+</li>
+<li>沒有限制 topic 的數量</li>
+<li>由 name 來識別</li>
+</ul>
+<h3 id="topic-replication">Topic replication</h3>
+<ul>
+<li>如果有一個 broker down 了，會有另一個 broker 繼續提供複本</li>
+<li>topic replication factor
+<ul>
+<li>這個 factor 要大於 1</li>
+<li>常見的設定值是 3</li>
+<li>這個數值代表有幾個複本
+<ul>
+<li>複本會被放在其他的 broker 上</li>
+</ul>
+</li>
+<li>設為 n，可以承受 n-1 個 broker down</li>
+</ul>
+</li>
+<li>一個 partition 只會有一個 broker 作為他的 leader
+<ul>
+<li>其他的有複本的 broker 被稱為 ISR (in-sync replica)</li>
+<li>producer 寫入的時候，只能寫到 leader</li>
+<li>consumer 預設也只會從 leader 讀取
+<ul>
+<li>2.4 版本後，可以設定從 ISR 讀取</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="partition">Partition</h2>
+<ul>
+<li>topic 通常會被分成多個 partition</li>
+<li>partiton 中的 message 是有序的
+<ul>
+<li>message 會獲得 id，他是 incremental 的</li>
+<li>這個 id 被稱為 offset
+<ul>
+<li>只在特定的 partition 中有意義，不同的 partition 的 offset 是獨立的</li>
+</ul>
+</li>
+<li>但不同 partition 的 message 是沒有順序的，只有在同一個 partition 中才有順序</li>
+</ul>
+</li>
+<li>immutable
+<ul>
+<li>一旦 message 被寫入，就不能被修改</li>
+</ul>
+</li>
+<li>通常 partition 的數量至少為 consumer 數量
+<ul>
+<li>如果 partition 數量少於 consumer 數量，有些 consumer 會閒置</li>
+</ul>
+</li>
+</ul>
+<h2 id="message">Message</h2>
+<ul>
+<li>message 也被叫做 event</li>
+<li>構成
+<ul>
+<li>required
+<ul>
+<li>key, value, compression type, partition, offset, timestamp
+<ul>
+<li>key, value 可以是 null</li>
+<li>timestamp 可以由系統設置</li>
+<li>message 發給 kafka 後，會加上 partition, offset, timestamp</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>optional
+<ul>
+<li>header</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>retention
+<ul>
+<li>message 會在一段時間後被刪除</li>
+<li>預設 7 天，可以設定</li>
+</ul>
+</li>
+</ul>
+<h3 id="message-serialization--deserialization">Message serialization / deserialization</h3>
+<ul>
+<li>Kafka 會將 message 轉換成 bytes 才傳輸</li>
+<li>用在 key 和 value</li>
+<li>不支援的格式也可以用自訂的 serializer / deserializer
+<ul>
+<li>ex: JSON</li>
+</ul>
+</li>
+<li>優點
+<ul>
+<li>可以用不同的語言來寫 producer 和 consumer</li>
+<li>減少資料大小</li>
+</ul>
+</li>
+</ul>
+<h2 id="producer">Producer</h2>
+<ul>
+<li>producer 會將 message 寫入到 topic</li>
+<li>producer 會知道要寫入哪個 partition</li>
+<li>send message
+<ul>
+<li>會帶有一個 key，可以是任何資料型態
+<ul>
+<li>如果 key 是 null，會以 round-robin 的方式分配到 partition</li>
+<li>如果不是，同個 key 會被分配到同個 partition，因為有 hash function 來決定
+<ul>
+<li>kafka partitioner 會負責做 key hashing</li>
+<li>預設 hash function 是 murmur2</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="producer-acknoledgement-ack">Producer acknoledgement (ack)</h3>
+<ul>
+<li>有三種 ack
+<ul>
+<li>acks=0
+<ul>
+<li>producer 不會等待 broker 的回應</li>
+<li>這樣會有最高的效能，但是可能會有 message 丟失</li>
+</ul>
+</li>
+<li>acks=1
+<ul>
+<li>producer 會等待 leader 的回應</li>
+<li>這樣會有中等的效能，但是可能發生 leader down 的情況</li>
+</ul>
+</li>
+<li>acks=all
+<ul>
+<li>producer 會等待所有的 ISR 的回應</li>
+<li>這樣會有最低的效能，但是不會有 message 丟失</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="consumer">Consumer</h2>
+<ul>
+<li>consumer 會從 topic 中讀取 message
+<ul>
+<li>是 pull 的方式</li>
+</ul>
+</li>
+<li>和 producer 解耦</li>
+</ul>
+<h3 id="push-vs-pull">Push vs Pull</h3>
+<ul>
+<li>push
+<ul>
+<li>沒辦法知道 consumer 能不能 handle message</li>
+<li>如果 push 出去但 consumer 來不及消化會造成問題</li>
+</ul>
+</li>
+<li>pull
+<ul>
+<li>如果 consumer 速度比 producer 慢，可以之後慢慢補上</li>
+</ul>
+</li>
+</ul>
+<h3 id="consumer-group">Consumer group</h3>
+<ul>
+<li>一個 application 可以有多個 consumer，共同組成一個 consumer group</li>
+<li>同個 consumer group 中的 consumer 會共同設置一個 group id</li>
+<li>consumer group 中的所有 consumer 會以 exclusive 的方式從 partition 中讀取 message
+<ul>
+<li>不會有同一個 partition 被配給多個 consumer</li>
+<li>如果 consumer 比 partition 多，有些 consumer 會閒置</li>
+</ul>
+</li>
+<li>group coordinator
+<ul>
+<li>會負責管理 group 中的 consumer</li>
+<li>會負責分配 partition 給 consumer</li>
+<li>利用 __consumer_offsets 來記錄 consumer group 中的 consumer 的 offset</li>
+</ul>
+</li>
+</ul>
+<h3 id="consumer-offset">Consumer offset</h3>
+<ul>
+<li>kafka 會紀錄 consumer group 中的每個 consumer 消耗到哪裡了</li>
+<li>會放在 topic 的 __consumer_offsets</li>
+<li>當 group 中的 consumer 取得 message 後，會週期性的 commit offset，讓 kafka 更新到 ＿consumer_offsets
+<ul>
+<li>這樣即使 consumer down 了，下次啟動時，也可以從上次消耗的地方繼續</li>
+</ul>
+</li>
+<li>三種 commit 策略
+<ul>
+<li>at least once
+<ul>
+<li>會在處理完 message 後才 commit</li>
+<li>要確保處理方式是 idempotent
+<ul>
+<li>可以幫 message 加上 primary key</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>at most once
+<ul>
+<li>會在取得 message 後就 commit</li>
+</ul>
+</li>
+<li>exactly once</li>
+</ul>
+</li>
+</ul>
+<h2 id="kafka-broker">Kafka broker</h2>
+<ul>
+<li>kafka cluster 中的每個 server 都是 broker</li>
+<li>多個連接在一起的 broker 組成一個 cluster
+<ul>
+<li>會有一個 broker 是 controller
+<ul>
+<li>負責管理 cluster 中的 broker</li>
+<li>也管 topic 和 partition</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>用 id 來識別，id 是整數</li>
+<li>broker 會包含某些 partition</li>
+<li>也被叫做 bootstrap server
+<ul>
+<li>一但連到某個 broker，就可以連到整個 cluster
+<ul>
+<li>kafka client 會處理</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>broker 數量考量
+<ul>
+<li>儲存空間</li>
+<li>容錯</li>
+<li>throughput</li>
+</ul>
+</li>
+</ul>
+<h2 id="zookeeper">Zookeeper</h2>
+<ul>
+<li>被用來管理 kafka broker</li>
+<li>可以拿來幫 partition 做 leader election</li>
+<li>Zookeeper 分成 leader 和 follower</li>
+<li>Kafka 3.0 之後，可以改用 Kafka Raft
+<ul>
+<li>4.0 之後，會移除 zookeeper</li>
+</ul>
+</li>
+<li>該不該用
+<ul>
+<li>現在似乎 KRaft 已經準備好上 production 了</li>
+<li>如果是 kafka client，應該盡量不使用 zookeeper</li>
+</ul>
+</li>
+</ul>
+<h2 id="cli">CLI</h2>
+<ul>
+<li><code>kafka-server-start.sh &lt;config file&gt;</code>
+<ul>
+<li>啟動 kafka server (broker)</li>
+<li>指定 config file</li>
+</ul>
+</li>
+<li><code>--bootstrap-server</code>
+<ul>
+<li>指定 kafka server</li>
+<li>不推薦使用 <code>--zookeeper</code></li>
+</ul>
+</li>
+<li><code>--command-config</code>
+<ul>
+<li>指定 config file</li>
+<li>裡面會寫包含帳號密碼以及加密方式等安全設定</li>
+</ul>
+</li>
+<li><code>kaft-topics.sh</code>
+<ul>
+<li><code>--partitions</code>
+<ul>
+<li>指定 partition 數量</li>
+</ul>
+</li>
+<li><code>--replication-factor</code>
+<ul>
+<li>指定 replication factor</li>
+</ul>
+</li>
+<li><code>--topic</code>
+<ul>
+<li>指定 topic name</li>
+</ul>
+</li>
+<li><code>--create</code></li>
+<li><code>delete</code></li>
+<li><code>--describe</code>
+<ul>
+<li>描述 topic
+<ul>
+<li><code>Replicas</code>
+<ul>
+<li>顯示哪些 broker 有複本 (id)</li>
+</ul>
+</li>
+<li><code>ISR</code>
+<ul>
+<li>顯示哪些 broker 和 leader 同步</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>--list</code>
+<ul>
+<li>列出所有 topic</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>kaft-console-producer.sh</code>
+<ul>
+<li><code>--topic</code>
+<ul>
+<li>指定 topic</li>
+</ul>
+</li>
+<li><code>--producer.config</code>
+<ul>
+<li>指定 config file</li>
+</ul>
+</li>
+<li><code>--producer-property</code>
+<ul>
+<li>指定 producer property</li>
+<li><code>acks</code>
+<ul>
+<li>指定 acks 模式</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>--property</code>
+<ul>
+<li>可以打許多次，每次指定一個 property</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>kaft-console-consumer.sh</code>
+<ul>
+<li><code>--topic</code>
+<ul>
+<li>指定 topic</li>
+</ul>
+</li>
+<li><code>--from-beginning</code>
+<ul>
+<li>不只是自打開 consumer 後的 message，而是從一開始的 message 開始</li>
+<li>如果同一個 group 有多個 consumer，這個選項只會對第一個 consumer 有用，offset 是看 group 的</li>
+</ul>
+</li>
+<li><code>--consumer.config</code>
+<ul>
+<li>指定 config file</li>
+</ul>
+</li>
+<li><code>--property</code></li>
+<li><code>--group</code>
+<ul>
+<li>指定 consumer group</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>kafka-consumer-groups.sh</code>
+<ul>
+<li><code>--list</code>
+<ul>
+<li>列出所有 consumer group</li>
+</ul>
+</li>
+<li><code>--describe</code>
+<ul>
+<li>描述 consumer group
+<ul>
+<li><code>CURRENT-OFFSET</code>
+<ul>
+<li>目前 offset</li>
+</ul>
+</li>
+<li><code>LOG-END-OFFSET</code>
+<ul>
+<li>最後一個 offset</li>
+</ul>
+</li>
+<li><code>LAG</code>
+<ul>
+<li>落後的 offset</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/Blog/tags/queue/">queue</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/Blog/p/sql-%E8%AA%9E%E6%B3%95%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SQL 語法筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/mongodb-%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">MongoDB 筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Database 一般筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/angular-%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Angular 筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Spring Boot 筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2023 - 
+        
+        2025 Roykesydon
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        
+    </section>
+
+    <section class="powerby">
+        <a href="https://www.vecteezy.com/free-vector/mountain">Mountain Vectors by Vecteezy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+
+            
+        </main>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/Blog/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </div>
+
+</body>
+
+</html>

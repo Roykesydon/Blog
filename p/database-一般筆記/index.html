@@ -7,7 +7,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.5163a15f4e386e181ec7b98f1f4c8be67b494b4f5f50b7ccc90c92303ffeeb50.css"><meta property='og:title' content='Database 一般筆記'>
+<link rel="stylesheet" href="/Blog/scss/style.min.a1e2d8f7d8200181ca470ddb7bf38c4e0112dd2a1dd58f8e7fe7a7eb3efbaab2.css"><meta property='og:title' content='Database 一般筆記'>
 <meta property='og:description' content='沒有另外被獨立出去一篇且有關 Database 的內容'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -329,7 +329,11 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     </li>
     <li><a href="#distributed-database">Distributed database</a>
       <ol>
-        <li><a href="#sharding">Sharding</a></li>
+        <li><a href="#sharding">Sharding</a>
+          <ol>
+            <li><a href="#sharding-key">Sharding key</a></li>
+          </ol>
+        </li>
         <li><a href="#database-replication">Database replication</a></li>
       </ol>
     </li>
@@ -414,7 +418,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 
 
                 <time class="article-time--reading">
-                    4 minute read
+                    5 minute read
                 </time>
             </div>
         
@@ -756,6 +760,40 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </ul>
 </li>
 </ul>
+<h4 id="sharding-key">Sharding key</h4>
+<ul>
+<li>Hash
+<ul>
+<li>用 hash function 來決定資料要放在哪個 shard</li>
+</ul>
+</li>
+<li>Range
+<ul>
+<li>用某個 column 所處的範圍來決定資料要放在哪個 shard</li>
+</ul>
+</li>
+<li>Dictionary
+<ul>
+<li>用離散的值來決定資料要放在哪個 shard</li>
+</ul>
+</li>
+<li>考慮事項
+<ul>
+<li>cardinality
+<ul>
+<li>cardinality 是 set 中的元素數量</li>
+<li>key 種類太少，就會限制水平擴展</li>
+</ul>
+</li>
+<li>frequency</li>
+<li>monotonicity
+<ul>
+<li>如果 key 是遞增或遞減的，可能會導致某個 shard 過度使用</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <h3 id="database-replication">Database replication</h3>
 <ul>
 <li>透過 redundancy 來提高 reliability, tolerance, accessibility</li>
@@ -1029,6 +1067,19 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
             
                 
 <article class="">
+    <a href="/Blog/p/sql-%E8%AA%9E%E6%B3%95%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SQL 語法筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
     <a href="/Blog/p/mongodb-%E7%AD%86%E8%A8%98/">
         
         
@@ -1042,38 +1093,25 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
             
                 
 <article class="">
+    <a href="/Blog/p/kafka-%E7%AD%86%E8%A8%98/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Kafka 筆記</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
     <a href="/Blog/p/angular-%E7%AD%86%E8%A8%98/">
         
         
 
         <div class="article-details">
             <h2 class="article-title">Angular 筆記</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/spring-boot-%E7%AD%86%E8%A8%98/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Spring Boot 筆記</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/graphql-%E7%B0%A1%E4%BB%8B/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">GraphQL 簡介</h2>
         </div>
     </a>
 </article>
@@ -1094,7 +1132,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
         
             2023 - 
         
-        2024 Roykesydon
+        2025 Roykesydon
     </section>
     
     <section class="powerby">

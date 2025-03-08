@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>queue on Roykesydon</title>
+        <link>https://roykesydon.github.io/Blog/tags/queue/</link>
+        <description>Recent content in queue on Roykesydon</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <lastBuildDate>Sat, 17 Aug 2024 00:00:17 +0800</lastBuildDate><atom:link href="https://roykesydon.github.io/Blog/tags/queue/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Kafka 筆記</title>
+        <link>https://roykesydon.github.io/Blog/p/kafka-%E7%AD%86%E8%A8%98/</link>
+        <pubDate>Sat, 17 Aug 2024 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/kafka-%E7%AD%86%E8%A8%98/</guid>
+        <description>&lt;h2 id=&#34;kafka&#34;&gt;Kafka&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;event streaming platform&lt;/li&gt;
+&lt;li&gt;專注在 publish / subscribe&lt;/li&gt;
+&lt;li&gt;message 會在一段時間後被刪除，而不是等待 consumer 處理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;topic&#34;&gt;Topic&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;一個特定的 data stream
+&lt;ul&gt;
+&lt;li&gt;一系列的 message&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;沒有限制 topic 的數量&lt;/li&gt;
+&lt;li&gt;由 name 來識別&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;topic-replication&#34;&gt;Topic replication&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;如果有一個 broker down 了，會有另一個 broker 繼續提供複本&lt;/li&gt;
+&lt;li&gt;topic replication factor
+&lt;ul&gt;
+&lt;li&gt;這個 factor 要大於 1&lt;/li&gt;
+&lt;li&gt;常見的設定值是 3&lt;/li&gt;
+&lt;li&gt;這個數值代表有幾個複本
+&lt;ul&gt;
+&lt;li&gt;複本會被放在其他的 broker 上&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;設為 n，可以承受 n-1 個 broker down&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;一個 partition 只會有一個 broker 作為他的 leader
+&lt;ul&gt;
+&lt;li&gt;其他的有複本的 broker 被稱為 ISR (in-sync replica)&lt;/li&gt;
+&lt;li&gt;producer 寫入的時候，只能寫到 leader&lt;/li&gt;
+&lt;li&gt;consumer 預設也只會從 leader 讀取
+&lt;ul&gt;
+&lt;li&gt;2.4 版本後，可以設定從 ISR 讀取&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;partition&#34;&gt;Partition&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;topic 通常會被分成多個 partition&lt;/li&gt;
+&lt;li&gt;partiton 中的 message 是有序的
+&lt;ul&gt;
+&lt;li&gt;message 會獲得 id，他是 incremental 的&lt;/li&gt;
+&lt;li&gt;這個 id 被稱為 offset
+&lt;ul&gt;
+&lt;li&gt;只在特定的 partition 中有意義，不同的 partition 的 offset 是獨立的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;但不同 partition 的 message 是沒有順序的，只有在同一個 partition 中才有順序&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;immutable
+&lt;ul&gt;
+&lt;li&gt;一旦 message 被寫入，就不能被修改&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;通常 partition 的數量至少為 consumer 數量
+&lt;ul&gt;
+&lt;li&gt;如果 partition 數量少於 consumer 數量，有些 consumer 會閒置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;message&#34;&gt;Message&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;message 也被叫做 event&lt;/li&gt;
+&lt;li&gt;構成
+&lt;ul&gt;
+&lt;li&gt;required
+&lt;ul&gt;
+&lt;li&gt;key, value, compression type, partition, offset, timestamp
+&lt;ul&gt;
+&lt;li&gt;key, value 可以是 null&lt;/li&gt;
+&lt;li&gt;timestamp 可以由系統設置&lt;/li&gt;
+&lt;li&gt;message 發給 kafka 後，會加上 partition, offset, timestamp&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;optional
+&lt;ul&gt;
+&lt;li&gt;header&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;retention
+&lt;ul&gt;
+&lt;li&gt;message 會在一段時間後被刪除&lt;/li&gt;
+&lt;li&gt;預設 7 天，可以設定&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;message-serialization--deserialization&#34;&gt;Message serialization / deserialization&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Kafka 會將 message 轉換成 bytes 才傳輸&lt;/li&gt;
+&lt;li&gt;用在 key 和 value&lt;/li&gt;
+&lt;li&gt;不支援的格式也可以用自訂的 serializer / deserializer
+&lt;ul&gt;
+&lt;li&gt;ex: JSON&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;優點
+&lt;ul&gt;
+&lt;li&gt;可以用不同的語言來寫 producer 和 consumer&lt;/li&gt;
+&lt;li&gt;減少資料大小&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;producer&#34;&gt;Producer&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;producer 會將 message 寫入到 topic&lt;/li&gt;
+&lt;li&gt;producer 會知道要寫入哪個 partition&lt;/li&gt;
+&lt;li&gt;send message
+&lt;ul&gt;
+&lt;li&gt;會帶有一個 key，可以是任何資料型態
+&lt;ul&gt;
+&lt;li&gt;如果 key 是 null，會以 round-robin 的方式分配到 partition&lt;/li&gt;
+&lt;li&gt;如果不是，同個 key 會被分配到同個 partition，因為有 hash function 來決定
+&lt;ul&gt;
+&lt;li&gt;kafka partitioner 會負責做 key hashing&lt;/li&gt;
+&lt;li&gt;預設 hash function 是 murmur2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;producer-acknoledgement-ack&#34;&gt;Producer acknoledgement (ack)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;有三種 ack
+&lt;ul&gt;
+&lt;li&gt;acks=0
+&lt;ul&gt;
+&lt;li&gt;producer 不會等待 broker 的回應&lt;/li&gt;
+&lt;li&gt;這樣會有最高的效能，但是可能會有 message 丟失&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;acks=1
+&lt;ul&gt;
+&lt;li&gt;producer 會等待 leader 的回應&lt;/li&gt;
+&lt;li&gt;這樣會有中等的效能，但是可能發生 leader down 的情況&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;acks=all
+&lt;ul&gt;
+&lt;li&gt;producer 會等待所有的 ISR 的回應&lt;/li&gt;
+&lt;li&gt;這樣會有最低的效能，但是不會有 message 丟失&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;consumer&#34;&gt;Consumer&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;consumer 會從 topic 中讀取 message
+&lt;ul&gt;
+&lt;li&gt;是 pull 的方式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;和 producer 解耦&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;push-vs-pull&#34;&gt;Push vs Pull&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;push
+&lt;ul&gt;
+&lt;li&gt;沒辦法知道 consumer 能不能 handle message&lt;/li&gt;
+&lt;li&gt;如果 push 出去但 consumer 來不及消化會造成問題&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;pull
+&lt;ul&gt;
+&lt;li&gt;如果 consumer 速度比 producer 慢，可以之後慢慢補上&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;consumer-group&#34;&gt;Consumer group&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一個 application 可以有多個 consumer，共同組成一個 consumer group&lt;/li&gt;
+&lt;li&gt;同個 consumer group 中的 consumer 會共同設置一個 group id&lt;/li&gt;
+&lt;li&gt;consumer group 中的所有 consumer 會以 exclusive 的方式從 partition 中讀取 message
+&lt;ul&gt;
+&lt;li&gt;不會有同一個 partition 被配給多個 consumer&lt;/li&gt;
+&lt;li&gt;如果 consumer 比 partition 多，有些 consumer 會閒置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;group coordinator
+&lt;ul&gt;
+&lt;li&gt;會負責管理 group 中的 consumer&lt;/li&gt;
+&lt;li&gt;會負責分配 partition 給 consumer&lt;/li&gt;
+&lt;li&gt;利用 __consumer_offsets 來記錄 consumer group 中的 consumer 的 offset&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;consumer-offset&#34;&gt;Consumer offset&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;kafka 會紀錄 consumer group 中的每個 consumer 消耗到哪裡了&lt;/li&gt;
+&lt;li&gt;會放在 topic 的 __consumer_offsets&lt;/li&gt;
+&lt;li&gt;當 group 中的 consumer 取得 message 後，會週期性的 commit offset，讓 kafka 更新到 ＿consumer_offsets
+&lt;ul&gt;
+&lt;li&gt;這樣即使 consumer down 了，下次啟動時，也可以從上次消耗的地方繼續&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;三種 commit 策略
+&lt;ul&gt;
+&lt;li&gt;at least once
+&lt;ul&gt;
+&lt;li&gt;會在處理完 message 後才 commit&lt;/li&gt;
+&lt;li&gt;要確保處理方式是 idempotent
+&lt;ul&gt;
+&lt;li&gt;可以幫 message 加上 primary key&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;at most once
+&lt;ul&gt;
+&lt;li&gt;會在取得 message 後就 commit&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;exactly once&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;kafka-broker&#34;&gt;Kafka broker&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;kafka cluster 中的每個 server 都是 broker&lt;/li&gt;
+&lt;li&gt;多個連接在一起的 broker 組成一個 cluster
+&lt;ul&gt;
+&lt;li&gt;會有一個 broker 是 controller
+&lt;ul&gt;
+&lt;li&gt;負責管理 cluster 中的 broker&lt;/li&gt;
+&lt;li&gt;也管 topic 和 partition&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;用 id 來識別，id 是整數&lt;/li&gt;
+&lt;li&gt;broker 會包含某些 partition&lt;/li&gt;
+&lt;li&gt;也被叫做 bootstrap server
+&lt;ul&gt;
+&lt;li&gt;一但連到某個 broker，就可以連到整個 cluster
+&lt;ul&gt;
+&lt;li&gt;kafka client 會處理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;broker 數量考量
+&lt;ul&gt;
+&lt;li&gt;儲存空間&lt;/li&gt;
+&lt;li&gt;容錯&lt;/li&gt;
+&lt;li&gt;throughput&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;zookeeper&#34;&gt;Zookeeper&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;被用來管理 kafka broker&lt;/li&gt;
+&lt;li&gt;可以拿來幫 partition 做 leader election&lt;/li&gt;
+&lt;li&gt;Zookeeper 分成 leader 和 follower&lt;/li&gt;
+&lt;li&gt;Kafka 3.0 之後，可以改用 Kafka Raft
+&lt;ul&gt;
+&lt;li&gt;4.0 之後，會移除 zookeeper&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;該不該用
+&lt;ul&gt;
+&lt;li&gt;現在似乎 KRaft 已經準備好上 production 了&lt;/li&gt;
+&lt;li&gt;如果是 kafka client，應該盡量不使用 zookeeper&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;cli&#34;&gt;CLI&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;kafka-server-start.sh &amp;lt;config file&amp;gt;&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;啟動 kafka server (broker)&lt;/li&gt;
+&lt;li&gt;指定 config file&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--bootstrap-server&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定 kafka server&lt;/li&gt;
+&lt;li&gt;不推薦使用 &lt;code&gt;--zookeeper&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--command-config&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定 config file&lt;/li&gt;
+&lt;li&gt;裡面會寫包含帳號密碼以及加密方式等安全設定&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kaft-topics.sh&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--partitions&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定 partition 數量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--replication-factor&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定 replication factor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--topic&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定 topic name&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--create&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;delete&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--describe&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;描述 topic
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Replicas&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;顯示哪些 broker 有複本 (id)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ISR&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;顯示哪些 broker 和 leader 同步&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--list&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;列出所有 topic&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kaft-console-producer.sh&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--topic&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定 topic&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--producer.config&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定 config file&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--producer-property&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定 producer property&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;acks&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定 acks 模式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--property&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;可以打許多次，每次指定一個 property&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kaft-console-consumer.sh&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--topic&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定 topic&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--from-beginning&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;不只是自打開 consumer 後的 message，而是從一開始的 message 開始&lt;/li&gt;
+&lt;li&gt;如果同一個 group 有多個 consumer，這個選項只會對第一個 consumer 有用，offset 是看 group 的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--consumer.config&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定 config file&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--property&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--group&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;指定 consumer group&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kafka-consumer-groups.sh&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--list&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;列出所有 consumer group&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--describe&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;描述 consumer group
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;CURRENT-OFFSET&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;目前 offset&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;LOG-END-OFFSET&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;最後一個 offset&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;LAG&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;落後的 offset&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>
