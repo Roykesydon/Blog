@@ -7,7 +7,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/mongodb-%E7%AD%86%E8%A8%98/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.a1e2d8f7d8200181ca470ddb7bf38c4e0112dd2a1dd58f8e7fe7a7eb3efbaab2.css"><meta property='og:title' content='MongoDB 筆記'>
+<link rel="stylesheet" href="/Blog/scss/style.min.7043ab073f3cae4b95936f5bfe326aa019ab0eadb79066e80f4e10d773250541.css"><meta property='og:title' content='MongoDB 筆記'>
 <meta property='og:description' content='MongoDB 以 BSON (Binary JSON) 儲存資料 composite index prefix 如果有一個 index 是 (a, b)，那麼 (a) 也是有效的 index explain 用來看 query 的 execution plan cursor BasicCursor 會 scan 整個 collection，是個警訊 掃描的文件數量 nscanned 掃描的 index 數量 nscannedObjects 掃描的 document 數量 n 回傳的 document 數量 nscanned &amp;gt;= nscannedObjects &amp;gt;= n scanAndOrder 是否需要把文件都放在 memory 並排序 還會一次性回傳資料 hint 強制使用某個 index optimizer 挑選索引 第一階段 - 挑選最佳索引 最佳索引 包含所有的 filter 和 sort 的欄位 range filter 和 sort 的欄位必須在 equality filter 的後面 sort 的欄位必須在 range filter 的後面 如果有多個最佳索引就會隨便選一個 第二階段 - 透過實驗挑選索引 沒有最佳索引就會實驗判斷要選哪個，看看誰先找到指定數量的文件 換句話說，如果有多個索引，optimizer 會選 nscanned 最小的 MMAPv1 Mongo 一開始用的 storage engine _id 直接對應到 diskloc，也就是 disk 的偏移量 查找速度驚人，但是更新就要維護偏移量很費時 採用 database-level lock，Mongo 後來也只更新成 collection-level lock WiredTiger MongoDB 收購的 storage engine Document-level locking 可以做到 compression 5.'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/mongodb-%E7%AD%86%E8%A8%98/'>
 <meta property='og:site_name' content='Roykesydon'>
