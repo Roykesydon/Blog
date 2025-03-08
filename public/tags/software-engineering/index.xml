@@ -675,6 +675,97 @@ Decorator 和 Component 都繼承同一個 interface。
 </description>
         </item>
         <item>
+        <title>Clean Architecture</title>
+        <link>https://roykesydon.github.io/Blog/p/clean-architecture/</link>
+        <pubDate>Mon, 22 May 2023 00:00:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/clean-architecture/</guid>
+        <description>&lt;h2 id=&#34;hexagonal-architecture&#34;&gt;Hexagonal Architecture&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;也稱為 Ports and Adapters Architecture&lt;/li&gt;
+&lt;li&gt;把軟體分為兩個部分
+&lt;ul&gt;
+&lt;li&gt;內部部分
+&lt;ul&gt;
+&lt;li&gt;包含 domain logic&lt;/li&gt;
+&lt;li&gt;會先被開發，並且不會受到外部系統的影響&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;外部部分
+&lt;ul&gt;
+&lt;li&gt;包含所有的 depending layers，不屬於你的軟體的部分，比如 UI、DB、或是你用的 framework&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;ports&#34;&gt;Ports&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一個 interface，定義了一個外部系統可以使用的方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;adapters&#34;&gt;Adapters&lt;/h3&gt;
+&lt;h4 id=&#34;primary-adapter&#34;&gt;Primary Adapter&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;這個 adapter 會透過實現 input port 來達成 use case&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;secondary-adapter&#34;&gt;Secondary Adapter&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;這個 adapter 會實作 output port，並且被 domain logic 調用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;clean-architecture&#34;&gt;Clean Architecture&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;希望讓 domain logic 與其他部分分離，好讓其他部分應用新技術的時候不會影響到。&lt;/li&gt;
+&lt;li&gt;將軟體分為不同的層次，並且讓這些層次互相獨立。dependency 只能往內部移動，不會往外部移動。&lt;/li&gt;
+&lt;li&gt;透過 DIP (Dependency Inversion Principle) 來達到這個目標。
+&lt;ul&gt;
+&lt;li&gt;DIP
+&lt;ul&gt;
+&lt;li&gt;高層次模組不應該依賴低層次模組，兩者都應該依賴抽象。&lt;/li&gt;
+&lt;li&gt;抽象不應該依賴細節，細節應該依賴抽象。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;在常見的三層架構中，常會見到 Presentation Layer、Business Logic Layer、Data Access Layer
+&lt;ul&gt;
+&lt;li&gt;這三層的依賴關係是 Presentation Layer -&amp;gt; Business Logic Layer -&amp;gt; Data Access Layer&lt;/li&gt;
+&lt;li&gt;Clean Architecture 則是會讓所有都依賴於 Business Logic Layer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;優點&#34;&gt;優點&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;因為 domain logic 保持獨立，許多部分可以換新技術而不影響到 domain logic
+&lt;ul&gt;
+&lt;li&gt;可以單獨替換掉 adapter&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;讓實作 dependencies 的部分可以被延遲到最後，因為 domain logic 不會依賴於他們，所以可以用 mock 來測試 domain logic&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;元件&#34;&gt;元件&lt;/h3&gt;
+&lt;h4 id=&#34;entities&#34;&gt;Entities&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;核心的 Object，帶有 data 同時也包含 enterprise  business rules
+&lt;ul&gt;
+&lt;li&gt;比如一個帳號的 entity 可能包含帳號的名稱、密碼、以及驗證密碼的方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;use-cases&#34;&gt;Use Cases&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;描述 application business rules，會再調用不同 entity 的 enterprise business rules&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;interface-adapters&#34;&gt;Interface Adapters&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;這裡會把 data 從最適合的格式轉換成 domain layer 可以使用的格式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;frameworks-and-drivers&#34;&gt;Frameworks and Drivers&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;這裡會包含所有的 frameworks 和 infrastructure&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>領域驅動設計 Domain-Driven Design</title>
         <link>https://roykesydon.github.io/Blog/p/%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88-domain-driven-design/</link>
         <pubDate>Mon, 22 May 2023 00:00:17 +0800</pubDate>

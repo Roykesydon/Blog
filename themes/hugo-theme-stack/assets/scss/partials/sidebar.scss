@@ -444,8 +444,8 @@ $update-steps: 20;
 .ring {
     position: absolute;
     border-radius: 50%;
-    width: 180px;
-    height: 180px;
+    width: 100%;
+    height: 100%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -460,13 +460,13 @@ $update-steps: 20;
 }
 
 .ring3 {
-    width: 180px;
-    height: 180px;
+    // width: 180px;
+    // height: 180px;
     background: rgba(255, 255, 255, 1);
 }
 .ring4 {
-    width: 180px;
-    height: 180px;
+    // width: 180px;
+    // height: 180px;
     border: 6px solid rgba(255, 255, 255, 1);
     z-index: 10;
 }
@@ -477,7 +477,7 @@ $update-steps: 20;
 }
 
 .ring1 {
-    border: 30px solid rgba(33, 211, 255, 0.9);
+    border: 10px solid rgba(33, 211, 255, 0.9);
     // border: 30px solid rgba(255, 255, 255, 0.9);
     // border: 30px solid rgba(255, 61, 229, 0.9);
     animation-delay: calc(-1s * #{random2(1, 4)});

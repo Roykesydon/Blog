@@ -1,7 +1,7 @@
 ---
 title: "SQL 語法筆記"
 date: 2024-08-25T00:00:17+08:00
-draft: true
+draft: false
 description: "記錄一些簡單常見的 SQL 語法"
 type: "post"
 tags: ["sql"]

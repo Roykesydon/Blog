@@ -1,7 +1,7 @@
 ---
 title: "Kafka 筆記"
 date: 2024-08-17T00:00:17+08:00
-draft: true
+draft: false
 description: ""
 type: "post"
 tags: ["queue"]

@@ -2,21 +2,36 @@
 <html lang="en-us" dir="ltr">
 
 <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Normalization 目的 避免 redundent information 更容易 understand、enhance、extend 避免 anomalies 隨著 1NF ~ 5NF，有更多的 safety guarantee
-1NF 違反條件 用 row order 傳達資訊 mixing data types in single column 但 relational database 不會讓你這樣做 存在沒有 primary key 的 table repeating groups 同一個 column 有多個數值，或是在同一個 row 存多個同類型的數值。 ex : player item roy 1 item_1, 4 item_2 star 4 item_4 player item_type1 quantity1 item_type2 quantity2 roy item1 1 item2 4 star item_4 4 2NF 所有的 non-key attribute 都要 depend on 整個 PK 非正式定義，有點細微差異 functional dependency ex: {player_id, item_type} -&amp;gt; {item_Quantity} 3NF transitive dependency {A} -&amp;gt; {B} -&amp;gt; {C} 所有 non-key attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute Boyce-Codd Normal Form 所有 attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute 4NF multivalued dependency 不像 functional dependency，箭頭後方的那項可以有多個 value {Model} $\twoheadrightarrow$ {Color} 一個 table 中的所有 multivalued dependency 必須依賴於 key 5NF 沒有 Join Dependency table 不能表示成其他 table join 起來的結果 '>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Normalization 目的 避免 redundant information 資料重複容易導致資料不一致 避免 anomalies 避免資料不一致 隨著 1NF ~ 5NF，有更多的 safety guarantee
+Functional Dependency {X} -&amp;gt; {Y}
+X 是 determinant，Y 是 dependent Y is functionally dependent on X (Y depends on X) X functionally determines Y 一個 attribute 的 value 可以決定另一個 attribute 的 value
+ex: {playerID} -&amp;gt; {playerName} 這代表 playerID 決定了 playerName 用箭頭表示，左邊是 determinant，右邊是 dependent
+一個 attribute 可以有多個 dependent
+ex: {playerID} -&amp;gt; {playerName, playerAge}
+一個 attribute 也可以是多個 attribute 的 dependent'>
 <title>Database Normalization</title>
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/database-normalization/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.5163a15f4e386e181ec7b98f1f4c8be67b494b4f5f50b7ccc90c92303ffeeb50.css"><meta property='og:title' content='Database Normalization'>
-<meta property='og:description' content='Normalization 目的 避免 redundent information 更容易 understand、enhance、extend 避免 anomalies 隨著 1NF ~ 5NF，有更多的 safety guarantee
-1NF 違反條件 用 row order 傳達資訊 mixing data types in single column 但 relational database 不會讓你這樣做 存在沒有 primary key 的 table repeating groups 同一個 column 有多個數值，或是在同一個 row 存多個同類型的數值。 ex : player item roy 1 item_1, 4 item_2 star 4 item_4 player item_type1 quantity1 item_type2 quantity2 roy item1 1 item2 4 star item_4 4 2NF 所有的 non-key attribute 都要 depend on 整個 PK 非正式定義，有點細微差異 functional dependency ex: {player_id, item_type} -&amp;gt; {item_Quantity} 3NF transitive dependency {A} -&amp;gt; {B} -&amp;gt; {C} 所有 non-key attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute Boyce-Codd Normal Form 所有 attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute 4NF multivalued dependency 不像 functional dependency，箭頭後方的那項可以有多個 value {Model} $\twoheadrightarrow$ {Color} 一個 table 中的所有 multivalued dependency 必須依賴於 key 5NF 沒有 Join Dependency table 不能表示成其他 table join 起來的結果 '>
+<link rel="stylesheet" href="/Blog/scss/style.min.a1e2d8f7d8200181ca470ddb7bf38c4e0112dd2a1dd58f8e7fe7a7eb3efbaab2.css"><meta property='og:title' content='Database Normalization'>
+<meta property='og:description' content='Normalization 目的 避免 redundant information 資料重複容易導致資料不一致 避免 anomalies 避免資料不一致 隨著 1NF ~ 5NF，有更多的 safety guarantee
+Functional Dependency {X} -&amp;gt; {Y}
+X 是 determinant，Y 是 dependent Y is functionally dependent on X (Y depends on X) X functionally determines Y 一個 attribute 的 value 可以決定另一個 attribute 的 value
+ex: {playerID} -&amp;gt; {playerName} 這代表 playerID 決定了 playerName 用箭頭表示，左邊是 determinant，右邊是 dependent
+一個 attribute 可以有多個 dependent
+ex: {playerID} -&amp;gt; {playerName, playerAge}
+一個 attribute 也可以是多個 attribute 的 dependent'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/database-normalization/'>
 <meta property='og:site_name' content='Roykesydon'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='database' /><meta property='article:published_time' content='2023-03-14T10:26:17&#43;08:00'/><meta property='article:modified_time' content='2023-03-14T10:26:17&#43;08:00'/>
 <meta name="twitter:title" content="Database Normalization">
-<meta name="twitter:description" content="Normalization 目的 避免 redundent information 更容易 understand、enhance、extend 避免 anomalies 隨著 1NF ~ 5NF，有更多的 safety guarantee
-1NF 違反條件 用 row order 傳達資訊 mixing data types in single column 但 relational database 不會讓你這樣做 存在沒有 primary key 的 table repeating groups 同一個 column 有多個數值，或是在同一個 row 存多個同類型的數值。 ex : player item roy 1 item_1, 4 item_2 star 4 item_4 player item_type1 quantity1 item_type2 quantity2 roy item1 1 item2 4 star item_4 4 2NF 所有的 non-key attribute 都要 depend on 整個 PK 非正式定義，有點細微差異 functional dependency ex: {player_id, item_type} -&amp;gt; {item_Quantity} 3NF transitive dependency {A} -&amp;gt; {B} -&amp;gt; {C} 所有 non-key attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute Boyce-Codd Normal Form 所有 attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute 4NF multivalued dependency 不像 functional dependency，箭頭後方的那項可以有多個 value {Model} $\twoheadrightarrow$ {Color} 一個 table 中的所有 multivalued dependency 必須依賴於 key 5NF 沒有 Join Dependency table 不能表示成其他 table join 起來的結果 ">
+<meta name="twitter:description" content="Normalization 目的 避免 redundant information 資料重複容易導致資料不一致 避免 anomalies 避免資料不一致 隨著 1NF ~ 5NF，有更多的 safety guarantee
+Functional Dependency {X} -&amp;gt; {Y}
+X 是 determinant，Y 是 dependent Y is functionally dependent on X (Y depends on X) X functionally determines Y 一個 attribute 的 value 可以決定另一個 attribute 的 value
+ex: {playerID} -&amp;gt; {playerName} 這代表 playerID 決定了 playerName 用箭頭表示，左邊是 determinant，右邊是 dependent
+一個 attribute 可以有多個 dependent
+ex: {playerID} -&amp;gt; {playerName, playerAge}
+一個 attribute 也可以是多個 attribute 的 dependent">
     <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
 
 </head>
@@ -314,11 +329,12 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
             <nav id="TableOfContents">
   <ol>
     <li><a href="#normalization-目的">Normalization 目的</a></li>
+    <li><a href="#functional-dependency">Functional Dependency</a></li>
     <li><a href="#1nf">1NF</a></li>
     <li><a href="#2nf">2NF</a></li>
     <li><a href="#3nf">3NF</a>
       <ol>
-        <li><a href="#boyce-codd-normal-form">Boyce-Codd Normal Form</a></li>
+        <li><a href="#boyce-codd-normal-form-bcnf">Boyce-Codd Normal Form (BCNF)</a></li>
       </ol>
     </li>
     <li><a href="#4nf">4NF</a></li>
@@ -396,7 +412,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    2 minute read
                 </time>
             </div>
         
@@ -413,15 +429,56 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     
     <h2 id="normalization-目的">Normalization 目的</h2>
 <ul>
-<li>避免 redundent information</li>
-<li>更容易 understand、enhance、extend</li>
-<li>避免 anomalies</li>
+<li>避免 redundant information
+<ul>
+<li>資料重複容易導致資料不一致</li>
+</ul>
+</li>
+<li>避免 anomalies
+<ul>
+<li>避免資料不一致</li>
+</ul>
+</li>
 </ul>
 <p>隨著 1NF ~ 5NF，有更多的 safety guarantee</p>
+<h2 id="functional-dependency">Functional Dependency</h2>
+<ul>
+<li>
+<p>{X} -&gt; {Y}</p>
+<ul>
+<li>X 是 determinant，Y 是 dependent</li>
+<li>Y is functionally dependent on X (Y depends on X)</li>
+<li>X functionally determines Y</li>
+</ul>
+</li>
+<li>
+<p>一個 attribute 的 value 可以決定另一個 attribute 的 value</p>
+<ul>
+<li>ex: {playerID} -&gt; {playerName}</li>
+<li>這代表 playerID 決定了 playerName</li>
+</ul>
+</li>
+<li>
+<p>用箭頭表示，左邊是 determinant，右邊是 dependent</p>
+</li>
+<li>
+<p>一個 attribute 可以有多個 dependent</p>
+</li>
+<li>
+<p>ex: {playerID} -&gt; {playerName, playerAge}</p>
+</li>
+<li>
+<p>一個 attribute 也可以是多個 attribute 的 dependent</p>
+</li>
+<li>
+<p>ex: {playerID, itemID} -&gt; {itemName}</p>
+</li>
+</ul>
 <h2 id="1nf">1NF</h2>
 <ul>
+<li>去除重複性</li>
 <li>違反條件
-<ul>
+<ol>
 <li>用 row order 傳達資訊</li>
 <li>mixing data types in single column
 <ul>
@@ -431,7 +488,11 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li>存在沒有 primary key 的 table</li>
 <li>repeating groups
 <ul>
-<li>同一個 column 有多個數值，或是在同一個 row 存多個同類型的數值。</li>
+<li>同一個 column 有多個數值，或是在同一個 row 存多個同類型的數值
+<ul>
+<li>每個 column 的 value 都應該是 atomic</li>
+</ul>
+</li>
 <li>ex :
 <div class="table-wrapper"><table>
 <thead>
@@ -481,17 +542,54 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </li>
 </ul>
 </li>
-</ul>
+</ol>
 </li>
 </ul>
 <h2 id="2nf">2NF</h2>
 <ul>
+<li>去除 partial dependency</li>
 <li>所有的 non-key attribute 都要 depend on 整個 PK
 <ul>
 <li>非正式定義，有點細微差異</li>
+<li>如果是 composite key，不能 depend on PK 的其中一部分</li>
 <li>functional dependency
 <ul>
-<li>ex: {player_id, item_type} -&gt; {item_Quantity}</li>
+<li>ex: {playerID, itemID} -&gt; {itemName}</li>
+</ul>
+</li>
+<li>違反的例子
+<ul>
+<li>ex:
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:left">playerID</th>
+<th style="text-align:left">itemID</th>
+<th style="text-align:left">itemName</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">item_1</td>
+</tr>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">item_2</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">item_1</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>這裡的 PK 是 {playerID, itemID}，但 itemName 只 depend on itemID</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -499,34 +597,154 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </ul>
 <h2 id="3nf">3NF</h2>
 <ul>
+<li>
+<p>去除 transitive dependency</p>
+<ul>
 <li>transitive dependency
 <ul>
 <li>{A} -&gt; {B} -&gt; {C}</li>
 </ul>
 </li>
-<li>所有 non-key attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute</li>
 </ul>
-<h3 id="boyce-codd-normal-form">Boyce-Codd Normal Form</h3>
+</li>
+<li>
+<p>考慮到 functional dependency 有遞移性(Transitivity)</p>
 <ul>
-<li>所有 attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute</li>
+<li>Transitivity
+<ul>
+<li>{A} -&gt; {B}，{B} -&gt; {C}，則 {A} -&gt; {C}</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>所有 non-key attribute 都要 depend on the whole key，不能 depend on 其他 non-key attribute</p>
+</li>
+<li>
+<p>違反的例子</p>
+<ul>
+<li>ex:
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:left">playerID</th>
+<th style="text-align:left">itemID</th>
+<th style="text-align:left">itemName</th>
+<th style="text-align:left">itemCategory</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">item_1</td>
+<td style="text-align:left">weapon</td>
+</tr>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">item_2</td>
+<td style="text-align:left">weapon</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">item_1</td>
+<td style="text-align:left">weapon</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>這裡的 PK 是 {playerID, itemID}，但 itemCategory 只 depend on itemName</li>
+<li>這裡的 itemCategory 是 transitive dependency</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="boyce-codd-normal-form-bcnf">Boyce-Codd Normal Form (BCNF)</h3>
+<ul>
+<li>3NF 的強化版，又稱 3.5NF</li>
+<li>實務中大多做到 3NF</li>
+<li>對於每個 functional dependency，左邊的 attribute 都是 super key</li>
+<li>違反例子
+<ul>
+<li>ex:
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th style="text-align:left">playerID</th>
+<th style="text-align:left">itemID</th>
+<th style="text-align:left">itemName</th>
+<th style="text-align:left">PlayerName</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">item_1</td>
+<td style="text-align:left">roy</td>
+</tr>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">item_2</td>
+<td style="text-align:left">roy</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">item_1</td>
+<td style="text-align:left">test</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>存在至少兩個 functional dependency
+<ul>
+<li>{itemID} -&gt; {itemName}</li>
+<li>{playerID} -&gt; {playerName}</li>
+</ul>
+</li>
+<li>但是 {playerID} 和 {itemID} 都不是 super key
+<ul>
+<li>拆成三個表就可以解決</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h2 id="4nf">4NF</h2>
 <ul>
+<li>要先符合 BCNF</li>
+<li>去除多值依賴(Multivalued Dependency)
+<ul>
 <li>multivalued dependency
 <ul>
-<li>不像 functional dependency，箭頭後方的那項可以有多個 value</li>
-<li>{Model} $\twoheadrightarrow$ {Color}</li>
+<li>一個表格至少要有 3 個 column 才有可能有 multivalued dependency</li>
+<li>對於 {A} -&gt; {B}，如果一個 A 可以對應到多個 B，也可以對應到多個 C，然後 B 和 C 獨立，則有 multivalued dependency</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>一個 table 中的所有 multivalued dependency 必須依賴於 key</li>
 </ul>
 <h2 id="5nf">5NF</h2>
 <ul>
-<li>沒有 Join Dependency
+<li>又稱 Project-Join Normal Form (PJNF)</li>
+<li>去除 join dependency
 <ul>
-<li>table 不能表示成其他 table join 起來的結果</li>
+<li>join dependency
+<ul>
+<li>一個 table 可以表示成其他 table join 起來的結果</li>
 </ul>
 </li>
+</ul>
+</li>
+<li>如果 JOIN dependency 存在，就拆分多個 table</li>
 </ul>
 
 </section>
@@ -582,12 +800,12 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
             
                 
 <article class="">
-    <a href="/Blog/p/database-acid/">
+    <a href="/Blog/p/database-transactions-and-acid-properties/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Database ACID</h2>
+            <h2 class="article-title">Database Transactions and ACID Properties</h2>
         </div>
     </a>
 </article>
@@ -634,12 +852,12 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
             
                 
 <article class="">
-    <a href="/Blog/p/%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88-domain-driven-design/">
+    <a href="/Blog/p/clean-architecture/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">領域驅動設計 Domain-Driven Design</h2>
+            <h2 class="article-title">Clean Architecture</h2>
         </div>
     </a>
 </article>
@@ -660,7 +878,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
         
             2023 - 
         
-        2024 Roykesydon
+        2025 Roykesydon
     </section>
     
     <section class="powerby">

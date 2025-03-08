@@ -339,6 +339,40 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;h4 id=&#34;sharding-key&#34;&gt;Sharding key&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;Hash
+&lt;ul&gt;
+&lt;li&gt;用 hash function 來決定資料要放在哪個 shard&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Range
+&lt;ul&gt;
+&lt;li&gt;用某個 column 所處的範圍來決定資料要放在哪個 shard&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Dictionary
+&lt;ul&gt;
+&lt;li&gt;用離散的值來決定資料要放在哪個 shard&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;考慮事項
+&lt;ul&gt;
+&lt;li&gt;cardinality
+&lt;ul&gt;
+&lt;li&gt;cardinality 是 set 中的元素數量&lt;/li&gt;
+&lt;li&gt;key 種類太少，就會限制水平擴展&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;frequency&lt;/li&gt;
+&lt;li&gt;monotonicity
+&lt;ul&gt;
+&lt;li&gt;如果 key 是遞增或遞減的，可能會導致某個 shard 過度使用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h3 id=&#34;database-replication&#34;&gt;Database replication&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;透過 redundancy 來提高 reliability, tolerance, accessibility&lt;/li&gt;

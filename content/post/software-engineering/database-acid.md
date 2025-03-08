@@ -1,5 +1,5 @@
 ---
-title: "Database ACID"
+title: "Database Transactions and ACID Properties"
 date: 2024-07-21T00:00:17+08:00
 draft: false
 description: "Transaction 四大特性"
@@ -12,7 +12,7 @@ categories : ["software-engineering"]
 ## Transaction
 - 一個或多個操作的集合
 - 一個 transaction 要不全部執行，要不全部不執行
-- 就算在程式中沒顯式的寫 transaction，資料庫也會自動幫你包 transaction
+- 即使程式中未顯式使用 transaction，資料庫也會自動為操作包裹一個隱式的 transaction
 - lifespan
   - begin
   - commit
@@ -25,7 +25,7 @@ categories : ["software-engineering"]
   - referential integrity
     - 保證 primary key 和 foreign key 之間的關係
 - Eventual consistency
-  - 最後一定會 consistent
+  - 最後一定會 consistent，儘管過程中可能會出現短暫的不一致
 ## Isolation
 - 一個 transaction 的執行不應該影響其他 transaction
 - read phenomena
@@ -45,8 +45,9 @@ categories : ["software-engineering"]
       - example
         - 兩個 transaction 都先 select 再 update
         - 他們兩個 select 都先看到有空位，然後一前一後更新，就會造成 double booking
-- Isoaltion level
+- Isolation level
   - 為了解決 read phenomena，資料庫提供了不同的隔離等級
+  - 不同的隔離等級會影響到 transaction 之間讀取資料的方式，以達到不同的資料一致性要求
   - 不會影響自身 transaction 前面所 write 的資料
   - read uncommitted
     - No isolation

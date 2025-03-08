@@ -171,6 +171,22 @@ categories : ["full-stack"]
   - 和 Horizontal partitioning 的差別
     - table 現在會分到不同的 database server
     - 做 partition，client 不用管資料具體在哪個 partition，交給 DBMS 去處理。但是 sharding 就要 client 自己去處理
+
+#### Sharding key
+- Hash
+  - 用 hash function 來決定資料要放在哪個 shard
+- Range
+  - 用某個 column 所處的範圍來決定資料要放在哪個 shard
+- Dictionary
+  - 用離散的值來決定資料要放在哪個 shard
+- 考慮事項
+  - cardinality
+    - cardinality 是 set 中的元素數量
+    - key 種類太少，就會限制水平擴展
+  - frequency
+  - monotonicity
+    - 如果 key 是遞增或遞減的，可能會導致某個 shard 過度使用
+
 ### Database replication
 - 透過 redundancy 來提高 reliability, tolerance, accessibility
 - Master / Backup replication
