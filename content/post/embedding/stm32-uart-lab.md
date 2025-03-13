@@ -1,7 +1,7 @@
 ---
 title: "STM32 UART 實驗"
 date: 2023-04-09T01:32:54+08:00
-draft: false
+draft: true
 description: ""
 type: "post"
 tags: ["embedded-system", "stm32", "mcu"]

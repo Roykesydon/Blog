@@ -1,7 +1,7 @@
 ---
 title: "STM32 GPIO 介紹"
 date: 2023-04-26T01:32:54+08:00
-draft: false
+draft: true
 description: ""
 type: "post"
 tags: ["embedded-system", "stm32", "mcu"]

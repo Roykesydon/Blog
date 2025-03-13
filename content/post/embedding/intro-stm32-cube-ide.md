@@ -1,7 +1,7 @@
 ---
 title: "STM32CubeIDE 基本開發使用"
 date: 2023-04-02T00:32:54+08:00
-draft: false
+draft: true
 description: ""
 type: "post"
 tags: ["embedded-system", "stm32", "mcu"]
