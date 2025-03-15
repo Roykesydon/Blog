@@ -1,7 +1,7 @@
 ---
 title: "Process Management"
 date: 2023-01-21T00:08:25+08:00
-draft: false
+draft: true
 type: "post"
 tags: ["linux", "C"]
 categories : ["linux"]

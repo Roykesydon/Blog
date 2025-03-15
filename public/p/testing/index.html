@@ -7,7 +7,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/testing/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.7043ab073f3cae4b95936f5bfe326aa019ab0eadb79066e80f4e10d773250541.css"><meta property='og:title' content='Testing'>
+<link rel="stylesheet" href="/Blog/scss/style.min.6c2f219b50fdafd3d9e37eb3a78aae1ae4db4cfd4d2a5606db7e9bc87ed0c4d1.css"><meta property='og:title' content='Testing'>
 <meta property='og:description' content='關於測試的基本概念'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/testing/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -310,15 +310,26 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#通用術語">通用術語</a></li>
-    <li><a href="#test-coverage">Test coverage</a></li>
-    <li><a href="#testing-types">Testing Types</a>
+    <li>
       <ol>
-        <li><a href="#unit-testing">Unit Testing</a></li>
-        <li><a href="#integration-testing">Integration Testing</a></li>
+        <li><a href="#測試相關概念">測試相關概念</a></li>
+        <li><a href="#bug-與錯誤類型">Bug 與錯誤類型</a></li>
+        <li><a href="#測試輔助工具">測試輔助工具</a></li>
       </ol>
     </li>
-    <li><a href="#black-box-vs-white-box-testing">Black Box vs White Box Testing</a></li>
+    <li><a href="#測試覆蓋率test-coverage">測試覆蓋率（Test Coverage）</a></li>
+    <li><a href="#測試類型testing-types">測試類型（Testing Types）</a>
+      <ol>
+        <li><a href="#單元測試unit-testing">單元測試（Unit Testing）</a></li>
+        <li><a href="#整合測試integration-testing">整合測試（Integration Testing）</a></li>
+      </ol>
+    </li>
+    <li><a href="#黑箱測試-vs-白箱測試">黑箱測試 vs 白箱測試</a>
+      <ol>
+        <li><a href="#黑箱測試black-box-testing">黑箱測試（Black Box Testing）</a></li>
+        <li><a href="#白箱測試white-box-testing">白箱測試（White Box Testing）</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -411,180 +422,211 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     <section class="article-content">
     
     
-    <h2 id="通用術語">通用術語</h2>
+    <h3 id="測試相關概念">測試相關概念</h3>
 <ul>
-<li>Test data
+<li><strong>Test Data</strong>
 <ul>
 <li>用來測試系統的輸入</li>
 </ul>
 </li>
-<li>Test case
+<li><strong>Test Case</strong>
 <ul>
-<li>包含測試步驟, 預期結果, 測試資料</li>
+<li>包含測試步驟、預期結果、測試資料</li>
 </ul>
 </li>
-<li>Oracle
+<li><strong>Oracle</strong>
 <ul>
-<li>理想的結果</li>
+<li>理想的結果，作為判斷測試是否成功的標準</li>
 </ul>
 </li>
-<li>Bug
+<li><strong>Verification（驗證）</strong>
 <ul>
-<li>error 或是偏離預期的行為</li>
-<li>用詞
-<ul>
-<li>failure
-<ul>
-<li>偏離預期的 event</li>
+<li>確認系統是否符合規格（specification）</li>
+<li>若出錯，通常是開發或設計的問題</li>
 </ul>
 </li>
-<li>error
-<ul>
-<li>導致 failure 的 code part</li>
-</ul>
-</li>
-<li>fault
-<ul>
-<li>outcome</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Verification
-<ul>
-<li>確認系統是否符合 specifcation</li>
-<li>這裡出問題是工程師的錯</li>
-</ul>
-</li>
-<li>Validation
+<li><strong>Validation（確認）</strong>
 <ul>
 <li>確認系統是否符合使用者需求</li>
-<li>這裡出問題代表產品目標有錯</li>
-</ul>
-</li>
-<li>Stub
-<ul>
-<li>用來代替其他 component 的 template，會回傳 hard-coded value</li>
-</ul>
-</li>
-<li>Mock
-<ul>
-<li>用來代替其他 component 的 template，會回傳預先設定的值，而且會檢查調用的次數</li>
-</ul>
-</li>
-<li>Driver
-<ul>
-<li>用來執行 commands 還有初始化變數的 template</li>
+<li>若出錯，代表產品目標可能有誤</li>
 </ul>
 </li>
 </ul>
-<h2 id="test-coverage">Test coverage</h2>
+<h3 id="bug-與錯誤類型">Bug 與錯誤類型</h3>
 <ul>
-<li>line coverage
+<li><strong>Bug</strong>
 <ul>
-<li>根據程式碼實際執行的程式碼行數來計算</li>
+<li>程式中的錯誤或偏離預期的行為</li>
 </ul>
 </li>
-<li>branch coverage
+<li><strong>Failure</strong>
 <ul>
-<li>檢查程式碼是不是不同的可能都跑過
-<ul>
-<li>考慮 if, switch&hellip;</li>
+<li>偏離預期的事件（event），如系統崩潰或錯誤輸出</li>
 </ul>
 </li>
+<li><strong>Error</strong>
+<ul>
+<li>導致 failure 的程式錯誤（code issue）</li>
 </ul>
 </li>
-</ul>
-<h2 id="testing-types">Testing Types</h2>
-<h3 id="unit-testing">Unit Testing</h3>
+<li><strong>Fault（缺陷）</strong>
 <ul>
-<li>專注在測試 smallest unit of software</li>
-<li>要 isolate unit，避免其他 unit 影響測試結果
-<ul>
-<li>用 dummy value</li>
+<li>造成 failure 的設計或開發上的錯誤，可能潛伏在系統內直到被觸發</li>
 </ul>
 </li>
 </ul>
-<h3 id="integration-testing">Integration Testing</h3>
+<h3 id="測試輔助工具">測試輔助工具</h3>
 <ul>
-<li>專注在測試 communication 和 architecture</li>
-<li>type
+<li><strong>Stub</strong>
 <ul>
-<li>non-incremental
-<ul>
-<li>一次測試所有 component，測試整個應用程式</li>
-<li>Big Bang Testing</li>
+<li>用來代替其他元件的簡單實作，會回傳硬編碼（hard-coded）值</li>
 </ul>
 </li>
-<li>incremental
+<li><strong>Mock</strong>
 <ul>
-<li>每次新增一個 module，做一些測試，反覆執行</li>
-<li>Top-Down Testing
-<ul>
-<li>從最上層開始，下面調用的部分用 stub 代替</li>
+<li>類似 stub，但除了回傳預設值，還可驗證是否正確調用</li>
 </ul>
 </li>
-<li>Bottom-Up Testing
+<li><strong>Driver</strong>
 <ul>
-<li>從最底層開始，上面呼叫的部分用 driver 代替</li>
+<li>負責執行測試指令並初始化變數的工具</li>
 </ul>
 </li>
 </ul>
-</li>
+<h2 id="測試覆蓋率test-coverage">測試覆蓋率（Test Coverage）</h2>
+<ul>
+<li><strong>Line Coverage（行覆蓋率）</strong>
+<ul>
+<li>測試過的程式碼行數相對於總行數的比例</li>
 </ul>
 </li>
-<li>Back-to-Back Testing
+<li><strong>Branch Coverage（分支覆蓋率）</strong>
 <ul>
-<li>把已知良好的版本和新版本比較</li>
-<li>如果 output 一樣，就代表新版本舊的功能是正確的</li>
-<li>可以是 incremental testing 的一部分</li>
+<li>測試所有條件分支是否都被執行過，如 if、switch 內的所有可能路徑</li>
 </ul>
 </li>
 </ul>
-<h2 id="black-box-vs-white-box-testing">Black Box vs White Box Testing</h2>
+<h2 id="測試類型testing-types">測試類型（Testing Types）</h2>
+<h3 id="單元測試unit-testing">單元測試（Unit Testing）</h3>
 <ul>
-<li>Black Box Testing
+<li>測試程式的最小單位（smallest unit of software）</li>
+<li>需隔離（isolate）被測單元，避免外部依賴影響測試結果
 <ul>
-<li>不需要知道內部結構</li>
-<li>用 input 和 output 來測試</li>
-<li>Boundary Value
-<ul>
-<li>測試高低邊界值，過了就假設中間都過了</li>
+<li>常使用 dummy value、mock 物件來替代外部依賴</li>
 </ul>
 </li>
-<li>Cause-Effect Graph
+</ul>
+<h3 id="整合測試integration-testing">整合測試（Integration Testing）</h3>
 <ul>
-<li>一種設計 Test Case 的方法</li>
-<li>又稱為 fishbone diagram</li>
-<li>不同的 cause 會導致不同的 effect</li>
-<li>最後會有一個 table 來表示所有可能輸入的組合會對應到什麼結果</li>
+<li>測試不同組件（components）之間的交互（communication）和架構（architecture）</li>
+<li>測試方式
+<ul>
+<li><strong>Big Bang Testing（非漸進式測試）</strong>
+<ul>
+<li>一次測試所有 components，通常用於大型應用程式</li>
 </ul>
 </li>
-<li>Pair-wise Testing
+<li><strong>Incremental Testing（漸進式測試）</strong>
 <ul>
-<li>測試多個參數的可能組合</li>
+<li>逐步新增模組進行測試，直到完整測試整個系統</li>
+<li><strong>Top-Down Testing</strong>
+<ul>
+<li>從最上層開始，尚未開發的底層使用 stub 代替</li>
 </ul>
 </li>
-<li>State-based Testing
+<li><strong>Bottom-Up Testing</strong>
 <ul>
-<li>測試不同狀態下的輸入，確認 state 改變的情形</li>
+<li>從最底層開始，尚未開發的上層使用 driver 代替</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>White Box Testing
+<li><strong>Back-to-Back Testing（對比測試）</strong>
 <ul>
-<li>知道內部原理，嘗試測試程式碼本身</li>
-<li>Control Flow Testing
-<ul>
-<li>寫涵蓋所有 branch condition 的 test case</li>
+<li>比較已知良好版本與新版本的輸出</li>
+<li>若 output 相同，則新版本仍保有舊版本的正確功能</li>
+<li>可作為 incremental testing 的一部分</li>
 </ul>
 </li>
-<li>Data Flow Testing
+</ul>
+</li>
+</ul>
+<h2 id="黑箱測試-vs-白箱測試">黑箱測試 vs 白箱測試</h2>
+<h3 id="黑箱測試black-box-testing">黑箱測試（Black Box Testing）</h3>
 <ul>
-<li>test case 要涵蓋所有的變數，包含 declaration 和 use</li>
+<li>不需要知道內部結構，透過輸入與輸出來驗證系統行為</li>
+<li><strong>常見測試方法</strong>
+<ul>
+<li><strong>Boundary Value Analysis（邊界值分析）</strong>
+<ul>
+<li>測試邊界值，如最大、最小、剛好超出範圍的數值</li>
+</ul>
+</li>
+<li><strong>Cause-Effect Graph（因果圖測試）</strong>
+<ul>
+<li>一種設計測試案例的方法，也稱為 <strong>fishbone diagram</strong></li>
+<li>不同的輸入條件（cause）會導致不同的結果（effect）</li>
+</ul>
+</li>
+<li><strong>Pair-Wise Testing（成對測試）</strong>
+<ul>
+<li>測試多個參數的不同組合，減少測試案例數量的同時仍保證足夠覆蓋率</li>
+</ul>
+</li>
+<li><strong>State-Based Testing（狀態測試）</strong>
+<ul>
+<li>測試不同狀態下的輸入，確認狀態變更的正確性</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>測試種類</strong>
+<ul>
+<li><strong>Functional Testing（功能測試）</strong>
+<ul>
+<li>確保系統功能符合需求</li>
+</ul>
+</li>
+<li><strong>Regression Testing（回歸測試）</strong>
+<ul>
+<li>重新測試已驗證過的功能，確保新的修改沒有破壞舊的功能</li>
+</ul>
+</li>
+<li><strong>Non-Functional Testing（非功能測試）</strong>
+<ul>
+<li>測試效能、安全性、可靠性等非功能性需求</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="白箱測試white-box-testing">白箱測試（White Box Testing）</h3>
+<ul>
+<li>需要了解內部結構，測試程式碼本身</li>
+<li><strong>常見測試方法</strong>
+<ul>
+<li><strong>Control Flow Testing（控制流程測試）</strong>
+<ul>
+<li>設計測試案例，使所有條件分支（branch condition）皆被執行</li>
+</ul>
+</li>
+<li><strong>Data Flow Testing（資料流測試）</strong>
+<ul>
+<li>測試變數的生命週期，包括變數的定義（declaration）與使用（use）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>應用範圍</strong>
+<ul>
+<li><strong>Unit Testing</strong>
+<ul>
+<li>最主要用於單元測試</li>
+</ul>
+</li>
+<li><strong>Integration Testing</strong>
+<ul>
+<li>用於確保不同模組之間的溝通正確</li>
 </ul>
 </li>
 </ul>

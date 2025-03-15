@@ -1,7 +1,7 @@
 ---
 title: "Linux 瑣事"
 date: 2023-01-19T01:50:07+08:00
-draft: false
+draft: true
 description: "一些不想單獨分一篇又有關 Linux 的東西放這"
 type: "post"
 tags: ["linux"]

@@ -2,18 +2,18 @@
 <html lang="en-us" dir="ltr">
 
 <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='MongoDB 以 BSON (Binary JSON) 儲存資料 composite index prefix 如果有一個 index 是 (a, b)，那麼 (a) 也是有效的 index explain 用來看 query 的 execution plan cursor BasicCursor 會 scan 整個 collection，是個警訊 掃描的文件數量 nscanned 掃描的 index 數量 nscannedObjects 掃描的 document 數量 n 回傳的 document 數量 nscanned &amp;gt;= nscannedObjects &amp;gt;= n scanAndOrder 是否需要把文件都放在 memory 並排序 還會一次性回傳資料 hint 強制使用某個 index optimizer 挑選索引 第一階段 - 挑選最佳索引 最佳索引 包含所有的 filter 和 sort 的欄位 range filter 和 sort 的欄位必須在 equality filter 的後面 sort 的欄位必須在 range filter 的後面 如果有多個最佳索引就會隨便選一個 第二階段 - 透過實驗挑選索引 沒有最佳索引就會實驗判斷要選哪個，看看誰先找到指定數量的文件 換句話說，如果有多個索引，optimizer 會選 nscanned 最小的 MMAPv1 Mongo 一開始用的 storage engine _id 直接對應到 diskloc，也就是 disk 的偏移量 查找速度驚人，但是更新就要維護偏移量很費時 採用 database-level lock，Mongo 後來也只更新成 collection-level lock WiredTiger MongoDB 收購的 storage engine Document-level locking 可以做到 compression 5.'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='MongoDB 基礎 以 BSON (Binary JSON) 儲存資料 BSON 是 JSON 的二進位版本，支援更多資料型別，如日期和二進位資料 _id 欄位作為預設的主鍵 若未指定，MongoDB 會自動生成一個 12 字節的 ObjectId 用於確保文件中唯一性，特別在分散式系統中 索引機制 Composite Index 由多個欄位組成，例如 (a, b) Prefix 特性 如果索引為 (a, b)，則 (a) 也可被單獨使用 但 (b) 或 (a, b, c) 無法直接利用此索引 Hint 可強制 MongoDB 使用特定索引 用於測試或避免 optimizer 選錯索引 Explain 分析查詢 用來檢視查詢的執行計畫 重要欄位 cursor BasicCursor 表示全表掃描，應避免 BtreeCursor 表示使用索引 nscanned 掃描的索引數量 nscannedObjects 掃描的文件數量 n 最終返回的文件數量 關係：nscanned &amp;gt;= nscannedObjects &amp;gt;= n scanAndOrder 表示需要將文件載入記憶體並排序 通常一次性返回所有結果，效率較低 Optimizer 索引選擇 第一階段：尋找最佳索引 最佳索引條件 包含所有 filter 和 sort 的欄位 equality filter 必須在 range filter 之前 sort 欄位必須在 range filter 之後 若有多個最佳索引條件符合條件，隨便選擇一個 第二階段：實驗性選擇 若無最佳索引，會測試多個索引 optimizer 選擇 nscanned 最小的索引作為最終方案 儲存引擎 MMAPv1 MongoDB 早期的儲存引擎 特性 _id 直接對應 disk 偏移量 (diskloc) 查詢速度快，但更新需維護偏移量，效能低 鎖定機制 初始為 database-level lock 後期升級至 collection-level lock 已於 MongoDB 4.'>
 <title>MongoDB 筆記</title>
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/mongodb-%E7%AD%86%E8%A8%98/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.7043ab073f3cae4b95936f5bfe326aa019ab0eadb79066e80f4e10d773250541.css"><meta property='og:title' content='MongoDB 筆記'>
-<meta property='og:description' content='MongoDB 以 BSON (Binary JSON) 儲存資料 composite index prefix 如果有一個 index 是 (a, b)，那麼 (a) 也是有效的 index explain 用來看 query 的 execution plan cursor BasicCursor 會 scan 整個 collection，是個警訊 掃描的文件數量 nscanned 掃描的 index 數量 nscannedObjects 掃描的 document 數量 n 回傳的 document 數量 nscanned &amp;gt;= nscannedObjects &amp;gt;= n scanAndOrder 是否需要把文件都放在 memory 並排序 還會一次性回傳資料 hint 強制使用某個 index optimizer 挑選索引 第一階段 - 挑選最佳索引 最佳索引 包含所有的 filter 和 sort 的欄位 range filter 和 sort 的欄位必須在 equality filter 的後面 sort 的欄位必須在 range filter 的後面 如果有多個最佳索引就會隨便選一個 第二階段 - 透過實驗挑選索引 沒有最佳索引就會實驗判斷要選哪個，看看誰先找到指定數量的文件 換句話說，如果有多個索引，optimizer 會選 nscanned 最小的 MMAPv1 Mongo 一開始用的 storage engine _id 直接對應到 diskloc，也就是 disk 的偏移量 查找速度驚人，但是更新就要維護偏移量很費時 採用 database-level lock，Mongo 後來也只更新成 collection-level lock WiredTiger MongoDB 收購的 storage engine Document-level locking 可以做到 compression 5.'>
+<link rel="stylesheet" href="/Blog/scss/style.min.6c2f219b50fdafd3d9e37eb3a78aae1ae4db4cfd4d2a5606db7e9bc87ed0c4d1.css"><meta property='og:title' content='MongoDB 筆記'>
+<meta property='og:description' content='MongoDB 基礎 以 BSON (Binary JSON) 儲存資料 BSON 是 JSON 的二進位版本，支援更多資料型別，如日期和二進位資料 _id 欄位作為預設的主鍵 若未指定，MongoDB 會自動生成一個 12 字節的 ObjectId 用於確保文件中唯一性，特別在分散式系統中 索引機制 Composite Index 由多個欄位組成，例如 (a, b) Prefix 特性 如果索引為 (a, b)，則 (a) 也可被單獨使用 但 (b) 或 (a, b, c) 無法直接利用此索引 Hint 可強制 MongoDB 使用特定索引 用於測試或避免 optimizer 選錯索引 Explain 分析查詢 用來檢視查詢的執行計畫 重要欄位 cursor BasicCursor 表示全表掃描，應避免 BtreeCursor 表示使用索引 nscanned 掃描的索引數量 nscannedObjects 掃描的文件數量 n 最終返回的文件數量 關係：nscanned &amp;gt;= nscannedObjects &amp;gt;= n scanAndOrder 表示需要將文件載入記憶體並排序 通常一次性返回所有結果，效率較低 Optimizer 索引選擇 第一階段：尋找最佳索引 最佳索引條件 包含所有 filter 和 sort 的欄位 equality filter 必須在 range filter 之前 sort 欄位必須在 range filter 之後 若有多個最佳索引條件符合條件，隨便選擇一個 第二階段：實驗性選擇 若無最佳索引，會測試多個索引 optimizer 選擇 nscanned 最小的索引作為最終方案 儲存引擎 MMAPv1 MongoDB 早期的儲存引擎 特性 _id 直接對應 disk 偏移量 (diskloc) 查詢速度快，但更新需維護偏移量，效能低 鎖定機制 初始為 database-level lock 後期升級至 collection-level lock 已於 MongoDB 4.'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/mongodb-%E7%AD%86%E8%A8%98/'>
 <meta property='og:site_name' content='Roykesydon'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='database' /><meta property='article:tag' content='nosql' /><meta property='article:tag' content='mongodb' /><meta property='article:published_time' content='2024-08-16T00:00:17&#43;08:00'/><meta property='article:modified_time' content='2024-08-16T00:00:17&#43;08:00'/>
 <meta name="twitter:title" content="MongoDB 筆記">
-<meta name="twitter:description" content="MongoDB 以 BSON (Binary JSON) 儲存資料 composite index prefix 如果有一個 index 是 (a, b)，那麼 (a) 也是有效的 index explain 用來看 query 的 execution plan cursor BasicCursor 會 scan 整個 collection，是個警訊 掃描的文件數量 nscanned 掃描的 index 數量 nscannedObjects 掃描的 document 數量 n 回傳的 document 數量 nscanned &amp;gt;= nscannedObjects &amp;gt;= n scanAndOrder 是否需要把文件都放在 memory 並排序 還會一次性回傳資料 hint 強制使用某個 index optimizer 挑選索引 第一階段 - 挑選最佳索引 最佳索引 包含所有的 filter 和 sort 的欄位 range filter 和 sort 的欄位必須在 equality filter 的後面 sort 的欄位必須在 range filter 的後面 如果有多個最佳索引就會隨便選一個 第二階段 - 透過實驗挑選索引 沒有最佳索引就會實驗判斷要選哪個，看看誰先找到指定數量的文件 換句話說，如果有多個索引，optimizer 會選 nscanned 最小的 MMAPv1 Mongo 一開始用的 storage engine _id 直接對應到 diskloc，也就是 disk 的偏移量 查找速度驚人，但是更新就要維護偏移量很費時 採用 database-level lock，Mongo 後來也只更新成 collection-level lock WiredTiger MongoDB 收購的 storage engine Document-level locking 可以做到 compression 5.">
+<meta name="twitter:description" content="MongoDB 基礎 以 BSON (Binary JSON) 儲存資料 BSON 是 JSON 的二進位版本，支援更多資料型別，如日期和二進位資料 _id 欄位作為預設的主鍵 若未指定，MongoDB 會自動生成一個 12 字節的 ObjectId 用於確保文件中唯一性，特別在分散式系統中 索引機制 Composite Index 由多個欄位組成，例如 (a, b) Prefix 特性 如果索引為 (a, b)，則 (a) 也可被單獨使用 但 (b) 或 (a, b, c) 無法直接利用此索引 Hint 可強制 MongoDB 使用特定索引 用於測試或避免 optimizer 選錯索引 Explain 分析查詢 用來檢視查詢的執行計畫 重要欄位 cursor BasicCursor 表示全表掃描，應避免 BtreeCursor 表示使用索引 nscanned 掃描的索引數量 nscannedObjects 掃描的文件數量 n 最終返回的文件數量 關係：nscanned &amp;gt;= nscannedObjects &amp;gt;= n scanAndOrder 表示需要將文件載入記憶體並排序 通常一次性返回所有結果，效率較低 Optimizer 索引選擇 第一階段：尋找最佳索引 最佳索引條件 包含所有 filter 和 sort 的欄位 equality filter 必須在 range filter 之前 sort 欄位必須在 range filter 之後 若有多個最佳索引條件符合條件，隨便選擇一個 第二階段：實驗性選擇 若無最佳索引，會測試多個索引 optimizer 選擇 nscanned 最小的索引作為最終方案 儲存引擎 MMAPv1 MongoDB 早期的儲存引擎 特性 _id 直接對應 disk 偏移量 (diskloc) 查詢速度快，但更新需維護偏移量，效能低 鎖定機制 初始為 database-level lock 後期升級至 collection-level lock 已於 MongoDB 4.">
     <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
 
 </head>
@@ -288,7 +288,51 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     </ol>
 </aside>
 
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#mongodb-基礎">MongoDB 基礎</a></li>
+    <li><a href="#索引機制">索引機制</a>
+      <ol>
+        <li><a href="#composite-index">Composite Index</a></li>
+        <li><a href="#explain-分析查詢">Explain 分析查詢</a></li>
+        <li><a href="#optimizer-索引選擇">Optimizer 索引選擇</a></li>
+      </ol>
+    </li>
+    <li><a href="#儲存引擎">儲存引擎</a>
+      <ol>
+        <li><a href="#mmapv1">MMAPv1</a></li>
+        <li><a href="#wiredtiger">WiredTiger</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
         
         
@@ -368,117 +412,140 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     <section class="article-content">
     
     
-    <h2 id="mongodb">MongoDB</h2>
+    <h2 id="mongodb-基礎">MongoDB 基礎</h2>
 <ul>
-<li>以 BSON (Binary JSON) 儲存資料</li>
-<li>composite index
+<li>以 BSON (Binary JSON) 儲存資料
 <ul>
-<li>prefix
-<ul>
-<li>如果有一個 index 是 (a, b)，那麼 (a) 也是有效的 index</li>
+<li>BSON 是 JSON 的二進位版本，支援更多資料型別，如日期和二進位資料</li>
 </ul>
 </li>
-<li>explain
+<li>_id 欄位作為預設的主鍵
 <ul>
-<li>用來看 query 的 execution plan</li>
+<li>若未指定，MongoDB 會自動生成一個 12 字節的 ObjectId</li>
+<li>用於確保文件中唯一性，特別在分散式系統中</li>
+</ul>
+</li>
+</ul>
+<h2 id="索引機制">索引機制</h2>
+<h3 id="composite-index">Composite Index</h3>
+<ul>
+<li>由多個欄位組成，例如 (a, b)</li>
+<li>Prefix 特性
+<ul>
+<li>如果索引為 (a, b)，則 (a) 也可被單獨使用</li>
+<li>但 (b) 或 (a, b, c) 無法直接利用此索引</li>
+</ul>
+</li>
+<li>Hint
+<ul>
+<li>可強制 MongoDB 使用特定索引</li>
+<li>用於測試或避免 optimizer 選錯索引</li>
+</ul>
+</li>
+</ul>
+<h3 id="explain-分析查詢">Explain 分析查詢</h3>
+<ul>
+<li>用來檢視查詢的執行計畫</li>
+<li>重要欄位
+<ul>
 <li>cursor
 <ul>
-<li>BasicCursor
-<ul>
-<li>會 scan 整個 collection，是個警訊</li>
+<li>BasicCursor 表示全表掃描，應避免</li>
+<li>BtreeCursor 表示使用索引</li>
 </ul>
 </li>
-</ul>
-</li>
-<li>掃描的文件數量
-<ul>
 <li>nscanned
 <ul>
-<li>掃描的 index 數量</li>
+<li>掃描的索引數量</li>
 </ul>
 </li>
 <li>nscannedObjects
 <ul>
-<li>掃描的 document 數量</li>
+<li>掃描的文件數量</li>
 </ul>
 </li>
 <li>n
 <ul>
-<li>回傳的 document 數量</li>
+<li>最終返回的文件數量</li>
 </ul>
 </li>
-<li>nscanned &gt;= nscannedObjects &gt;= n</li>
+<li>關係：nscanned &gt;= nscannedObjects &gt;= n</li>
 </ul>
 </li>
 <li>scanAndOrder
 <ul>
-<li>是否需要把文件都放在 memory 並排序</li>
-<li>還會一次性回傳資料</li>
+<li>表示需要將文件載入記憶體並排序</li>
+<li>通常一次性返回所有結果，效率較低</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>hint
+<h3 id="optimizer-索引選擇">Optimizer 索引選擇</h3>
 <ul>
-<li>強制使用某個 index</li>
-</ul>
-</li>
-<li>optimizer 挑選索引
+<li>第一階段：尋找最佳索引
 <ul>
-<li>第一階段 - 挑選最佳索引
+<li>最佳索引條件
 <ul>
-<li>最佳索引
+<li>包含所有 filter 和 sort 的欄位</li>
+<li>equality filter 必須在 range filter 之前</li>
+<li>sort 欄位必須在 range filter 之後</li>
+</ul>
+</li>
+<li>若有多個最佳索引條件符合條件，隨便選擇一個</li>
+</ul>
+</li>
+<li>第二階段：實驗性選擇
 <ul>
-<li>包含所有的 filter 和 sort 的欄位</li>
-<li>range filter 和 sort 的欄位必須在 equality filter 的後面
+<li>若無最佳索引，會測試多個索引</li>
+<li>optimizer 選擇 nscanned 最小的索引作為最終方案</li>
+</ul>
+</li>
+</ul>
+<h2 id="儲存引擎">儲存引擎</h2>
+<h3 id="mmapv1">MMAPv1</h3>
 <ul>
-<li>sort 的欄位必須在 range filter 的後面</li>
-</ul>
-</li>
-<li>如果有多個最佳索引就會隨便選一個</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>第二階段 - 透過實驗挑選索引
+<li>MongoDB 早期的儲存引擎</li>
+<li>特性
 <ul>
-<li>沒有最佳索引就會實驗判斷要選哪個，看看誰先找到指定數量的文件</li>
-<li>換句話說，如果有多個索引，optimizer 會選 nscanned 最小的</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>MMAPv1
+<li>_id 直接對應 disk 偏移量 (diskloc)
 <ul>
-<li>Mongo 一開始用的 storage engine</li>
-<li>_id 直接對應到 diskloc，也就是 disk 的偏移量
-<ul>
-<li>查找速度驚人，但是更新就要維護偏移量很費時</li>
+<li>查詢速度快，但更新需維護偏移量，效能低</li>
 </ul>
 </li>
-<li>採用 database-level lock，Mongo 後來也只更新成 collection-level lock</li>
+<li>鎖定機制
+<ul>
+<li>初始為 database-level lock</li>
+<li>後期升級至 collection-level lock</li>
 </ul>
 </li>
-<li>WiredTiger
+</ul>
+</li>
+<li>已於 MongoDB 4.0 後棄用</li>
+</ul>
+<h3 id="wiredtiger">WiredTiger</h3>
 <ul>
-<li>MongoDB 收購的 storage engine</li>
-<li>Document-level locking</li>
-<li>可以做到 compression</li>
+<li>MongoDB 收購並採用的新儲存引擎</li>
+<li>特性
+<ul>
+<li>Document-level locking，提升並發效能</li>
+<li>支援資料壓縮，減少儲存空間</li>
+</ul>
+</li>
+<li>版本演進
+<ul>
 <li>5.2 之前
 <ul>
-<li>_id 會先被用來尋找 recordid，再用 recordid 去獲取 document</li>
-<li>recordid 是 clustered index</li>
+<li>_id 用於查找 recordid</li>
+<li>recordid 作為 clustered index，指向實際文件</li>
 </ul>
 </li>
-<li>5.3
+<li>5.3 之後
 <ul>
-<li>_id 變成 clustered index</li>
-<li>之前 recordid 只有 64 位，但現在 _id 作為 primary key 有 12 bytes
+<li>_id 直接成為 clustered index</li>
+<li>_id 為 12 字節 (ObjectId)，比原 64 位 recordid 更大</li>
+<li>影響
 <ul>
-<li>對 secondary index 造成更大的負擔</li>
-<li>Mongo 想達成跨機器和 shard 的唯一性</li>
+<li>對 secondary index 增加儲存負擔</li>
+<li>提升跨機器和 shard 環境中的唯一性</li>
 </ul>
 </li>
 </ul>

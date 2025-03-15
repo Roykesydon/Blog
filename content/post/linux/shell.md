@@ -1,7 +1,7 @@
 ---
 title: "Shell"
 date: 2023-01-19T23:00:02+08:00
-draft: false
+draft: true
 description: "有關 Shell 的一些東西"
 type: "post"
 tags: ["linux", "shell"]

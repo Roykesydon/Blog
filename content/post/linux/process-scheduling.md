@@ -1,7 +1,7 @@
 ---
 title: "Process Scheduling"
 date: 2023-02-20T21:12:52+08:00
-draft: false
+draft: true
 description: ""
 type: "post"
 tags: ["linux"]

@@ -16,43 +16,41 @@
 &lt;h3 id=&#34;module&#34;&gt;Module&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;把相關的 Component、Directive、Pipe、Service 等打包在一起的容器&lt;/li&gt;
-&lt;li&gt;Lazy Loading&lt;/li&gt;
+&lt;li&gt;可以使用 Lazy Loading 延遲加載模組，提高效能&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;component&#34;&gt;Component&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;Angular 應用程式的基本組成單位&lt;/li&gt;
+&lt;li&gt;由 HTML、CSS、TypeScript 共同組成&lt;/li&gt;
+&lt;li&gt;具有自己的 &lt;code&gt;@Component&lt;/code&gt; 裝飾器&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;pipe&#34;&gt;Pipe&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;用來轉換資料的工具，可以把字串格式化、日期格式化等&lt;/li&gt;
+&lt;li&gt;用來轉換資料的工具，可以用於字串格式化、日期格式化等&lt;/li&gt;
+&lt;li&gt;可以透過 &lt;code&gt;|&lt;/code&gt; 符號在模板中使用，例如 &lt;code&gt;{{ value | uppercase }}&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;內建 Pipes：&lt;code&gt;date&lt;/code&gt;、&lt;code&gt;uppercase&lt;/code&gt;、&lt;code&gt;lowercase&lt;/code&gt;、&lt;code&gt;currency&lt;/code&gt;、&lt;code&gt;percent&lt;/code&gt; 等&lt;/li&gt;
+&lt;li&gt;可以建立自訂 Pipe&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;directive&#34;&gt;Directive&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;用來修改 DOM 元素的外觀或行為
 &lt;ul&gt;
-&lt;li&gt;比如說 ngIf、ngFor、ngStyle、ngClass&lt;/li&gt;
-&lt;li&gt;類型
+&lt;li&gt;例如 &lt;code&gt;ngIf&lt;/code&gt;、&lt;code&gt;ngFor&lt;/code&gt;、&lt;code&gt;ngStyle&lt;/code&gt;、&lt;code&gt;ngClass&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;分為三種類型：
 &lt;ul&gt;
-&lt;li&gt;Structural Directive: 修改 DOM 的結構
+&lt;li&gt;&lt;strong&gt;Structural Directive&lt;/strong&gt;: 修改 DOM 的結構
 &lt;ul&gt;
-&lt;li&gt;可以搭配
+&lt;li&gt;&lt;code&gt;*ngIf&lt;/code&gt;, &lt;code&gt;*ngFor&lt;/code&gt;, &lt;code&gt;*ngSwitch&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;可搭配 &lt;code&gt;ng-container&lt;/code&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;ng-container&lt;/code&gt;
-&lt;ul&gt;
-&lt;li&gt;不會產生額外的 DOM 元素，可以用在想要用 ngIf 和 ngFor 但不想產生額外元素的情況&lt;/li&gt;
+&lt;li&gt;不會產生額外的 DOM 元素，適合在 &lt;code&gt;ngIf&lt;/code&gt; 和 &lt;code&gt;ngFor&lt;/code&gt; 不希望產生額外元素時使用&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;*ngFor&lt;/code&gt; 例子：&lt;code&gt;let item of items; index as i&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;code&gt;*ngFor&lt;/code&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;let item of items; index as i&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Attribute Directive: 修改 DOM 的屬性&lt;/li&gt;
-&lt;li&gt;Component Directive: 包含 template 的 directive&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Attribute Directive&lt;/strong&gt;: 修改 DOM 的屬性，例如 &lt;code&gt;ngClass&lt;/code&gt;, &lt;code&gt;ngStyle&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Component Directive&lt;/strong&gt;: 包含 template 的 directive&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -61,13 +59,13 @@
 &lt;h3 id=&#34;service&#34;&gt;Service&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;負責 API 請求、資料處理等工作&lt;/li&gt;
-&lt;li&gt;Dependency Injection&lt;/li&gt;
-&lt;li&gt;@Injectable
+&lt;li&gt;透過 &lt;strong&gt;Dependency Injection (DI)&lt;/strong&gt; 來提供服務&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;@Injectable()&lt;/code&gt; 裝飾器用來標記服務
 &lt;ul&gt;
-&lt;li&gt;providedIn
+&lt;li&gt;&lt;code&gt;providedIn&lt;/code&gt;
 &lt;ul&gt;
-&lt;li&gt;root: 全域共用&lt;/li&gt;
-&lt;li&gt;也可以在 component 的 providers 中設定要注入的 service&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;root&lt;/code&gt;: 服務將在整個應用程式中可用&lt;/li&gt;
+&lt;li&gt;也可以在特定 Module 或 Component 的 &lt;code&gt;providers&lt;/code&gt; 中設定要注入的 Service&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -76,22 +74,20 @@
 &lt;h3 id=&#34;router&#34;&gt;Router&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;負責處理 URL 路由&lt;/li&gt;
-&lt;li&gt;routes
+&lt;li&gt;設定路由時使用 &lt;code&gt;routes&lt;/code&gt; 陣列
 &lt;ul&gt;
-&lt;li&gt;path&lt;/li&gt;
-&lt;li&gt;component&lt;/li&gt;
-&lt;li&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;path&lt;/code&gt;: 定義路徑&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;component&lt;/code&gt;: 指定對應的 Component&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;canActivate&lt;/code&gt;: 設定路由守衛 (Guard)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;guard
+&lt;li&gt;路由守衛 (Guard)
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;ng g guard &amp;lt;guard-name&amp;gt;&lt;/code&gt;
+&lt;li&gt;透過 &lt;code&gt;ng g guard &amp;lt;guard-name&amp;gt;&lt;/code&gt; 來產生&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CanActivate&lt;/code&gt;:
 &lt;ul&gt;
-&lt;li&gt;
-&lt;h2 id=&#34;canactivate&#34;&gt;CanActivate&lt;/h2&gt;
-&lt;/li&gt;
+&lt;li&gt;控制是否允許使用者進入某個路由&lt;/li&gt;
+&lt;li&gt;適合用來驗證使用者權限&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -102,146 +98,127 @@
 &lt;li&gt;&lt;code&gt;ng new my-app&lt;/code&gt;: 建立新的 Angular 專案&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;ng serve&lt;/code&gt;: 啟動開發伺服器&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;ng build&lt;/code&gt;: 打包專案&lt;/li&gt;
-&lt;li&gt;generate
+&lt;li&gt;&lt;code&gt;ng generate&lt;/code&gt; (縮寫 &lt;code&gt;ng g&lt;/code&gt;)
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;ng generate module my-module&lt;/code&gt;: 建立新的 Module&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ng generate component my-component&lt;/code&gt;: 建立新的 Component
+&lt;li&gt;&lt;code&gt;ng g module my-module&lt;/code&gt;: 建立新的 Module&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng g component my-component&lt;/code&gt;: 建立新的 Component
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;--module=app&lt;/code&gt;: 指定 Component 所屬的 Module&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ng generate service my-service&lt;/code&gt;: 建立新的 Service&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ng generate pipe my-pipe&lt;/code&gt;: 建立新的 Pipe&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ng generate directive my-directive&lt;/code&gt;: 建立新的 Directive&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng g service my-service&lt;/code&gt;: 建立新的 Service&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng g pipe my-pipe&lt;/code&gt;: 建立新的 Pipe&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ng g directive my-directive&lt;/code&gt;: 建立新的 Directive&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;module-1&#34;&gt;Module&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;NgModule
+&lt;li&gt;&lt;code&gt;@NgModule()&lt;/code&gt;
 &lt;ul&gt;
-&lt;li&gt;declarations: 定義同一 Module 中的 Component、Directive、Pipe&lt;/li&gt;
-&lt;li&gt;imports: 匯入其他 Module&lt;/li&gt;
-&lt;li&gt;providers: 定義 Service&lt;/li&gt;
-&lt;li&gt;bootstrap: 定義啟動的 Component&lt;/li&gt;
-&lt;li&gt;exports: 定義要匯出的 Component、Directive、Pipe&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;declarations&lt;/code&gt;: 定義同一 Module 中的 Component、Directive、Pipe&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;imports&lt;/code&gt;: 匯入其他 Module&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;providers&lt;/code&gt;: 定義 Service&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;bootstrap&lt;/code&gt;: 定義應用程式啟動時的根 Component&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;exports&lt;/code&gt;: 定義要匯出的 Component、Directive、Pipe&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;component-1&#34;&gt;Component&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;包含元素
+&lt;li&gt;包含的主要部分：
 &lt;ul&gt;
-&lt;li&gt;Template&lt;/li&gt;
-&lt;li&gt;TypeScript Class
-&lt;ul&gt;
-&lt;li&gt;.spec.ts: 測試檔&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Template&lt;/strong&gt;: HTML 模板&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TypeScript Class&lt;/strong&gt;: 包含 Component 的邏輯與屬性&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Selector&lt;/strong&gt;: 定義 Component 在 HTML 中的名稱&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;CSS Style&lt;/strong&gt;: 樣式&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;.spec.ts&lt;/strong&gt;: 測試檔案&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Selector: 定義 Component 的名稱&lt;/li&gt;
-&lt;li&gt;CSS Style&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;standalone
+&lt;li&gt;&lt;strong&gt;Standalone Component&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;新版 Angular 預設 app 使用 Standalone 模式，使 component 不再需要透過 NgModule 管理&lt;/li&gt;
+&lt;li&gt;Angular 新版預設採用 Standalone Component 模式&lt;/li&gt;
+&lt;li&gt;Component 不再需要透過 &lt;code&gt;NgModule&lt;/code&gt; 管理&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;lifecycle-hooks&#34;&gt;Lifecycle Hooks&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;ngOnChanges
-&lt;ul&gt;
-&lt;li&gt;當 Angular 重新綁定輸入屬性時調用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ngOnChanges&lt;/code&gt;: 當輸入屬性變更時調用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ngOnInit&lt;/code&gt;: 組件初始化時調用（僅執行一次）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ngDoCheck&lt;/code&gt;: 手動偵測變更&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ngAfterContentInit&lt;/code&gt;: &lt;code&gt;ng-content&lt;/code&gt; 投影完成後調用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ngAfterContentChecked&lt;/code&gt;: &lt;code&gt;ng-content&lt;/code&gt; 內容變更後調用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ngAfterViewInit&lt;/code&gt;: &lt;code&gt;ViewChild&lt;/code&gt;、&lt;code&gt;ViewChildren&lt;/code&gt; 初始化後調用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ngAfterViewChecked&lt;/code&gt;: 每次檢查變更後調用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ngOnDestroy&lt;/code&gt;: 組件銷毀前調用，可用於取消訂閱與清除資源&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;ngOnInit
+&lt;h2 id=&#34;sharing-data-資料傳遞&#34;&gt;Sharing Data (資料傳遞)&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;當 Angular 初始化指令/元件時調用&lt;/li&gt;
-&lt;li&gt;在第一輪 ngOnChanges 後調用&lt;/li&gt;
-&lt;li&gt;只調用一次&lt;/li&gt;
-&lt;li&gt;使用場景
+&lt;li&gt;&lt;code&gt;@Input&lt;/code&gt;: 父元件傳遞資料給子元件&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;@Output&lt;/code&gt;: 子元件透過 &lt;code&gt;EventEmitter&lt;/code&gt; 傳遞資料給父元件&lt;/li&gt;
+&lt;li&gt;其他方式：
 &lt;ul&gt;
-&lt;li&gt;初始化資料（需要根據 @Input 變數）&lt;/li&gt;
-&lt;li&gt;fetch data from API&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;ngDoCheck
-&lt;ul&gt;
-&lt;li&gt;在 ngOnChange 和 ngOnInit 之後調用&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;ngAfterContentInit
-&lt;ul&gt;
-&lt;li&gt;在 Angular 把 ng-content 投影到 view 後調用&lt;/li&gt;
-&lt;li&gt;在第一個 ngDoCheck 之後調用&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;ngAfterContentChecked
-&lt;ul&gt;
-&lt;li&gt;在 ng-content 的內容變更後調用&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;ngAfterViewInit
-&lt;ul&gt;
-&lt;li&gt;在 Angular 初始化完 view 後調用&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;ngAfterViewChecked
-&lt;ul&gt;
-&lt;li&gt;在每次做完 view 的變更檢查後調用&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;ngOnDestroy
-&lt;ul&gt;
-&lt;li&gt;在 Angular 銷毀 directive/component 前調用&lt;/li&gt;
+&lt;li&gt;透過 &lt;strong&gt;Service&lt;/strong&gt; 和 &lt;strong&gt;RxJS&lt;/strong&gt; Subject/BehaviorSubject 來進行資料共享&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;component-check&#34;&gt;Component check&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;操作
-&lt;ul&gt;
-&lt;li&gt;update child component input binding&lt;/li&gt;
-&lt;li&gt;update DOM interpolation&lt;/li&gt;
-&lt;li&gt;update query list&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;sharing-data&#34;&gt;Sharing Data&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;@Input
-&lt;ul&gt;
-&lt;li&gt;父元件傳遞資料給子元件&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;@Output
-&lt;ul&gt;
-&lt;li&gt;子元件傳遞資料給父元件&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;binding&#34;&gt;Binding&lt;/h2&gt;
-&lt;h3 id=&#34;property-binding&#34;&gt;Property Binding&lt;/h3&gt;
+&lt;h2 id=&#34;data-binding-資料綁定&#34;&gt;Data Binding (資料綁定)&lt;/h2&gt;
+&lt;h3 id=&#34;property-binding-屬性綁定&#34;&gt;Property Binding (屬性綁定)&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;用來設定 HTML 元素的屬性&lt;/li&gt;
-&lt;li&gt;用中括號 &lt;code&gt;[]&lt;/code&gt; 包住屬性名稱&lt;/li&gt;
-&lt;li&gt;ex: &lt;code&gt;&amp;lt;img [src]=&amp;quot;imageUrl&amp;quot;&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;使用中括號 &lt;code&gt;[]&lt;/code&gt; 包住屬性名稱&lt;/li&gt;
+&lt;li&gt;範例：
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;img&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;src&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;]=&amp;#34;&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;imageUrl&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;event-binding&#34;&gt;Event Binding&lt;/h3&gt;
+&lt;h3 id=&#34;event-binding-事件綁定&#34;&gt;Event Binding (事件綁定)&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;用來設定 HTML 元素的事件&lt;/li&gt;
-&lt;li&gt;用小括號 &lt;code&gt;()&lt;/code&gt; 包住事件名稱&lt;/li&gt;
-&lt;li&gt;ex: &lt;code&gt;&amp;lt;button (click)=&amp;quot;onClick()&amp;quot;&amp;gt;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;$event&lt;/code&gt;: 可以取得事件物件&lt;/li&gt;
+&lt;li&gt;使用小括號 &lt;code&gt;()&lt;/code&gt; 包住事件名稱&lt;/li&gt;
+&lt;li&gt;範例：
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;button&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;click&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;)=&amp;#34;&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;onClick&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;()&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;Click Me&lt;span class=&#34;p&#34;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;button&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$event&lt;/code&gt;: 取得事件物件
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;input&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;input&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;)=&amp;#34;&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;onInput&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;($&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;event&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;)&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;two-way-binding&#34;&gt;Two-way Binding&lt;/h3&gt;
+&lt;h3 id=&#34;two-way-binding-雙向綁定&#34;&gt;Two-way Binding (雙向綁定)&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;把屬性和事件綁定在一起&lt;/li&gt;
-&lt;li&gt;用中括號和小括號 &lt;code&gt;[(ngModel)]&lt;/code&gt; 包住屬性名稱&lt;/li&gt;
-&lt;li&gt;ex: &lt;code&gt;&amp;lt;input [(ngModel)]=&amp;quot;name&amp;quot;&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;屬性與事件綁定結合在一起&lt;/li&gt;
+&lt;li&gt;使用 &lt;code&gt;[(ngModel)]&lt;/code&gt; 綁定表單輸入&lt;/li&gt;
+&lt;li&gt;需要匯入 &lt;code&gt;FormsModule&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;範例：
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;input&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;[(&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ngModel&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;)]=&amp;#34;&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         </item>

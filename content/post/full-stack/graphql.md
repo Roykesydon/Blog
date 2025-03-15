@@ -11,38 +11,41 @@ categories : ["full-stack"]
 ## 簡介
 
 - Meta 在 2015 年公開的 API Query Language
-- 常被用來和傳統的 REST API 比較，具備查詢更加靈活等特性
-- 有在使用的公司
+- 相較於傳統的 REST API，具備更靈活的查詢能力
+- 可讓客戶端精確地獲取所需的資料，避免多餘的請求和回應
+- 被多家公司採用，如：
     - Facebook
     - GitHub
     - Twitter
     - ...
 
-## 和 REST API 的主要差別
+## GraphQL 與 REST API 的主要差異
 
-- Single Endpoint
-    - 和 REST API 對於不同 resource 需要不同 endpoint 不同，GraphQL 對於所有 resource 都是從同一個 endpoint 進行存取
-    - 但 GraphQL 不能輕易地用 HTTP caching，因為現在只剩一種 URL 了
+- **Single Endpoint**
+    - REST API 針對不同資源 (resource) 需要不同的 endpoint，而 GraphQL 透過單一 endpoint 存取所有資源
+    - 但 GraphQL 由於僅有一個 URL，無法直接利用 HTTP caching 進行快取，而是依賴 client-side caching 或 persistent queries 來優化效能
 
-- 解決 Under-fetching 和 Over-fetching 問題
-    - Under-fetching
-        - 一個 API call 沒辦法取得所有想要的資料，需要多次 API call
-        - 假如要用 RESTful API 取得一個文章的作者，可能得先取得文章，再取得作者，這樣就需要兩次 API call
-            - 但 GraphQL 可以在一次 API call 中取得文章和作者，透過 nested query
 
-    - Over-fetching
-        - 一個 API call 取得的資料比想要的還多，造成資源浪費
-        - GraphQL 可以透過 query 定義只想取得的欄位
+- **解決 Under-fetching 和 Over-fetching 問題**
+    - **Under-fetching**
+        - 一個 API call 無法取得所有需要的資料，導致需要多次 API call
+        - 例如，使用 RESTful API 取得一篇文章及其作者資訊，可能需要先請求文章資料，再請求作者資料
+        - GraphQL 透過 nested query 可以在單次 API call 內獲取文章及作者資訊
+    
+    - **Over-fetching**
+        - API 回應的資料超過實際所需，造成資源浪費
+        - GraphQL 允許客戶端指定僅需要的欄位，避免傳輸過多無用資料
 
-## 使用
+## GraphQL 的運作方式
 
-和 RESTful API 不同，需要特別架個 GraphQL server，可以考慮用 Apollo Server
+GraphQL 需要特別架設 GraphQL server，可考慮使用 Apollo Server、Express + graphql 套件等方式實作
 
-要定義不同 Data type 的 schema、relationship，以及寫對應不同 query 的 resolver
+- 需定義 schema 來描述不同的資料類型 (Data type) 及其關聯 (relationship)
+- 透過 resolver 來處理查詢和資料變更
 
-### Query
+### Query (查詢)
 
-可能會是長這樣的東西
+GraphQL 的查詢語法允許客戶端精確地獲取所需的資料，例如：
 
 ```graphql
 query postQuery($id: ID!) {
@@ -56,11 +59,10 @@ query postQuery($id: ID!) {
         }
     }
 }
-```
 
-### Mutation
+### Mutation (變更資料)
 
-新增、修改、刪除資料都屬於這塊
+GraphQL 透過 Mutation 來處理新增、修改、刪除資料，例如新增文章的請求：
 
 ```graphql
 query addPost($post: AddPostInput!) {

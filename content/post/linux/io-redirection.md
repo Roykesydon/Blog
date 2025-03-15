@@ -1,7 +1,7 @@
 ---
 title: "IO Redirection"
 date: 2023-01-21T02:20:43+08:00
-draft: false
+draft: true
 
 type: "post"
 tags: ["linux"]

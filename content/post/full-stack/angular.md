@@ -11,120 +11,123 @@ categories : ["full-stack"]
 ## 基礎概念
 ### Module
 - 把相關的 Component、Directive、Pipe、Service 等打包在一起的容器
-- Lazy Loading
+- 可以使用 Lazy Loading 延遲加載模組，提高效能
+
 ### Component
 - Angular 應用程式的基本組成單位
+- 由 HTML、CSS、TypeScript 共同組成
+- 具有自己的 `@Component` 裝飾器
+
 ### Pipe
-- 用來轉換資料的工具，可以把字串格式化、日期格式化等
+- 用來轉換資料的工具，可以用於字串格式化、日期格式化等
+- 可以透過 `|` 符號在模板中使用，例如 `{{ value | uppercase }}`
+- 內建 Pipes：`date`、`uppercase`、`lowercase`、`currency`、`percent` 等
+- 可以建立自訂 Pipe
+
 ### Directive
 - 用來修改 DOM 元素的外觀或行為
-  - 比如說 ngIf、ngFor、ngStyle、ngClass
-  - 類型
-    - Structural Directive: 修改 DOM 的結構
-      - 可以搭配
-        - `ng-container`
-          - 不會產生額外的 DOM 元素，可以用在想要用 ngIf 和 ngFor 但不想產生額外元素的情況
-      - `*ngFor`
-        - `let item of items; index as i`
-    - Attribute Directive: 修改 DOM 的屬性
-    - Component Directive: 包含 template 的 directive
+  - 例如 `ngIf`、`ngFor`、`ngStyle`、`ngClass`
+  - 分為三種類型：
+    - **Structural Directive**: 修改 DOM 的結構
+      - `*ngIf`, `*ngFor`, `*ngSwitch`
+      - 可搭配 `ng-container`
+        - 不會產生額外的 DOM 元素，適合在 `ngIf` 和 `ngFor` 不希望產生額外元素時使用
+      - `*ngFor` 例子：`let item of items; index as i`
+    - **Attribute Directive**: 修改 DOM 的屬性，例如 `ngClass`, `ngStyle`
+    - **Component Directive**: 包含 template 的 directive
 ### Service
 - 負責 API 請求、資料處理等工作
-- Dependency Injection
-- @Injectable
-  - providedIn
-    - root: 全域共用
-    - 也可以在 component 的 providers 中設定要注入的 service
+- 透過 **Dependency Injection (DI)** 來提供服務
+- `@Injectable()` 裝飾器用來標記服務
+  - `providedIn`
+    - `root`: 服務將在整個應用程式中可用
+    - 也可以在特定 Module 或 Component 的 `providers` 中設定要注入的 Service
+
 ### Router
 - 負責處理 URL 路由
-- routes
-  - path
-  - component
-  - <canActivate>
-    - 可以設定 guard
-- guard
-  - `ng g guard <guard-name>`
-    - CanActivate
-      - 
-
+- 設定路由時使用 `routes` 陣列
+  - `path`: 定義路徑
+  - `component`: 指定對應的 Component
+  - `canActivate`: 設定路由守衛 (Guard)
+- 路由守衛 (Guard)
+  - 透過 `ng g guard <guard-name>` 來產生
+  - `CanActivate`:
+    - 控制是否允許使用者進入某個路由
+    - 適合用來驗證使用者權限
 
 ## CLI Command
 - `ng new my-app`: 建立新的 Angular 專案
 - `ng serve`: 啟動開發伺服器
 - `ng build`: 打包專案
-- generate
-  - `ng generate module my-module`: 建立新的 Module
-  - `ng generate component my-component`: 建立新的 Component
+- `ng generate` (縮寫 `ng g`)
+  - `ng g module my-module`: 建立新的 Module
+  - `ng g component my-component`: 建立新的 Component
     - `--module=app`: 指定 Component 所屬的 Module
-  - `ng generate service my-service`: 建立新的 Service
-  - `ng generate pipe my-pipe`: 建立新的 Pipe
-  - `ng generate directive my-directive`: 建立新的 Directive
+  - `ng g service my-service`: 建立新的 Service
+  - `ng g pipe my-pipe`: 建立新的 Pipe
+  - `ng g directive my-directive`: 建立新的 Directive
 
 ## Module
-- NgModule
-  - declarations: 定義同一 Module 中的 Component、Directive、Pipe
-  - imports: 匯入其他 Module
-  - providers: 定義 Service
-  - bootstrap: 定義啟動的 Component
-  - exports: 定義要匯出的 Component、Directive、Pipe
+- `@NgModule()`
+  - `declarations`: 定義同一 Module 中的 Component、Directive、Pipe
+  - `imports`: 匯入其他 Module
+  - `providers`: 定義 Service
+  - `bootstrap`: 定義應用程式啟動時的根 Component
+  - `exports`: 定義要匯出的 Component、Directive、Pipe
 
 ## Component
-- 包含元素
-  - Template
-  - TypeScript Class
-    - .spec.ts: 測試檔
-  - Selector: 定義 Component 的名稱
-  - CSS Style
-- standalone
-  - 新版 Angular 預設 app 使用 Standalone 模式，使 component 不再需要透過 NgModule 管理
+- 包含的主要部分：
+  - **Template**: HTML 模板
+  - **TypeScript Class**: 包含 Component 的邏輯與屬性
+  - **Selector**: 定義 Component 在 HTML 中的名稱
+  - **CSS Style**: 樣式
+  - **.spec.ts**: 測試檔案
+- **Standalone Component**
+  - Angular 新版預設採用 Standalone Component 模式
+  - Component 不再需要透過 `NgModule` 管理
 
 ## Lifecycle Hooks
-- ngOnChanges
-  - 當 Angular 重新綁定輸入屬性時調用
-- ngOnInit
-  - 當 Angular 初始化指令/元件時調用
-  - 在第一輪 ngOnChanges 後調用
-  - 只調用一次
-  - 使用場景
-    - 初始化資料（需要根據 @Input 變數）
-    - fetch data from API
-- ngDoCheck
-  - 在 ngOnChange 和 ngOnInit 之後調用
-- ngAfterContentInit
-  - 在 Angular 把 ng-content 投影到 view 後調用
-  - 在第一個 ngDoCheck 之後調用
-- ngAfterContentChecked
-  - 在 ng-content 的內容變更後調用
-- ngAfterViewInit
-  - 在 Angular 初始化完 view 後調用
-- ngAfterViewChecked
-  - 在每次做完 view 的變更檢查後調用
-- ngOnDestroy
-  - 在 Angular 銷毀 directive/component 前調用
+- `ngOnChanges`: 當輸入屬性變更時調用
+- `ngOnInit`: 組件初始化時調用（僅執行一次）
+- `ngDoCheck`: 手動偵測變更
+- `ngAfterContentInit`: `ng-content` 投影完成後調用
+- `ngAfterContentChecked`: `ng-content` 內容變更後調用
+- `ngAfterViewInit`: `ViewChild`、`ViewChildren` 初始化後調用
+- `ngAfterViewChecked`: 每次檢查變更後調用
+- `ngOnDestroy`: 組件銷毀前調用，可用於取消訂閱與清除資源
 
-### Component check
-- 操作
-  - update child component input binding
-  - update DOM interpolation
-  - update query list
+## Sharing Data (資料傳遞)
+- `@Input`: 父元件傳遞資料給子元件
+- `@Output`: 子元件透過 `EventEmitter` 傳遞資料給父元件
+- 其他方式：
+  - 透過 **Service** 和 **RxJS** Subject/BehaviorSubject 來進行資料共享
 
-## Sharing Data
-- @Input
-  - 父元件傳遞資料給子元件
-- @Output
-  - 子元件傳遞資料給父元件
-
-## Binding
-### Property Binding
+## Data Binding (資料綁定)
+### Property Binding (屬性綁定)
 - 用來設定 HTML 元素的屬性
-- 用中括號 `[]` 包住屬性名稱
-- ex: `<img [src]="imageUrl">`
-### Event Binding
+- 使用中括號 `[]` 包住屬性名稱
+- 範例：
+  ```html
+  <img [src]="imageUrl">
+  ```
+
+### Event Binding (事件綁定)
 - 用來設定 HTML 元素的事件
-- 用小括號 `()` 包住事件名稱
-- ex: `<button (click)="onClick()">`
-- `$event`: 可以取得事件物件
-### Two-way Binding
-- 把屬性和事件綁定在一起
-- 用中括號和小括號 `[(ngModel)]` 包住屬性名稱
-- ex: `<input [(ngModel)]="name">`
+- 使用小括號 `()` 包住事件名稱
+- 範例：
+  ```html
+  <button (click)="onClick()">Click Me</button>
+  ```
+- `$event`: 取得事件物件
+  ```html
+  <input (input)="onInput($event)">
+  ```
+
+### Two-way Binding (雙向綁定)
+- 屬性與事件綁定結合在一起
+- 使用 `[(ngModel)]` 綁定表單輸入
+- 需要匯入 `FormsModule`
+- 範例：
+  ```html
+  <input [(ngModel)]="name">
+  ```

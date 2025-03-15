@@ -1,7 +1,7 @@
 ---
 title: "IPC -- Inter-Process Communication"
 date: 2023-01-28T15:31:50+08:00
-draft: false
+draft: true
 description: "Inter-Process Communication"
 type: "post"
 tags: ["linux"]

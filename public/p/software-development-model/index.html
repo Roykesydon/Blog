@@ -2,18 +2,18 @@
 <html lang="en-us" dir="ltr">
 
 <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Terms Incremental vs Iterative Incremental 隨時間一步一步完成 Iterative 建立 prototype，然後不斷改進 Model type Linear/Predictive 有類似的專案經驗 有明確的流程 沒什麼可以改動的空間 Flexible/Adaptive 專案屬於 new idea 專案很有可能隨時間改變 Waterfall Model 像瀑布一樣，一個階段完成後才能進行下一個階段 Requirement -&amp;gt; Design -&amp;gt; Implementation -&amp;gt; Testing -&amp;gt; Deployment -&amp;gt; Maintenance 非常 predictive，沒有彈性 如果在 Testing 發現重大問題，可能要從 Requirement 重新開始 隨著進度推進，fix 成本增長很快 每一步都得考慮周密 用戶很晚才能看到結果 Incremental Model 在整個開發過程中多次完成軟體開發過程 每個子開發過程都有明確的目標 Agile 一種思維方法，不是模型 Manifesto Individuals and interactions over processes and tools 如果一組人決定要用一組新的工具，那他們應該有更高的優先權 過往的做法可能偏向使用過的工具 Working software over comprehensive documentation document 很重要，但是只有大量的 document 沒辦法讓客戶給出反饋 Customer collaboration over contract negotiation 強調和客戶的合作，而不是只在意合同上的項目 Responding to change over following a plan 瀑布式開發的缺點 現在的技術環境變化太快，Agile 希望在開發過程中能夠快速適應 傳統的開發方法考量到金錢損失，不太可能辦到。但透過小的 increment，可以在每個 increment 中朝正確的方向前進 軟體系統不可能被 100% 預測 系統可能不符合用戶要求 市場變化很快，Agile 可以在短時間內推出最小可行產品，先行推向市場 Kanban 會存在多張卡片 可以直觀看到某個欄位是否堆積大量工作 Properties Visualize workflow Limit work in progress Manage flow Make process policies explicit Improve collaboratively Principles Start with what you do now Agree to pursue incremental, evolutionary change 並非試著立刻改變所有事情 Respect the current process, roles, responsibilities &amp;amp; titles Encourage acts of leadership at all levels 這裡的 leadership 不一定指領導他人，也可以是激勵他人 欄位 Backlog Analyze Develop Test Release Scrum 可以利用 back-to-back testing 來確認沒有弄壞之前 sprint 的功能 roles Product Owner 決定要用什麼方式完成什麼事 與外部世界溝通的人，和利害關係人溝通 目標 最大化產品價值 價低成本、提高收益 職責 維護 open, healthy product backlog 回答產品相關問題 管理預算、release schedule 確保團隊價值，找出問題 Scrum Master 確保團隊遵守 Scrum 的規則，促成會議、解決衝突 Servant Leader 有一點領導，但和大家平等。促成團隊工作而不是指揮別人 目標 促成 Daily Standup 移除障礙 確保大家的心情 確保 Scurm values 團隊的調解人 Dev Team 包含工程師、設計師等等 目標 和 Product Owner 合作，create user stories 寫 code 和測試，確保符合預期 research, design, prototype 流程 product backlog 待完成的事情 可能的欄位 優先度 預計花費時間 誰來執行 spring planning meeting 決定要在這個 sprint 完成的事情 時間點會是 sprint 的第一天 目標 把 product backlog 轉換成 sprint backlog 職責 Scrum Master 促成會議 確保和準備會議地點 確保會議有在持續推進，好達成 timebox 如果有講太久的部分，可能稍後再排單獨會議 確保一切都和 sprint goal 一致 Product Owner 準備好 product backlog 澄清 product backlog 的細節 要準備好描述 acceptance criteria 比如搜索速度要多快？ Dev Team 協助判斷哪些任務可達成且符合 sprint goal sprint backlog 這個 sprint 要完成的事情 開發人員去自己選擇要做的事情 然後就會花 1-4 週完成一個 sprint Daily Scrum (Daily standup) 不該花太久，比如最多 15 分鐘 職責 Scrum Master 確保會議的進行，確保 timebox 紀錄關於目前障礙的筆記，規劃時間移除 Dev Team 回答問題 做了什麼 計畫做什麼 遇到什麼問題 sprint review 找 stakeholders 來看看這個 sprint 的成果 秀出 product increment product increment 意味著他本身就是一個完成的產品，經過測試且準備 release 任務 review sprint result 回顧那些任務做得好和不好 如果有事情沒完成，要解釋為什麼推遲 這個 sprint 有沒有達到目標 Discuss and demonstrate work product owner 全程記錄筆記 Update status of the project Collaborate on the plan ahead sprint retrospective 團隊討論這個 sprint 的問題，並且改進 常見方法 start-stop-continue 每個人說出一個想開始做的事情，一個想停止做的事情，一個想繼續做的事情 可以保持匿名 3-5-3 Structure 3 artifacts Sprint Backlog Product Backlog Product Increment 5 events Sprint Planning Daily Scrum The Sprint Sprint Review Sprint Retrospective 3 roles Product Owner Scrum Master Dev Team 可以再加上 5 values Focus Respect Commitment Courage Openness 3 pillars Transparency Inspection Adaptation '>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Terms Incremental vs Iterative Incremental 透過多個 increment（增量）逐步構建專案，每個增量都是可運行的部分功能，並在後續開發中持續擴充。 Iterative 建立 prototype（原型），然後反覆改進，每次迭代都基於上一版本進行調整與優化。 Model Type Linear/Predictive 適用於具備類似專案經驗的情境 擁有明確的開發流程 變更空間極小，需求需在開發前確定 Flexible/Adaptive 適用於新創概念或需求尚不明確的專案 專案可能隨時間變更，因此需具備較高的靈活性 Waterfall Model 像瀑布一樣，一個階段完成後才能進入下一個階段 典型流程： Requirement → Design → Implementation → Testing → Deployment → Maintenance 高度預測性（Predictive），變更成本極高，彈性低 問題點： 若在 Testing 階段發現重大缺陷，可能需回溯至 Requirement 重新開始 隨著進度推進，修正成本（fix cost）將大幅增加 需要在每個階段做詳細規劃，以降低風險 用戶直到後期才會看到可運行的成果 Incremental Model 在整個開發過程中，將系統劃分為 多個增量（increments） 來逐步開發與交付 每個增量都具備可運行的功能，並能獨立部署 各個增量的目標與功能範圍需事先定義，以確保最終整合 Agile 一種思維方式，而非特定的開發模型 Agile Manifesto（敏捷宣言） Individuals and interactions over processes and tools（個人與互動高於流程與工具） 若團隊決定使用新的工具，應優先考量團隊的需求，而非僅僅依賴過去習慣的工具 Working software over comprehensive documentation（可運行的軟體高於完備的文件） 文件很重要，但單純依賴大量文件無法讓客戶提供有效回饋 Customer collaboration over contract negotiation（與客戶合作高於合約談判） 強調持續與客戶溝通，以確保專案方向正確，而不是只關注合同上的條款 Responding to change over following a plan（回應變化高於遵循計畫） 在變化快速的環境下，適應需求變更比僵化地執行既定計畫更重要 瀑布式開發的缺點（Agile 解決的問題） 技術環境變化迅速，Agile 讓開發更具適應性 傳統開發方法往往因為考量成本，不容易應對變更 而 Agile 透過 小的增量（increment） 來持續調整方向，降低風險 軟體需求無法 100% 預測 早期規劃的需求可能與最終需求不符，因此 Agile 強調 持續交付與回饋 系統可能不符合用戶需求 透過 迭代開發（iterative development），確保用戶能夠在開發過程中參與並提供反饋 市場變化快速 Agile 強調 MVP（最小可行產品），讓團隊能在短時間內推出核心功能，以快速測試市場反應 Kanban 以視覺化方式管理工作流程 透過卡片（Kanban 卡）來追蹤工作項目 能夠直觀地發現某個工作階段是否積壓過多任務 核心屬性（Properties） Visualize workflow（視覺化工作流） Limit work in progress（限制在製作業務量） Manage flow（管理工作流） Make process policies explicit（明確定義流程規則） Improve collaboratively（透過協作持續改進） 核心原則（Principles） Start with what you do now（從現有流程開始） Agree to pursue incremental, evolutionary change（追求漸進式改變） 並非一次性顛覆整個流程，而是逐步優化 Respect the current process, roles, responsibilities &amp;amp; titles（尊重現有流程、角色、職責與職位） Encourage acts of leadership at all levels（鼓勵各層級展現領導力） Leadership 不僅指管理職責，也包含主動解決問題、協助他人、激勵他人 工作欄位（Work Columns） Backlog（待辦事項） Analyze（需求分析） Develop（開發） Test（測試） Release（發布） Scrum Scrum 核心概念 Scrum 是敏捷開發框架，透過迭代式的開發方式，提高軟體交付的效率與適應性。 主要流程包括 Sprint Planning、Daily Scrum、Sprint Review 和 Sprint Retrospective。 角色與職責 1.'>
 <title>Software Development Model</title>
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/software-development-model/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.7043ab073f3cae4b95936f5bfe326aa019ab0eadb79066e80f4e10d773250541.css"><meta property='og:title' content='Software Development Model'>
-<meta property='og:description' content='Terms Incremental vs Iterative Incremental 隨時間一步一步完成 Iterative 建立 prototype，然後不斷改進 Model type Linear/Predictive 有類似的專案經驗 有明確的流程 沒什麼可以改動的空間 Flexible/Adaptive 專案屬於 new idea 專案很有可能隨時間改變 Waterfall Model 像瀑布一樣，一個階段完成後才能進行下一個階段 Requirement -&amp;gt; Design -&amp;gt; Implementation -&amp;gt; Testing -&amp;gt; Deployment -&amp;gt; Maintenance 非常 predictive，沒有彈性 如果在 Testing 發現重大問題，可能要從 Requirement 重新開始 隨著進度推進，fix 成本增長很快 每一步都得考慮周密 用戶很晚才能看到結果 Incremental Model 在整個開發過程中多次完成軟體開發過程 每個子開發過程都有明確的目標 Agile 一種思維方法，不是模型 Manifesto Individuals and interactions over processes and tools 如果一組人決定要用一組新的工具，那他們應該有更高的優先權 過往的做法可能偏向使用過的工具 Working software over comprehensive documentation document 很重要，但是只有大量的 document 沒辦法讓客戶給出反饋 Customer collaboration over contract negotiation 強調和客戶的合作，而不是只在意合同上的項目 Responding to change over following a plan 瀑布式開發的缺點 現在的技術環境變化太快，Agile 希望在開發過程中能夠快速適應 傳統的開發方法考量到金錢損失，不太可能辦到。但透過小的 increment，可以在每個 increment 中朝正確的方向前進 軟體系統不可能被 100% 預測 系統可能不符合用戶要求 市場變化很快，Agile 可以在短時間內推出最小可行產品，先行推向市場 Kanban 會存在多張卡片 可以直觀看到某個欄位是否堆積大量工作 Properties Visualize workflow Limit work in progress Manage flow Make process policies explicit Improve collaboratively Principles Start with what you do now Agree to pursue incremental, evolutionary change 並非試著立刻改變所有事情 Respect the current process, roles, responsibilities &amp;amp; titles Encourage acts of leadership at all levels 這裡的 leadership 不一定指領導他人，也可以是激勵他人 欄位 Backlog Analyze Develop Test Release Scrum 可以利用 back-to-back testing 來確認沒有弄壞之前 sprint 的功能 roles Product Owner 決定要用什麼方式完成什麼事 與外部世界溝通的人，和利害關係人溝通 目標 最大化產品價值 價低成本、提高收益 職責 維護 open, healthy product backlog 回答產品相關問題 管理預算、release schedule 確保團隊價值，找出問題 Scrum Master 確保團隊遵守 Scrum 的規則，促成會議、解決衝突 Servant Leader 有一點領導，但和大家平等。促成團隊工作而不是指揮別人 目標 促成 Daily Standup 移除障礙 確保大家的心情 確保 Scurm values 團隊的調解人 Dev Team 包含工程師、設計師等等 目標 和 Product Owner 合作，create user stories 寫 code 和測試，確保符合預期 research, design, prototype 流程 product backlog 待完成的事情 可能的欄位 優先度 預計花費時間 誰來執行 spring planning meeting 決定要在這個 sprint 完成的事情 時間點會是 sprint 的第一天 目標 把 product backlog 轉換成 sprint backlog 職責 Scrum Master 促成會議 確保和準備會議地點 確保會議有在持續推進，好達成 timebox 如果有講太久的部分，可能稍後再排單獨會議 確保一切都和 sprint goal 一致 Product Owner 準備好 product backlog 澄清 product backlog 的細節 要準備好描述 acceptance criteria 比如搜索速度要多快？ Dev Team 協助判斷哪些任務可達成且符合 sprint goal sprint backlog 這個 sprint 要完成的事情 開發人員去自己選擇要做的事情 然後就會花 1-4 週完成一個 sprint Daily Scrum (Daily standup) 不該花太久，比如最多 15 分鐘 職責 Scrum Master 確保會議的進行，確保 timebox 紀錄關於目前障礙的筆記，規劃時間移除 Dev Team 回答問題 做了什麼 計畫做什麼 遇到什麼問題 sprint review 找 stakeholders 來看看這個 sprint 的成果 秀出 product increment product increment 意味著他本身就是一個完成的產品，經過測試且準備 release 任務 review sprint result 回顧那些任務做得好和不好 如果有事情沒完成，要解釋為什麼推遲 這個 sprint 有沒有達到目標 Discuss and demonstrate work product owner 全程記錄筆記 Update status of the project Collaborate on the plan ahead sprint retrospective 團隊討論這個 sprint 的問題，並且改進 常見方法 start-stop-continue 每個人說出一個想開始做的事情，一個想停止做的事情，一個想繼續做的事情 可以保持匿名 3-5-3 Structure 3 artifacts Sprint Backlog Product Backlog Product Increment 5 events Sprint Planning Daily Scrum The Sprint Sprint Review Sprint Retrospective 3 roles Product Owner Scrum Master Dev Team 可以再加上 5 values Focus Respect Commitment Courage Openness 3 pillars Transparency Inspection Adaptation '>
+<link rel="stylesheet" href="/Blog/scss/style.min.6c2f219b50fdafd3d9e37eb3a78aae1ae4db4cfd4d2a5606db7e9bc87ed0c4d1.css"><meta property='og:title' content='Software Development Model'>
+<meta property='og:description' content='Terms Incremental vs Iterative Incremental 透過多個 increment（增量）逐步構建專案，每個增量都是可運行的部分功能，並在後續開發中持續擴充。 Iterative 建立 prototype（原型），然後反覆改進，每次迭代都基於上一版本進行調整與優化。 Model Type Linear/Predictive 適用於具備類似專案經驗的情境 擁有明確的開發流程 變更空間極小，需求需在開發前確定 Flexible/Adaptive 適用於新創概念或需求尚不明確的專案 專案可能隨時間變更，因此需具備較高的靈活性 Waterfall Model 像瀑布一樣，一個階段完成後才能進入下一個階段 典型流程： Requirement → Design → Implementation → Testing → Deployment → Maintenance 高度預測性（Predictive），變更成本極高，彈性低 問題點： 若在 Testing 階段發現重大缺陷，可能需回溯至 Requirement 重新開始 隨著進度推進，修正成本（fix cost）將大幅增加 需要在每個階段做詳細規劃，以降低風險 用戶直到後期才會看到可運行的成果 Incremental Model 在整個開發過程中，將系統劃分為 多個增量（increments） 來逐步開發與交付 每個增量都具備可運行的功能，並能獨立部署 各個增量的目標與功能範圍需事先定義，以確保最終整合 Agile 一種思維方式，而非特定的開發模型 Agile Manifesto（敏捷宣言） Individuals and interactions over processes and tools（個人與互動高於流程與工具） 若團隊決定使用新的工具，應優先考量團隊的需求，而非僅僅依賴過去習慣的工具 Working software over comprehensive documentation（可運行的軟體高於完備的文件） 文件很重要，但單純依賴大量文件無法讓客戶提供有效回饋 Customer collaboration over contract negotiation（與客戶合作高於合約談判） 強調持續與客戶溝通，以確保專案方向正確，而不是只關注合同上的條款 Responding to change over following a plan（回應變化高於遵循計畫） 在變化快速的環境下，適應需求變更比僵化地執行既定計畫更重要 瀑布式開發的缺點（Agile 解決的問題） 技術環境變化迅速，Agile 讓開發更具適應性 傳統開發方法往往因為考量成本，不容易應對變更 而 Agile 透過 小的增量（increment） 來持續調整方向，降低風險 軟體需求無法 100% 預測 早期規劃的需求可能與最終需求不符，因此 Agile 強調 持續交付與回饋 系統可能不符合用戶需求 透過 迭代開發（iterative development），確保用戶能夠在開發過程中參與並提供反饋 市場變化快速 Agile 強調 MVP（最小可行產品），讓團隊能在短時間內推出核心功能，以快速測試市場反應 Kanban 以視覺化方式管理工作流程 透過卡片（Kanban 卡）來追蹤工作項目 能夠直觀地發現某個工作階段是否積壓過多任務 核心屬性（Properties） Visualize workflow（視覺化工作流） Limit work in progress（限制在製作業務量） Manage flow（管理工作流） Make process policies explicit（明確定義流程規則） Improve collaboratively（透過協作持續改進） 核心原則（Principles） Start with what you do now（從現有流程開始） Agree to pursue incremental, evolutionary change（追求漸進式改變） 並非一次性顛覆整個流程，而是逐步優化 Respect the current process, roles, responsibilities &amp;amp; titles（尊重現有流程、角色、職責與職位） Encourage acts of leadership at all levels（鼓勵各層級展現領導力） Leadership 不僅指管理職責，也包含主動解決問題、協助他人、激勵他人 工作欄位（Work Columns） Backlog（待辦事項） Analyze（需求分析） Develop（開發） Test（測試） Release（發布） Scrum Scrum 核心概念 Scrum 是敏捷開發框架，透過迭代式的開發方式，提高軟體交付的效率與適應性。 主要流程包括 Sprint Planning、Daily Scrum、Sprint Review 和 Sprint Retrospective。 角色與職責 1.'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/software-development-model/'>
 <meta property='og:site_name' content='Roykesydon'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='software-engineering' /><meta property='article:tag' content='software-design' /><meta property='article:published_time' content='2024-06-27T02:00:17&#43;08:00'/><meta property='article:modified_time' content='2024-06-27T02:00:17&#43;08:00'/>
 <meta name="twitter:title" content="Software Development Model">
-<meta name="twitter:description" content="Terms Incremental vs Iterative Incremental 隨時間一步一步完成 Iterative 建立 prototype，然後不斷改進 Model type Linear/Predictive 有類似的專案經驗 有明確的流程 沒什麼可以改動的空間 Flexible/Adaptive 專案屬於 new idea 專案很有可能隨時間改變 Waterfall Model 像瀑布一樣，一個階段完成後才能進行下一個階段 Requirement -&amp;gt; Design -&amp;gt; Implementation -&amp;gt; Testing -&amp;gt; Deployment -&amp;gt; Maintenance 非常 predictive，沒有彈性 如果在 Testing 發現重大問題，可能要從 Requirement 重新開始 隨著進度推進，fix 成本增長很快 每一步都得考慮周密 用戶很晚才能看到結果 Incremental Model 在整個開發過程中多次完成軟體開發過程 每個子開發過程都有明確的目標 Agile 一種思維方法，不是模型 Manifesto Individuals and interactions over processes and tools 如果一組人決定要用一組新的工具，那他們應該有更高的優先權 過往的做法可能偏向使用過的工具 Working software over comprehensive documentation document 很重要，但是只有大量的 document 沒辦法讓客戶給出反饋 Customer collaboration over contract negotiation 強調和客戶的合作，而不是只在意合同上的項目 Responding to change over following a plan 瀑布式開發的缺點 現在的技術環境變化太快，Agile 希望在開發過程中能夠快速適應 傳統的開發方法考量到金錢損失，不太可能辦到。但透過小的 increment，可以在每個 increment 中朝正確的方向前進 軟體系統不可能被 100% 預測 系統可能不符合用戶要求 市場變化很快，Agile 可以在短時間內推出最小可行產品，先行推向市場 Kanban 會存在多張卡片 可以直觀看到某個欄位是否堆積大量工作 Properties Visualize workflow Limit work in progress Manage flow Make process policies explicit Improve collaboratively Principles Start with what you do now Agree to pursue incremental, evolutionary change 並非試著立刻改變所有事情 Respect the current process, roles, responsibilities &amp;amp; titles Encourage acts of leadership at all levels 這裡的 leadership 不一定指領導他人，也可以是激勵他人 欄位 Backlog Analyze Develop Test Release Scrum 可以利用 back-to-back testing 來確認沒有弄壞之前 sprint 的功能 roles Product Owner 決定要用什麼方式完成什麼事 與外部世界溝通的人，和利害關係人溝通 目標 最大化產品價值 價低成本、提高收益 職責 維護 open, healthy product backlog 回答產品相關問題 管理預算、release schedule 確保團隊價值，找出問題 Scrum Master 確保團隊遵守 Scrum 的規則，促成會議、解決衝突 Servant Leader 有一點領導，但和大家平等。促成團隊工作而不是指揮別人 目標 促成 Daily Standup 移除障礙 確保大家的心情 確保 Scurm values 團隊的調解人 Dev Team 包含工程師、設計師等等 目標 和 Product Owner 合作，create user stories 寫 code 和測試，確保符合預期 research, design, prototype 流程 product backlog 待完成的事情 可能的欄位 優先度 預計花費時間 誰來執行 spring planning meeting 決定要在這個 sprint 完成的事情 時間點會是 sprint 的第一天 目標 把 product backlog 轉換成 sprint backlog 職責 Scrum Master 促成會議 確保和準備會議地點 確保會議有在持續推進，好達成 timebox 如果有講太久的部分，可能稍後再排單獨會議 確保一切都和 sprint goal 一致 Product Owner 準備好 product backlog 澄清 product backlog 的細節 要準備好描述 acceptance criteria 比如搜索速度要多快？ Dev Team 協助判斷哪些任務可達成且符合 sprint goal sprint backlog 這個 sprint 要完成的事情 開發人員去自己選擇要做的事情 然後就會花 1-4 週完成一個 sprint Daily Scrum (Daily standup) 不該花太久，比如最多 15 分鐘 職責 Scrum Master 確保會議的進行，確保 timebox 紀錄關於目前障礙的筆記，規劃時間移除 Dev Team 回答問題 做了什麼 計畫做什麼 遇到什麼問題 sprint review 找 stakeholders 來看看這個 sprint 的成果 秀出 product increment product increment 意味著他本身就是一個完成的產品，經過測試且準備 release 任務 review sprint result 回顧那些任務做得好和不好 如果有事情沒完成，要解釋為什麼推遲 這個 sprint 有沒有達到目標 Discuss and demonstrate work product owner 全程記錄筆記 Update status of the project Collaborate on the plan ahead sprint retrospective 團隊討論這個 sprint 的問題，並且改進 常見方法 start-stop-continue 每個人說出一個想開始做的事情，一個想停止做的事情，一個想繼續做的事情 可以保持匿名 3-5-3 Structure 3 artifacts Sprint Backlog Product Backlog Product Increment 5 events Sprint Planning Daily Scrum The Sprint Sprint Review Sprint Retrospective 3 roles Product Owner Scrum Master Dev Team 可以再加上 5 values Focus Respect Commitment Courage Openness 3 pillars Transparency Inspection Adaptation ">
+<meta name="twitter:description" content="Terms Incremental vs Iterative Incremental 透過多個 increment（增量）逐步構建專案，每個增量都是可運行的部分功能，並在後續開發中持續擴充。 Iterative 建立 prototype（原型），然後反覆改進，每次迭代都基於上一版本進行調整與優化。 Model Type Linear/Predictive 適用於具備類似專案經驗的情境 擁有明確的開發流程 變更空間極小，需求需在開發前確定 Flexible/Adaptive 適用於新創概念或需求尚不明確的專案 專案可能隨時間變更，因此需具備較高的靈活性 Waterfall Model 像瀑布一樣，一個階段完成後才能進入下一個階段 典型流程： Requirement → Design → Implementation → Testing → Deployment → Maintenance 高度預測性（Predictive），變更成本極高，彈性低 問題點： 若在 Testing 階段發現重大缺陷，可能需回溯至 Requirement 重新開始 隨著進度推進，修正成本（fix cost）將大幅增加 需要在每個階段做詳細規劃，以降低風險 用戶直到後期才會看到可運行的成果 Incremental Model 在整個開發過程中，將系統劃分為 多個增量（increments） 來逐步開發與交付 每個增量都具備可運行的功能，並能獨立部署 各個增量的目標與功能範圍需事先定義，以確保最終整合 Agile 一種思維方式，而非特定的開發模型 Agile Manifesto（敏捷宣言） Individuals and interactions over processes and tools（個人與互動高於流程與工具） 若團隊決定使用新的工具，應優先考量團隊的需求，而非僅僅依賴過去習慣的工具 Working software over comprehensive documentation（可運行的軟體高於完備的文件） 文件很重要，但單純依賴大量文件無法讓客戶提供有效回饋 Customer collaboration over contract negotiation（與客戶合作高於合約談判） 強調持續與客戶溝通，以確保專案方向正確，而不是只關注合同上的條款 Responding to change over following a plan（回應變化高於遵循計畫） 在變化快速的環境下，適應需求變更比僵化地執行既定計畫更重要 瀑布式開發的缺點（Agile 解決的問題） 技術環境變化迅速，Agile 讓開發更具適應性 傳統開發方法往往因為考量成本，不容易應對變更 而 Agile 透過 小的增量（increment） 來持續調整方向，降低風險 軟體需求無法 100% 預測 早期規劃的需求可能與最終需求不符，因此 Agile 強調 持續交付與回饋 系統可能不符合用戶需求 透過 迭代開發（iterative development），確保用戶能夠在開發過程中參與並提供反饋 市場變化快速 Agile 強調 MVP（最小可行產品），讓團隊能在短時間內推出核心功能，以快速測試市場反應 Kanban 以視覺化方式管理工作流程 透過卡片（Kanban 卡）來追蹤工作項目 能夠直觀地發現某個工作階段是否積壓過多任務 核心屬性（Properties） Visualize workflow（視覺化工作流） Limit work in progress（限制在製作業務量） Manage flow（管理工作流） Make process policies explicit（明確定義流程規則） Improve collaboratively（透過協作持續改進） 核心原則（Principles） Start with what you do now（從現有流程開始） Agree to pursue incremental, evolutionary change（追求漸進式改變） 並非一次性顛覆整個流程，而是逐步優化 Respect the current process, roles, responsibilities &amp;amp; titles（尊重現有流程、角色、職責與職位） Encourage acts of leadership at all levels（鼓勵各層級展現領導力） Leadership 不僅指管理職責，也包含主動解決問題、協助他人、激勵他人 工作欄位（Work Columns） Backlog（待辦事項） Analyze（需求分析） Develop（開發） Test（測試） Release（發布） Scrum Scrum 核心概念 Scrum 是敏捷開發框架，透過迭代式的開發方式，提高軟體交付的效率與適應性。 主要流程包括 Sprint Planning、Daily Scrum、Sprint Review 和 Sprint Retrospective。 角色與職責 1.">
     <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
 
 </head>
@@ -315,14 +315,49 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
         <li><a href="#incremental-vs-iterative">Incremental vs Iterative</a></li>
       </ol>
     </li>
-    <li><a href="#model-type">Model type</a></li>
+    <li><a href="#model-type">Model Type</a></li>
     <li><a href="#waterfall-model">Waterfall Model</a></li>
     <li><a href="#incremental-model">Incremental Model</a></li>
-    <li><a href="#agile">Agile</a></li>
-    <li><a href="#kanban">Kanban</a></li>
+    <li><a href="#agile">Agile</a>
+      <ol>
+        <li><a href="#瀑布式開發的缺點agile-解決的問題"><strong>瀑布式開發的缺點（Agile 解決的問題）</strong></a></li>
+      </ol>
+    </li>
+    <li><a href="#kanban">Kanban</a>
+      <ol>
+        <li><a href="#核心屬性properties"><strong>核心屬性（Properties）</strong></a></li>
+        <li><a href="#核心原則principles"><strong>核心原則（Principles）</strong></a></li>
+        <li><a href="#工作欄位work-columns"><strong>工作欄位（Work Columns）</strong></a></li>
+      </ol>
+    </li>
     <li><a href="#scrum">Scrum</a>
       <ol>
-        <li><a href="#3-5-3-structure">3-5-3 Structure</a></li>
+        <li><a href="#scrum-核心概念">Scrum 核心概念</a></li>
+        <li><a href="#角色與職責">角色與職責</a>
+          <ol>
+            <li><a href="#1-product-owner">1. Product Owner</a></li>
+            <li><a href="#2-scrum-master">2. Scrum Master</a></li>
+            <li><a href="#3-開發團隊dev-team">3. 開發團隊（Dev Team）</a></li>
+          </ol>
+        </li>
+        <li><a href="#scrum-流程">Scrum 流程</a>
+          <ol>
+            <li><a href="#1-product-backlog">1. Product Backlog</a></li>
+            <li><a href="#2-sprint-planning-meeting">2. Sprint Planning Meeting</a></li>
+            <li><a href="#3-sprint-backlog">3. Sprint Backlog</a></li>
+            <li><a href="#4-daily-scrum">4. Daily Scrum</a></li>
+            <li><a href="#5-sprint-review成果展示">5. Sprint Review（成果展示）</a></li>
+            <li><a href="#6-sprint-retrospective回顧與改進">6. Sprint Retrospective（回顧與改進）</a></li>
+          </ol>
+        </li>
+        <li><a href="#3-5-3-structurescrum-的核心架構">3-5-3 Structure（Scrum 的核心架構）</a>
+          <ol>
+            <li><a href="#3-大工件artifacts">3 大工件（Artifacts）</a></li>
+            <li><a href="#5-大事件events">5 大事件（Events）</a></li>
+            <li><a href="#3-大角色roles">3 大角色（Roles）</a></li>
+            <li><a href="#其他補充">其他補充：</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
   </ol>
@@ -416,224 +451,213 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     <h2 id="terms">Terms</h2>
 <h3 id="incremental-vs-iterative">Incremental vs Iterative</h3>
 <ul>
-<li>Incremental
+<li><strong>Incremental</strong>
 <ul>
-<li>隨時間一步一步完成</li>
+<li>透過多個 <strong>increment</strong>（增量）逐步構建專案，每個增量都是可運行的部分功能，並在後續開發中持續擴充。</li>
 </ul>
 </li>
-<li>Iterative
+<li><strong>Iterative</strong>
 <ul>
-<li>建立 prototype，然後不斷改進</li>
+<li>建立 <strong>prototype</strong>（原型），然後反覆改進，每次迭代都基於上一版本進行調整與優化。</li>
 </ul>
 </li>
 </ul>
-<h2 id="model-type">Model type</h2>
+<h2 id="model-type">Model Type</h2>
 <ul>
-<li>Linear/Predictive
+<li><strong>Linear/Predictive</strong>
 <ul>
-<li>有類似的專案經驗</li>
-<li>有明確的流程</li>
-<li>沒什麼可以改動的空間</li>
+<li>適用於具備類似專案經驗的情境</li>
+<li>擁有明確的開發流程</li>
+<li>變更空間極小，需求需在開發前確定</li>
 </ul>
 </li>
-<li>Flexible/Adaptive
+<li><strong>Flexible/Adaptive</strong>
 <ul>
-<li>專案屬於 new idea</li>
-<li>專案很有可能隨時間改變</li>
+<li>適用於新創概念或需求尚不明確的專案</li>
+<li>專案可能隨時間變更，因此需具備較高的靈活性</li>
 </ul>
 </li>
 </ul>
 <h2 id="waterfall-model">Waterfall Model</h2>
 <ul>
-<li>像瀑布一樣，一個階段完成後才能進行下一個階段</li>
-<li>Requirement -&gt; Design -&gt; Implementation -&gt; Testing -&gt; Deployment -&gt; Maintenance</li>
-<li>非常 predictive，沒有彈性</li>
-<li>如果在 Testing 發現重大問題，可能要從 Requirement 重新開始</li>
-<li>隨著進度推進，fix 成本增長很快</li>
-<li>每一步都得考慮周密</li>
-<li>用戶很晚才能看到結果</li>
+<li><strong>像瀑布一樣，一個階段完成後才能進入下一個階段</strong></li>
+<li>典型流程：
+<ul>
+<li><strong>Requirement</strong> → <strong>Design</strong> → <strong>Implementation</strong> → <strong>Testing</strong> → <strong>Deployment</strong> → <strong>Maintenance</strong></li>
+</ul>
+</li>
+<li><strong>高度預測性</strong>（Predictive），變更成本極高，彈性低</li>
+<li><strong>問題點：</strong>
+<ul>
+<li>若在 <strong>Testing</strong> 階段發現重大缺陷，可能需回溯至 <strong>Requirement</strong> 重新開始</li>
+<li>隨著進度推進，<strong>修正成本（fix cost）將大幅增加</strong></li>
+<li>需要在每個階段做詳細規劃，以降低風險</li>
+<li><strong>用戶直到後期才會看到可運行的成果</strong></li>
+</ul>
+</li>
 </ul>
 <h2 id="incremental-model">Incremental Model</h2>
 <ul>
-<li>在整個開發過程中多次完成軟體開發過程</li>
-<li>每個子開發過程都有明確的目標</li>
+<li>在整個開發過程中，將系統劃分為 <strong>多個增量（increments）</strong> 來逐步開發與交付</li>
+<li>每個增量都具備可運行的功能，並能獨立部署</li>
+<li>各個增量的目標與功能範圍需事先定義，以確保最終整合</li>
 </ul>
 <h2 id="agile">Agile</h2>
 <ul>
-<li>一種思維方法，不是模型</li>
-<li>Manifesto
+<li><strong>一種思維方式，而非特定的開發模型</strong></li>
+<li><strong>Agile Manifesto（敏捷宣言）</strong>
 <ul>
-<li>Individuals and interactions over processes and tools
+<li><strong>Individuals and interactions over processes and tools</strong>（個人與互動高於流程與工具）
 <ul>
-<li>如果一組人決定要用一組新的工具，那他們應該有更高的優先權</li>
-<li>過往的做法可能偏向使用過的工具</li>
+<li>若團隊決定使用新的工具，應優先考量團隊的需求，而非僅僅依賴過去習慣的工具</li>
 </ul>
 </li>
-<li>Working software over comprehensive documentation
+<li><strong>Working software over comprehensive documentation</strong>（可運行的軟體高於完備的文件）
 <ul>
-<li>document 很重要，但是只有大量的 document 沒辦法讓客戶給出反饋</li>
+<li>文件很重要，但單純依賴大量文件無法讓客戶提供有效回饋</li>
 </ul>
 </li>
-<li>Customer collaboration over contract negotiation
+<li><strong>Customer collaboration over contract negotiation</strong>（與客戶合作高於合約談判）
 <ul>
-<li>強調和客戶的合作，而不是只在意合同上的項目</li>
+<li>強調持續與客戶溝通，以確保專案方向正確，而不是只關注合同上的條款</li>
 </ul>
 </li>
-<li>Responding to change over following a plan</li>
-</ul>
-</li>
-<li>瀑布式開發的缺點
+<li><strong>Responding to change over following a plan</strong>（回應變化高於遵循計畫）
 <ul>
-<li>現在的技術環境變化太快，Agile 希望在開發過程中能夠快速適應
-<ul>
-<li>傳統的開發方法考量到金錢損失，不太可能辦到。但透過小的 increment，可以在每個 increment 中朝正確的方向前進</li>
-</ul>
-</li>
-<li>軟體系統不可能被 100% 預測</li>
-<li>系統可能不符合用戶要求</li>
-<li>市場變化很快，Agile 可以在短時間內推出最小可行產品，先行推向市場</li>
+<li>在變化快速的環境下，適應需求變更比僵化地執行既定計畫更重要</li>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+<h3 id="瀑布式開發的缺點agile-解決的問題"><strong>瀑布式開發的缺點（Agile 解決的問題）</strong></h3>
+<ul>
+<li><strong>技術環境變化迅速，Agile 讓開發更具適應性</strong>
+<ul>
+<li>傳統開發方法往往因為考量成本，不容易應對變更 而 Agile 透過 <strong>小的增量（increment）</strong> 來持續調整方向，降低風險</li>
+</ul>
+</li>
+<li><strong>軟體需求無法 100% 預測</strong>
+<ul>
+<li>早期規劃的需求可能與最終需求不符，因此 Agile 強調 <strong>持續交付與回饋</strong></li>
+</ul>
+</li>
+<li><strong>系統可能不符合用戶需求</strong>
+<ul>
+<li>透過 <strong>迭代開發（iterative development）</strong>，確保用戶能夠在開發過程中參與並提供反饋</li>
+</ul>
+</li>
+<li><strong>市場變化快速</strong>
+<ul>
+<li>Agile 強調 <strong>MVP（最小可行產品）</strong>，讓團隊能在短時間內推出核心功能，以快速測試市場反應</li>
+</ul>
+</li>
+</ul>
+<hr>
 <h2 id="kanban">Kanban</h2>
 <ul>
-<li>會存在多張卡片</li>
-<li>可以直觀看到某個欄位是否堆積大量工作</li>
-<li>Properties
+<li><strong>以視覺化方式管理工作流程</strong></li>
+<li><strong>透過卡片（Kanban 卡）來追蹤工作項目</strong></li>
+<li><strong>能夠直觀地發現某個工作階段是否積壓過多任務</strong></li>
+</ul>
+<h3 id="核心屬性properties"><strong>核心屬性（Properties）</strong></h3>
 <ul>
-<li>Visualize workflow</li>
-<li>Limit work in progress</li>
-<li>Manage flow</li>
-<li>Make process policies explicit</li>
-<li>Improve collaboratively</li>
+<li><strong>Visualize workflow</strong>（視覺化工作流）</li>
+<li><strong>Limit work in progress</strong>（限制在製作業務量）</li>
+<li><strong>Manage flow</strong>（管理工作流）</li>
+<li><strong>Make process policies explicit</strong>（明確定義流程規則）</li>
+<li><strong>Improve collaboratively</strong>（透過協作持續改進）</li>
+</ul>
+<h3 id="核心原則principles"><strong>核心原則（Principles）</strong></h3>
+<ul>
+<li><strong>Start with what you do now</strong>（從現有流程開始）</li>
+<li><strong>Agree to pursue incremental, evolutionary change</strong>（追求漸進式改變）
+<ul>
+<li>並非一次性顛覆整個流程，而是逐步優化</li>
 </ul>
 </li>
-<li>Principles
+<li><strong>Respect the current process, roles, responsibilities &amp; titles</strong>（尊重現有流程、角色、職責與職位）</li>
+<li><strong>Encourage acts of leadership at all levels</strong>（鼓勵各層級展現領導力）
 <ul>
-<li>Start with what you do now</li>
-<li>Agree to pursue incremental, evolutionary change
-<ul>
-<li>並非試著立刻改變所有事情</li>
-</ul>
-</li>
-<li>Respect the current process, roles, responsibilities &amp; titles</li>
-<li>Encourage acts of leadership at all levels
-<ul>
-<li>這裡的 leadership 不一定指領導他人，也可以是激勵他人</li>
+<li><strong>Leadership</strong> 不僅指管理職責，也包含主動解決問題、協助他人、激勵他人</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>欄位
+<h3 id="工作欄位work-columns"><strong>工作欄位（Work Columns）</strong></h3>
 <ul>
-<li>Backlog</li>
-<li>Analyze</li>
-<li>Develop</li>
-<li>Test</li>
-<li>Release</li>
-</ul>
-</li>
+<li><strong>Backlog</strong>（待辦事項）</li>
+<li><strong>Analyze</strong>（需求分析）</li>
+<li><strong>Develop</strong>（開發）</li>
+<li><strong>Test</strong>（測試）</li>
+<li><strong>Release</strong>（發布）</li>
 </ul>
 <h2 id="scrum">Scrum</h2>
+<h3 id="scrum-核心概念">Scrum 核心概念</h3>
 <ul>
-<li>可以利用 back-to-back testing 來確認沒有弄壞之前 sprint 的功能</li>
-<li>roles
+<li><strong>Scrum 是敏捷開發框架</strong>，透過迭代式的開發方式，提高軟體交付的效率與適應性。</li>
+<li>主要流程包括 <strong>Sprint Planning、Daily Scrum、Sprint Review 和 Sprint Retrospective</strong>。</li>
+</ul>
+<h3 id="角色與職責">角色與職責</h3>
+<h4 id="1-product-owner">1. Product Owner</h4>
 <ul>
-<li>Product Owner
+<li><strong>負責確保產品的價值最大化</strong></li>
+<li><strong>職責</strong>：
 <ul>
-<li>決定要用什麼方式完成什麼事</li>
-<li>與外部世界溝通的人，和利害關係人溝通</li>
-<li>目標
-<ul>
-<li>最大化產品價值
-<ul>
-<li>價低成本、提高收益</li>
+<li>維護 <strong>健康的 Product Backlog</strong>（保持任務清晰、優先順序合理）</li>
+<li>與 <strong>利害關係人</strong> 溝通，確保開發方向符合需求</li>
+<li>定義 <strong>Acceptance Criteria（驗收標準）</strong></li>
+<li>管理 <strong>預算與 Release 計畫</strong></li>
 </ul>
 </li>
 </ul>
-</li>
-<li>職責
+<h4 id="2-scrum-master">2. Scrum Master</h4>
 <ul>
-<li>維護 open, healthy product backlog</li>
-<li>回答產品相關問題</li>
-<li>管理預算、release schedule</li>
-<li>確保團隊價值，找出問題</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Scrum Master
+<li><strong>確保 Scrum 流程正確執行</strong></li>
+<li><strong>職責</strong>：
 <ul>
-<li>確保團隊遵守 Scrum 的規則，促成會議、解決衝突</li>
+<li>促成 <strong>Daily Standup</strong>，確保討論聚焦</li>
+<li><strong>移除障礙</strong>，幫助團隊專注於開發</li>
+<li>培養 <strong>Scrum 文化</strong>，確保團隊理解並實踐 Scrum 的價值觀</li>
 <li>Servant Leader
-<ul>
-<li>有一點領導，但和大家平等。促成團隊工作而不是指揮別人</li>
-</ul>
-</li>
-<li>目標
-<ul>
-<li>促成 Daily Standup</li>
-<li>移除障礙</li>
-<li>確保大家的心情</li>
-<li>確保 Scurm values</li>
-<li>團隊的調解人</li>
+- 有一點領導，但和大家平等。促成團隊工作而不是指揮別人</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>Dev Team
+<h4 id="3-開發團隊dev-team">3. 開發團隊（Dev Team）</h4>
 <ul>
-<li>包含工程師、設計師等等</li>
-<li>目標
+<li>包括工程師、設計師、測試人員等</li>
+<li><strong>目標</strong>：
 <ul>
-<li>和 Product Owner 合作，create user stories</li>
-<li>寫 code 和測試，確保符合預期</li>
-<li>research, design, prototype</li>
-<li></li>
+<li>與 Product Owner <strong>合作撰寫 User Stories</strong></li>
+<li>開發、測試、確保功能符合定義的需求</li>
+<li>參與 <strong>技術設計、研究與原型開發</strong></li>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-</li>
-<li>流程
+<h3 id="scrum-流程">Scrum 流程</h3>
+<h4 id="1-product-backlog">1. Product Backlog</h4>
 <ul>
-<li>product backlog
+<li>由 Product Owner 負責維護，內容包含：
 <ul>
-<li>待完成的事情</li>
-<li>可能的欄位
-<ul>
-<li>優先度</li>
-<li>預計花費時間</li>
-<li>誰來執行</li>
+<li><strong>優先度</strong></li>
+<li><strong>預估花費時間</strong></li>
+<li><strong>負責的人</strong></li>
 </ul>
 </li>
 </ul>
-</li>
-<li>spring planning meeting
+<h4 id="2-sprint-planning-meeting">2. Sprint Planning Meeting</h4>
 <ul>
-<li>決定要在這個 sprint 完成的事情</li>
-<li>時間點會是 sprint 的第一天</li>
-<li>目標
+<li>目標：將 <strong>Product Backlog</strong> 轉換為 <strong>Sprint Backlog</strong></li>
+<li><strong>角色分工</strong>：
 <ul>
-<li>把 product backlog 轉換成 sprint backlog</li>
-</ul>
-</li>
-<li>職責
+<li><strong>Scrum Master</strong>
 <ul>
-<li>Scrum Master
-<ul>
-<li>促成會議</li>
-<li>確保和準備會議地點</li>
-<li>確保會議有在持續推進，好達成 timebox
-<ul>
+<li>確保會議高效進行</li>
 <li>如果有講太久的部分，可能稍後再排單獨會議</li>
-</ul>
-</li>
 <li>確保一切都和 sprint goal 一致</li>
 </ul>
 </li>
-<li>Product Owner
+<li><strong>Product Owner</strong>
 <ul>
 <li>準備好 product backlog</li>
 <li>澄清 product backlog 的細節</li>
@@ -644,27 +668,22 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </li>
 </ul>
 </li>
-<li>Dev Team
+<li><strong>Dev Team</strong>
 <ul>
-<li>協助判斷哪些任務可達成且符合 sprint goal</li>
+<li>拆解任務、估算工作量、選擇可完成的任務</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-</li>
-<li>sprint backlog
+<h4 id="3-sprint-backlog">3. Sprint Backlog</h4>
 <ul>
-<li>這個 sprint 要完成的事情</li>
-<li>開發人員去自己選擇要做的事情</li>
-<li>然後就會花 1-4 週完成一個 sprint</li>
+<li>本次 Sprint 需要完成的所有任務</li>
+<li><strong>開發人員自行選擇任務</strong>，並在 <strong>1-4 週內完成 Sprint</strong></li>
 </ul>
-</li>
-<li>Daily Scrum (Daily standup)
+<h4 id="4-daily-scrum">4. Daily Scrum</h4>
 <ul>
-<li>不該花太久，比如最多 15 分鐘</li>
-<li>職責
-<ul>
+<li>不能花太久，比如<strong>限制 15 分鐘內完成</strong></li>
 <li>Scrum Master
 <ul>
 <li>確保會議的進行，確保 timebox</li>
@@ -672,59 +691,30 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </ul>
 </li>
 <li>Dev Team
-<ul>
-<li>回答問題
-<ul>
-<li>做了什麼</li>
-<li>計畫做什麼</li>
-<li>遇到什麼問題</li>
-</ul>
+<ol>
+<li>昨天完成了什麼？</li>
+<li>今天計畫做什麼？</li>
+<li>有遇到什麼阻礙？</li>
+</ol>
 </li>
 </ul>
-</li>
+<h4 id="5-sprint-review成果展示">5. Sprint Review（成果展示）</h4>
+<ul>
+<li>向 <strong>Stakeholders</strong> 展示這次 Sprint 交付的 <strong>Product Increment</strong></li>
+<li><strong>討論改進方向，準備下一個 Sprint</strong></li>
 </ul>
-</li>
-</ul>
-</li>
-<li>sprint review
+<h4 id="6-sprint-retrospective回顧與改進">6. Sprint Retrospective（回顧與改進）</h4>
 <ul>
-<li>找 stakeholders 來看看這個 sprint 的成果</li>
-<li>秀出 product increment
+<li>探討 <strong>這次 Sprint 哪些地方可以改進</strong></li>
+<li><strong>常見方法</strong>：
 <ul>
-<li>product increment 意味著他本身就是一個完成的產品，經過測試且準備 release</li>
-</ul>
-</li>
-<li>任務
+<li><strong>Start-Stop-Continue</strong>
 <ul>
-<li>review sprint result
+<li><strong>Start</strong>：開始做什麼？</li>
+<li><strong>Stop</strong>：應該停止什麼？</li>
+<li><strong>Continue</strong>：繼續保持哪些做法？</li>
+<li>每個人說出一個想開始做的事情，一個想停止做的事情，一個想繼續做的事情
 <ul>
-<li>回顧那些任務做得好和不好
-<ul>
-<li>如果有事情沒完成，要解釋為什麼推遲</li>
-</ul>
-</li>
-<li>這個 sprint 有沒有達到目標</li>
-</ul>
-</li>
-<li>Discuss and demonstrate work
-<ul>
-<li>product owner 全程記錄筆記</li>
-</ul>
-</li>
-<li>Update status of the project</li>
-<li>Collaborate on the plan ahead</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>sprint retrospective
-<ul>
-<li>團隊討論這個 sprint 的問題，並且改進</li>
-<li>常見方法
-<ul>
-<li>start-stop-continue
-<ul>
-<li>每個人說出一個想開始做的事情，一個想停止做的事情，一個想繼續做的事情</li>
 <li>可以保持匿名</li>
 </ul>
 </li>
@@ -733,53 +723,46 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </ul>
 </li>
 </ul>
-</li>
+<h3 id="3-5-3-structurescrum-的核心架構">3-5-3 Structure（Scrum 的核心架構）</h3>
+<h4 id="3-大工件artifacts">3 大工件（Artifacts）</h4>
+<ul>
+<li><strong>Product Backlog</strong></li>
+<li><strong>Sprint Backlog</strong></li>
+<li><strong>Product Increment</strong></li>
 </ul>
-<h3 id="3-5-3-structure">3-5-3 Structure</h3>
+<h4 id="5-大事件events">5 大事件（Events）</h4>
+<ol>
+<li><strong>Sprint Planning</strong></li>
+<li><strong>Daily Scrum</strong></li>
+<li><strong>The Sprint</strong></li>
+<li><strong>Sprint Review</strong></li>
+<li><strong>Sprint Retrospective</strong></li>
+</ol>
+<h4 id="3-大角色roles">3 大角色（Roles）</h4>
 <ul>
-<li>3 artifacts
-<ul>
-<li>Sprint Backlog</li>
-<li>Product Backlog</li>
-<li>Product Increment</li>
+<li><strong>Product Owner</strong></li>
+<li><strong>Scrum Master</strong></li>
+<li><strong>開發團隊（Dev Team）</strong></li>
 </ul>
-</li>
-<li>5 events
+<h4 id="其他補充">其他補充：</h4>
 <ul>
-<li>Sprint Planning</li>
-<li>Daily Scrum</li>
-<li>The Sprint</li>
-<li>Sprint Review</li>
-<li>Sprint Retrospective</li>
-</ul>
-</li>
-<li>3 roles
+<li><strong>Scrum 5 大價值觀 (Values)</strong>：
 <ul>
-<li>Product Owner</li>
-<li>Scrum Master</li>
-<li>Dev Team</li>
-</ul>
-</li>
-<li>可以再加上
-<ul>
-<li>5 values
-<ul>
-<li>Focus</li>
-<li>Respect</li>
-<li>Commitment</li>
-<li>Courage</li>
-<li>Openness</li>
+<li><strong>專注（Focus）</strong></li>
+<li><strong>尊重（Respect）</strong></li>
+<li><strong>承諾（Commitment）</strong></li>
+<li><strong>勇氣（Courage）</strong></li>
+<li><strong>開放（Openness）</strong></li>
 </ul>
 </li>
-<li>3 pillars
+<li><strong>Scrum 3 大支柱 (Pillars)</strong>：
 <ul>
-<li>Transparency</li>
-<li>Inspection</li>
-<li>Adaptation</li>
+<li><strong>透明性（Transparency）</strong></li>
+<li><strong>檢視（Inspection）</strong></li>
+<li><strong>適應（Adaptation）</strong></li>
 </ul>
 </li>
-</ul>
-</li>
+<li>可以利用 back-to-back testing 來確認沒有弄壞之前 sprint 的功能</li>
 </ul>
 
 </section>

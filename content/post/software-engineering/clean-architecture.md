@@ -8,47 +8,79 @@ tags: ["software-engineering", "software-design"]
 categories : ["software-engineering"]
 ---
 
-## Hexagonal Architecture
-- 也稱為 Ports and Adapters Architecture
-- 把軟體分為兩個部分
-  - 內部部分
+## Hexagonal Architecture (Ports and Adapters Architecture)
+- 目標是讓應用程式的核心邏輯與外部系統解耦
+- 把軟體分為內部部分與外部部分
+  - **內部部分**
     - 包含 domain logic
-    - 會先被開發，並且不會受到外部系統的影響
-  - 外部部分
-    - 包含所有的 depending layers，不屬於你的軟體的部分，比如 UI、DB、或是你用的 framework
+    - 先被開發，不受外部系統影響
+  - **外部部分**
+    - 包含所有的依賴層 (dependency layers)
+    - 不屬於應用程式的部分，如 UI、資料庫 (DB)、或應用框架 (framework)
 
 ### Ports
-- 一個 interface，定義了一個外部系統可以使用的方法
+- 介面 (interface)，定義外部系統可以使用的方法
+- 兩種類型
+  - **Input Ports**：由內部應用程式暴露給外部使用，定義應用程式的行為
+  - **Output Ports**：由內部應用程式呼叫外部系統，如資料庫或 API
 
 ### Adapters
+- 用來實作 Ports，轉換外部請求到應用程式內部邏輯
+
 #### Primary Adapter
-- 這個 adapter 會透過實現 input port 來達成 use case
+- 實作 Input Port，負責接收外部輸入並調用 Use Case
+- 例如 Web Controller 或 CLI Handler
 
 #### Secondary Adapter
-- 這個 adapter 會實作 output port，並且被 domain logic 調用
+- 實作 Output Port，負責將 Use Case 的結果傳遞到外部系統
+- 例如資料庫存取層 (Repository) 或 API 呼叫
+
+---
 
 ## Clean Architecture
-- 希望讓 domain logic 與其他部分分離，好讓其他部分應用新技術的時候不會影響到。
-- 將軟體分為不同的層次，並且讓這些層次互相獨立。dependency 只能往內部移動，不會往外部移動。
-- 透過 DIP (Dependency Inversion Principle) 來達到這個目標。
-  - DIP
-    - 高層次模組不應該依賴低層次模組，兩者都應該依賴抽象。
-    - 抽象不應該依賴細節，細節應該依賴抽象。
-- 在常見的三層架構中，常會見到 Presentation Layer、Business Logic Layer、Data Access Layer
-  - 這三層的依賴關係是 Presentation Layer -> Business Logic Layer -> Data Access Layer
-  - Clean Architecture 則是會讓所有都依賴於 Business Logic Layer
-### 優點
-- 因為 domain logic 保持獨立，許多部分可以換新技術而不影響到 domain logic
-  - 可以單獨替換掉 adapter
-- 讓實作 dependencies 的部分可以被延遲到最後，因為 domain logic 不會依賴於他們，所以可以用 mock 來測試 domain logic
+- 目標是讓 domain logic 與其他部分分離，使系統可以隨時更換技術而不影響核心邏輯
+- 透過 **DIP (Dependency Inversion Principle)** 達成
+  - **高層次模組不應依賴低層次模組，兩者應依賴抽象**
+  - **抽象不應依賴細節，細節應依賴抽象**
+- 將軟體分為不同層次，並確保依賴方向只能往內部流動
 
-### 元件
-#### Entities
-- 核心的 Object，帶有 data 同時也包含 enterprise  business rules
-  - 比如一個帳號的 entity 可能包含帳號的名稱、密碼、以及驗證密碼的方法
-#### Use Cases
-- 描述 application business rules，會再調用不同 entity 的 enterprise business rules
-#### Interface Adapters
-- 這裡會把 data 從最適合的格式轉換成 domain layer 可以使用的格式
-#### Frameworks and Drivers
-- 這裡會包含所有的 frameworks 和 infrastructure
+### 常見架構比較
+- **傳統三層架構 (Three-Tier Architecture)**
+  - 依賴關係：`Presentation Layer -> Business Logic Layer -> Data Access Layer`
+  - 這種架構會導致 Business Logic 依賴 Data Access，影響可測試性與可維護性
+
+- **Clean Architecture**
+  - 所有外部層次都應依賴 **Business Logic Layer (Use Cases)**
+  - 依賴方向為 `Frameworks & Drivers -> Interface Adapters -> Use Cases -> Entities`
+
+### 優點
+- **技術可替換性高**
+  - domain logic 獨立於技術實現，允許更換 UI、資料庫、框架等技術
+  - 只需替換 Adapters，不影響核心邏輯
+- **測試方便**
+  - domain logic 不依賴外部系統，可以使用 mock 測試
+  - 減少整合測試的負擔
+- **更容易擴展與維護**
+  - 避免不同技術層相互耦合，讓系統更具彈性
+
+---
+
+
+## Clean Architecture 的層次結構
+### Entities
+- **核心物件**，負責企業規則 (Enterprise Business Rules)
+- 只關心應用程式的核心邏輯，與技術無關
+- 例如帳戶物件：包含帳號名稱、密碼、驗證密碼的方法
+
+### Use Cases
+- **應用程式規則 (Application Business Rules)**，定義具體業務邏輯
+- 負責協調 Entities，確保業務流程正確
+- 例如處理使用者登入、交易等邏輯
+
+### Interface Adapters
+- **負責資料轉換**，讓資料符合不同層的需求
+- 例如 View Model 轉換、DTO 轉換、Repository 轉換
+
+### Frameworks and Drivers
+- **包含所有技術相關的部分**，如 Web 框架、資料庫、第三方 API
+- 這些技術可以隨時替換，不影響 Use Cases 和 Entities

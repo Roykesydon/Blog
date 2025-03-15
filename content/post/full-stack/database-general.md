@@ -8,277 +8,353 @@ tags: ["database", "cache", "sql"]
 categories : ["full-stack"]
 ---
 
-## Database internal
-### Storage concept
-- Table
-- Row_id
-  - 多數 database 會維護自己的 row_id
-  - 也叫做 tuple id
-- Page
-  - 多個 row 會被存在一個 page
-  - 讀取不會只讀一個 row，而是一個或多個 page
-- IO
-  - IO operation 指的是存取 disk 的操作
-  - 一個 IO 可能會獲得多個 page，也可能只是用 cache 的資料
-  - Database 常常會利用 cache 來減少 IO
-    - 因此有些 query 很快，可能是因為有快取資料可用
-- Heap data structure
-  - 儲存整個 table 的資料
-  - 有些 database 會用 clustered index 來儲存，就不會有 heap
-- Index data structure (b-tree)
-  - 一個有 pointer 來指向 heap 的資料結構
-    - 較流行的是 b-tree
-  - 可以對一個或多個 column 做 index
-  - index 可以告訴你要查詢的資料在哪個 page
-  - index 也會被儲存在 page
-### Row-oriented vs Column-oriented
-- Row-oriented database (row store)
-  - 每個 row 接著下個 row 來儲存
-  - 每次 IO 會獲得多個 row，每個都有所有的 column
-- Col-oriented database (column store)
-  - 每個 column 接著下個 column 來儲存
-  - 比較好壓縮，也比較好做 aggregation，所以在一些分析資料的軟體會用到
+## 資料庫核心概念
 
-### Data structure
-- B-tree
-  - Balanced data structure for fast search
+### 儲存結構
+- **Table**
+  - 資料庫中最基本的儲存單位，用來組織資料
+- **Row_id**
+  - 多數資料庫會維護一個唯一的 row_id，也稱為 tuple id，用來識別每一行資料
+  - 例如 PostgreSQL 使用 OID 或 ctid，MySQL 則依賴主鍵
+- **Page**
+  - 多個 row 會被儲存在一個 page 中
+  - 讀取時不會單獨讀取某個 row，而是以 page 為單位讀取一或多個 page
+- **IO**
+  - IO 操作指的是存取磁碟的操作
+  - 一次 IO 可能讀取多個 page，也可能直接從 cache 中取得資料
+  - 資料庫常利用 cache（如 buffer pool）來減少 IO
+    - 若查詢速度很快，可能是因為資料已存在 cache 中
+- **Heap**
+  - 用來儲存整個 table 的資料，是一種無特定順序的結構
+  - 若使用 clustered index 組織資料，則不會有獨立的 heap
+    - 例如 MySQL InnoDB 的主鍵就是 clustered index，資料直接依主鍵排序儲存
+
+### 資料儲存方式
+- **Row-oriented (行導向)**
+  - 每個 row 依序儲存，包含所有 column 的資料
+  - 一次 IO 會讀取多個 row，每個 row 包含所有欄位
+  - 適合 OLTP（線上交易處理），因為常需要存取整行資料
+- **Column-oriented (列導向)**
+  - 每個 column 依序儲存，同一 column 的資料連續存放
+  - 壓縮效率高，且適合 aggregation 操作，因此常用於 OLAP（線上分析處理）
+
+### 碎片化 (Fragmentation)
+- **Internal Fragmentation (內部碎片)**
+  - 一個 page 中有許多未使用的空間
+  - 可能因為 row 刪除或大小不均導致，例如插入時預留空間過多
+- **External Fragmentation (外部碎片)**
+  - 多個 page 的儲存位置不連續
+  - 即使剩餘空間足夠，因不連續而無法使用，需透過整理（如 vacuum）來解決
+
+
+## 資料結構與索引
+
+### 常用資料結構
+- **B-Tree**
+  - 一種平衡樹結構，適用於快速搜尋
+  - 每個 node 同時儲存 key 和 value
   - 限制
-    - node 中的 element 同時存了 key 和 value
-    - range query 效率很差，因為要各別 random access
-- B+Tree
-  - B-tree 的變形，和 B-tree 很像，不過 internal node 只存放 key，只有 leaf node 會存放 value
-    - internal node 因為現在只需要儲存 key，element size 比較小，所以可以存放更多 element
-  - leaf node 會用 linked list 串起來
-    - 適合 range query
-  - 通常一個 node 是一個 DBMS page
-- LSM-tree
-  - Log-Structured Merge-Tree
-  - 都加在尾端，不會覆蓋原本的資料，對 SSD 有利
-  - B-Tree 為了平衡會頻繁修改
-  - 有利於 insert
+    - 由於 node 儲存完整資料，空間利用率較低
+    - range query 效率較差，因為需要多次隨機存取
+- **B+Tree**
+  - B-Tree 的改良版本，常用於資料庫索引
+  - 特性
+    - internal node 只儲存 key，leaf node 儲存 key 和 value
+    - 因 internal node 只存 key，元素大小較小，一個 node 可容納更多 key，使存取的結點數變少，提升搜尋效率
+    - leaf node 用 linked list 串聯，適合 range query
+  - 通常一個 node 對應一個 DBMS 的 page
+- **LSM-Tree (Log-Structured Merge-Tree)**
+  - 設計為追加式寫入，資料加在尾端，不覆蓋原有資料
+  - 優勢
+    - 對 SSD 友好，因避免隨機寫入
+    - 適合高寫入量的場景
+  - 與 B-Tree 比較
+    - B-Tree 為保持平衡會頻繁調整結構，導致隨機 IO
 
-### Fragmentation
-- 這裡是以 database 為出發點去看 fragmentation
-- Internal fragmentation
-  - 一個 Page 中有很多空間是空的
-- External fragmentation
-  - 多個 Page 存放不是連續的。剩下的空間夠儲存新的資料，但是因為不連續，所以不能用
+### 索引基礎
+- **索引的作用**
+  - 若欄位未建立索引，查詢需掃描整個 table
+  - 索引透過 pointer 指向 heap 或資料位置，加速查詢
+  - 索引本身也儲存在 page 中
+- **搜索方法**
+  - **Table Scan**
+    - 掃描整個 table，適用於範圍過大或無索引的情況
+    - 通常以 parallel 方式執行，提升效率
+  - **Index Scan**
+    - 利用索引定位資料，再從 heap 取值
+  - **Index-only Scan (Covering Index)**
+    - 若所需欄位已包含在索引中，無需存取 heap
+    - 優勢
+      - 速度快，因避免額外 IO
+    - 注意
+      - 索引過大可能佔用更多記憶體，甚至觸發磁碟 IO，降低效率
+- **Composite Index**
+  - 將多個 column 作為 key 建立索引
+  - 特性
+    - 在 PostgreSQL 中，若索引為 (a, b)，查詢 a 可使用索引，但單獨查 b 無法有效利用
+    - 順序影響查詢效率，設計時需考慮常用條件
+- **Non-key Column**
+  - 可透過 include 將常用但非 key 的欄位加入索引
+  - 促成 index-only scan，提升查詢速度
 
-### Database cursor
-- 當資料庫有很大的結果集時，不可能一次把所有資料用網路傳給 client，用戶也沒有 memory 來存放所有資料
-- Server side / client side cursor
-  - Server side
-    - 一次只傳一部分資料給 client
-    - 但是要多次往返可能最後總時間會比較久
-  - Client side
-    - 一次把所有資料傳給 client
-    - client 自己分批處理
-    - 對 network bandwidth 要求較大
-    - 可能沒有足夠的 memory
+### 索引類型
+- **Clustered Index (叢集索引)**
+  - 資料依索引順序物理儲存，也稱 Index-Organized Table
+  - 特性
+    - 一個 table 只能有一個 clustered index，因資料只能按一種順序排列
+    - 未指定時，primary key 通常作為 clustered index（如 MySQL InnoDB）
+  - 優勢
+    - 範圍查詢效率高，因資料已排序
+- **Primary Key vs Secondary Key**
+  - **Primary Key**
+    - 通常用於 clustered index，資料圍繞其排序
+    - 若查詢小範圍資料，因有序可減少 IO
+    - 設計差異
+      - PostgreSQL 不強制 clustered，primary key 只是唯一約束
+      - MySQL InnoDB 則將 primary key 作為 clustered index
+  - **Secondary Key**
+    - 不在乎原本 table 的 order，而是根據自訂的 key 來排序
+    - 會有另外一個結構去放 index，可以找到 row_id
+    - 用途
+      - 提供額外的查詢路徑
+  - **設計差異**
+    - **PostgreSQL**
+      - 所有索引（包括 primary 和 secondary）直接指向 row
+      - 優勢：secondary index 可直接取資料，不用再跳一層 primary key
+      - 劣勢：更新 row 時，若 row_id 改變，所有索引需同步更新
+    - **MySQL**
+      - secondary index 指向 primary key，再由 primary key 指向 row
+      - 優勢：row 更新時只需調整 primary key 的指向
+      - 劣勢：查詢需多跳一次，增加 IO
 
-### Partitioning
-- 把大 table 分成多個小 table
-- Vertical vs Horizontal
-  - Vertical
-    - 根據 columns 拆成多個 partition
-    - 可以把不太常用又大的 column (比如 blob) 放到另外一個 partition
-      - 可以把他放在較慢的 disk，保留其他常存取的 column 在 SSD
-      - 也可以讓比較不常用的資料比較不容易進入 cache
-  - Horizontal
-    - 把 rows 拆成多個 partition
-- 優點
-  - 用 single query 存取單一 partition 的速度更快
-  - 對某些 sequential scan 有幫助
-  - 可以把舊資料放在比較便宜的設備
-- 缺點
-  - 如果要從一個 partition 移動資料到另一個 partition，效率很慢
-  - 對於效率很差的 query，可能會需要 scan 所有 partition，此時比掃描整個沒做 partition 的 table 還要慢
-  - partition 可能會 unbalance
+## 資料模型與類型
 
-## Data types
-- 這裡以 PostgreSQL 為例，列一小部分
-- 設計 column 前可以先看有沒有合適的 data type
-- Numeric
-  - 整數
-  - 浮點數
-  - Serial
-    - 一種特殊的整數，會 auto increment
-- Character
-  - char
-  - varchar
-    - 可變長度的字串，如果沒有設定長度，就是 text
-  - text
-  - bpchar
-    - 好像就是 varchar，但是 document 有寫 blank trimmed
-- Date / Time
-- Boolean
-- Binary
-- Geometric
-  - 特地寫這個是因為如果要用二維平面點，一般來說可能會用兩個 float，但是如果用 geometric 類有 point 可用
-  - 其他形狀也可存
-- UUID
-- Enum
-  - 一個有限的字串集合
-  - 有序
-    - 按照建立時的順序
+### 資料類型
+- **設計原則**
+  - 設計 column 時，應先確認資料庫提供的資料類型，選擇最適合的類型以提升效能與儲存效率
+- **以 PostgreSQL 為例**
+  - **Numeric**
+    - 整數 (integer)：如 smallint、integer、bigint
+    - 浮點數 (float)：如 real、double precision
+    - Serial：自動遞增（auto increment）的整數，常用於主鍵（如 serial、bigserial）
+  - **Character**
+    - char(n)：固定長度字串，空間不足時補空白
+    - varchar(n)：可變長度字串，指定最大長度
+    - text：無長度限制的字串，等同於未指定長度的 varchar
+    - bpchar：好像就是 varchar，但是 document 有寫 blank trimmed
+  - **Date / Time**
+    - 如 date、time、timestamp，提供日期與時間儲存
+  - **Boolean**
+    - true/false 或 null
+  - **Binary**
+    - bytea：儲存二進位資料
+  - **Geometric**
+    - 提供點 (point)、線 (line)、多邊形 (polygon) 等類型
+    - 應用：若需儲存二維平面座標，可用 point 替代兩個 float
+  - **UUID**
+    - 通用唯一識別碼，適合分散式系統生成唯一 ID
+  - **Enum**
+    - 自訂有限字串集合，按建立順序有序
+    - 應用：狀態欄位（如 "pending"、"completed"）
+
+### 分割 (Partitioning)
+- **定義**
+  - 將大 table 分成多個小 table，以提升效能或管理便利性
+- **類型**
+  - **Vertical Partitioning (垂直分割)**
+    - 按 column 分割
+    - 應用
+      - 將不常用或大型欄位（如 blob）獨立出來
+      - 可將這些欄位放在較慢的磁碟，保留常用欄位在 SSD
+      - 減少不必要欄位進入 cache
+  - **Horizontal Partitioning (水平分割)**
+    - 按 row 分割
+    - 應用
+      - 根據範圍（如時間、地域）分割資料
+- **優點**
+  - 單一 partition 的單次查詢更快
+  - 對 sequential scan 有幫助，因範圍縮小
+  - 可將舊資料移至較便宜的儲存設備
+- **缺點**
+  - 跨 partition 移動資料效率低
+  - 若查詢需掃描所有 partition，可能比未分割的 table 更慢
+  - partition 大小可能不均（unbalance），需設計均衡策略
+
+### 資料庫游標 (Database Cursor)
+- **用途**
+  - 處理大型結果集時，避免一次傳送所有資料給 client（因網路與記憶體限制）
+- **類型**
+  - **Server-side Cursor**
+    - 伺服器分批傳送資料給 client
+    - 優勢：減少 client 記憶體需求
+    - 劣勢：多次網路往返可能增加總時間
+  - **Client-side Cursor**
+    - 一次傳送所有資料，由 client 分批處理
+    - 優勢：減少伺服器負擔
+    - 劣勢：需較大網路頻寬與 client 記憶體
+
+## 分散式系統
+
+### 分片 (Sharding)
+- **定義**
+  - 將 table 分成多個 shard，分散至不同資料庫伺服器
+- **與 Horizontal Partitioning 的差異**
+  - Horizontal Partitioning：分割後仍位於同一資料庫，由 DBMS 管理
+  - Sharding：分割後分至不同伺服器，client 需自行處理資料位置
+- **挑戰**
+  - 交易 (transaction) 與 join 操作變得複雜，因資料分散
+  - 需額外設計一致性與資料存取邏輯
+
+#### 分片鍵 (Sharding Key)
+- **類型**
+  - **Hash**
+    - 使用 hash function 決定資料分配
+    - 優勢：分佈均勻
+    - 劣勢：範圍查詢困難
+  - **Range**
+    - 根據某 column 的範圍（如時間、ID）分配
+    - 優勢：支援範圍查詢
+    - 劣勢：可能導致熱點（hotspot）
+  - **Dictionary**
+    - 根據離散值（如地區、類別）分配
+    - 優勢：直觀且易管理
+    - 劣勢：擴展性受限
+- **設計考量**
+  - **Cardinality**
+    - 鍵值的種類數量，種類過少限制水平擴展
+  - **Frequency**
+    - 鍵值的分佈頻率，需避免單一 shard 負載過高
+  - **Monotonicity**
+    - 若鍵值單調遞增或遞減，可能導致新資料集中於某 shard
+    - 解決方式：結合 hash 或隨機前綴
+
+### 資料庫複製 (Database Replication)
+- **目的**
+  - 透過 redundancy 來提高 reliability, tolerance, accessibility
+- **類型**
+  - **Master / Backup Replication (主從複製)**
+    - 單一 master 負責寫入，多個 backup（slave）負責讀取
+    - 模式：一寫多讀
+    - 應用：讀多寫少的場景（如內容管理系統）
+  - **Multi-master Replication (多主複製)**
+    - 多個 master 可同時寫入
+    - 挑戰：需處理寫入衝突（如使用版本控制或衝突解決策略）
+    - 應用：高可用性與分散式寫入需求
+- **同步方式**
+  - **Synchronous (同步)**
+    - transaction 完成前需等待所有 backup 寫入確認
+    - 變體：可設定等待前 N 個或任一完成
+    - 優勢：資料一致性高
+    - 劣勢：延遲增加
+  - **Asynchronous (非同步)**
+    - transaction 寫入 master 後即完成，後台同步至 backup
+    - 優勢：寫入速度快
+    - 劣勢：可能出現資料不一致（若 master 故障）
+- **應用**
+  - 常見於負載平衡與災難恢復設計
 
 
-## Database indexing
-- 如果需要搜索的欄位沒做 index，那麼就會需要 scan 整個 table，直到找到
-  - 如果要求欄位做 `like` 之類的，那麼依然需要 scan 整個 table
-- 搜索方法
-  - table scan
-    - 如果掃描的範圍過大，Database 可能就會選擇該方法
-    - 通常會用 parallel 的方式搜尋，所以還是會快一些
-  - index scan
-  - Index-only scan
-    - 也叫 covering index
-    - 需要的欄位在 index 裡面就有了，在這種情況不用去 heap 取，可以加速很多
-    - 但也要小心使 index 變得過大。如果 memory 不夠，又會用到 disk，拖垮效率
-- non-key column
-  - 可以用 include 把一些常常需要一起帶入的資訊放到 index 裡面
-  - 可以促成 index-only scan
-- composite index
-  - 把多個 col 作為 key 做 index
-  - 在 PostgreSQL ，如果有一個 index 是 (a, b)，用靠左的 index 可以做 index scan，但是用靠右的就不行
-### Clustered index
-- 也叫做 Index-Organized Table
-  - 資料圍繞 index 來組織
-  - 這也是為什麼 clustered index 只能有一個
-- 沒特別指定的話，primary key 一般是 clustered index
-### Primary key vs Secondary key
-- primary key
-  - clusering
-    - 把 table 圍繞 primary key 來組織，但也有些 Database 不是這樣設計，比如 PostgreSQL
-  - 需要維持 order，但是如果我要根據 PK 取得小範圍內的資料，和不顧排序相比，就可能不用多次 IO
-- Secondary key
-  - 不在乎原本 table 的 order，而是根據自訂的 key 來排序
-  - 但是會有另外一個結構去放 index，可以找到 row_id
-- 設計差異
-  - PostgreSQL 的 index 都指向 row，不管是 primary 還是 secondary
-    - 這樣 secondary index 就可以直接取資料，不用再跳一層 primary key
-    - 但是如果更新 row，會更新 row id，連帶影響要更新所有 secondary index，不管修改的欄位有沒有在這 index
-  - MySQL 的 secondary index 指向 primary key，primary key 指向 row
-    - 這樣 secondary index 就要先找到 primary key，再找到 row
+## 並發與交易管理
 
-## Distributed database
-### Sharding
-- 把 table 拆成多個 table，分散在不同的 database
-- 分散式會帶來很多問題，比如要怎麼做 transaction 和 join?
-- Horizontal partitioning vs sharding
-  - Horizontal partitioning
-    - 一個 table 拆成多個 table，但是還是在同一個 database
-  - 和 Horizontal partitioning 的差別
-    - table 現在會分到不同的 database server
-    - 做 partition，client 不用管資料具體在哪個 partition，交給 DBMS 去處理。但是 sharding 就要 client 自己去處理
+### 並發控制策略
+- **Pessimistic (悲觀)**
+  - 使用鎖定機制確保交易隔離
+  - 適用於衝突頻繁的場景
+- **Optimistic (樂觀)**
+  - 不使用鎖，假設衝突少見，若發生衝突則交易失敗並重試
+  - 適用於讀多寫少的場景
 
-#### Sharding key
-- Hash
-  - 用 hash function 來決定資料要放在哪個 shard
-- Range
-  - 用某個 column 所處的範圍來決定資料要放在哪個 shard
-- Dictionary
-  - 用離散的值來決定資料要放在哪個 shard
-- 考慮事項
-  - cardinality
-    - cardinality 是 set 中的元素數量
-    - key 種類太少，就會限制水平擴展
-  - frequency
-  - monotonicity
-    - 如果 key 是遞增或遞減的，可能會導致某個 shard 過度使用
+### 鎖定機制 (Lock)
+- **類型**
+  - **Shared Lock (共享鎖)**
+    - 多個交易可同時持有，適用於讀取
+    - 其他交易可再設置 shared lock
+  - **Exclusive Lock (排他鎖)**
+    - 僅一個交易可持有，適用於寫入
+    - 禁止其他交易讀取或寫入
+    - PostgreSQL 提供 `SELECT ... FOR UPDATE` 來取得 exclusive lock
+- **相容性**
+  - 若資料已持有一種鎖，其他交易無法設置另一種鎖
+  - 例如：shared lock 下無法設置 exclusive lock，反之亦然
 
-### Database replication
-- 透過 redundancy 來提高 reliability, tolerance, accessibility
-- Master / Backup replication
-  - 也叫 master-slave replication
-  - 只有一個 master / leader，有一或多個 backup / standby
-  - 一寫多讀
-- Multi-master replication
-  - 多個 master，可以同時寫入
-  - 需要處理 conflict
-- Sychronous vs Asynchronous replication
-  - Synchronous
-    - transaction 會被 blocked，直到所有的 backup 都寫入
-    - 有些 database 可以設定 First N 或是 any 完成就好
-  - Asynchronous
-    - transaction 被寫入 master 後就算完成
+### 死結 (Deadlock)
+- **定義**
+  - 多個交易互相等待對方釋放鎖，導致無法繼續執行
+- **處理**
+  - 多數 DBMS 會檢測死結，並強制回滾最後造成死結的交易
 
-
-## Concurrency control
-- strategy
-  - pessimistic
-    - 用各種 lock 來保證 isolation
-  - optimistic
-    - 不用 lock，真的有 transaction 衝突時就 fail
-- Lock
-  - shared vs exclusive
-    - shared lock 可以被多個 transaction 同時持有
-      - 用在讀取，所以可以多個 transaction 同時讀取
-      - 在有 shared lock  的條件下，其他 transaction 也可以設置 shared lock
-    - exclusive lock 只能被一個 transaction 持有
-      - 他人不能讀取或寫入
-      - PostgreSQL 有一個 `SELECT ... FOR UPDATE` 來取得 exclusive lock
-    - 當涉及的資料持有其中一種 lock 時，其他 transaction 都不能設置另外一種 lock
-- Deadlock
-  - 多個 transaction 互相等待對方釋放 lock
-  - 多數 DBMS 會檢查 deadlock，並讓最後一個造成 deadlock 的 transaction rollback
-- Two-phase locking (2PL)
+### 兩階段鎖定 (Two-Phase Locking, 2PL)
+- **目的**
   - DBMS 為了實現 isolation 需要保證 conflict serializability (CSR)，2PL 可以保證這一點
-  - two-phase
-    - growing phase
-      - 取得 lock
-    - shrinking phase
-      - 釋放 lock
-    - 強調一個 transaction 不能釋放 lock 後就再也無法取得
-    - 有可能造成 deadlock
+- **階段**
+  - **Growing Phase (增長階段)**
+    - 交易只能申請鎖
+  - **Shrinking Phase (收縮階段)**
+    - 交易只能釋放鎖
+  - 限制：釋放任一鎖後，交易無法再申請新鎖
+- **特性**
+  - 一個交易釋放鎖後，無法再取得鎖
+  - 保證一致性，但可能導致死結
+  - 應用於多數關聯式資料庫的交易管理
 
-## Database Engine
-- 也叫 storage engine 或 embedded database
-- 負責處理 CRUD 的 library
-- DBMS 基於 engine 來提供更多功能
+## 實作與優化
 
-## ORM
-- Eager vs Lazy loading
-  - Eager
-    - 一次把所有相關的資料都讀取出來
-    - 如果 Teacher 有很多 Student，可能會一次把所有 Student 都讀取出來
-  - Lazy
-    - 只有在需要的時候才讀取
-    - 但是可能會有很多次 IO
-- Open session in view (OSIV)
-  - 一個 request 一個 database session
-  - 可以配合 lazy loading 來用
-- N+1 problem
-  - 一個 query 取得所有資料，然後再用每個資料的 id 來取得相關資料
-  - 這樣就會有 N+1 次 IO
-    - 第一次是從主表拿清單
-    - 接下來 N 次是從子表拿資料
+### 資料庫引擎 (Database Engine)
+- **定義**
+  - 也叫 storage engine 或 embedded database，負責處理 CRUD 操作的核心庫
+- **功能**
+  - DBMS 基於引擎提供更高階功能（如查詢優化、交易管理）
+- **範例**
+  - MySQL 的 InnoDB（支援交易與外鍵）、MyISAM（高效讀寫但無交易）
+  - SQLite 本身即為嵌入式引擎
 
-## Tips
-- 盡量不要使用 offset
-  - 最 naive 的實現 pagination 的做法就是用 offset + limit。但是 offset 代表讀取並丟掉前面幾筆資料，所以他會多讀一堆沒用的資料
-  - 可以讓用戶那邊保存 id，where 設置 id 要大於多少來規避 offset
-- Connection pool
-  - 維護一定數量的連接，避免每次都要建立連接
-- Idempotency key
-  - 用來確保一個 request 只會被執行一次
-  - 會生成一個唯一的 key，並且在 request 中帶上這個 key。執行操作後會把這個 key 存起來，下次再收到這個 key 時就不會再執行操作
-  - 可以用 ULID 而不用 UUID，因為 ULID 前面的 bit 有時間戳，可以用來排序
-    - 輸入的資料集中在相近的 page，還都加在尾端，可以減少 IO (相較隨機的 UUID)
-      - 不用被迫頻繁存取 disk。而且 UUID 的隨機性拉一堆 page 會導致 buffer 更容易被塞滿，而得強制寫入 disk
-- consistent hashing
-  - 把 hash function 的結果分散在一個 hash ring 上
-    - 根據 hash function 的結果，看自己落在哪段範圍，配給指定的 server
-    - 這樣的好處是追加或是移除 server 時，只會影響一台 server 的資料
-    - 也可以追加到負載比較高的 server 附近
-- write amplification
-  - 寫入資料時，發現 disk 寫入的資料比你預期寫入的資料多很多
+### 物件關聯映射 (ORM)
+- **載入策略**
+  - **Eager Loading (積極載入)**
+    - 一次載入所有相關資料
+    - 範例：查詢 Teacher 時一併載入所有 Student
+    - 優勢：減少後續查詢次數
+    - 劣勢：可能載入過多不必要資料
+  - **Lazy Loading (延遲載入)**
+    - 僅在需要時載入相關資料
+    - 優勢：節省初始載入時間與記憶體
+    - 劣勢：可能導致多次 IO
+- **Open Session in View (OSIV)**
+  - 每個 http request 開啟一個資料庫 session
+  - 用途：配合 lazy loading，確保 request 期間資料可隨時載入
+  - 注意：可能延長 session 存活時間，增加資源占用
+- **N+1 Problem**
+  - 查詢主表後，對每個主表記錄再查詢子表，導致 N+1 次 IO
+  - 範例：查詢 10 個 Teacher，再各查其 Student，共 11 次查詢
+  - 解決方式：使用 join 或 eager loading 合併查詢
+
+### 效能優化與實務建議
+- **避免使用 Offset**
+  - Offset + Limit 是簡單的 pagination 實現，但 offset 需讀取並丟棄前 n 筆資料
+  - 替代方案：使用條件（如 `WHERE id > last_id`）追蹤分頁位置
+- **連線池 (Connection Pool)**
+  - 維護固定數量的資料庫連線，避免頻繁建立與關閉連線的開銷
+- **等幂鍵 (Idempotency Key)**
+  - 確保同一 request 只執行一次
+  - 實現
+    - 生成唯一鍵（如 ULID），隨 request 傳送並記錄
+    - 重複鍵時拒絕執行
+  - ULID 優勢
+    - 包含時間戳記，可排序且集中於相近 page
+    - 相較 UUID 的隨機性，減少 IO 與 buffer 壓力
+- **一致性雜湊 (Consistent Hashing)**
+  - 將 hash 結果映射至環狀結構，分配資料至伺服器
+  - 優勢
+    - 新增或移除伺服器時，僅影響部分資料重分配
+    - 可針對負載高的伺服器動態調整
+- **寫入放大 (Write Amplification)**
+  - 實際寫入磁碟的資料量超出預期
   - 分很多不同 level，通常是在說 SSD 造成的
-  - 想更新的時候，更新的 page 會被標記為不能使用。會有另外一隻非同步程式定期處理這種
-    - 但是他會把整個 block 寫到新的地方，再把原地方設為 free，就為了那些不能再被使用的空間搬整個 block
-- polymorphic association
-  - 一個 table 有多個關聯，但是這些關聯是不同的 table
-    - 某個 id column 會根據不同情況代表不同 table 的 id
-  - 可能可以節省空間
-  - 也可能因為這樣而沒辦法使用 foreign key
-  - 可以考慮拆成多個 column 或是多個 table
+  - 原因
+    - SSD 更新時，需將整個 block 搬移至新位置並標記舊 block 為 free
+      - 想更新的時候，更新的 page 會被標記為不能使用。為了那些不能再被使用的空間搬整個 block
+- **多型關聯 (Polymorphic Association)**
+  - 單一欄位根據情況指向不同 table 的 id
+  - 優勢：節省空間與表數
+  - 劣勢：無法直接使用 foreign key，需額外邏輯處理
+  - 替代方案：拆為多欄位或多表，增加明確性

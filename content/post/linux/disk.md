@@ -1,7 +1,7 @@
 ---
 title: "磁碟管理"
 date: 2024-04-24T00:00:43+08:00
-draft: false
+draft: true
 
 type: "post"
 tags: ["linux"]

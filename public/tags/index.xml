@@ -127,14 +127,6 @@
         <description></description>
         </item>
         <item>
-        <title>linux</title>
-        <link>https://roykesydon.github.io/Blog/tags/linux/</link>
-        <pubDate>Wed, 24 Apr 2024 00:00:43 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/linux/</guid>
-        <description></description>
-        </item>
-        <item>
         <title>algorithm</title>
         <link>https://roykesydon.github.io/Blog/tags/algorithm/</link>
         <pubDate>Tue, 29 Aug 2023 00:08:46 +0800</pubDate>
@@ -148,30 +140,6 @@
         <pubDate>Tue, 29 Aug 2023 00:08:46 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/data-structure/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>embedded-system</title>
-        <link>https://roykesydon.github.io/Blog/tags/embedded-system/</link>
-        <pubDate>Thu, 04 May 2023 01:32:54 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/embedded-system/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>mcu</title>
-        <link>https://roykesydon.github.io/Blog/tags/mcu/</link>
-        <pubDate>Thu, 04 May 2023 01:32:54 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/mcu/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>stm32</title>
-        <link>https://roykesydon.github.io/Blog/tags/stm32/</link>
-        <pubDate>Thu, 04 May 2023 01:32:54 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/stm32/</guid>
         <description></description>
         </item>
         <item>
@@ -196,22 +164,6 @@
         <pubDate>Thu, 26 Jan 2023 01:36:53 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/tags/machine-learning/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>C</title>
-        <link>https://roykesydon.github.io/Blog/tags/c/</link>
-        <pubDate>Sat, 21 Jan 2023 00:08:25 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/c/</guid>
-        <description></description>
-        </item>
-        <item>
-        <title>shell</title>
-        <link>https://roykesydon.github.io/Blog/tags/shell/</link>
-        <pubDate>Thu, 19 Jan 2023 23:00:02 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/tags/shell/</guid>
         <description></description>
         </item>
         

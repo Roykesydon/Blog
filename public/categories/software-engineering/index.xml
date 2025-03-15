@@ -179,224 +179,213 @@
         <description>&lt;h2 id=&#34;terms&#34;&gt;Terms&lt;/h2&gt;
 &lt;h3 id=&#34;incremental-vs-iterative&#34;&gt;Incremental vs Iterative&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;Incremental
+&lt;li&gt;&lt;strong&gt;Incremental&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;隨時間一步一步完成&lt;/li&gt;
+&lt;li&gt;透過多個 &lt;strong&gt;increment&lt;/strong&gt;（增量）逐步構建專案，每個增量都是可運行的部分功能，並在後續開發中持續擴充。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Iterative
+&lt;li&gt;&lt;strong&gt;Iterative&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;建立 prototype，然後不斷改進&lt;/li&gt;
+&lt;li&gt;建立 &lt;strong&gt;prototype&lt;/strong&gt;（原型），然後反覆改進，每次迭代都基於上一版本進行調整與優化。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;model-type&#34;&gt;Model type&lt;/h2&gt;
+&lt;h2 id=&#34;model-type&#34;&gt;Model Type&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Linear/Predictive
+&lt;li&gt;&lt;strong&gt;Linear/Predictive&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;有類似的專案經驗&lt;/li&gt;
-&lt;li&gt;有明確的流程&lt;/li&gt;
-&lt;li&gt;沒什麼可以改動的空間&lt;/li&gt;
+&lt;li&gt;適用於具備類似專案經驗的情境&lt;/li&gt;
+&lt;li&gt;擁有明確的開發流程&lt;/li&gt;
+&lt;li&gt;變更空間極小，需求需在開發前確定&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Flexible/Adaptive
+&lt;li&gt;&lt;strong&gt;Flexible/Adaptive&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;專案屬於 new idea&lt;/li&gt;
-&lt;li&gt;專案很有可能隨時間改變&lt;/li&gt;
+&lt;li&gt;適用於新創概念或需求尚不明確的專案&lt;/li&gt;
+&lt;li&gt;專案可能隨時間變更，因此需具備較高的靈活性&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;waterfall-model&#34;&gt;Waterfall Model&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;像瀑布一樣，一個階段完成後才能進行下一個階段&lt;/li&gt;
-&lt;li&gt;Requirement -&amp;gt; Design -&amp;gt; Implementation -&amp;gt; Testing -&amp;gt; Deployment -&amp;gt; Maintenance&lt;/li&gt;
-&lt;li&gt;非常 predictive，沒有彈性&lt;/li&gt;
-&lt;li&gt;如果在 Testing 發現重大問題，可能要從 Requirement 重新開始&lt;/li&gt;
-&lt;li&gt;隨著進度推進，fix 成本增長很快&lt;/li&gt;
-&lt;li&gt;每一步都得考慮周密&lt;/li&gt;
-&lt;li&gt;用戶很晚才能看到結果&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;像瀑布一樣，一個階段完成後才能進入下一個階段&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;典型流程：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Requirement&lt;/strong&gt; → &lt;strong&gt;Design&lt;/strong&gt; → &lt;strong&gt;Implementation&lt;/strong&gt; → &lt;strong&gt;Testing&lt;/strong&gt; → &lt;strong&gt;Deployment&lt;/strong&gt; → &lt;strong&gt;Maintenance&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;高度預測性&lt;/strong&gt;（Predictive），變更成本極高，彈性低&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;問題點：&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;若在 &lt;strong&gt;Testing&lt;/strong&gt; 階段發現重大缺陷，可能需回溯至 &lt;strong&gt;Requirement&lt;/strong&gt; 重新開始&lt;/li&gt;
+&lt;li&gt;隨著進度推進，&lt;strong&gt;修正成本（fix cost）將大幅增加&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;需要在每個階段做詳細規劃，以降低風險&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;用戶直到後期才會看到可運行的成果&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;incremental-model&#34;&gt;Incremental Model&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;在整個開發過程中多次完成軟體開發過程&lt;/li&gt;
-&lt;li&gt;每個子開發過程都有明確的目標&lt;/li&gt;
+&lt;li&gt;在整個開發過程中，將系統劃分為 &lt;strong&gt;多個增量（increments）&lt;/strong&gt; 來逐步開發與交付&lt;/li&gt;
+&lt;li&gt;每個增量都具備可運行的功能，並能獨立部署&lt;/li&gt;
+&lt;li&gt;各個增量的目標與功能範圍需事先定義，以確保最終整合&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;agile&#34;&gt;Agile&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;一種思維方法，不是模型&lt;/li&gt;
-&lt;li&gt;Manifesto
+&lt;li&gt;&lt;strong&gt;一種思維方式，而非特定的開發模型&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Agile Manifesto（敏捷宣言）&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;Individuals and interactions over processes and tools
+&lt;li&gt;&lt;strong&gt;Individuals and interactions over processes and tools&lt;/strong&gt;（個人與互動高於流程與工具）
 &lt;ul&gt;
-&lt;li&gt;如果一組人決定要用一組新的工具，那他們應該有更高的優先權&lt;/li&gt;
-&lt;li&gt;過往的做法可能偏向使用過的工具&lt;/li&gt;
+&lt;li&gt;若團隊決定使用新的工具，應優先考量團隊的需求，而非僅僅依賴過去習慣的工具&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Working software over comprehensive documentation
+&lt;li&gt;&lt;strong&gt;Working software over comprehensive documentation&lt;/strong&gt;（可運行的軟體高於完備的文件）
 &lt;ul&gt;
-&lt;li&gt;document 很重要，但是只有大量的 document 沒辦法讓客戶給出反饋&lt;/li&gt;
+&lt;li&gt;文件很重要，但單純依賴大量文件無法讓客戶提供有效回饋&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Customer collaboration over contract negotiation
+&lt;li&gt;&lt;strong&gt;Customer collaboration over contract negotiation&lt;/strong&gt;（與客戶合作高於合約談判）
 &lt;ul&gt;
-&lt;li&gt;強調和客戶的合作，而不是只在意合同上的項目&lt;/li&gt;
+&lt;li&gt;強調持續與客戶溝通，以確保專案方向正確，而不是只關注合同上的條款&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Responding to change over following a plan&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;瀑布式開發的缺點
+&lt;li&gt;&lt;strong&gt;Responding to change over following a plan&lt;/strong&gt;（回應變化高於遵循計畫）
 &lt;ul&gt;
-&lt;li&gt;現在的技術環境變化太快，Agile 希望在開發過程中能夠快速適應
-&lt;ul&gt;
-&lt;li&gt;傳統的開發方法考量到金錢損失，不太可能辦到。但透過小的 increment，可以在每個 increment 中朝正確的方向前進&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;軟體系統不可能被 100% 預測&lt;/li&gt;
-&lt;li&gt;系統可能不符合用戶要求&lt;/li&gt;
-&lt;li&gt;市場變化很快，Agile 可以在短時間內推出最小可行產品，先行推向市場&lt;/li&gt;
+&lt;li&gt;在變化快速的環境下，適應需求變更比僵化地執行既定計畫更重要&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;瀑布式開發的缺點agile-解決的問題&#34;&gt;&lt;strong&gt;瀑布式開發的缺點（Agile 解決的問題）&lt;/strong&gt;&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;技術環境變化迅速，Agile 讓開發更具適應性&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;傳統開發方法往往因為考量成本，不容易應對變更 而 Agile 透過 &lt;strong&gt;小的增量（increment）&lt;/strong&gt; 來持續調整方向，降低風險&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;軟體需求無法 100% 預測&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;早期規劃的需求可能與最終需求不符，因此 Agile 強調 &lt;strong&gt;持續交付與回饋&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;系統可能不符合用戶需求&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;透過 &lt;strong&gt;迭代開發（iterative development）&lt;/strong&gt;，確保用戶能夠在開發過程中參與並提供反饋&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;市場變化快速&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;Agile 強調 &lt;strong&gt;MVP（最小可行產品）&lt;/strong&gt;，讓團隊能在短時間內推出核心功能，以快速測試市場反應&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
 &lt;h2 id=&#34;kanban&#34;&gt;Kanban&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;會存在多張卡片&lt;/li&gt;
-&lt;li&gt;可以直觀看到某個欄位是否堆積大量工作&lt;/li&gt;
-&lt;li&gt;Properties
+&lt;li&gt;&lt;strong&gt;以視覺化方式管理工作流程&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;透過卡片（Kanban 卡）來追蹤工作項目&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;能夠直觀地發現某個工作階段是否積壓過多任務&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;核心屬性properties&#34;&gt;&lt;strong&gt;核心屬性（Properties）&lt;/strong&gt;&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;Visualize workflow&lt;/li&gt;
-&lt;li&gt;Limit work in progress&lt;/li&gt;
-&lt;li&gt;Manage flow&lt;/li&gt;
-&lt;li&gt;Make process policies explicit&lt;/li&gt;
-&lt;li&gt;Improve collaboratively&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Visualize workflow&lt;/strong&gt;（視覺化工作流）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Limit work in progress&lt;/strong&gt;（限制在製作業務量）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Manage flow&lt;/strong&gt;（管理工作流）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Make process policies explicit&lt;/strong&gt;（明確定義流程規則）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Improve collaboratively&lt;/strong&gt;（透過協作持續改進）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;核心原則principles&#34;&gt;&lt;strong&gt;核心原則（Principles）&lt;/strong&gt;&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Start with what you do now&lt;/strong&gt;（從現有流程開始）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Agree to pursue incremental, evolutionary change&lt;/strong&gt;（追求漸進式改變）
+&lt;ul&gt;
+&lt;li&gt;並非一次性顛覆整個流程，而是逐步優化&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Principles
+&lt;li&gt;&lt;strong&gt;Respect the current process, roles, responsibilities &amp;amp; titles&lt;/strong&gt;（尊重現有流程、角色、職責與職位）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Encourage acts of leadership at all levels&lt;/strong&gt;（鼓勵各層級展現領導力）
 &lt;ul&gt;
-&lt;li&gt;Start with what you do now&lt;/li&gt;
-&lt;li&gt;Agree to pursue incremental, evolutionary change
-&lt;ul&gt;
-&lt;li&gt;並非試著立刻改變所有事情&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Respect the current process, roles, responsibilities &amp;amp; titles&lt;/li&gt;
-&lt;li&gt;Encourage acts of leadership at all levels
-&lt;ul&gt;
-&lt;li&gt;這裡的 leadership 不一定指領導他人，也可以是激勵他人&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Leadership&lt;/strong&gt; 不僅指管理職責，也包含主動解決問題、協助他人、激勵他人&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;欄位
+&lt;h3 id=&#34;工作欄位work-columns&#34;&gt;&lt;strong&gt;工作欄位（Work Columns）&lt;/strong&gt;&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;Backlog&lt;/li&gt;
-&lt;li&gt;Analyze&lt;/li&gt;
-&lt;li&gt;Develop&lt;/li&gt;
-&lt;li&gt;Test&lt;/li&gt;
-&lt;li&gt;Release&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Backlog&lt;/strong&gt;（待辦事項）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Analyze&lt;/strong&gt;（需求分析）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Develop&lt;/strong&gt;（開發）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Test&lt;/strong&gt;（測試）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Release&lt;/strong&gt;（發布）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;scrum&#34;&gt;Scrum&lt;/h2&gt;
+&lt;h3 id=&#34;scrum-核心概念&#34;&gt;Scrum 核心概念&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;可以利用 back-to-back testing 來確認沒有弄壞之前 sprint 的功能&lt;/li&gt;
-&lt;li&gt;roles
+&lt;li&gt;&lt;strong&gt;Scrum 是敏捷開發框架&lt;/strong&gt;，透過迭代式的開發方式，提高軟體交付的效率與適應性。&lt;/li&gt;
+&lt;li&gt;主要流程包括 &lt;strong&gt;Sprint Planning、Daily Scrum、Sprint Review 和 Sprint Retrospective&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;角色與職責&#34;&gt;角色與職責&lt;/h3&gt;
+&lt;h4 id=&#34;1-product-owner&#34;&gt;1. Product Owner&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;Product Owner
+&lt;li&gt;&lt;strong&gt;負責確保產品的價值最大化&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;職責&lt;/strong&gt;：
 &lt;ul&gt;
-&lt;li&gt;決定要用什麼方式完成什麼事&lt;/li&gt;
-&lt;li&gt;與外部世界溝通的人，和利害關係人溝通&lt;/li&gt;
-&lt;li&gt;目標
-&lt;ul&gt;
-&lt;li&gt;最大化產品價值
-&lt;ul&gt;
-&lt;li&gt;價低成本、提高收益&lt;/li&gt;
+&lt;li&gt;維護 &lt;strong&gt;健康的 Product Backlog&lt;/strong&gt;（保持任務清晰、優先順序合理）&lt;/li&gt;
+&lt;li&gt;與 &lt;strong&gt;利害關係人&lt;/strong&gt; 溝通，確保開發方向符合需求&lt;/li&gt;
+&lt;li&gt;定義 &lt;strong&gt;Acceptance Criteria（驗收標準）&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;管理 &lt;strong&gt;預算與 Release 計畫&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;職責
+&lt;h4 id=&#34;2-scrum-master&#34;&gt;2. Scrum Master&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;維護 open, healthy product backlog&lt;/li&gt;
-&lt;li&gt;回答產品相關問題&lt;/li&gt;
-&lt;li&gt;管理預算、release schedule&lt;/li&gt;
-&lt;li&gt;確保團隊價值，找出問題&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Scrum Master
+&lt;li&gt;&lt;strong&gt;確保 Scrum 流程正確執行&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;職責&lt;/strong&gt;：
 &lt;ul&gt;
-&lt;li&gt;確保團隊遵守 Scrum 的規則，促成會議、解決衝突&lt;/li&gt;
+&lt;li&gt;促成 &lt;strong&gt;Daily Standup&lt;/strong&gt;，確保討論聚焦&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;移除障礙&lt;/strong&gt;，幫助團隊專注於開發&lt;/li&gt;
+&lt;li&gt;培養 &lt;strong&gt;Scrum 文化&lt;/strong&gt;，確保團隊理解並實踐 Scrum 的價值觀&lt;/li&gt;
 &lt;li&gt;Servant Leader
-&lt;ul&gt;
-&lt;li&gt;有一點領導，但和大家平等。促成團隊工作而不是指揮別人&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;目標
-&lt;ul&gt;
-&lt;li&gt;促成 Daily Standup&lt;/li&gt;
-&lt;li&gt;移除障礙&lt;/li&gt;
-&lt;li&gt;確保大家的心情&lt;/li&gt;
-&lt;li&gt;確保 Scurm values&lt;/li&gt;
-&lt;li&gt;團隊的調解人&lt;/li&gt;
+- 有一點領導，但和大家平等。促成團隊工作而不是指揮別人&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Dev Team
+&lt;h4 id=&#34;3-開發團隊dev-team&#34;&gt;3. 開發團隊（Dev Team）&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;包含工程師、設計師等等&lt;/li&gt;
-&lt;li&gt;目標
+&lt;li&gt;包括工程師、設計師、測試人員等&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;目標&lt;/strong&gt;：
 &lt;ul&gt;
-&lt;li&gt;和 Product Owner 合作，create user stories&lt;/li&gt;
-&lt;li&gt;寫 code 和測試，確保符合預期&lt;/li&gt;
-&lt;li&gt;research, design, prototype&lt;/li&gt;
-&lt;li&gt;&lt;/li&gt;
+&lt;li&gt;與 Product Owner &lt;strong&gt;合作撰寫 User Stories&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;開發、測試、確保功能符合定義的需求&lt;/li&gt;
+&lt;li&gt;參與 &lt;strong&gt;技術設計、研究與原型開發&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;流程
+&lt;h3 id=&#34;scrum-流程&#34;&gt;Scrum 流程&lt;/h3&gt;
+&lt;h4 id=&#34;1-product-backlog&#34;&gt;1. Product Backlog&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;product backlog
+&lt;li&gt;由 Product Owner 負責維護，內容包含：
 &lt;ul&gt;
-&lt;li&gt;待完成的事情&lt;/li&gt;
-&lt;li&gt;可能的欄位
-&lt;ul&gt;
-&lt;li&gt;優先度&lt;/li&gt;
-&lt;li&gt;預計花費時間&lt;/li&gt;
-&lt;li&gt;誰來執行&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;優先度&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;預估花費時間&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;負責的人&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;spring planning meeting
+&lt;h4 id=&#34;2-sprint-planning-meeting&#34;&gt;2. Sprint Planning Meeting&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;決定要在這個 sprint 完成的事情&lt;/li&gt;
-&lt;li&gt;時間點會是 sprint 的第一天&lt;/li&gt;
-&lt;li&gt;目標
+&lt;li&gt;目標：將 &lt;strong&gt;Product Backlog&lt;/strong&gt; 轉換為 &lt;strong&gt;Sprint Backlog&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;角色分工&lt;/strong&gt;：
 &lt;ul&gt;
-&lt;li&gt;把 product backlog 轉換成 sprint backlog&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;職責
+&lt;li&gt;&lt;strong&gt;Scrum Master&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;Scrum Master
-&lt;ul&gt;
-&lt;li&gt;促成會議&lt;/li&gt;
-&lt;li&gt;確保和準備會議地點&lt;/li&gt;
-&lt;li&gt;確保會議有在持續推進，好達成 timebox
-&lt;ul&gt;
+&lt;li&gt;確保會議高效進行&lt;/li&gt;
 &lt;li&gt;如果有講太久的部分，可能稍後再排單獨會議&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;li&gt;確保一切都和 sprint goal 一致&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Product Owner
+&lt;li&gt;&lt;strong&gt;Product Owner&lt;/strong&gt;
 &lt;ul&gt;
 &lt;li&gt;準備好 product backlog&lt;/li&gt;
 &lt;li&gt;澄清 product backlog 的細節&lt;/li&gt;
@@ -407,27 +396,22 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Dev Team
+&lt;li&gt;&lt;strong&gt;Dev Team&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;協助判斷哪些任務可達成且符合 sprint goal&lt;/li&gt;
+&lt;li&gt;拆解任務、估算工作量、選擇可完成的任務&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;sprint backlog
+&lt;h4 id=&#34;3-sprint-backlog&#34;&gt;3. Sprint Backlog&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;這個 sprint 要完成的事情&lt;/li&gt;
-&lt;li&gt;開發人員去自己選擇要做的事情&lt;/li&gt;
-&lt;li&gt;然後就會花 1-4 週完成一個 sprint&lt;/li&gt;
+&lt;li&gt;本次 Sprint 需要完成的所有任務&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;開發人員自行選擇任務&lt;/strong&gt;，並在 &lt;strong&gt;1-4 週內完成 Sprint&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Daily Scrum (Daily standup)
+&lt;h4 id=&#34;4-daily-scrum&#34;&gt;4. Daily Scrum&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;不該花太久，比如最多 15 分鐘&lt;/li&gt;
-&lt;li&gt;職責
-&lt;ul&gt;
+&lt;li&gt;不能花太久，比如&lt;strong&gt;限制 15 分鐘內完成&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;Scrum Master
 &lt;ul&gt;
 &lt;li&gt;確保會議的進行，確保 timebox&lt;/li&gt;
@@ -435,59 +419,30 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Dev Team
-&lt;ul&gt;
-&lt;li&gt;回答問題
-&lt;ul&gt;
-&lt;li&gt;做了什麼&lt;/li&gt;
-&lt;li&gt;計畫做什麼&lt;/li&gt;
-&lt;li&gt;遇到什麼問題&lt;/li&gt;
-&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;昨天完成了什麼？&lt;/li&gt;
+&lt;li&gt;今天計畫做什麼？&lt;/li&gt;
+&lt;li&gt;有遇到什麼阻礙？&lt;/li&gt;
+&lt;/ol&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
+&lt;h4 id=&#34;5-sprint-review成果展示&#34;&gt;5. Sprint Review（成果展示）&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;向 &lt;strong&gt;Stakeholders&lt;/strong&gt; 展示這次 Sprint 交付的 &lt;strong&gt;Product Increment&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;討論改進方向，準備下一個 Sprint&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;sprint review
+&lt;h4 id=&#34;6-sprint-retrospective回顧與改進&#34;&gt;6. Sprint Retrospective（回顧與改進）&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;找 stakeholders 來看看這個 sprint 的成果&lt;/li&gt;
-&lt;li&gt;秀出 product increment
+&lt;li&gt;探討 &lt;strong&gt;這次 Sprint 哪些地方可以改進&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;常見方法&lt;/strong&gt;：
 &lt;ul&gt;
-&lt;li&gt;product increment 意味著他本身就是一個完成的產品，經過測試且準備 release&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;任務
+&lt;li&gt;&lt;strong&gt;Start-Stop-Continue&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;review sprint result
+&lt;li&gt;&lt;strong&gt;Start&lt;/strong&gt;：開始做什麼？&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Stop&lt;/strong&gt;：應該停止什麼？&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Continue&lt;/strong&gt;：繼續保持哪些做法？&lt;/li&gt;
+&lt;li&gt;每個人說出一個想開始做的事情，一個想停止做的事情，一個想繼續做的事情
 &lt;ul&gt;
-&lt;li&gt;回顧那些任務做得好和不好
-&lt;ul&gt;
-&lt;li&gt;如果有事情沒完成，要解釋為什麼推遲&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;這個 sprint 有沒有達到目標&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Discuss and demonstrate work
-&lt;ul&gt;
-&lt;li&gt;product owner 全程記錄筆記&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Update status of the project&lt;/li&gt;
-&lt;li&gt;Collaborate on the plan ahead&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;sprint retrospective
-&lt;ul&gt;
-&lt;li&gt;團隊討論這個 sprint 的問題，並且改進&lt;/li&gt;
-&lt;li&gt;常見方法
-&lt;ul&gt;
-&lt;li&gt;start-stop-continue
-&lt;ul&gt;
-&lt;li&gt;每個人說出一個想開始做的事情，一個想停止做的事情，一個想繼續做的事情&lt;/li&gt;
 &lt;li&gt;可以保持匿名&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
@@ -496,53 +451,46 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
+&lt;h3 id=&#34;3-5-3-structurescrum-的核心架構&#34;&gt;3-5-3 Structure（Scrum 的核心架構）&lt;/h3&gt;
+&lt;h4 id=&#34;3-大工件artifacts&#34;&gt;3 大工件（Artifacts）&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Product Backlog&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sprint Backlog&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Product Increment&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;3-5-3-structure&#34;&gt;3-5-3 Structure&lt;/h3&gt;
+&lt;h4 id=&#34;5-大事件events&#34;&gt;5 大事件（Events）&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Sprint Planning&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Daily Scrum&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;The Sprint&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sprint Review&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sprint Retrospective&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;3-大角色roles&#34;&gt;3 大角色（Roles）&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;3 artifacts
-&lt;ul&gt;
-&lt;li&gt;Sprint Backlog&lt;/li&gt;
-&lt;li&gt;Product Backlog&lt;/li&gt;
-&lt;li&gt;Product Increment&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Product Owner&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scrum Master&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;開發團隊（Dev Team）&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;5 events
+&lt;h4 id=&#34;其他補充&#34;&gt;其他補充：&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;Sprint Planning&lt;/li&gt;
-&lt;li&gt;Daily Scrum&lt;/li&gt;
-&lt;li&gt;The Sprint&lt;/li&gt;
-&lt;li&gt;Sprint Review&lt;/li&gt;
-&lt;li&gt;Sprint Retrospective&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;3 roles
+&lt;li&gt;&lt;strong&gt;Scrum 5 大價值觀 (Values)&lt;/strong&gt;：
 &lt;ul&gt;
-&lt;li&gt;Product Owner&lt;/li&gt;
-&lt;li&gt;Scrum Master&lt;/li&gt;
-&lt;li&gt;Dev Team&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;可以再加上
-&lt;ul&gt;
-&lt;li&gt;5 values
-&lt;ul&gt;
-&lt;li&gt;Focus&lt;/li&gt;
-&lt;li&gt;Respect&lt;/li&gt;
-&lt;li&gt;Commitment&lt;/li&gt;
-&lt;li&gt;Courage&lt;/li&gt;
-&lt;li&gt;Openness&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;專注（Focus）&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;尊重（Respect）&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;承諾（Commitment）&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;勇氣（Courage）&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;開放（Openness）&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;3 pillars
+&lt;li&gt;&lt;strong&gt;Scrum 3 大支柱 (Pillars)&lt;/strong&gt;：
 &lt;ul&gt;
-&lt;li&gt;Transparency&lt;/li&gt;
-&lt;li&gt;Inspection&lt;/li&gt;
-&lt;li&gt;Adaptation&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;透明性（Transparency）&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;檢視（Inspection）&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;適應（Adaptation）&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
+&lt;li&gt;可以利用 back-to-back testing 來確認沒有弄壞之前 sprint 的功能&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         </item>
@@ -552,180 +500,211 @@
         <pubDate>Thu, 27 Jun 2024 00:01:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/p/testing/</guid>
-        <description>&lt;h2 id=&#34;通用術語&#34;&gt;通用術語&lt;/h2&gt;
+        <description>&lt;h3 id=&#34;測試相關概念&#34;&gt;測試相關概念&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;Test data
+&lt;li&gt;&lt;strong&gt;Test Data&lt;/strong&gt;
 &lt;ul&gt;
 &lt;li&gt;用來測試系統的輸入&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Test case
+&lt;li&gt;&lt;strong&gt;Test Case&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;包含測試步驟, 預期結果, 測試資料&lt;/li&gt;
+&lt;li&gt;包含測試步驟、預期結果、測試資料&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Oracle
+&lt;li&gt;&lt;strong&gt;Oracle&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;理想的結果&lt;/li&gt;
+&lt;li&gt;理想的結果，作為判斷測試是否成功的標準&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Bug
+&lt;li&gt;&lt;strong&gt;Verification（驗證）&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;error 或是偏離預期的行為&lt;/li&gt;
-&lt;li&gt;用詞
-&lt;ul&gt;
-&lt;li&gt;failure
-&lt;ul&gt;
-&lt;li&gt;偏離預期的 event&lt;/li&gt;
+&lt;li&gt;確認系統是否符合規格（specification）&lt;/li&gt;
+&lt;li&gt;若出錯，通常是開發或設計的問題&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;error
-&lt;ul&gt;
-&lt;li&gt;導致 failure 的 code part&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;fault
-&lt;ul&gt;
-&lt;li&gt;outcome&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Verification
-&lt;ul&gt;
-&lt;li&gt;確認系統是否符合 specifcation&lt;/li&gt;
-&lt;li&gt;這裡出問題是工程師的錯&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Validation
+&lt;li&gt;&lt;strong&gt;Validation（確認）&lt;/strong&gt;
 &lt;ul&gt;
 &lt;li&gt;確認系統是否符合使用者需求&lt;/li&gt;
-&lt;li&gt;這裡出問題代表產品目標有錯&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Stub
-&lt;ul&gt;
-&lt;li&gt;用來代替其他 component 的 template，會回傳 hard-coded value&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Mock
-&lt;ul&gt;
-&lt;li&gt;用來代替其他 component 的 template，會回傳預先設定的值，而且會檢查調用的次數&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Driver
-&lt;ul&gt;
-&lt;li&gt;用來執行 commands 還有初始化變數的 template&lt;/li&gt;
+&lt;li&gt;若出錯，代表產品目標可能有誤&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;test-coverage&#34;&gt;Test coverage&lt;/h2&gt;
+&lt;h3 id=&#34;bug-與錯誤類型&#34;&gt;Bug 與錯誤類型&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;line coverage
+&lt;li&gt;&lt;strong&gt;Bug&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;根據程式碼實際執行的程式碼行數來計算&lt;/li&gt;
+&lt;li&gt;程式中的錯誤或偏離預期的行為&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;branch coverage
+&lt;li&gt;&lt;strong&gt;Failure&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;檢查程式碼是不是不同的可能都跑過
-&lt;ul&gt;
-&lt;li&gt;考慮 if, switch&amp;hellip;&lt;/li&gt;
+&lt;li&gt;偏離預期的事件（event），如系統崩潰或錯誤輸出&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Error&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;導致 failure 的程式錯誤（code issue）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;testing-types&#34;&gt;Testing Types&lt;/h2&gt;
-&lt;h3 id=&#34;unit-testing&#34;&gt;Unit Testing&lt;/h3&gt;
+&lt;li&gt;&lt;strong&gt;Fault（缺陷）&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;專注在測試 smallest unit of software&lt;/li&gt;
-&lt;li&gt;要 isolate unit，避免其他 unit 影響測試結果
-&lt;ul&gt;
-&lt;li&gt;用 dummy value&lt;/li&gt;
+&lt;li&gt;造成 failure 的設計或開發上的錯誤，可能潛伏在系統內直到被觸發&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;integration-testing&#34;&gt;Integration Testing&lt;/h3&gt;
+&lt;h3 id=&#34;測試輔助工具&#34;&gt;測試輔助工具&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;專注在測試 communication 和 architecture&lt;/li&gt;
-&lt;li&gt;type
+&lt;li&gt;&lt;strong&gt;Stub&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;non-incremental
-&lt;ul&gt;
-&lt;li&gt;一次測試所有 component，測試整個應用程式&lt;/li&gt;
-&lt;li&gt;Big Bang Testing&lt;/li&gt;
+&lt;li&gt;用來代替其他元件的簡單實作，會回傳硬編碼（hard-coded）值&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;incremental
+&lt;li&gt;&lt;strong&gt;Mock&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;每次新增一個 module，做一些測試，反覆執行&lt;/li&gt;
-&lt;li&gt;Top-Down Testing
-&lt;ul&gt;
-&lt;li&gt;從最上層開始，下面調用的部分用 stub 代替&lt;/li&gt;
+&lt;li&gt;類似 stub，但除了回傳預設值，還可驗證是否正確調用&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Bottom-Up Testing
+&lt;li&gt;&lt;strong&gt;Driver&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;從最底層開始，上面呼叫的部分用 driver 代替&lt;/li&gt;
+&lt;li&gt;負責執行測試指令並初始化變數的工具&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
+&lt;h2 id=&#34;測試覆蓋率test-coverage&#34;&gt;測試覆蓋率（Test Coverage）&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Line Coverage（行覆蓋率）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;測試過的程式碼行數相對於總行數的比例&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Back-to-Back Testing
+&lt;li&gt;&lt;strong&gt;Branch Coverage（分支覆蓋率）&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;把已知良好的版本和新版本比較&lt;/li&gt;
-&lt;li&gt;如果 output 一樣，就代表新版本舊的功能是正確的&lt;/li&gt;
-&lt;li&gt;可以是 incremental testing 的一部分&lt;/li&gt;
+&lt;li&gt;測試所有條件分支是否都被執行過，如 if、switch 內的所有可能路徑&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;black-box-vs-white-box-testing&#34;&gt;Black Box vs White Box Testing&lt;/h2&gt;
+&lt;h2 id=&#34;測試類型testing-types&#34;&gt;測試類型（Testing Types）&lt;/h2&gt;
+&lt;h3 id=&#34;單元測試unit-testing&#34;&gt;單元測試（Unit Testing）&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;Black Box Testing
+&lt;li&gt;測試程式的最小單位（smallest unit of software）&lt;/li&gt;
+&lt;li&gt;需隔離（isolate）被測單元，避免外部依賴影響測試結果
 &lt;ul&gt;
-&lt;li&gt;不需要知道內部結構&lt;/li&gt;
-&lt;li&gt;用 input 和 output 來測試&lt;/li&gt;
-&lt;li&gt;Boundary Value
-&lt;ul&gt;
-&lt;li&gt;測試高低邊界值，過了就假設中間都過了&lt;/li&gt;
+&lt;li&gt;常使用 dummy value、mock 物件來替代外部依賴&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Cause-Effect Graph
+&lt;/ul&gt;
+&lt;h3 id=&#34;整合測試integration-testing&#34;&gt;整合測試（Integration Testing）&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;一種設計 Test Case 的方法&lt;/li&gt;
-&lt;li&gt;又稱為 fishbone diagram&lt;/li&gt;
-&lt;li&gt;不同的 cause 會導致不同的 effect&lt;/li&gt;
-&lt;li&gt;最後會有一個 table 來表示所有可能輸入的組合會對應到什麼結果&lt;/li&gt;
+&lt;li&gt;測試不同組件（components）之間的交互（communication）和架構（architecture）&lt;/li&gt;
+&lt;li&gt;測試方式
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Big Bang Testing（非漸進式測試）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;一次測試所有 components，通常用於大型應用程式&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Pair-wise Testing
+&lt;li&gt;&lt;strong&gt;Incremental Testing（漸進式測試）&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;測試多個參數的可能組合&lt;/li&gt;
+&lt;li&gt;逐步新增模組進行測試，直到完整測試整個系統&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Top-Down Testing&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;從最上層開始，尚未開發的底層使用 stub 代替&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;State-based Testing
+&lt;li&gt;&lt;strong&gt;Bottom-Up Testing&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;測試不同狀態下的輸入，確認 state 改變的情形&lt;/li&gt;
+&lt;li&gt;從最底層開始，尚未開發的上層使用 driver 代替&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;White Box Testing
+&lt;li&gt;&lt;strong&gt;Back-to-Back Testing（對比測試）&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;知道內部原理，嘗試測試程式碼本身&lt;/li&gt;
-&lt;li&gt;Control Flow Testing
-&lt;ul&gt;
-&lt;li&gt;寫涵蓋所有 branch condition 的 test case&lt;/li&gt;
+&lt;li&gt;比較已知良好版本與新版本的輸出&lt;/li&gt;
+&lt;li&gt;若 output 相同，則新版本仍保有舊版本的正確功能&lt;/li&gt;
+&lt;li&gt;可作為 incremental testing 的一部分&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Data Flow Testing
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;黑箱測試-vs-白箱測試&#34;&gt;黑箱測試 vs 白箱測試&lt;/h2&gt;
+&lt;h3 id=&#34;黑箱測試black-box-testing&#34;&gt;黑箱測試（Black Box Testing）&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;test case 要涵蓋所有的變數，包含 declaration 和 use&lt;/li&gt;
+&lt;li&gt;不需要知道內部結構，透過輸入與輸出來驗證系統行為&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;常見測試方法&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Boundary Value Analysis（邊界值分析）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;測試邊界值，如最大、最小、剛好超出範圍的數值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cause-Effect Graph（因果圖測試）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;一種設計測試案例的方法，也稱為 &lt;strong&gt;fishbone diagram&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;不同的輸入條件（cause）會導致不同的結果（effect）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Pair-Wise Testing（成對測試）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;測試多個參數的不同組合，減少測試案例數量的同時仍保證足夠覆蓋率&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;State-Based Testing（狀態測試）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;測試不同狀態下的輸入，確認狀態變更的正確性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;測試種類&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Functional Testing（功能測試）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;確保系統功能符合需求&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Regression Testing（回歸測試）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;重新測試已驗證過的功能，確保新的修改沒有破壞舊的功能&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Non-Functional Testing（非功能測試）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;測試效能、安全性、可靠性等非功能性需求&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;白箱測試white-box-testing&#34;&gt;白箱測試（White Box Testing）&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;需要了解內部結構，測試程式碼本身&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;常見測試方法&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Control Flow Testing（控制流程測試）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;設計測試案例，使所有條件分支（branch condition）皆被執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Data Flow Testing（資料流測試）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;測試變數的生命週期，包括變數的定義（declaration）與使用（use）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;應用範圍&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Unit Testing&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;最主要用於單元測試&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Integration Testing&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;用於確保不同模組之間的溝通正確&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -742,100 +721,208 @@
         <description>&lt;h2 id=&#34;creational-patterns&#34;&gt;Creational patterns&lt;/h2&gt;
 &lt;p&gt;關於 object creation 的 patterns。&lt;/p&gt;
 &lt;h3 id=&#34;factory-method&#34;&gt;Factory Method&lt;/h3&gt;
-&lt;p&gt;將不同 Product 定義一個共有的 Interface，並由子類別實作，透過工廠類別來產生實體。&lt;/p&gt;
-&lt;p&gt;將建立 Product 的方法獨立出來，符合 Single Responsibility Principle。
-可以輕易擴充新的 Product，而不用修改原本的程式碼，符合 Open-Closed Principle。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;將不同 Product 定義一個共有的 Interface(以下簡稱 PI)，並由子類別實作，同時也幫不同工廠定義一個生成 product 的 interface(以下簡稱 FI)，透過不同的工廠類別實體來建立有共同 interface (PI)的不同 Product。&lt;/li&gt;
+&lt;li&gt;優點
+&lt;ul&gt;
+&lt;li&gt;將建立 Product 的方法獨立出來，符合 Single Responsibility Principle&lt;/li&gt;
+&lt;li&gt;可以輕易擴充新種類的 Product，而不用修改原本的程式碼，符合 Open-Closed Principle&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h3 id=&#34;abstract-factory&#34;&gt;Abstract Factory&lt;/h3&gt;
-&lt;p&gt;相比 Factory Method，現在的情境是有多個 Product，而且每次都是使用同一系列的 Product。&lt;/p&gt;
+&lt;p&gt;相比 Factory Method，現在的情境是有多個 Product 的同時，又會分不同系列，而且每次都是使用同一系列的 Product。
+- ex: 有一套家具，但是分多種不同的風格，每次都是使用同一風格的家具。&lt;/p&gt;
+&lt;p&gt;現在 Factory 會有一個共有的 interface，但是這個 interface 包含了建立一整套 product 的方法&lt;/p&gt;
 &lt;h3 id=&#34;builder&#34;&gt;Builder&lt;/h3&gt;
-&lt;p&gt;對於建構一個複雜且具備多種組合的產品，可以透過建構巨大的建構函式或是覆蓋所有可能的子類別來解決。&lt;/p&gt;
+&lt;p&gt;對於建構一個複雜且具備多種組合的產品，可以透過下面兩種方式其中之一解決：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;建構巨大的建構函式&lt;/li&gt;
+&lt;li&gt;覆蓋所有可能的子類別&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;但都存在其問題，要不是大量的子類別，不然就是難以呼叫的建構函式。&lt;/p&gt;
-&lt;p&gt;把建立物件的每個 component 獨立出來，並且切成多個可分開執行的 step。&lt;/p&gt;
-&lt;p&gt;由 Builder 來負責生出每一個 component，Director 不是必需的，但有需要的話可以讓他幫忙調用 Builder 的 method，好在專案中重複使用。&lt;/p&gt;
+&lt;p&gt;把建立物件的每個 component 獨立出來，並且切成多個可分開執行的 step，再根據自己的需求調用需要的函式。&lt;/p&gt;
+&lt;p&gt;對於建置步驟可能需要不同時做的情況，定義一個 Builder interface，包含了建立物件的每個 component 的方法，然後由 Builder 的子類別來實作這些方法。&lt;/p&gt;
+&lt;p&gt;Client 可以根據自己的需要調用 Builder 中的方法（不用全部調用），就可以在同樣的建構程式碼下透過不同的 Builder 來建立不同的物件。&lt;/p&gt;
+&lt;p&gt;Director 不是必需的，但有需要的話可以讓他幫忙調用 Builder 的 method，好在專案中重複使用。&lt;/p&gt;
 &lt;h3 id=&#34;prototype&#34;&gt;Prototype&lt;/h3&gt;
-&lt;p&gt;使用在想要獲得某個對象的 clone 的情境。&lt;/p&gt;
-&lt;p&gt;把 clone 的責任交給對象本身，而不是交給 Client。由對象本身提供 clone method。&lt;/p&gt;
+&lt;p&gt;使用在想要獲得某個對象的 clone 的情境。如果直接照著外表複製，可能會因為看不到私有屬性而造成問題。&lt;/p&gt;
+&lt;p&gt;把 clone 的責任交給對象本身，而不是交給 Client。由對象本身提供 clone method。
+支援 clone 方法的物像被稱為 prototype。&lt;/p&gt;
 &lt;h3 id=&#34;singleton&#34;&gt;Singleton&lt;/h3&gt;
 &lt;p&gt;確保某個類別只有一個 instance，並且提供一個 global access point。&lt;/p&gt;
-&lt;p&gt;但是這樣違反了 Single Responsibility Principle，因為除了原本的功能外，還要負責管理自己的 instance。&lt;/p&gt;
+&lt;p&gt;但是這樣違反了 Single Responsibility Principle，因為他現在要解決兩個問題：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;要讓唯一的 instance 可以被全域存取&lt;/li&gt;
+&lt;li&gt;負責確保自己的類別只有一個 instance&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;而且會讓全域變數有的缺點轉移過來，比如不安全，因為別的程式碼可能也可能修改我們在用的變數&lt;/p&gt;
+&lt;hr&gt;
 &lt;h2 id=&#34;structural-patterns&#34;&gt;Structural patterns&lt;/h2&gt;
 &lt;p&gt;探討如何組裝類別和物件成為更大的結構。&lt;/p&gt;
 &lt;h3 id=&#34;adapter&#34;&gt;Adapter&lt;/h3&gt;
 &lt;p&gt;轉換某個對象的 interface 到另外一種 interface，讓另外一個 Object 可以理解他。
 就像 XML 要轉到 JSON。&lt;/p&gt;
 &lt;h3 id=&#34;brdige&#34;&gt;Brdige&lt;/h3&gt;
-&lt;p&gt;使用在需要在多個 orthogonal (independent) 的維度上擴展類別時的情境。
-讓情況從難以計數的子類別數，變成多組功能聯合起來。&lt;/p&gt;
+&lt;p&gt;把一個大類別分成兩個獨立的維度（抽象和實作），讓他們可以獨立變化。&lt;/p&gt;
+&lt;h4 id=&#34;gura-舉的簡單例子&#34;&gt;Gura 舉的簡單例子&lt;/h4&gt;
+&lt;p&gt;這例子可以被拿來想像具體實作可能長怎樣&lt;/p&gt;
+&lt;p&gt;使用在需要在多個 orthogonal (independent) 的維度上擴展類別時的情境。比如我們要生產的一堆 entity 有分不同的 shape 和 color。
+如果有兩種 shape 和兩種 color，我們就會有 4 種子類別&lt;/p&gt;
+&lt;p&gt;目標是讓情況從難以計數的子類別數，變成多組功能聯合起來。可以透過把其中一個維度轉換成單獨的類別，然後用引用的方式獲取。&lt;/p&gt;
+&lt;h4 id=&#34;作法&#34;&gt;作法&lt;/h4&gt;
 &lt;p&gt;拆成 abstraction (high-level control) 和 implementation (實際工作)，
-由 abstraction 來控制 implementation，比如 GUI 來控制底下的 API&lt;/p&gt;
+由 abstraction 來控制 implementation，比如 GUI 來控制底下的 API。
+這樣的好處是兩邊都可以各自發展，以 GUI 和 API 舉例，GUI 可以開發不同方法調用事先說好的 API 介面（abstract），而根據 API 介面可以發展出不同的 implementation。&lt;/p&gt;
+&lt;p&gt;未來有更新的 GUI （繼承原有的 abstraction）也因為 implementation 是獨立的，不用擔心影響到他&lt;/p&gt;
 &lt;h3 id=&#34;composite&#34;&gt;Composite&lt;/h3&gt;
-&lt;p&gt;用在某些層級結構。&lt;/p&gt;
-&lt;p&gt;對於 Composite (Container)，不但實現 Component，也提供一個 list 來存放子 component。&lt;/p&gt;
+&lt;p&gt;用在程式模型具有層級結構（像是表示成樹）的情況。比如說我現在有一個大盒子，每次拆開盒子裡面有可能是多個東西，然後東西可能是小一點的盒子，或是產品。&lt;/p&gt;
+&lt;p&gt;如果要確認全部的產品價格總和，就要層層展開所有盒子，直到看到所有產品。&lt;/p&gt;
+&lt;h4 id=&#34;作法-1&#34;&gt;作法&lt;/h4&gt;
+&lt;p&gt;假設盒子結構稱為 Composite，而裡面的東西稱為 Component。我們可以定義一個共同介面，以價格為例，可能是讓 composite 和 component 都有獲取價格的 method，但是當調用 composite 的價格時，他會往 child 調用獲取價格的 method，然後把價格加總起來。用遞迴的方式來處理。&lt;/p&gt;
+&lt;p&gt;對於 Composite (Container)，不但實現 Component，也提供一個 list 來存放子 component，以及加入和從 list 中移除的 method。&lt;/p&gt;
 &lt;p&gt;對 Composite 的操作，會被委託給子 component，不需要 client 擔心。&lt;/p&gt;
 &lt;p&gt;就像指揮官只需要對高階軍官下命令。&lt;/p&gt;
 &lt;h3 id=&#34;decorator&#34;&gt;Decorator&lt;/h3&gt;
 &lt;p&gt;當今天有多種同類型的東西，你可以能會同時用到多種子類別所形成的組合時，就可以用 Decorator。&lt;/p&gt;
-&lt;p&gt;比如多種類型的 notification，你可能同時想要 FB 和 TG 的，或是只想要其中一個。
-或是多件衣服，有超級多種的穿搭。&lt;/p&gt;
+&lt;p&gt;Guru 舉例，不同社群平台的 notification，你可能會想要有不同的 notifier，發到一些指定的社群平台。也有拿天冷穿衣服舉例，可以層層穿不同的衣服。&lt;/p&gt;
 &lt;p&gt;但這是一層層的感覺，具有順序性。
 Decorator 和 Component 都繼承同一個 interface。
-就像是 &lt;code&gt;Data data = new Encrypt(new Compress(new FileData()))&lt;/code&gt;。&lt;/p&gt;
+有兩種實作辦法，可以層層包裹但是在外部自行調用，也可以把包裹的功能放在 Decorator 裡面，讓他自己調用。
+如果是第二種，可能就像下面這樣
+就像是 &lt;code&gt;data = new Encrypt(new Compress(new FileData(data)))&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;存在很難從 stack 中刪除特定 decorator 的缺點。&lt;/p&gt;
 &lt;h3 id=&#34;facade&#34;&gt;Facade&lt;/h3&gt;
-&lt;p&gt;為複雜的一堆子系統提供一個 Class，讓 client 可以使用他們關心的功能。
+&lt;p&gt;為複雜的一堆子系統提供一個外部介面 Class，讓 client 可以使用他們關心的功能。
 實際怎麼調用 client 無須知道。&lt;/p&gt;
+&lt;p&gt;Guru 舉例，比如說你要轉換影片，可能要調用很多不同的子系統，比如說轉檔、壓縮、上傳等等，可以獨立出去一個新的 class 提供轉換影片的功能，然後內部調用這堆子系統，client 只需要調用這個新的 class 就好。&lt;/p&gt;
 &lt;p&gt;容易形成 god object。&lt;/p&gt;
 &lt;h3 id=&#34;flyweight&#34;&gt;Flyweight&lt;/h3&gt;
 &lt;p&gt;對於大量類似的物件，為求節省記憶體而誕生的 pattern。&lt;/p&gt;
-&lt;p&gt;把物件的內容分成 intrinsic 和 extrinsic，intrinsic 是不會改變的 (unique)，而 extrinsic 是會改變的 (repeating)。&lt;/p&gt;
-&lt;p&gt;讓 extrinsic 的東西用同一塊記憶體。&lt;/p&gt;
+&lt;p&gt;把物件的內容分成 intrinsic 和 extrinsic，intrinsic 是不會改變的 (unique)，而 extrinsic 是會改變的 (repeating)。讓 extrinsic 的東西用同一塊記憶體。&lt;/p&gt;
+&lt;p&gt;可以透過一個可以儲存建立過共有物件的 factory 來建立物件。&lt;/p&gt;
 &lt;h3 id=&#34;proxy&#34;&gt;Proxy&lt;/h3&gt;
-&lt;p&gt;用在多個服務想要調用某個重量級資源的情境下。&lt;/p&gt;
-&lt;p&gt;存在多種 proxy 的應用類型，比如 cache 機制來加速資源的存取，並減少系統資源消耗。&lt;/p&gt;
+&lt;p&gt;用在多個服務想要調用某個重量級資源的情境下，可能只有很偶爾的情況需要用這 entity，但是如果平常就佔據著這個 entity，可能會消耗大量資源。&lt;/p&gt;
+&lt;p&gt;如果在服務和 entity 之間加上 proxy，就可以讓 proxy 來處理這些情況。可以用 proxy 的場景較多，下面以 cache 的場景為例子。&lt;/p&gt;
+&lt;p&gt;獲取某個靜態檔案可能非常花時間，但如果透過 proxy，第一個 service 想要這檔案的時候，proxy 可以去調用並暫存，其他 service 來要求的時候就可以直接回傳給他們。&lt;/p&gt;
+&lt;hr&gt;
 &lt;h2 id=&#34;behavioral-patterns&#34;&gt;Behavioral patterns&lt;/h2&gt;
+&lt;p&gt;探討物件或是演算法之間的溝通和分配職責。&lt;/p&gt;
 &lt;h3 id=&#34;chain-of-responsibility&#34;&gt;Chain of Responsibility&lt;/h3&gt;
+&lt;p&gt;透過一連串可以串接起來的 handler，來處理請求。&lt;/p&gt;
 &lt;p&gt;對於一系列檢查的情況，可以用這種作法，有兩種形式：&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;一路檢查，檢查失敗則中斷請求。&lt;/li&gt;
+&lt;li&gt;一路檢查，檢查失敗則中斷請求。
+&lt;ul&gt;
+&lt;li&gt;常見的例子是用在網頁的 middleware，如果有一個 middleware 檢查失敗，就不會往下傳。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;每個 Handler 自行決定要不要處理該請求，要的話則不會往下傳。
 &lt;ul&gt;
 &lt;li&gt;這樣可能會最後沒人處理&lt;/li&gt;
+&lt;li&gt;就像網頁點擊事件，一層層元素往上問。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;就像網頁點擊事件，一層層元素往下問。&lt;/p&gt;
 &lt;h3 id=&#34;command&#34;&gt;Command&lt;/h3&gt;
-&lt;p&gt;把請求獨立出來，讓該請求可以被用作參數、佇列、撤銷行為等。&lt;/p&gt;
-&lt;p&gt;比如多種不同的按鈕背後都執行同一個存檔功能。存檔就可以作為 command 獨立出來。
+&lt;p&gt;把請求獨立出來，讓請求可以被用各種方式調用。
+比如說把業務邏輯從 GUI 中抽出來，讓 GUI 只負責呼叫 command，然後 GUI 就可以有多個地方呼叫同一個 command。&lt;/p&gt;
+&lt;p&gt;比如多種不同的按鈕或快捷鍵背後都執行同一個存檔功能。存檔就可以作為 command 獨立出來。
 背後再根據這個 command 實施對應的業務邏輯。&lt;/p&gt;
 &lt;h3 id=&#34;iterator&#34;&gt;Iterator&lt;/h3&gt;
 &lt;p&gt;用來需要遍歷集合中元素的情境，把不同種類的遍歷行為細節隱藏起來。&lt;/p&gt;
 &lt;p&gt;提供多種不同的 iterator，但遵循同一種 interface，讓使用者可以根據需要選擇 iterator。
 對於不關心用哪種 iterator 的使用者，也能受益於 iterator 的 interface，而不必耦合於特定的演算法。&lt;/p&gt;
 &lt;h3 id=&#34;mediator&#34;&gt;Mediator&lt;/h3&gt;
-&lt;p&gt;禁止多個 component 間的直接溝通，迫使他們透過 mediator 來溝通，避免複雜的關係。
+&lt;p&gt;禁止多個 component 直接溝通，迫使他們透過 mediator 來溝通，避免複雜的關係。
 所有人只能透過 notify mediator 來溝通，mediator 根據 sender 和 event，來做出相應處理。&lt;/p&gt;
+&lt;p&gt;所有的 component 都不知道最終會有哪些 component 處理自己的請求，同樣的，他們也不知道請求是誰造成的，彼此不知道對方的存在。&lt;/p&gt;
 &lt;h3 id=&#34;memento&#34;&gt;Memento&lt;/h3&gt;
 &lt;p&gt;讓你可以儲存和復原到先前的狀態。&lt;/p&gt;
 &lt;p&gt;讓要儲存的對象自己生成 snapshot。&lt;/p&gt;
-&lt;p&gt;建議存在名為 momento 的 special object，這個 object 不能讓除了 producer 外的其他 object 直接存取。
-其他 object 只能透過 limited interface 來取得 metadata。&lt;/p&gt;
-&lt;p&gt;這些限制讓 momento 可以交給其他 object 來管理，稱為 caretaker。&lt;/p&gt;
+&lt;p&gt;建議存在名為 momento 的 special object，這個 object 不能讓除了 producer 外的其他 object 直接存取。&lt;/p&gt;
+&lt;p&gt;其他 object 只能透過 limited interface 來取得透過 producer 產生的 momento。&lt;/p&gt;
+&lt;p&gt;這些限制讓 momento 可以交給其他 object 來管理，稱為 caretaker，要復原的時候再把 momento 交還給 producer。&lt;/p&gt;
 &lt;h3 id=&#34;observer&#34;&gt;Observer&lt;/h3&gt;
 &lt;p&gt;定義 subscription 機制。&lt;/p&gt;
 &lt;p&gt;有 interesting state 的 object 稱為 subject，但由於他也會通知其他人，所以又稱為 publisher。追蹤它的人稱為 Subscriber。&lt;/p&gt;
+&lt;p&gt;Subscriber 如果想要在 Publisher 的狀態改變時被通知，就要訂閱 Publisher。然後 Publisher 維護一個 list 來存放所有訂閱者。&lt;/p&gt;
 &lt;h3 id=&#34;state&#34;&gt;State&lt;/h3&gt;
 &lt;p&gt;用在類似 Finite-State Machine 的情況。&lt;/p&gt;
+&lt;p&gt;把物件可能的狀態給提取出去，建立一個 interface，interface 包含了所有在不同狀態下會表現行為不同的 method。&lt;/p&gt;
 &lt;p&gt;該 pattern 把每個 state 獨立成一個 Class，把實際的行為委託給 state，而不是由 context (原始物件) 來控制。Context 只管切換 state。&lt;/p&gt;
 &lt;h3 id=&#34;strategy&#34;&gt;Strategy&lt;/h3&gt;
 &lt;p&gt;把不同實現方法的演算法定義為遵循同一個 interface 的類別，讓使用者可以根據需要選擇演算法。&lt;/p&gt;
+&lt;p&gt;原始的類別叫做 Context，client 可以把不同的策略傳給 Context，然後 Context 再根據策略來執行。&lt;/p&gt;
 &lt;h3 id=&#34;template-method&#34;&gt;Template Method&lt;/h3&gt;
-&lt;p&gt;把演算法拆成多個步驟，讓子類別可以覆寫其中的步驟，但不改變演算法的結構。&lt;/p&gt;
+&lt;p&gt;把演算法拆成多個步驟，讓子類別可以選擇性覆寫其中的一些步驟，但不改變演算法的結構。&lt;/p&gt;
+&lt;p&gt;原始的 template 可能有已經有預設實作或是 abstract method，就算有預設實作，子類別也可以選擇性覆寫。&lt;/p&gt;
 &lt;h3 id=&#34;visitor&#34;&gt;Visitor&lt;/h3&gt;
-&lt;p&gt;讓我們可以把演算法從執行他們的 object 中分離出來。&lt;/p&gt;
-&lt;p&gt;假設我們要對一堆繼承 client 屬性的公司新增 sendEmail 功能，如果我們在 client 新增 sendEmail 並且 override 每個子 class，就會違反 Single Responsibility Principle 和 Open-Closed Principle。&lt;/p&gt;
-&lt;p&gt;要利用 Double-Dispatch，讓 Object 本身選擇該用的演算法。&lt;/p&gt;
+&lt;p&gt;如果今天有一堆有共同父類別的子類別，我想新增某個功能，並給他們所有人用，同時不太希望修改到既有的這些類別，這時候可以用 visitor（雖然還是會做微不足道的修改）。&lt;/p&gt;
+&lt;p&gt;Visitor 要解決的問題和 Double Dispatch 很像。&lt;/p&gt;
+&lt;p&gt;vistor 會把新功能放在名為 Visitor 的新 class 中，然後透過 double dispatch 來執行。&lt;/p&gt;
+&lt;p&gt;新功能會根據這些子類別提供不同的 method，然後透過這些 method 來執行新功能。&lt;/p&gt;
+&lt;p&gt;我們最終會在這些子類別中新增一個 accept method，這個 method 會接受一個 visitor，然後根據 visitor 來執行對應的 method。&lt;/p&gt;
 &lt;p&gt;雖然這樣依然會修改到子 class，但這屬於微不足道的改變，而且可以讓之後新增的一些功能不用再去修改這些子 class。&lt;/p&gt;
+&lt;h4 id=&#34;single-dispatch&#34;&gt;Single Dispatch&lt;/h4&gt;
+&lt;p&gt;dispatch 是指決定在 runtime 要呼叫哪個 method 的過程。
+大多數的物件導向程式語言都支持 single dispatch，比如說在執行時期，遇到多型的時候，選擇要執行什麼 method。（我不確定有沒有多型以外的情況）&lt;/p&gt;
+&lt;h4 id=&#34;double-dispatch&#34;&gt;Double Dispatch&lt;/h4&gt;
+&lt;p&gt;這是一種技巧，讓我們可以在執行時期根據接收者（物件本身）和參數（傳進方法的物件）的類型決定要執行哪個 method。&lt;/p&gt;
+&lt;p&gt;好像也可以說是兩個參數的多型。&lt;/p&gt;
+&lt;p&gt;這是因為在編譯時期，看利用多型的程式碼，我們只能知道物件的多型型別，但是不知道他的實際型別，所以我們無法知道要執行哪個 method。&lt;/p&gt;
+&lt;p&gt;但是如果我們在執行時期，可以根據物件的實際型別來決定要執行哪個 method，這樣就可以達到我們想要的效果。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;A&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;accept&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Visitor&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;v&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;v&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;visit&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;B&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;accept&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Visitor&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;v&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;v&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;visit&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Visitor&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;visit&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;// visitor 不一定要用重名，這裏只是舉例
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;A&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;visit&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;B&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;b&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;B&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;調用的時候可能會像&lt;code&gt;a.accept(visitor)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;第一次調用發生在 accept method，根據 a 來決定要執行哪個 accept method&lt;/p&gt;
+&lt;p&gt;第二次調用發生在 visit method，根據 參數的類型 來決定要執行哪個 visit method&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -844,20 +931,21 @@ Decorator 和 Component 都繼承同一個 interface。
         <pubDate>Mon, 22 May 2023 00:00:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/p/clean-architecture/</guid>
-        <description>&lt;h2 id=&#34;hexagonal-architecture&#34;&gt;Hexagonal Architecture&lt;/h2&gt;
+        <description>&lt;h2 id=&#34;hexagonal-architecture-ports-and-adapters-architecture&#34;&gt;Hexagonal Architecture (Ports and Adapters Architecture)&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;也稱為 Ports and Adapters Architecture&lt;/li&gt;
-&lt;li&gt;把軟體分為兩個部分
+&lt;li&gt;目標是讓應用程式的核心邏輯與外部系統解耦&lt;/li&gt;
+&lt;li&gt;把軟體分為內部部分與外部部分
 &lt;ul&gt;
-&lt;li&gt;內部部分
+&lt;li&gt;&lt;strong&gt;內部部分&lt;/strong&gt;
 &lt;ul&gt;
 &lt;li&gt;包含 domain logic&lt;/li&gt;
-&lt;li&gt;會先被開發，並且不會受到外部系統的影響&lt;/li&gt;
+&lt;li&gt;先被開發，不受外部系統影響&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;外部部分
+&lt;li&gt;&lt;strong&gt;外部部分&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;包含所有的 depending layers，不屬於你的軟體的部分，比如 UI、DB、或是你用的 framework&lt;/li&gt;
+&lt;li&gt;包含所有的依賴層 (dependency layers)&lt;/li&gt;
+&lt;li&gt;不屬於應用程式的部分，如 UI、資料庫 (DB)、或應用框架 (framework)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -865,67 +953,100 @@ Decorator 和 Component 都繼承同一個 interface。
 &lt;/ul&gt;
 &lt;h3 id=&#34;ports&#34;&gt;Ports&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;一個 interface，定義了一個外部系統可以使用的方法&lt;/li&gt;
+&lt;li&gt;介面 (interface)，定義外部系統可以使用的方法&lt;/li&gt;
+&lt;li&gt;兩種類型
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Input Ports&lt;/strong&gt;：由內部應用程式暴露給外部使用，定義應用程式的行為&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Output Ports&lt;/strong&gt;：由內部應用程式呼叫外部系統，如資料庫或 API&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;adapters&#34;&gt;Adapters&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來實作 Ports，轉換外部請求到應用程式內部邏輯&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h4 id=&#34;primary-adapter&#34;&gt;Primary Adapter&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;這個 adapter 會透過實現 input port 來達成 use case&lt;/li&gt;
+&lt;li&gt;實作 Input Port，負責接收外部輸入並調用 Use Case&lt;/li&gt;
+&lt;li&gt;例如 Web Controller 或 CLI Handler&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h4 id=&#34;secondary-adapter&#34;&gt;Secondary Adapter&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;這個 adapter 會實作 output port，並且被 domain logic 調用&lt;/li&gt;
+&lt;li&gt;實作 Output Port，負責將 Use Case 的結果傳遞到外部系統&lt;/li&gt;
+&lt;li&gt;例如資料庫存取層 (Repository) 或 API 呼叫&lt;/li&gt;
 &lt;/ul&gt;
+&lt;hr&gt;
 &lt;h2 id=&#34;clean-architecture&#34;&gt;Clean Architecture&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;希望讓 domain logic 與其他部分分離，好讓其他部分應用新技術的時候不會影響到。&lt;/li&gt;
-&lt;li&gt;將軟體分為不同的層次，並且讓這些層次互相獨立。dependency 只能往內部移動，不會往外部移動。&lt;/li&gt;
-&lt;li&gt;透過 DIP (Dependency Inversion Principle) 來達到這個目標。
+&lt;li&gt;目標是讓 domain logic 與其他部分分離，使系統可以隨時更換技術而不影響核心邏輯&lt;/li&gt;
+&lt;li&gt;透過 &lt;strong&gt;DIP (Dependency Inversion Principle)&lt;/strong&gt; 達成
 &lt;ul&gt;
-&lt;li&gt;DIP
-&lt;ul&gt;
-&lt;li&gt;高層次模組不應該依賴低層次模組，兩者都應該依賴抽象。&lt;/li&gt;
-&lt;li&gt;抽象不應該依賴細節，細節應該依賴抽象。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;高層次模組不應依賴低層次模組，兩者應依賴抽象&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;抽象不應依賴細節，細節應依賴抽象&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;將軟體分為不同層次，並確保依賴方向只能往內部流動&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;常見架構比較&#34;&gt;常見架構比較&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;傳統三層架構 (Three-Tier Architecture)&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;依賴關係：&lt;code&gt;Presentation Layer -&amp;gt; Business Logic Layer -&amp;gt; Data Access Layer&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;這種架構會導致 Business Logic 依賴 Data Access，影響可測試性與可維護性&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;在常見的三層架構中，常會見到 Presentation Layer、Business Logic Layer、Data Access Layer
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Clean Architecture&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;這三層的依賴關係是 Presentation Layer -&amp;gt; Business Logic Layer -&amp;gt; Data Access Layer&lt;/li&gt;
-&lt;li&gt;Clean Architecture 則是會讓所有都依賴於 Business Logic Layer&lt;/li&gt;
+&lt;li&gt;所有外部層次都應依賴 &lt;strong&gt;Business Logic Layer (Use Cases)&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;依賴方向為 &lt;code&gt;Frameworks &amp;amp; Drivers -&amp;gt; Interface Adapters -&amp;gt; Use Cases -&amp;gt; Entities&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;優點&#34;&gt;優點&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;因為 domain logic 保持獨立，許多部分可以換新技術而不影響到 domain logic
+&lt;li&gt;&lt;strong&gt;技術可替換性高&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;可以單獨替換掉 adapter&lt;/li&gt;
+&lt;li&gt;domain logic 獨立於技術實現，允許更換 UI、資料庫、框架等技術&lt;/li&gt;
+&lt;li&gt;只需替換 Adapters，不影響核心邏輯&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;讓實作 dependencies 的部分可以被延遲到最後，因為 domain logic 不會依賴於他們，所以可以用 mock 來測試 domain logic&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;測試方便&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;domain logic 不依賴外部系統，可以使用 mock 測試&lt;/li&gt;
+&lt;li&gt;減少整合測試的負擔&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;元件&#34;&gt;元件&lt;/h3&gt;
-&lt;h4 id=&#34;entities&#34;&gt;Entities&lt;/h4&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;更容易擴展與維護&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;核心的 Object，帶有 data 同時也包含 enterprise  business rules
-&lt;ul&gt;
-&lt;li&gt;比如一個帳號的 entity 可能包含帳號的名稱、密碼、以及驗證密碼的方法&lt;/li&gt;
+&lt;li&gt;避免不同技術層相互耦合，讓系統更具彈性&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;use-cases&#34;&gt;Use Cases&lt;/h4&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;clean-architecture-的層次結構&#34;&gt;Clean Architecture 的層次結構&lt;/h2&gt;
+&lt;h3 id=&#34;entities&#34;&gt;Entities&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;描述 application business rules，會再調用不同 entity 的 enterprise business rules&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;核心物件&lt;/strong&gt;，負責企業規則 (Enterprise Business Rules)&lt;/li&gt;
+&lt;li&gt;只關心應用程式的核心邏輯，與技術無關&lt;/li&gt;
+&lt;li&gt;例如帳戶物件：包含帳號名稱、密碼、驗證密碼的方法&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;interface-adapters&#34;&gt;Interface Adapters&lt;/h4&gt;
+&lt;h3 id=&#34;use-cases&#34;&gt;Use Cases&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;這裡會把 data 從最適合的格式轉換成 domain layer 可以使用的格式&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;應用程式規則 (Application Business Rules)&lt;/strong&gt;，定義具體業務邏輯&lt;/li&gt;
+&lt;li&gt;負責協調 Entities，確保業務流程正確&lt;/li&gt;
+&lt;li&gt;例如處理使用者登入、交易等邏輯&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;frameworks-and-drivers&#34;&gt;Frameworks and Drivers&lt;/h4&gt;
+&lt;h3 id=&#34;interface-adapters&#34;&gt;Interface Adapters&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;這裡會包含所有的 frameworks 和 infrastructure&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;負責資料轉換&lt;/strong&gt;，讓資料符合不同層的需求&lt;/li&gt;
+&lt;li&gt;例如 View Model 轉換、DTO 轉換、Repository 轉換&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;frameworks-and-drivers&#34;&gt;Frameworks and Drivers&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;包含所有技術相關的部分&lt;/strong&gt;，如 Web 框架、資料庫、第三方 API&lt;/li&gt;
+&lt;li&gt;這些技術可以隨時替換，不影響 Use Cases 和 Entities&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         </item>
@@ -937,75 +1058,62 @@ Decorator 和 Component 都繼承同一個 interface。
         <guid>https://roykesydon.github.io/Blog/p/%E9%A0%98%E5%9F%9F%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88-domain-driven-design/</guid>
         <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
 &lt;p&gt;軟體要對 domain 做 Modeling，呈現出 domain 裡的核心概念，才能滿足使用者需求，因此不乏與領域專家的討論&lt;/p&gt;
-&lt;p&gt;寫這篇的時候我還沒嗑完 Eric 的聖經，可能嗑完了之後會回來修改&lt;/p&gt;
 &lt;h2 id=&#34;通用語言-ubiquitous-language&#34;&gt;通用語言 Ubiquitous Language&lt;/h2&gt;
-&lt;p&gt;鑒於程式開發人員與領域專家熟悉知識的差異，會產生交流困難&lt;/p&gt;
-&lt;p&gt;因此領域專家和開發團隊要訂定共同的語言，並且盡可能少用自己知道的術語&lt;/p&gt;
-&lt;h2 id=&#34;uml&#34;&gt;UML&lt;/h2&gt;
-&lt;p&gt;UML 適合用在小型模型上，它擅長表達類別間的關係，但對於抽象概念卻沒那麼好傳達&lt;/p&gt;
-&lt;p&gt;因此用 UML 建構模型時，理想上要添加額外的文字，傳達一些圖所不能表達的 behavior 和 constraint&lt;/p&gt;
-&lt;p&gt;並且不能一次寫過於複雜，而是分塊處理&lt;/p&gt;
+&lt;p&gt;開發人員與領域專家熟悉的知識不同，容易產生交流困難。因此：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;領域專家和開發團隊要訂定共同的語言，避免使用自己熟悉但對方不理解的術語。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;確保這些語言在代碼、文件、溝通中保持一致&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;layered-architecture&#34;&gt;Layered Architecture&lt;/h2&gt;
 &lt;p&gt;分為四個概念層，只會往下調用，可能會跨層&lt;/p&gt;
 &lt;p&gt;可以達到關注點分離 (separation of concerns)，提高各個方面的 cohesive&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;User Interface (Presentation Layer)&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;User Interface (Presentation Layer)
-&lt;ul&gt;
-&lt;li&gt;呈現給 user 的 UI，User 可能是另一個系統&lt;/li&gt;
+&lt;li&gt;負責 UI 呈現（使用者可能是人或另一個系統）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Application Layer
+&lt;li&gt;&lt;strong&gt;Application Layer&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;不含 bussiness logic，指揮表達領域概念的物件來完成任務&lt;/li&gt;
+&lt;li&gt;不包含 &lt;strong&gt;business logic&lt;/strong&gt;，負責協調 &lt;strong&gt;domain object&lt;/strong&gt; 完成業務流程&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Domain Layer
+&lt;li&gt;&lt;strong&gt;Domain Layer&lt;/strong&gt;（&lt;strong&gt;核心&lt;/strong&gt;）
 &lt;ul&gt;
-&lt;li&gt;有關 domain 的資訊都在這裡，業務邏輯在此處理&lt;/li&gt;
-&lt;li&gt;表達業務概念、狀態、規則&lt;/li&gt;
-&lt;li&gt;劃分出這層是 Model-Driven Design 的關鍵&lt;/li&gt;
+&lt;li&gt;負責業務邏輯、業務規則、狀態管理。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;這一層的設計是 Model-Driven Design 的關鍵！&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Infrastructure layer
+&lt;li&gt;&lt;strong&gt;Infrastructure Layer&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;supporting library&lt;/li&gt;
+&lt;li&gt;負責技術支援（如資料庫存取、外部 API 連接）&lt;/li&gt;
 &lt;li&gt;保存業務狀態的技術細節在此實作&lt;/li&gt;
-&lt;li&gt;為前三個 layer 服務&lt;/li&gt;
+&lt;li&gt;為前三層提供支援&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;entity&#34;&gt;Entity&lt;/h2&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;主要概念&#34;&gt;主要概念&lt;/h2&gt;
+&lt;h3 id=&#34;entity實體&#34;&gt;Entity（實體）&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;具備 identity&lt;/li&gt;
-&lt;li&gt;identity 在 status 經過改變後依然不變&lt;/li&gt;
-&lt;li&gt;追蹤 entity 需要高成本&lt;/li&gt;
-&lt;li&gt;mutable&lt;/li&gt;
+&lt;li&gt;具備 &lt;strong&gt;identity&lt;/strong&gt;，即使 &lt;strong&gt;state&lt;/strong&gt; 改變，identity 仍保持不變&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mutable&lt;/strong&gt;，但應該透過業務邏輯來控制修改方式&lt;/li&gt;
+&lt;li&gt;追蹤 &lt;strong&gt;Entity&lt;/strong&gt; 需要較高的成本&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;value-object&#34;&gt;Value Object&lt;/h2&gt;
+&lt;h3 id=&#34;value-object值物件&#34;&gt;Value Object（值物件）&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;沒有 identity&lt;/li&gt;
-&lt;li&gt;只關心 obejct 的 value&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;沒有 identity&lt;/strong&gt;，只關心 &lt;strong&gt;Value&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Immutable&lt;/strong&gt;（不可變），如需修改，則應&lt;strong&gt;創建新的值物件&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;可以安全地&lt;strong&gt;共用&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;可以輕易創建丟棄&lt;/li&gt;
-&lt;li&gt;immutable (不變的)
-&lt;ul&gt;
-&lt;li&gt;如果想修改數值就創新的&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;可被共用&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;service&#34;&gt;Service&lt;/h2&gt;
+&lt;h3 id=&#34;service&#34;&gt;Service&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;有些動作不屬於某個 Entity 或 Value Object，因為它是跨物件的&lt;/li&gt;
-&lt;li&gt;Stateless
-&lt;ul&gt;
-&lt;li&gt;每個請求不互相影響&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Stateless&lt;/strong&gt;（無狀態）：每個請求互不影響&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;aggregate&#34;&gt;Aggregate&lt;/h2&gt;
+&lt;h2 id=&#34;aggregate聚合&#34;&gt;Aggregate（聚合）&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;把複雜關聯的物件圈在一起考量&lt;/li&gt;
-&lt;li&gt;確保 consistency 和 inveraints
+&lt;li&gt;&lt;strong&gt;把複雜關聯的物件聚合在一起&lt;/strong&gt;，確保 &lt;strong&gt;consistency&lt;/strong&gt; 和 &lt;strong&gt;invariants&lt;/strong&gt;
 &lt;ul&gt;
 &lt;li&gt;consistency (一致性)
 &lt;ul&gt;
@@ -1019,25 +1127,96 @@ Decorator 和 Component 都繼承同一個 interface。
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;aggregate-root&#34;&gt;Aggregate root&lt;/h3&gt;
+&lt;li&gt;&lt;strong&gt;Aggregate Root&lt;/strong&gt;：
 &lt;ul&gt;
-&lt;li&gt;具備 global identity，其他內部 entity 只有 local identity&lt;/li&gt;
+&lt;li&gt;具備 &lt;strong&gt;global identity&lt;/strong&gt;，內部 Entity 只有 &lt;strong&gt;local identity&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;通常是 entity 擔任&lt;/li&gt;
-&lt;li&gt;外部只能存取它，不能存取 aggregate 的其他 entity 或 value obejct&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;外部只能透過 Aggregate Root 存取內部其他物件&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;factory&#34;&gt;Factory&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;若創建 aggregate、entity、value object 的過程很複雜，或是涉及專業知識，就該用 factory 包起來&lt;/li&gt;
-&lt;li&gt;對於不複雜的情況，或是想控制更多細節，可以只依賴於簡單的建構函式&lt;/li&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;repository&#34;&gt;Repository&lt;/h2&gt;
-&lt;p&gt;如果大家都直接存取資料庫的各種物件，會破壞原本精心設計的結構，破壞封裝性&lt;/p&gt;
-&lt;p&gt;Repositoy 用來存取物件，封裝了資料庫操作&lt;/p&gt;
-&lt;h2 id=&#34;domain-event&#34;&gt;Domain event&lt;/h2&gt;
+&lt;h2 id=&#34;其他-building-blocks&#34;&gt;其他 Building Blocks&lt;/h2&gt;
+&lt;h3 id=&#34;factory&#34;&gt;Factory&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;Domain 中重要的事情&lt;/li&gt;
-&lt;li&gt;可以用在其他物件和 aggrgate 訂閱，讓 aggregate 通知他們 domain event 的發生&lt;/li&gt;
+&lt;li&gt;若創建 aggregate、entity、value object 的過程很複雜，或是涉及專業知識，就該用 factory 封裝&lt;/li&gt;
+&lt;li&gt;若情況不複雜，或是需要更細的控制，可以直接使用建構函式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;repository&#34;&gt;Repository&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;若所有物件都直接存取資料庫，會破壞精心設計的結構，導致封裝性降低&lt;/li&gt;
+&lt;li&gt;Repository 封裝了資料庫操作，提供物件存取的統一介面&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;domain-event&#34;&gt;Domain event&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;代表 Domain 中的重要事件&lt;/li&gt;
+&lt;li&gt;其他物件或 aggregate 可以訂閱它，讓 aggregate 通知它們某個 domain event 發生&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;strategic-design&#34;&gt;Strategic Design&lt;/h2&gt;
+&lt;h3 id=&#34;subdomain&#34;&gt;Subdomain&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;將 domain 拆分為小塊，理想情況下 subdomain 和 bounded context 是一對一的關係&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;類型&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Core Subdomain&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;公司的競爭優勢所在，最核心的業務邏輯，例如搜尋引擎的搜尋演算法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Generic Subdomain&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;一般常見的功能，例如登入系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Supporting Subdomain&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;輔助核心業務的部分，例如電商網站的商品篩選功能&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;bounded-context&#34;&gt;Bounded Context&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;劃定界線，確保同一個 bounded context 內的概念和規則保持一致&lt;/li&gt;
+&lt;li&gt;相同的名詞可能在不同的 context 中有不同的意義&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;context-map&#34;&gt;Context Map&lt;/h3&gt;
+&lt;p&gt;描述 Bounded Context 之間的關係&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;上下游 (U/D)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;上游提供服務，下游依賴上游&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Shared Kernel&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;兩個 BC 共享某些部分&lt;/li&gt;
+&lt;li&gt;違反 BC 原則，是一種例外設計&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Customer-Supplier&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;一個子系統重度依賴另一個子系統&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Conformist&lt;/strong&gt;：Customer 完全配合 Supplier&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Partnership&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;兩個 BC 互相合作，沒有主次之分，成敗與共&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Anticorruption Layer (ACL)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;在開發系統與外部系統之間加一層適配，防止影響內部模型&lt;/li&gt;
+&lt;li&gt;常用到 &lt;strong&gt;Facade&lt;/strong&gt; 和 &lt;strong&gt;Adapter&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Open Host Service (OHS)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;外部系統提供統一的服務接口，避免每個用戶端都要自己實作 ACL&lt;/li&gt;
+&lt;li&gt;通常搭配 &lt;strong&gt;Published Language (PL)&lt;/strong&gt;（PL 是協定傳送資料的格式，例如 XML、JSON、Protocol Buffer）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;anti-pattern&#34;&gt;Anti-Pattern&lt;/h2&gt;
 &lt;ul&gt;
@@ -1051,82 +1230,6 @@ Decorator 和 Component 都繼承同一個 interface。
 &lt;ul&gt;
 &lt;li&gt;貧血模型&lt;/li&gt;
 &lt;li&gt;只有 getter 和 setter，沒有業務邏輯的模型&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;subdomain&#34;&gt;Subdomain&lt;/h2&gt;
-&lt;p&gt;把 domain 切分成小塊，理想上 subdomain 和 bounded context 有 one-to-one 的關係&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Types
-&lt;ul&gt;
-&lt;li&gt;core subdomain
-&lt;ul&gt;
-&lt;li&gt;和其他競爭者相比不同的部分，最核心的業務，比如搜尋引擎中的搜尋演算法&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;generic subdomain
-&lt;ul&gt;
-&lt;li&gt;大家都會弄的部分，比如登入系統&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;supporting subdomain
-&lt;ul&gt;
-&lt;li&gt;用來輔助 core subdomain 的部分，比如篩選網頁&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;bounded-context&#34;&gt;Bounded Context&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;劃出 boundary，確保 boundary 內用的概念、規則皆一致&lt;/li&gt;
-&lt;li&gt;同個名詞可能出現在不同的 context，但有不同意思&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;context-map&#34;&gt;Context Map&lt;/h2&gt;
-&lt;p&gt;描述 BC 和 BC 間的關係&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;上下游 (U/D)
-&lt;ul&gt;
-&lt;li&gt;上游提供下游 (下游依賴上游)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Shared Kernel
-&lt;ul&gt;
-&lt;li&gt;兩個 BC 共用的部份&lt;/li&gt;
-&lt;li&gt;違反 BC 的基本原則，是一種例外設計&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Customer-Supplier
-&lt;ul&gt;
-&lt;li&gt;一個子系統重度依賴另一個子系統&lt;/li&gt;
-&lt;li&gt;Conformist
-&lt;ul&gt;
-&lt;li&gt;Customer 完全配合 Supplier&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Partnership
-&lt;ul&gt;
-&lt;li&gt;兩個 BC 互相合作，沒有以誰為主&lt;/li&gt;
-&lt;li&gt;一起成功或一起失敗&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Anticorruption Layer (ACL)
-&lt;ul&gt;
-&lt;li&gt;開發系統和外部系統的中間層&lt;/li&gt;
-&lt;li&gt;可能出現在調用 legacy system&lt;/li&gt;
-&lt;li&gt;常用到 Facade 和 Adapter&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Open Host Service (OHS)
-&lt;ul&gt;
-&lt;li&gt;如果外部子系統要給一堆用戶端子系統調用，就得在所有用戶端子系統搞 ACL&lt;/li&gt;
-&lt;li&gt;外部系統做為服務提供，常會搭配 Published Language (PL)
-&lt;ul&gt;
-&lt;li&gt;PL 是協定傳送資料的格式，比如 XML、JSON 或是 Protocol Buffer&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1150,28 +1253,34 @@ Decorator 和 Component 都繼承同一個 interface。
 &lt;p&gt;在不改變軟體行為的情況下，對軟體內部構造進行改善&lt;/p&gt;
 &lt;h2 id=&#34;code-smell&#34;&gt;Code Smell&lt;/h2&gt;
 &lt;p&gt;也稱 Bad Smell，代表程式碼中需要重構的部分&lt;/p&gt;
-&lt;h3 id=&#34;duplicated-code&#34;&gt;Duplicated Code&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;重複程式碼
-&lt;ul&gt;
-&lt;li&gt;在同個 Class
-&lt;ul&gt;
-&lt;li&gt;Extract Method&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;在不同 Class
-&lt;ul&gt;
-&lt;li&gt;Extract Class&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
+&lt;h2 id=&#34;bloaters&#34;&gt;Bloaters&lt;/h2&gt;
+&lt;p&gt;程式碼（類別、方法）過於龐大&lt;/p&gt;
 &lt;h3 id=&#34;long-method&#34;&gt;Long Method&lt;/h3&gt;
 &lt;ul&gt;
+&lt;li&gt;部分解法
+&lt;ul&gt;
 &lt;li&gt;用 Extract Method 拆解過長的 function&lt;/li&gt;
+&lt;li&gt;用 Replace Temp with Query 取代暫存變數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;large-class&#34;&gt;Large Class&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一個 Class 有太多 fields / methods / lines&lt;/li&gt;
+&lt;li&gt;部分解法
+&lt;ul&gt;
+&lt;li&gt;Extract Class&lt;/li&gt;
+&lt;li&gt;Extract Subclass
+&lt;ul&gt;
+&lt;li&gt;把部分功能移到新建的子類別&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;long-parameter-list&#34;&gt;Long Parameter List&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;部分解法
 &lt;ul&gt;
 &lt;li&gt;Preserve Whole Object
 &lt;ul&gt;
@@ -1180,70 +1289,207 @@ Decorator 和 Component 都繼承同一個 interface。
 &lt;/li&gt;
 &lt;li&gt;Introduce Parameter Object
 &lt;ul&gt;
-&lt;li&gt;把相關的資料包成一個 Object&lt;/li&gt;
+&lt;li&gt;把相關的參數包成一個 Object&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;large-class&#34;&gt;Large Class&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;一個 Class 有太多 fields / methods / lines&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;magic-number&#34;&gt;Magic Number&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;特殊數值直接用數字表示，日後修改每個地方都要改&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;lack-of-comments&#34;&gt;Lack of Comments&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;加註解的好時機：寫程式前寫上&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;switch-statements&#34;&gt;Switch Statements&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;可利用「多型 (Polymorphism)」解決&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;divergent-change&#34;&gt;Divergent Change&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;一個類別有太多改變的原因&lt;/li&gt;
-&lt;li&gt;盡量讓其遵守 SRP&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;shotgun-surgery&#34;&gt;Shotgun Surgery&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;某個責任被分散到大量的 Class 身上，使修改其時要大量修改&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;feature-envy&#34;&gt;Feature Envy&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;存取別的 Object 的 Data 的情形比自己的還頻繁&lt;/li&gt;
-&lt;li&gt;這方法可能應該屬於另一個 Object&lt;/li&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;data-clumps&#34;&gt;Data Clumps&lt;/h3&gt;
 &lt;ul&gt;
+&lt;li&gt;不同的程式碼區域出現相同的變數組（Guru 舉的例子是連接資料庫用的參數）&lt;/li&gt;
 &lt;li&gt;常一起出現的資料群應該被單獨抽成一個 Class&lt;/li&gt;
+&lt;li&gt;部分解法
+&lt;ul&gt;
+&lt;li&gt;Extract Class&lt;/li&gt;
+&lt;li&gt;Introduce Parameter Object&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;primitive-obsession&#34;&gt;Primitive Obsession&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;過度使用基本類別，造成 Shotgun Surgery&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;message-chains&#34;&gt;Message Chains&lt;/h3&gt;
+&lt;li&gt;過度使用基本類別（primitives），造成 Shotgun Surgery&lt;/li&gt;
+&lt;li&gt;Magic Number 也是一種 Primitive Obsession&lt;/li&gt;
+&lt;li&gt;部分解法
 &lt;ul&gt;
-&lt;li&gt;Client 請求 A 物件，A 物件又請求 B 物件&lt;/li&gt;
+&lt;li&gt;Replace Data Value with Object&lt;/li&gt;
+&lt;li&gt;Replace Type Code with Class&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;lazy-class&#34;&gt;Lazy Class&lt;/h3&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;object-orientation-abusers&#34;&gt;Object-Orientation Abusers&lt;/h2&gt;
+&lt;p&gt;亂用物件導向程式設計原則&lt;/p&gt;
+&lt;h3 id=&#34;switch-statements&#34;&gt;Switch Statements&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;把冗員類別移除&lt;/li&gt;
+&lt;li&gt;有非常複雜的 Switch Case 或是 if-else&lt;/li&gt;
+&lt;li&gt;部分解法
+&lt;ul&gt;
+&lt;li&gt;Replace Conditional with Polymorphism&lt;/li&gt;
+&lt;li&gt;Replace Type Code with Subclasses
+&lt;ul&gt;
+&lt;li&gt;直接把多種狀態個別建立子物件，並把相關行為放進去，用多型處理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Replace Type Code with State/Strategy
+&lt;ul&gt;
+&lt;li&gt;用一個 state 物件來取代 type code&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;temporary-field&#34;&gt;Temporary Field&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;Instance variable 只有在特殊情形才被使用，應該改為區域變數或參數&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;inappropriate-intimacy&#34;&gt;Inappropriate Intimacy&lt;/h3&gt;
+&lt;li&gt;指那些只在特定情況下才會被使用的 field，平時都是 null&lt;/li&gt;
+&lt;li&gt;通常是因為存在需要大量參數的 function，但是這些參數被選擇放到 field&lt;/li&gt;
+&lt;li&gt;部分解法
 &lt;ul&gt;
-&lt;li&gt;Classes 間頻繁讀取對方資料&lt;/li&gt;
-&lt;li&gt;理解程式要同時看懂兩者&lt;/li&gt;
+&lt;li&gt;Extract Class
+&lt;ul&gt;
+&lt;li&gt;把這些 field 和會用到的 function 抽成一個 Class&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Introduce Null Object
+&lt;ul&gt;
+&lt;li&gt;用一個 Null Object 來取代 null，他可以提供一些預設的行為&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;alternative-classes-with-different-interfaces&#34;&gt;Alternative Classes with Different Interfaces&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;兩個 Class 具有功能相同、命名不同的 function&lt;/li&gt;
-&lt;li&gt;可汲取共同部分為 Super Class 來解決&lt;/li&gt;
+&lt;li&gt;部分解法
+&lt;ul&gt;
+&lt;li&gt;Rename Method&lt;/li&gt;
+&lt;li&gt;Extract Superclass
+&lt;ul&gt;
+&lt;li&gt;把兩個 Class 的共同功能抽成一個父類別&lt;/li&gt;
 &lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;change-preventers&#34;&gt;Change Preventers&lt;/h2&gt;
+&lt;p&gt;一處改變會導致多處程式碼改變&lt;/p&gt;
+&lt;h3 id=&#34;divergent-change&#34;&gt;Divergent Change&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;對一個類別的修改會導致類別的多處也需要修改&lt;/li&gt;
+&lt;li&gt;部分解法
+&lt;ul&gt;
+&lt;li&gt;Extract Class&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;shotgun-surgery&#34;&gt;Shotgun Surgery&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;某個責任被分散到大量的 Class 身上，使修改其時要大量修改&lt;/li&gt;
+&lt;li&gt;對多個類別進行同一種修改&lt;/li&gt;
+&lt;li&gt;部分解法
+&lt;ul&gt;
+&lt;li&gt;Move Method&lt;/li&gt;
+&lt;li&gt;Move Field&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;dispensables&#34;&gt;Dispensables&lt;/h2&gt;
+&lt;p&gt;不必要的程式碼&lt;/p&gt;
+&lt;h3 id=&#34;duplicated-code&#34;&gt;Duplicated Code&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;多個程式碼片段幾乎相同&lt;/li&gt;
+&lt;li&gt;部分解法
+&lt;ul&gt;
+&lt;li&gt;Extract Method&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;lazy-class&#34;&gt;Lazy Class&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;沒什麼用的冗餘 Class&lt;/li&gt;
+&lt;li&gt;部分解法
+&lt;ul&gt;
+&lt;li&gt;Inline Class
+&lt;ul&gt;
+&lt;li&gt;把這個 Class 的 feature 全部移到另一個 Class&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Collapse Hierarchy
+&lt;ul&gt;
+&lt;li&gt;子類別和父類別功能差不多，可以把子類別和父類別合併&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;couplers&#34;&gt;Couplers&lt;/h2&gt;
+&lt;p&gt;導致類別之間高度耦合&lt;/p&gt;
+&lt;h3 id=&#34;feature-envy&#34;&gt;Feature Envy&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;存取別的 Object 的 Data 的情形比自己的還頻繁&lt;/li&gt;
+&lt;li&gt;這方法可能應該屬於另一個 Object&lt;/li&gt;
+&lt;li&gt;部分解法
+&lt;ul&gt;
+&lt;li&gt;Move Method
+&lt;ul&gt;
+&lt;li&gt;把這個方法移到另一個 Class&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Extract Method
+&lt;ul&gt;
+&lt;li&gt;如果只有一部分有這種情況，可以把這部分抽出來&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;message-chains&#34;&gt;Message Chains&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Client 請求 A 物件，A 物件又請求 B 物件，以此類推&lt;/li&gt;
+&lt;li&gt;部分解法
+&lt;ul&gt;
+&lt;li&gt;Hide Delegate
+&lt;ul&gt;
+&lt;li&gt;情境是 client 從 A 物件取得 B 物件，然後又呼叫 B 物件的方法&lt;/li&gt;
+&lt;li&gt;解法是把 B 物件的方法轉移給 A 物件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Extract Method &amp;amp; Move Method
+&lt;ul&gt;
+&lt;li&gt;把最終的方法抽出來，放到開頭的物件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;inappropriate-intimacy&#34;&gt;Inappropriate Intimacy&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一個類別使用另一個類別的內部欄位或方法
+&lt;ul&gt;
+&lt;li&gt;不單是存取私有變數，應該說依賴於另外一個類別的實作細節，比如出於某些原因知道要以特定順序呼叫方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;和 Feature Envy 相比，損害了其他類別的封裝性&lt;/li&gt;
+&lt;li&gt;部分解法
+&lt;ul&gt;
+&lt;li&gt;Move Method / Move Field
+&lt;ul&gt;
+&lt;li&gt;如果該類別確實不需要這些東西可以考慮&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Extract Class
+&lt;ul&gt;
+&lt;li&gt;把這些方法和欄位抽成一個 Class&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
 </description>
         </item>
         <item>
@@ -1574,250 +1820,316 @@ Decorator 和 Component 都繼承同一個 interface。
 </description>
         </item>
         <item>
+        <title>UML 筆記</title>
+        <link>https://roykesydon.github.io/Blog/p/uml-%E7%AD%86%E8%A8%98/</link>
+        <pubDate>Thu, 09 Mar 2023 14:26:17 +0800</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/p/uml-%E7%AD%86%E8%A8%98/</guid>
+        <description>&lt;h2 id=&#34;class-diagram&#34;&gt;Class Diagram&lt;/h2&gt;
+&lt;h3 id=&#34;類別關係-class-relationships&#34;&gt;類別關係 (Class Relationships)&lt;/h3&gt;
+&lt;h4 id=&#34;依賴-dependency&#34;&gt;依賴 (Dependency)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;描述&lt;/strong&gt;：「uses-a」關係，表示某個類別&lt;strong&gt;暫時依賴&lt;/strong&gt;於另一個類別，通常體現在方法的參數或回傳值中。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;符號&lt;/strong&gt;：虛線箭頭 &lt;code&gt;- - -&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：&lt;code&gt;Class A - - -&amp;gt; Class B&lt;/code&gt;（A 使用 B，但 B 的變動不會影響 A）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;關聯-association&#34;&gt;關聯 (Association)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;描述&lt;/strong&gt;：「knows-a」關係，表示兩個類別彼此有關聯，可存取對方的屬性或方法。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;符號&lt;/strong&gt;：實線 &lt;code&gt;-----&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;額外資訊&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;單向關聯&lt;/strong&gt;：A 知道 B，但 B 不知道 A&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;雙向關聯&lt;/strong&gt;：A 和 B 彼此知道對方&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;聚合-aggregation&#34;&gt;聚合 (Aggregation)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;描述&lt;/strong&gt;：「has-a」關係，表示物件之間的組合，但子物件 (&lt;code&gt;child&lt;/code&gt;) 可以獨立存在，不受 &lt;code&gt;parent&lt;/code&gt; 影響。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;符號&lt;/strong&gt;：空心菱形 &lt;code&gt;◊-----&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：學校 (&lt;code&gt;School&lt;/code&gt;) 擁有多個老師 (&lt;code&gt;Teacher&lt;/code&gt;)，但學校刪除後，老師仍然可以存在。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;組合-composition&#34;&gt;組合 (Composition)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;描述&lt;/strong&gt;：「has-a」關係，強於聚合，表示 &lt;code&gt;child&lt;/code&gt; 的生命週期依賴 &lt;code&gt;parent&lt;/code&gt;，若 &lt;code&gt;parent&lt;/code&gt; 被刪除，&lt;code&gt;child&lt;/code&gt; 也會消失。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;符號&lt;/strong&gt;：實心菱形 &lt;code&gt;◆-----&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：房子 (&lt;code&gt;House&lt;/code&gt;) 由房間 (&lt;code&gt;Room&lt;/code&gt;) 組成，若房子被拆除，房間也會消失。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;繼承-inheritance&#34;&gt;繼承 (Inheritance)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;描述&lt;/strong&gt;：「is-a」關係，表示子類別 (&lt;code&gt;subclass&lt;/code&gt;) 繼承父類別 (&lt;code&gt;superclass&lt;/code&gt;) 的屬性和行為。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;符號&lt;/strong&gt;：實線箭頭 &lt;code&gt;-----▷&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：&lt;code&gt;Dog&lt;/code&gt; 是 &lt;code&gt;Animal&lt;/code&gt; 的子類別 (&lt;code&gt;Dog -----▷ Animal&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;實作-implementation&#34;&gt;實作 (Implementation)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;描述&lt;/strong&gt;：「can-do」關係，表示類別實作 (&lt;code&gt;implements&lt;/code&gt;) 介面 (&lt;code&gt;interface&lt;/code&gt;)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;符號&lt;/strong&gt;：虛線箭頭 &lt;code&gt;- - - -▷&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：&lt;code&gt;Bird&lt;/code&gt; 實作 &lt;code&gt;Flyable&lt;/code&gt; (&lt;code&gt;Bird - - - -▷ Flyable&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;額外特性-other-features&#34;&gt;額外特性 (Other Features)&lt;/h3&gt;
+&lt;h4 id=&#34;導向-navigation&#34;&gt;導向 (Navigation)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;若兩個類別都能訪問對方，則使用無箭頭的關聯線 &lt;code&gt;-----&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;若只有一方能訪問對方，則使用箭頭 &lt;code&gt;-----&amp;gt;&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;角色名稱-role-name&#34;&gt;角色名稱 (Role Name)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;在關聯線旁標示角色名稱，表示該類別在關係中的角色。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：&lt;code&gt;Person&lt;/code&gt; 與 &lt;code&gt;Car&lt;/code&gt; 之間的關係中，&lt;code&gt;Car&lt;/code&gt; 可能有 &lt;code&gt;owner&lt;/code&gt; 角色。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;多重度-multiplicity&#34;&gt;多重度 (Multiplicity)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;定義關聯物件的數量。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;1&lt;/code&gt;：只能有一個實例&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;0..1&lt;/code&gt;：最多一個&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;*&lt;/code&gt;：零個或多個&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;1..*&lt;/code&gt;：至少一個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;自關聯-self-association&#34;&gt;自關聯 (Self-Association)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;當類別內部的物件彼此有關聯時，可用自關聯 (Self-Association)。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：&lt;code&gt;Employee&lt;/code&gt; 可能是另一個 &lt;code&gt;Employee&lt;/code&gt; 的 &lt;code&gt;manager&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;存取修飾詞-access-modifiers&#34;&gt;存取修飾詞 (Access Modifiers)&lt;/h3&gt;
+&lt;p&gt;在 UML 類別圖中，可以用 &lt;code&gt;+&lt;/code&gt;、&lt;code&gt;-&lt;/code&gt;、&lt;code&gt;#&lt;/code&gt; 來表示不同的存取權限：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;符號&lt;/th&gt;
+&lt;th&gt;存取修飾詞&lt;/th&gt;
+&lt;th&gt;說明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;+&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;public&lt;/td&gt;
+&lt;td&gt;任何類別都可以存取&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;-&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;private&lt;/td&gt;
+&lt;td&gt;只有該類別本身可以存取&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;#&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;protected&lt;/td&gt;
+&lt;td&gt;只有該類別與其子類別可以存取&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;~&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;package (default)&lt;/td&gt;
+&lt;td&gt;只有相同 package 內的類別可以存取&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+</description>
+        </item>
+        <item>
         <title>軟體設計 - Low Level</title>
         <link>https://roykesydon.github.io/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88-low-level/</link>
         <pubDate>Wed, 08 Mar 2023 14:26:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/p/%E8%BB%9F%E9%AB%94%E8%A8%AD%E8%A8%88-low-level/</guid>
-        <description>&lt;h2 id=&#34;uml-類別圖&#34;&gt;UML 類別圖&lt;/h2&gt;
-&lt;h3 id=&#34;relationship&#34;&gt;Relationship&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Dependency
-&lt;ul&gt;
-&lt;li&gt;&amp;ldquo;uses-a&amp;rdquo;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Association
-&lt;ul&gt;
-&lt;li&gt;&amp;ldquo;knows-a&amp;rdquo;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Composition
-&lt;ul&gt;
-&lt;li&gt;&amp;ldquo;has-a&amp;rdquo;&lt;/li&gt;
-&lt;li&gt;child 的存在依賴於 parent，若刪除 parent，child 也會隨之刪除&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Aggregation
-&lt;ul&gt;
-&lt;li&gt;&amp;ldquo;has-a&amp;rdquo;&lt;/li&gt;
-&lt;li&gt;child 的存在獨立於 parent，若刪除 parent，child 不會隨之刪除&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Inheritance
-&lt;ul&gt;
-&lt;li&gt;&amp;ldquo;is-a&amp;rdquo;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Implementation
-&lt;ul&gt;
-&lt;li&gt;&amp;ldquo;can-do&amp;rdquo;&lt;/li&gt;
-&lt;li&gt;實現 interface&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;other-features&#34;&gt;other features&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;Navigation
-&lt;ul&gt;
-&lt;li&gt;當兩個 class 都可以看到對方，就用沒箭頭的關聯線，否則有箭頭&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Role Name
-&lt;ul&gt;
-&lt;li&gt;類別中的 Attribute&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Multiplicity
-&lt;ul&gt;
-&lt;li&gt;關聯端點上可以寫數量，代表物件個數&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Self-Association
-&lt;ul&gt;
-&lt;li&gt;同個類別的物件彼此有關係&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;軟體設計原則&#34;&gt;軟體設計原則&lt;/h2&gt;
+        <description>&lt;h2 id=&#34;軟體設計原則&#34;&gt;軟體設計原則&lt;/h2&gt;
+&lt;h2 id=&#34;軟體設計原則-1&#34;&gt;軟體設計原則&lt;/h2&gt;
 &lt;h3 id=&#34;encapsulate-what-varies&#34;&gt;Encapsulate What Varies&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;把經常改變的程式碼封裝起來，使日後修改時不會影響其他區塊的程式碼&lt;/li&gt;
-&lt;li&gt;實際使用的情境，可以把常改變的東西放在 interface 後，使日後改變實作時不影響呼叫該 interface 的程式碼&lt;/li&gt;
+&lt;li&gt;封裝經常改變的程式碼，以避免影響其他區塊的程式碼，提升維護性&lt;/li&gt;
+&lt;li&gt;具體做法包括將變動部分抽象為 &lt;code&gt;interface&lt;/code&gt;，讓實作細節與使用方解耦&lt;/li&gt;
+&lt;li&gt;例如，在策略模式（Strategy Pattern）中，將變動行為封裝於獨立類別，並透過 &lt;code&gt;interface&lt;/code&gt; 進行交換&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;favor-composition-over-inheritance&#34;&gt;Favor Composition over Inheritance&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;Composition(組合)在很多情境可以取代掉 Inheritance(繼承)，甚至實現 Polymorphism(多型)&lt;/li&gt;
-&lt;li&gt;只有當 is-a 的情境出現，才用繼承比較好&lt;/li&gt;
-&lt;li&gt;Composition 使用起來更有彈性&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Composition&lt;/code&gt;（組合）在許多情境下可取代 &lt;code&gt;Inheritance&lt;/code&gt;（繼承），並能達成 &lt;code&gt;Polymorphism&lt;/code&gt;（多型）&lt;/li&gt;
+&lt;li&gt;只有在符合 &lt;code&gt;is-a&lt;/code&gt; 關係時才應考慮使用繼承，例如「貓是動物」&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Composition&lt;/code&gt; 透過組合物件的方式擴展功能，通常比繼承更具彈性，且能降低耦合度&lt;/li&gt;
+&lt;li&gt;比如有 &lt;code&gt;Engine&lt;/code&gt; 類別，&lt;code&gt;Car&lt;/code&gt; 可以有一個 &lt;code&gt;Engine&lt;/code&gt; 的物件，而不是繼承 &lt;code&gt;Engine&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;solid-設計原則&#34;&gt;SOLID 設計原則&lt;/h2&gt;
-&lt;h3 id=&#34;single-responsibility-principle-srp&#34;&gt;Single Responsibility Principle, SRP&lt;/h3&gt;
+&lt;h3 id=&#34;single-responsibility-principle-srp---單一職責原則&#34;&gt;Single Responsibility Principle (SRP) - 單一職責原則&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;單一職責原則&lt;/li&gt;
-&lt;li&gt;A class should have only one reason to change.&lt;/li&gt;
-&lt;li&gt;可以把一個複雜的 module 拆成多個&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;A class should have only one reason to change&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;每個類別應該只負責一項功能，避免職責過於複雜&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;實踐方式&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;把一個複雜的模組拆成多個獨立的類別&lt;/li&gt;
+&lt;li&gt;例如，把「資料庫存取」與「商業邏輯」分開，避免單一類別同時負責多種功能&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;open-close-principle-ocp&#34;&gt;Open-Close Principle, OCP&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;開放封閉原則&lt;/li&gt;
-&lt;li&gt;You should be able to extend the behavior of a system without having to modify that system.&lt;/li&gt;
-&lt;li&gt;要可以擴充，同時不修改到原系統&lt;/li&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;liskovsubstitution-principle-lsp&#34;&gt;LiskovSubstitution Principle, LSP&lt;/h3&gt;
+&lt;h3 id=&#34;open-closed-principle-ocp---開放封閉原則&#34;&gt;Open-Closed Principle (OCP) - 開放封閉原則&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;里氏替換原則&lt;/li&gt;
-&lt;li&gt;父類別有的功能，子類別必須遵從，父類別的部分要可以直接替換成子類別&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;You should be able to extend the behavior of a system without having to modify that system&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;系統應該&lt;strong&gt;對擴充開放，對修改封閉&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;實踐方式&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;使用&lt;strong&gt;抽象類別&lt;/strong&gt;與&lt;strong&gt;介面&lt;/strong&gt;，讓新功能可以透過擴展來新增，而不是直接修改原始碼&lt;/li&gt;
+&lt;li&gt;例如，在 &lt;code&gt;Shape&lt;/code&gt; 介面下定義 &lt;code&gt;draw()&lt;/code&gt;，新增 &lt;code&gt;Circle&lt;/code&gt;、&lt;code&gt;Rectangle&lt;/code&gt; 只需實作該介面，而無需修改原有 &lt;code&gt;Shape&lt;/code&gt; 相關程式碼&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;interface-segregation-principle-isp&#34;&gt;Interface Segregation Principle, ISP&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;介面隔離原則&lt;/li&gt;
-&lt;li&gt;No client should be forced to depend on methods it does not use&lt;/li&gt;
-&lt;li&gt;以 interface 來說，不該讓 module 實現它不需要的功能，可以把 interface 拆小&lt;/li&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;dependency-inversion-principle-dip&#34;&gt;Dependency Inversion Principle, DIP&lt;/h3&gt;
+&lt;h3 id=&#34;liskov-substitution-principle-lsp---里氏替換原則&#34;&gt;Liskov Substitution Principle (LSP) - 里氏替換原則&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;反向依賴原則&lt;/li&gt;
-&lt;li&gt;高階模組不應該依賴低階模組，兩者都應依賴抽象層&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;子類別應該能替換父類別，且不影響程式的正確性&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;確保繼承時不破壞原有功能，避免發生「使用父類別時正常，但換成子類別就出錯」的情況&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;實踐方式&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;避免子類別重寫父類別方法時，改變原有的行為或拋出例外&lt;/li&gt;
+&lt;li&gt;例如，如果 &lt;code&gt;Bird&lt;/code&gt; 有 &lt;code&gt;fly()&lt;/code&gt; 方法，而 &lt;code&gt;Penguin&lt;/code&gt; 繼承 &lt;code&gt;Bird&lt;/code&gt;，但企鵝不會飛，則應改用 &lt;code&gt;CanFly&lt;/code&gt; 介面來區分，而非讓 &lt;code&gt;Penguin&lt;/code&gt; 繼承 &lt;code&gt;Bird&lt;/code&gt; 而空實作 &lt;code&gt;fly()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;interface-segregation-principle-isp---介面隔離原則&#34;&gt;Interface Segregation Principle (ISP) - 介面隔離原則&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;No client should be forced to depend on methods it does not use&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;避免讓一個介面擁有過多功能，導致實作該介面的類別需要實作不必要的功能&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;實踐方式&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;把大介面拆分為多個小介面，使類別只需實作與自身業務相關的介面&lt;/li&gt;
+&lt;li&gt;例如，&lt;code&gt;Worker&lt;/code&gt; 介面包含 &lt;code&gt;work()&lt;/code&gt;、&lt;code&gt;eat()&lt;/code&gt; 方法，則應將其拆成 &lt;code&gt;Workable&lt;/code&gt; 介面（包含 &lt;code&gt;work()&lt;/code&gt;）與 &lt;code&gt;Eatable&lt;/code&gt; 介面（包含 &lt;code&gt;eat()&lt;/code&gt;），避免機器人類別被迫實作 &lt;code&gt;eat()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;dependency-inversion-principle-dip---依賴反轉原則&#34;&gt;Dependency Inversion Principle (DIP) - 依賴反轉原則&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;高階模組不應該依賴低階模組，兩者都應依賴抽象層&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;抽象不應依賴具體實現，具體實現應依賴抽象&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;實踐方式&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;透過 &lt;code&gt;interface&lt;/code&gt; 或 &lt;code&gt;抽象類別&lt;/code&gt; 來解耦高階與低階模組&lt;/li&gt;
+&lt;li&gt;例如，&lt;code&gt;OrderService&lt;/code&gt; 依賴 &lt;code&gt;PaymentProcessor&lt;/code&gt; 介面，而不是直接依賴 &lt;code&gt;PayPalProcessor&lt;/code&gt; 或 &lt;code&gt;StripeProcessor&lt;/code&gt;，這樣未來更換支付方式時無需修改 &lt;code&gt;OrderService&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;modularity&#34;&gt;Modularity&lt;/h2&gt;
-&lt;h3 id=&#34;coupling&#34;&gt;Coupling&lt;/h3&gt;
+&lt;h3 id=&#34;coupling耦合&#34;&gt;Coupling（耦合）&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;模組間的依賴程度，耦合越鬆散，模組的獨立性越高，維護與擴展性越好&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&#34;tight-coupling緊密耦合&#34;&gt;Tight Coupling（緊密耦合）&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;type
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Content Coupling（內容耦合）&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Tight coupling
+&lt;li&gt;一個模組直接依賴另一個模組的內部運作&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：一個模組直接存取另一個模組的變數（假設變數表示長度，單位是公尺）
 &lt;ul&gt;
-&lt;li&gt;Content coupling
-&lt;ul&gt;
-&lt;li&gt;一個模組依賴另一個模組的內部運作&lt;/li&gt;
-&lt;li&gt;ex: 一個模組直接存取另一個模組的變數，假設回傳的數值是公尺，如果另一個模組要修改成公分，就會影響到這個模組
-&lt;ul&gt;
-&lt;li&gt;可以用 getter 抽象出 getMeter()，這樣就不會直接存取變數&lt;/li&gt;
+&lt;li&gt;若另一個模組改變單位為公分，則所有存取該變數的模組都會受到影響&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;解法&lt;/strong&gt;：透過 &lt;code&gt;getter&lt;/code&gt; 提供 &lt;code&gt;getMeter()&lt;/code&gt; 方法，而不是直接存取變數&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Common coupling
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Common Coupling（公共耦合）&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;多個模組共同存取和修改同個 global data&lt;/li&gt;
-&lt;li&gt;ex: 一個模組錯誤修改會導致其他人都壞掉&lt;/li&gt;
+&lt;li&gt;多個模組共同存取和修改同一個 &lt;code&gt;global data&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：多個模組使用相同的全域變數，當其中一個模組錯誤修改該變數時，其他模組可能會出錯&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;External coupling
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;External Coupling（外部耦合）&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;多個模組直接存取同個 external I/O&lt;/li&gt;
-&lt;li&gt;ex: API 要改就會全部都影響到&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Medium coupling
-&lt;ul&gt;
-&lt;li&gt;Control coupling
-&lt;ul&gt;
-&lt;li&gt;一個模組影響另一個模組的內部邏輯（比如說透過參數）&lt;/li&gt;
-&lt;li&gt;ex: 參數要改個寫法就會影響一堆模組&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Data-Sructure coupling
-&lt;ul&gt;
-&lt;li&gt;多個模組共同存取同個 data structure&lt;/li&gt;
-&lt;li&gt;ex: Data structure 要改就會影響到其他模組&lt;/li&gt;
+&lt;li&gt;多個模組依賴相同的外部 I/O&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：所有模組直接呼叫相同的 API，若 API 變更，所有模組都需修改&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Loose coupling
+&lt;h4 id=&#34;medium-coupling中等耦合&#34;&gt;Medium Coupling（中等耦合）&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;Data Coupling
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Control Coupling（控制耦合）&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;兩個模組 share/pass 同樣的資料&lt;/li&gt;
+&lt;li&gt;一個模組透過參數影響另一個模組的內部邏輯&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：函式 &lt;code&gt;process(data, mode)&lt;/code&gt; 內部邏輯依賴 &lt;code&gt;mode&lt;/code&gt; 參數，若 &lt;code&gt;mode&lt;/code&gt; 值的定義變更，所有呼叫該函式的地方都需同步修改&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Message Coupling
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Data-Structure Coupling（資料結構耦合）&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;多個模組間透過 message 或是 command 來溝通&lt;/li&gt;
-&lt;li&gt;和 control coupling 的差別在於，並沒有去控制某個模組，只是叫他做某件事情&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;No Coupling
-&lt;ul&gt;
-&lt;li&gt;不是好的設計&lt;/li&gt;
-&lt;li&gt;模組間沒有關聯，或是有個超巨大的模組&lt;/li&gt;
+&lt;li&gt;多個模組共用相同的 &lt;code&gt;data structure&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：若所有模組都依賴一個 &lt;code&gt;dict&lt;/code&gt; 來存取資料，當 &lt;code&gt;dict&lt;/code&gt; 結構變更時，所有模組都會受到影響&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;h4 id=&#34;loose-coupling鬆散耦合&#34;&gt;Loose Coupling（鬆散耦合）&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Data Coupling（資料耦合）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;模組之間僅透過資料交換（參數或回傳值）來溝通&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：函式 &lt;code&gt;calculateTax(amount)&lt;/code&gt; 接受 &lt;code&gt;amount&lt;/code&gt; 參數，而不依賴全域變數&lt;/li&gt;
+&lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Message Coupling（訊息耦合）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;模組之間透過訊息或指令進行溝通，而不是直接影響彼此的邏輯&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：一個模組透過 &lt;code&gt;event bus&lt;/code&gt; 發送 &lt;code&gt;order_created&lt;/code&gt; 訊息，另一個模組根據訊息執行相應動作（而不依賴具體的函式呼叫）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;cohesion&#34;&gt;Cohesion&lt;/h3&gt;
+&lt;h3 id=&#34;cohesion內聚&#34;&gt;Cohesion（內聚）&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;衡量模組內部功能的相關性，內聚度越高，模組的單一性越強，功能更專注且更易於維護&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&#34;weak-cohesion弱內聚&#34;&gt;Weak Cohesion（弱內聚）&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;type
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Coincidental Cohesion（偶然內聚）&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Weak cohesion
-&lt;ul&gt;
-&lt;li&gt;Coincidental cohesion
-&lt;ul&gt;
-&lt;li&gt;唯一的關聯是他們在同個檔案&lt;/li&gt;
-&lt;li&gt;ex: single file program&lt;/li&gt;
+&lt;li&gt;模組內的功能沒有關聯，只是被放在同一個檔案內&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：單一檔案內包含不相關的函式，如 &lt;code&gt;calculateTax()&lt;/code&gt; 和 &lt;code&gt;generateReport()&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Temporal cohesion
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Temporal Cohesion（時間內聚）&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;關聯的地方是他們在同個時間點被執行&lt;/li&gt;
-&lt;li&gt;ex: 「執行 shutdown  相關的活動」&lt;/li&gt;
+&lt;li&gt;功能的唯一關聯是它們在相同時間執行&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：&lt;code&gt;Initializer&lt;/code&gt; 類別內包含 &lt;code&gt;initDatabase()&lt;/code&gt;、&lt;code&gt;initCache()&lt;/code&gt;、&lt;code&gt;initLogger()&lt;/code&gt;，這些功能只在初始化時執行，內聚度較低&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Logical cohesion
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Logical Cohesion（邏輯內聚）&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;活動間可以被歸類在同個 general category&lt;/li&gt;
-&lt;li&gt;ex: Backup Controller，可能有很多地方需要 Backup&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Medium cohesion
-&lt;ul&gt;
-&lt;li&gt;Procedureal cohesion
-&lt;ul&gt;
-&lt;li&gt;command 間存在執行順序&lt;/li&gt;
-&lt;li&gt;ex: Clean car module 可能包含噴水、填表格、擦乾等等
-&lt;ul&gt;
-&lt;li&gt;但是 Clean car module 此處包含了操控財務資料的狀況&lt;/li&gt;
+&lt;li&gt;模組內的功能可以被歸類為相同的類別&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：&lt;code&gt;BackupController&lt;/code&gt; 負責多種不同類型的備份，沒有專注於單一職責&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Communicational cohesion
+&lt;h4 id=&#34;medium-cohesion中等內聚&#34;&gt;Medium Cohesion（中等內聚）&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;所有的 activities 都支援相同的 input/output&lt;/li&gt;
-&lt;li&gt;ex: 提取文章的作者、提取文章的標題、提取文章的內容&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Sequential cohesion
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Procedural Cohesion（程序內聚）&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;某個 activities 的輸出是另一個 activities 的輸入，且具有順序性&lt;/li&gt;
-&lt;li&gt;Procedureal cohesion 和 Communicational cohesion 的結合&lt;/li&gt;
-&lt;li&gt;這個沒那麼糟糕&lt;/li&gt;
+&lt;li&gt;模組內的功能需要以特定順序執行&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：&lt;code&gt;Sender&lt;/code&gt; 類別內包含 &lt;code&gt;connect()&lt;/code&gt;、&lt;code&gt;sendData()&lt;/code&gt;、&lt;code&gt;disconnect()&lt;/code&gt;，這些功能需要按照順序執行，內聚度較高&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Strong cohesion
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Communicational Cohesion（通信內聚）&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Functional cohesion
+&lt;li&gt;模組內的功能都圍繞在某個特定資料結構上&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：&lt;code&gt;ShoppingCart&lt;/code&gt; 類別內包含 &lt;code&gt;addItem()&lt;/code&gt;、&lt;code&gt;removeItem()&lt;/code&gt;、&lt;code&gt;calculateTotal()&lt;/code&gt;，這些功能都圍繞在 &lt;code&gt;items&lt;/code&gt; 屬性上&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Sequential Cohesion（順序內聚）&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Module 只支援只和一個問題相關的 activities&lt;/li&gt;
+&lt;li&gt;某個函式的輸出作為另一個函式的輸入，且具有執行順序&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：&lt;code&gt;readData()&lt;/code&gt; → &lt;code&gt;processData()&lt;/code&gt; → &lt;code&gt;saveData()&lt;/code&gt;，內聚度相對較高，但仍可能包含非核心功能&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Object cohesion
+&lt;/ul&gt;
+&lt;h4 id=&#34;strong-cohesion強內聚&#34;&gt;Strong Cohesion（強內聚）&lt;/h4&gt;
 &lt;ul&gt;
-&lt;li&gt;所有的 activities 都只會修改一個 object&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Functional Cohesion（功能內聚）&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;模組中的各部分都對模組中單一明確的目標有貢獻&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;：&lt;code&gt;CalculateCircleArea&lt;/code&gt; 類別僅包含 &lt;code&gt;calculateArea()&lt;/code&gt; 方法，專注於計算圓形面積&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;

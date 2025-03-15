@@ -12,117 +12,140 @@
         <pubDate>Fri, 16 Aug 2024 00:00:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/p/mongodb-%E7%AD%86%E8%A8%98/</guid>
-        <description>&lt;h2 id=&#34;mongodb&#34;&gt;MongoDB&lt;/h2&gt;
+        <description>&lt;h2 id=&#34;mongodb-基礎&#34;&gt;MongoDB 基礎&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;以 BSON (Binary JSON) 儲存資料&lt;/li&gt;
-&lt;li&gt;composite index
+&lt;li&gt;以 BSON (Binary JSON) 儲存資料
 &lt;ul&gt;
-&lt;li&gt;prefix
-&lt;ul&gt;
-&lt;li&gt;如果有一個 index 是 (a, b)，那麼 (a) 也是有效的 index&lt;/li&gt;
+&lt;li&gt;BSON 是 JSON 的二進位版本，支援更多資料型別，如日期和二進位資料&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;explain
+&lt;li&gt;_id 欄位作為預設的主鍵
 &lt;ul&gt;
-&lt;li&gt;用來看 query 的 execution plan&lt;/li&gt;
+&lt;li&gt;若未指定，MongoDB 會自動生成一個 12 字節的 ObjectId&lt;/li&gt;
+&lt;li&gt;用於確保文件中唯一性，特別在分散式系統中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;索引機制&#34;&gt;索引機制&lt;/h2&gt;
+&lt;h3 id=&#34;composite-index&#34;&gt;Composite Index&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;由多個欄位組成，例如 (a, b)&lt;/li&gt;
+&lt;li&gt;Prefix 特性
+&lt;ul&gt;
+&lt;li&gt;如果索引為 (a, b)，則 (a) 也可被單獨使用&lt;/li&gt;
+&lt;li&gt;但 (b) 或 (a, b, c) 無法直接利用此索引&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Hint
+&lt;ul&gt;
+&lt;li&gt;可強制 MongoDB 使用特定索引&lt;/li&gt;
+&lt;li&gt;用於測試或避免 optimizer 選錯索引&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;explain-分析查詢&#34;&gt;Explain 分析查詢&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來檢視查詢的執行計畫&lt;/li&gt;
+&lt;li&gt;重要欄位
+&lt;ul&gt;
 &lt;li&gt;cursor
 &lt;ul&gt;
-&lt;li&gt;BasicCursor
-&lt;ul&gt;
-&lt;li&gt;會 scan 整個 collection，是個警訊&lt;/li&gt;
+&lt;li&gt;BasicCursor 表示全表掃描，應避免&lt;/li&gt;
+&lt;li&gt;BtreeCursor 表示使用索引&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;掃描的文件數量
-&lt;ul&gt;
 &lt;li&gt;nscanned
 &lt;ul&gt;
-&lt;li&gt;掃描的 index 數量&lt;/li&gt;
+&lt;li&gt;掃描的索引數量&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;nscannedObjects
 &lt;ul&gt;
-&lt;li&gt;掃描的 document 數量&lt;/li&gt;
+&lt;li&gt;掃描的文件數量&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;n
 &lt;ul&gt;
-&lt;li&gt;回傳的 document 數量&lt;/li&gt;
+&lt;li&gt;最終返回的文件數量&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;nscanned &amp;gt;= nscannedObjects &amp;gt;= n&lt;/li&gt;
+&lt;li&gt;關係：nscanned &amp;gt;= nscannedObjects &amp;gt;= n&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;scanAndOrder
 &lt;ul&gt;
-&lt;li&gt;是否需要把文件都放在 memory 並排序&lt;/li&gt;
-&lt;li&gt;還會一次性回傳資料&lt;/li&gt;
+&lt;li&gt;表示需要將文件載入記憶體並排序&lt;/li&gt;
+&lt;li&gt;通常一次性返回所有結果，效率較低&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;hint
+&lt;h3 id=&#34;optimizer-索引選擇&#34;&gt;Optimizer 索引選擇&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;強制使用某個 index&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;optimizer 挑選索引
+&lt;li&gt;第一階段：尋找最佳索引
 &lt;ul&gt;
-&lt;li&gt;第一階段 - 挑選最佳索引
+&lt;li&gt;最佳索引條件
 &lt;ul&gt;
-&lt;li&gt;最佳索引
+&lt;li&gt;包含所有 filter 和 sort 的欄位&lt;/li&gt;
+&lt;li&gt;equality filter 必須在 range filter 之前&lt;/li&gt;
+&lt;li&gt;sort 欄位必須在 range filter 之後&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;若有多個最佳索引條件符合條件，隨便選擇一個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;第二階段：實驗性選擇
 &lt;ul&gt;
-&lt;li&gt;包含所有的 filter 和 sort 的欄位&lt;/li&gt;
-&lt;li&gt;range filter 和 sort 的欄位必須在 equality filter 的後面
+&lt;li&gt;若無最佳索引，會測試多個索引&lt;/li&gt;
+&lt;li&gt;optimizer 選擇 nscanned 最小的索引作為最終方案&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;儲存引擎&#34;&gt;儲存引擎&lt;/h2&gt;
+&lt;h3 id=&#34;mmapv1&#34;&gt;MMAPv1&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;sort 的欄位必須在 range filter 的後面&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;如果有多個最佳索引就會隨便選一個&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;第二階段 - 透過實驗挑選索引
+&lt;li&gt;MongoDB 早期的儲存引擎&lt;/li&gt;
+&lt;li&gt;特性
 &lt;ul&gt;
-&lt;li&gt;沒有最佳索引就會實驗判斷要選哪個，看看誰先找到指定數量的文件&lt;/li&gt;
-&lt;li&gt;換句話說，如果有多個索引，optimizer 會選 nscanned 最小的&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;MMAPv1
+&lt;li&gt;_id 直接對應 disk 偏移量 (diskloc)
 &lt;ul&gt;
-&lt;li&gt;Mongo 一開始用的 storage engine&lt;/li&gt;
-&lt;li&gt;_id 直接對應到 diskloc，也就是 disk 的偏移量
-&lt;ul&gt;
-&lt;li&gt;查找速度驚人，但是更新就要維護偏移量很費時&lt;/li&gt;
+&lt;li&gt;查詢速度快，但更新需維護偏移量，效能低&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;採用 database-level lock，Mongo 後來也只更新成 collection-level lock&lt;/li&gt;
+&lt;li&gt;鎖定機制
+&lt;ul&gt;
+&lt;li&gt;初始為 database-level lock&lt;/li&gt;
+&lt;li&gt;後期升級至 collection-level lock&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;WiredTiger
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;已於 MongoDB 4.0 後棄用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;wiredtiger&#34;&gt;WiredTiger&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;MongoDB 收購的 storage engine&lt;/li&gt;
-&lt;li&gt;Document-level locking&lt;/li&gt;
-&lt;li&gt;可以做到 compression&lt;/li&gt;
+&lt;li&gt;MongoDB 收購並採用的新儲存引擎&lt;/li&gt;
+&lt;li&gt;特性
+&lt;ul&gt;
+&lt;li&gt;Document-level locking，提升並發效能&lt;/li&gt;
+&lt;li&gt;支援資料壓縮，減少儲存空間&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;版本演進
+&lt;ul&gt;
 &lt;li&gt;5.2 之前
 &lt;ul&gt;
-&lt;li&gt;_id 會先被用來尋找 recordid，再用 recordid 去獲取 document&lt;/li&gt;
-&lt;li&gt;recordid 是 clustered index&lt;/li&gt;
+&lt;li&gt;_id 用於查找 recordid&lt;/li&gt;
+&lt;li&gt;recordid 作為 clustered index，指向實際文件&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;5.3
+&lt;li&gt;5.3 之後
 &lt;ul&gt;
-&lt;li&gt;_id 變成 clustered index&lt;/li&gt;
-&lt;li&gt;之前 recordid 只有 64 位，但現在 _id 作為 primary key 有 12 bytes
+&lt;li&gt;_id 直接成為 clustered index&lt;/li&gt;
+&lt;li&gt;_id 為 12 字節 (ObjectId)，比原 64 位 recordid 更大&lt;/li&gt;
+&lt;li&gt;影響
 &lt;ul&gt;
-&lt;li&gt;對 secondary index 造成更大的負擔&lt;/li&gt;
-&lt;li&gt;Mongo 想達成跨機器和 shard 的唯一性&lt;/li&gt;
+&lt;li&gt;對 secondary index 增加儲存負擔&lt;/li&gt;
+&lt;li&gt;提升跨機器和 shard 環境中的唯一性&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
