@@ -12,117 +12,140 @@
         <pubDate>Fri, 16 Aug 2024 00:00:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/p/mongodb-%E7%AD%86%E8%A8%98/</guid>
-        <description>&lt;h2 id=&#34;mongodb&#34;&gt;MongoDB&lt;/h2&gt;
+        <description>&lt;h2 id=&#34;mongodb-基礎&#34;&gt;MongoDB 基礎&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;以 BSON (Binary JSON) 儲存資料&lt;/li&gt;
-&lt;li&gt;composite index
+&lt;li&gt;以 BSON (Binary JSON) 儲存資料
 &lt;ul&gt;
-&lt;li&gt;prefix
-&lt;ul&gt;
-&lt;li&gt;如果有一個 index 是 (a, b)，那麼 (a) 也是有效的 index&lt;/li&gt;
+&lt;li&gt;BSON 是 JSON 的二進位版本，支援更多資料型別，如日期和二進位資料&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;explain
+&lt;li&gt;_id 欄位作為預設的主鍵
 &lt;ul&gt;
-&lt;li&gt;用來看 query 的 execution plan&lt;/li&gt;
+&lt;li&gt;若未指定，MongoDB 會自動生成一個 12 字節的 ObjectId&lt;/li&gt;
+&lt;li&gt;用於確保文件中唯一性，特別在分散式系統中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;索引機制&#34;&gt;索引機制&lt;/h2&gt;
+&lt;h3 id=&#34;composite-index&#34;&gt;Composite Index&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;由多個欄位組成，例如 (a, b)&lt;/li&gt;
+&lt;li&gt;Prefix 特性
+&lt;ul&gt;
+&lt;li&gt;如果索引為 (a, b)，則 (a) 也可被單獨使用&lt;/li&gt;
+&lt;li&gt;但 (b) 或 (a, b, c) 無法直接利用此索引&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Hint
+&lt;ul&gt;
+&lt;li&gt;可強制 MongoDB 使用特定索引&lt;/li&gt;
+&lt;li&gt;用於測試或避免 optimizer 選錯索引&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;explain-分析查詢&#34;&gt;Explain 分析查詢&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用來檢視查詢的執行計畫&lt;/li&gt;
+&lt;li&gt;重要欄位
+&lt;ul&gt;
 &lt;li&gt;cursor
 &lt;ul&gt;
-&lt;li&gt;BasicCursor
-&lt;ul&gt;
-&lt;li&gt;會 scan 整個 collection，是個警訊&lt;/li&gt;
+&lt;li&gt;BasicCursor 表示全表掃描，應避免&lt;/li&gt;
+&lt;li&gt;BtreeCursor 表示使用索引&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;掃描的文件數量
-&lt;ul&gt;
 &lt;li&gt;nscanned
 &lt;ul&gt;
-&lt;li&gt;掃描的 index 數量&lt;/li&gt;
+&lt;li&gt;掃描的索引數量&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;nscannedObjects
 &lt;ul&gt;
-&lt;li&gt;掃描的 document 數量&lt;/li&gt;
+&lt;li&gt;掃描的文件數量&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;n
 &lt;ul&gt;
-&lt;li&gt;回傳的 document 數量&lt;/li&gt;
+&lt;li&gt;最終返回的文件數量&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;nscanned &amp;gt;= nscannedObjects &amp;gt;= n&lt;/li&gt;
+&lt;li&gt;關係：nscanned &amp;gt;= nscannedObjects &amp;gt;= n&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;scanAndOrder
 &lt;ul&gt;
-&lt;li&gt;是否需要把文件都放在 memory 並排序&lt;/li&gt;
-&lt;li&gt;還會一次性回傳資料&lt;/li&gt;
+&lt;li&gt;表示需要將文件載入記憶體並排序&lt;/li&gt;
+&lt;li&gt;通常一次性返回所有結果，效率較低&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;hint
+&lt;h3 id=&#34;optimizer-索引選擇&#34;&gt;Optimizer 索引選擇&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;強制使用某個 index&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;optimizer 挑選索引
+&lt;li&gt;第一階段：尋找最佳索引
 &lt;ul&gt;
-&lt;li&gt;第一階段 - 挑選最佳索引
+&lt;li&gt;最佳索引條件
 &lt;ul&gt;
-&lt;li&gt;最佳索引
+&lt;li&gt;包含所有 filter 和 sort 的欄位&lt;/li&gt;
+&lt;li&gt;equality filter 必須在 range filter 之前&lt;/li&gt;
+&lt;li&gt;sort 欄位必須在 range filter 之後&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;若有多個最佳索引條件符合條件，隨便選擇一個&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;第二階段：實驗性選擇
 &lt;ul&gt;
-&lt;li&gt;包含所有的 filter 和 sort 的欄位&lt;/li&gt;
-&lt;li&gt;range filter 和 sort 的欄位必須在 equality filter 的後面
+&lt;li&gt;若無最佳索引，會測試多個索引&lt;/li&gt;
+&lt;li&gt;optimizer 選擇 nscanned 最小的索引作為最終方案&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;儲存引擎&#34;&gt;儲存引擎&lt;/h2&gt;
+&lt;h3 id=&#34;mmapv1&#34;&gt;MMAPv1&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;sort 的欄位必須在 range filter 的後面&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;如果有多個最佳索引就會隨便選一個&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;第二階段 - 透過實驗挑選索引
+&lt;li&gt;MongoDB 早期的儲存引擎&lt;/li&gt;
+&lt;li&gt;特性
 &lt;ul&gt;
-&lt;li&gt;沒有最佳索引就會實驗判斷要選哪個，看看誰先找到指定數量的文件&lt;/li&gt;
-&lt;li&gt;換句話說，如果有多個索引，optimizer 會選 nscanned 最小的&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;MMAPv1
+&lt;li&gt;_id 直接對應 disk 偏移量 (diskloc)
 &lt;ul&gt;
-&lt;li&gt;Mongo 一開始用的 storage engine&lt;/li&gt;
-&lt;li&gt;_id 直接對應到 diskloc，也就是 disk 的偏移量
-&lt;ul&gt;
-&lt;li&gt;查找速度驚人，但是更新就要維護偏移量很費時&lt;/li&gt;
+&lt;li&gt;查詢速度快，但更新需維護偏移量，效能低&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;採用 database-level lock，Mongo 後來也只更新成 collection-level lock&lt;/li&gt;
+&lt;li&gt;鎖定機制
+&lt;ul&gt;
+&lt;li&gt;初始為 database-level lock&lt;/li&gt;
+&lt;li&gt;後期升級至 collection-level lock&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;WiredTiger
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;已於 MongoDB 4.0 後棄用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;wiredtiger&#34;&gt;WiredTiger&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;MongoDB 收購的 storage engine&lt;/li&gt;
-&lt;li&gt;Document-level locking&lt;/li&gt;
-&lt;li&gt;可以做到 compression&lt;/li&gt;
+&lt;li&gt;MongoDB 收購並採用的新儲存引擎&lt;/li&gt;
+&lt;li&gt;特性
+&lt;ul&gt;
+&lt;li&gt;Document-level locking，提升並發效能&lt;/li&gt;
+&lt;li&gt;支援資料壓縮，減少儲存空間&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;版本演進
+&lt;ul&gt;
 &lt;li&gt;5.2 之前
 &lt;ul&gt;
-&lt;li&gt;_id 會先被用來尋找 recordid，再用 recordid 去獲取 document&lt;/li&gt;
-&lt;li&gt;recordid 是 clustered index&lt;/li&gt;
+&lt;li&gt;_id 用於查找 recordid&lt;/li&gt;
+&lt;li&gt;recordid 作為 clustered index，指向實際文件&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;5.3
+&lt;li&gt;5.3 之後
 &lt;ul&gt;
-&lt;li&gt;_id 變成 clustered index&lt;/li&gt;
-&lt;li&gt;之前 recordid 只有 64 位，但現在 _id 作為 primary key 有 12 bytes
+&lt;li&gt;_id 直接成為 clustered index&lt;/li&gt;
+&lt;li&gt;_id 為 12 字節 (ObjectId)，比原 64 位 recordid 更大&lt;/li&gt;
+&lt;li&gt;影響
 &lt;ul&gt;
-&lt;li&gt;對 secondary index 造成更大的負擔&lt;/li&gt;
-&lt;li&gt;Mongo 想達成跨機器和 shard 的唯一性&lt;/li&gt;
+&lt;li&gt;對 secondary index 增加儲存負擔&lt;/li&gt;
+&lt;li&gt;提升跨機器和 shard 環境中的唯一性&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -302,566 +325,701 @@
         <pubDate>Sun, 21 Jul 2024 00:00:17 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/</guid>
-        <description>&lt;h2 id=&#34;database-internal&#34;&gt;Database internal&lt;/h2&gt;
-&lt;h3 id=&#34;storage-concept&#34;&gt;Storage concept&lt;/h3&gt;
+        <description>&lt;h2 id=&#34;資料庫核心概念&#34;&gt;資料庫核心概念&lt;/h2&gt;
+&lt;h3 id=&#34;儲存結構&#34;&gt;儲存結構&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;Table&lt;/li&gt;
-&lt;li&gt;Row_id
+&lt;li&gt;&lt;strong&gt;Table&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;多數 database 會維護自己的 row_id&lt;/li&gt;
-&lt;li&gt;也叫做 tuple id&lt;/li&gt;
+&lt;li&gt;資料庫中最基本的儲存單位，用來組織資料&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Page
+&lt;li&gt;&lt;strong&gt;Row_id&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;多個 row 會被存在一個 page&lt;/li&gt;
-&lt;li&gt;讀取不會只讀一個 row，而是一個或多個 page&lt;/li&gt;
+&lt;li&gt;多數資料庫會維護一個唯一的 row_id，也稱為 tuple id，用來識別每一行資料&lt;/li&gt;
+&lt;li&gt;例如 PostgreSQL 使用 OID 或 ctid，MySQL 則依賴主鍵&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;IO
+&lt;li&gt;&lt;strong&gt;Page&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;IO operation 指的是存取 disk 的操作&lt;/li&gt;
-&lt;li&gt;一個 IO 可能會獲得多個 page，也可能只是用 cache 的資料&lt;/li&gt;
-&lt;li&gt;Database 常常會利用 cache 來減少 IO
-&lt;ul&gt;
-&lt;li&gt;因此有些 query 很快，可能是因為有快取資料可用&lt;/li&gt;
+&lt;li&gt;多個 row 會被儲存在一個 page 中&lt;/li&gt;
+&lt;li&gt;讀取時不會單獨讀取某個 row，而是以 page 為單位讀取一或多個 page&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Heap data structure
+&lt;li&gt;&lt;strong&gt;IO&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;儲存整個 table 的資料&lt;/li&gt;
-&lt;li&gt;有些 database 會用 clustered index 來儲存，就不會有 heap&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Index data structure (b-tree)
+&lt;li&gt;IO 操作指的是存取磁碟的操作&lt;/li&gt;
+&lt;li&gt;一次 IO 可能讀取多個 page，也可能直接從 cache 中取得資料&lt;/li&gt;
+&lt;li&gt;資料庫常利用 cache（如 buffer pool）來減少 IO
 &lt;ul&gt;
-&lt;li&gt;一個有 pointer 來指向 heap 的資料結構
-&lt;ul&gt;
-&lt;li&gt;較流行的是 b-tree&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;可以對一個或多個 column 做 index&lt;/li&gt;
-&lt;li&gt;index 可以告訴你要查詢的資料在哪個 page&lt;/li&gt;
-&lt;li&gt;index 也會被儲存在 page&lt;/li&gt;
+&lt;li&gt;若查詢速度很快，可能是因為資料已存在 cache 中&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;row-oriented-vs-column-oriented&#34;&gt;Row-oriented vs Column-oriented&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Row-oriented database (row store)
-&lt;ul&gt;
-&lt;li&gt;每個 row 接著下個 row 來儲存&lt;/li&gt;
-&lt;li&gt;每次 IO 會獲得多個 row，每個都有所有的 column&lt;/li&gt;
-&lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Col-oriented database (column store)
+&lt;li&gt;&lt;strong&gt;Heap&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;每個 column 接著下個 column 來儲存&lt;/li&gt;
-&lt;li&gt;比較好壓縮，也比較好做 aggregation，所以在一些分析資料的軟體會用到&lt;/li&gt;
+&lt;li&gt;用來儲存整個 table 的資料，是一種無特定順序的結構&lt;/li&gt;
+&lt;li&gt;若使用 clustered index 組織資料，則不會有獨立的 heap
+&lt;ul&gt;
+&lt;li&gt;例如 MySQL InnoDB 的主鍵就是 clustered index，資料直接依主鍵排序儲存&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;data-structure&#34;&gt;Data structure&lt;/h3&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;資料儲存方式&#34;&gt;資料儲存方式&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;B-tree
+&lt;li&gt;&lt;strong&gt;Row-oriented (行導向)&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;Balanced data structure for fast search&lt;/li&gt;
+&lt;li&gt;每個 row 依序儲存，包含所有 column 的資料&lt;/li&gt;
+&lt;li&gt;一次 IO 會讀取多個 row，每個 row 包含所有欄位&lt;/li&gt;
+&lt;li&gt;適合 OLTP（線上交易處理），因為常需要存取整行資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Column-oriented (列導向)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;每個 column 依序儲存，同一 column 的資料連續存放&lt;/li&gt;
+&lt;li&gt;壓縮效率高，且適合 aggregation 操作，因此常用於 OLAP（線上分析處理）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;碎片化-fragmentation&#34;&gt;碎片化 (Fragmentation)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Internal Fragmentation (內部碎片)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;一個 page 中有許多未使用的空間&lt;/li&gt;
+&lt;li&gt;可能因為 row 刪除或大小不均導致，例如插入時預留空間過多&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;External Fragmentation (外部碎片)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;多個 page 的儲存位置不連續&lt;/li&gt;
+&lt;li&gt;即使剩餘空間足夠，因不連續而無法使用，需透過整理（如 vacuum）來解決&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;資料結構與索引&#34;&gt;資料結構與索引&lt;/h2&gt;
+&lt;h3 id=&#34;常用資料結構&#34;&gt;常用資料結構&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;B-Tree&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;一種平衡樹結構，適用於快速搜尋&lt;/li&gt;
+&lt;li&gt;每個 node 同時儲存 key 和 value&lt;/li&gt;
 &lt;li&gt;限制
 &lt;ul&gt;
-&lt;li&gt;node 中的 element 同時存了 key 和 value&lt;/li&gt;
-&lt;li&gt;range query 效率很差，因為要各別 random access&lt;/li&gt;
+&lt;li&gt;由於 node 儲存完整資料，空間利用率較低&lt;/li&gt;
+&lt;li&gt;range query 效率較差，因為需要多次隨機存取&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;B+Tree
+&lt;li&gt;&lt;strong&gt;B+Tree&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;B-tree 的變形，和 B-tree 很像，不過 internal node 只存放 key，只有 leaf node 會存放 value
+&lt;li&gt;B-Tree 的改良版本，常用於資料庫索引&lt;/li&gt;
+&lt;li&gt;特性
 &lt;ul&gt;
-&lt;li&gt;internal node 因為現在只需要儲存 key，element size 比較小，所以可以存放更多 element&lt;/li&gt;
+&lt;li&gt;internal node 只儲存 key，leaf node 儲存 key 和 value&lt;/li&gt;
+&lt;li&gt;因 internal node 只存 key，元素大小較小，一個 node 可容納更多 key，使存取的結點數變少，提升搜尋效率&lt;/li&gt;
+&lt;li&gt;leaf node 用 linked list 串聯，適合 range query&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;leaf node 會用 linked list 串起來
-&lt;ul&gt;
-&lt;li&gt;適合 range query&lt;/li&gt;
+&lt;li&gt;通常一個 node 對應一個 DBMS 的 page&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;通常一個 node 是一個 DBMS page&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;LSM-Tree (Log-Structured Merge-Tree)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;設計為追加式寫入，資料加在尾端，不覆蓋原有資料&lt;/li&gt;
+&lt;li&gt;優勢
+&lt;ul&gt;
+&lt;li&gt;對 SSD 友好，因避免隨機寫入&lt;/li&gt;
+&lt;li&gt;適合高寫入量的場景&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;LSM-tree
+&lt;li&gt;與 B-Tree 比較
 &lt;ul&gt;
-&lt;li&gt;Log-Structured Merge-Tree&lt;/li&gt;
-&lt;li&gt;都加在尾端，不會覆蓋原本的資料，對 SSD 有利&lt;/li&gt;
-&lt;li&gt;B-Tree 為了平衡會頻繁修改&lt;/li&gt;
-&lt;li&gt;有利於 insert&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;fragmentation&#34;&gt;Fragmentation&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;這裡是以 database 為出發點去看 fragmentation&lt;/li&gt;
-&lt;li&gt;Internal fragmentation
-&lt;ul&gt;
-&lt;li&gt;一個 Page 中有很多空間是空的&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;External fragmentation
-&lt;ul&gt;
-&lt;li&gt;多個 Page 存放不是連續的。剩下的空間夠儲存新的資料，但是因為不連續，所以不能用&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;database-cursor&#34;&gt;Database cursor&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;當資料庫有很大的結果集時，不可能一次把所有資料用網路傳給 client，用戶也沒有 memory 來存放所有資料&lt;/li&gt;
-&lt;li&gt;Server side / client side cursor
-&lt;ul&gt;
-&lt;li&gt;Server side
-&lt;ul&gt;
-&lt;li&gt;一次只傳一部分資料給 client&lt;/li&gt;
-&lt;li&gt;但是要多次往返可能最後總時間會比較久&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Client side
-&lt;ul&gt;
-&lt;li&gt;一次把所有資料傳給 client&lt;/li&gt;
-&lt;li&gt;client 自己分批處理&lt;/li&gt;
-&lt;li&gt;對 network bandwidth 要求較大&lt;/li&gt;
-&lt;li&gt;可能沒有足夠的 memory&lt;/li&gt;
+&lt;li&gt;B-Tree 為保持平衡會頻繁調整結構，導致隨機 IO&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;partitioning&#34;&gt;Partitioning&lt;/h3&gt;
+&lt;h3 id=&#34;索引基礎&#34;&gt;索引基礎&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;把大 table 分成多個小 table&lt;/li&gt;
-&lt;li&gt;Vertical vs Horizontal
+&lt;li&gt;&lt;strong&gt;索引的作用&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;Vertical
-&lt;ul&gt;
-&lt;li&gt;根據 columns 拆成多個 partition&lt;/li&gt;
-&lt;li&gt;可以把不太常用又大的 column (比如 blob) 放到另外一個 partition
-&lt;ul&gt;
-&lt;li&gt;可以把他放在較慢的 disk，保留其他常存取的 column 在 SSD&lt;/li&gt;
-&lt;li&gt;也可以讓比較不常用的資料比較不容易進入 cache&lt;/li&gt;
+&lt;li&gt;若欄位未建立索引，查詢需掃描整個 table&lt;/li&gt;
+&lt;li&gt;索引透過 pointer 指向 heap 或資料位置，加速查詢&lt;/li&gt;
+&lt;li&gt;索引本身也儲存在 page 中&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;搜索方法&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Table Scan&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;掃描整個 table，適用於範圍過大或無索引的情況&lt;/li&gt;
+&lt;li&gt;通常以 parallel 方式執行，提升效率&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Horizontal
+&lt;li&gt;&lt;strong&gt;Index Scan&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;把 rows 拆成多個 partition&lt;/li&gt;
+&lt;li&gt;利用索引定位資料，再從 heap 取值&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Index-only Scan (Covering Index)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;若所需欄位已包含在索引中，無需存取 heap&lt;/li&gt;
+&lt;li&gt;優勢
+&lt;ul&gt;
+&lt;li&gt;速度快，因避免額外 IO&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;優點
+&lt;li&gt;注意
 &lt;ul&gt;
-&lt;li&gt;用 single query 存取單一 partition 的速度更快&lt;/li&gt;
-&lt;li&gt;對某些 sequential scan 有幫助&lt;/li&gt;
-&lt;li&gt;可以把舊資料放在比較便宜的設備&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;缺點
-&lt;ul&gt;
-&lt;li&gt;如果要從一個 partition 移動資料到另一個 partition，效率很慢&lt;/li&gt;
-&lt;li&gt;對於效率很差的 query，可能會需要 scan 所有 partition，此時比掃描整個沒做 partition 的 table 還要慢&lt;/li&gt;
-&lt;li&gt;partition 可能會 unbalance&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;data-types&#34;&gt;Data types&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;這裡以 PostgreSQL 為例，列一小部分&lt;/li&gt;
-&lt;li&gt;設計 column 前可以先看有沒有合適的 data type&lt;/li&gt;
-&lt;li&gt;Numeric
-&lt;ul&gt;
-&lt;li&gt;整數&lt;/li&gt;
-&lt;li&gt;浮點數&lt;/li&gt;
-&lt;li&gt;Serial
-&lt;ul&gt;
-&lt;li&gt;一種特殊的整數，會 auto increment&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Character
-&lt;ul&gt;
-&lt;li&gt;char&lt;/li&gt;
-&lt;li&gt;varchar
-&lt;ul&gt;
-&lt;li&gt;可變長度的字串，如果沒有設定長度，就是 text&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;text&lt;/li&gt;
-&lt;li&gt;bpchar
-&lt;ul&gt;
-&lt;li&gt;好像就是 varchar，但是 document 有寫 blank trimmed&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Date / Time&lt;/li&gt;
-&lt;li&gt;Boolean&lt;/li&gt;
-&lt;li&gt;Binary&lt;/li&gt;
-&lt;li&gt;Geometric
-&lt;ul&gt;
-&lt;li&gt;特地寫這個是因為如果要用二維平面點，一般來說可能會用兩個 float，但是如果用 geometric 類有 point 可用&lt;/li&gt;
-&lt;li&gt;其他形狀也可存&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;UUID&lt;/li&gt;
-&lt;li&gt;Enum
-&lt;ul&gt;
-&lt;li&gt;一個有限的字串集合&lt;/li&gt;
-&lt;li&gt;有序
-&lt;ul&gt;
-&lt;li&gt;按照建立時的順序&lt;/li&gt;
+&lt;li&gt;索引過大可能佔用更多記憶體，甚至觸發磁碟 IO，降低效率&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;database-indexing&#34;&gt;Database indexing&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;如果需要搜索的欄位沒做 index，那麼就會需要 scan 整個 table，直到找到
-&lt;ul&gt;
-&lt;li&gt;如果要求欄位做 &lt;code&gt;like&lt;/code&gt; 之類的，那麼依然需要 scan 整個 table&lt;/li&gt;
-&lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;搜索方法
+&lt;li&gt;&lt;strong&gt;Composite Index&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;table scan
+&lt;li&gt;將多個 column 作為 key 建立索引&lt;/li&gt;
+&lt;li&gt;特性
 &lt;ul&gt;
-&lt;li&gt;如果掃描的範圍過大，Database 可能就會選擇該方法&lt;/li&gt;
-&lt;li&gt;通常會用 parallel 的方式搜尋，所以還是會快一些&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;index scan&lt;/li&gt;
-&lt;li&gt;Index-only scan
-&lt;ul&gt;
-&lt;li&gt;也叫 covering index&lt;/li&gt;
-&lt;li&gt;需要的欄位在 index 裡面就有了，在這種情況不用去 heap 取，可以加速很多&lt;/li&gt;
-&lt;li&gt;但也要小心使 index 變得過大。如果 memory 不夠，又會用到 disk，拖垮效率&lt;/li&gt;
+&lt;li&gt;在 PostgreSQL 中，若索引為 (a, b)，查詢 a 可使用索引，但單獨查 b 無法有效利用&lt;/li&gt;
+&lt;li&gt;順序影響查詢效率，設計時需考慮常用條件&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;non-key column
+&lt;li&gt;&lt;strong&gt;Non-key Column&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;可以用 include 把一些常常需要一起帶入的資訊放到 index 裡面&lt;/li&gt;
-&lt;li&gt;可以促成 index-only scan&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;composite index
-&lt;ul&gt;
-&lt;li&gt;把多個 col 作為 key 做 index&lt;/li&gt;
-&lt;li&gt;在 PostgreSQL ，如果有一個 index 是 (a, b)，用靠左的 index 可以做 index scan，但是用靠右的就不行&lt;/li&gt;
+&lt;li&gt;可透過 include 將常用但非 key 的欄位加入索引&lt;/li&gt;
+&lt;li&gt;促成 index-only scan，提升查詢速度&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;clustered-index&#34;&gt;Clustered index&lt;/h3&gt;
+&lt;h3 id=&#34;索引類型&#34;&gt;索引類型&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;也叫做 Index-Organized Table
+&lt;li&gt;&lt;strong&gt;Clustered Index (叢集索引)&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;資料圍繞 index 來組織&lt;/li&gt;
-&lt;li&gt;這也是為什麼 clustered index 只能有一個&lt;/li&gt;
+&lt;li&gt;資料依索引順序物理儲存，也稱 Index-Organized Table&lt;/li&gt;
+&lt;li&gt;特性
+&lt;ul&gt;
+&lt;li&gt;一個 table 只能有一個 clustered index，因資料只能按一種順序排列&lt;/li&gt;
+&lt;li&gt;未指定時，primary key 通常作為 clustered index（如 MySQL InnoDB）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;沒特別指定的話，primary key 一般是 clustered index&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;primary-key-vs-secondary-key&#34;&gt;Primary key vs Secondary key&lt;/h3&gt;
+&lt;li&gt;優勢
 &lt;ul&gt;
-&lt;li&gt;primary key
-&lt;ul&gt;
-&lt;li&gt;clusering
-&lt;ul&gt;
-&lt;li&gt;把 table 圍繞 primary key 來組織，但也有些 Database 不是這樣設計，比如 PostgreSQL&lt;/li&gt;
+&lt;li&gt;範圍查詢效率高，因資料已排序&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;需要維持 order，但是如果我要根據 PK 取得小範圍內的資料，和不顧排序相比，就可能不用多次 IO&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Secondary key
+&lt;li&gt;&lt;strong&gt;Primary Key vs Secondary Key&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;不在乎原本 table 的 order，而是根據自訂的 key 來排序&lt;/li&gt;
-&lt;li&gt;但是會有另外一個結構去放 index，可以找到 row_id&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Primary Key&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;通常用於 clustered index，資料圍繞其排序&lt;/li&gt;
+&lt;li&gt;若查詢小範圍資料，因有序可減少 IO&lt;/li&gt;
 &lt;li&gt;設計差異
 &lt;ul&gt;
-&lt;li&gt;PostgreSQL 的 index 都指向 row，不管是 primary 還是 secondary
-&lt;ul&gt;
-&lt;li&gt;這樣 secondary index 就可以直接取資料，不用再跳一層 primary key&lt;/li&gt;
-&lt;li&gt;但是如果更新 row，會更新 row id，連帶影響要更新所有 secondary index，不管修改的欄位有沒有在這 index&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;MySQL 的 secondary index 指向 primary key，primary key 指向 row
-&lt;ul&gt;
-&lt;li&gt;這樣 secondary index 就要先找到 primary key，再找到 row&lt;/li&gt;
+&lt;li&gt;PostgreSQL 不強制 clustered，primary key 只是唯一約束&lt;/li&gt;
+&lt;li&gt;MySQL InnoDB 則將 primary key 作為 clustered index&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;distributed-database&#34;&gt;Distributed database&lt;/h2&gt;
-&lt;h3 id=&#34;sharding&#34;&gt;Sharding&lt;/h3&gt;
+&lt;li&gt;&lt;strong&gt;Secondary Key&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;把 table 拆成多個 table，分散在不同的 database&lt;/li&gt;
-&lt;li&gt;分散式會帶來很多問題，比如要怎麼做 transaction 和 join?&lt;/li&gt;
-&lt;li&gt;Horizontal partitioning vs sharding
+&lt;li&gt;不在乎原本 table 的 order，而是根據自訂的 key 來排序&lt;/li&gt;
+&lt;li&gt;會有另外一個結構去放 index，可以找到 row_id&lt;/li&gt;
+&lt;li&gt;用途
 &lt;ul&gt;
-&lt;li&gt;Horizontal partitioning
-&lt;ul&gt;
-&lt;li&gt;一個 table 拆成多個 table，但是還是在同一個 database&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;和 Horizontal partitioning 的差別
-&lt;ul&gt;
-&lt;li&gt;table 現在會分到不同的 database server&lt;/li&gt;
-&lt;li&gt;做 partition，client 不用管資料具體在哪個 partition，交給 DBMS 去處理。但是 sharding 就要 client 自己去處理&lt;/li&gt;
+&lt;li&gt;提供額外的查詢路徑&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;sharding-key&#34;&gt;Sharding key&lt;/h4&gt;
+&lt;li&gt;&lt;strong&gt;設計差異&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;Hash
+&lt;li&gt;&lt;strong&gt;PostgreSQL&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;用 hash function 來決定資料要放在哪個 shard&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Range
-&lt;ul&gt;
-&lt;li&gt;用某個 column 所處的範圍來決定資料要放在哪個 shard&lt;/li&gt;
+&lt;li&gt;所有索引（包括 primary 和 secondary）直接指向 row&lt;/li&gt;
+&lt;li&gt;優勢：secondary index 可直接取資料，不用再跳一層 primary key&lt;/li&gt;
+&lt;li&gt;劣勢：更新 row 時，若 row_id 改變，所有索引需同步更新&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Dictionary
+&lt;li&gt;&lt;strong&gt;MySQL&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;用離散的值來決定資料要放在哪個 shard&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;考慮事項
-&lt;ul&gt;
-&lt;li&gt;cardinality
-&lt;ul&gt;
-&lt;li&gt;cardinality 是 set 中的元素數量&lt;/li&gt;
-&lt;li&gt;key 種類太少，就會限制水平擴展&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;frequency&lt;/li&gt;
-&lt;li&gt;monotonicity
-&lt;ul&gt;
-&lt;li&gt;如果 key 是遞增或遞減的，可能會導致某個 shard 過度使用&lt;/li&gt;
+&lt;li&gt;secondary index 指向 primary key，再由 primary key 指向 row&lt;/li&gt;
+&lt;li&gt;優勢：row 更新時只需調整 primary key 的指向&lt;/li&gt;
+&lt;li&gt;劣勢：查詢需多跳一次，增加 IO&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;database-replication&#34;&gt;Database replication&lt;/h3&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;資料模型與類型&#34;&gt;資料模型與類型&lt;/h2&gt;
+&lt;h3 id=&#34;資料類型&#34;&gt;資料類型&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;設計原則&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;設計 column 時，應先確認資料庫提供的資料類型，選擇最適合的類型以提升效能與儲存效率&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;以 PostgreSQL 為例&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Numeric&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;整數 (integer)：如 smallint、integer、bigint&lt;/li&gt;
+&lt;li&gt;浮點數 (float)：如 real、double precision&lt;/li&gt;
+&lt;li&gt;Serial：自動遞增（auto increment）的整數，常用於主鍵（如 serial、bigserial）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Character&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;char(n)：固定長度字串，空間不足時補空白&lt;/li&gt;
+&lt;li&gt;varchar(n)：可變長度字串，指定最大長度&lt;/li&gt;
+&lt;li&gt;text：無長度限制的字串，等同於未指定長度的 varchar&lt;/li&gt;
+&lt;li&gt;bpchar：好像就是 varchar，但是 document 有寫 blank trimmed&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Date / Time&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;如 date、time、timestamp，提供日期與時間儲存&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Boolean&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;true/false 或 null&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Binary&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;bytea：儲存二進位資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Geometric&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;提供點 (point)、線 (line)、多邊形 (polygon) 等類型&lt;/li&gt;
+&lt;li&gt;應用：若需儲存二維平面座標，可用 point 替代兩個 float&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;UUID&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;通用唯一識別碼，適合分散式系統生成唯一 ID&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Enum&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;自訂有限字串集合，按建立順序有序&lt;/li&gt;
+&lt;li&gt;應用：狀態欄位（如 &amp;ldquo;pending&amp;rdquo;、&amp;ldquo;completed&amp;rdquo;）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;分割-partitioning&#34;&gt;分割 (Partitioning)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;定義&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;將大 table 分成多個小 table，以提升效能或管理便利性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;類型&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Vertical Partitioning (垂直分割)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;按 column 分割&lt;/li&gt;
+&lt;li&gt;應用
+&lt;ul&gt;
+&lt;li&gt;將不常用或大型欄位（如 blob）獨立出來&lt;/li&gt;
+&lt;li&gt;可將這些欄位放在較慢的磁碟，保留常用欄位在 SSD&lt;/li&gt;
+&lt;li&gt;減少不必要欄位進入 cache&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Horizontal Partitioning (水平分割)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;按 row 分割&lt;/li&gt;
+&lt;li&gt;應用
+&lt;ul&gt;
+&lt;li&gt;根據範圍（如時間、地域）分割資料&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;優點&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;單一 partition 的單次查詢更快&lt;/li&gt;
+&lt;li&gt;對 sequential scan 有幫助，因範圍縮小&lt;/li&gt;
+&lt;li&gt;可將舊資料移至較便宜的儲存設備&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;缺點&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;跨 partition 移動資料效率低&lt;/li&gt;
+&lt;li&gt;若查詢需掃描所有 partition，可能比未分割的 table 更慢&lt;/li&gt;
+&lt;li&gt;partition 大小可能不均（unbalance），需設計均衡策略&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;資料庫游標-database-cursor&#34;&gt;資料庫游標 (Database Cursor)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;用途&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;處理大型結果集時，避免一次傳送所有資料給 client（因網路與記憶體限制）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;類型&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Server-side Cursor&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;伺服器分批傳送資料給 client&lt;/li&gt;
+&lt;li&gt;優勢：減少 client 記憶體需求&lt;/li&gt;
+&lt;li&gt;劣勢：多次網路往返可能增加總時間&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Client-side Cursor&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;一次傳送所有資料，由 client 分批處理&lt;/li&gt;
+&lt;li&gt;優勢：減少伺服器負擔&lt;/li&gt;
+&lt;li&gt;劣勢：需較大網路頻寬與 client 記憶體&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;分散式系統&#34;&gt;分散式系統&lt;/h2&gt;
+&lt;h3 id=&#34;分片-sharding&#34;&gt;分片 (Sharding)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;定義&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;將 table 分成多個 shard，分散至不同資料庫伺服器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;與 Horizontal Partitioning 的差異&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;Horizontal Partitioning：分割後仍位於同一資料庫，由 DBMS 管理&lt;/li&gt;
+&lt;li&gt;Sharding：分割後分至不同伺服器，client 需自行處理資料位置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;挑戰&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;交易 (transaction) 與 join 操作變得複雜，因資料分散&lt;/li&gt;
+&lt;li&gt;需額外設計一致性與資料存取邏輯&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;分片鍵-sharding-key&#34;&gt;分片鍵 (Sharding Key)&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;類型&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Hash&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 hash function 決定資料分配&lt;/li&gt;
+&lt;li&gt;優勢：分佈均勻&lt;/li&gt;
+&lt;li&gt;劣勢：範圍查詢困難&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Range&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;根據某 column 的範圍（如時間、ID）分配&lt;/li&gt;
+&lt;li&gt;優勢：支援範圍查詢&lt;/li&gt;
+&lt;li&gt;劣勢：可能導致熱點（hotspot）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Dictionary&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;根據離散值（如地區、類別）分配&lt;/li&gt;
+&lt;li&gt;優勢：直觀且易管理&lt;/li&gt;
+&lt;li&gt;劣勢：擴展性受限&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;設計考量&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Cardinality&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;鍵值的種類數量，種類過少限制水平擴展&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Frequency&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;鍵值的分佈頻率，需避免單一 shard 負載過高&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Monotonicity&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;若鍵值單調遞增或遞減，可能導致新資料集中於某 shard&lt;/li&gt;
+&lt;li&gt;解決方式：結合 hash 或隨機前綴&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;資料庫複製-database-replication&#34;&gt;資料庫複製 (Database Replication)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;目的&lt;/strong&gt;
 &lt;ul&gt;
 &lt;li&gt;透過 redundancy 來提高 reliability, tolerance, accessibility&lt;/li&gt;
-&lt;li&gt;Master / Backup replication
-&lt;ul&gt;
-&lt;li&gt;也叫 master-slave replication&lt;/li&gt;
-&lt;li&gt;只有一個 master / leader，有一或多個 backup / standby&lt;/li&gt;
-&lt;li&gt;一寫多讀&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Multi-master replication
+&lt;li&gt;&lt;strong&gt;類型&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;多個 master，可以同時寫入&lt;/li&gt;
-&lt;li&gt;需要處理 conflict&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Master / Backup Replication (主從複製)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;單一 master 負責寫入，多個 backup（slave）負責讀取&lt;/li&gt;
+&lt;li&gt;模式：一寫多讀&lt;/li&gt;
+&lt;li&gt;應用：讀多寫少的場景（如內容管理系統）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Sychronous vs Asynchronous replication
+&lt;li&gt;&lt;strong&gt;Multi-master Replication (多主複製)&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;Synchronous
-&lt;ul&gt;
-&lt;li&gt;transaction 會被 blocked，直到所有的 backup 都寫入&lt;/li&gt;
-&lt;li&gt;有些 database 可以設定 First N 或是 any 完成就好&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Asynchronous
-&lt;ul&gt;
-&lt;li&gt;transaction 被寫入 master 後就算完成&lt;/li&gt;
+&lt;li&gt;多個 master 可同時寫入&lt;/li&gt;
+&lt;li&gt;挑戰：需處理寫入衝突（如使用版本控制或衝突解決策略）&lt;/li&gt;
+&lt;li&gt;應用：高可用性與分散式寫入需求&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;concurrency-control&#34;&gt;Concurrency control&lt;/h2&gt;
+&lt;li&gt;&lt;strong&gt;同步方式&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;strategy
+&lt;li&gt;&lt;strong&gt;Synchronous (同步)&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;pessimistic
-&lt;ul&gt;
-&lt;li&gt;用各種 lock 來保證 isolation&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;optimistic
-&lt;ul&gt;
-&lt;li&gt;不用 lock，真的有 transaction 衝突時就 fail&lt;/li&gt;
+&lt;li&gt;transaction 完成前需等待所有 backup 寫入確認&lt;/li&gt;
+&lt;li&gt;變體：可設定等待前 N 個或任一完成&lt;/li&gt;
+&lt;li&gt;優勢：資料一致性高&lt;/li&gt;
+&lt;li&gt;劣勢：延遲增加&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Lock
+&lt;li&gt;&lt;strong&gt;Asynchronous (非同步)&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;shared vs exclusive
-&lt;ul&gt;
-&lt;li&gt;shared lock 可以被多個 transaction 同時持有
-&lt;ul&gt;
-&lt;li&gt;用在讀取，所以可以多個 transaction 同時讀取&lt;/li&gt;
-&lt;li&gt;在有 shared lock  的條件下，其他 transaction 也可以設置 shared lock&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;exclusive lock 只能被一個 transaction 持有
-&lt;ul&gt;
-&lt;li&gt;他人不能讀取或寫入&lt;/li&gt;
-&lt;li&gt;PostgreSQL 有一個 &lt;code&gt;SELECT ... FOR UPDATE&lt;/code&gt; 來取得 exclusive lock&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;當涉及的資料持有其中一種 lock 時，其他 transaction 都不能設置另外一種 lock&lt;/li&gt;
+&lt;li&gt;transaction 寫入 master 後即完成，後台同步至 backup&lt;/li&gt;
+&lt;li&gt;優勢：寫入速度快&lt;/li&gt;
+&lt;li&gt;劣勢：可能出現資料不一致（若 master 故障）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Deadlock
+&lt;li&gt;&lt;strong&gt;應用&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;多個 transaction 互相等待對方釋放 lock&lt;/li&gt;
-&lt;li&gt;多數 DBMS 會檢查 deadlock，並讓最後一個造成 deadlock 的 transaction rollback&lt;/li&gt;
+&lt;li&gt;常見於負載平衡與災難恢復設計&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Two-phase locking (2PL)
+&lt;/ul&gt;
+&lt;h2 id=&#34;並發與交易管理&#34;&gt;並發與交易管理&lt;/h2&gt;
+&lt;h3 id=&#34;並發控制策略&#34;&gt;並發控制策略&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Pessimistic (悲觀)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;使用鎖定機制確保交易隔離&lt;/li&gt;
+&lt;li&gt;適用於衝突頻繁的場景&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Optimistic (樂觀)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;不使用鎖，假設衝突少見，若發生衝突則交易失敗並重試&lt;/li&gt;
+&lt;li&gt;適用於讀多寫少的場景&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;鎖定機制-lock&#34;&gt;鎖定機制 (Lock)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;類型&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Shared Lock (共享鎖)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;多個交易可同時持有，適用於讀取&lt;/li&gt;
+&lt;li&gt;其他交易可再設置 shared lock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Exclusive Lock (排他鎖)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;僅一個交易可持有，適用於寫入&lt;/li&gt;
+&lt;li&gt;禁止其他交易讀取或寫入&lt;/li&gt;
+&lt;li&gt;PostgreSQL 提供 &lt;code&gt;SELECT ... FOR UPDATE&lt;/code&gt; 來取得 exclusive lock&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;相容性&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;若資料已持有一種鎖，其他交易無法設置另一種鎖&lt;/li&gt;
+&lt;li&gt;例如：shared lock 下無法設置 exclusive lock，反之亦然&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;死結-deadlock&#34;&gt;死結 (Deadlock)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;定義&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;多個交易互相等待對方釋放鎖，導致無法繼續執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;處理&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;多數 DBMS 會檢測死結，並強制回滾最後造成死結的交易&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;兩階段鎖定-two-phase-locking-2pl&#34;&gt;兩階段鎖定 (Two-Phase Locking, 2PL)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;目的&lt;/strong&gt;
 &lt;ul&gt;
 &lt;li&gt;DBMS 為了實現 isolation 需要保證 conflict serializability (CSR)，2PL 可以保證這一點&lt;/li&gt;
-&lt;li&gt;two-phase
-&lt;ul&gt;
-&lt;li&gt;growing phase
-&lt;ul&gt;
-&lt;li&gt;取得 lock&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;shrinking phase
+&lt;li&gt;&lt;strong&gt;階段&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;釋放 lock&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Growing Phase (增長階段)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;交易只能申請鎖&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;強調一個 transaction 不能釋放 lock 後就再也無法取得&lt;/li&gt;
-&lt;li&gt;有可能造成 deadlock&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Shrinking Phase (收縮階段)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;交易只能釋放鎖&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;限制：釋放任一鎖後，交易無法再申請新鎖&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;database-engine&#34;&gt;Database Engine&lt;/h2&gt;
+&lt;li&gt;&lt;strong&gt;特性&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;也叫 storage engine 或 embedded database&lt;/li&gt;
-&lt;li&gt;負責處理 CRUD 的 library&lt;/li&gt;
-&lt;li&gt;DBMS 基於 engine 來提供更多功能&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;orm&#34;&gt;ORM&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Eager vs Lazy loading
-&lt;ul&gt;
-&lt;li&gt;Eager
-&lt;ul&gt;
-&lt;li&gt;一次把所有相關的資料都讀取出來&lt;/li&gt;
-&lt;li&gt;如果 Teacher 有很多 Student，可能會一次把所有 Student 都讀取出來&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Lazy
-&lt;ul&gt;
-&lt;li&gt;只有在需要的時候才讀取&lt;/li&gt;
-&lt;li&gt;但是可能會有很多次 IO&lt;/li&gt;
+&lt;li&gt;一個交易釋放鎖後，無法再取得鎖&lt;/li&gt;
+&lt;li&gt;保證一致性，但可能導致死結&lt;/li&gt;
+&lt;li&gt;應用於多數關聯式資料庫的交易管理&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Open session in view (OSIV)
+&lt;h2 id=&#34;實作與優化&#34;&gt;實作與優化&lt;/h2&gt;
+&lt;h3 id=&#34;資料庫引擎-database-engine&#34;&gt;資料庫引擎 (Database Engine)&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;一個 request 一個 database session&lt;/li&gt;
-&lt;li&gt;可以配合 lazy loading 來用&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;定義&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;也叫 storage engine 或 embedded database，負責處理 CRUD 操作的核心庫&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;N+1 problem
+&lt;li&gt;&lt;strong&gt;功能&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;一個 query 取得所有資料，然後再用每個資料的 id 來取得相關資料&lt;/li&gt;
-&lt;li&gt;這樣就會有 N+1 次 IO
+&lt;li&gt;DBMS 基於引擎提供更高階功能（如查詢優化、交易管理）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;範例&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;第一次是從主表拿清單&lt;/li&gt;
-&lt;li&gt;接下來 N 次是從子表拿資料&lt;/li&gt;
+&lt;li&gt;MySQL 的 InnoDB（支援交易與外鍵）、MyISAM（高效讀寫但無交易）&lt;/li&gt;
+&lt;li&gt;SQLite 本身即為嵌入式引擎&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;tips&#34;&gt;Tips&lt;/h2&gt;
+&lt;h3 id=&#34;物件關聯映射-orm&#34;&gt;物件關聯映射 (ORM)&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;盡量不要使用 offset
+&lt;li&gt;&lt;strong&gt;載入策略&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;最 naive 的實現 pagination 的做法就是用 offset + limit。但是 offset 代表讀取並丟掉前面幾筆資料，所以他會多讀一堆沒用的資料&lt;/li&gt;
-&lt;li&gt;可以讓用戶那邊保存 id，where 設置 id 要大於多少來規避 offset&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Connection pool
+&lt;li&gt;&lt;strong&gt;Eager Loading (積極載入)&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;維護一定數量的連接，避免每次都要建立連接&lt;/li&gt;
+&lt;li&gt;一次載入所有相關資料&lt;/li&gt;
+&lt;li&gt;範例：查詢 Teacher 時一併載入所有 Student&lt;/li&gt;
+&lt;li&gt;優勢：減少後續查詢次數&lt;/li&gt;
+&lt;li&gt;劣勢：可能載入過多不必要資料&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Idempotency key
+&lt;li&gt;&lt;strong&gt;Lazy Loading (延遲載入)&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;用來確保一個 request 只會被執行一次&lt;/li&gt;
-&lt;li&gt;會生成一個唯一的 key，並且在 request 中帶上這個 key。執行操作後會把這個 key 存起來，下次再收到這個 key 時就不會再執行操作&lt;/li&gt;
-&lt;li&gt;可以用 ULID 而不用 UUID，因為 ULID 前面的 bit 有時間戳，可以用來排序
-&lt;ul&gt;
-&lt;li&gt;輸入的資料集中在相近的 page，還都加在尾端，可以減少 IO (相較隨機的 UUID)
-&lt;ul&gt;
-&lt;li&gt;不用被迫頻繁存取 disk。而且 UUID 的隨機性拉一堆 page 會導致 buffer 更容易被塞滿，而得強制寫入 disk&lt;/li&gt;
+&lt;li&gt;僅在需要時載入相關資料&lt;/li&gt;
+&lt;li&gt;優勢：節省初始載入時間與記憶體&lt;/li&gt;
+&lt;li&gt;劣勢：可能導致多次 IO&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Open Session in View (OSIV)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;每個 http request 開啟一個資料庫 session&lt;/li&gt;
+&lt;li&gt;用途：配合 lazy loading，確保 request 期間資料可隨時載入&lt;/li&gt;
+&lt;li&gt;注意：可能延長 session 存活時間，增加資源占用&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;consistent hashing
+&lt;li&gt;&lt;strong&gt;N+1 Problem&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;把 hash function 的結果分散在一個 hash ring 上
+&lt;li&gt;查詢主表後，對每個主表記錄再查詢子表，導致 N+1 次 IO&lt;/li&gt;
+&lt;li&gt;範例：查詢 10 個 Teacher，再各查其 Student，共 11 次查詢&lt;/li&gt;
+&lt;li&gt;解決方式：使用 join 或 eager loading 合併查詢&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;效能優化與實務建議&#34;&gt;效能優化與實務建議&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;根據 hash function 的結果，看自己落在哪段範圍，配給指定的 server&lt;/li&gt;
-&lt;li&gt;這樣的好處是追加或是移除 server 時，只會影響一台 server 的資料&lt;/li&gt;
-&lt;li&gt;也可以追加到負載比較高的 server 附近&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;避免使用 Offset&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;Offset + Limit 是簡單的 pagination 實現，但 offset 需讀取並丟棄前 n 筆資料&lt;/li&gt;
+&lt;li&gt;替代方案：使用條件（如 &lt;code&gt;WHERE id &amp;gt; last_id&lt;/code&gt;）追蹤分頁位置&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;連線池 (Connection Pool)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;維護固定數量的資料庫連線，避免頻繁建立與關閉連線的開銷&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;等幂鍵 (Idempotency Key)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;確保同一 request 只執行一次&lt;/li&gt;
+&lt;li&gt;實現
+&lt;ul&gt;
+&lt;li&gt;生成唯一鍵（如 ULID），隨 request 傳送並記錄&lt;/li&gt;
+&lt;li&gt;重複鍵時拒絕執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ULID 優勢
+&lt;ul&gt;
+&lt;li&gt;包含時間戳記，可排序且集中於相近 page&lt;/li&gt;
+&lt;li&gt;相較 UUID 的隨機性，減少 IO 與 buffer 壓力&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;write amplification
+&lt;li&gt;&lt;strong&gt;一致性雜湊 (Consistent Hashing)&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;寫入資料時，發現 disk 寫入的資料比你預期寫入的資料多很多&lt;/li&gt;
+&lt;li&gt;將 hash 結果映射至環狀結構，分配資料至伺服器&lt;/li&gt;
+&lt;li&gt;優勢
+&lt;ul&gt;
+&lt;li&gt;新增或移除伺服器時，僅影響部分資料重分配&lt;/li&gt;
+&lt;li&gt;可針對負載高的伺服器動態調整&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;寫入放大 (Write Amplification)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;實際寫入磁碟的資料量超出預期&lt;/li&gt;
 &lt;li&gt;分很多不同 level，通常是在說 SSD 造成的&lt;/li&gt;
-&lt;li&gt;想更新的時候，更新的 page 會被標記為不能使用。會有另外一隻非同步程式定期處理這種
+&lt;li&gt;原因
 &lt;ul&gt;
-&lt;li&gt;但是他會把整個 block 寫到新的地方，再把原地方設為 free，就為了那些不能再被使用的空間搬整個 block&lt;/li&gt;
+&lt;li&gt;SSD 更新時，需將整個 block 搬移至新位置並標記舊 block 為 free
+&lt;ul&gt;
+&lt;li&gt;想更新的時候，更新的 page 會被標記為不能使用。為了那些不能再被使用的空間搬整個 block&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;polymorphic association
-&lt;ul&gt;
-&lt;li&gt;一個 table 有多個關聯，但是這些關聯是不同的 table
-&lt;ul&gt;
-&lt;li&gt;某個 id column 會根據不同情況代表不同 table 的 id&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;可能可以節省空間&lt;/li&gt;
-&lt;li&gt;也可能因為這樣而沒辦法使用 foreign key&lt;/li&gt;
-&lt;li&gt;可以考慮拆成多個 column 或是多個 table&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;多型關聯 (Polymorphic Association)&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;單一欄位根據情況指向不同 table 的 id&lt;/li&gt;
+&lt;li&gt;優勢：節省空間與表數&lt;/li&gt;
+&lt;li&gt;劣勢：無法直接使用 foreign key，需額外邏輯處理&lt;/li&gt;
+&lt;li&gt;替代方案：拆為多欄位或多表，增加明確性&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;

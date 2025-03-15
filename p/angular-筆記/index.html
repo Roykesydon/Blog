@@ -2,18 +2,18 @@
 <html lang="en-us" dir="ltr">
 
 <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='基礎概念 Module 把相關的 Component、Directive、Pipe、Service 等打包在一起的容器 Lazy Loading Component Angular 應用程式的基本組成單位 Pipe 用來轉換資料的工具，可以把字串格式化、日期格式化等 Directive 用來修改 DOM 元素的外觀或行為 比如說 ngIf、ngFor、ngStyle、ngClass 類型 Structural Directive: 修改 DOM 的結構 可以搭配 ng-container 不會產生額外的 DOM 元素，可以用在想要用 ngIf 和 ngFor 但不想產生額外元素的情況 *ngFor let item of items; index as i Attribute Directive: 修改 DOM 的屬性 Component Directive: 包含 template 的 directive Service 負責 API 請求、資料處理等工作 Dependency Injection @Injectable providedIn root: 全域共用 也可以在 component 的 providers 中設定要注入的 service Router 負責處理 URL 路由 routes path component guard ng g guard &amp;lt;guard-name&amp;gt; CanActivate CLI Command ng new my-app: 建立新的 Angular 專案 ng serve: 啟動開發伺服器 ng build: 打包專案 generate ng generate module my-module: 建立新的 Module ng generate component my-component: 建立新的 Component --module=app: 指定 Component 所屬的 Module ng generate service my-service: 建立新的 Service ng generate pipe my-pipe: 建立新的 Pipe ng generate directive my-directive: 建立新的 Directive Module NgModule declarations: 定義同一 Module 中的 Component、Directive、Pipe imports: 匯入其他 Module providers: 定義 Service bootstrap: 定義啟動的 Component exports: 定義要匯出的 Component、Directive、Pipe Component 包含元素 Template TypeScript Class .'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='基礎概念 Module 把相關的 Component、Directive、Pipe、Service 等打包在一起的容器 可以使用 Lazy Loading 延遲加載模組，提高效能 Component Angular 應用程式的基本組成單位 由 HTML、CSS、TypeScript 共同組成 具有自己的 @Component 裝飾器 Pipe 用來轉換資料的工具，可以用於字串格式化、日期格式化等 可以透過 | 符號在模板中使用，例如 {{ value | uppercase }} 內建 Pipes：date、uppercase、lowercase、currency、percent 等 可以建立自訂 Pipe Directive 用來修改 DOM 元素的外觀或行為 例如 ngIf、ngFor、ngStyle、ngClass 分為三種類型： Structural Directive: 修改 DOM 的結構 *ngIf, *ngFor, *ngSwitch 可搭配 ng-container 不會產生額外的 DOM 元素，適合在 ngIf 和 ngFor 不希望產生額外元素時使用 *ngFor 例子：let item of items; index as i Attribute Directive: 修改 DOM 的屬性，例如 ngClass, ngStyle Component Directive: 包含 template 的 directive Service 負責 API 請求、資料處理等工作 透過 Dependency Injection (DI) 來提供服務 @Injectable() 裝飾器用來標記服務 providedIn root: 服務將在整個應用程式中可用 也可以在特定 Module 或 Component 的 providers 中設定要注入的 Service Router 負責處理 URL 路由 設定路由時使用 routes 陣列 path: 定義路徑 component: 指定對應的 Component canActivate: 設定路由守衛 (Guard) 路由守衛 (Guard) 透過 ng g guard &amp;lt;guard-name&amp;gt; 來產生 CanActivate: 控制是否允許使用者進入某個路由 適合用來驗證使用者權限 CLI Command ng new my-app: 建立新的 Angular 專案 ng serve: 啟動開發伺服器 ng build: 打包專案 ng generate (縮寫 ng g) ng g module my-module: 建立新的 Module ng g component my-component: 建立新的 Component --module=app: 指定 Component 所屬的 Module ng g service my-service: 建立新的 Service ng g pipe my-pipe: 建立新的 Pipe ng g directive my-directive: 建立新的 Directive Module @NgModule() declarations: 定義同一 Module 中的 Component、Directive、Pipe imports: 匯入其他 Module providers: 定義 Service bootstrap: 定義應用程式啟動時的根 Component exports: 定義要匯出的 Component、Directive、Pipe Component 包含的主要部分： Template: HTML 模板 TypeScript Class: 包含 Component 的邏輯與屬性 Selector: 定義 Component 在 HTML 中的名稱 CSS Style: 樣式 .'>
 <title>Angular 筆記</title>
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/angular-%E7%AD%86%E8%A8%98/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.7043ab073f3cae4b95936f5bfe326aa019ab0eadb79066e80f4e10d773250541.css"><meta property='og:title' content='Angular 筆記'>
-<meta property='og:description' content='基礎概念 Module 把相關的 Component、Directive、Pipe、Service 等打包在一起的容器 Lazy Loading Component Angular 應用程式的基本組成單位 Pipe 用來轉換資料的工具，可以把字串格式化、日期格式化等 Directive 用來修改 DOM 元素的外觀或行為 比如說 ngIf、ngFor、ngStyle、ngClass 類型 Structural Directive: 修改 DOM 的結構 可以搭配 ng-container 不會產生額外的 DOM 元素，可以用在想要用 ngIf 和 ngFor 但不想產生額外元素的情況 *ngFor let item of items; index as i Attribute Directive: 修改 DOM 的屬性 Component Directive: 包含 template 的 directive Service 負責 API 請求、資料處理等工作 Dependency Injection @Injectable providedIn root: 全域共用 也可以在 component 的 providers 中設定要注入的 service Router 負責處理 URL 路由 routes path component guard ng g guard &amp;lt;guard-name&amp;gt; CanActivate CLI Command ng new my-app: 建立新的 Angular 專案 ng serve: 啟動開發伺服器 ng build: 打包專案 generate ng generate module my-module: 建立新的 Module ng generate component my-component: 建立新的 Component --module=app: 指定 Component 所屬的 Module ng generate service my-service: 建立新的 Service ng generate pipe my-pipe: 建立新的 Pipe ng generate directive my-directive: 建立新的 Directive Module NgModule declarations: 定義同一 Module 中的 Component、Directive、Pipe imports: 匯入其他 Module providers: 定義 Service bootstrap: 定義啟動的 Component exports: 定義要匯出的 Component、Directive、Pipe Component 包含元素 Template TypeScript Class .'>
+<link rel="stylesheet" href="/Blog/scss/style.min.6c2f219b50fdafd3d9e37eb3a78aae1ae4db4cfd4d2a5606db7e9bc87ed0c4d1.css"><meta property='og:title' content='Angular 筆記'>
+<meta property='og:description' content='基礎概念 Module 把相關的 Component、Directive、Pipe、Service 等打包在一起的容器 可以使用 Lazy Loading 延遲加載模組，提高效能 Component Angular 應用程式的基本組成單位 由 HTML、CSS、TypeScript 共同組成 具有自己的 @Component 裝飾器 Pipe 用來轉換資料的工具，可以用於字串格式化、日期格式化等 可以透過 | 符號在模板中使用，例如 {{ value | uppercase }} 內建 Pipes：date、uppercase、lowercase、currency、percent 等 可以建立自訂 Pipe Directive 用來修改 DOM 元素的外觀或行為 例如 ngIf、ngFor、ngStyle、ngClass 分為三種類型： Structural Directive: 修改 DOM 的結構 *ngIf, *ngFor, *ngSwitch 可搭配 ng-container 不會產生額外的 DOM 元素，適合在 ngIf 和 ngFor 不希望產生額外元素時使用 *ngFor 例子：let item of items; index as i Attribute Directive: 修改 DOM 的屬性，例如 ngClass, ngStyle Component Directive: 包含 template 的 directive Service 負責 API 請求、資料處理等工作 透過 Dependency Injection (DI) 來提供服務 @Injectable() 裝飾器用來標記服務 providedIn root: 服務將在整個應用程式中可用 也可以在特定 Module 或 Component 的 providers 中設定要注入的 Service Router 負責處理 URL 路由 設定路由時使用 routes 陣列 path: 定義路徑 component: 指定對應的 Component canActivate: 設定路由守衛 (Guard) 路由守衛 (Guard) 透過 ng g guard &amp;lt;guard-name&amp;gt; 來產生 CanActivate: 控制是否允許使用者進入某個路由 適合用來驗證使用者權限 CLI Command ng new my-app: 建立新的 Angular 專案 ng serve: 啟動開發伺服器 ng build: 打包專案 ng generate (縮寫 ng g) ng g module my-module: 建立新的 Module ng g component my-component: 建立新的 Component --module=app: 指定 Component 所屬的 Module ng g service my-service: 建立新的 Service ng g pipe my-pipe: 建立新的 Pipe ng g directive my-directive: 建立新的 Directive Module @NgModule() declarations: 定義同一 Module 中的 Component、Directive、Pipe imports: 匯入其他 Module providers: 定義 Service bootstrap: 定義應用程式啟動時的根 Component exports: 定義要匯出的 Component、Directive、Pipe Component 包含的主要部分： Template: HTML 模板 TypeScript Class: 包含 Component 的邏輯與屬性 Selector: 定義 Component 在 HTML 中的名稱 CSS Style: 樣式 .'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/angular-%E7%AD%86%E8%A8%98/'>
 <meta property='og:site_name' content='Roykesydon'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='framework' /><meta property='article:tag' content='javascript' /><meta property='article:published_time' content='2024-05-24T00:00:17&#43;08:00'/><meta property='article:modified_time' content='2024-05-24T00:00:17&#43;08:00'/>
 <meta name="twitter:title" content="Angular 筆記">
-<meta name="twitter:description" content="基礎概念 Module 把相關的 Component、Directive、Pipe、Service 等打包在一起的容器 Lazy Loading Component Angular 應用程式的基本組成單位 Pipe 用來轉換資料的工具，可以把字串格式化、日期格式化等 Directive 用來修改 DOM 元素的外觀或行為 比如說 ngIf、ngFor、ngStyle、ngClass 類型 Structural Directive: 修改 DOM 的結構 可以搭配 ng-container 不會產生額外的 DOM 元素，可以用在想要用 ngIf 和 ngFor 但不想產生額外元素的情況 *ngFor let item of items; index as i Attribute Directive: 修改 DOM 的屬性 Component Directive: 包含 template 的 directive Service 負責 API 請求、資料處理等工作 Dependency Injection @Injectable providedIn root: 全域共用 也可以在 component 的 providers 中設定要注入的 service Router 負責處理 URL 路由 routes path component guard ng g guard &amp;lt;guard-name&amp;gt; CanActivate CLI Command ng new my-app: 建立新的 Angular 專案 ng serve: 啟動開發伺服器 ng build: 打包專案 generate ng generate module my-module: 建立新的 Module ng generate component my-component: 建立新的 Component --module=app: 指定 Component 所屬的 Module ng generate service my-service: 建立新的 Service ng generate pipe my-pipe: 建立新的 Pipe ng generate directive my-directive: 建立新的 Directive Module NgModule declarations: 定義同一 Module 中的 Component、Directive、Pipe imports: 匯入其他 Module providers: 定義 Service bootstrap: 定義啟動的 Component exports: 定義要匯出的 Component、Directive、Pipe Component 包含元素 Template TypeScript Class .">
+<meta name="twitter:description" content="基礎概念 Module 把相關的 Component、Directive、Pipe、Service 等打包在一起的容器 可以使用 Lazy Loading 延遲加載模組，提高效能 Component Angular 應用程式的基本組成單位 由 HTML、CSS、TypeScript 共同組成 具有自己的 @Component 裝飾器 Pipe 用來轉換資料的工具，可以用於字串格式化、日期格式化等 可以透過 | 符號在模板中使用，例如 {{ value | uppercase }} 內建 Pipes：date、uppercase、lowercase、currency、percent 等 可以建立自訂 Pipe Directive 用來修改 DOM 元素的外觀或行為 例如 ngIf、ngFor、ngStyle、ngClass 分為三種類型： Structural Directive: 修改 DOM 的結構 *ngIf, *ngFor, *ngSwitch 可搭配 ng-container 不會產生額外的 DOM 元素，適合在 ngIf 和 ngFor 不希望產生額外元素時使用 *ngFor 例子：let item of items; index as i Attribute Directive: 修改 DOM 的屬性，例如 ngClass, ngStyle Component Directive: 包含 template 的 directive Service 負責 API 請求、資料處理等工作 透過 Dependency Injection (DI) 來提供服務 @Injectable() 裝飾器用來標記服務 providedIn root: 服務將在整個應用程式中可用 也可以在特定 Module 或 Component 的 providers 中設定要注入的 Service Router 負責處理 URL 路由 設定路由時使用 routes 陣列 path: 定義路徑 component: 指定對應的 Component canActivate: 設定路由守衛 (Guard) 路由守衛 (Guard) 透過 ng g guard &amp;lt;guard-name&amp;gt; 來產生 CanActivate: 控制是否允許使用者進入某個路由 適合用來驗證使用者權限 CLI Command ng new my-app: 建立新的 Angular 專案 ng serve: 啟動開發伺服器 ng build: 打包專案 ng generate (縮寫 ng g) ng g module my-module: 建立新的 Module ng g component my-component: 建立新的 Component --module=app: 指定 Component 所屬的 Module ng g service my-service: 建立新的 Service ng g pipe my-pipe: 建立新的 Pipe ng g directive my-directive: 建立新的 Directive Module @NgModule() declarations: 定義同一 Module 中的 Component、Directive、Pipe imports: 匯入其他 Module providers: 定義 Service bootstrap: 定義應用程式啟動時的根 Component exports: 定義要匯出的 Component、Directive、Pipe Component 包含的主要部分： Template: HTML 模板 TypeScript Class: 包含 Component 的邏輯與屬性 Selector: 定義 Component 在 HTML 中的名稱 CSS Style: 樣式 .">
     <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
 
 </head>
@@ -320,21 +320,16 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
         <li><a href="#router">Router</a></li>
       </ol>
     </li>
-    <li><a href="#canactivate">CanActivate</a></li>
     <li><a href="#cli-command">CLI Command</a></li>
     <li><a href="#module-1">Module</a></li>
     <li><a href="#component-1">Component</a></li>
-    <li><a href="#lifecycle-hooks">Lifecycle Hooks</a>
+    <li><a href="#lifecycle-hooks">Lifecycle Hooks</a></li>
+    <li><a href="#sharing-data-資料傳遞">Sharing Data (資料傳遞)</a></li>
+    <li><a href="#data-binding-資料綁定">Data Binding (資料綁定)</a>
       <ol>
-        <li><a href="#component-check">Component check</a></li>
-      </ol>
-    </li>
-    <li><a href="#sharing-data">Sharing Data</a></li>
-    <li><a href="#binding">Binding</a>
-      <ol>
-        <li><a href="#property-binding">Property Binding</a></li>
-        <li><a href="#event-binding">Event Binding</a></li>
-        <li><a href="#two-way-binding">Two-way Binding</a></li>
+        <li><a href="#property-binding-屬性綁定">Property Binding (屬性綁定)</a></li>
+        <li><a href="#event-binding-事件綁定">Event Binding (事件綁定)</a></li>
+        <li><a href="#two-way-binding-雙向綁定">Two-way Binding (雙向綁定)</a></li>
       </ol>
     </li>
   </ol>
@@ -429,43 +424,41 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <h3 id="module">Module</h3>
 <ul>
 <li>把相關的 Component、Directive、Pipe、Service 等打包在一起的容器</li>
-<li>Lazy Loading</li>
+<li>可以使用 Lazy Loading 延遲加載模組，提高效能</li>
 </ul>
 <h3 id="component">Component</h3>
 <ul>
 <li>Angular 應用程式的基本組成單位</li>
+<li>由 HTML、CSS、TypeScript 共同組成</li>
+<li>具有自己的 <code>@Component</code> 裝飾器</li>
 </ul>
 <h3 id="pipe">Pipe</h3>
 <ul>
-<li>用來轉換資料的工具，可以把字串格式化、日期格式化等</li>
+<li>用來轉換資料的工具，可以用於字串格式化、日期格式化等</li>
+<li>可以透過 <code>|</code> 符號在模板中使用，例如 <code>{{ value | uppercase }}</code></li>
+<li>內建 Pipes：<code>date</code>、<code>uppercase</code>、<code>lowercase</code>、<code>currency</code>、<code>percent</code> 等</li>
+<li>可以建立自訂 Pipe</li>
 </ul>
 <h3 id="directive">Directive</h3>
 <ul>
 <li>用來修改 DOM 元素的外觀或行為
 <ul>
-<li>比如說 ngIf、ngFor、ngStyle、ngClass</li>
-<li>類型
+<li>例如 <code>ngIf</code>、<code>ngFor</code>、<code>ngStyle</code>、<code>ngClass</code></li>
+<li>分為三種類型：
 <ul>
-<li>Structural Directive: 修改 DOM 的結構
+<li><strong>Structural Directive</strong>: 修改 DOM 的結構
 <ul>
-<li>可以搭配
+<li><code>*ngIf</code>, <code>*ngFor</code>, <code>*ngSwitch</code></li>
+<li>可搭配 <code>ng-container</code>
 <ul>
-<li><code>ng-container</code>
-<ul>
-<li>不會產生額外的 DOM 元素，可以用在想要用 ngIf 和 ngFor 但不想產生額外元素的情況</li>
+<li>不會產生額外的 DOM 元素，適合在 <code>ngIf</code> 和 <code>ngFor</code> 不希望產生額外元素時使用</li>
 </ul>
 </li>
+<li><code>*ngFor</code> 例子：<code>let item of items; index as i</code></li>
 </ul>
 </li>
-<li><code>*ngFor</code>
-<ul>
-<li><code>let item of items; index as i</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Attribute Directive: 修改 DOM 的屬性</li>
-<li>Component Directive: 包含 template 的 directive</li>
+<li><strong>Attribute Directive</strong>: 修改 DOM 的屬性，例如 <code>ngClass</code>, <code>ngStyle</code></li>
+<li><strong>Component Directive</strong>: 包含 template 的 directive</li>
 </ul>
 </li>
 </ul>
@@ -474,13 +467,13 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <h3 id="service">Service</h3>
 <ul>
 <li>負責 API 請求、資料處理等工作</li>
-<li>Dependency Injection</li>
-<li>@Injectable
+<li>透過 <strong>Dependency Injection (DI)</strong> 來提供服務</li>
+<li><code>@Injectable()</code> 裝飾器用來標記服務
 <ul>
-<li>providedIn
+<li><code>providedIn</code>
 <ul>
-<li>root: 全域共用</li>
-<li>也可以在 component 的 providers 中設定要注入的 service</li>
+<li><code>root</code>: 服務將在整個應用程式中可用</li>
+<li>也可以在特定 Module 或 Component 的 <code>providers</code> 中設定要注入的 Service</li>
 </ul>
 </li>
 </ul>
@@ -489,22 +482,20 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <h3 id="router">Router</h3>
 <ul>
 <li>負責處理 URL 路由</li>
-<li>routes
+<li>設定路由時使用 <code>routes</code> 陣列
 <ul>
-<li>path</li>
-<li>component</li>
-<li>
-<!-- raw HTML omitted -->
-</li>
+<li><code>path</code>: 定義路徑</li>
+<li><code>component</code>: 指定對應的 Component</li>
+<li><code>canActivate</code>: 設定路由守衛 (Guard)</li>
 </ul>
 </li>
-<li>guard
+<li>路由守衛 (Guard)
 <ul>
-<li><code>ng g guard &lt;guard-name&gt;</code>
+<li>透過 <code>ng g guard &lt;guard-name&gt;</code> 來產生</li>
+<li><code>CanActivate</code>:
 <ul>
-<li>
-<h2 id="canactivate">CanActivate</h2>
-</li>
+<li>控制是否允許使用者進入某個路由</li>
+<li>適合用來驗證使用者權限</li>
 </ul>
 </li>
 </ul>
@@ -515,146 +506,127 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <li><code>ng new my-app</code>: 建立新的 Angular 專案</li>
 <li><code>ng serve</code>: 啟動開發伺服器</li>
 <li><code>ng build</code>: 打包專案</li>
-<li>generate
+<li><code>ng generate</code> (縮寫 <code>ng g</code>)
 <ul>
-<li><code>ng generate module my-module</code>: 建立新的 Module</li>
-<li><code>ng generate component my-component</code>: 建立新的 Component
+<li><code>ng g module my-module</code>: 建立新的 Module</li>
+<li><code>ng g component my-component</code>: 建立新的 Component
 <ul>
 <li><code>--module=app</code>: 指定 Component 所屬的 Module</li>
 </ul>
 </li>
-<li><code>ng generate service my-service</code>: 建立新的 Service</li>
-<li><code>ng generate pipe my-pipe</code>: 建立新的 Pipe</li>
-<li><code>ng generate directive my-directive</code>: 建立新的 Directive</li>
+<li><code>ng g service my-service</code>: 建立新的 Service</li>
+<li><code>ng g pipe my-pipe</code>: 建立新的 Pipe</li>
+<li><code>ng g directive my-directive</code>: 建立新的 Directive</li>
 </ul>
 </li>
 </ul>
 <h2 id="module-1">Module</h2>
 <ul>
-<li>NgModule
+<li><code>@NgModule()</code>
 <ul>
-<li>declarations: 定義同一 Module 中的 Component、Directive、Pipe</li>
-<li>imports: 匯入其他 Module</li>
-<li>providers: 定義 Service</li>
-<li>bootstrap: 定義啟動的 Component</li>
-<li>exports: 定義要匯出的 Component、Directive、Pipe</li>
+<li><code>declarations</code>: 定義同一 Module 中的 Component、Directive、Pipe</li>
+<li><code>imports</code>: 匯入其他 Module</li>
+<li><code>providers</code>: 定義 Service</li>
+<li><code>bootstrap</code>: 定義應用程式啟動時的根 Component</li>
+<li><code>exports</code>: 定義要匯出的 Component、Directive、Pipe</li>
 </ul>
 </li>
 </ul>
 <h2 id="component-1">Component</h2>
 <ul>
-<li>包含元素
+<li>包含的主要部分：
 <ul>
-<li>Template</li>
-<li>TypeScript Class
-<ul>
-<li>.spec.ts: 測試檔</li>
+<li><strong>Template</strong>: HTML 模板</li>
+<li><strong>TypeScript Class</strong>: 包含 Component 的邏輯與屬性</li>
+<li><strong>Selector</strong>: 定義 Component 在 HTML 中的名稱</li>
+<li><strong>CSS Style</strong>: 樣式</li>
+<li><strong>.spec.ts</strong>: 測試檔案</li>
 </ul>
 </li>
-<li>Selector: 定義 Component 的名稱</li>
-<li>CSS Style</li>
-</ul>
-</li>
-<li>standalone
+<li><strong>Standalone Component</strong>
 <ul>
-<li>新版 Angular 預設 app 使用 Standalone 模式，使 component 不再需要透過 NgModule 管理</li>
+<li>Angular 新版預設採用 Standalone Component 模式</li>
+<li>Component 不再需要透過 <code>NgModule</code> 管理</li>
 </ul>
 </li>
 </ul>
 <h2 id="lifecycle-hooks">Lifecycle Hooks</h2>
 <ul>
-<li>ngOnChanges
-<ul>
-<li>當 Angular 重新綁定輸入屬性時調用</li>
+<li><code>ngOnChanges</code>: 當輸入屬性變更時調用</li>
+<li><code>ngOnInit</code>: 組件初始化時調用（僅執行一次）</li>
+<li><code>ngDoCheck</code>: 手動偵測變更</li>
+<li><code>ngAfterContentInit</code>: <code>ng-content</code> 投影完成後調用</li>
+<li><code>ngAfterContentChecked</code>: <code>ng-content</code> 內容變更後調用</li>
+<li><code>ngAfterViewInit</code>: <code>ViewChild</code>、<code>ViewChildren</code> 初始化後調用</li>
+<li><code>ngAfterViewChecked</code>: 每次檢查變更後調用</li>
+<li><code>ngOnDestroy</code>: 組件銷毀前調用，可用於取消訂閱與清除資源</li>
 </ul>
-</li>
-<li>ngOnInit
+<h2 id="sharing-data-資料傳遞">Sharing Data (資料傳遞)</h2>
 <ul>
-<li>當 Angular 初始化指令/元件時調用</li>
-<li>在第一輪 ngOnChanges 後調用</li>
-<li>只調用一次</li>
-<li>使用場景
+<li><code>@Input</code>: 父元件傳遞資料給子元件</li>
+<li><code>@Output</code>: 子元件透過 <code>EventEmitter</code> 傳遞資料給父元件</li>
+<li>其他方式：
 <ul>
-<li>初始化資料（需要根據 @Input 變數）</li>
-<li>fetch data from API</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>ngDoCheck
-<ul>
-<li>在 ngOnChange 和 ngOnInit 之後調用</li>
-</ul>
-</li>
-<li>ngAfterContentInit
-<ul>
-<li>在 Angular 把 ng-content 投影到 view 後調用</li>
-<li>在第一個 ngDoCheck 之後調用</li>
-</ul>
-</li>
-<li>ngAfterContentChecked
-<ul>
-<li>在 ng-content 的內容變更後調用</li>
-</ul>
-</li>
-<li>ngAfterViewInit
-<ul>
-<li>在 Angular 初始化完 view 後調用</li>
-</ul>
-</li>
-<li>ngAfterViewChecked
-<ul>
-<li>在每次做完 view 的變更檢查後調用</li>
-</ul>
-</li>
-<li>ngOnDestroy
-<ul>
-<li>在 Angular 銷毀 directive/component 前調用</li>
+<li>透過 <strong>Service</strong> 和 <strong>RxJS</strong> Subject/BehaviorSubject 來進行資料共享</li>
 </ul>
 </li>
 </ul>
-<h3 id="component-check">Component check</h3>
-<ul>
-<li>操作
-<ul>
-<li>update child component input binding</li>
-<li>update DOM interpolation</li>
-<li>update query list</li>
-</ul>
-</li>
-</ul>
-<h2 id="sharing-data">Sharing Data</h2>
-<ul>
-<li>@Input
-<ul>
-<li>父元件傳遞資料給子元件</li>
-</ul>
-</li>
-<li>@Output
-<ul>
-<li>子元件傳遞資料給父元件</li>
-</ul>
-</li>
-</ul>
-<h2 id="binding">Binding</h2>
-<h3 id="property-binding">Property Binding</h3>
+<h2 id="data-binding-資料綁定">Data Binding (資料綁定)</h2>
+<h3 id="property-binding-屬性綁定">Property Binding (屬性綁定)</h3>
 <ul>
 <li>用來設定 HTML 元素的屬性</li>
-<li>用中括號 <code>[]</code> 包住屬性名稱</li>
-<li>ex: <code>&lt;img [src]=&quot;imageUrl&quot;&gt;</code></li>
+<li>使用中括號 <code>[]</code> 包住屬性名稱</li>
+<li>範例：
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">img</span> <span class="err">[</span><span class="na">src</span><span class="err">]=&#34;</span><span class="na">imageUrl</span><span class="err">&#34;</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
 </ul>
-<h3 id="event-binding">Event Binding</h3>
+<h3 id="event-binding-事件綁定">Event Binding (事件綁定)</h3>
 <ul>
 <li>用來設定 HTML 元素的事件</li>
-<li>用小括號 <code>()</code> 包住事件名稱</li>
-<li>ex: <code>&lt;button (click)=&quot;onClick()&quot;&gt;</code></li>
-<li><code>$event</code>: 可以取得事件物件</li>
+<li>使用小括號 <code>()</code> 包住事件名稱</li>
+<li>範例：
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">button</span> <span class="err">(</span><span class="na">click</span><span class="err">)=&#34;</span><span class="na">onClick</span><span class="err">()&#34;</span><span class="p">&gt;</span>Click Me<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li><code>$event</code>: 取得事件物件
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">input</span> <span class="err">(</span><span class="na">input</span><span class="err">)=&#34;</span><span class="na">onInput</span><span class="err">($</span><span class="na">event</span><span class="err">)&#34;</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
 </ul>
-<h3 id="two-way-binding">Two-way Binding</h3>
+<h3 id="two-way-binding-雙向綁定">Two-way Binding (雙向綁定)</h3>
 <ul>
-<li>把屬性和事件綁定在一起</li>
-<li>用中括號和小括號 <code>[(ngModel)]</code> 包住屬性名稱</li>
-<li>ex: <code>&lt;input [(ngModel)]=&quot;name&quot;&gt;</code></li>
+<li>屬性與事件綁定結合在一起</li>
+<li>使用 <code>[(ngModel)]</code> 綁定表單輸入</li>
+<li>需要匯入 <code>FormsModule</code></li>
+<li>範例：
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">input</span> <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&#34;</span><span class="na">name</span><span class="err">&#34;</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
 </ul>
 
 </section>

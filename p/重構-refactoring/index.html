@@ -4,22 +4,25 @@
 <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='重構 在不改變軟體行為的情況下，對軟體內部構造進行改善
 Code Smell 也稱 Bad Smell，代表程式碼中需要重構的部分
-Duplicated Code 重複程式碼 在同個 Class Extract Method 在不同 Class Extract Class Long Method 用 Extract Method 拆解過長的 function Long Parameter List Preserve Whole Object 把來自同一物件的資料直接該物件取代 Introduce Parameter Object 把相關的資料包成一個 Object Large Class 一個 Class 有太多 fields / methods / lines Magic Number 特殊數值直接用數字表示，日後修改每個地方都要改 Lack of Comments 加註解的好時機：寫程式前寫上 Switch Statements 可利用「多型 (Polymorphism)」解決 Divergent Change 一個類別有太多改變的原因 盡量讓其遵守 SRP Shotgun Surgery 某個責任被分散到大量的 Class 身上，使修改其時要大量修改 Feature Envy 存取別的 Object 的 Data 的情形比自己的還頻繁 這方法可能應該屬於另一個 Object Data Clumps 常一起出現的資料群應該被單獨抽成一個 Class Primitive Obsession 過度使用基本類別，造成 Shotgun Surgery Message Chains Client 請求 A 物件，A 物件又請求 B 物件 Lazy Class 把冗員類別移除 Temporary Field Instance variable 只有在特殊情形才被使用，應該改為區域變數或參數 Inappropriate Intimacy Classes 間頻繁讀取對方資料 理解程式要同時看懂兩者 Alternative Classes with Different Interfaces 兩個 Class 具有功能相同、命名不同的 function 可汲取共同部分為 Super Class 來解決 '>
+Bloaters 程式碼（類別、方法）過於龐大
+Long Method 部分解法 用 Extract Method 拆解過長的 function 用 Replace Temp with Query 取代暫存變數 Large Class 一個 Class 有太多 fields / methods / lines 部分解法 Extract Class Extract Subclass 把部分功能移到新建的子類別 Long Parameter List 部分解法 Preserve Whole Object 把來自同一物件的資料直接該物件取代 Introduce Parameter Object 把相關的參數包成一個 Object Data Clumps 不同的程式碼區域出現相同的變數組（Guru 舉的例子是連接資料庫用的參數） 常一起出現的資料群應該被單獨抽成一個 Class 部分解法 Extract Class Introduce Parameter Object Primitive Obsession 過度使用基本類別（primitives），造成 Shotgun Surgery Magic Number 也是一種 Primitive Obsession 部分解法 Replace Data Value with Object Replace Type Code with Class Object-Orientation Abusers 亂用物件導向程式設計原則'>
 <title>重構 Refactoring</title>
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/%E9%87%8D%E6%A7%8B-refactoring/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.7043ab073f3cae4b95936f5bfe326aa019ab0eadb79066e80f4e10d773250541.css"><meta property='og:title' content='重構 Refactoring'>
+<link rel="stylesheet" href="/Blog/scss/style.min.6c2f219b50fdafd3d9e37eb3a78aae1ae4db4cfd4d2a5606db7e9bc87ed0c4d1.css"><meta property='og:title' content='重構 Refactoring'>
 <meta property='og:description' content='重構 在不改變軟體行為的情況下，對軟體內部構造進行改善
 Code Smell 也稱 Bad Smell，代表程式碼中需要重構的部分
-Duplicated Code 重複程式碼 在同個 Class Extract Method 在不同 Class Extract Class Long Method 用 Extract Method 拆解過長的 function Long Parameter List Preserve Whole Object 把來自同一物件的資料直接該物件取代 Introduce Parameter Object 把相關的資料包成一個 Object Large Class 一個 Class 有太多 fields / methods / lines Magic Number 特殊數值直接用數字表示，日後修改每個地方都要改 Lack of Comments 加註解的好時機：寫程式前寫上 Switch Statements 可利用「多型 (Polymorphism)」解決 Divergent Change 一個類別有太多改變的原因 盡量讓其遵守 SRP Shotgun Surgery 某個責任被分散到大量的 Class 身上，使修改其時要大量修改 Feature Envy 存取別的 Object 的 Data 的情形比自己的還頻繁 這方法可能應該屬於另一個 Object Data Clumps 常一起出現的資料群應該被單獨抽成一個 Class Primitive Obsession 過度使用基本類別，造成 Shotgun Surgery Message Chains Client 請求 A 物件，A 物件又請求 B 物件 Lazy Class 把冗員類別移除 Temporary Field Instance variable 只有在特殊情形才被使用，應該改為區域變數或參數 Inappropriate Intimacy Classes 間頻繁讀取對方資料 理解程式要同時看懂兩者 Alternative Classes with Different Interfaces 兩個 Class 具有功能相同、命名不同的 function 可汲取共同部分為 Super Class 來解決 '>
+Bloaters 程式碼（類別、方法）過於龐大
+Long Method 部分解法 用 Extract Method 拆解過長的 function 用 Replace Temp with Query 取代暫存變數 Large Class 一個 Class 有太多 fields / methods / lines 部分解法 Extract Class Extract Subclass 把部分功能移到新建的子類別 Long Parameter List 部分解法 Preserve Whole Object 把來自同一物件的資料直接該物件取代 Introduce Parameter Object 把相關的參數包成一個 Object Data Clumps 不同的程式碼區域出現相同的變數組（Guru 舉的例子是連接資料庫用的參數） 常一起出現的資料群應該被單獨抽成一個 Class 部分解法 Extract Class Introduce Parameter Object Primitive Obsession 過度使用基本類別（primitives），造成 Shotgun Surgery Magic Number 也是一種 Primitive Obsession 部分解法 Replace Data Value with Object Replace Type Code with Class Object-Orientation Abusers 亂用物件導向程式設計原則'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/%E9%87%8D%E6%A7%8B-refactoring/'>
 <meta property='og:site_name' content='Roykesydon'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='software-engineering' /><meta property='article:tag' content='software-design' /><meta property='article:published_time' content='2023-04-25T14:26:17&#43;08:00'/><meta property='article:modified_time' content='2023-04-25T14:26:17&#43;08:00'/>
 <meta name="twitter:title" content="重構 Refactoring">
 <meta name="twitter:description" content="重構 在不改變軟體行為的情況下，對軟體內部構造進行改善
 Code Smell 也稱 Bad Smell，代表程式碼中需要重構的部分
-Duplicated Code 重複程式碼 在同個 Class Extract Method 在不同 Class Extract Class Long Method 用 Extract Method 拆解過長的 function Long Parameter List Preserve Whole Object 把來自同一物件的資料直接該物件取代 Introduce Parameter Object 把相關的資料包成一個 Object Large Class 一個 Class 有太多 fields / methods / lines Magic Number 特殊數值直接用數字表示，日後修改每個地方都要改 Lack of Comments 加註解的好時機：寫程式前寫上 Switch Statements 可利用「多型 (Polymorphism)」解決 Divergent Change 一個類別有太多改變的原因 盡量讓其遵守 SRP Shotgun Surgery 某個責任被分散到大量的 Class 身上，使修改其時要大量修改 Feature Envy 存取別的 Object 的 Data 的情形比自己的還頻繁 這方法可能應該屬於另一個 Object Data Clumps 常一起出現的資料群應該被單獨抽成一個 Class Primitive Obsession 過度使用基本類別，造成 Shotgun Surgery Message Chains Client 請求 A 物件，A 物件又請求 B 物件 Lazy Class 把冗員類別移除 Temporary Field Instance variable 只有在特殊情形才被使用，應該改為區域變數或參數 Inappropriate Intimacy Classes 間頻繁讀取對方資料 理解程式要同時看懂兩者 Alternative Classes with Different Interfaces 兩個 Class 具有功能相同、命名不同的 function 可汲取共同部分為 Super Class 來解決 ">
+Bloaters 程式碼（類別、方法）過於龐大
+Long Method 部分解法 用 Extract Method 拆解過長的 function 用 Replace Temp with Query 取代暫存變數 Large Class 一個 Class 有太多 fields / methods / lines 部分解法 Extract Class Extract Subclass 把部分功能移到新建的子類別 Long Parameter List 部分解法 Preserve Whole Object 把來自同一物件的資料直接該物件取代 Introduce Parameter Object 把相關的參數包成一個 Object Data Clumps 不同的程式碼區域出現相同的變數組（Guru 舉的例子是連接資料庫用的參數） 常一起出現的資料群應該被單獨抽成一個 Class 部分解法 Extract Class Introduce Parameter Object Primitive Obsession 過度使用基本類別（primitives），造成 Shotgun Surgery Magic Number 也是一種 Primitive Obsession 部分解法 Replace Data Value with Object Replace Type Code with Class Object-Orientation Abusers 亂用物件導向程式設計原則">
     <link rel="shortcut icon" href="/Blog/images/favicon/logo.ico" />
 
 </head>
@@ -317,25 +320,40 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
             <nav id="TableOfContents">
   <ol>
     <li><a href="#重構">重構</a></li>
-    <li><a href="#code-smell">Code Smell</a>
+    <li><a href="#code-smell">Code Smell</a></li>
+    <li><a href="#bloaters">Bloaters</a>
       <ol>
-        <li><a href="#duplicated-code">Duplicated Code</a></li>
         <li><a href="#long-method">Long Method</a></li>
-        <li><a href="#long-parameter-list">Long Parameter List</a></li>
         <li><a href="#large-class">Large Class</a></li>
-        <li><a href="#magic-number">Magic Number</a></li>
-        <li><a href="#lack-of-comments">Lack of Comments</a></li>
-        <li><a href="#switch-statements">Switch Statements</a></li>
-        <li><a href="#divergent-change">Divergent Change</a></li>
-        <li><a href="#shotgun-surgery">Shotgun Surgery</a></li>
-        <li><a href="#feature-envy">Feature Envy</a></li>
+        <li><a href="#long-parameter-list">Long Parameter List</a></li>
         <li><a href="#data-clumps">Data Clumps</a></li>
         <li><a href="#primitive-obsession">Primitive Obsession</a></li>
-        <li><a href="#message-chains">Message Chains</a></li>
-        <li><a href="#lazy-class">Lazy Class</a></li>
+      </ol>
+    </li>
+    <li><a href="#object-orientation-abusers">Object-Orientation Abusers</a>
+      <ol>
+        <li><a href="#switch-statements">Switch Statements</a></li>
         <li><a href="#temporary-field">Temporary Field</a></li>
-        <li><a href="#inappropriate-intimacy">Inappropriate Intimacy</a></li>
         <li><a href="#alternative-classes-with-different-interfaces">Alternative Classes with Different Interfaces</a></li>
+      </ol>
+    </li>
+    <li><a href="#change-preventers">Change Preventers</a>
+      <ol>
+        <li><a href="#divergent-change">Divergent Change</a></li>
+        <li><a href="#shotgun-surgery">Shotgun Surgery</a></li>
+      </ol>
+    </li>
+    <li><a href="#dispensables">Dispensables</a>
+      <ol>
+        <li><a href="#duplicated-code">Duplicated Code</a></li>
+        <li><a href="#lazy-class">Lazy Class</a></li>
+      </ol>
+    </li>
+    <li><a href="#couplers">Couplers</a>
+      <ol>
+        <li><a href="#feature-envy">Feature Envy</a></li>
+        <li><a href="#message-chains">Message Chains</a></li>
+        <li><a href="#inappropriate-intimacy">Inappropriate Intimacy</a></li>
       </ol>
     </li>
   </ol>
@@ -411,7 +429,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    2 minute read
                 </time>
             </div>
         
@@ -430,28 +448,34 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 <p>在不改變軟體行為的情況下，對軟體內部構造進行改善</p>
 <h2 id="code-smell">Code Smell</h2>
 <p>也稱 Bad Smell，代表程式碼中需要重構的部分</p>
-<h3 id="duplicated-code">Duplicated Code</h3>
-<ul>
-<li>重複程式碼
-<ul>
-<li>在同個 Class
-<ul>
-<li>Extract Method</li>
-</ul>
-</li>
-<li>在不同 Class
-<ul>
-<li>Extract Class</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+<h2 id="bloaters">Bloaters</h2>
+<p>程式碼（類別、方法）過於龐大</p>
 <h3 id="long-method">Long Method</h3>
 <ul>
+<li>部分解法
+<ul>
 <li>用 Extract Method 拆解過長的 function</li>
+<li>用 Replace Temp with Query 取代暫存變數</li>
+</ul>
+</li>
+</ul>
+<h3 id="large-class">Large Class</h3>
+<ul>
+<li>一個 Class 有太多 fields / methods / lines</li>
+<li>部分解法
+<ul>
+<li>Extract Class</li>
+<li>Extract Subclass
+<ul>
+<li>把部分功能移到新建的子類別</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h3 id="long-parameter-list">Long Parameter List</h3>
+<ul>
+<li>部分解法
 <ul>
 <li>Preserve Whole Object
 <ul>
@@ -460,70 +484,207 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 </li>
 <li>Introduce Parameter Object
 <ul>
-<li>把相關的資料包成一個 Object</li>
+<li>把相關的參數包成一個 Object</li>
 </ul>
 </li>
 </ul>
-<h3 id="large-class">Large Class</h3>
-<ul>
-<li>一個 Class 有太多 fields / methods / lines</li>
-</ul>
-<h3 id="magic-number">Magic Number</h3>
-<ul>
-<li>特殊數值直接用數字表示，日後修改每個地方都要改</li>
-</ul>
-<h3 id="lack-of-comments">Lack of Comments</h3>
-<ul>
-<li>加註解的好時機：寫程式前寫上</li>
-</ul>
-<h3 id="switch-statements">Switch Statements</h3>
-<ul>
-<li>可利用「多型 (Polymorphism)」解決</li>
-</ul>
-<h3 id="divergent-change">Divergent Change</h3>
-<ul>
-<li>一個類別有太多改變的原因</li>
-<li>盡量讓其遵守 SRP</li>
-</ul>
-<h3 id="shotgun-surgery">Shotgun Surgery</h3>
-<ul>
-<li>某個責任被分散到大量的 Class 身上，使修改其時要大量修改</li>
-</ul>
-<h3 id="feature-envy">Feature Envy</h3>
-<ul>
-<li>存取別的 Object 的 Data 的情形比自己的還頻繁</li>
-<li>這方法可能應該屬於另一個 Object</li>
+</li>
 </ul>
 <h3 id="data-clumps">Data Clumps</h3>
 <ul>
+<li>不同的程式碼區域出現相同的變數組（Guru 舉的例子是連接資料庫用的參數）</li>
 <li>常一起出現的資料群應該被單獨抽成一個 Class</li>
+<li>部分解法
+<ul>
+<li>Extract Class</li>
+<li>Introduce Parameter Object</li>
+</ul>
+</li>
 </ul>
 <h3 id="primitive-obsession">Primitive Obsession</h3>
 <ul>
-<li>過度使用基本類別，造成 Shotgun Surgery</li>
-</ul>
-<h3 id="message-chains">Message Chains</h3>
+<li>過度使用基本類別（primitives），造成 Shotgun Surgery</li>
+<li>Magic Number 也是一種 Primitive Obsession</li>
+<li>部分解法
 <ul>
-<li>Client 請求 A 物件，A 物件又請求 B 物件</li>
+<li>Replace Data Value with Object</li>
+<li>Replace Type Code with Class</li>
 </ul>
-<h3 id="lazy-class">Lazy Class</h3>
+</li>
+</ul>
+<hr>
+<h2 id="object-orientation-abusers">Object-Orientation Abusers</h2>
+<p>亂用物件導向程式設計原則</p>
+<h3 id="switch-statements">Switch Statements</h3>
 <ul>
-<li>把冗員類別移除</li>
+<li>有非常複雜的 Switch Case 或是 if-else</li>
+<li>部分解法
+<ul>
+<li>Replace Conditional with Polymorphism</li>
+<li>Replace Type Code with Subclasses
+<ul>
+<li>直接把多種狀態個別建立子物件，並把相關行為放進去，用多型處理</li>
+</ul>
+</li>
+<li>Replace Type Code with State/Strategy
+<ul>
+<li>用一個 state 物件來取代 type code</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h3 id="temporary-field">Temporary Field</h3>
 <ul>
-<li>Instance variable 只有在特殊情形才被使用，應該改為區域變數或參數</li>
-</ul>
-<h3 id="inappropriate-intimacy">Inappropriate Intimacy</h3>
+<li>指那些只在特定情況下才會被使用的 field，平時都是 null</li>
+<li>通常是因為存在需要大量參數的 function，但是這些參數被選擇放到 field</li>
+<li>部分解法
 <ul>
-<li>Classes 間頻繁讀取對方資料</li>
-<li>理解程式要同時看懂兩者</li>
+<li>Extract Class
+<ul>
+<li>把這些 field 和會用到的 function 抽成一個 Class</li>
+</ul>
+</li>
+<li>Introduce Null Object
+<ul>
+<li>用一個 Null Object 來取代 null，他可以提供一些預設的行為</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <h3 id="alternative-classes-with-different-interfaces">Alternative Classes with Different Interfaces</h3>
 <ul>
 <li>兩個 Class 具有功能相同、命名不同的 function</li>
-<li>可汲取共同部分為 Super Class 來解決</li>
+<li>部分解法
+<ul>
+<li>Rename Method</li>
+<li>Extract Superclass
+<ul>
+<li>把兩個 Class 的共同功能抽成一個父類別</li>
 </ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="change-preventers">Change Preventers</h2>
+<p>一處改變會導致多處程式碼改變</p>
+<h3 id="divergent-change">Divergent Change</h3>
+<ul>
+<li>對一個類別的修改會導致類別的多處也需要修改</li>
+<li>部分解法
+<ul>
+<li>Extract Class</li>
+</ul>
+</li>
+</ul>
+<h3 id="shotgun-surgery">Shotgun Surgery</h3>
+<ul>
+<li>某個責任被分散到大量的 Class 身上，使修改其時要大量修改</li>
+<li>對多個類別進行同一種修改</li>
+<li>部分解法
+<ul>
+<li>Move Method</li>
+<li>Move Field</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="dispensables">Dispensables</h2>
+<p>不必要的程式碼</p>
+<h3 id="duplicated-code">Duplicated Code</h3>
+<ul>
+<li>多個程式碼片段幾乎相同</li>
+<li>部分解法
+<ul>
+<li>Extract Method</li>
+</ul>
+</li>
+</ul>
+<h3 id="lazy-class">Lazy Class</h3>
+<ul>
+<li>沒什麼用的冗餘 Class</li>
+<li>部分解法
+<ul>
+<li>Inline Class
+<ul>
+<li>把這個 Class 的 feature 全部移到另一個 Class</li>
+</ul>
+</li>
+<li>Collapse Hierarchy
+<ul>
+<li>子類別和父類別功能差不多，可以把子類別和父類別合併</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="couplers">Couplers</h2>
+<p>導致類別之間高度耦合</p>
+<h3 id="feature-envy">Feature Envy</h3>
+<ul>
+<li>存取別的 Object 的 Data 的情形比自己的還頻繁</li>
+<li>這方法可能應該屬於另一個 Object</li>
+<li>部分解法
+<ul>
+<li>Move Method
+<ul>
+<li>把這個方法移到另一個 Class</li>
+</ul>
+</li>
+<li>Extract Method
+<ul>
+<li>如果只有一部分有這種情況，可以把這部分抽出來</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="message-chains">Message Chains</h3>
+<ul>
+<li>Client 請求 A 物件，A 物件又請求 B 物件，以此類推</li>
+<li>部分解法
+<ul>
+<li>Hide Delegate
+<ul>
+<li>情境是 client 從 A 物件取得 B 物件，然後又呼叫 B 物件的方法</li>
+<li>解法是把 B 物件的方法轉移給 A 物件</li>
+</ul>
+</li>
+<li>Extract Method &amp; Move Method
+<ul>
+<li>把最終的方法抽出來，放到開頭的物件</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="inappropriate-intimacy">Inappropriate Intimacy</h3>
+<ul>
+<li>一個類別使用另一個類別的內部欄位或方法
+<ul>
+<li>不單是存取私有變數，應該說依賴於另外一個類別的實作細節，比如出於某些原因知道要以特定順序呼叫方法</li>
+</ul>
+</li>
+<li>和 Feature Envy 相比，損害了其他類別的封裝性</li>
+<li>部分解法
+<ul>
+<li>Move Method / Move Field
+<ul>
+<li>如果該類別確實不需要這些東西可以考慮</li>
+</ul>
+</li>
+<li>Extract Class
+<ul>
+<li>把這些方法和欄位抽成一個 Class</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
 
 </section>
 

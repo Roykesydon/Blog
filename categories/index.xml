@@ -47,22 +47,6 @@
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/ctf.jpg" alt="Featured image of post CTF" /&gt;</description>
         </item>
         <item>
-        <title>Linux</title>
-        <link>https://roykesydon.github.io/Blog/categories/linux/</link>
-        <pubDate>Wed, 24 Apr 2024 00:00:43 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/categories/linux/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/linux.jpg" alt="Featured image of post Linux" /&gt;</description>
-        </item>
-        <item>
-        <title>Embedded System</title>
-        <link>https://roykesydon.github.io/Blog/categories/embedded-system/</link>
-        <pubDate>Thu, 04 May 2023 01:32:54 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/categories/embedded-system/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/embedded-system.jpg" alt="Featured image of post Embedded System" /&gt;</description>
-        </item>
-        <item>
         <title>Deep Learning</title>
         <link>https://roykesydon.github.io/Blog/categories/deep-learning/</link>
         <pubDate>Thu, 26 Jan 2023 01:36:53 +0800</pubDate>
@@ -71,12 +55,12 @@
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/deep-learning.jpg" alt="Featured image of post Deep Learning" /&gt;</description>
         </item>
         <item>
-        <title>Math</title>
-        <link>https://roykesydon.github.io/Blog/categories/math/</link>
+        <title>Linux</title>
+        <link>https://roykesydon.github.io/Blog/categories/linux/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://roykesydon.github.io/Blog/categories/math/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/math.jpg" alt="Featured image of post Math" /&gt;</description>
+        <guid>https://roykesydon.github.io/Blog/categories/linux/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/linux.jpg" alt="Featured image of post Linux" /&gt;</description>
         </item>
         <item>
         <title>Unclassified</title>

@@ -7,7 +7,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.7043ab073f3cae4b95936f5bfe326aa019ab0eadb79066e80f4e10d773250541.css"><meta property='og:title' content='Database 一般筆記'>
+<link rel="stylesheet" href="/Blog/scss/style.min.6c2f219b50fdafd3d9e37eb3a78aae1ae4db4cfd4d2a5606db7e9bc87ed0c4d1.css"><meta property='og:title' content='Database 一般筆記'>
 <meta property='og:description' content='沒有另外被獨立出去一篇且有關 Database 的內容'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -310,37 +310,52 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
         <div class="widget--toc">
             <nav id="TableOfContents">
   <ol>
-    <li><a href="#database-internal">Database internal</a>
+    <li><a href="#資料庫核心概念">資料庫核心概念</a>
       <ol>
-        <li><a href="#storage-concept">Storage concept</a></li>
-        <li><a href="#row-oriented-vs-column-oriented">Row-oriented vs Column-oriented</a></li>
-        <li><a href="#data-structure">Data structure</a></li>
-        <li><a href="#fragmentation">Fragmentation</a></li>
-        <li><a href="#database-cursor">Database cursor</a></li>
-        <li><a href="#partitioning">Partitioning</a></li>
+        <li><a href="#儲存結構">儲存結構</a></li>
+        <li><a href="#資料儲存方式">資料儲存方式</a></li>
+        <li><a href="#碎片化-fragmentation">碎片化 (Fragmentation)</a></li>
       </ol>
     </li>
-    <li><a href="#data-types">Data types</a></li>
-    <li><a href="#database-indexing">Database indexing</a>
+    <li><a href="#資料結構與索引">資料結構與索引</a>
       <ol>
-        <li><a href="#clustered-index">Clustered index</a></li>
-        <li><a href="#primary-key-vs-secondary-key">Primary key vs Secondary key</a></li>
+        <li><a href="#常用資料結構">常用資料結構</a></li>
+        <li><a href="#索引基礎">索引基礎</a></li>
+        <li><a href="#索引類型">索引類型</a></li>
       </ol>
     </li>
-    <li><a href="#distributed-database">Distributed database</a>
+    <li><a href="#資料模型與類型">資料模型與類型</a>
       <ol>
-        <li><a href="#sharding">Sharding</a>
+        <li><a href="#資料類型">資料類型</a></li>
+        <li><a href="#分割-partitioning">分割 (Partitioning)</a></li>
+        <li><a href="#資料庫游標-database-cursor">資料庫游標 (Database Cursor)</a></li>
+      </ol>
+    </li>
+    <li><a href="#分散式系統">分散式系統</a>
+      <ol>
+        <li><a href="#分片-sharding">分片 (Sharding)</a>
           <ol>
-            <li><a href="#sharding-key">Sharding key</a></li>
+            <li><a href="#分片鍵-sharding-key">分片鍵 (Sharding Key)</a></li>
           </ol>
         </li>
-        <li><a href="#database-replication">Database replication</a></li>
+        <li><a href="#資料庫複製-database-replication">資料庫複製 (Database Replication)</a></li>
       </ol>
     </li>
-    <li><a href="#concurrency-control">Concurrency control</a></li>
-    <li><a href="#database-engine">Database Engine</a></li>
-    <li><a href="#orm">ORM</a></li>
-    <li><a href="#tips">Tips</a></li>
+    <li><a href="#並發與交易管理">並發與交易管理</a>
+      <ol>
+        <li><a href="#並發控制策略">並發控制策略</a></li>
+        <li><a href="#鎖定機制-lock">鎖定機制 (Lock)</a></li>
+        <li><a href="#死結-deadlock">死結 (Deadlock)</a></li>
+        <li><a href="#兩階段鎖定-two-phase-locking-2pl">兩階段鎖定 (Two-Phase Locking, 2PL)</a></li>
+      </ol>
+    </li>
+    <li><a href="#實作與優化">實作與優化</a>
+      <ol>
+        <li><a href="#資料庫引擎-database-engine">資料庫引擎 (Database Engine)</a></li>
+        <li><a href="#物件關聯映射-orm">物件關聯映射 (ORM)</a></li>
+        <li><a href="#效能優化與實務建議">效能優化與實務建議</a></li>
+      </ol>
+    </li>
   </ol>
 </nav>
         </div>
@@ -418,7 +433,7 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
 
 
                 <time class="article-time--reading">
-                    5 minute read
+                    4 minute read
                 </time>
             </div>
         
@@ -433,566 +448,701 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
     <section class="article-content">
     
     
-    <h2 id="database-internal">Database internal</h2>
-<h3 id="storage-concept">Storage concept</h3>
+    <h2 id="資料庫核心概念">資料庫核心概念</h2>
+<h3 id="儲存結構">儲存結構</h3>
 <ul>
-<li>Table</li>
-<li>Row_id
+<li><strong>Table</strong>
 <ul>
-<li>多數 database 會維護自己的 row_id</li>
-<li>也叫做 tuple id</li>
+<li>資料庫中最基本的儲存單位，用來組織資料</li>
 </ul>
 </li>
-<li>Page
+<li><strong>Row_id</strong>
 <ul>
-<li>多個 row 會被存在一個 page</li>
-<li>讀取不會只讀一個 row，而是一個或多個 page</li>
+<li>多數資料庫會維護一個唯一的 row_id，也稱為 tuple id，用來識別每一行資料</li>
+<li>例如 PostgreSQL 使用 OID 或 ctid，MySQL 則依賴主鍵</li>
 </ul>
 </li>
-<li>IO
+<li><strong>Page</strong>
 <ul>
-<li>IO operation 指的是存取 disk 的操作</li>
-<li>一個 IO 可能會獲得多個 page，也可能只是用 cache 的資料</li>
-<li>Database 常常會利用 cache 來減少 IO
-<ul>
-<li>因此有些 query 很快，可能是因為有快取資料可用</li>
+<li>多個 row 會被儲存在一個 page 中</li>
+<li>讀取時不會單獨讀取某個 row，而是以 page 為單位讀取一或多個 page</li>
 </ul>
 </li>
-</ul>
-</li>
-<li>Heap data structure
+<li><strong>IO</strong>
 <ul>
-<li>儲存整個 table 的資料</li>
-<li>有些 database 會用 clustered index 來儲存，就不會有 heap</li>
-</ul>
-</li>
-<li>Index data structure (b-tree)
+<li>IO 操作指的是存取磁碟的操作</li>
+<li>一次 IO 可能讀取多個 page，也可能直接從 cache 中取得資料</li>
+<li>資料庫常利用 cache（如 buffer pool）來減少 IO
 <ul>
-<li>一個有 pointer 來指向 heap 的資料結構
-<ul>
-<li>較流行的是 b-tree</li>
-</ul>
-</li>
-<li>可以對一個或多個 column 做 index</li>
-<li>index 可以告訴你要查詢的資料在哪個 page</li>
-<li>index 也會被儲存在 page</li>
+<li>若查詢速度很快，可能是因為資料已存在 cache 中</li>
 </ul>
 </li>
 </ul>
-<h3 id="row-oriented-vs-column-oriented">Row-oriented vs Column-oriented</h3>
-<ul>
-<li>Row-oriented database (row store)
-<ul>
-<li>每個 row 接著下個 row 來儲存</li>
-<li>每次 IO 會獲得多個 row，每個都有所有的 column</li>
-</ul>
 </li>
-<li>Col-oriented database (column store)
+<li><strong>Heap</strong>
 <ul>
-<li>每個 column 接著下個 column 來儲存</li>
-<li>比較好壓縮，也比較好做 aggregation，所以在一些分析資料的軟體會用到</li>
+<li>用來儲存整個 table 的資料，是一種無特定順序的結構</li>
+<li>若使用 clustered index 組織資料，則不會有獨立的 heap
+<ul>
+<li>例如 MySQL InnoDB 的主鍵就是 clustered index，資料直接依主鍵排序儲存</li>
 </ul>
 </li>
 </ul>
-<h3 id="data-structure">Data structure</h3>
+</li>
+</ul>
+<h3 id="資料儲存方式">資料儲存方式</h3>
 <ul>
-<li>B-tree
+<li><strong>Row-oriented (行導向)</strong>
 <ul>
-<li>Balanced data structure for fast search</li>
+<li>每個 row 依序儲存，包含所有 column 的資料</li>
+<li>一次 IO 會讀取多個 row，每個 row 包含所有欄位</li>
+<li>適合 OLTP（線上交易處理），因為常需要存取整行資料</li>
+</ul>
+</li>
+<li><strong>Column-oriented (列導向)</strong>
+<ul>
+<li>每個 column 依序儲存，同一 column 的資料連續存放</li>
+<li>壓縮效率高，且適合 aggregation 操作，因此常用於 OLAP（線上分析處理）</li>
+</ul>
+</li>
+</ul>
+<h3 id="碎片化-fragmentation">碎片化 (Fragmentation)</h3>
+<ul>
+<li><strong>Internal Fragmentation (內部碎片)</strong>
+<ul>
+<li>一個 page 中有許多未使用的空間</li>
+<li>可能因為 row 刪除或大小不均導致，例如插入時預留空間過多</li>
+</ul>
+</li>
+<li><strong>External Fragmentation (外部碎片)</strong>
+<ul>
+<li>多個 page 的儲存位置不連續</li>
+<li>即使剩餘空間足夠，因不連續而無法使用，需透過整理（如 vacuum）來解決</li>
+</ul>
+</li>
+</ul>
+<h2 id="資料結構與索引">資料結構與索引</h2>
+<h3 id="常用資料結構">常用資料結構</h3>
+<ul>
+<li><strong>B-Tree</strong>
+<ul>
+<li>一種平衡樹結構，適用於快速搜尋</li>
+<li>每個 node 同時儲存 key 和 value</li>
 <li>限制
 <ul>
-<li>node 中的 element 同時存了 key 和 value</li>
-<li>range query 效率很差，因為要各別 random access</li>
+<li>由於 node 儲存完整資料，空間利用率較低</li>
+<li>range query 效率較差，因為需要多次隨機存取</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>B+Tree
+<li><strong>B+Tree</strong>
 <ul>
-<li>B-tree 的變形，和 B-tree 很像，不過 internal node 只存放 key，只有 leaf node 會存放 value
+<li>B-Tree 的改良版本，常用於資料庫索引</li>
+<li>特性
 <ul>
-<li>internal node 因為現在只需要儲存 key，element size 比較小，所以可以存放更多 element</li>
+<li>internal node 只儲存 key，leaf node 儲存 key 和 value</li>
+<li>因 internal node 只存 key，元素大小較小，一個 node 可容納更多 key，使存取的結點數變少，提升搜尋效率</li>
+<li>leaf node 用 linked list 串聯，適合 range query</li>
 </ul>
 </li>
-<li>leaf node 會用 linked list 串起來
-<ul>
-<li>適合 range query</li>
+<li>通常一個 node 對應一個 DBMS 的 page</li>
 </ul>
 </li>
-<li>通常一個 node 是一個 DBMS page</li>
+<li><strong>LSM-Tree (Log-Structured Merge-Tree)</strong>
+<ul>
+<li>設計為追加式寫入，資料加在尾端，不覆蓋原有資料</li>
+<li>優勢
+<ul>
+<li>對 SSD 友好，因避免隨機寫入</li>
+<li>適合高寫入量的場景</li>
 </ul>
 </li>
-<li>LSM-tree
+<li>與 B-Tree 比較
 <ul>
-<li>Log-Structured Merge-Tree</li>
-<li>都加在尾端，不會覆蓋原本的資料，對 SSD 有利</li>
-<li>B-Tree 為了平衡會頻繁修改</li>
-<li>有利於 insert</li>
-</ul>
-</li>
-</ul>
-<h3 id="fragmentation">Fragmentation</h3>
-<ul>
-<li>這裡是以 database 為出發點去看 fragmentation</li>
-<li>Internal fragmentation
-<ul>
-<li>一個 Page 中有很多空間是空的</li>
-</ul>
-</li>
-<li>External fragmentation
-<ul>
-<li>多個 Page 存放不是連續的。剩下的空間夠儲存新的資料，但是因為不連續，所以不能用</li>
-</ul>
-</li>
-</ul>
-<h3 id="database-cursor">Database cursor</h3>
-<ul>
-<li>當資料庫有很大的結果集時，不可能一次把所有資料用網路傳給 client，用戶也沒有 memory 來存放所有資料</li>
-<li>Server side / client side cursor
-<ul>
-<li>Server side
-<ul>
-<li>一次只傳一部分資料給 client</li>
-<li>但是要多次往返可能最後總時間會比較久</li>
-</ul>
-</li>
-<li>Client side
-<ul>
-<li>一次把所有資料傳給 client</li>
-<li>client 自己分批處理</li>
-<li>對 network bandwidth 要求較大</li>
-<li>可能沒有足夠的 memory</li>
+<li>B-Tree 為保持平衡會頻繁調整結構，導致隨機 IO</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<h3 id="partitioning">Partitioning</h3>
+<h3 id="索引基礎">索引基礎</h3>
 <ul>
-<li>把大 table 分成多個小 table</li>
-<li>Vertical vs Horizontal
+<li><strong>索引的作用</strong>
 <ul>
-<li>Vertical
-<ul>
-<li>根據 columns 拆成多個 partition</li>
-<li>可以把不太常用又大的 column (比如 blob) 放到另外一個 partition
-<ul>
-<li>可以把他放在較慢的 disk，保留其他常存取的 column 在 SSD</li>
-<li>也可以讓比較不常用的資料比較不容易進入 cache</li>
+<li>若欄位未建立索引，查詢需掃描整個 table</li>
+<li>索引透過 pointer 指向 heap 或資料位置，加速查詢</li>
+<li>索引本身也儲存在 page 中</li>
 </ul>
 </li>
+<li><strong>搜索方法</strong>
+<ul>
+<li><strong>Table Scan</strong>
+<ul>
+<li>掃描整個 table，適用於範圍過大或無索引的情況</li>
+<li>通常以 parallel 方式執行，提升效率</li>
 </ul>
 </li>
-<li>Horizontal
+<li><strong>Index Scan</strong>
 <ul>
-<li>把 rows 拆成多個 partition</li>
+<li>利用索引定位資料，再從 heap 取值</li>
 </ul>
 </li>
+<li><strong>Index-only Scan (Covering Index)</strong>
+<ul>
+<li>若所需欄位已包含在索引中，無需存取 heap</li>
+<li>優勢
+<ul>
+<li>速度快，因避免額外 IO</li>
 </ul>
 </li>
-<li>優點
+<li>注意
 <ul>
-<li>用 single query 存取單一 partition 的速度更快</li>
-<li>對某些 sequential scan 有幫助</li>
-<li>可以把舊資料放在比較便宜的設備</li>
-</ul>
-</li>
-<li>缺點
-<ul>
-<li>如果要從一個 partition 移動資料到另一個 partition，效率很慢</li>
-<li>對於效率很差的 query，可能會需要 scan 所有 partition，此時比掃描整個沒做 partition 的 table 還要慢</li>
-<li>partition 可能會 unbalance</li>
-</ul>
-</li>
-</ul>
-<h2 id="data-types">Data types</h2>
-<ul>
-<li>這裡以 PostgreSQL 為例，列一小部分</li>
-<li>設計 column 前可以先看有沒有合適的 data type</li>
-<li>Numeric
-<ul>
-<li>整數</li>
-<li>浮點數</li>
-<li>Serial
-<ul>
-<li>一種特殊的整數，會 auto increment</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Character
-<ul>
-<li>char</li>
-<li>varchar
-<ul>
-<li>可變長度的字串，如果沒有設定長度，就是 text</li>
-</ul>
-</li>
-<li>text</li>
-<li>bpchar
-<ul>
-<li>好像就是 varchar，但是 document 有寫 blank trimmed</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Date / Time</li>
-<li>Boolean</li>
-<li>Binary</li>
-<li>Geometric
-<ul>
-<li>特地寫這個是因為如果要用二維平面點，一般來說可能會用兩個 float，但是如果用 geometric 類有 point 可用</li>
-<li>其他形狀也可存</li>
-</ul>
-</li>
-<li>UUID</li>
-<li>Enum
-<ul>
-<li>一個有限的字串集合</li>
-<li>有序
-<ul>
-<li>按照建立時的順序</li>
+<li>索引過大可能佔用更多記憶體，甚至觸發磁碟 IO，降低效率</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<h2 id="database-indexing">Database indexing</h2>
-<ul>
-<li>如果需要搜索的欄位沒做 index，那麼就會需要 scan 整個 table，直到找到
-<ul>
-<li>如果要求欄位做 <code>like</code> 之類的，那麼依然需要 scan 整個 table</li>
-</ul>
 </li>
-<li>搜索方法
+<li><strong>Composite Index</strong>
 <ul>
-<li>table scan
+<li>將多個 column 作為 key 建立索引</li>
+<li>特性
 <ul>
-<li>如果掃描的範圍過大，Database 可能就會選擇該方法</li>
-<li>通常會用 parallel 的方式搜尋，所以還是會快一些</li>
-</ul>
-</li>
-<li>index scan</li>
-<li>Index-only scan
-<ul>
-<li>也叫 covering index</li>
-<li>需要的欄位在 index 裡面就有了，在這種情況不用去 heap 取，可以加速很多</li>
-<li>但也要小心使 index 變得過大。如果 memory 不夠，又會用到 disk，拖垮效率</li>
+<li>在 PostgreSQL 中，若索引為 (a, b)，查詢 a 可使用索引，但單獨查 b 無法有效利用</li>
+<li>順序影響查詢效率，設計時需考慮常用條件</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>non-key column
+<li><strong>Non-key Column</strong>
 <ul>
-<li>可以用 include 把一些常常需要一起帶入的資訊放到 index 裡面</li>
-<li>可以促成 index-only scan</li>
-</ul>
-</li>
-<li>composite index
-<ul>
-<li>把多個 col 作為 key 做 index</li>
-<li>在 PostgreSQL ，如果有一個 index 是 (a, b)，用靠左的 index 可以做 index scan，但是用靠右的就不行</li>
+<li>可透過 include 將常用但非 key 的欄位加入索引</li>
+<li>促成 index-only scan，提升查詢速度</li>
 </ul>
 </li>
 </ul>
-<h3 id="clustered-index">Clustered index</h3>
+<h3 id="索引類型">索引類型</h3>
 <ul>
-<li>也叫做 Index-Organized Table
+<li><strong>Clustered Index (叢集索引)</strong>
 <ul>
-<li>資料圍繞 index 來組織</li>
-<li>這也是為什麼 clustered index 只能有一個</li>
+<li>資料依索引順序物理儲存，也稱 Index-Organized Table</li>
+<li>特性
+<ul>
+<li>一個 table 只能有一個 clustered index，因資料只能按一種順序排列</li>
+<li>未指定時，primary key 通常作為 clustered index（如 MySQL InnoDB）</li>
 </ul>
 </li>
-<li>沒特別指定的話，primary key 一般是 clustered index</li>
-</ul>
-<h3 id="primary-key-vs-secondary-key">Primary key vs Secondary key</h3>
+<li>優勢
 <ul>
-<li>primary key
-<ul>
-<li>clusering
-<ul>
-<li>把 table 圍繞 primary key 來組織，但也有些 Database 不是這樣設計，比如 PostgreSQL</li>
+<li>範圍查詢效率高，因資料已排序</li>
 </ul>
 </li>
-<li>需要維持 order，但是如果我要根據 PK 取得小範圍內的資料，和不顧排序相比，就可能不用多次 IO</li>
 </ul>
 </li>
-<li>Secondary key
+<li><strong>Primary Key vs Secondary Key</strong>
 <ul>
-<li>不在乎原本 table 的 order，而是根據自訂的 key 來排序</li>
-<li>但是會有另外一個結構去放 index，可以找到 row_id</li>
-</ul>
-</li>
+<li><strong>Primary Key</strong>
+<ul>
+<li>通常用於 clustered index，資料圍繞其排序</li>
+<li>若查詢小範圍資料，因有序可減少 IO</li>
 <li>設計差異
 <ul>
-<li>PostgreSQL 的 index 都指向 row，不管是 primary 還是 secondary
-<ul>
-<li>這樣 secondary index 就可以直接取資料，不用再跳一層 primary key</li>
-<li>但是如果更新 row，會更新 row id，連帶影響要更新所有 secondary index，不管修改的欄位有沒有在這 index</li>
-</ul>
-</li>
-<li>MySQL 的 secondary index 指向 primary key，primary key 指向 row
-<ul>
-<li>這樣 secondary index 就要先找到 primary key，再找到 row</li>
+<li>PostgreSQL 不強制 clustered，primary key 只是唯一約束</li>
+<li>MySQL InnoDB 則將 primary key 作為 clustered index</li>
 </ul>
 </li>
 </ul>
 </li>
-</ul>
-<h2 id="distributed-database">Distributed database</h2>
-<h3 id="sharding">Sharding</h3>
+<li><strong>Secondary Key</strong>
 <ul>
-<li>把 table 拆成多個 table，分散在不同的 database</li>
-<li>分散式會帶來很多問題，比如要怎麼做 transaction 和 join?</li>
-<li>Horizontal partitioning vs sharding
+<li>不在乎原本 table 的 order，而是根據自訂的 key 來排序</li>
+<li>會有另外一個結構去放 index，可以找到 row_id</li>
+<li>用途
 <ul>
-<li>Horizontal partitioning
-<ul>
-<li>一個 table 拆成多個 table，但是還是在同一個 database</li>
-</ul>
-</li>
-<li>和 Horizontal partitioning 的差別
-<ul>
-<li>table 現在會分到不同的 database server</li>
-<li>做 partition，client 不用管資料具體在哪個 partition，交給 DBMS 去處理。但是 sharding 就要 client 自己去處理</li>
+<li>提供額外的查詢路徑</li>
 </ul>
 </li>
 </ul>
 </li>
-</ul>
-<h4 id="sharding-key">Sharding key</h4>
+<li><strong>設計差異</strong>
 <ul>
-<li>Hash
+<li><strong>PostgreSQL</strong>
 <ul>
-<li>用 hash function 來決定資料要放在哪個 shard</li>
-</ul>
-</li>
-<li>Range
-<ul>
-<li>用某個 column 所處的範圍來決定資料要放在哪個 shard</li>
+<li>所有索引（包括 primary 和 secondary）直接指向 row</li>
+<li>優勢：secondary index 可直接取資料，不用再跳一層 primary key</li>
+<li>劣勢：更新 row 時，若 row_id 改變，所有索引需同步更新</li>
 </ul>
 </li>
-<li>Dictionary
+<li><strong>MySQL</strong>
 <ul>
-<li>用離散的值來決定資料要放在哪個 shard</li>
-</ul>
-</li>
-<li>考慮事項
-<ul>
-<li>cardinality
-<ul>
-<li>cardinality 是 set 中的元素數量</li>
-<li>key 種類太少，就會限制水平擴展</li>
-</ul>
-</li>
-<li>frequency</li>
-<li>monotonicity
-<ul>
-<li>如果 key 是遞增或遞減的，可能會導致某個 shard 過度使用</li>
+<li>secondary index 指向 primary key，再由 primary key 指向 row</li>
+<li>優勢：row 更新時只需調整 primary key 的指向</li>
+<li>劣勢：查詢需多跳一次，增加 IO</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<h3 id="database-replication">Database replication</h3>
+</li>
+</ul>
+<h2 id="資料模型與類型">資料模型與類型</h2>
+<h3 id="資料類型">資料類型</h3>
+<ul>
+<li><strong>設計原則</strong>
+<ul>
+<li>設計 column 時，應先確認資料庫提供的資料類型，選擇最適合的類型以提升效能與儲存效率</li>
+</ul>
+</li>
+<li><strong>以 PostgreSQL 為例</strong>
+<ul>
+<li><strong>Numeric</strong>
+<ul>
+<li>整數 (integer)：如 smallint、integer、bigint</li>
+<li>浮點數 (float)：如 real、double precision</li>
+<li>Serial：自動遞增（auto increment）的整數，常用於主鍵（如 serial、bigserial）</li>
+</ul>
+</li>
+<li><strong>Character</strong>
+<ul>
+<li>char(n)：固定長度字串，空間不足時補空白</li>
+<li>varchar(n)：可變長度字串，指定最大長度</li>
+<li>text：無長度限制的字串，等同於未指定長度的 varchar</li>
+<li>bpchar：好像就是 varchar，但是 document 有寫 blank trimmed</li>
+</ul>
+</li>
+<li><strong>Date / Time</strong>
+<ul>
+<li>如 date、time、timestamp，提供日期與時間儲存</li>
+</ul>
+</li>
+<li><strong>Boolean</strong>
+<ul>
+<li>true/false 或 null</li>
+</ul>
+</li>
+<li><strong>Binary</strong>
+<ul>
+<li>bytea：儲存二進位資料</li>
+</ul>
+</li>
+<li><strong>Geometric</strong>
+<ul>
+<li>提供點 (point)、線 (line)、多邊形 (polygon) 等類型</li>
+<li>應用：若需儲存二維平面座標，可用 point 替代兩個 float</li>
+</ul>
+</li>
+<li><strong>UUID</strong>
+<ul>
+<li>通用唯一識別碼，適合分散式系統生成唯一 ID</li>
+</ul>
+</li>
+<li><strong>Enum</strong>
+<ul>
+<li>自訂有限字串集合，按建立順序有序</li>
+<li>應用：狀態欄位（如 &ldquo;pending&rdquo;、&ldquo;completed&rdquo;）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="分割-partitioning">分割 (Partitioning)</h3>
+<ul>
+<li><strong>定義</strong>
+<ul>
+<li>將大 table 分成多個小 table，以提升效能或管理便利性</li>
+</ul>
+</li>
+<li><strong>類型</strong>
+<ul>
+<li><strong>Vertical Partitioning (垂直分割)</strong>
+<ul>
+<li>按 column 分割</li>
+<li>應用
+<ul>
+<li>將不常用或大型欄位（如 blob）獨立出來</li>
+<li>可將這些欄位放在較慢的磁碟，保留常用欄位在 SSD</li>
+<li>減少不必要欄位進入 cache</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Horizontal Partitioning (水平分割)</strong>
+<ul>
+<li>按 row 分割</li>
+<li>應用
+<ul>
+<li>根據範圍（如時間、地域）分割資料</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>優點</strong>
+<ul>
+<li>單一 partition 的單次查詢更快</li>
+<li>對 sequential scan 有幫助，因範圍縮小</li>
+<li>可將舊資料移至較便宜的儲存設備</li>
+</ul>
+</li>
+<li><strong>缺點</strong>
+<ul>
+<li>跨 partition 移動資料效率低</li>
+<li>若查詢需掃描所有 partition，可能比未分割的 table 更慢</li>
+<li>partition 大小可能不均（unbalance），需設計均衡策略</li>
+</ul>
+</li>
+</ul>
+<h3 id="資料庫游標-database-cursor">資料庫游標 (Database Cursor)</h3>
+<ul>
+<li><strong>用途</strong>
+<ul>
+<li>處理大型結果集時，避免一次傳送所有資料給 client（因網路與記憶體限制）</li>
+</ul>
+</li>
+<li><strong>類型</strong>
+<ul>
+<li><strong>Server-side Cursor</strong>
+<ul>
+<li>伺服器分批傳送資料給 client</li>
+<li>優勢：減少 client 記憶體需求</li>
+<li>劣勢：多次網路往返可能增加總時間</li>
+</ul>
+</li>
+<li><strong>Client-side Cursor</strong>
+<ul>
+<li>一次傳送所有資料，由 client 分批處理</li>
+<li>優勢：減少伺服器負擔</li>
+<li>劣勢：需較大網路頻寬與 client 記憶體</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="分散式系統">分散式系統</h2>
+<h3 id="分片-sharding">分片 (Sharding)</h3>
+<ul>
+<li><strong>定義</strong>
+<ul>
+<li>將 table 分成多個 shard，分散至不同資料庫伺服器</li>
+</ul>
+</li>
+<li><strong>與 Horizontal Partitioning 的差異</strong>
+<ul>
+<li>Horizontal Partitioning：分割後仍位於同一資料庫，由 DBMS 管理</li>
+<li>Sharding：分割後分至不同伺服器，client 需自行處理資料位置</li>
+</ul>
+</li>
+<li><strong>挑戰</strong>
+<ul>
+<li>交易 (transaction) 與 join 操作變得複雜，因資料分散</li>
+<li>需額外設計一致性與資料存取邏輯</li>
+</ul>
+</li>
+</ul>
+<h4 id="分片鍵-sharding-key">分片鍵 (Sharding Key)</h4>
+<ul>
+<li><strong>類型</strong>
+<ul>
+<li><strong>Hash</strong>
+<ul>
+<li>使用 hash function 決定資料分配</li>
+<li>優勢：分佈均勻</li>
+<li>劣勢：範圍查詢困難</li>
+</ul>
+</li>
+<li><strong>Range</strong>
+<ul>
+<li>根據某 column 的範圍（如時間、ID）分配</li>
+<li>優勢：支援範圍查詢</li>
+<li>劣勢：可能導致熱點（hotspot）</li>
+</ul>
+</li>
+<li><strong>Dictionary</strong>
+<ul>
+<li>根據離散值（如地區、類別）分配</li>
+<li>優勢：直觀且易管理</li>
+<li>劣勢：擴展性受限</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>設計考量</strong>
+<ul>
+<li><strong>Cardinality</strong>
+<ul>
+<li>鍵值的種類數量，種類過少限制水平擴展</li>
+</ul>
+</li>
+<li><strong>Frequency</strong>
+<ul>
+<li>鍵值的分佈頻率，需避免單一 shard 負載過高</li>
+</ul>
+</li>
+<li><strong>Monotonicity</strong>
+<ul>
+<li>若鍵值單調遞增或遞減，可能導致新資料集中於某 shard</li>
+<li>解決方式：結合 hash 或隨機前綴</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="資料庫複製-database-replication">資料庫複製 (Database Replication)</h3>
+<ul>
+<li><strong>目的</strong>
 <ul>
 <li>透過 redundancy 來提高 reliability, tolerance, accessibility</li>
-<li>Master / Backup replication
-<ul>
-<li>也叫 master-slave replication</li>
-<li>只有一個 master / leader，有一或多個 backup / standby</li>
-<li>一寫多讀</li>
 </ul>
 </li>
-<li>Multi-master replication
+<li><strong>類型</strong>
 <ul>
-<li>多個 master，可以同時寫入</li>
-<li>需要處理 conflict</li>
+<li><strong>Master / Backup Replication (主從複製)</strong>
+<ul>
+<li>單一 master 負責寫入，多個 backup（slave）負責讀取</li>
+<li>模式：一寫多讀</li>
+<li>應用：讀多寫少的場景（如內容管理系統）</li>
 </ul>
 </li>
-<li>Sychronous vs Asynchronous replication
+<li><strong>Multi-master Replication (多主複製)</strong>
 <ul>
-<li>Synchronous
-<ul>
-<li>transaction 會被 blocked，直到所有的 backup 都寫入</li>
-<li>有些 database 可以設定 First N 或是 any 完成就好</li>
-</ul>
-</li>
-<li>Asynchronous
-<ul>
-<li>transaction 被寫入 master 後就算完成</li>
+<li>多個 master 可同時寫入</li>
+<li>挑戰：需處理寫入衝突（如使用版本控制或衝突解決策略）</li>
+<li>應用：高可用性與分散式寫入需求</li>
 </ul>
 </li>
 </ul>
 </li>
-</ul>
-<h2 id="concurrency-control">Concurrency control</h2>
+<li><strong>同步方式</strong>
 <ul>
-<li>strategy
+<li><strong>Synchronous (同步)</strong>
 <ul>
-<li>pessimistic
-<ul>
-<li>用各種 lock 來保證 isolation</li>
-</ul>
-</li>
-<li>optimistic
-<ul>
-<li>不用 lock，真的有 transaction 衝突時就 fail</li>
+<li>transaction 完成前需等待所有 backup 寫入確認</li>
+<li>變體：可設定等待前 N 個或任一完成</li>
+<li>優勢：資料一致性高</li>
+<li>劣勢：延遲增加</li>
 </ul>
 </li>
-</ul>
-</li>
-<li>Lock
+<li><strong>Asynchronous (非同步)</strong>
 <ul>
-<li>shared vs exclusive
-<ul>
-<li>shared lock 可以被多個 transaction 同時持有
-<ul>
-<li>用在讀取，所以可以多個 transaction 同時讀取</li>
-<li>在有 shared lock  的條件下，其他 transaction 也可以設置 shared lock</li>
-</ul>
-</li>
-<li>exclusive lock 只能被一個 transaction 持有
-<ul>
-<li>他人不能讀取或寫入</li>
-<li>PostgreSQL 有一個 <code>SELECT ... FOR UPDATE</code> 來取得 exclusive lock</li>
-</ul>
-</li>
-<li>當涉及的資料持有其中一種 lock 時，其他 transaction 都不能設置另外一種 lock</li>
+<li>transaction 寫入 master 後即完成，後台同步至 backup</li>
+<li>優勢：寫入速度快</li>
+<li>劣勢：可能出現資料不一致（若 master 故障）</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>Deadlock
+<li><strong>應用</strong>
 <ul>
-<li>多個 transaction 互相等待對方釋放 lock</li>
-<li>多數 DBMS 會檢查 deadlock，並讓最後一個造成 deadlock 的 transaction rollback</li>
+<li>常見於負載平衡與災難恢復設計</li>
 </ul>
 </li>
-<li>Two-phase locking (2PL)
+</ul>
+<h2 id="並發與交易管理">並發與交易管理</h2>
+<h3 id="並發控制策略">並發控制策略</h3>
+<ul>
+<li><strong>Pessimistic (悲觀)</strong>
+<ul>
+<li>使用鎖定機制確保交易隔離</li>
+<li>適用於衝突頻繁的場景</li>
+</ul>
+</li>
+<li><strong>Optimistic (樂觀)</strong>
+<ul>
+<li>不使用鎖，假設衝突少見，若發生衝突則交易失敗並重試</li>
+<li>適用於讀多寫少的場景</li>
+</ul>
+</li>
+</ul>
+<h3 id="鎖定機制-lock">鎖定機制 (Lock)</h3>
+<ul>
+<li><strong>類型</strong>
+<ul>
+<li><strong>Shared Lock (共享鎖)</strong>
+<ul>
+<li>多個交易可同時持有，適用於讀取</li>
+<li>其他交易可再設置 shared lock</li>
+</ul>
+</li>
+<li><strong>Exclusive Lock (排他鎖)</strong>
+<ul>
+<li>僅一個交易可持有，適用於寫入</li>
+<li>禁止其他交易讀取或寫入</li>
+<li>PostgreSQL 提供 <code>SELECT ... FOR UPDATE</code> 來取得 exclusive lock</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>相容性</strong>
+<ul>
+<li>若資料已持有一種鎖，其他交易無法設置另一種鎖</li>
+<li>例如：shared lock 下無法設置 exclusive lock，反之亦然</li>
+</ul>
+</li>
+</ul>
+<h3 id="死結-deadlock">死結 (Deadlock)</h3>
+<ul>
+<li><strong>定義</strong>
+<ul>
+<li>多個交易互相等待對方釋放鎖，導致無法繼續執行</li>
+</ul>
+</li>
+<li><strong>處理</strong>
+<ul>
+<li>多數 DBMS 會檢測死結，並強制回滾最後造成死結的交易</li>
+</ul>
+</li>
+</ul>
+<h3 id="兩階段鎖定-two-phase-locking-2pl">兩階段鎖定 (Two-Phase Locking, 2PL)</h3>
+<ul>
+<li><strong>目的</strong>
 <ul>
 <li>DBMS 為了實現 isolation 需要保證 conflict serializability (CSR)，2PL 可以保證這一點</li>
-<li>two-phase
-<ul>
-<li>growing phase
-<ul>
-<li>取得 lock</li>
 </ul>
 </li>
-<li>shrinking phase
+<li><strong>階段</strong>
 <ul>
-<li>釋放 lock</li>
+<li><strong>Growing Phase (增長階段)</strong>
+<ul>
+<li>交易只能申請鎖</li>
 </ul>
 </li>
-<li>強調一個 transaction 不能釋放 lock 後就再也無法取得</li>
-<li>有可能造成 deadlock</li>
+<li><strong>Shrinking Phase (收縮階段)</strong>
+<ul>
+<li>交易只能釋放鎖</li>
 </ul>
 </li>
+<li>限制：釋放任一鎖後，交易無法再申請新鎖</li>
 </ul>
 </li>
-</ul>
-<h2 id="database-engine">Database Engine</h2>
+<li><strong>特性</strong>
 <ul>
-<li>也叫 storage engine 或 embedded database</li>
-<li>負責處理 CRUD 的 library</li>
-<li>DBMS 基於 engine 來提供更多功能</li>
-</ul>
-<h2 id="orm">ORM</h2>
-<ul>
-<li>Eager vs Lazy loading
-<ul>
-<li>Eager
-<ul>
-<li>一次把所有相關的資料都讀取出來</li>
-<li>如果 Teacher 有很多 Student，可能會一次把所有 Student 都讀取出來</li>
-</ul>
-</li>
-<li>Lazy
-<ul>
-<li>只有在需要的時候才讀取</li>
-<li>但是可能會有很多次 IO</li>
+<li>一個交易釋放鎖後，無法再取得鎖</li>
+<li>保證一致性，但可能導致死結</li>
+<li>應用於多數關聯式資料庫的交易管理</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>Open session in view (OSIV)
+<h2 id="實作與優化">實作與優化</h2>
+<h3 id="資料庫引擎-database-engine">資料庫引擎 (Database Engine)</h3>
 <ul>
-<li>一個 request 一個 database session</li>
-<li>可以配合 lazy loading 來用</li>
+<li><strong>定義</strong>
+<ul>
+<li>也叫 storage engine 或 embedded database，負責處理 CRUD 操作的核心庫</li>
 </ul>
 </li>
-<li>N+1 problem
+<li><strong>功能</strong>
 <ul>
-<li>一個 query 取得所有資料，然後再用每個資料的 id 來取得相關資料</li>
-<li>這樣就會有 N+1 次 IO
+<li>DBMS 基於引擎提供更高階功能（如查詢優化、交易管理）</li>
+</ul>
+</li>
+<li><strong>範例</strong>
 <ul>
-<li>第一次是從主表拿清單</li>
-<li>接下來 N 次是從子表拿資料</li>
+<li>MySQL 的 InnoDB（支援交易與外鍵）、MyISAM（高效讀寫但無交易）</li>
+<li>SQLite 本身即為嵌入式引擎</li>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-<h2 id="tips">Tips</h2>
+<h3 id="物件關聯映射-orm">物件關聯映射 (ORM)</h3>
 <ul>
-<li>盡量不要使用 offset
+<li><strong>載入策略</strong>
 <ul>
-<li>最 naive 的實現 pagination 的做法就是用 offset + limit。但是 offset 代表讀取並丟掉前面幾筆資料，所以他會多讀一堆沒用的資料</li>
-<li>可以讓用戶那邊保存 id，where 設置 id 要大於多少來規避 offset</li>
-</ul>
-</li>
-<li>Connection pool
+<li><strong>Eager Loading (積極載入)</strong>
 <ul>
-<li>維護一定數量的連接，避免每次都要建立連接</li>
+<li>一次載入所有相關資料</li>
+<li>範例：查詢 Teacher 時一併載入所有 Student</li>
+<li>優勢：減少後續查詢次數</li>
+<li>劣勢：可能載入過多不必要資料</li>
 </ul>
 </li>
-<li>Idempotency key
+<li><strong>Lazy Loading (延遲載入)</strong>
 <ul>
-<li>用來確保一個 request 只會被執行一次</li>
-<li>會生成一個唯一的 key，並且在 request 中帶上這個 key。執行操作後會把這個 key 存起來，下次再收到這個 key 時就不會再執行操作</li>
-<li>可以用 ULID 而不用 UUID，因為 ULID 前面的 bit 有時間戳，可以用來排序
-<ul>
-<li>輸入的資料集中在相近的 page，還都加在尾端，可以減少 IO (相較隨機的 UUID)
-<ul>
-<li>不用被迫頻繁存取 disk。而且 UUID 的隨機性拉一堆 page 會導致 buffer 更容易被塞滿，而得強制寫入 disk</li>
+<li>僅在需要時載入相關資料</li>
+<li>優勢：節省初始載入時間與記憶體</li>
+<li>劣勢：可能導致多次 IO</li>
 </ul>
 </li>
 </ul>
 </li>
+<li><strong>Open Session in View (OSIV)</strong>
+<ul>
+<li>每個 http request 開啟一個資料庫 session</li>
+<li>用途：配合 lazy loading，確保 request 期間資料可隨時載入</li>
+<li>注意：可能延長 session 存活時間，增加資源占用</li>
 </ul>
 </li>
-<li>consistent hashing
+<li><strong>N+1 Problem</strong>
 <ul>
-<li>把 hash function 的結果分散在一個 hash ring 上
+<li>查詢主表後，對每個主表記錄再查詢子表，導致 N+1 次 IO</li>
+<li>範例：查詢 10 個 Teacher，再各查其 Student，共 11 次查詢</li>
+<li>解決方式：使用 join 或 eager loading 合併查詢</li>
+</ul>
+</li>
+</ul>
+<h3 id="效能優化與實務建議">效能優化與實務建議</h3>
 <ul>
-<li>根據 hash function 的結果，看自己落在哪段範圍，配給指定的 server</li>
-<li>這樣的好處是追加或是移除 server 時，只會影響一台 server 的資料</li>
-<li>也可以追加到負載比較高的 server 附近</li>
+<li><strong>避免使用 Offset</strong>
+<ul>
+<li>Offset + Limit 是簡單的 pagination 實現，但 offset 需讀取並丟棄前 n 筆資料</li>
+<li>替代方案：使用條件（如 <code>WHERE id &gt; last_id</code>）追蹤分頁位置</li>
+</ul>
+</li>
+<li><strong>連線池 (Connection Pool)</strong>
+<ul>
+<li>維護固定數量的資料庫連線，避免頻繁建立與關閉連線的開銷</li>
+</ul>
+</li>
+<li><strong>等幂鍵 (Idempotency Key)</strong>
+<ul>
+<li>確保同一 request 只執行一次</li>
+<li>實現
+<ul>
+<li>生成唯一鍵（如 ULID），隨 request 傳送並記錄</li>
+<li>重複鍵時拒絕執行</li>
+</ul>
+</li>
+<li>ULID 優勢
+<ul>
+<li>包含時間戳記，可排序且集中於相近 page</li>
+<li>相較 UUID 的隨機性，減少 IO 與 buffer 壓力</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>write amplification
+<li><strong>一致性雜湊 (Consistent Hashing)</strong>
 <ul>
-<li>寫入資料時，發現 disk 寫入的資料比你預期寫入的資料多很多</li>
+<li>將 hash 結果映射至環狀結構，分配資料至伺服器</li>
+<li>優勢
+<ul>
+<li>新增或移除伺服器時，僅影響部分資料重分配</li>
+<li>可針對負載高的伺服器動態調整</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>寫入放大 (Write Amplification)</strong>
+<ul>
+<li>實際寫入磁碟的資料量超出預期</li>
 <li>分很多不同 level，通常是在說 SSD 造成的</li>
-<li>想更新的時候，更新的 page 會被標記為不能使用。會有另外一隻非同步程式定期處理這種
+<li>原因
 <ul>
-<li>但是他會把整個 block 寫到新的地方，再把原地方設為 free，就為了那些不能再被使用的空間搬整個 block</li>
+<li>SSD 更新時，需將整個 block 搬移至新位置並標記舊 block 為 free
+<ul>
+<li>想更新的時候，更新的 page 會被標記為不能使用。為了那些不能再被使用的空間搬整個 block</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>polymorphic association
-<ul>
-<li>一個 table 有多個關聯，但是這些關聯是不同的 table
-<ul>
-<li>某個 id column 會根據不同情況代表不同 table 的 id</li>
 </ul>
 </li>
-<li>可能可以節省空間</li>
-<li>也可能因為這樣而沒辦法使用 foreign key</li>
-<li>可以考慮拆成多個 column 或是多個 table</li>
+<li><strong>多型關聯 (Polymorphic Association)</strong>
+<ul>
+<li>單一欄位根據情況指向不同 table 的 id</li>
+<li>優勢：節省空間與表數</li>
+<li>劣勢：無法直接使用 foreign key，需額外邏輯處理</li>
+<li>替代方案：拆為多欄位或多表，增加明確性</li>
 </ul>
 </li>
 </ul>
