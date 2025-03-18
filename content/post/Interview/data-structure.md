@@ -1,7 +1,7 @@
 ---
 title: "資料結構筆記"
 date: 2023-08-29T00:08:46+08:00
-draft: false
+draft: true
 type: "post"
 tags: ["algorithm", "data-structure"]
 categories: ["Interview"]

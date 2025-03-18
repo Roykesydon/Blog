@@ -1,7 +1,7 @@
 ---
 title: "Database 一般筆記"
 date: 2024-07-21T00:00:17+08:00
-draft: false
+draft: true
 description: "沒有另外被獨立出去一篇且有關 Database 的內容"
 type: "post"
 tags: ["database", "cache", "sql"]
@@ -37,15 +37,6 @@ categories : ["full-stack"]
 - **Column-oriented (列導向)**
   - 每個 column 依序儲存，同一 column 的資料連續存放
   - 壓縮效率高，且適合 aggregation 操作，因此常用於 OLAP（線上分析處理）
-
-### 碎片化 (Fragmentation)
-- **Internal Fragmentation (內部碎片)**
-  - 一個 page 中有許多未使用的空間
-  - 可能因為 row 刪除或大小不均導致，例如插入時預留空間過多
-- **External Fragmentation (外部碎片)**
-  - 多個 page 的儲存位置不連續
-  - 即使剩餘空間足夠，因不連續而無法使用，需透過整理（如 vacuum）來解決
-
 
 ## 資料結構與索引
 
@@ -157,6 +148,21 @@ categories : ["full-stack"]
     - 自訂有限字串集合，按建立順序有序
     - 應用：狀態欄位（如 "pending"、"completed"）
 
+### 資料庫游標 (Database Cursor)
+- **用途**
+  - 處理大型結果集時，避免一次傳送所有資料給 client（因網路與記憶體限制）
+- **類型**
+  - **Server-side Cursor**
+    - 伺服器分批傳送資料給 client
+    - 優勢：減少 client 記憶體需求
+    - 劣勢：多次網路往返可能增加總時間
+  - **Client-side Cursor**
+    - 一次傳送所有資料，由 client 分批處理
+    - 優勢：減少伺服器負擔
+    - 劣勢：需較大網路頻寬與 client 記憶體
+
+## 分散式系統 & Partitioning
+
 ### 分割 (Partitioning)
 - **定義**
   - 將大 table 分成多個小 table，以提升效能或管理便利性
@@ -179,21 +185,6 @@ categories : ["full-stack"]
   - 跨 partition 移動資料效率低
   - 若查詢需掃描所有 partition，可能比未分割的 table 更慢
   - partition 大小可能不均（unbalance），需設計均衡策略
-
-### 資料庫游標 (Database Cursor)
-- **用途**
-  - 處理大型結果集時，避免一次傳送所有資料給 client（因網路與記憶體限制）
-- **類型**
-  - **Server-side Cursor**
-    - 伺服器分批傳送資料給 client
-    - 優勢：減少 client 記憶體需求
-    - 劣勢：多次網路往返可能增加總時間
-  - **Client-side Cursor**
-    - 一次傳送所有資料，由 client 分批處理
-    - 優勢：減少伺服器負擔
-    - 劣勢：需較大網路頻寬與 client 記憶體
-
-## 分散式系統
 
 ### 分片 (Sharding)
 - **定義**
@@ -328,7 +319,14 @@ categories : ["full-stack"]
   - 範例：查詢 10 個 Teacher，再各查其 Student，共 11 次查詢
   - 解決方式：使用 join 或 eager loading 合併查詢
 
-### 效能優化與實務建議
+### 常見問題 & 實務技巧
+- **碎片化 (Fragmentation)**
+  - **Internal Fragmentation (內部碎片)**
+    - 一個 page 中有許多未使用的空間
+    - 可能因為 row 刪除或大小不均導致，例如插入時預留空間過多
+  - **External Fragmentation (外部碎片)**
+    - 多個 page 的儲存位置不連續
+    - 即使剩餘空間足夠，因不連續而無法使用，需透過整理（如 vacuum）來解決
 - **避免使用 Offset**
   - Offset + Limit 是簡單的 pagination 實現，但 offset 需讀取並丟棄前 n 筆資料
   - 替代方案：使用條件（如 `WHERE id > last_id`）追蹤分頁位置

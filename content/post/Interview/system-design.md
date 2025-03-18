@@ -1,7 +1,7 @@
 ---
 title: "System Design"
 date: 2024-08-03T00:08:46+08:00
-draft: false
+draft: true
 type: "post"
 tags: ["system-design"]
 categories: ["Interview"]

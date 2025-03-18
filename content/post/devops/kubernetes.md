@@ -1,7 +1,7 @@
 ---
 title: "Kubernetes 筆記"
 date: 2024-06-14T00:00:17+08:00
-draft: false
+draft: true
 description: ""
 type: "post"
 tags: ["container orchestration"]

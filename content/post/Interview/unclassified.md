@@ -1,7 +1,7 @@
 ---
 title: "未分類演算法 & 資料結構筆記"
 date: 2023-08-27T00:09:46+08:00
-draft: false
+draft: true
 type: "post"
 tags: ["algorithm", "data-structure"]
 categories: ["Interview"]

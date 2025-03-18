@@ -15,14 +15,6 @@
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/full-stack.jpg" alt="Featured image of post Full Stack" /&gt;</description>
         </item>
         <item>
-        <title>Interview</title>
-        <link>https://roykesydon.github.io/Blog/categories/interview/</link>
-        <pubDate>Sat, 03 Aug 2024 00:08:46 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/categories/interview/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/interview.jpg" alt="Featured image of post Interview" /&gt;</description>
-        </item>
-        <item>
         <title>Software Engineering</title>
         <link>https://roykesydon.github.io/Blog/categories/software-engineering/</link>
         <pubDate>Sun, 21 Jul 2024 00:00:17 +0800</pubDate>
@@ -39,20 +31,28 @@
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/devops.jpg" alt="Featured image of post DevOps" /&gt;</description>
         </item>
         <item>
-        <title>CTF</title>
-        <link>https://roykesydon.github.io/Blog/categories/ctf/</link>
-        <pubDate>Fri, 28 Jun 2024 00:00:17 +0800</pubDate>
-        
-        <guid>https://roykesydon.github.io/Blog/categories/ctf/</guid>
-        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/ctf.jpg" alt="Featured image of post CTF" /&gt;</description>
-        </item>
-        <item>
         <title>Deep Learning</title>
         <link>https://roykesydon.github.io/Blog/categories/deep-learning/</link>
         <pubDate>Thu, 26 Jan 2023 01:36:53 +0800</pubDate>
         
         <guid>https://roykesydon.github.io/Blog/categories/deep-learning/</guid>
         <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/deep-learning.jpg" alt="Featured image of post Deep Learning" /&gt;</description>
+        </item>
+        <item>
+        <title>CTF</title>
+        <link>https://roykesydon.github.io/Blog/categories/ctf/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/categories/ctf/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/ctf.jpg" alt="Featured image of post CTF" /&gt;</description>
+        </item>
+        <item>
+        <title>Interview</title>
+        <link>https://roykesydon.github.io/Blog/categories/interview/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://roykesydon.github.io/Blog/categories/interview/</guid>
+        <description>&lt;img src="https://roykesydon.github.io/Blog/images/categories/interview.jpg" alt="Featured image of post Interview" /&gt;</description>
         </item>
         <item>
         <title>Linux</title>

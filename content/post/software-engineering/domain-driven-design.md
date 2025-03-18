@@ -1,7 +1,7 @@
 ---
 title: "領域驅動設計 Domain-Driven Design"
 date: 2023-05-22T00:00:17+08:00
-draft: false
+draft: true
 description: ""
 type: "post"
 tags: ["software-engineering", "software-design"]
@@ -96,16 +96,19 @@ categories : ["software-engineering"]
 
 ### Context Map
 描述 Bounded Context 之間的關係
-- **上下游 (U/D)**  
-    - 上游提供服務，下游依賴上游
+#### Symmetric Relationship
 - **Shared Kernel**  
     - 兩個 BC 共享某些部分  
     - 違反 BC 原則，是一種例外設計
+- **Partnership**  
+    - 兩個 BC 互相合作，沒有主次之分，成敗與共
+
+#### Upstream-Downstream Relationship
+- **上下游 (U/D)**  
+    - 上游提供服務，下游依賴上游
 - **Customer-Supplier**  
     - 一個子系統重度依賴另一個子系統  
     - **Conformist**：Customer 完全配合 Supplier
-- **Partnership**  
-    - 兩個 BC 互相合作，沒有主次之分，成敗與共
 - **Anticorruption Layer (ACL)**  
     - 在開發系統與外部系統之間加一層適配，防止影響內部模型  
     - 常用到 **Facade** 和 **Adapter**
