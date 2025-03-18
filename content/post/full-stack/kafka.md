@@ -1,63 +1,92 @@
 ---
 title: "Kafka 筆記"
 date: 2024-08-17T00:00:17+08:00
-draft: false
+draft: true
 description: ""
 type: "post"
 tags: ["queue"]
 categories : ["full-stack"]
 ---
 
-## Kafka
-- event streaming platform
-- 專注在 publish / subscribe
-- message 會在一段時間後被刪除，而不是等待 consumer 處理
+## Kafka 基礎概述
 
-## Topic
-- 一個特定的 data stream
-  - 一系列的 message
-- 沒有限制 topic 的數量
-- 由 name 來識別
+- **定義與功能**
+  - 一個分散式的事件串流平台 (event streaming platform)
+  - 專注於訊息的發布與訂閱 (publish/subscribe)
+  - 適用於高吞吐量、即時數據處理場景，例如日誌收集、數據管道、事件驅動架構
+- **核心特性**
+  - 訊息在一段時間後自動刪除，不等待消費者處理完畢
+    - 預設保留期為 7 天，可自行配置
+    - 適用於暫時性數據處理，避免無限增長
+  - 高容錯性與可擴展性，支援多節點叢集運作
+  - 提供有序訊息處理（在單一 partition 內）
 
-### Topic replication
-- 如果有一個 broker down 了，會有另一個 broker 繼續提供複本
-- topic replication factor
-  - 這個 factor 要大於 1
-  - 常見的設定值是 3
-  - 這個數值代表有幾個複本
-    - 複本會被放在其他的 broker 上
-  - 設為 n，可以承受 n-1 個 broker down
-- 一個 partition 只會有一個 broker 作為他的 leader
-  - 其他的有複本的 broker 被稱為 ISR (in-sync replica)
-  - producer 寫入的時候，只能寫到 leader
-  - consumer 預設也只會從 leader 讀取
-    - 2.4 版本後，可以設定從 ISR 讀取
-  
+## 核心概念
 
-## Partition
-- topic 通常會被分成多個 partition
-- partiton 中的 message 是有序的
-  - message 會獲得 id，他是 incremental 的
-  - 這個 id 被稱為 offset
-    - 只在特定的 partition 中有意義，不同的 partition 的 offset 是獨立的
-  - 但不同 partition 的 message 是沒有順序的，只有在同一個 partition 中才有順序
-- immutable
-  - 一旦 message 被寫入，就不能被修改
-- 通常 partition 的數量至少為 consumer 數量
-  - 如果 partition 數量少於 consumer 數量，有些 consumer 會閒置
-## Message
-  - message 也被叫做 event
-  - 構成
-    - required
-      - key, value, compression type, partition, offset, timestamp
-        - key, value 可以是 null
-        - timestamp 可以由系統設置
-        - message 發給 kafka 後，會加上 partition, offset, timestamp
-    - optional
-      - header
-  - retention
-    - message 會在一段時間後被刪除
-    - 預設 7 天，可以設定
+### Topic
+
+- **定義**
+  - 一個特定的數據流 (data stream)
+  - 由一系列訊息 (message) 組成，用名稱來識別
+  - 沒有限制 topic 數量，可根據業務需求自由創建
+- **使用情境**
+  - 用來分類不同類型的數據，例如 "訂單事件"、"用戶行為日誌"
+- **複製機制 (Replication)**
+  - **目的**
+    - 確保高可用性，若某個 broker 故障，其他 broker 可提供複本繼續服務
+  - **複製因子 (Replication Factor)**
+    - 表示複本數量，常見設定為 3
+    - 設為 n 可承受 n-1 個 broker 故障
+    - 複本分佈於不同 broker，提升容錯能力
+  - **運作細節**
+    - 每個 partition 只有一個 broker 作為 leader
+    - 其他持有複本的 broker 稱為 ISR (in-sync replica)
+    - 生產者只能寫入 leader，消費者預設從 leader 讀取
+      - 自 2.4 版起，可配置從 ISR 讀取以提升效能
+
+### Partition
+
+- **定義**
+  - topic 被分割成多個 partition 以實現並行處理
+  - partition 內的訊息是有序的，不同 partition 間無序
+- **訊息特性**
+  - 每個訊息分配一個遞增的 id，稱為 offset
+    - offset 僅在單一 partition 內有效，不同 partition 獨立
+  - 訊息不可變 (immutable)，一旦寫入無法修改
+- **數量規劃**
+  - partition 數量應至少等於消費者數量
+    - 若少於消費者數量，部分消費者會閒置
+
+### Message
+
+- **定義**
+  - 也被稱為 event，是 Kafka 的基本數據單元
+- **組成**
+  - **必要欄位**
+    - key：用於決定訊息分配到哪個 partition，可為 null
+    - value：訊息主體，可為 null
+    - compression type：壓縮格式
+    - partition：訊息所屬的分區
+    - offset：訊息在 partition 內的序號
+    - timestamp：訊息創建時間，可由系統自動設置
+  - **選填欄位**
+    - header：用於存放元數據，例如訊息來源或版本
+- **保留機制 (Retention)**
+  - 訊息保留一段時間後自動刪除
+    - 預設 7 天，可配置為其他值，例如 1 小時或 30 天
+    - 適用於控制儲存空間或處理即時數據
+- **序列化與反序列化 (Serialization / Deserialization)**
+  - **運作**
+    - Kafka 將訊息轉為位元組 (bytes) 傳輸
+    - 針對 key 和 value 進行序列化
+  - **支援**
+    - 對於不支援的格式，也可自定義序列化器
+      - 例如 JSON、Avro
+  - **優勢**
+    - 跨語言相容，生產者與消費者可用不同程式語言實現
+    - 壓縮數據，減少傳輸與儲存成本
+
+
 ### Message serialization / deserialization
 - Kafka 會將 message 轉換成 bytes 才傳輸
 - 用在 key 和 value
@@ -66,6 +95,117 @@ categories : ["full-stack"]
 - 優點
   - 可以用不同的語言來寫 producer 和 consumer
   - 減少資料大小
+
+## Producer and Consumer
+
+### Producer
+
+- **定義**
+  - 負責將訊息寫入 topic 的元件
+  - 可指定訊息發送到哪個 partition
+- **訊息發送機制**
+  - 訊息帶有 key，決定分配邏輯
+    - key 為 null 時，以 round-robin 方式分配到 partition
+    - key 不為 null 時，經 hash function 分配到固定 partition
+      - 預設使用 murmur2 演算法，由 Kafka partitioner 處理
+  - 使用情境：利用 key 確保同類訊息有序，例如同一用戶的事件
+- **確認機制 (Acknowledgement, acks)**
+  - **acks=0**
+    - 不等待 broker 回應
+    - 最高效能，但可能丟失訊息
+    - 適用於效能優先、非關鍵數據場景，例如即時監控數據
+  - **acks=1**
+    - 等待 leader 回應
+    - 中等效能，可能因 leader 故障丟失訊息
+    - 適用於平衡效能與可靠性的場景
+  - **acks=all**
+    - 等待所有 ISR 回應
+    - 最低效能，但保證不丟訊息
+    - 適用於高可靠性需求，例如金融交易記錄
+
+### Consumer
+
+- **定義**
+  - 從 topic 讀取訊息的元件
+  - 採用 pull 模式，主動拉取訊息
+- **Push vs Pull**
+  - **Push**
+    - 無法確認消費者處理能力，可能導致訊息積壓
+  - **Pull**
+    - 消費者可依自身速度拉取
+    - 若速度慢於生產者，可稍後補齊
+    - 優勢：解耦生產者與消費者，適應不同處理速度
+- **Consumer Group**
+  - **定義**
+    - 多個消費者組成群組，共享同一個 group id
+    - 共同消費 topic 的訊息
+  - **運作**
+    - partition 以獨占方式分配給群組內消費者
+      - 同 partition 不會分配給多個消費者
+      - 若消費者數多於 partition，部分消費者閒置
+  - **Group Coordinator**
+    - 由 broker 負責管理群組
+    - 分配 partition 並記錄 offset 至 __consumer_offsets topic
+  - 使用情境：實現負載均衡，例如多個服務實例並行處理訂單
+- **Offset 管理**
+  - **定義**
+    - 記錄消費者在 partition 中消費到的位置
+      - 由 consumer commit offset
+    - 儲存於 topic 的 __consumer_offsets
+  - **提交策略 (Commit)**
+    - **At Least Once**
+      - 處理完訊息後 commit
+      - 需確保處理具冪等性 (idempotent)，例如為訊息加唯一識別碼
+    - **At Most Once**
+      - 接收訊息後立即 commit
+      - 可能漏處理訊息，適用於容忍少量丟失場景
+    - **Exactly Once**
+      - 確保訊息恰好處理一次
+      - 需搭配事務支援，適用於嚴格一致性需求
+  - 優勢：消費者如果 down，重啟後可從上次 offset 繼續，避免重複或遺漏
+
+## 架構與管理
+
+### Kafka Broker
+
+- **定義**
+  - Kafka 叢集中的單一伺服器
+  - 多個 broker 組成叢集，提供分散式服務
+- **特性**
+  - 每個 broker 以整數 id 識別
+  - 儲存部分 partition 數據
+  - 也被稱為 bootstrap server
+    - 連接到任一 broker 即可訪問整個叢集
+    - Kafka 客戶端負責處理連線邏輯
+- **叢集管理**
+  - 叢集內選出一個 broker 作為 controller
+    - 負責管理 broker、topic 和 partition
+- **數量考量**
+  - 儲存空間：依數據量規劃
+  - 容錯：至少 3 個 broker 確保高可用性
+  - 吞吐量：增加 broker 提升並行處理能力
+
+### Zookeeper / KRaft
+
+- **Zookeeper**
+  - **作用**
+    - 管理 Kafka broker 的元數據
+    - 負責 partition 的 leader 選舉
+  - **架構**
+    - 分為 leader 和 follower 節點
+  - **限制**
+    - 增加運維複雜度
+- **KRaft (Kafka Raft)**
+  - **背景**
+    - 自 3.0 引入，替代 Zookeeper
+    - 4.0 後將完全移除 Zookeeper 支援
+  - **優勢**
+    - 簡化架構，無需額外 Zookeeper 叢集
+    - 已準備好用於生產環境
+  - **建議**
+    - 新項目優先使用 KRaft
+    - Kafka 客戶端應避免直接依賴 Zookeeper
+
 ## Producer
 - producer 會將 message 寫入到 topic
 - producer 會知道要寫入哪個 partition
@@ -149,63 +289,93 @@ categories : ["full-stack"]
   - 現在似乎 KRaft 已經準備好上 production 了
   - 如果是 kafka client，應該盡量不使用 zookeeper
 
-## CLI
-- `kafka-server-start.sh <config file>`
-  - 啟動 kafka server (broker)
-  - 指定 config file
-- `--bootstrap-server`
-  - 指定 kafka server
-  - 不推薦使用 `--zookeeper`
-- `--command-config`
-  - 指定 config file
-  - 裡面會寫包含帳號密碼以及加密方式等安全設定
-- `kaft-topics.sh`
-  - `--partitions`
-    - 指定 partition 數量
-  - `--replication-factor`
-    - 指定 replication factor
-  - `--topic`
-    - 指定 topic name
+## 實務操作 (CLI)
+
+### 常用命令總覽
+
+- **啟動 Kafka 伺服器**
+  - `kafka-server-start.sh <config file>`
+    - 啟動 broker，指定配置文件
+    - 配置文件包含 broker id、端口等設定
+- **通用參數**
+  - `--bootstrap-server`
+    - 指定 Kafka 伺服器地址，例如 `localhost:9092`
+    - 取代過時的 `--zookeeper` 參數
+  - `--command-config <config file>`
+    - 指定安全相關配置，例如帳號密碼、SSL 設定
+### Topic 管理
+
+- **命令**
+  - `kafka-topics.sh`
+- **參數與功能**
   - `--create`
-  - `delete`
+    - 創建新 topic
+    - 搭配 `--partitions` 指定分區數
+    - 搭配 `--replication-factor` 指定複製因子
+    - 搭配 `--topic` 指定 topic 名稱
+    - 示例：`kafka-topics.sh --create --bootstrap-server localhost:9092 --partitions 3 --replication-factor 2 --topic my-topic`
+  - `--delete`
+    - 刪除指定 topic
   - `--describe`
-    - 描述 topic
-      - `Replicas`
-        - 顯示哪些 broker 有複本 (id)
-      - `ISR`
-        - 顯示哪些 broker 和 leader 同步
+    - 查看 topic 詳細資訊
+    - 輸出欄位：
+      - `Replicas`：顯示持有複本的 broker id
+      - `ISR`：顯示與 leader 同步的 broker
   - `--list`
     - 列出所有 topic
-- `kaft-console-producer.sh`
+- **使用情境**
+  - 檢查 topic 狀態、分區分配，或快速創建測試用 topic
+### 生產者操作
+
+- **命令**
+  - `kafka-console-producer.sh`
+- **參數與功能**
   - `--topic`
-    - 指定 topic
-  - `--producer.config`
-    - 指定 config file
+    - 指定目標 topic
+  - `--producer.config <config file>`
+    - 指定生產者配置文件
   - `--producer-property`
-    - 指定 producer property
-    - `acks`
-      - 指定 acks 模式
+    - 設定生產者屬性，例如 `acks`
+      - 示例：`--producer-property acks=all`
   - `--property`
-    - 可以打許多次，每次指定一個 property
-- `kaft-console-consumer.sh`
+    - 多次使用以設置多個屬性，例如壓縮類型
+- **使用情境**
+  - 測試訊息發送，例如模擬日誌輸入
+  - 示例：`kafka-console-producer.sh --bootstrap-server localhost:9092 --topic my-topic`
+
+### 消費者操作
+
+- **命令**
+  - `kafka-console-consumer.sh`
+- **參數與功能**
   - `--topic`
-    - 指定 topic
+    - 指定消費的 topic
   - `--from-beginning`
-    - 不只是自打開 consumer 後的 message，而是從一開始的 message 開始
-    - 如果同一個 group 有多個 consumer，這個選項只會對第一個 consumer 有用，offset 是看 group 的
-  - `--consumer.config`
-    - 指定 config file
+    - 從 topic 開頭消費，而非僅接收新訊息
+    - 注意：如果一個 group 有多個消費者，僅第一個消費者有效，offset 是看 group 級別的
+  - `--consumer.config <config file>`
+    - 指定消費者配置文件
   - `--property`
+    - 設置消費者屬性，例如訊息格式
   - `--group`
-    - 指定 consumer group
-- `kafka-consumer-groups.sh`
+    - 指定消費者群組名稱
+- **使用情境**
+  - 驗證生產者訊息是否正確送達
+  - 示例：`kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic my-topic --from-beginning --group my-group`
+
+### 消費者群組管理
+
+- **命令**
+  - `kafka-consumer-groups.sh`
+- **參數與功能**
   - `--list`
-    - 列出所有 consumer group
+    - 列出所有消費者群組
   - `--describe`
-    - 描述 consumer group
-      - `CURRENT-OFFSET`
-        - 目前 offset
-      - `LOG-END-OFFSET`
-        - 最後一個 offset
-      - `LAG`
-        - 落後的 offset
+    - 查看群組詳細資訊
+    - 輸出欄位：
+      - `CURRENT-OFFSET`：當前消費到的 offset
+      - `LOG-END-OFFSET`：最新訊息的 offset
+      - `LAG`：落後的訊息數量
+    - 示例：`kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group my-group`
+- **使用情境**
+  - 監控消費者群組的消費進度，排查延遲問題
