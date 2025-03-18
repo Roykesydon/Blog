@@ -7,7 +7,7 @@
 
 <link rel='canonical' href='https://roykesydon.github.io/Blog/p/mongodb-%E7%AD%86%E8%A8%98/'>
 
-<link rel="stylesheet" href="/Blog/scss/style.min.6c2f219b50fdafd3d9e37eb3a78aae1ae4db4cfd4d2a5606db7e9bc87ed0c4d1.css"><meta property='og:title' content='MongoDB 筆記'>
+<link rel="stylesheet" href="/Blog/scss/style.min.65b4d4c973ba412e6fcdc64a6e310bd1c77007875bd82031e7187c4cf200ea82.css"><meta property='og:title' content='MongoDB 筆記'>
 <meta property='og:description' content='MongoDB 基礎 以 BSON (Binary JSON) 儲存資料 BSON 是 JSON 的二進位版本，支援更多資料型別，如日期和二進位資料 _id 欄位作為預設的主鍵 若未指定，MongoDB 會自動生成一個 12 字節的 ObjectId 用於確保文件中唯一性，特別在分散式系統中 索引機制 Composite Index 由多個欄位組成，例如 (a, b) Prefix 特性 如果索引為 (a, b)，則 (a) 也可被單獨使用 但 (b) 或 (a, b, c) 無法直接利用此索引 Hint 可強制 MongoDB 使用特定索引 用於測試或避免 optimizer 選錯索引 Explain 分析查詢 用來檢視查詢的執行計畫 重要欄位 cursor BasicCursor 表示全表掃描，應避免 BtreeCursor 表示使用索引 nscanned 掃描的索引數量 nscannedObjects 掃描的文件數量 n 最終返回的文件數量 關係：nscanned &amp;gt;= nscannedObjects &amp;gt;= n scanAndOrder 表示需要將文件載入記憶體並排序 通常一次性返回所有結果，效率較低 Optimizer 索引選擇 第一階段：尋找最佳索引 最佳索引條件 包含所有 filter 和 sort 的欄位 equality filter 必須在 range filter 之前 sort 欄位必須在 range filter 之後 若有多個最佳索引條件符合條件，隨便選擇一個 第二階段：實驗性選擇 若無最佳索引，會測試多個索引 optimizer 選擇 nscanned 最小的索引作為最終方案 儲存引擎 MMAPv1 MongoDB 早期的儲存引擎 特性 _id 直接對應 disk 偏移量 (diskloc) 查詢速度快，但更新需維護偏移量，效能低 鎖定機制 初始為 database-level lock 後期升級至 collection-level lock 已於 MongoDB 4.'>
 <meta property='og:url' content='https://roykesydon.github.io/Blog/p/mongodb-%E7%AD%86%E8%A8%98/'>
 <meta property='og:site_name' content='Roykesydon'>
@@ -624,19 +624,6 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
             
                 
 <article class="">
-    <a href="/Blog/p/database-%E4%B8%80%E8%88%AC%E7%AD%86%E8%A8%98/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Database 一般筆記</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
     <a href="/Blog/p/sql-%E8%AA%9E%E6%B3%95%E7%AD%86%E8%A8%98/">
         
         
@@ -650,25 +637,12 @@ class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24"
             
                 
 <article class="">
-    <a href="/Blog/p/kafka-%E7%AD%86%E8%A8%98/">
+    <a href="/Blog/p/graphql-%E7%B0%A1%E4%BB%8B/">
         
         
 
         <div class="article-details">
-            <h2 class="article-title">Kafka 筆記</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="">
-    <a href="/Blog/p/angular-%E7%AD%86%E8%A8%98/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">Angular 筆記</h2>
+            <h2 class="article-title">GraphQL 簡介</h2>
         </div>
     </a>
 </article>
