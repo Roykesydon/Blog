@@ -15,6 +15,21 @@ categories : ["full-stack"]
   - 若未指定，MongoDB 會自動生成一個 12 字節的 ObjectId
   - 用於確保文件中唯一性，特別在分散式系統中
 
+## 和 RDB 比較
+- 儲存結構
+  - 具有彈性的 schema，資料結構可隨時變更
+  - PostgreSQL 也有 JSON 結構的樣子，尚待我研究一下
+- 水平擴展性
+  - 原生分片 (sharding) 機制，支援水平擴展
+  - 但是 RDB 也不是說就不能水平擴展，只是需要額外的工具
+- Transaction
+  - 原生是希望盡量避免 JOIN 以及 Transaction 的概念
+  - MongoDB 4.0 開始支援多文件事務，但仍不如 RDB 的 ACID 支援完整
+    - 好像可選的隔離級別也有限
+- Denormalization
+  - 鼓勵資料去正規化，將相關資料儲存在同一文件中
+  - 但是可能有冗餘資料的問題
+
 ## 索引機制
 ### Composite Index
 - 由多個欄位組成，例如 (a, b)
