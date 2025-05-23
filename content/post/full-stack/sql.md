@@ -214,3 +214,20 @@ DELETE FROM table_name WHERE condition;
 - Math Functions
 - Date Functions
 - String Functions
+### User Defined Functions (UDF)
+使用者自訂函式 (UDF) 是由資料庫使用者自己建立的函式，用於執行特定業務邏輯。它們允許將複雜或重複的邏輯封裝起來，提高程式碼的可重用性和可讀性。UDF 與內建函式一樣，可以接收輸入參數並返回單一值。
+
+MySQL 範例：
+```sql
+DELIMITER //
+CREATE FUNCTION CalculateTotalPrice (quantity INT, price DECIMAL(10, 2))
+RETURNS DECIMAL(10, 2)
+DETERMINISTIC
+BEGIN
+    RETURN quantity * price;
+END //
+DELIMITER ;
+```
+
+## Stored Procedures
+預存程序是預先編譯並儲存在資料庫中的 SQL 語句集合。它們可以包含一個或多個 SQL 語句，邏輯控制語句（如 IF, WHILE 迴圈），並且可以接收輸入參數和返回輸出參數。與函式不同，預存程序通常用於執行一系列操作，例如資料插入、更新、刪除或複雜的報表生成，並且不強制返回單一值。另外，也可以包含輸出參數。

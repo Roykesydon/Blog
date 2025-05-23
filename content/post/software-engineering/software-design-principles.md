@@ -10,8 +10,6 @@ categories : ["software-engineering"]
 
 ## 軟體設計原則
 
-## 軟體設計原則
-
 ### Encapsulate What Varies
 - 封裝經常改變的程式碼，以避免影響其他區塊的程式碼，提升維護性
 - 具體做法包括將變動部分抽象為 `interface`，讓實作細節與使用方解耦
@@ -66,25 +64,25 @@ categories : ["software-engineering"]
 
 #### Tight Coupling（緊密耦合）
 - **Content Coupling（內容耦合）**
-  - 一個模組直接依賴另一個模組的內部運作
+  - 一個模組直接存取或修改另一個模組的資料或內部邏輯
   - **範例**：一個模組直接存取另一個模組的變數（假設變數表示長度，單位是公尺）
     - 若另一個模組改變單位為公分，則所有存取該變數的模組都會受到影響
     - **解法**：透過 `getter` 提供 `getMeter()` 方法，而不是直接存取變數
 
 - **Common Coupling（公共耦合）**
-  - 多個模組共同存取和修改同一個 `global data`
+  - 多個模組共用同一個全域變數或全域資源
   - **範例**：多個模組使用相同的全域變數，當其中一個模組錯誤修改該變數時，其他模組可能會出錯
 
 - **External Coupling（外部耦合）**
-  - 多個模組依賴相同的外部 I/O
+  - 多個模組依賴外部的系統介面或硬體裝置（例如第三方 API）。
   - **範例**：所有模組直接呼叫相同的 API，若 API 變更，所有模組都需修改
 
 #### Medium Coupling（中等耦合）
 - **Control Coupling（控制耦合）**
-  - 一個模組透過參數影響另一個模組的內部邏輯
+  - 一個模組控制另一個模組的流程，例如傳入控制參數來決定邏輯分支
   - **範例**：函式 `process(data, mode)` 內部邏輯依賴 `mode` 參數，若 `mode` 值的定義變更，所有呼叫該函式的地方都需同步修改
 
-- **Data-Structure Coupling（資料結構耦合）**
+- **Data-Structure Coupling（資料結構耦合） 也叫 Stamp Coupling**
   - 多個模組共用相同的 `data structure`
   - **範例**：若所有模組都依賴一個 `dict` 來存取資料，當 `dict` 結構變更時，所有模組都會受到影響
 
@@ -111,6 +109,7 @@ categories : ["software-engineering"]
 
 - **Logical Cohesion（邏輯內聚）**
   - 模組內的功能可以被歸類為相同的類別
+  - 因為他們作用相似所以被歸在一起
   - **範例**：`BackupController` 負責多種不同類型的備份，沒有專注於單一職責
 
 #### Medium Cohesion（中等內聚）
