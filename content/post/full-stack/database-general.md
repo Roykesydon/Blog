@@ -23,14 +23,15 @@ categories : ["full-stack"]
 - **Primary Key**
   - 資料唯一性保證。
   - MySQL（InnoDB）：primary key 作為 clustered index，資料儲存依其排序。
+    - locality：資料儲存與索引結構緊密結合，查詢效率高。
   - PostgreSQL：primary key 為唯一約束，索引與資料儲存分離。
 
 - **Secondary Index**
   - 非主鍵欄位所建之索引，用來提供其他查詢條件的效能。
   - 差異：
     - **MySQL InnoDB**
-      - secondary index 指向 primary key，需多跳一次才能找到資料位置（稱為「回表」）。
-      - 優勢：row 移動時只需更新 primary key 指向。
+      - secondary index 指向 primary key，需多跳一次（再去查 clustered index tree）才能找到資料位置（稱為「回表」）。
+      - 優勢：row 移動時只需更新 clustered index tree。
     - **PostgreSQL**
       - secondary index 直接指向實際資料位置（tuple ID, TID）。
       - 優勢：查詢不需透過 primary key
@@ -142,6 +143,26 @@ categories : ["full-stack"]
     - 對 SSD 優化良好，因為避免隨機寫入。
     - 也避開了 B-Tree 為了保持平含頻繁調整結構導致 IO 的情形
     - 存在讀取放大（read amplification）和寫入放大（write amplification）相對較嚴重的問題。
+
+### Write-Ahead Logging (WAL)
+這裡以 PostgreSQL 為例說明 WAL 機制。
+- **定義與目的**
+  - PostgreSQL 使用 WAL 機制來確保交易的持久性與資料一致性（ACID 的 Durability 特性）
+  - WAL 是一種「先寫入日誌再執行資料修改」的機制，確保即使系統當機，也能透過日誌恢復資料
+  - 透過該方案，不用每次修改資料時都直接寫入磁碟，而是先寫入日誌，然後更新資料頁（data page），這樣可以減少磁碟寫入次數，提高效能
+
+- **運作流程**
+  - 當有資料變更時，系統**先將變更記錄寫入 WAL log**（順序寫入）
+  - 等 WAL 寫入磁碟後，才會進行實際資料頁（data page）的修改
+
+- **Crash Recovery**
+  - 若 PostgreSQL 意外關閉，重啟時會透過 WAL 還原未完成的交易或完成的寫入
+  - 能夠將資料恢復到一致狀態（即使資料頁尚未同步到磁碟）
+
+- **Checkpoint**
+  - 為了避免重啟時重播過多 WAL，系統會定期執行 checkpoint，將記憶體中已修改的資料頁（dirty pages）同步至磁碟
+  - checkpoint 發生後，WAL 可標記為「已持久化資料」的安全點
+
 
 ## 時間與空間效率問題
 
@@ -356,6 +377,47 @@ categories : ["full-stack"]
       - 如果沒有被標記為 all-visible，則需要額外的 heap lookup 來確認 tuple 對當前事務的可見性，變回了 index scan。
   - 優勢：
     - 減少 IO，提高查詢效率。
+- **Bitmap Index Scan（位圖索引掃描）**
+  - 將一或多個索引查詢結果轉換為 bitmap（位圖），再一次性讀取符合條件的資料頁（heap page）。
+    - 在 PostgreSQL 中，這是透過 `Bitmap Index Scan` 和 `Bitmap Heap Scan` 兩個步驟完成的。
+    - 一個 bit 對應一個 page，若該 page 中有符合條件的 tuple，則該 bit 為 1，否則為 0。
+  - 特性：
+    - 適合多個條件需結合評估的查詢，如 `a = 1 AND b = 2 AND c = 3`。
+    - 不像 Index Scan 每找到一筆就做 heap lookup，Bitmap Scan 是「**批次處理**」，提升效率。
+    - 通常搭配 `Bitmap Heap Scan` 一起使用：前者決定哪些頁面要讀，後者實際讀取。
+  - 使用時機：
+    - 多個條件分別對應不同索引。
+    - 命中資料多、Index Scan 隨機 IO 成本高時。
+  - 流程：
+    1. 每個條件建立對應的 bitmap（由索引產生）。
+    2. 系統對 bitmap 做 AND / OR 合併。
+    3. 執行 Bitmap Heap Scan，依據位圖讀取需要的頁面，再從頁面中挑出符合條件的 tuple。
+
+## Planner / Optimizer
+
+計劃器/優化器的任務是產生一個最佳執行計劃
+
+- Planner/Optimizer 的任務是建立一個最好的執行計畫。一個 SQL 查詢可以用多種不同方式執行，都會產生相同結果，如果計算可行，Optimizer 會檢查每個可能的執行計畫，最後執行預期可以最快的計畫
+  - 由於找出所有可能的執行方式太耗資源，當 join 的數量超過一定 threshold 後，PostgreSQL 會利用基因演算法
+- 會考慮可用的索引，產生使用索引與不使用索引的多種查詢方式。
+- 根據索引的類型（單欄位、複合、Clustered）及查詢條件產生不同的 plan。
+  - 但總會有一個全表掃描（Table Scan）作為 plan 之一。其他就是看 index 是否符合查詢條件
+- 單表掃描計畫
+  - Index Scan（使用索引依序讀取）
+  - Bitmap Index Scan（結合多個索引條件）
+  - Index Only Scan（僅使用索引，不需回表）
+  - Sequential Scan（全表掃描）
+- optimizer 會先為每一個 table 產生計畫，如果需要 JOIN 多個 table，也是在找到每個 table 的所有可行掃描計畫後才開始考慮 JOIN
+- JOIN 策略
+  - Nested Loop Join（嵌套迴圈連接）
+    - 對於左邊的 table 每一行，對右邊的 table 做一次掃描
+  - Merge Join（合併連接）
+    - 先對兩個 table 的 join key 做排序，再同步掃描兩個 table，把符合條件的合併成連接結果
+    - 每個 table 都只掃描一次
+  - Hash Join（雜湊連接）
+    - 先把右表建立 Hash Table，把 JOIN 的屬性作為 Hash Key。再掃描左表，用 Hash Table 找出符合條件的行
+
+
 
 ## 併發（Concurrency）
 ### 並發控制（Concurrency Control）
@@ -366,30 +428,80 @@ categories : ["full-stack"]
 
 - **樂觀控制（Optimistic Concurrency Control）**
   - 假設交易間衝突少，交易不加鎖，提交時再驗證是否有衝突
+    - 可能使用版本號或時間戳記來檢查資料是否被修改
   - 優點：執行效率高，適合低衝突環境
   - 缺點：若驗證失敗需回滾與重試
 
 ### 鎖定機制（Lock）
 
-#### 類型
-  - **Shared Lock（共享鎖）**
-    - 適用於讀取操作
-    - 多個交易可同時持有（允許共享）
-  - **Exclusive Lock（排他鎖）**
-    - 適用於寫入操作
-    - 僅允許一個交易持有，其他交易無法讀寫
-    - PostgreSQL 可用 `SELECT ... FOR UPDATE` 來取得排他鎖
+資料庫為了確保交易的隔離性（Isolation），會對資料加鎖來避免同時存取導致的不一致問題。
 
-- **鎖的相容性表**
+#### 鎖的分類
 
-  |        | Shared (S) | Exclusive (X) |
-  |--------|------------|---------------|
-  | **S**  | ✔          | ✘             |
-  | **X**  | ✘          | ✘             |
+- **依鎖定範圍**：
+  - 行鎖（Row Lock）
+  - 頁鎖（Page Lock）
+  - 表鎖（Table Lock）
 
-- **鎖衝突說明**
-  - 若某筆資料已有 S 鎖，其他交易可再加 S 鎖，但不能加 X 鎖
-  - 若已有 X 鎖，其他交易無法加任意鎖
+- **依操作目的**：
+  - Shared Lock（共享鎖）：允許多個交易讀取資料
+  - Exclusive Lock（排他鎖）：只允許單一交易修改資料
+
+- **依顯示與隱式加鎖方式**：
+  - 顯式鎖（Explicit Lock）：使用 SQL 語句主動加鎖，如 `SELECT ... FOR UPDATE`
+  - 隱式鎖（Implicit Lock）：由資料庫系統在交易期間自動加鎖，無需開發者手動指定
+
+- **意圖鎖（Intent Lock）**：
+  - 用於多層級（如表與行）鎖時的協調機制，幫助系統判斷是否允許加鎖
+---
+
+
+#### Shared Lock （共享鎖）與 Exclusive Lock（排他鎖）
+
+##### Shared Lock（共享鎖）
+- 適用於**讀取操作**
+- 多個交易可同時持有（允許共享）
+- PostgreSQL 可使用 `SELECT ... FOR SHARE` 來取得共享鎖
+
+##### Exclusive Lock（排他鎖）
+- 適用於**寫入操作**
+- 只能有一個交易持有，其他交易無法讀寫
+- PostgreSQL 可使用 `SELECT ... FOR UPDATE` 來取得排他鎖
+---
+
+#### Multiple Granularity Locking（多層級鎖定, MGL）
+資料庫系統通常會使用多層級鎖定來提高效能與靈活性，允許在不同層級（如行、頁、表）上加鎖。
+
+##### 意圖鎖（Intention Lock）
+
+當使用**多層級鎖（如：表鎖＋列鎖）**時，為了讓上層資源（如整張表）知道下層（如某列）是否已被加鎖，會使用意圖鎖來進行協調。
+這樣可以避免一個交易對表加鎖時與其他交易在列上的鎖發生衝突。也可以避免逐列檢查鎖的狀態，提升效能。
+
+常見的意圖鎖種類：
+- **Intent Shared (IS)**：表示交易打算在某些子資源上加共享鎖
+- **Intent Exclusive (IX)**：表示交易打算在某些子資源上加排他鎖
+- **Shared and Intent Exclusive (SIX)**：表層加共享鎖，某些子資源加排他鎖（S+IX，對表上 S 鎖的同時，會更新某些行）
+
+---
+
+#### 鎖的相容性表
+
+
+|        | IS | IX | S  |  X  |
+|--------|----|----|----|----|
+| **IS** | ✔  | ✔  | ✔  | ✘  |
+| **IX** | ✔  | ✔  | ✘  |  ✘  |
+| **S**  | ✔  | ✘  | ✔  |  ✘  |
+| **X**  | ✘  | ✘  | ✘  |  ✘  |
+
+---
+
+#### 鎖衝突說明
+
+- 若某筆資料已有 **Shared 鎖（S）**，其他交易可再加 S 鎖，但不能加 X 鎖
+- 若已有 **Exclusive 鎖（X）**，其他交易無法加任何鎖
+- 若在列上已有 X 鎖，表層無法再加表級 S 鎖，因為需要 IX 或 IS 協調
+
 
 #### 死結（Deadlock）
 
@@ -403,7 +515,7 @@ categories : ["full-stack"]
 
 - **目的**
   - 保證交易之間的操作順序達到 Conflict Serializability（CSR，衝突序列化），以實現交易隔離（isolation）。
-    - CSR 是指交易的執行結果與某個將事物按照特定順序下執行的結果一致
+    - CSR 保證交易的執行結果與某個將事物按照特定順序下執行的結果一致
 
 - **階段**
   - **Growing Phase（增長階段）**
@@ -416,8 +528,54 @@ categories : ["full-stack"]
   - 符合 2PL 的交易保證衝突序列化
   - 缺點：仍可能導致死結
 
-- **補充**
-  - 多數關聯式資料庫系統（如 PostgreSQL、MySQL）皆採用 2PL 為基礎的交易隔離機制
+### 多版本並發控制（MVCC, Multi-Version Concurrency Control）
+#### 概念介紹
+MVCC 是一種資料庫的並發控制機制，主要目的是解決多個交易（transaction）同時存取資料時的衝突，提升讀取效率與整體性能。MVCC 允許資料庫同時保有多個資料版本，讀取和寫入不會阻塞彼此。
+PostgreSQL 即使是透過 Serializable Snapshot Isolation (SSI) 來實現最嚴格的 isolation 也可以保證讀寫不互阻塞。 
+
+#### PostgreSQL 中的 MVCC
+
+PostgreSQL 用 MVCC 來維護一致性，和許多用 lock 進行併發控制的資料庫不同
+PostgreSQL 採用 MVCC 來實現高效的多用戶並發控制。其核心思想是資料列（row）在被修改時，資料庫不直接覆蓋舊資料，而是產生一個新的版本，並且利用系統欄位追蹤該版本的可見性。
+PostgreSQL document 提及「PostgreSQL 雖然提供了表格層級（table-level）和資料列層級（row-level）的鎖定功能，給那些不太需要完整交易隔離（full transaction isolation）、而是偏好自己手動處理資料衝突的應用程式使用。但一般來說，如果正確地使用 MVCC（多版本並發控制，Multi-Version Concurrency Control），效能會比直接用鎖來得更好。」
+不曉得是不是在指善用隔離等級
+
+#### MVCC 實作細節
+
+- **資料版本保存**  
+  每一筆資料列都包含兩個系統欄位（Transaction IDs）：  
+  - `xmin`：該資料列的建立交易 ID（transaction ID）  
+  - `xmax`：該資料列被刪除或取代的交易 ID 
+
+- **可見性判斷**  
+  PostgreSQL 的交易在讀取資料時，根據自身的 transaction ID 和資料列的 `xmin`、`xmax` 以及 CLOG，判斷該版本是否對該交易可見。  
+  - 如果交易 ID 在 `xmin` 之後且在 `xmax` 之前，則版本對交易可見。  
+  - 這樣能確保交易只能看到自己開始前已提交的版本，避免讀到未提交或未決定的資料。
+
+- **行為示例**  
+  - 讀取時，交易看到的是當前時間點有效的版本，並不會被其他交易的未提交變更阻塞。  
+  - 寫入（UPDATE、DELETE）時，不是直接修改舊版本，而是產生新版本，舊版本標記為過期（設定 `xmax`）。  
+  - 因此，PostgreSQL 實際上是「新增」了一筆新資料，舊資料依然存在直到垃圾回收。
+
+- **CLOG (Commit Log)**  
+  - CLOG 紀錄每個 transaction 的狀態
+
+#### MVCC 的優點
+- **非鎖定讀取（Non-blocking reads）**  
+  - 讀取操作不會阻塞寫入，避免讀寫競爭造成的效能瓶頸。
+    - 避免 shared lock 影響 update 操作。
+- **避免死鎖與鎖等待**  
+  由於讀取不需要加鎖，降低死鎖機率。  
+- **可支援快照隔離（Snapshot Isolation）**  
+  每個交易看到的資料是一個一致的「快照」，提升交易一致性。  
+
+#### MVCC 的挑戰與缺點
+- **存儲空間開銷**  
+  多版本資料持續存在，可能造成磁碟空間膨脹。  
+- **VACUUM 清理機制**  
+  PostgreSQL 需要定期執行 `VACUUM` 來回收不再需要的舊版本，避免空間浪費與查詢效能下降。  
+- **寫入放大**  
+  更新不是覆寫，而是新增資料版本，會產生較多寫入操作。
 
 ## 資料分散
 ### 分割 (Partitioning)

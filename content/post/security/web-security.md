@@ -4,8 +4,8 @@ date: 2024-06-28T00:00:17+08:00
 draft: false
 description: "常見的 Web attack 和防禦方法"
 type: "post"
-tags: ["ctf", "security"]
-categories : ["ctf"]
+tags: ["security"]
+categories : ["security"]
 ---
 
 ## SQL Injection
@@ -52,19 +52,73 @@ categories : ["ctf"]
   - `<` → `&lt;`
   - `"` → `&quot;` …等
 - **只要資料要顯示到網頁，就要 encode！**
-
-#### 使用框架的自動防護機制
-- React、Angular、Vue 等現代框架預設對插入內容進行 escape。
-
-#### Content Security Policy（CSP）
-- 限制腳本來源，降低攻擊成功機會。
-- 範例：
-  ```
-  Content-Security-Policy: default-src 'self'; script-src 'self';
-  ```
-
 #### 避免動態寫入 innerHTML、document.write 等 API
 - 優先使用 `textContent` 或 `setAttribute` 等安全替代。
+#### 使用框架的自動防護機制
+- React、Angular、Vue 等現代框架預設對插入內容進行 escape。
+#### Content Security Policy（CSP）
+- CSP 是一種瀏覽器安全機制，用來限制網頁能夠載入哪些資源，減少 XSS 和資料竄改的風險。
+- 透過設定 HTTP Header（`Content-Security-Policy`）來告訴瀏覽器允許執行或載入的資源來源。
+### CSP 主要防護功能
+
+- **禁止內嵌 Javascript**
+  - 比如 inline scripts、inline event handlers（如 `onclick`、`onload` 等）。  
+  - 內嵌腳本指的是直接寫在 HTML 頁面中的 `<script>` 標籤內的 JavaScript，或以 `onclick`、`onload` 等 HTML 屬性方式寫的腳本。這類腳本容易被注入惡意程式碼。CSP 可以禁止這種執行，強制所有腳本必須來自外部可信來源。
+- **禁止不安全 API**
+  - 比如 `eval()` 及類似的 API。  
+  - 這些 API 可以執行任意 JavaScript 代碼，容易被攻擊者利用來執行惡意腳本。CSP 可以禁止這些不安全的 API，減少 XSS 攻擊的風險。
+- **限制外部資源來源**  
+包括限制載入 JavaScript、CSS、圖片、字型等的來源網址，避免來自未知或惡意網站的資源執行。
+- **防止點擊劫持（Clickjacking）**  
+限制哪些網站可以將此頁面放入 `<iframe>`。
+
+##### CSP Header 範例
+```http
+Content-Security-Policy: default-src 'self'; script-src 'self' https://apis.example.com; style-src 'self' 'unsafe-inline'; img-src *; font-src https://fonts.gstatic.com; connect-src 'none'; frame-ancestors 'none'; base-uri 'self';
+```
+
+##### 主要 Directive 解釋
+- `default-src`: 預設允許載入的資源來源（當其他 directive 未明確定義時）
+- `script-src`: 允許載入執行的 JavaScript 來源
+- `style-src`: 允許載入 CSS 來源
+- `img-src`: 允許載入圖片來源
+- `font-src`: 允許載入字型來源
+- `connect-src`: 限制 AJAX / WebSocket 連線來源
+- `frame-ancestors`: 限制該頁面可以被嵌入的父框架來源（防止 Clickjacking）
+- `base-uri`: 限制 `<base>` 標籤的 href 設定來源
+- `upgrade-insecure-requests`: 在一些情況下自動將 HTTP 資源升級為 HTTPS
+
+##### 常用關鍵字
+- `'self'`: 只允許同源資源
+- `'none'`: 不允許任何來源
+- `'unsafe-inline'`: 允許內嵌腳本或樣式（一般不建議）
+- `'strict-dynamic'`: 允許動態載入腳本，搭配 nonce 使用
+  - 用在第三方腳本，只需要允許第三方腳本有 hash 或 nonce，就信任他們，讓他們自己可以載入其他更多腳本或是用 inline script
+- `https:`: 允許 HTTPS 協定的資源
+
+##### 使用 Nonce 或 Hash 允許特定內嵌腳本
+Nonce（Number used once，一次性隨機數）是伺服器每次回應時隨機產生的一組字串（類似密碼），並把它放到 CSP 標頭裡和內嵌 `<script>` 標籤的 `nonce` 屬性中。
+如果攻擊者無法預測這個 nonce，就無法注入惡意腳本。
+- Nonce 範例：
+```http
+Content-Security-Policy: script-src 'nonce-2726c7f26c' 'strict-dynamic'; object-src 'none'; base-uri 'none';
+```
+
+- HTML 內嵌腳本需帶相同 nonce：
+```html
+<script nonce="2726c7f26c">
+  // 安全允許執行的腳本
+</script>
+```
+
+##### Str
+
+##### 注意事項
+- CSP 設定太寬鬆（如允許 `'unsafe-inline'`）會降低防護效果
+- 初次部署可用瀏覽器報告模式（`Content-Security-Policy-Report-Only`）測試設定是否有阻擋合法資源
+- 配合其他安全機制（如 HTTP Only Cookies、SameSite Cookie）能更完善防護
+
+
 
 ## CSRF（Cross Site Request Forgery，跨站請求偽造）
 
@@ -101,15 +155,6 @@ Set-Cookie: sessionid=abc123; SameSite=Strict; HttpOnly; Secure
 
 #### 檢查 Referer / Origin Header（次要輔助）
 - 驗證 `Origin` 或 `Referer` 是否來自預期的網域，但會有兼容性或隱私問題。
-
-#### 前後端分離注意事項
-- 若採用 JWT 或 Token-based Auth，可將 CSRF token 傳在自定義 header 中，如：
-
-```http
-X-CSRF-Token: a1b2c3d4
-```
-
-- 記得 **後端禁止接受任意 CORS 請求來源**（設置嚴格的 `Access-Control-Allow-Origin`），避免 token 被惡意網站取得。
 
 ## Command Injection (命令注入)
 **描述**：攻擊者將惡意系統命令注入後端指令執行語句中。

@@ -22,6 +22,7 @@ categories : ["software-engineering"]
 - 若中途失敗，資料庫會回滾（rollback）至交易開始前的狀態。
 ## Consistency
 - 一致性是指資料交易執行前後，資料庫必須從一個合法狀態轉變為另一個合法狀態。
+- 資料庫的完整性在事務開始前和結束後都不能配破壞。
 - 交易需確保不會違反資料庫的約束（constraints），如主鍵、外鍵、檢查條件等。
 
 
@@ -61,19 +62,23 @@ categories : ["software-engineering"]
 
 ## Serialization Anomaly
 - The result of successfully committing a group of transactions is inconsistent with all possible orderings of running those transactions one at a time.
-- 交易的提交結果與將這些交易逐一執行的所有可能順序不一致。
+- 在成功提交一群交易後，結果與以所有可能的順序依序執行交易的結果都不一致。
 
 ### Write Skew（寫偏斜）
-- 交易基於過時資料進行更新，導致邏輯不一致。過時是指讀取的值已經因為併發事務的提交而變得過時。
-- 兩個交易同時讀取多筆資料，修改後各自 commit，導致某些資料的更新邏輯不一致。
-#### Lost Update（更新遺失）
+- 兩個交易在讀取彼此重疊但不同的資料後，根據讀到的資料做出條件判斷並各自寫入不同的資料列。
+### Lost Update（更新遺失）
 - 兩個交易同時讀取同一筆資料，修改後各自 commit，造成其中一次的修改被覆蓋。
-- 是 write skew 的一種特殊情況。
-#### Double booking problem
-- 兩個交易同時查詢某條件下的資料，然後各自更新同一筆資料，導致兩筆資料都符合原本的條件，但是有矛盾。
+### Double booking problem
+- 兩個交易同時查詢某條件下的資料，然後更新資料，導致兩筆資料都符合原本的條件，但是有矛盾。
 - 例如：兩個人同時預約同一個時間的會議室，兩邊初始檢查都判斷有空，最後各自下訂，但實際上只有一個人能使用該會議室。
 - 可以用 lock（pessimistic）來避免這個問題，但這樣會降低併發性。
-
+#### 解法 1. Pessimistic Locking（悲觀鎖）
+透過 `SELECT ... FOR UPDATE` 來鎖定資料列，避免同時被其他交易修改。
+PostgreSQL 可以用這樣把 row 加上 exclusive lock
+#### 解法 2. Optimistic Locking（樂觀鎖）
+透過在資料表中加入版本號（version number）或時間戳記（timestamp），在更新時檢查版本號是否一致，若不一致則拒絕更新。
+- 當交易開始時，讀取資料的版本號。
+- 在更新時，檢查資料的版本號是否與開始時一致。
 
 ## 資料庫隔離等級（Isolation Levels）
 
@@ -99,13 +104,21 @@ categories : ["software-engineering"]
 - 確保同一筆資料在同一交易中讀取時，結果是一致的。
 - 但 phantom read 還是有可能發生。
 
+### Serializable
+最嚴格的隔離等級，確保所有交易的執行結果等同於某種交易**逐一依序執行（serial order）**的情況。
+可以避免所有類型的讀取異常（包括 dirty read、non-repeatable read、phantom read），也能避免 write skew。
+
 ## Durability
-- 一旦交易提交，其對資料的修改會被永久保存（persistent），即使系統崩潰或斷電也不會丟失。
-  - 完成的 transaction 會被記在 non-volatile storage
-- durability technique
-  - Write ahead log (WAL)
-    - 先寫 log (寫你做了什麼操作，但不去真的改 disk 上對應的資料)，有空再修改
-      - 這樣一些修改就可以改在 memory，如果 crash 了，可以用 log 來 recover
-      - 而且考量硬碟限制，如果你想修改的資料遠小於硬碟可寫的最小單位，會很浪費
-  - Asynchronous snapshot
-    - 在後台把 snapshot 寫到 disk
+- **定義**: 持久性確保一旦事務提交成功，其對資料庫的修改就是永久性（persistent）的，即使系統發生故障（如斷電、系統崩潰），這些修改也不會丟失。
+- **目標**: 確保資料的永久儲存和可恢復性。
+- **相關技術**:
+    - **寫入日誌 (Write-Ahead Logging, WAL)**:
+        - 在資料庫實際修改資料文件之前，事務的所有修改操作會先被寫入到持久化的日誌文件（稱為 WAL）。
+        - 主要是希望修改可以盡量停留在 memory，而不是直接寫入磁碟，有空再改。
+        - 這些日誌包含了足夠的資訊，以便在系統恢復時重新應用這些修改，確保資料的一致性。
+    - **快照（Snapshots）**:
+        - 資料庫系統會定期創建資料的快照，這些快照可以用於故障恢復。
+        - 這之間，資料可以在記憶體中進行修改，但快照確保了在某個時間點的資料狀態可以被恢復。
+        - 發生崩潰的時候，可以搭配 WAL 使用，從最後一個快照和日誌中恢復資料。
+
+- **例子**: 當你在網路上完成一筆訂單支付後，即使此時伺服器突然斷電，訂單資訊也應該被永久保存下來，不會因為斷電而丟失。這是因為支付事務提交後，其修改已經被寫入到日誌中，並且最終會被持久化到儲存設備上。

@@ -55,7 +55,7 @@ Redis 支援以下幾種資料結構：
 - **Sorted Set (ZSet)**：有分數排序的集合，`ZADD`、`ZRANGE`
 - **Bitmap**：位元組陣列，可用於統計、計數等操作
 - **HyperLogLog**：用於近似計數，節省空間。可用在大數據統計，如獨立訪客數。
-- **Steam**：用於處理資料流，支援生產者/消費者模式。
+- **Stream**：用於處理資料流，支援生產者/消費者模式。
   - 和 Pub/Sub 不同，Stream 支援持久化。
 
 ## 基本操作
@@ -90,7 +90,7 @@ Redis 支援以下幾種資料結構：
 - ```SETEX <key> <seconds> <value>```  
   設定鍵值對並同時指定過期時間
 
-## 持久化
+## 持久化 Persistence
 Redis 支援將資料從記憶體儲存至磁碟，以防止服務重啟或異常時資料完全遺失。主要持久化方式有兩種：**RDB** 和 **AOF**，也可以同時啟用形成「混合模式」。
 
 ### RDB（Redis Database Snapshot）
